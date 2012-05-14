@@ -8,8 +8,7 @@
  */
 namespace Engine;
 
-//use Engine\Error,
-//	Engine\DB;
+use Engine\Error;
 
 class Classes{
 	/** @var array Именна классов с путями к их файлам */

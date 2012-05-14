@@ -33,16 +33,8 @@ class ErrorsHandler{
 
 	static function ExceptionHandler($e, $fatal = true){
 		self::Log($e);
-//		if ($fatal){
-//			$result = Events::Send('ERRORS_SYSTEM', $e);
-//			if ($result->count == 0){
-//				if (DEBUG){
-					//echo 'System error';
 		ob_clean();
-					echo trace($e, 'SYSTEM ERROR');
-//				}
-//			}
-//		}
+		trace($e, 'SYSTEM ERROR');
 		return true;
 	}
 
