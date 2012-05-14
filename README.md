@@ -1,4 +1,4 @@
-# Boolive CMS
+# Boolive CMS 2
 
 See more: http://boolive.ru (russian)
 
