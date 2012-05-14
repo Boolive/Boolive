@@ -85,7 +85,8 @@ class Events{
 				if (!Classes::IsIncluded(self::$handlers[$event_name][$i][0])){
 					Classes::Activate(self::$handlers[$event_name][$i][0]);
 				}
-				$r->value = call_user_func_array(self::$handlers[$event_name][$i], $params);
+				$value = call_user_func_array(self::$handlers[$event_name][$i], $params);
+				if (isset($value)) $r->value = $value;
 				$r->count++;
 				if (isset(self::$once[$event_name]) && isset(self::$once[$event_name][self::$handlers[$event_name][$i][0].self::$handlers[$event_name][$i][1]])){
 					self::RemoveHandler($event_name, self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]);

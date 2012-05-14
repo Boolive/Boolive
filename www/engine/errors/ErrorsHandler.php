@@ -32,9 +32,13 @@ class ErrorsHandler{
 	 */
 
 	static function ExceptionHandler($e, $fatal = true){
-		self::Log($e);
-		ob_clean();
-		trace($e, 'SYSTEM ERROR');
+		if (!Events::Send('ERRORS_SYSTEM', $e)){
+			error_log((string)$e);
+			ob_clean();
+			// @TODO Заменить на юзабильное отображение
+			trace($e, 'SYSTEM ERROR');
+			return false;
+		}
 		return true;
 	}
 
@@ -53,13 +57,5 @@ class ErrorsHandler{
 			return false;
 		}
 		throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
-	}
-
-	/**
-	 * Запись ошибки в log-файл
-	 * @param \Exception $e Исключение
-	 */
-	static function Log($e){
-		error_log((string)$e);
 	}
 }
