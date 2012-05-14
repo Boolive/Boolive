@@ -14,11 +14,6 @@ namespace Engine;
 use Exception;
 
 class Error extends Exception{
-	/** @const string Файл со статическими сообщениями */
-	const FILE_STATIC_MESSAGE = 'config.error_message.php';
-	/** @var array Массив со статическими сообщениями */
-	private static $user_messages;
-
 	/** @var \Engine\Error Родительское  исключение */
 	protected $parent;
 	/** @var array Массив исключений */
@@ -27,7 +22,7 @@ class Error extends Exception{
 	private $temp_list;
 	/** @var bool Признак, является ли исключение временным */
 	private $is_temp;
-
+	/** @var array Аргументы для вставки в текст сообщения */
 	private $args;
 
 	/**
@@ -140,7 +135,7 @@ class Error extends Exception{
 	}
 
 	/**
-	 * Все исключения
+	 * Возвращает все исключения
 	 * @return array
 	 */
 	public function getAll(){
@@ -160,7 +155,7 @@ class Error extends Exception{
 	}
 
 	/**
-	 * Удаление подчиенных исключений
+	 * Удаление всех подчиенных исключений
 	 */
 	public function clear(){
 		unset($this->list, $this->temp_list);
@@ -168,6 +163,10 @@ class Error extends Exception{
 		$this->temp_list = array();
 	}
 
+	/**
+	 * Удаление подчиенного исключения
+	 * @param $name Название (ключ) исключения
+	 */
 	public function delete($name){
 		if (isset($this->list[$name])){
 			$this->list[$name]->parent = null;
@@ -179,11 +178,23 @@ class Error extends Exception{
 		}
 	}
 
+	/**
+	 * Аргументы сообщения
+	 * @return array
+	 */
 	public function getArgs(){
 		return $this->args;
 	}
 
-	public function getUserMessage($all_sub = false, $postfix = "\n", $default = true){
+	/**
+	 * Пользовательские сообщения об ошибке
+	 * Возвращаются сообщения либо всех подчиенных исключений, либо тольок свой сообщение, если нет подчиенных
+	 * @param bool $all_sub Признак, возратить все сообщения на вложенные исключения?
+	 * @param string $postfix Строка, которую добавлять в конец каждого сообщения.
+	 * @return string
+	 */
+	public function getUserMessage($all_sub = false, $postfix = "\n"){
+		// Объединение сообщений подчиенных исключений
 		if ($all_sub && $this->isExist()){
 			$message = '';
 			foreach ($this->list as $e){
@@ -192,37 +203,9 @@ class Error extends Exception{
 			}
 			return $message;
 		}
-		self::LoadUserMessages();
-		// Формирование полного ключа
-		$keys = array();
-		$curr = $this;
-		while ($curr){
-			array_unshift($keys, $curr->message);
-			if ($curr instanceof self){
-				$curr = $curr->parent;
-			}else{
-				$curr = null;
-			}
-		}
-		// Поиск сообщения в массиве загруженных
-		$curr = self::$user_messages;
-		$cnt = sizeof($keys);
-		$i = 0;
-		while ($i<$cnt && is_array($curr)){
-			if (isset($curr[$keys[$i]]) ){
-				$curr = $curr[$keys[$i]];
-			}else{
-				$curr = null;
-			}
-			$i++;
-		}
-		// Если найдено
-		if (is_scalar($curr)){
-			return $curr."\n";
-		}else
-		if (is_array($curr) && isset($curr['default'])){
-			return $curr['default']."\n";
-		}
+		// @TODO Поиск пользовательского сообщения...
+
+		// Сообщение по-умолчанию
 		return vsprintf($this->message.$postfix, $this->args);
 	}
 
@@ -231,23 +214,11 @@ class Error extends Exception{
 	 * @return string
 	 */
 	public function __toString(){
-		$result = "{$this->message}<ul>";
+		$result = "{$this->message}\n";
 		foreach ($this->list as $e){
 			/** @var $e \Engine\Error */
-			$result.='<li>'.$e->__toString().'</li>';
+			$result.=' - '.$e->__toString()."\n";
 		}
-		return $result.'</ul>';
-	}
-
-	/**
-	 * Загрузка пользовательских сообщений из конфига
-	 *
-	 */
-	private static function LoadUserMessages(){
-		if (!isset(self::$user_messages)){
-			include ROOT_DIR_ENGINE.self::FILE_STATIC_MESSAGE;
-			if (!isset($messages)) $messages = array();
-			self::$user_messages = $messages;
-		}
+		return $result;
 	}
 }

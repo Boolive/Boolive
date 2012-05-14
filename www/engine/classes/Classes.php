@@ -28,6 +28,7 @@ class Classes{
 	 */
 	static function Activate($class_name){
 		$class_name = ltrim($class_name, '\\');
+		// Если ещё не подключен
 		if (!self::IsIncluded($class_name)){
 			if ($class_name == 'Engine\Classes'){
 				// Актвация самого себя
@@ -35,27 +36,33 @@ class Classes{
 				self::$activated = array();
 				self::$included = array();
 				self::$engine_classes = array();
+				// Загрузка путей на классы ядра
 				self::LoadEngineClasses(ROOT_DIR_ENGINE.'config.classes.php', SITE_DIR_ENGINE);
 				// Регистрация метода-обработчика автозагрузки классов
 				spl_autoload_register(array('\Engine\Classes', 'Activate'));
-				// Загрузка списка классов проекта
+				// Загрузка сведений о классах проекта
 				self::LoadProjectClasses();
 			}else{
 				// Активация указанного класса
 				if (!isset(self::$classes[$class_name])){
-					throw new Error(array('Класс %s не установлен', $class_name));
+					// Система не знает о классе
+					throw new Error(array('Модуль "%s" не установлен', $class_name));
 				}else{
 					try{
 						include(DOCUMENT_ROOT.self::$classes[$class_name]);
 						self::$included[$class_name] = $class_name;
 						if (!isset(self::$activated[$class_name])){
-							// Если система установлена или класс явно указан в необходимости активации
+							// Активация класса (модуля)
 							if (method_exists($class_name, 'Activate')){
 								call_user_func(array($class_name, 'Activate'));
 								self::$activated[$class_name] = $class_name;
 							}
 						}
 					}catch(\ErrorException $e){
+						if ($e->getCode() == 2){
+							// Отсутсвует файл класса.
+							// @TODO Если класс принадлежит проекту, то его нужно деактивировать (удалить)
+						}
 						throw $e;
 					}
 				}
