@@ -1,4 +1,3 @@
 # Boolive CMS
 
-
-http://boolive.ru
+See more: http://boolive.ru (russian)
