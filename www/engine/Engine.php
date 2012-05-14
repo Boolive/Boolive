@@ -17,8 +17,8 @@ class Engine{
 		include_once ROOT_DIR_ENGINE.'classes/Classes.php';
 		// Принудельная активация необходимых системе классов
 		Classes::Activate('Engine\Classes');
-		Classes::Activate('Engine\Trace');
 		Classes::Activate('Engine\Benchmark');
+		Classes::Activate('Engine\Trace');
 		Classes::Activate('Engine\Unicode');
 		Classes::Activate('Engine\ErrorsHandler');
 		// При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.

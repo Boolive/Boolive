@@ -48,7 +48,7 @@ class Benchmark{
 			'memory' => memory_get_usage() - self::$start[$key]['memory'],
 			'memory_max' => memory_get_peak_usage()
 		);
-		return self::Get($key = 'all', $format);
+		return self::Get($key, $format);
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Benchmark{
 	 * @return array Результаты замера
 	 */
 	static function Get($key = 'all', $format = false){
-		if (!isset(self::$stop[$key])){
+		if (isset(self::$stop[$key])){
 			if ($format){
 				return array(
 					'time' => sprintf('%0.8f s', self::$stop[$key]['time']),
@@ -78,10 +78,10 @@ class Benchmark{
 	 */
 	static function StopAndPrint($key = 'all'){
 		if ($info = self::Stop($key, true)){
-			print '== Benchmark "'.$key.'" == <br>';
-			print 'Time: '.$info['time'].' <br>';
-			print 'Memory: '.$info['memory'].' <br>';
-			print 'Max memory: '.$info['memory_max'].' <br>';
+			print "\n=== Benchmark \"".$key."\" ===\n";
+			print 'Time: '.$info['time']."\n";
+			print 'Memory: '.$info['memory']."\n";
+			print 'Max memory: '.$info['memory_max']."\n";
 		}
 	}
 }
