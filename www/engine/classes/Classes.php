@@ -92,6 +92,18 @@ class Classes{
 	}
 
 	/**
+	 * Путь на файл класса относительно корня сайта
+	 * @param $class_name Имя класса
+	 * @return mixed
+	 */
+	public static function GetPath($class_name){
+		if (isset(self::$classes[$class_name])){
+			return self::$classes[$class_name];
+		}
+		return false;
+	}
+
+	/**
 	 * Список активированных классов.
 	 * Классы, у которых был вызован метод Activate().
 	 * @return array Названия классов

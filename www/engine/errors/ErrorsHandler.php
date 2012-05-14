@@ -27,11 +27,10 @@ class ErrorsHandler{
 	 * Вызывается автоматически при исключениях и ошибках
 	 *
 	 * @param \Exception $e Исключение
-	 * @param bool $fatal Признак фатальности ошибки
 	 * @return bool
 	 */
 
-	static function ExceptionHandler($e, $fatal = true){
+	static function ExceptionHandler($e){
 		if (!Events::Send('ERRORS_SYSTEM', $e)){
 			error_log((string)$e);
 			ob_clean();
