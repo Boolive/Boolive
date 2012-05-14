@@ -1,0 +1,47 @@
+# Кодировка по умолчанию
+AddDefaultCharset UTF-8
+
+# Файлы, к которым запрщено обращаться напрямую
+<Files ~ "((readme\.txt)|(readme)|(\.(htaccess|sql|php|cache|tpl)))$">
+	Order deny,allow
+	Deny from all
+</Files>
+
+<Files "index.php">
+	Allow from all
+</Files>
+
+Options -Indexes
+Options +FollowSymLinks
+
+# Отключение index файла, так как используется mod_rewrite
+DirectoryIndex Off
+
+# Правила изменеия запросов ("чистые" ссылки)
+<IfModule mod_rewrite.c>
+
+	RewriteEngine On
+	
+	# Директория сайта относительно домена
+	# Если Boolive CMS расположена в поддиректории, например в http://localhost/boolive, то
+	# следует изменить параметр RewriteBase, указав название поддиректории:
+	# RewriteBase /boolive
+	#
+	# Если сайт в корневой директории, например его адрес: http://localhost, то установите:
+	# RewriteBase /
+
+	RewriteBase /
+	
+	# Не изменять ссылки на файлы
+	RewriteCond %{REQUEST_URI} !\.[a-zA-Z]{1,4}[\?0-9]*/?$ [NC]
+
+	# Правило изменения ссылок. Всё после адреса сайта присваивается параметру "q" GET запроса
+	# http://boolive.ru/news/first => 'http://boolive.ru/index.php?q=news/first'.
+	RewriteRule ^(.*)$ index.php?q=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+
+</IfModule>
+
+# Если mod_rewrite отключен, то устанвливаем index файл
+<IfDefine !RewriteEngine>
+	DirectoryIndex index.php
+</IfDefine>
