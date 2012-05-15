@@ -1,9 +1,8 @@
 <?php
 /**
  * Управление событиями
- * Обеспечивает взаимодействие классов системы
  *
- * @version	1.0
+ * @version	2.0
  */
 namespace Engine;
 
@@ -11,34 +10,40 @@ use Engine\Classes,
 	Engine\EventResult;
 
 class Events{
-	const FILE_HANDLERS = 'config.events.php';
+	/** @const Названия файла со сведениями о зарегистрированных обработчиков */
+	const CONFIG_FILE = 'config.handlers.json';
+	/** @var array Реестр обработчиков событий */
 	private static $handlers = array();
-	private static $save = array();
-	private static $is_change = false;
-	private static $once = array();
+	/** @var bool Признак, требуется ли выпонить сохранение обработчиков в файл */
+	private static $need_save = false;
 
 	/**
 	 * Активация модуля
 	 */
 	static function Activate(){
-		self::LoadHandlers(ROOT_DIR_ENGINE.self::FILE_HANDLERS);
+		self::LoadHandlers();
+		self::AddHandler('STOP', '\\Engine\\Events', 'Stop', false);
 	}
 
 	/**
-	 * Добавляет обработчик события с определенным имененм
-	 * от определённого источника (класса)
+	 * Обработчик системного события STOP (завершение работы системы)
+	 */
+	static function Stop(){
+		if (self::$need_save) self::SaveHandlers();
+	}
+
+	/**
+	 * Добавление обработчика события
 	 *
 	 * @param string $event_name Имя события
-	 * @param string $handler_module Имя модуля обработчика события
+	 * @param string $handler_module Имя класса обработчика события
 	 * @param string $handler_method Имя метода класса обработчика события
-	 * @param bool $save Автоматически сохранять регистрацию
-	 * @param bool $once Одноразовая обработка события
+	 * @param bool $save Признак, сохранять регистрацию на событие?
+	 * @param bool $once Признак, одноразовы обработка события
 	 */
-	static function AddHandler($event_name, $handler_module, $handler_method, $save=true, $once = false){
-		self::$handlers[$event_name][] = array($handler_module, $handler_method);
-		if ($once) self::$once[$event_name][$handler_module.$handler_method] = true;
-		self::$save[$event_name][] = $save;
-		if ($save) self::$is_change = true;
+	static function AddHandler($event_name, $handler_module, $handler_method, $save = false, $once = false){
+		self::$handlers[$event_name][] = array($handler_module, $handler_method, 'save' => $save, 'once' => $once);
+		if ($save) self::$need_save = true;
 	}
 
 	/**
@@ -51,28 +56,21 @@ class Events{
 	static function RemoveHandler($event_name, $handler_module, $handler_method){
 		if (isset(self::$handlers[$event_name])){
 			$list = self::$handlers[$event_name];
-			$cnt = sizeof($list) - 1;
-			for ($i = $cnt; $i >= 0; $i--){
-				if (($list[$i][0] == $handler_module) && ($list[$i][1] == $handler_method)){
-					$key = self::$handlers[$event_name][$i][0].self::$handlers[$event_name][$i][1];
-					if (isset(self::$once[$event_name]) && isset(self::$once[$event_name][$key])){
-						unset(self::$once[$event_name][$key]);
-						if (sizeof(self::$once[$event_name]) == 0) unset(self::$once[$event_name]);
-					}
-				}else{
-					self::$is_change = true;
+			foreach ($list as $key => $handler){
+				if (($handler[0] == $handler_module) && ($handler[1] == $handler_method)){
+					unset(self::$handlers[$event_name][$key]);
+					if (!empty($handler['svae'])) self::$need_save = true;
 				}
-				array_splice(self::$handlers[$event_name], $i, 1);
 			}
 		}
 	}
 
 	/**
-	 * Генерация события.
+	 * Генерация события
 	 *
 	 * @param string $event_name Имя события
-	 * @param array $params Параметры события
-	 * @return EventResult Объект события с результатами его обработки
+	 * @param array|mixed $params Параметры события
+	 * @return \Engine\EventResult Объект события с результатами его обработки
 	 */
 	static function Send($event_name, $params=array()){
 		$r = new EventResult();
@@ -85,11 +83,13 @@ class Events{
 				if (!Classes::IsIncluded(self::$handlers[$event_name][$i][0])){
 					Classes::Activate(self::$handlers[$event_name][$i][0]);
 				}
-				$value = call_user_func_array(self::$handlers[$event_name][$i], $params);
-				if (isset($value)) $r->value = $value;
-				$r->count++;
-				if (isset(self::$once[$event_name]) && isset(self::$once[$event_name][self::$handlers[$event_name][$i][0].self::$handlers[$event_name][$i][1]])){
-					self::RemoveHandler($event_name, self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]);
+				if (method_exists(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1])){
+					$value = call_user_func_array(array(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]), $params);
+					if (isset($value)) $r->value = $value;
+					$r->count++;
+					if (!empty(self::$handlers[$event_name]['once'])){
+						self::RemoveHandler($event_name, self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]);
+					}
 				}
 			}
 		}
@@ -97,14 +97,35 @@ class Events{
 	}
 
 	/**
-	 * Загрузка информации об обработчиков собыйти из файла
-	 * @param $config_file
+	 * Загрузка реестра обработчиков событий
 	 */
-	private static function LoadHandlers($config_file){
-		include $config_file;
-		if (isset($events)){
-			self::$handlers = array_merge(self::$handlers, $events);
+	private static function LoadHandlers(){
+		$content = file_get_contents(ROOT_DIR_ENGINE.'Events/'.self::CONFIG_FILE);
+		self::$handlers = json_decode($content, true);
+	}
+
+	/**
+	 * Сохранение реестра обработчиков событий
+	 */
+	private static function SaveHandlers(){
+		$content = array();
+		$list = self::$handlers;
+		foreach ($list as $event => $handlers){
+			$content[$event] = array();
+			$cnt = sizeof($handlers);
+			for ($i = 0; $i < $cnt; $i++){
+				// Если не указано о сохранени или явно указано сохранять
+				if (!isset($handlers[$i]['save']) || !empty($handlers[$i]['save'])){
+					$content[$event][] = $handlers[$i];
+				}
+			}
+			if (empty($content[$event])) unset($content[$event]);
 		}
-		self::$is_change = false;
+		$content = json_encode($content);
+		if ($f = fopen(ROOT_DIR_ENGINE.'Events/'.self::CONFIG_FILE, 'w')){
+			fwrite($f, $content);
+			fclose($f);
+		}
+		self::$need_save = false;
 	}
 }
