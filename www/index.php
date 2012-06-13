@@ -4,6 +4,7 @@
  * Главный исполняемый файл. Запуск системы
  *
  * @version 2
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  * @see http://boolive.ru
  */
 // Подключение базовой конфигурации проекта

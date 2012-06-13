@@ -3,6 +3,7 @@
  * Класс для работы с кодировкой юникод (UTF-8)
  *
  * @version	1.0
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
 

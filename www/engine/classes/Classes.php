@@ -5,6 +5,7 @@
  * Информация о классах загружается из конфигурационного файла "engine/config.classes.php" и БД
  *
  * @version	2.0
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
 

@@ -3,6 +3,7 @@
  * Класс результата вызова обработчиков события
  *
  * @version	1.0
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
 

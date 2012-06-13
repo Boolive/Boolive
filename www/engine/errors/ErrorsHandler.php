@@ -3,6 +3,7 @@
  * Обработчик ошибок и исключений системы
  *
  * @version	2.0
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
 

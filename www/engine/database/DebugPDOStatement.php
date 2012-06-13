@@ -5,6 +5,7 @@
  * в объект запроса методами bindValue() и bindParam()
  *
  * @version 1.0
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
 
@@ -47,9 +48,9 @@ class DebugPDOStatement{
 		return $this->stmt->bindValue($key, $value, $data_type);
 	}
 
-	function bindParam($key, &$value, $data_type = PDO::PARAM_STR, $length = null){
-		$this->values[$key] = $value;
-		return $this->stmt->bindParam($key, $value, $data_type, $length);
+	function bindParam($key, &$variable, $data_type = PDO::PARAM_STR, $length = null, $driver_options = null){
+		$this->values[$key] = $variable;
+		return $this->stmt->bindParam($key, $variable, $data_type, $length);
 	}
 
 	function fetch($fetch_style = null, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0){

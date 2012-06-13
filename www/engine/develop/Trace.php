@@ -9,6 +9,7 @@
  * Trace::Group()->db->out(); // Вывод группы db
  * Trace::Group()->out(); // Вывод всех трассировок
  * @version	1.3
+ * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine{
 
