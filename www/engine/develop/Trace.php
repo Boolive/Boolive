@@ -1,34 +1,61 @@
 <?php
 /**
  * Трассировщик
- *
- * @version	1.2
+ * @example
+ * trace($value); // Вывод форматированного значения переменной
+ * trace($value)->log(); // Вывод и запись в php лог форматированного значения
+ * Trace::Group()->db->query->set($sql); // Добавление значения $sql в группу db->query
+ * Trace::Group()->group('db')->group('query')->set($sql); // ...альтернативное указание групп
+ * Trace::Group()->db->out(); // Вывод группы db
+ * Trace::Group()->out(); // Вывод всех трассировок
+ * @version	1.3
  */
 namespace Engine{
 
 	class Trace{
-		/** @var string Форматированное значение */
+		/** @var \Engine\Trace Список всех объектов трассировки */
+		static private $trace;
+		/** @var mixed Трассируемое значение */
 		private $value;
 		/** @var mixed Ключ трассировки (именование) */
 		private $key;
-		/** @var array Список всех трассировок */
-		static private $trace_list = array();
+		/** @var array Список вложенных трассировок */
+		private $list = array();
+		/** @var string Форматированное значение (кэш) */
+		private $format;
 
 		/**
 		 * Конструктор объекта трассировки
-		 * @param $key Ключ новой трассировки
+		 * @param string $key Ключ новой трассировки
 		 * @param $value Значения для трассировки
+		 * @param bool $clone Признак, клонировать значение, если является объектом?
 		 */
-		public function __construct($key, $value){
+		public function __construct($key = null, $value = null, $clone = true){
 			$this->key = $key;
-			$this->value = self::Format($value);
+			$this->set($value, $clone);
 		}
 
 		/**
-		 * Возвращение значения трассировки
-		 * @return string
+		 * Установка трассируемого значения.
+		 * @param mixed $value Значения для трассировки
+		 * @param bool $clone Признак, клонировать значение, если является объектом?
+		 * @return \Engine\Trace
 		 */
-		public function value(){
+		public function set($value, $clone = true){
+			if ($clone && is_object($value)){
+				$this->value = clone $value;
+			}else{
+				$this->value = $value;
+			}
+			$this->format = null;
+			return $this;
+		}
+
+		/**
+		 * Возвращение трассируемого значения
+		 * @return mixed
+		 */
+		public function get(){
 			return $this->value;
 		}
 
@@ -37,61 +64,70 @@ namespace Engine{
 		 * @return string
 		 */
 		public function key(){
-			return $this->value;
+			return $this->key;
 		}
 
 		/**
-		 * Вывод трассировки в HTML формате
-		 * @return \Engine\Trace Объект буфера
-		 */
-		public function out(){
-			echo '<pre>== '.$this->key." ==<br>\n".$this->value.'</pre>';
-			return $this;
-		}
-
-		/**
-		 * Запись значения буфера в лог файл
-		 * @return \Engine\Trace Объект буфера
+		 * Запись форматированного значения в лог файл
+		 * @return \Engine\Trace
 		 */
 		public function log(){
-			error_log('== Trace "'.$this->key."\" ==\n".$this->value);
+			error_log(self::Format($this));
 			return $this;
 		}
 
 		/**
-		 * Создание трассировки
-		 * @param mixed $value Значение для трассировки
-		 * @param string|int $key Ключ трассировки
-		 * @return \Engine\Trace Объект буфера
+		 * Вывод форматированного значения в HTML
+		 * @return \Engine\Trace $this
 		 */
-		static public function Add($value = null, $key = null){
-			if (empty($key)) $key = uniqid();
-			return self::$trace_list[$key] = new Trace($key, $value);
+		public function out(){
+			echo '<pre>'.self::Format($this).'</pre>';
+			return $this;
 		}
 
 		/**
-		 * Получения трассировки
-		 * @param null $key Ключ трассировки, если null, то возвращается массив из всех трассировок
-		 * @return array|\Engine\Trace Объект трассировки
+		 * Получения вложенного объекта трассировки
+		 * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
+		 * @return \Engine\Trace Объект трассировки
 		 */
-		static public function Get($key = null){
-			if (isset($key)){
-				if (isset(self::$trace_list[$key])) return (self::$trace_list[$key]);
-				return new Trace($key, null);
-			}else{
-				return self::$trace_list;
+		public function group($key = null){
+			if (empty($key)) $key = sizeof($this->list);
+			if (!isset($this->list[$key])){
+				$this->list[$key] = new Trace($key, null);
+			}
+			return $this->list[$key];
+		}
+
+		/**
+		 * Получения вложенного объекта трассировки
+		 * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
+		 * @return \Engine\Trace Объект трассировки
+		 */
+		public function __get($key = null){
+			return $this->group($key);
+		}
+
+		/**
+		 * Удаление вложенного объекта трассировки
+		 * @param $key Ключ трассировки
+		 */
+		public function __unset($key){
+			if (!isset($this->list[$key])){
+				unset($this->list[$key]);
 			}
 		}
 
 		/**
-		 * Удаление трассировки
-		 * @param null $key Ключ трассировки, если null, то очищается весь список тарссировок
+		 * Корневой объект трассировки
+		 * @param null $key Ключ подчиенного объекта трассировки. Если отсутствует, то будет создан
+		 * @return \Engine\Trace
 		 */
-		static public function Delete($key = null){
+		static function Groups($key = null){
+			if (!isset(self::$trace)) self::$trace = new Trace('TRACE');
 			if (isset($key)){
-				if (isset(self::$trace_list[$key])) unset(self::$trace_list[$key]);
+				return self::$trace->__get($key);
 			}else{
-				self::$trace_list = array();
+				return self::$trace;
 			}
 		}
 
@@ -99,14 +135,31 @@ namespace Engine{
 		 * Форматирование значения
 		 *
 		 * @param mixed $var Значение для форматировния
-		 * @param int $indent Отступ выводимой структуры
-		 * @param array $trace_buf Буфер вывода (результата)
+		 * @param array $trace_buf Буфер вывода (результата). Используется в рекурсии для предотвращения обратных ссылок
+		 * @param string $pfx Префикс для строки вывода. Для имитации иерархии
 		 * @return string
 		 */
-		static public function Format(&$var, $indent = 0, &$trace_buf = array()){
+		static public function Format($var, &$trace_buf = array(), $pfx = '  '){
 			$sp = '| ';
 			$sp2 = '. ';
+			$sp3 = '  ';
 			$out = '';
+			if ($var instanceof Trace){
+				$out.= '# '.$var->key."\n";
+				if (empty($var->list)){
+					$var = $pfx.self::Format($var->value, $trace_buf, $pfx.$sp3);
+				}else{
+					if (isset($var->value)){
+						$out.= $pfx.self::Format($var->value, $trace_buf, $pfx)."\n";
+					}
+					$cnt = sizeof($var->list);
+					foreach ($var->list as $var){
+						$cnt--;
+						$out.= $pfx.self::Format($var, $trace_buf, ($cnt?$pfx.$sp:$pfx.$sp3))."\n";
+					}
+					return rtrim($out);
+				}
+			}
 			// если не определена или null
 			if (!isset($var) || is_null($var)){
 				$out.= "null";
@@ -121,12 +174,19 @@ namespace Engine{
 			}else
 			// если массив
 			if (is_array($var)){
-				if (count($var) == 0){
+				$cnt = sizeof($var);
+				if ($cnt == 0){
 					$out.='{Array} ()';
 				}else{
 					$out.= '{Array}';
 					foreach ($var as $name => $value){
-						$out.= "\n".str_repeat($sp, $indent).$sp2.'['.$name.'] => '.self::Format($value, $indent+1, $trace_buf);
+						$cnt--;
+						if ($cnt){
+							$new_pfx = $pfx.' '.$sp;
+						}else{
+							$new_pfx = $pfx.' '.$sp3;
+						}
+						$out.= "\n".$pfx.'['.$name.'] => '.self::Format($value, $trace_buf, $new_pfx);
 					}
 				}
 			}else
@@ -148,16 +208,22 @@ namespace Engine{
 					}
 					$list = self::ObjToArray($var);
 				}
-
-				if (count($list) > 0){
+				$cnt = sizeof($list);
+				if ($cnt > 0){
 					foreach ($list as $name => $value){
-						$out.= "\n".str_repeat($sp, $indent).$sp2.'['.$name.'] => '.self::Format($value, $indent+1, $trace_buf);
+						$cnt--;
+						if ($cnt){
+							$new_pfx = $pfx.' '.$sp;
+						}else{
+							$new_pfx = $pfx.' '.$sp3;
+						}
+						$out.= "\n".$pfx.'['.$name.'] => '.self::Format($value, $trace_buf, $new_pfx);
 					}
 				}
 			}
 			// Иначе
 			else{
-				$out.= htmlentities($var, ENT_QUOTES, 'UTF-8');
+				$out.= $var;
 			}
 			return $out;
 		}
@@ -184,7 +250,7 @@ namespace Engine{
 	}
 
 	/**
-	 * Интерфейс для получения от объекта значений для трассировки (вывода)
+	 * Интерфейс получения от объекта значений для трассировки (вывода)
 	 */
 	interface ITrace{
 		/**
@@ -203,7 +269,7 @@ namespace {
 	 * @param string|int $key Ключ трассировки
 	 * @return \Engine\Trace Объект трассировки
 	 */
-	function trace($var = null, $key = null){
-		return \Engine\Trace::Add($var, $key)->out();
+	function trace($var = null, $key = 'trace'){
+		return \Engine\Trace::Groups($key)->group()->set($var)->out();
 	}
 }
