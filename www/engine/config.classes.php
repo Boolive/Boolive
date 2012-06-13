@@ -28,4 +28,7 @@ $classes = array(
 	// База данных
 	'Engine\DB'					=> 'database/DB.php',
 	'Engine\DebugPDOStatement'	=> 'database/DebugPDOStatement.php',
+
+	// Отложенные вызовы
+	'Engine\Calls'			=> 'calls/Calls.php',
 );
