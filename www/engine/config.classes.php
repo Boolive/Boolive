@@ -31,4 +31,9 @@ $classes = array(
 
 	// Отложенные вызовы
 	'Engine\Calls'			=> 'calls/Calls.php',
+
+	// Значения, правила проверки, проверка и фильтр
+	'Engine\Rule'			=> 'values/Rule.php',
+	'Engine\Check'			=> 'values/Check.php',
+	'Engine\Values'			=> 'values/Values.php',
 );
