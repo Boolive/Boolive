@@ -78,21 +78,31 @@ class Calls {
 	}
 
 	/**
-	 * Размещение метода в очередь на выполнение в текущей транзакции
-	 * Если транзакций нет, то возвращается false
-	 * @param $class_or_object
-	 * @param $method
+	 * Добавление функции в текущую очередь на выполнение
+	 * Если очереди нет, то функция сразу исполняется
+	 * @param callback $callback Имя функции или массив из имени класса или объекта и именем метода
 	 * @param array $args Значения аргументов метода
-	 * @internal param string $name Имя метода класса File
-	 * @return bool
+	 * @return mixed
 	 */
-	static function Pull($class_or_object, $method, $args){
+	static function Pull($callback, $args){
 		if (self::$level > 0){
-			self::$commands[self::$level][] = array(array($class_or_object, $method), $args);
+			self::$commands[self::$level][] = array($callback, $args);
 			return true;
 		}else{
-			return false;
+			call_user_func_array($callback, $args);
 		}
+	}
+
+	/**
+	 * Добавление метода в текущую очередь на выполнение
+	 * Если очереди нет, то метод сразу исполняется
+	 * @param $class_or_object Имя класса или объект
+	 * @param $method Имя метода
+	 * @param array $args Значения аргументов метода
+	 * @return mixed
+	 */
+	static function PullMethod($class_or_object, $method, $args){
+		return self::Pull(array($class_or_object, $method), $args);
 	}
 
 	/**

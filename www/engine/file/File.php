@@ -37,7 +37,7 @@ class File{
 				throw new Error('File name is already used');
 			}
 		}
-		if (!Calls::Pull('\\Engine\\File', 'Create', array($content, $to, $create_uniqname))){
+		if (!Calls::PullMethod('\\Engine\\File', 'Create', array($content, $to, $create_uniqname))){
 			// Если папки нет, то создаем её
 			$dir = dirname($to);
 			if(!is_dir($dir)){
@@ -79,7 +79,7 @@ class File{
 					throw new Error('File name is already used');
 				}
 			}
-			if (!Calls::Pull('\\Engine\\File', 'Upload', array($from, $to, $create_uniqname))){
+			if (!Calls::PullMethod('\\Engine\\File', 'Upload', array($from, $to, $create_uniqname))){
 				// Если папки нет, то создаем её
 				$dir = dirname($to);
 				if(!is_dir($dir)){
@@ -104,7 +104,7 @@ class File{
 	 * @return bool
 	 */
 	static function Copy($from, $to){
-		if (!Calls::Pull('\\Engine\\File', 'Copy', array($from, $to))){
+		if (!Calls::PullMethod('\\Engine\\File', 'Copy', array($from, $to))){
 			// Если папки нет, то создаем её
 			$dir = dirname($to);
 			if(!is_dir($dir)){
@@ -126,7 +126,7 @@ class File{
 	 * @return bool
 	 */
 	static function Rename($from, $to){
-		if (!Calls::Pull('\\Engine\\File', 'Rename', array($from, $to))){
+		if (!Calls::PullMethod('\\Engine\\File', 'Rename', array($from, $to))){
 			$dir = dirname($to);
 			if(!is_dir($dir)){
 				mkdir($dir, 0777, true);
@@ -147,7 +147,7 @@ class File{
 	 * @return bool
 	 */
 	static function ClearDir($dir, $delete_me = false){
-		if (!Calls::Pull('\\Engine\\File', 'ClearDir', array($dir, $delete_me))){
+		if (!Calls::PullMethod('\\Engine\\File', 'ClearDir', array($dir, $delete_me))){
 			if (is_file($dir)){
 				return @unlink($dir);
 			}else
