@@ -2,7 +2,8 @@
 /**
  * Значения, требующие проверки или фильтра
  *
- * @version	2.1
+ * @version	2.2
+ * @link http://boolive.ru/createcms/filter-and-check-data
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
@@ -15,7 +16,14 @@ use ArrayObject,
 class Values extends ArrayObject{
 	/** @var \Engine\Rule Правило по умолчанию */
 	protected $_rule;
-
+	/** @var bool Признак, были изменения значений (true) или нет (false)? */
+	protected $_changed;
+	/** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
+	protected $_filtered;
+	/** @var \Engine\Values Родительский объект Values. Необходим для оповещения об изменениях */
+	protected $_parent;
+	/** @var Ключ объекта в родителе. Используется при отложенном связывании временных объектов после изменений */
+	private $_name_in_parent;
 	/**
 	 * Конструктор
 	 * @param array|mixed $list Значения. Если не массив, то значение будет обернуто в массив
@@ -25,6 +33,9 @@ class Values extends ArrayObject{
 		if (!is_array($list)) $list = array($list);
 		parent::__construct($list);
 		$this->_rule = $rule;
+		$this->_changed = false;
+		$this->_filtered = false;
+		$this->_parent = null;
 	}
 
 	/**
@@ -72,6 +83,10 @@ class Values extends ArrayObject{
 	 * @return mixed Отфильтрованное значение
 	 */
 	public function get($name, $rule = null, &$error = null){
+		// Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
+		if (!$rule && $this->_filtered && parent::offsetExists($name)){
+			return parent::offsetGet($name);
+		}
 		// Результат фильтра
 		$result = null;
 		$used_filter = false;
@@ -112,6 +127,7 @@ class Values extends ArrayObject{
 					// Если значение - массив, то преобразовываем его в объект Values
 					if (is_array($value)){
 						parent::offsetSet($name, $value = new Values($value));
+						$value->_parent = $this;
 					}
 					// Если правилом задана выборка массива значений
 					if ($rule->getKind() != Rule::KIND_SINGLE && $value instanceof Values){
@@ -125,9 +141,6 @@ class Values extends ArrayObject{
 					if ($rule->getType() == Rule::TYPE_VALUES && $value instanceof Values){
 						$result = $value;
 					}else{
-	//				if ($rule->getKind() == Rule::KIND_SINGLE && $value instanceof Values){
-	//					$used_filter = Rule::ERROR_TYPE;
-	//				}else{
 						// Фильтруем и возращаем в соответствии с указанным типом
 						$result = Check::Filter($value, $rule, $used_filter);
 					}
@@ -165,9 +178,13 @@ class Values extends ArrayObject{
 	 * @return array Отфильтрованные значения
 	 */
 	public function getArray($rule = null, &$errors = null){
-		$result = array();
 		// Контейнер для исключений
 		if (!($errors instanceof Error)) $errors = new Error();
+		// Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
+		if (!$rule && $this->_filtered){
+			return parent::getArrayCopy();
+		}
+		$result = array();
 		// Если не указано правило
 		if (!$rule) $rule = $this->getRule();
 
@@ -312,15 +329,24 @@ class Values extends ArrayObject{
 	 * Применение правила к своим элементам для фильтра их значения
 	 * @param array|\Engine\Rule $rule Правило проверки и фильтра
 	 * @param null $errors Ошибки после проверки
-	 * @param bool $cut Признак, удалить или нет элементы, для которых нет правила?
 	 */
-	public function filterArray($rule = null, &$errors = null, $cut = true){
+	public function filterArray($rule = null, &$errors = null){
 		$values = $this->getArray($rule, $errors);
-		if ($cut){
-			$this->exchangeArray($values);
-		}else{
-			$this->replaceArray($values);
+		$this->exchangeArray($values);
+	}
+
+	/**
+	 * @param mixed $list
+	 * @return array
+	 */
+	public function exchangeArray($list){
+		$this->changed(true);
+		$this->_filtered = false;
+		// Смена родителей для элментов $list класса Values
+		foreach ($list as $value){
+			if ($value instanceof Values) $value->_parent = $this;
 		}
+		return parent::exchangeArray($list);
 	}
 
 	/**
@@ -332,8 +358,10 @@ class Values extends ArrayObject{
 	public function replaceArray($list){
 		if ((is_array($list)||$list instanceof \ArrayAccess) &&!empty($list)){
 			foreach ($list as $key => $value){
-				parent::offsetSet($key, $value);
+				$this->offsetSet($key, $value);
 			}
+			$this->changed(true);
+			$this->_filtered = false;
 		}
 	}
 
@@ -355,7 +383,7 @@ class Values extends ArrayObject{
 					$self_value = parent::offsetGet($name);
 					// объединение
 					if (!$self_value instanceof Values){
-						parent::offsetSet($name, $self_value = new Values($self_value));
+						$this->offsetSet($name, $self_value = new Values($self_value));
 					}
 					if (is_array($value) || $value instanceof Values){
 						// вложенное объединение
@@ -366,9 +394,10 @@ class Values extends ArrayObject{
 					}
 				}else{
 					// Добавление или обновление значения
-					parent::offsetSet($name, $value);
+					$this->offsetSet($name, $value);
 				}
 			}else{
+				// @todo Смена родителя?
 				$this->append($value);
 			}
 		}
@@ -433,6 +462,80 @@ class Values extends ArrayObject{
 			}
 			parent::exchangeArray($list);
 		}
+		$this->changed(true);
+		$this->_filtered = false;
+	}
+
+	/**
+	 * Родительский объект Values
+	 * @return Values|null
+	 */
+	public function parent(){
+		return $this->_parent;
+	}
+
+	/**
+	 * Признак, отфильтрованы значения или нет
+	 * @return bool
+	 */
+	public function isFiltered(){
+		return $this->_filtered;
+	}
+
+	/**
+	 * Признак, изменялись значения или нет
+	 * @return bool
+	 */
+	public function isChanged(){
+		return $this->_changed;
+	}
+
+	/**
+	 * Установка признака наличия изменений
+	 * Если объект изменился, то изменяют все родители
+	 * @param bool $changed
+	 */
+	public function changed($changed = true){
+		if (!$this->_changed && $changed && !$this->_parent){
+			if ($this->_name_in_parent){
+				$this->_parent->offsetSet($this->_name_in_parent, $this);
+				$this->_name_in_parent = null;
+			}else{
+				$this->_parent->changed($changed);
+			}
+		}
+		$this->_changed = $changed;
+	}
+
+	public function append($value){
+		parent::append($value);
+		$this->changed(true);
+		$this->_filtered = false;
+	}
+
+	/**
+	 * Получение значения с применением правила по умолчанию
+	 * @param mixed $name Ключ элемента
+	 * @return mixed Отфильтрованное значение
+	 */
+	public function offsetGet($name){
+		return $this->get($name);
+	}
+
+	/**
+	 * Установка значения
+	 * @param mixed $name Ключ элемента
+	 * @param mixed $value Новое значения элемента
+	 */
+	public function offsetSet($name, $value){
+		if (!parent::offsetExists($name) || parent::offsetGet($name)!=$value){
+			parent::offsetSet($name, $value);
+			if ($value instanceof Values){
+				$value->_parent = $this;
+			}
+			$this->changed(true);
+			$this->_filtered = false;
+		}
 	}
 
 	/**
@@ -461,6 +564,8 @@ class Values extends ArrayObject{
 	 */
 	public function offsetUnsetAll(){
 		$this->exchangeArray(array());
+		$this->changed(true);
+		$this->_filtered = false;
 	}
 
 	/**
@@ -475,6 +580,8 @@ class Values extends ArrayObject{
 		foreach ($arg as $name){
 			parent::offsetUnset($name);
 		}
+		$this->changed(true);
+		$this->_filtered = false;
 	}
 
 	/**
@@ -489,14 +596,21 @@ class Values extends ArrayObject{
 			$value = parent::offsetGet($name);
 			if (is_array($value)){
 				parent::offsetSet($name, $value = new Values($value, $this->_rule));
+				$value->_parent = $this;
 			}
 			if ($value instanceof Values){
 				return $value;
 			}else{
-				return new Values($value, $this->_rule);
+				// @todo Если объект будет изменяться, то нужно установить связь с $this
+				$value = new Values($value, $this->_rule);
+				$value->_parent = $this;
+				$value->_name = $name;
+				return $value;
 			}
 		}else{
+			// Создание временного объекта. Счиатется временным, пока не изменится
 			parent::offsetSet($name, $value = new Values(array(), $this->_rule));
+			$value->_parent = $this;
 			return $value;
 		}
 	}
@@ -508,7 +622,7 @@ class Values extends ArrayObject{
 	 * @param mixed $value Значение
 	 */
 	public function __set($name, $value){
-		parent::offsetSet($name, $value);
+		$this->offsetSet($name, $value);
 	}
 
 	/**
@@ -518,7 +632,7 @@ class Values extends ArrayObject{
 	 * @return bool
 	 */
 	public function __isset($name){
-		return parent::offsetExists($name);
+		$this->offsetExists($name);
 	}
 
 	/**
@@ -528,7 +642,7 @@ class Values extends ArrayObject{
 	 * @return bool
 	 */
 	public function __unset($name){
-		parent::offsetUnset($name);
+		$this->offsetUnset($name);
 	}
 
 	/**
@@ -555,10 +669,21 @@ class Values extends ArrayObject{
 	 * Клонирование объекта
 	 */
 	public function __clone(){
+		$this->_parent = null;
 		foreach ((array)$this as $key => $item){
 			if (is_object($item)){
-				parent::offsetSet($key, clone $item);
+				$this->offsetSet($key, clone $item);
 			}
 		}
+	}
+
+	/**
+	 * Вызов неопределённого метода
+	 * @param string $name Имя метода
+	 * @param array $args Аргументы
+	 * @return null
+	 */
+	public function __call($name, $args){
+		return null;
 	}
 }

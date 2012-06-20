@@ -3,6 +3,7 @@
  * Правила для проверки и фильтра значений
  *
  * @version 1.0
+ * @link http://boolive.ru/createcms/filter-and-check-data
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @examle
  * // Простое правило
@@ -412,7 +413,7 @@ class Rule {
 	}
 
 	/**
-	 * Признак обязательности сущестования
+	 * Признак обязательности существования
 	 * @param $exist
 	 * @return Rule
 	 */
@@ -433,7 +434,7 @@ class Rule {
 	}
 
 	/**
-	 * Значение по умолчанию, если параметр отсутсвует
+	 * Значение по умолчанию, если значение отсутствует
 	 * @param $value
 	 * @return Rule
 	 */

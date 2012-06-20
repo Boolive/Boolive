@@ -3,6 +3,7 @@
  * Фильтры и валидаторы значений
  *
  * @version	1.1
+ * @link http://boolive.ru/createcms/filter-and-check-data
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
