@@ -50,7 +50,7 @@ class DB extends PDO{
 	 *  'options' => array(),
 	 *  'prefix' => ''
 	 * )
-	 * @return \Engine\SQL
+	 * @return \Engine\DB
 	 */
 	static function Connect($config = null){
 //		if (empty($config)) $config = self::GetDefaultConfig();
@@ -192,7 +192,7 @@ class DB extends PDO{
 		if ($this->debug){
 			$stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
 			if ($stmt instanceof PDOStatement){
-				return new DebugSQLStatement($stmt);
+				return new DebugDBStatement($stmt);
 			}else{
 				throw new Error('PDO does not return PDOStatement');
 			}
