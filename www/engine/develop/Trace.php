@@ -43,7 +43,7 @@ namespace Engine{
 		 * @return \Engine\Trace
 		 */
 		public function set($value, $clone = true){
-			if ($clone && is_object($value)){
+			if ($clone && is_object($value) && !$value instanceof \Exception){
 				$this->value = clone $value;
 			}else{
 				$this->value = $value;
@@ -267,10 +267,9 @@ namespace {
 	 * Трассировка переменной с автоматическим выводом значения
 	 * Сделано из-за лени обращаться к классу Trace :)
 	 * @param mixed $var Значение для трассировки
-	 * @param string|int $key Ключ трассировки
 	 * @return \Engine\Trace Объект трассировки
 	 */
-	function trace($var = null, $key = 'trace'){
-		return \Engine\Trace::Groups($key)->group()->set($var)->out();
+	function trace($var = null){
+		return \Engine\Trace::Groups('trace')->group()->set($var)->out();
 	}
 }
