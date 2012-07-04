@@ -7,18 +7,18 @@
 define('DOCUMENT_ROOT', get_doc_root());
 
 /** @cont string Директория сайта относительно домена (там, где файл index.php). Слеш в начале и конце обязателен! */
-define('SITE_DIR', get_site_dir());
+define('DIR_WEB', get_web_dir());
 /** @cont string Директория ядра (движка) относительно домена. Слеш в конце обязателен! */
-define('SITE_DIR_ENGINE', SITE_DIR.'engine/');
+define('DIR_WEB_ENGINE', DIR_WEB.'engine/');
 /** @cont string Директория проекта относительно домена. Слеш в конце обязателен! */
-define('SITE_DIR_PROJECT', SITE_DIR.'project/');
+define('DIR_WEB_PROJECT', DIR_WEB.'site/');
 
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */
-define('ROOT_DIR', DOCUMENT_ROOT.SITE_DIR);
+define('DIR_SERVER', DOCUMENT_ROOT.DIR_WEB);
 /** @cont string Директория ядра на сервере. Слеш в конце обязателен! */
-define('ROOT_DIR_ENGINE', DOCUMENT_ROOT.SITE_DIR_ENGINE);
+define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
-define('ROOT_DIR_PROJECT', DOCUMENT_ROOT.SITE_DIR_PROJECT);
+define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
 
 /**
  * Определение корневой директории сервера
@@ -35,7 +35,7 @@ function get_doc_root(){
  * Определение корневой директории относительно домена сайта
  * @return string
  */
-function get_site_dir(){
+function get_web_dir(){
 	preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)index\.php$|', $_SERVER['SCRIPT_FILENAME'], $find);
 	return $find[1];
 }

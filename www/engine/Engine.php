@@ -2,6 +2,7 @@
 /**
  * Ядро. Главный класс системы.
  * @version 1.0
+ * @link http://boolive.ru/createcms/cms-engine
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
@@ -15,7 +16,7 @@ class Engine{
 		register_shutdown_function(array('\Engine\Engine', 'Stop'));
 		// Подключение файла класса для управления всеми классами.
 		// Остальные файлы классов будут подключаться автоматически при первом обращении
-		include_once ROOT_DIR_ENGINE.'classes/Classes.php';
+		include_once DIR_SERVER_ENGINE.'classes/Classes.php';
 		// Принудельная активация необходимых системе классов
 		Classes::Activate('Engine\Classes');
 		Classes::Activate('Engine\Benchmark');
@@ -70,16 +71,16 @@ class Engine{
 			$requirements[] = 'Требуется включить модуль "mod_rewrite" для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
 			Включение выполняется в файле конфигурации "...\Apache\conf\httpd.conf" опцией LoadModule';
 		}
-		$file = ROOT_DIR.'config.php';
+		$file = DIR_SERVER.'config.php';
 		if (!is_writable($file)){
 			$requirements[] = 'Установите права на запись для файла "'.$file.'". Необходимо для автоматической записи настроек системы';
 		}
-		$file = ROOT_DIR.'.htaccess';
+		$file = DIR_SERVER.'.htaccess';
 		if (!is_writable($file)){
 			$requirements[] = 'Установите права на запись для файла "'.$file.'". Необходимо для автоматической записи настроек системы';
 		}
-		if (!is_writable(ROOT_DIR)){
-			$requirements[] = 'Установите права на запись для директории "'.ROOT_DIR_PROJECT.'" и всех её вложенных директорий и файлов';
+		if (!is_writable(DIR_SERVER)){
+			$requirements[] = 'Установите права на запись для директории "'.DIR_SERVER_PROJECT.'" и всех её вложенных директорий и файлов';
 		}
 		return $requirements;
 	}
@@ -89,11 +90,11 @@ class Engine{
 	 *
 	 */
 	static function Install(){
-		$file = ROOT_DIR.'.htaccess';
+		$file = DIR_SERVER.'.htaccess';
 		if (is_writable($file)){
 			$content = file_get_contents($file);
 			// Прописывание базовой директории для mod_rewrite
-			$content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n\tRewriteBase ".SITE_DIR, $content);
+			$content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n\tRewriteBase ".DIR_WEB, $content);
 			$fp = fopen($file, 'w');
 			fwrite($fp, $content);
 			fclose($fp);

@@ -102,7 +102,7 @@ class Events{
 	 * Загрузка реестра обработчиков событий
 	 */
 	private static function LoadHandlers(){
-		$content = file_get_contents(ROOT_DIR_ENGINE.'Events/'.self::CONFIG_FILE);
+		$content = file_get_contents(DIR_SERVER_ENGINE.'Events/'.self::CONFIG_FILE);
 		self::$handlers = json_decode($content, true);
 	}
 
@@ -124,7 +124,7 @@ class Events{
 			if (empty($content[$event])) unset($content[$event]);
 		}
 		$content = json_encode($content);
-		if ($f = fopen(ROOT_DIR_ENGINE.'Events/'.self::CONFIG_FILE, 'w')){
+		if ($f = fopen(DIR_SERVER_ENGINE.'Events/'.self::CONFIG_FILE, 'w')){
 			fwrite($f, $content);
 			fclose($f);
 		}

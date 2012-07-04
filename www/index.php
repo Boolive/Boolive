@@ -10,6 +10,6 @@
 // Подключение базовой конфигурации проекта
 require 'config.php';
 // Подключение главного класса системы
-require ROOT_DIR_ENGINE.'Engine.php';
+require DIR_SERVER_ENGINE.'Engine.php';
 // Запуск системы
 Engine\Engine::Start();
