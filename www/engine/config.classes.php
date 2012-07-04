@@ -27,7 +27,7 @@ $classes = array(
 
 	// База данных
 	'Engine\DB'					=> 'database/DB.php',
-	'Engine\DebugPDOStatement'	=> 'database/DebugPDOStatement.php',
+	'Engine\DebugDBStatement'	=> 'database/DebugDBStatement.php',
 
 	// Отложенные вызовы
 	'Engine\Calls'			=> 'calls/Calls.php',
@@ -36,4 +36,14 @@ $classes = array(
 	'Engine\Rule'			=> 'values/Rule.php',
 	'Engine\Check'			=> 'values/Check.php',
 	'Engine\Values'			=> 'values/Values.php',
+
+	// Модуль данных, базовые классы объектов данных
+	'Engine\Data'			=> 'data/Data.php',
+	'Engine\Entity'			=> 'data/Entity.php',
+	'Engine\Root'			=> 'data/Root.php',
+	'Engine\Section'		=> 'data/Section.php',
+	// Секции
+	'Engine\Sections\MySQLSection'	=> 'data/sections/MySQLSection.php',
+
+	'Engine\F'			=> 'functions/F.php'
 );
