@@ -1,6 +1,6 @@
 <?php
 /**
- * Класс доступа к базам данных.
+ * Класс доступа к реляционным базам данных.
  * Наследуется стандартный интерфейс доступа к данным PHP Data Objects (PDO)
  *
  * Особенности:
@@ -23,10 +23,10 @@ use PDO,
 	Engine\F;
 
 class DB extends PDO{
-	/** @const Файл параметров подключения по умолчанию */
-	const CONFIG_FILE = 'database/config.db.php';
-	/** @var array Параметры подключения по умолчанию */
-	static private $config;
+//	/** @const Файл параметров подключения по умолчанию */
+//	const CONFIG_FILE = 'database/config.db.php';
+//	/** @var array Параметры подключения по умолчанию */
+//	static private $config;
 	/** @var array Установленные соединения */
 	static private $connection = array();
 
@@ -50,10 +50,10 @@ class DB extends PDO{
 	 *  'options' => array(),
 	 *  'prefix' => ''
 	 * )
-	 * @return \Engine\DB
+	 * @return \Engine\SQL
 	 */
 	static function Connect($config = null){
-		if (empty($config)) $config = self::GetDefaultConfig();
+//		if (empty($config)) $config = self::GetDefaultConfig();
 		if (!empty($config['dsn'])){
 			// Формирование DSN и других параметров подключения
 			if (is_array($config['dsn'])){
@@ -84,19 +84,19 @@ class DB extends PDO{
 		return null;
 	}
 
-	/**
-	 * Параметры подключения по умолчанию
-	 * @return array|bool
-	 */
-	static function GetDefaultConfig(){
-		if (file_exists(ROOT_DIR_ENGINE.self::CONFIG_FILE)){
-			include ROOT_DIR_ENGINE.self::CONFIG_FILE;
-			if (isset($config)) self::$config = $config;
-		}else{
-			return false;
-		}
-		return self::$config;
-	}
+//	/**
+//	 * Параметры подключения по умолчанию
+//	 * @return array|bool
+//	 */
+//	static function GetDefaultConfig(){
+//		if (file_exists(ROOT_DIR_ENGINE.self::CONFIG_FILE)){
+//			include ROOT_DIR_ENGINE.self::CONFIG_FILE;
+//			if (isset($config)) self::$config = $config;
+//		}else{
+//			return false;
+//		}
+//		return self::$config;
+//	}
 
 	public function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false){
 		parent::__construct($dsn, $username, $passwd, $options);
@@ -186,13 +186,13 @@ class DB extends PDO{
 	 * @param string $sql Строка SQL запроса с параметрами
 	 * @param array $driver_options
 	 * @throws Error
-	 * @return \Engine\DebugPDOStatement|\PDOStatement
+	 * @return \Engine\DebugSQLStatement|\PDOStatement
 	 */
 	public function prepare($sql, $driver_options = array()){
 		if ($this->debug){
 			$stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
 			if ($stmt instanceof PDOStatement){
-				return new DebugPDOStatement($stmt);
+				return new DebugSQLStatement($stmt);
 			}else{
 				throw new Error('PDO does not return PDOStatement');
 			}
