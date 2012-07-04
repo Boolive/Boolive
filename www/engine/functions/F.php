@@ -69,6 +69,19 @@ class F{
 	}
 
 	/**
+	 * Разделение строки на две части используя строку-разделитель
+	 * Поиск разделителя выполняется с конца
+	 * @param $delim Разделитель
+	 * @param $str Строка, которая делится
+	 * @return array Массив строк. Если разделитель не найден, то первая строка = null, вторая = $str
+	 */
+	static function SplitRight($delim, $str){
+		$pos = mb_strrpos($str, $delim);
+		if ($pos === false)	return array(null, $str);
+		return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+1));
+	}
+
+	/**
 	 * Объединение элементов массива в строку
 	 * Работает с многомерныыми массивами
 	 * @param $glue Соединительная строка
