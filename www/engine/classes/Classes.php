@@ -38,14 +38,13 @@ class Classes{
 				self::$included = array();
 				self::$engine_classes = array();
 				// Загрузка путей на классы ядра
-				self::LoadEngineClasses(ROOT_DIR_ENGINE.'config.classes.php', SITE_DIR_ENGINE);
+				self::LoadEngineClasses(DIR_SERVER_ENGINE.'config.classes.php', DIR_WEB_ENGINE);
 				// Регистрация метода-обработчика автозагрузки классов
 				spl_autoload_register(array('\Engine\Classes', 'Activate'));
-				// Загрузка сведений о классах проекта
-				self::LoadProjectClasses();
 			}else{
 				// Активация указанного класса
 				if (!isset(self::$classes[$class_name])){
+
 					// Система не знает о классе
 					throw new Error(array('Модуль "%s" не установлен', $class_name));
 				}else{
@@ -86,10 +85,17 @@ class Classes{
 	}
 
 	/**
-	 * Загрузка классов проекта.
+	 * Добавление класса проекта
+	 * @param $path
+	 * @param $name
+	 * @throws Error
 	 */
-	public static function LoadProjectClasses(){
-
+	public static function AddProjectClasse($path, $name){
+		$path = DIR_WEB_PROJECT.trim($path, ' /\\');
+		if (isset(self::$classes[$name]) && self::$classes[$name] != $path){
+			throw new Error(array('Classes: class name %s is already exist', $name));
+		}
+		self::$classes[$name] = $path;
 	}
 
 	/**
@@ -156,7 +162,7 @@ class Classes{
 	 * @param string $class_name Имя класса
 	 * @return bool
 	 */
-	public static function IsLoaded($class_name){
+	public static function IsExist($class_name){
 		return isset(self::$classes[$class_name]);
 	}
 
