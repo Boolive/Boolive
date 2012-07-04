@@ -30,16 +30,16 @@ class ErrorsHandler{
 	 * @param \Exception $e Исключение
 	 * @return bool
 	 */
-
 	static function ExceptionHandler($e){
-		if (!Events::Send('ERRORS_SYSTEM', $e)){
-			error_log((string)$e);
-			ob_clean();
-			// @TODO Заменить на юзабильное отображение
+		Events::Send('ERRORS_SYSTEM', $e);
+		error_log((string)$e);
+		ob_clean();
+		// @TODO Заменить на юзабильное отображение
+		if (isset($e->xdebug_message)){
+			echo '<table cellspacing="0" cellpadding="1" border="1" dir="ltr">'.$e->xdebug_message.'</table>';
+		}else{
 			trace($e, 'SYSTEM ERROR');
-			return false;
 		}
-		return true;
 	}
 
 	/**

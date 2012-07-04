@@ -27,7 +27,9 @@ class Error extends Exception{
 	private $args;
 
 	/**
-	 * @param string|array $message Текст сообщения (имя исключения)
+	 * @param string|array $message Текст сообщения (имя исключения). С помощью массива передаётся текст сообщения и
+	 * вставляемые в текст переменные
+	 * @example new Error(array('Text %s incorrect', $text));
 	 * @param int|string $code Код исключения
 	 * @param Error $previous Предыдущее исключение. Используется при создания цепочки исключений
 	 */
@@ -141,6 +143,19 @@ class Error extends Exception{
 	 */
 	public function getAll(){
 		return $this->list;
+	}
+
+	/**
+	 * Возвращает многомерный массив сообщений всех ошибок
+	 * Сообщения используются в качестве ключей элементов массива
+	 * @return array
+	 */
+	public function getMessageTree(){
+		$result = array();
+		foreach ($this->list as $key => $e){
+			$result[$key] = $e->getMessageTree();
+		}
+		return $result;
 	}
 
 	/**
