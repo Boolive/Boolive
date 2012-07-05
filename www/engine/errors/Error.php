@@ -93,7 +93,12 @@ class Error extends Exception{
 			$this->list[$error] = new Error($error);
 			$this->list[$error]->parent = $this;
 			return $this->list[$error];
-		}
+		}else
+		if (is_array($error)){
+			foreach ($error as $e){
+				$this->add($e);
+			}
+		}else
 		if ($error instanceof Error){
 			return $this->list[$error->message] = $error;
 		}
