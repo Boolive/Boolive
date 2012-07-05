@@ -8,7 +8,6 @@
  * - Правило по умолчанию можно переопределить в конструкторе при создании экземпляра Values
  *   или в наследуемых классах методом defineRule.
  * @version	2.3
- * @link http://boolive.ru/createcms/filter-and-check-data
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
