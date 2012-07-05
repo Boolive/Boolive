@@ -1,13 +1,13 @@
 <?php
 /**
  * Значения, требующие проверки или фильтра
- * - Способ проверки определется правилом, которое указывается при получении значения в методах get*
+ * - Способ проверки определятся правилом, которое указывается при получении значения в методах get*
  * - Правилом является объект класса \Engine\Rule
  * - Если правило не указывается, то используется правило по умолчанию.
  * - Текущее правило по умолчанию определяет массив строк любой длины.
  * - Правило по умолчанию можно переопределить в конструкторе при создании экземпляра Values
  *   или в наследуемых классах методом defineRule.
- * @version	2.2
+ * @version	2.3
  * @link http://boolive.ru/createcms/filter-and-check-data
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
@@ -45,7 +45,7 @@ class Values extends ArrayObject{
 	 */
 	protected function defineRule(){
 		// Одномерный ассоциативный массив строк
-		$this->_rule = Rule::ArrayList(Rule::String());
+		$this->_rule = Rule::arrays(Rule::string());
 	}
 
 	/**
@@ -60,8 +60,18 @@ class Values extends ArrayObject{
 		// Правило на элемент
 		if (isset($name)){
 			if ($this->_rule instanceof Rule){
-				if ($this->_rule->getType() == Rule::TYPE_ARRAY){
-					return isset($this->_rule[$name])?$this->_rule[$name] : $this->_rule->getRuleDefault();
+				if (isset($this->_rule->arrays)){
+					// Нормализация аргументов
+					$args[0] = isset($this->_rule->arrays[0])? $this->_rule->arrays[0] : null;
+					$args[1] = isset($this->_rule->arrays[1])? $this->_rule->arrays[1] : $this->_rule->arrays[0];
+					// Выбор правила для элемента
+					if (is_array($args[0]) && isset($this->_rule->arrays[0][$name])){
+						// Правило на элемент
+						return $args[0][$name];
+					}else{
+						// Правило по умолчанию, если есть
+						return $args[1] instanceof Rule ? $args[1] : null;
+					}
 				}
 			}
 			return null;
@@ -98,7 +108,7 @@ class Values extends ArrayObject{
 				$value = $this;
 			}
 			// Отсутствие значения
-			if ($rule->getType() == Rule::TYPE_FORBIDDEN){
+			if (isset($rule->forbidden)){
 				if ($exist){
 					$error = new Error('NOT_FORBIDDEN');
 				}
