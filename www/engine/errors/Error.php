@@ -14,7 +14,7 @@ namespace Engine;
 
 use Exception;
 
-class Error extends Exception{
+class Error extends Exception implements ITrace{
 	/** @var \Engine\Error Родительское  исключение */
 	protected $parent;
 	/** @var array Массив исключений */
@@ -25,6 +25,8 @@ class Error extends Exception{
 	private $is_temp;
 	/** @var array Аргументы для вставки в текст сообщения */
 	private $args;
+
+	protected $code ;
 
 	/**
 	 * @param string|array $message Текст сообщения (имя исключения). С помощью массива передаётся текст сообщения и
@@ -49,7 +51,9 @@ class Error extends Exception{
 				$message = '';
 			}
 		}
-		parent::__construct($message, $code, $previous);
+		parent::__construct($message, 0, $previous);
+		$this->code = $code;
+
 		$this->parent = null;
 		$this->list = array();
 		$this->temp_list = array();
@@ -82,7 +86,7 @@ class Error extends Exception{
 
 	/**
 	 * Добавление исключениея
-	 * @param \Engine\Error|string $error Название (сообщение) исключения или объект исключения
+	 * @param \Engine\Error|string $error Код исключения или объект исключения
 	 * @return array|\Engine\Error |\Engine\Error
 	 */
 	public function add($error){
@@ -90,7 +94,7 @@ class Error extends Exception{
 		$this->untemp();
 		// Добавление подчиненного
 		if (is_scalar($error)){
-			$this->list[$error] = new Error($error);
+			$this->list[$error] = new Error('', $error);
 			$this->list[$error]->parent = $this;
 			return $this->list[$error];
 		}else
@@ -100,7 +104,7 @@ class Error extends Exception{
 			}
 		}else
 		if ($error instanceof Error){
-			return $this->list[$error->message] = $error;
+			return $this->list[$error->code] = $error;
 		}
 		return $this;
 	}
@@ -113,8 +117,8 @@ class Error extends Exception{
 			$this->is_temp = false;
 			if (isset($this->parent)){
 				// В родитле пермещаем себя в основной список
-				$this->parent->list[$this->message] = $this;
-				unset($this->parent->temp_list[$this->message]);
+				$this->parent->list[$this->code] = $this;
+				unset($this->parent->temp_list[$this->code]);
 				// Возможно, родитель тоже временный
 				$this->parent->untemp();
 			}
@@ -134,7 +138,7 @@ class Error extends Exception{
 			$this->temp_list[$name];
 		}else{
 			// Делавем временный подчиненный список исключений
-			$this->temp_list[$name] = new Error($name);
+			$this->temp_list[$name] = new Error('', $name);
 			$this->temp_list[$name]->is_temp = true;
 			$this->temp_list[$name]->parent = $this;
 			return $this->temp_list[$name];
@@ -148,19 +152,6 @@ class Error extends Exception{
 	 */
 	public function getAll(){
 		return $this->list;
-	}
-
-	/**
-	 * Возвращает многомерный массив сообщений всех ошибок
-	 * Сообщения используются в качестве ключей элементов массива
-	 * @return array
-	 */
-	public function getMessageTree(){
-		$result = array();
-		foreach ($this->list as $key => $e){
-			$result[$key] = $e->getMessageTree();
-		}
-		return $result;
 	}
 
 	/**
@@ -241,5 +232,16 @@ class Error extends Exception{
 			$result.=' - '.$e->__toString()."\n";
 		}
 		return $result;
+	}
+
+	public function trace(){
+		$trace = array();
+		$trace['code'] = $this->getCode();
+		$trace['message'] = $this->getMessage();
+		if (!empty($this->args)) $trace['message_user'] = $this->getUserMessage(false, '');
+		$trace['file'] = $this->getFile();
+		$trace['line'] = $this->getLine();
+		$trace['list'] = $this->list;
+		return $trace;
 	}
 }
