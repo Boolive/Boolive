@@ -1,35 +1,43 @@
 <?php
 /**
- * Значения, требующие проверки или фильтра
+ * Значения, требующие проверки или фильтра.
+ *
+ * В объект помещается любое значение и правило по умолчанию на значение.
+ * Из объекта значение возвращается отфильтрованным по указанному правилу.
+ * Если значение является массивом, то можно обращаться к его элементам, но они будут возвращаться в виде объектов Values,
+ * таким образом сохраняется полная изоляция опасных значений.
  *
  * @link http://boolive.ru/createcms/dangerous-data
- * @version	2.3
+ * @version	3.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
 
-use ArrayObject,
-	Engine\Rule,
-	Engine\Error,
-	Engine\Check;
+use ArrayAccess, IteratorAggregate, Countable, ArrayIterator,
+	Engine\Rule, Engine\Error, Engine\Check;
 
-class Values extends ArrayObject{
-	/** @var \Engine\Rule Правило по умолчанию */
+class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
+	/** @var mixed|array Значение */
+	protected $_value;
+	/** @var \Engine\Rule Правило по умолчанию для значения */
 	protected $_rule;
-	/** @var bool Признак, были изменения значений (true) или нет (false)? */
-	protected $_changed;
 	/** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
 	protected $_filtered;
+	/** @var array Объекты \Engine\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
+	private $_interfaces;
+	/** @var \Engine\Values Родитель объекта для оповещения об изменениях значения. Используется при отложенном связывании */
+	private $_maker;
+	/** @var string Имя для элемента в родителе. Используется при отложенном связывании */
+	private $_name;
+
 	/**
 	 * Конструктор
-	 * @param array|mixed $list Значения. Если не массив, то значение будет обернуто в массив
-	 * @param null|array|\Engine\Rule $rule Правило проверки значений по умолчанию
+	 * @param null|mixed $value Значение
+	 * @param null|\Engine\Rule $rule Правило проверки значений по умолчанию
 	 */
-	public function __construct($list = array(), $rule = null){
-		if (!is_array($list)) $list = array($list);
-		parent::__construct($list);
+	public function __construct($value = null, $rule = null){
+		$this->_value = $value;
 		$this->_rule = $rule;
-		$this->_changed = false;
 		$this->_filtered = false;
 	}
 
@@ -40,7 +48,7 @@ class Values extends ArrayObject{
 	 */
 	protected function defineRule(){
 		// Одномерный ассоциативный массив строк
-		$this->_rule = Rule::arrays(Rule::string());
+		$this->_rule = Rule::arrays(Rule::string(), true);
 	}
 
 	/**
@@ -57,16 +65,29 @@ class Values extends ArrayObject{
 			if ($this->_rule instanceof Rule){
 				if (isset($this->_rule->arrays)){
 					// Нормализация аргументов
-					$args[0] = isset($this->_rule->arrays[0])? $this->_rule->arrays[0] : null;
-					$args[1] = isset($this->_rule->arrays[1])? $this->_rule->arrays[1] : $this->_rule->arrays[0];
+					$args = array(array(), null, false);
+					foreach ($this->_rule->arrays as $arg){
+						if (is_array($arg)){
+							$args[0] = $arg;
+						}else
+						if ($arg instanceof Rule){
+							$args[1] = $arg;
+						}else
+						if (is_bool($arg)){
+							$args[2] = $arg;
+						}
+					}
+					// Если элемент массив и правило рекурсивно, то отдаём всё правило
+					if (isset($this->_value[$name]) && is_array($this->_value[$name]) && $args[2]){
+						return $this->_rule;
+					}
 					// Выбор правила для элемента
-					if (is_array($args[0]) && isset($this->_rule->arrays[0][$name])){
+					if (is_array($args[0]) && isset($args[0][$name])){
 						// Правило на элемент
 						return $args[0][$name];
-					}else{
-						// Правило по умолчанию, если есть
-						return $args[1] instanceof Rule ? $args[1] : null;
 					}
+					// Правило по умолчанию, если есть
+					return $args[1] instanceof Rule ? $args[1] : null;
 				}
 			}
 			return null;
@@ -75,72 +96,95 @@ class Values extends ArrayObject{
 	}
 
 	/**
-	 * Получение значения c применением правила проверки
-	 * @param string|null $name Ключ элемента. Если null, то выбирается весь массив значений
-	 * @param \Engine\Rule|null $rule Правило фильра/проверки значения
-	 * @param \Engine\Error|null $error Объект ошибки после проверки
-	 * @return mixed Отфильтрованное значение (если нет ошибок)
+	 * Установка значения
+	 * @param mixed $value
 	 */
-	public function get($name, $rule = null, &$error = null){
+	public function set($value){
+		$this->_value = $value;
+		$this->_interfaces = array();
+		$this->notFiltered();
+	}
+
+	/**
+	 * Выбор значения с применением правила
+	 * @param null $rule
+	 * @param null $error
+	 * @return array|mixed|null
+	 */
+	public function get($rule = null, &$error = null){
 		// Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
-		if (!$rule && $this->_filtered && parent::offsetExists($name)){
-			return parent::offsetGet($name);
-		}
+		if (!$rule && $this->_filtered)	return $this->_value;
 		// Если правило не указано, то берём по умолчанию
-		if (!$rule) $rule = $this->getRule($name);
+		if (!$rule) $rule = $this->getRule();
 		// Если правило определено
 		if ($rule instanceof Rule){
-			// Значение, которое нужно проверить и отфильтровать
-			$exist = true;
-			if (isset($name)){
-				if (parent::offsetExists($name)){
-					$value = parent::offsetGet($name);
-				}else{
-					$exist = false;
-					$value = null;
-				}
-			}else{
-				$value = $this;
-			}
-			// Отсутствие значения
-			if (isset($rule->forbidden)){
-				if ($exist){
-					$error = new Error('NOT_FORBIDDEN');
-				}
-			}else{
-				return Check::Filter($value, $rule, $error);
-			}
+			return Check::Filter($this->_value, $rule, $error);
 		}
-		$error = new Error('NO_RULE');
+		$error = new Error(array('Нет правила'), 'NO_RULE');
 		return null;
 	}
 
 	/**
-	 * Получение массива значений c применением правила проверки.
-	 * @param \Engine\Rule|null $rule Правило проверки. Если не указано, то используется правило по умолчанию
-	 * @param \Engine\Error|null $error Объект ошибки после проверки
-	 * @return array Отфильтрованные значения (если нет ошибок)
+	 * Фильтр всех значений в соответствии с правилом по умолчанию.
+	 * Текущее значение заменяется на отфильтрованное, если нет ошибок.
+	 * Если ошибок нет, то возвращается true, иначе false.
+	 * После успешного фильтра доступ к значениям будет выполняться без проверок, пока не произойдут какие-либо изменения.
+	 * @param null $errors Ошибки после проверки
+	 * @return bool
 	 */
-	public function getArray($rule = null, &$error = null){
-		return $this->get(null, $rule, $error);
+	public function filter(&$errors = null){
+		$values = $this->get(null, $errors);
+		if (!isset($errors)){
+			$this->set($values);
+			$this->_filtered = true;
+		}else{
+			$this->_filtered = false;
+		}
+		return $this->_filtered;
+	}
+
+	/**
+	 * Проверка значения
+	 * @param \Engine\Rule $rule Правило проверки
+	 * @param \Engine\Error | null $error Ошибки после проверки
+	 * @return bool
+	 */
+	public function check($rule = null, &$error = null){
+		$this->get($rule, $error);
+		return isset($error);
+	}
+
+	/**
+	 * Удяляет все элементы, имена которых не указаны в аргументах этого метода
+	 * Ключи элементов передаются в массиве или через запятую.
+	 * Если текущее значение не массив, то оно будет заменено на пустой массив
+	 * @example
+	 * 1. choose(array('name1', 'name2'));
+	 * 2. choose('name1', 'name2', 'name3');
+	 * @return \Engine\Values Ссылка на себя
+	 */
+	public function choose(){
+		if (!is_array($this->_value)) $this->_value = array();
+		$arg = func_get_args();
+		if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
+		$list = array();
+		foreach ($arg as $name){
+			if (array_key_exists($name, $this->_value)) $list[$name] = $this->_value[$name];
+		}
+		$this->set($list);
+		return $this;
 	}
 
 	/**
 	 * Возвращает все значения в виде массива объектов Values
-	 * @param bool $assoc
-	 * @return array Ассоциативный массив объектов Values
+	 * Если текущее значение не массив, то оно будет возвращено в качестве нулевого элемента массива
+	 * @return array Массив объектов Values
 	 */
-	public function getValuesList($assoc = true){
+	public function getValues(){
+		$v = is_array($this->_value)? $this->_value : array($this->_value);
 		$r = array();
-		foreach ((array)$this as $name => $value){
-			if (!$value instanceof Values){
-				$value = new Values($value);
-			}
-			if ($assoc){
-				$r[$name] = $value;
-			}else{
-				$r[] = $value;
-			}
+		foreach ($v as $name => $value){
+			$r[$name] = new Values($value);
 		}
 		return $r;
 	}
@@ -150,63 +194,7 @@ class Values extends ArrayObject{
 	 * @return array
 	 */
 	public function getKeys(){
-		return array_keys((array)$this);
-	}
-
-	/**
-	 * Возвращает объект класса Values с элементами, ключи которых указанны в аргументе метода
-	 * Объявления аргументов в методе отсутствует, так как предполагается два варианта их указания:
-	 * 1. Массивом, например getChosen(array('name1', 'name2'));
-	 * 2. Любым количеством скалярных аргументов, например getChosen('name1', 'name2', 'name3');
-	 * @return \Engine\Values Новый объект значений с выбранными элементами
-	 */
-	public function getChosen(){
-		$arg = func_get_args();
-		if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
-		$values = new Values(array(), $this->_rule);
-		foreach ($arg as $name){
-			if (parent::offsetExists($name)) $values->offsetSet($name, parent::offsetGet($name));
-		}
-		return $values;
-	}
-
-	/**
-	 * Удяляет все значения, имена которых не указаны в аргументах этого метода
-	 * Объявления аргументов в методе отсутствует, так как предполагается два варианта их указания:
-	 * 1. Массивом, например choose(array('name1', 'name2'));
-	 * 2. Любым количеством скалярных аргументов, например choose('name1', 'name2', 'name3');
-	 * @return \Engine\Values Ссылка на себя
-	 */
-	public function choose(){
-		$arg = func_get_args();
-		if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
-		$list = array();
-		foreach ($arg as $name){
-			if (parent::offsetExists($name)) $list[$name] = parent::offsetGet($name);
-		}
-		$this->exchangeArray($list);
-		return $this;
-	}
-
-	/**
-	 * Применение правила к своим элементам для фильтра их значения
-	 * @param array|\Engine\Rule $rule Правило проверки и фильтра
-	 * @param null $errors Ошибки после проверки
-	 */
-	public function filterArray($rule = null, &$errors = null){
-		$values = $this->getArray($rule, $errors);
-		$this->exchangeArray($values);
-	}
-
-	/**
-	 * Заменяет текущий массив на другой
-	 * @param mixed $list
-	 * @return array
-	 */
-	public function exchangeArray($list){
-		$this->changed(true);
-		$this->_filtered = false;
-		return parent::exchangeArray($list);
+		return array_keys((array)$this->_value);
 	}
 
 	/**
@@ -220,84 +208,7 @@ class Values extends ArrayObject{
 			foreach ($list as $key => $value){
 				$this->offsetSet($key, $value);
 			}
-			$this->changed(true);
-			$this->_filtered = false;
 		}
-	}
-
-	/**
-	 * Объединение элементов с переданным массивом или другим объектом Values.
-	 * Объединение рекурсивное
-	 * @param array|\Engine\Values $list Массив или объект Values добавляемых элементов
-	 */
-	public function unionArray($list){
-		if ($list instanceof \ArrayAccess){
-			$list = (array)$list;
-		}
-		if (!is_array($list)){
-			$list = array($list);
-		}
-		foreach ($list as $name => $value){
-			if (is_string($name)){
-				if (parent::offsetExists($name) && !is_scalar(parent::offsetGet($name))){
-					$self_value = parent::offsetGet($name);
-					// объединение
-					if (!$self_value instanceof Values){
-						$this->offsetSet($name, $self_value = new Values($self_value));
-					}
-					if (is_array($value) || $value instanceof Values){
-						// вложенное объединение
-						$self_value->unionArray($value);
-					}else{
-						// добавление
-						$self_value->append($value);
-					}
-				}else{
-					// Добавление или обновление значения
-					$this->offsetSet($name, $value);
-				}
-			}else{
-				// @todo Смена родителя?
-				$this->append($value);
-			}
-		}
-	}
-
-	/**
-	 * Проверка значения
-	 * @param $name Ключ элемента
-	 * @param \Engine\Rule $rule Правило проверки
-	 * @param \Engine\Error | null $error Ошибки после проверки
-	 * @return bool
-	 */
-	public function check($name, $rule = null, &$error = null){
-		$this->get($name, $rule, $error);
-		if ($error){
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Проверка всех значений
-	 * @param \Engine\Rule | array $rule Правило проверки
-	 * @param \Engine\Error | null $error Ошибки после проверки
-	 * @return bool
-	 */
-	public function checkArray($rule = null, &$error = null){
-		$this->getArray($rule, $error);
-		return !$error->isExist();
-	}
-
-	/**
-	 * Проверка значения на равенство указанному значению $need_value
-	 * @param string $name Ключ проверяемого значения
-	 * @param mixed $need_value Значение с которым выполняется сверка
-	 * @param bool $strict Тип сравнения. Если true, то сравнение без приведедния типов (строгое)
-	 * @return bool
-	 */
-	public function compare($name, $need_value, $strict = false){
-		return (parent::offsetExists($name)) && ($strict?(parent::offsetGet($name) === $need_value) : (parent::offsetGet($name) == $need_value));
 	}
 
 	/**
@@ -306,19 +217,36 @@ class Values extends ArrayObject{
 	 * @param int $shift Размер смещения
 	 */
 	public function shiftKeys($shift = 0){
-		if ($shift){
-			$list = array();
-			foreach ((array)$this as $key => $value){
-				if (is_numeric($key)){
-					$list[-$shift + $key] = parent::offsetGet($key);
-				}else{
-					$list[$key] = parent::offsetGet($key);
+		if (is_array($this->_value)){
+			if ($shift){
+				$list = array();
+				foreach ((array)$this as $key => $value){
+					if (is_numeric($key)){
+						$list[-$shift + $key] = $this->_value[$key];
+					}else{
+						$list[$key] = $this->_value[$key];
+					}
 				}
+				$this->set($list);
 			}
-			parent::exchangeArray($list);
 		}
-		$this->changed(true);
+	}
+
+	/**
+	 * Установка признака наличия изменений
+	 * Если объект изменился, то изменяют все родители
+	 */
+	public function notFiltered(){
 		$this->_filtered = false;
+		// Отложенное связывание с родителем
+		if (isset($this->_maker)){
+			if (isset($this->_name)){
+				$v = &$this->_maker->_value;
+				$v[$this->_name] = &$this->_value;
+				unset($this->_name);
+			}
+			$this->_maker->notFiltered();
+		}
 	}
 
 	/**
@@ -330,137 +258,153 @@ class Values extends ArrayObject{
 	}
 
 	/**
-	 * Признак, изменялись значения или нет
-	 * @return bool
+	 * Количество элементов.
+	 * Если значение не массив, то всегда возвращается 1
+	 * @return int
 	 */
-	public function isChanged(){
-		return $this->_changed;
+	public function count(){
+		return is_array($this->_value) ? count($this->_value) : 1;
 	}
 
 	/**
-	 * Установка признака наличия изменений
-	 * Если объект изменился, то изменяют все родители
-	 * @param bool $changed
-	 */
-	public function changed($changed = true){
-		$this->_changed = $changed;
-	}
-
-	/**
-	 * Добавление элемента с указанным значением
-	 * @example $v[] = $value;
-	 * @param mixed $value
-	 */
-	public function append($value){
-		parent::append($value);
-		$this->changed(true);
-		$this->_filtered = false;
-	}
-
-	/**
-	 * Получение значения с применением правила по умолчанию
+	 * Получение элемента массива в виде объекта Values
+	 * Если значение не являются массивом, то оно будет заменено на пустой массив.
+	 * Если элемента с указанным именем нет, то он будет создан со значением null
 	 * @param mixed $name Ключ элемента
-	 * @return mixed Отфильтрованное значение
+	 * @return \Engine\Values|mixed
 	 */
 	public function offsetGet($name){
-		return $this->get($name);
+		if (is_null($name)) return $this;
+		if (!isset($this->_interfaces[$name])){
+			// Создание объекта Values для запрашиваемого значения.
+			// Объекту устанавливается правило в соответсвии с правилом данного объекта Values и запрашиваемого элемента
+			$this->_interfaces[$name] = $interface = new Values(null, $this->getRule($name));
+			$interface->_maker = $this;
+			if (is_array($this->_value) && array_key_exists($name, $this->_value)){
+				// Если элемент существует, то делаем ссылку на него из нового объекта Values
+				$interface->_value = &$this->_value[$name];
+			}else{
+				// Если элемента нет, то фиксируем его название, чтобы при изменении значения
+				// в новом Values связать его значение с ещё не сущесвтующим элементом в данном объекте Values.
+				// Это необходимо сделать, чтобы новые элементы появлялись при явной их установке,
+				// а не при обращении к ним, но оставляя возможность обращаться к несуществующим элементам.
+				$interface->_value = null;
+				$interface->_name = $name;
+			}
+		}
+		return $this->_interfaces[$name];
 	}
 
 	/**
-	 * Установка значения
+	 * Установка значения элементу массива
+	 * Если текущее значение не является массивом, то оно будет заменено на пустой массив.
 	 * @param mixed $name Ключ элемента
 	 * @param mixed $value Новое значения элемента
 	 */
 	public function offsetSet($name, $value){
-		if (is_null($name) || !parent::offsetExists($name) || parent::offsetGet($name)!=$value){
-			parent::offsetSet($name, $value);
-//			if ($value instanceof Values){
-//				$value->_parent = $this;
-//			}
-			$this->changed(true);
-			$this->_filtered = false;
+		if (!is_array($this->_value)) $this->_value = array();
+		if (is_null($name)){
+			$this->_value[] = $value;
+		}else{
+			$this->_value[$name] = $value;
+			if (isset($this->_interfaces[$name])) unset($this->_interfaces[$name]);
 		}
+		$this->notFiltered();
 	}
 
 	/**
-	 * Проверка, значение элемента пустое либо элемент отсутсвует
+	 * Проверка существования элемента
+	 * @param mixed $name
+	 * @return bool
+	 */
+	public function offsetExists($name){
+		return is_array($this->_value) && array_key_exists($name, $this->_value);
+	}
+
+	/**
+	 * Проверка элемента, пустое у него значение или нет
 	 * @param string $name Ключ проверяемого элемента
      * @param bool $number Признак, проверять как число или строку. Если $number==true, то '0' будет считаться пустым значенеим
 	 * @return bool
 	 */
 	public function offsetEmpty($name, $number = false){
-		if (parent::offsetExists($name)){
-			$value = parent::offsetGet($name);
-			if (is_string($value)){
+		if (is_array($this->_value) && $this->offsetExists($name)){
+			if (is_string($this->_value[$name])){
 				if ($number) {
-                    $value = trim($value);
+                    $value = trim($this->_value[$name]);
                     return empty($value);
                 }
-                return trim($value) == '';
+                return trim($this->_value[$name]) == '';
 			}
-			return (empty($value));
+			return (empty($this->_value[$name]));
 		}
 		return true;
 	}
 
 	/**
-	 * Удаление всех элементов
+	 * Удаление элемента
+	 * @param mixed $name
+	 */
+	public function offsetUnset($name){
+		if (is_array($this->_value) && $this->offsetExists($name)){
+			$this->_interfaces[$name]->_maker = null;
+			unset($this->_interfaces[$name]);
+			unset($this->_value[$name]);
+			$this->notFiltered();
+		}
+	}
+
+	/**
+	 * Удаление всех элементов.
+	 * Обнуление значения.
 	 */
 	public function offsetUnsetAll(){
-		$this->exchangeArray(array());
-		$this->changed(true);
-		$this->_filtered = false;
+		foreach ($this->_interfaces as $i) $i->_maker = null;
+		$this->_value = null;
+		$this->_interfaces = array();
+		$this->notFiltered();
 	}
 
 	/**
 	 * Удаление элементов по именам
-	 * Объявления аргументов в методе отсутствует, так как предполагается два варианта их указания:
-	 * 1. Массивом, например deleteList(array('name1', 'name2'));
-	 * 2. Любым количеством скалярных аргументов, например deleteList('name1', 'name2', 'name3');
+	 * Ключи передаются в массиве или через запятую.
+	 * @example
+	 * 1. offsetUnsetList(array('name1', 'name2'));
+	 * 2. offsetUnsetList('name1', 'name2', 'name3');
 	 */
 	public function offsetUnsetList(){
-		$arg = func_get_args();
-		if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
-		foreach ($arg as $name){
-			parent::offsetUnset($name);
+		if (is_array($this->_value)){
+			$arg = func_get_args();
+			if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
+			foreach ($arg as $name){
+				$this->offsetUnset($name);
+			}
 		}
-		$this->changed(true);
-		$this->_filtered = false;
 	}
 
 	/**
-	 * Перегрузка метода получения элемента
+	 * Итератор для циклов
+	 * На каждый элемент массива (если текущее значение массив) создаётся объект Values.
+	 * Возвращается итератор на массив объектов Values.
+	 * @return \ArrayIterator|\Traversable
+	 */
+	public function getIterator(){
+        return new ArrayIterator($this->getValues());
+    }
+
+	/**
+	 * Перегрузка метода получения элемента как свойства
 	 * Всегда возвращется Values, даже если нет запрашиваемого элемента (Values будет пустым тогда)
 	 * @example $v = $values->v1;
 	 * @param string $name Ключ элемента
 	 * @return array|\Engine\Values
 	 */
 	public function __get($name){
-		if (parent::offsetExists($name)){
-			$value = parent::offsetGet($name);
-			if (is_array($value)){
-				parent::offsetSet($name, $value = new Values($value, $this->_rule));
-//				$value->_parent = $this;
-			}
-			if ($value instanceof Values){
-				return $value;
-			}else{
-				// @todo Если объект будет изменяться, то нужно установить связь с $this
-				$value = new Values($value, $this->_rule);
-//				$value->_parent = $this;
-//				$value->_name = $name;
-				return $value;
-			}
-		}else{
-			// Создание временного объекта. Счиатется временным, пока не изменится
-			parent::offsetSet($name, $value = new Values(array(), $this->_rule));
-//			$value->_parent = $this;
-			return $value;
-		}
+		return $this->offsetGet($name);
 	}
 
 	/**
-	 * Перегрузка установки значения элементу
+	 * Перегрузка установки значения элементу как свойства
 	 * @example $values->v1 = "value";
 	 * @param string $name Ключ элемента
 	 * @param mixed $value Значение
@@ -476,7 +420,7 @@ class Values extends ArrayObject{
 	 * @return bool
 	 */
 	public function __isset($name){
-		$this->offsetExists($name);
+		return is_array($this->_value) && isset($this->_value['values']);
 	}
 
 	/**
@@ -490,34 +434,33 @@ class Values extends ArrayObject{
 	}
 
 	/**
-	 * Перегрузка обращения к элементу для получения его строкового значения.
-	 * При обращении к значению как к свойству, значение помещается в объект класса Values, поэтому значение
-	 * необходимо достать из объекта
-	 * Значение фильтруется правилом по умолчанию
+	 * Отфильтрованное значение в виде строки
+	 * Значение фильтруется правилом по умолчанию и конвертируется в строку
 	 * @example
 	 * echo $values->v1;
 	 * $s = (string)$values->v1;
 	 * @return string
 	 */
 	public function __toString(){
-		if ($this->count()>0){
-			reset($this);
-			$name = key($this);
-			return $this->get($name);
-		}else{
-			return '';
-		}
+		return (string)$this->get();
 	}
 
 	/**
 	 * Клонирование объекта
 	 */
 	public function __clone(){
-		foreach ((array)$this as $key => $item){
-			if (is_object($item)){
-				$this->offsetSet($key, clone $item);
+		if (is_array($this->_value)){
+			foreach ($this->_value as $key => $item){
+				if (is_object($item)){
+					$this->_value[$key] = clone $item;
+				}
 			}
+		}else
+		if (is_object($this->_value)){
+			$this->_value = clone $this->_value;
 		}
+		$this->_interfaces = array();
+		$this->_maker = null;
 	}
 
 	/**
@@ -528,5 +471,20 @@ class Values extends ArrayObject{
 	 */
 	public function __call($name, $args){
 		return null;
+	}
+
+	/**
+	 * Возвращает свойства объекта для трассировки
+	 * @return array
+	 */
+	public function trace(){
+		return array(
+			'_value' => $this->_value,
+			'_rule' => $this->_rule,
+			'_filtered' => $this->_filtered,
+			'_interfaces' => $this->_interfaces,
+			'_maker' => $this->_maker,
+			'_name' => $this->_name
+		);
 	}
 }
