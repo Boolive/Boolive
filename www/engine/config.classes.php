@@ -45,5 +45,9 @@ $classes = array(
 	// Секции
 	'Engine\Sections\MySQLSection'	=> 'data/sections/MySQLSection.php',
 
-	'Engine\F'			=> 'functions/F.php'
+	// Общие функции
+	'Engine\F'			=> 'functions/F.php',
+
+	// Работа с файлами
+	'Engine\File'		=> 'file/File.php'
 );
