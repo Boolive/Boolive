@@ -8,103 +8,61 @@
  */
 namespace Engine;
 
-use Engine\Calls,
-	Engine\Error;
+use Engine\Error;
 
 class File{
-
 	/**
 	 * Создание файла
 	 * @param string $content Содержимое файла
 	 * @param string $to Путь к создаваемому файлу
-	 * @param bool $create_uniqname Признак, генерировать ли уникальное имя, если указанный файл в $to уже существует
-	 * @throws Error
-	 * @return bool
+	 * @return bool Признак, создан файл или нет
 	 */
-	static function Create($content, $to, $create_uniqname = false){
+	static function Create($content, $to){
+		// Если папки нет, то создаем её
 		$dir = dirname($to);
-		$info =  self::FileInfo($to);
-		if (empty($info['name'])){
-			throw new Error('File is not defined');
+		if(!is_dir($dir)){
+			mkdir($dir, 0777, true);
 		}
-		// Подбор уникального имени
-		if ($create_uniqname){
-			$i = 0;
-			while (is_file($to) && $i<100){
-				$to = $dir.'/'.$info['base'].(++$i).'.'.$info['ext'];
-			}
-			if ($i==100){
-				throw new Error('File name is already used');
-			}
+		// Создание файла
+		if (($f = fopen($to, "w"))) {
+			stream_set_write_buffer($f, 20);
+			fwrite($f, $content);
+			fclose($f);
+			return true;
 		}
-		if (!Calls::PullMethod('\\Engine\\File', 'Create', array($content, $to, $create_uniqname))){
+		return false;
+	}
+
+	/**
+	 * Перемешщение загруженного файла по указанному пути
+	 * @param string $from Путь к загружаемому файлу
+	 * @param string $to Путь, куда файл копировать. Путь должен содерджать имя файла
+	 * @return bool Признак, загружен файл или нет
+	 */
+	static function Upload($from, $to){
+		if(is_uploaded_file($from)){
 			// Если папки нет, то создаем её
 			$dir = dirname($to);
 			if(!is_dir($dir)){
 				mkdir($dir, 0777, true);
 			}
-			// Создание файла
-			if (($f = fopen($to, "w"))) {
-				stream_set_write_buffer($f, 20);
-				fwrite($f, $content);
-				fclose($f);
+			if (is_file($to)){
+				unlink($to);
 			}
+			//Перемещаем файл если он загружен через POST
+			return move_uploaded_file($from, $to);
 		}
-		return true;
-	}
-
-	/**
-	 * Перемешщение загруженного файла по указанному пути
-	 * @param string $from Путь к исходному файлу
-	 * @param string $to Путь, куда файл копировать. Путь должен содерджать имя файла
-	 * @param bool $create_uniqname Признак, генерировать ли уникальное имя, если указанный файл в $to уже существует
-	 * @throws Error
-	 * @return bool Результат перемещения
-	 */
-	static function Upload($from, $to, $create_uniqname = true){
-		if(is_uploaded_file($from)){
-			$dir = dirname($to);
-			$info =  self::FileInfo($to);
-
-			if(empty($info['name'])){
-				throw new Error('File is not defined');
-			}
-			// Подбор уникального имени
-			if ($create_uniqname){
-				$i = 0;
-				while (is_file($to) && $i<100){
-					$to = $dir.'/'.$info['base'].(++$i).'.'.$info['ext'];
-				}
-				if ($i==100){
-					throw new Error('File name is already used');
-				}
-			}
-			if (!Calls::PullMethod('\\Engine\\File', 'Upload', array($from, $to, $create_uniqname))){
-				// Если папки нет, то создаем её
-				$dir = dirname($to);
-				if(!is_dir($dir)){
-					mkdir($dir, 0777, true);
-				}
-				if (is_file($to)){
-					unlink($to);
-				}
-				//Перемещаем файл если он загружен через POST
-				return move_uploaded_file($from, $to);
-			}
-			return true;
-		}else{
-			throw new Error('File not uploaded');
-		}
+		return false;
 	}
 
 	/**
 	 * Копирование файла
-	 * @param string $from
-	 * @param string $to
-	 * @return bool
+	 * @param string $from Путь к копируемому файлу
+	 * @param string $to Путь, куда файл копировать. Путь должен содерджать имя файла
+	 * @return bool Признак, скопирован файл или нет
 	 */
 	static function Copy($from, $to){
-		if (!Calls::PullMethod('\\Engine\\File', 'Copy', array($from, $to))){
+		if (file_exists($from)){
 			// Если папки нет, то создаем её
 			$dir = dirname($to);
 			if(!is_dir($dir)){
@@ -114,19 +72,18 @@ class File{
 				unlink($to);
 			}
 			return copy($from, $to);
-		}else{
-			return true;
 		}
+		return false;
 	}
 
 	/**
 	 * Переименование или перемещение файла
-	 * @param string $from
-	 * @param string $to
-	 * @return bool
+	 * @param string $from Путь к переименовываемому файлу
+	 * @param string $to Путь с новым именем
+	 * @return bool Признак, переименован файл или нет
 	 */
 	static function Rename($from, $to){
-		if (!Calls::PullMethod('\\Engine\\File', 'Rename', array($from, $to))){
+		if (file_exists($from)){
 			$dir = dirname($to);
 			if(!is_dir($dir)){
 				mkdir($dir, 0777, true);
@@ -135,33 +92,28 @@ class File{
 				unlink($to);
 			}
 			return rename($from, $to);
-		}else{
-			return true;
-		}
+			}
+		return false;
 	}
 
 	/**
 	 * Удаление всех файлов и поддиректорий в указанной директории
-	 * @param string $dir
-	 * @param bool $delete_me Удалить указанную директорию?
-	 * @return bool
+	 * @param string $dir Путь на очищаемому директорию
+	 * @param bool $delete_me Удалить указанную директорию (true) или только её содержимое (false)?
+	 * @return bool Признак, выполнено ли удаление
 	 */
 	static function ClearDir($dir, $delete_me = false){
-		if (!Calls::PullMethod('\\Engine\\File', 'ClearDir', array($dir, $delete_me))){
-			if (is_file($dir)){
-				return @unlink($dir);
-			}else
-			if (is_dir($dir)){
-				$scan = glob(rtrim($dir, '/').'/*');
-				foreach ($scan as $path){
-					self::ClearDir($path, true);
-				}
-				return $delete_me?@rmdir($dir):true;
+		if (is_file($dir)){
+			return @unlink($dir);
+		}else
+		if (is_dir($dir)){
+			$scan = glob(rtrim($dir, '/').'/*');
+			foreach ($scan as $path){
+				self::ClearDir($path, true);
 			}
-			return false;
-		}else{
-			return true;
+			return $delete_me?@rmdir($dir):true;
 		}
+		return false;
 	}
 
 	/**
@@ -230,7 +182,22 @@ class File{
 		return array_pop($list);
 	}
 
-
+	/**
+	 * Создание уникального имени для файла или директории
+	 * @param $dir Директория со слэшем на конце, в которой подобрать уникальное имя
+	 * @param $name Базовое имя, к которому будут добавляться числовые префиксы для уникальности
+	 * @param $ext Расширение с точкой, присваиваемое к имени после подбора
+	 * @param int $start Начальное значение для префикса
+	 * @return string|bool Уникальное имя вместе с путём или false, если не удалось подобрать
+	 */
+	static function MakeUniqueName($dir, $name, $ext, $start = 1){
+		$i = 0;
+		$to = $dir.$name.$ext;
+		while (file_exists($to) && $i<100){
+			$to = $dir.$name.(++$i+$start).$ext;
+		}
+		return ($i < 100+$start)? false : $to;
+	}
 
 	/**
 	 * Текст ошибки загрзки файла
