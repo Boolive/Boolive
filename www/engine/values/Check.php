@@ -117,7 +117,7 @@ class Check{
 		if (is_string($value)){
 			$value = str_replace(' ', '', $value);
 		}
-		if (isset($value) && is_scalar($value) && preg_match('/^[-\+]?[0-9]+$/', strval($value)) == 1){
+		if (is_bool($value) || (is_scalar($value) && preg_match('/^[-\+]?[0-9]+$/', strval($value)) == 1)){
 			return intval($value);
 		}else{
 			$error = new Error('Значение не является целым числом', 'int');
