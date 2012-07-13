@@ -13,8 +13,8 @@
  */
 namespace Engine;
 
-use ArrayAccess, IteratorAggregate, Countable, ArrayIterator,
-	Engine\Rule, Engine\Error, Engine\Check;
+use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
+	Engine\Rule, Engine\Error, Engine\Check, Engine\Trace;
 
 class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	/** @var mixed|array Значение */
@@ -151,7 +151,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 */
 	public function check($rule = null, &$error = null){
 		$this->get($rule, $error);
-		return isset($error);
+		return !isset($error);
 	}
 
 	/**
