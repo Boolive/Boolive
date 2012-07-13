@@ -52,7 +52,7 @@ namespace Engine;
  * @method \Engine\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
  * @method \Engine\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
  */
-class Rule{
+class Rule implements ITrace{
 	/** @var array Фильтры */
 	private $filters = array();
 
@@ -130,6 +130,10 @@ class Rule{
 	 * @return array Ассоциативный массив фильтров, где ключ элемента - название фильтра, а значение - аргументы фильтра
 	 */
 	public function getFilters(){
+		return $this->filters;
+	}
+
+	public function trace(){
 		return $this->filters;
 	}
 }
