@@ -65,10 +65,13 @@ class Data {
 	/**
 	 * Возвращает объект по пути на него
 	 * Путь может указывать как на собственный объект, так и на любой внешний.
-	 * @param $uri
+	 * @param string $uri URI объекта
+	 * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
+	 * @param int $owner Код владельца. Если не указан, то выбирается общий
+	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
 	 * @return \Engine\Entity|null Экземпляр объекта, если найден или null, если не найден
 	 */
-	static function Object($uri){
+	static function Object($uri, $lang = '', $owner = 0, $date = null){
 		if (is_string($uri)){
 			if ($uri==='') return self::Root();
 			// Определеяем, в какой секции начать поиск.
@@ -76,11 +79,10 @@ class Data {
 			$names = explode('/', $uri, 2);
 			if ($s = self::Section($names[0])){
 				// Поиск выполнит секция
-				return $s->read($uri);
+				return $s->read($uri, $lang, $owner, $date);
 			}
 		}
 		return null;
-
 	}
 
 	/**
@@ -94,15 +96,25 @@ class Data {
 	/**
 	 * Создание объекта данных из атрибутов
 	 * @param $attribs
+	 * @throws \ErrorException
 	 * @return \Engine\Entity
 	 */
 	static function MakeObject($attribs){
-		if (isset($attribs['uri']) && !empty($attribs['logic'])){
-			// Свой класс
-			$names = F::SplitRight('/', $attribs['uri']);
-			Classes::AddProjectClasse($attribs['uri'].'/'.$names[1].'.php', $attribs['logic']);
-			$obj = new $attribs['logic']($attribs);
-		}else
+		if (isset($attribs['uri']) && !empty($attribs['is_logic'])){
+			try{
+				// Свой класс
+				$names = F::SplitRight('/', $attribs['uri']);
+				$class = str_replace('/', '\\', trim($attribs['uri'],' /'));
+				Classes::AddProjectClasse($attribs['uri'].'/'.$names[1].'.php', $class);
+				// Проверяем существование класса
+				if (Classes::IsExist($class)){
+					return new $class($attribs);
+				}
+			}catch(\ErrorException $e){
+				// Если файл не найден, то будет использовать класс прототипа или Entity
+				if ($e->getCode() != 2) throw $e;
+			}
+		}
 		if (!empty($attribs['proto']) && ($proto = self::Object($attribs['proto']))){
 			// Класс прототипа
 			$class = get_class($proto);
@@ -112,5 +124,21 @@ class Data {
 			$obj = new Entity($attribs);
 		}
 		return $obj;
+	}
+
+	static function getURIInfo($uri){
+		$uri = F::SplitRight('/', $uri);
+		$names = F::Explode('@', $uri[1], -3);
+		return array(
+			'uri' => $uri[0].'/'.$names[0],
+			'owner' => isset($names[1]) && is_numeric($names[1]) ? $names[1] : 0,
+			'lang' => isset($names[2])? $names[2]: (isset($names[1]) && !is_numeric($names[1])? $names[1] : '')
+		);
+	}
+
+	static function makeURI($path, $lang = '', $owner = 0){
+		if ($owner) $path.='@'.$owner;
+		if ($lang) $path.='@'.$lang;
+		return $path;
 	}
 }
