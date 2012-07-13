@@ -5,6 +5,7 @@
  * в объект запроса методами bindValue() и bindParam()
  *
  * @version 1.0
+ * @link http://boolive.ru/createcms/working-with-databases
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;

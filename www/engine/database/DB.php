@@ -13,6 +13,7 @@
  * 4. Режим профилирования запросов. Информация записывается в модуль Trace
  *
  * @version 2.0
+ * @link http://boolive.ru/createcms/working-with-databases
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;
@@ -23,14 +24,8 @@ use PDO,
 	Engine\F;
 
 class DB extends PDO{
-//	/** @const Файл параметров подключения по умолчанию */
-//	const CONFIG_FILE = 'database/config.db.php';
-//	/** @var array Параметры подключения по умолчанию */
-//	static private $config;
 	/** @var array Установленные соединения */
 	static private $connection = array();
-
-
 	/** @var array Уровни вложенности транзакций */
 	private $transaction_level = 0;
 	/** @var string Префикс к имени таблиц */
@@ -53,7 +48,6 @@ class DB extends PDO{
 	 * @return \Engine\DB
 	 */
 	static function Connect($config = null){
-//		if (empty($config)) $config = self::GetDefaultConfig();
 		if (!empty($config['dsn'])){
 			// Формирование DSN и других параметров подключения
 			if (is_array($config['dsn'])){
@@ -83,20 +77,6 @@ class DB extends PDO{
 		}
 		return null;
 	}
-
-//	/**
-//	 * Параметры подключения по умолчанию
-//	 * @return array|bool
-//	 */
-//	static function GetDefaultConfig(){
-//		if (file_exists(ROOT_DIR_ENGINE.self::CONFIG_FILE)){
-//			include ROOT_DIR_ENGINE.self::CONFIG_FILE;
-//			if (isset($config)) self::$config = $config;
-//		}else{
-//			return false;
-//		}
-//		return self::$config;
-//	}
 
 	public function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false){
 		parent::__construct($dsn, $username, $passwd, $options);
@@ -186,7 +166,7 @@ class DB extends PDO{
 	 * @param string $sql Строка SQL запроса с параметрами
 	 * @param array $driver_options
 	 * @throws Error
-	 * @return \Engine\DebugSQLStatement|\PDOStatement
+	 * @return \Engine\DebugDBStatement|\PDOStatement
 	 */
 	public function prepare($sql, $driver_options = array()){
 		if ($this->debug){
@@ -301,17 +281,4 @@ class DB extends PDO{
 		if ($query) $queries[] = $query;
 		return $queries;
 	}
-
-	/**
-	 * Проверка системных требований для установки класса
-	 * @return array
-	 */
-	static function SystemRequirements(){
-		$requirements = array();
-		if (!extension_loaded('pdo')){
-			$requirements[] = 'Требуется расширение "pdo" для PHP';
-		}
-		return $requirements;
-	}
 }
-
