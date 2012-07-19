@@ -10,33 +10,36 @@ namespace Engine;
 use Engine\Classes;
 
 class Data {
+	/** @const  Файл конфигурации секци */
 	const CONFIG_FILE = 'config.sections.php';
+	/** @var array Загруженная конфигурация секция */
 	private static $config;
+	/** @var array Экземплярв используемых секций */
 	private static $sections;
 
 	/**
-	 * Конфигурация секций
-	 * @param null $uri URI объекта, для которого требуется конфигурация секции
-	 * @return bool|array Если $uri не указан, то вся конфигурация, иначе под указанный объект, если есть
+	 * Возвращает объект по пути на него
+	 * Путь может указывать как на собственный объект, так и на любой внешний.
+	 * @todo Кодировать язык и владельца в URI
+	 * @param string $uri URI объекта
+	 * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
+	 * @param int $owner Код владельца. Если не указан, то выбирается общий
+	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+	 * @return \Engine\Entity|null Экземпляр объекта, если найден или null, если не найден
 	 */
-	private static function GetConfig($uri = null){
-		if (file_exists(DIR_SERVER.self::CONFIG_FILE)){
-			include DIR_SERVER.self::CONFIG_FILE;
-			if (isset($config)) self::$config = $config;
-		}else{
-			return false;
-		}
-		if (isset($uri)){
-			if (isset(self::$config[$uri])){
-				return self::$config[$uri];
-			}else{
-				return false;
+	static function Object($uri, $lang = '', $owner = 0, $date = null){
+		if (is_string($uri)){
+			if ($uri==='') return new Root(array('uri'=>'', 'value'=>null));
+			// Определеяем, в какой секции начать поиск.
+			// Для этого берется начало адреса
+			$names = explode('/', $uri, 2);
+			if ($s = self::Section($names[0])){
+				// Поиск выполнит секция
+				return $s->read($uri, $lang, $owner, $date);
 			}
-		}else{
-			return self::$config;
 		}
+		return null;
 	}
-
 
 	/**
 	 * Взвращает экземпляр секции, назначенную для подчиенных объекта
@@ -60,37 +63,6 @@ class Data {
 			}
 		}
 		return self::$sections[$uri];
-	}
-
-	/**
-	 * Возвращает объект по пути на него
-	 * Путь может указывать как на собственный объект, так и на любой внешний.
-	 * @param string $uri URI объекта
-	 * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
-	 * @param int $owner Код владельца. Если не указан, то выбирается общий
-	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
-	 * @return \Engine\Entity|null Экземпляр объекта, если найден или null, если не найден
-	 */
-	static function Object($uri, $lang = '', $owner = 0, $date = null){
-		if (is_string($uri)){
-			if ($uri==='') return self::Root();
-			// Определеяем, в какой секции начать поиск.
-			// Для этого берется начало адреса
-			$names = explode('/', $uri, 2);
-			if ($s = self::Section($names[0])){
-				// Поиск выполнит секция
-				return $s->read($uri, $lang, $owner, $date);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Возвращает корневой объект системы (объект проекта)
-	 * @return \Engine\Entity Экземпляр объекта
-	 */
-	static function Root(){
-		return new Root(array('uri'=>'', 'value'=>null));
 	}
 
 	/**
@@ -126,6 +98,12 @@ class Data {
 		return $obj;
 	}
 
+	/**
+	 * Парсинг URI.
+	 * Возвращается чистый URI, язык и код владельца
+	 * @param string $uri URI, в котором содержится язык и код владельца
+	 * @return array
+	 */
 	static function getURIInfo($uri){
 		$uri = F::SplitRight('/', $uri);
 		$names = F::Explode('@', $uri[1], -3);
@@ -136,9 +114,39 @@ class Data {
 		);
 	}
 
+	/**
+	 * Создание полного URI, в котором содержится сам uri, язык и код владельца
+	 * @param $path Чистый URI
+	 * @param string $lang Код языка из 3 символов
+	 * @param int $owner Код владельцы числом
+	 * @return string
+	 */
 	static function makeURI($path, $lang = '', $owner = 0){
 		if ($owner) $path.='@'.$owner;
 		if ($lang) $path.='@'.$lang;
 		return $path;
+	}
+
+	/**
+	 * Конфигурация всех секций или секции по URI
+	 * @param null $uri URI объекта, для которого требуется конфигурация секции
+	 * @return bool|array Если $uri не указан, то вся конфигурация, иначе под указанный объект, если есть
+	 */
+	private static function GetConfig($uri = null){
+		if (file_exists(DIR_SERVER.self::CONFIG_FILE)){
+			include DIR_SERVER.self::CONFIG_FILE;
+			if (isset($config)) self::$config = $config;
+		}else{
+			return false;
+		}
+		if (isset($uri)){
+			if (isset(self::$config[$uri])){
+				return self::$config[$uri];
+			}else{
+				return false;
+			}
+		}else{
+			return self::$config;
+		}
 	}
 }
