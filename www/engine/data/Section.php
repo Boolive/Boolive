@@ -7,7 +7,7 @@
  */
 namespace Engine;
 
-class Section extends Entity{
+abstract class Section extends Entity{
 	/**
 	 * @param array $config Конфигурация соединения
 	 */
@@ -43,8 +43,12 @@ class Section extends Entity{
 		return null;
 	}
 
+	/**
+	 * @param $cond
+	 * @return array
+	 */
 	public function select($cond){
-
+		return array();
 	}
 
 	/**
