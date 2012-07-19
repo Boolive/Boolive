@@ -63,7 +63,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 				'lang'		 => Rule::string()->max(3)->default(0)->required(), // Язык (код)
 				'owner'		 => Rule::int()->default(0)->required(), // Владелец (код)
 				'date'		 => Rule::int(), // Дата создания в секундах
-				'level'		 => Rule::int(), // Уровень вложенности. Вычисляется по uri
 				'order'		 => Rule::any(Rule::null(), Rule::int()), // Порядковый номер. Уникален в рамках родителя
 				'is_history' => Rule::bool()->int()->default(0)->required(), // В истории или нет
 				'is_delete'	 => Rule::bool()->int(), // Удаленный или нет
@@ -177,8 +176,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 					}
 					$this->updateName($value);
 				}
-				// Обновление уровня вложенности
-				$this['level'] = $this->getLevel();
 				$this->_section_children = null;
 				$this->_section_self = null;
 				$this->_name = null;
@@ -370,7 +367,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 				$cond['where'] = 'uri like ? AND level=?';
 			}
 			$cond['values'][] = $this['uri'].'/%';
-			$cond['values'][] = $this['level']+1;
+			$cond['values'][] = $this->getLevel()+1;
 			$results = $s->select($cond);
 			if ($load)	$this->_children = $results;
 			return $results;
@@ -485,7 +482,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		// "Контейнер" для ошибок по атрибутам и подчиненным объектам
 		$errors = new Error('Неверный объект', $this['uri']);
 		// Проверка и фильтр атрибутов
-		$this['level'] = $this->getLevel();
 		$attribs = new Values($this->_attribs);
 		$this->_attribs = $attribs->get($this->getRule(), $error);
 		if ($error){
@@ -570,6 +566,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 */
 	public function delete(){
 		$this['is_delete'] = true;
+		return $this;
 	}
 
 	/**
@@ -708,6 +705,15 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 			return $proto->getFile($root);
 		}
 		return null;
+	}
+
+	/**
+	 * Проверка, является ли объект файлом.
+	 * Проверяется с учетом прототипа
+	 * @return bool
+	 */
+	public function isFile(){
+		return !empty($this['is_file']) || (!isset($this['value']) && ($proto = $this->proto()) && $proto->isFile());
 	}
 
 	/**
