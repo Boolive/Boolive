@@ -33,8 +33,8 @@ class Engine{
 	 * Передача управления объектам интерфейса и вывод результатов их работы
 	 */
 	static function Work(){
-		// @TODO Запуск контроллеров
-		echo 'Hello World!';
+		// Исполнение корневого объекта и вывод клиенту результата
+		echo Data::Object('')->start(new Commands(), Input::all());
 	}
 
 	/**
