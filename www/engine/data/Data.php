@@ -29,7 +29,7 @@ class Data {
 	 */
 	static function Object($uri, $lang = '', $owner = 0, $date = null){
 		if (is_string($uri)){
-			if ($uri==='') return new Root(array('uri'=>'', 'value'=>null));
+			if ($uri==='')	return self::MakeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'site.php')));
 			// Определеяем, в какой секции начать поиск.
 			// Для этого берется начало адреса
 			$names = explode('/', $uri, 2);
@@ -74,10 +74,18 @@ class Data {
 	static function MakeObject($attribs){
 		if (isset($attribs['uri']) && !empty($attribs['is_logic'])){
 			try{
-				// Свой класс
-				$names = F::splitRight('/', $attribs['uri']);
-				$class = str_replace('/', '\\', trim($attribs['uri'],' /'));
-				Classes::AddProjectClasse($attribs['uri'].'/'.$names[1].'.php', $class);
+				// Имеется свой класс?
+				if ($attribs['uri']===''){
+					$path = 'site.php';
+					$class = 'site';
+				}else{
+					$names = F::splitRight('/', $attribs['uri']);
+					$class = str_replace('/', '\\', trim($names[0],'/'));
+					if (!empty($class)) $class.='\\';
+					$class.=$names[1];
+					$path = $attribs['uri'].'/'.$names[1].'.php';
+				}
+				Classes::AddProjectClasse($path, $class);
 				// Проверяем существование класса
 				if (Classes::IsExist($class)){
 					return new $class($attribs);
