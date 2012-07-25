@@ -17,7 +17,7 @@ class F{
 	 * @param string $tpl_right
 	 * @return string Подготовленный текст
 	 */
-	static function Parse($text, $vars=array(), $tpl_left = '{', $tpl_right = '}'){
+	static function parse($text, $vars=array(), $tpl_left = '{', $tpl_right = '}'){
 		$vars = filter_var_array($vars, FILTER_SANITIZE_SPECIAL_CHARS);
 		// По циклу проходимся по всем переменным заменяя значения в {} на значения в массиве
 		if (is_array($vars)){
@@ -33,13 +33,13 @@ class F{
 	 * @param array
 	 * @return array
 	 */
-	static function ArrayMergeRecursive(){
+	static function arrayMergeRecursive(){
 		$params = func_get_args();
 		$return = array_shift($params);
 		foreach ($params as $array){
 			foreach ($array as $key => $value){
 				if (isset($return[$key]) && is_array($value) && is_array($return[$key])){
-					$return[$key] = self::ArrayMergeRecursive($return[$key], $value);
+					$return[$key] = self::arrayMergeRecursive($return[$key], $value);
 				}else{
 					$return[$key] = $value;
 				}
@@ -56,15 +56,12 @@ class F{
 	 * @param int $lim Максимальное количество частей
 	 * @return array
 	 */
-	static function Explode($delim, $str, $lim = 1){
+	static function explode($delim, $str, $lim = 1){
 		if ($lim > -2) return explode($delim, $str, abs($lim));
-
 		$lim = -$lim;
 		$out = explode($delim, $str);
 		if ($lim >= count($out)) return $out;
-
 		$out = array_chunk($out, count($out) - $lim + 1);
-
 		return array_merge(array(implode($delim, $out[0])), $out[1]);
 	}
 
@@ -75,7 +72,7 @@ class F{
 	 * @param $str Строка, которая делится
 	 * @return array Массив строк. Если разделитель не найден, то первая строка = null, вторая = $str
 	 */
-	static function SplitRight($delim, $str){
+	static function splitRight($delim, $str){
 		$pos = mb_strrpos($str, $delim);
 		if ($pos === false)	return array(null, $str);
 		return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+1));
@@ -86,15 +83,13 @@ class F{
 	 * Работает с многомерныыми массивами
 	 * @param $glue Соединительная строка
 	 * @param $pieces Массив
-	 * @param bool $recursive Признак, обрабатывать вложенные массивы или нет?
 	 * @return string
 	 */
-	static function Implode($glue, $pieces, $recursive = true) {
-		if (!$recursive) return implode($glue, $pieces);
+	static function implodeRecursive($glue, $pieces) {
 		$items = array();
 		foreach ($pieces as $item){
 			if (is_array($item)){
-				$items[] = self::Implode($glue, $item, $recursive);
+				$items[] = self::implodeRecursive($glue, $item);
 			}else{
 				$items[] = $item;
 			}
@@ -110,7 +105,7 @@ class F{
 	 * @param array $mask Массив-маска
 	 * @return bool
 	 */
-	static function IsArrayMatch($source, $mask){
+	static function isArrayMatch($source, $mask){
 		if (!is_array($source) || !is_array($mask)){
 			return false;
 		}
@@ -120,7 +115,7 @@ class F{
 			}else
 			if (is_array($value)){
 				if (is_array($source[$key])){
-					return self::IsArrayMatch($value, $source[$key]);
+					return self::isArrayMatch($value, $source[$key]);
 				}else{
 					return false;
 				}

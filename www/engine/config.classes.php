@@ -49,5 +49,8 @@ $classes = array(
 	'Engine\F'			=> 'functions/F.php',
 
 	// Работа с файлами
-	'Engine\File'		=> 'file/File.php'
+	'Engine\File'		=> 'file/File.php',
+
+	// Входящие данные
+	'Engine\Input'		=> 'input/Input.php',
 );
