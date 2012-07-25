@@ -44,7 +44,6 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	/**
 	 * Установка правила проверки по умолчанию
 	 * Применяется в наследуемых классах для предопредления правила
-	 * @return \Engine\Rule
 	 */
 	protected function defineRule(){
 		// Одномерный ассоциативный массив строк
@@ -195,6 +194,17 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 */
 	public function getKeys(){
 		return array_keys((array)$this->_value);
+	}
+
+	/**
+	 * Создание копии с указанием нового правила по умолчанию
+	 * @param null|\Engine\Rule $rule
+	 * @return \Engine\Values
+	 */
+	public function getCopy($rule = null){
+		$copy = clone $this;
+		$copy->_rule = $rule;
+		return $copy;
 	}
 
 	/**
