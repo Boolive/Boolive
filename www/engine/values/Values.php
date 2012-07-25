@@ -478,13 +478,14 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * @return array
 	 */
 	public function trace(){
-		return array(
-			'_value' => $this->_value,
-			'_rule' => $this->_rule,
-			'_filtered' => $this->_filtered,
-			'_interfaces' => $this->_interfaces,
-			'_maker' => $this->_maker,
-			'_name' => $this->_name
-		);
+		return $this->_value;
+//		return array(
+//			'_value' => $this->_value,
+//			'_rule' => $this->_rule,
+//			'_filtered' => $this->_filtered,
+//			'_interfaces' => $this->_interfaces,
+//			'_maker' => $this->_maker,
+//			'_name' => $this->_name
+//		);
 	}
 }
