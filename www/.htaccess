@@ -35,9 +35,9 @@ DirectoryIndex Off
 	# Не изменять ссылки на файлы
 	RewriteCond %{REQUEST_URI} !\.[a-zA-Z]{1,4}[\?0-9]*/?$ [NC]
 
-	# Правило изменения ссылок. Всё после адреса сайта присваивается параметру "q" GET запроса
-	# http://boolive.ru/news/first => 'http://boolive.ru/index.php?q=news/first'.
-	RewriteRule ^(.*)$ index.php?q=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+	# Правило изменения ссылок. Всё после адреса сайта присваивается параметру "path" GET запроса
+	# http://boolive.ru/news/first => 'http://boolive.ru/index.php?path=news/first'.
+	RewriteRule ^(.*)$ index.php?path=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
 
 </IfModule>
 
