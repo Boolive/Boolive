@@ -125,7 +125,7 @@ class File{
 	 */
 	static function FileInfo($path, $key = null){
 		$path = str_replace('\\','/',$path);
-		$list = F::Explode('/', $path, -2);
+		$list = F::explode('/', $path, -2);
 		if (sizeof($list)<2){
 			array_unshift($list, '');
 		}
@@ -133,7 +133,7 @@ class File{
 		if (($len = mb_strlen($list[0]))>1 && mb_substr($list[0], $len-2)=='..'){
 			$info['back'] = true;
 		}
-		$list = F::Explode('.', $info['name'], -2);
+		$list = F::explode('.', $info['name'], -2);
 		// Если $list имеет один элемент, то это не расширение
 		if (sizeof($list)>1){
 			$info['ext'] = strtolower($list[1]);

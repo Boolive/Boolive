@@ -75,7 +75,7 @@ class Data {
 		if (isset($attribs['uri']) && !empty($attribs['is_logic'])){
 			try{
 				// Свой класс
-				$names = F::SplitRight('/', $attribs['uri']);
+				$names = F::splitRight('/', $attribs['uri']);
 				$class = str_replace('/', '\\', trim($attribs['uri'],' /'));
 				Classes::AddProjectClasse($attribs['uri'].'/'.$names[1].'.php', $class);
 				// Проверяем существование класса
@@ -105,8 +105,8 @@ class Data {
 	 * @return array
 	 */
 	static function getURIInfo($uri){
-		$uri = F::SplitRight('/', $uri);
-		$names = F::Explode('@', $uri[1], -3);
+		$uri = F::splitRight('/', $uri);
+		$names = F::explode('@', $uri[1], -3);
 		return array(
 			'uri' => $uri[0].'/'.$names[0],
 			'owner' => isset($names[1]) && is_numeric($names[1]) ? $names[1] : 0,

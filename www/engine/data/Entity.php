@@ -640,7 +640,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	public function getParentUri(){
 		if (!isset($this->_parent_uri)){
 			if (isset($this['uri'])){
-				$names = F::SplitRight('/',$this['uri']);
+				$names = F::splitRight('/',$this['uri']);
 				$this->_parent_uri = $names[0];
 				$this->_name = $names[1];
 			}else
@@ -660,7 +660,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	public function getName(){
 		if (!isset($this->_parent_uri)){
 			if (isset($this['uri'])){
-				$names = F::SplitRight('/',$this['uri']);
+				$names = F::splitRight('/',$this['uri']);
 				$this->_parent_uri = $names[0];
 				$this->_name = $names[1];
 			}
