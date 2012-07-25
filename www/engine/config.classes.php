@@ -40,7 +40,6 @@ $classes = array(
 	// Модуль данных, базовые классы объектов данных
 	'Engine\Data'			=> 'data/Data.php',
 	'Engine\Entity'			=> 'data/Entity.php',
-	'Engine\Root'			=> 'data/Root.php',
 	'Engine\Section'		=> 'data/Section.php',
 	// Секции
 	'Engine\Sections\MySQLSection'	=> 'data/sections/MySQLSection.php',
@@ -53,4 +52,6 @@ $classes = array(
 
 	// Входящие данные
 	'Engine\Input'		=> 'input/Input.php',
+	// Команды
+	'Engine\Commands'	=> 'commands/Commands.php',
 );
