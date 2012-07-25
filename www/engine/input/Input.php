@@ -172,4 +172,12 @@ class Input extends Values{
 		}
 		return $result;
 	}
+
+	/**
+	 * Правила по умолчанию
+	 * Правило отсутствует, поэтому без явного указания правиал при выборки значений значения не получить
+	 */
+	protected function defineRule(){
+		$this->_rule = null;
+	}
 }
