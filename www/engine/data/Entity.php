@@ -47,7 +47,23 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * Также означает, что текущее имя (uri) объекта временное
 	 * Если строка, то определяет базовое имя, к кторому будут подбираться числа для уникальности
 	 * @var bool|string */
-	public $_rename = false;
+	protected $_rename = false;
+
+	/**
+	 * Кoнтейнер входящих данных.
+	 * Инициализируется в методе start()
+	 * В качестве правила по умолчанию используется $this->getInputRule()
+	 * @var \Engine\Input
+	 */
+	protected $_input;
+	/**
+	 * Команды, передающиеся по всем исполняемым объектам.
+	 * Инициализируется в методе start()
+	 * @var \Engine\Commands
+	 */
+	protected $_commands;
+
+
 
 	public function __construct($attribs = array(), $section = null){
 		$this->_attribs = $attribs;
@@ -90,6 +106,16 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	public function getRule(){
 		if (!isset($this->_rule)) $this->defineRule();
 		return $this->_rule;
+	}
+
+	/**
+	 * Возвращает правило на входящие данные
+	 * Используется, если объект исполняется как контроллер для обработки запроса
+	 * По умолчанию любые значения
+	 * @return null|\Engine\Rule
+	 */
+	public function getInputRule(){
+		return Rule::any();
 	}
 
 	/**
@@ -269,7 +295,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		}else{
 			$uri = $this['uri'].'/'.$name;
 			// Если объекта нет в секции, то создается виртуальный
-			if (!($s = $this->sectionChildren())||!($obj = $s->read($uri, $this['lang'], $this['owner']))){
+			if (!($s = $this->sectionChildren())||!($obj = $s->read($uri, (string)$this['lang'], (int)$this['owner']))){
 				// Поиск прототипа для объекта
 				// Прототип тоже может оказаться виртуальным!
 				if ($proto = $this->proto()){
@@ -750,427 +776,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		return $this->_is_saved;
 	}
 
-
-
-//	/**
-//	 * Выбор подчиненного по его относительному пути
-//	 * @example $child = $obj->getSubByPath('sub/sub2/child'); Равноценно: $child = $obj->sub->sub2->child;
-//	 * @param string $path Относительный путь на объект
-//	 * @param bool $exist Признак, возвращать только сущесвтующий объект. Если false и подчиненного нет, то будет возвращен новый объект
-//	 * @return Entity|null
-//	 */
-//	public function getSubByPath($path, $exist = false){
-//		if (($path = trim($path, '/ '))){
-//			$path = explode('/', $path);
-//			$cnt = sizeof($path);
-//			$i = 0;
-//			$obj = $this;
-//			while ($i < $cnt && $obj){
-//				$obj = $obj->{$path[$i]};
-//				if ($obj && $exist && $obj->isNew()) return null;
-//				$i++;
-//			}
-//			return $obj;
-//		}
-//		return null;
-//	}
-//
-//	/**
-//	 * Проверка объекта
-//	 * Проверяются атрибуты, подчиненные объекты и информируется родитель об изменении или удалении его подчиненного.
-//	 * Если родитель при проверке вызовет исключение, то этот объект будет считаться с ошибкой.
-//	 * Проверяются только подгруженные подчиненные, а не все имеющеся у объекта в БД.
-//	 * @param bool $exchange_attr Признак, заменить ли атрибуты экземпляра на отфильтрованные после проверки?
-//	 * @return bool False, если есть ошибки в атрибутах
-//	 */
-//	public function check($exchange_attr = true){
-//		// @todo
-//		$attr = (array)$this;
-//		// Ссылка на родителя
-//		if (($parent = $this->parent())&&!$parent->isNew()) $attr['parent'] = $parent['section'].':'.$parent['id'];
-//		// Ссылка на прототип
-//		if (($proto = $this->proto())&&!$proto->isNew()) $attr['proto'] = $proto['section'].':'.$proto['id'];
-//		// Секция по умолчанию
-//		if (empty($attr['section']) && $parent)	$attr['section'] = $parent['section'];
-//
-//		if ($this->isNew()){
-//			// Имя объекта по умолчанию
-//			if (empty($attr['name'])) $attr['name'] = 'entity';
-//			// Даты создания, если не установлена вручную и объект новый
-//			if (empty($attr['date_create'])) $attr['date_create'] = time();
-//		}
-//		// Даты изменения, если не установлена вручную
-//		if (empty($attr['date_edit'])) $attr['date_edit'] = time();
-//
-//		// Атрибуты помещем в контейнер для фильтра
-//		$attr = new Values($attr);
-//		if (!($this->_errors instanceof Error)) $this->_errors = new Error(__CLASS__);
-//		$this->_verified = $attr->getArray($this->_rule, $this->_errors);
-//
-//		// Проверка файла
-//		if (isset($this->_verified['file'])){
-////			$this['file'] = $attr['file']->getArray($this->_rule_file, $this->_errors);
-//			// Ошибка загрузки файла
-//			if ($this->_verified['file']['error'] !== 0){
-//				$this->_errors->add(File::UploadErrorMmessage($this->_verified['file']['error']));
-//			}else
-//			if (!$this->_errors->isExist()){
-//				// Проверка типа файла
-//				if (!$this->isAssociated($this->_verified['file']['tmp_name'])){
-//					$this->_errors->add(array('Неподдерживаемый тип файла (%s)', $this->_verified['file']['tmp_name']));
-//				}
-//			}
-//		}
-//		// Замена текущих атрибутов на отфильтрованные
-//		if ($exchange_attr) $this->updateArray($this->_verified);
-//
-//		// Есть ли ошибки в атрибутах?
-//		$no_errors = !$this->_errors->isExist();
-//
-//		// Проверка подчиненных
-//		foreach ($this->_children as $sub){
-//			/** @var $sub \Engine\Entity */
-//			$no_errors = $sub->check() && $no_errors;
-//		}
-//		try{
-//			// Проверка объекта родителем
-//			if (!$this->isNew()){
-//				// Если родитель изменен, то информирование прошлого об удалении его подчиненноо
-//				$current = Data::Get($this['section'], $this['id'], false, false);
-//				$curr_parent = $current->parent();
-//				if ($curr_parent){
-//					if ($this['parent']!=$current['parent'] || (!$this->offsetIsEmpty('is_delete') && !$current['id_delete'])){
-//						$curr_parent->onRemoveChild($this);
-//					}
-//				}
-//			}
-//			// Информирование родителя об изменении его подчиенного
-//			if ($parent = $this->parent()){
-//				$parent->onChangeChild($this);
-//			}
-//		}catch(Error $e){
-//			$this->_errors->add($e);
-//			$no_errors = false;
-//		}
-//		return $no_errors;
-//	}
-//
-//	/**
-//	 * Сохранение объекта
-//	 * @param bool $save_sub Сохранять ли подчиенных?
-//	 * @throws Error|null
-//	 * @throws \Exception
-//	 * @return void
-//	 */
-//	public function save($save_sub = true){
-//		if (!$this->_is_on_save && $this->_can_save){
-////			try{
-//				$this->_is_on_save = true;
-//				// Старт транзакции
-////				Transaction::Begin();
-//				// Сохранение прототипа, если новый
-//				if (($proto = $this->proto()) && $proto->isNew()){
-//					$proto->save();
-//				}else
-//				if (!$proto){
-//					// @todo Определение прототипа от наследуемого класса
-//				}
-//				// Сохранение родителя, если новый
-//				if (($parent = $this->parent()) && $parent->isNew()){
-//					$parent->save();
-//				}
-//
-//				// Проверка объекта
-//				if (!$this->check()) throw $this->_errors;
-//
-//				// Сохранение, если объект новый
-//				if ($this->isNew()){
-//					$this->updateArray(Data::Add($this));
-//				}else{
-//					$this->updateArray(Data::Edit($this));
-//				}
-//				if ($save_sub){
-//					// Сохранение подчиненных
-//					foreach ($this->_sub as $sub){
-//						/** @var $sub \Engine\Entity */
-//						$sub->save();
-//					}
-//				}
-//				$this->_is_on_save = false;
-//				// Завершение тразакции
-////				Transaction::Commit();
-////			}catch(Exception $e){
-////				Transaction::RollBack();
-////				$this->_is_on_save = false;
-////				throw $e;
-////			}
-//		}
-//	}
-//	/**
-//	 * Проверка, является ли объект новым (не сохраненным в БД)
-//	 * @return bool
-//	 */
-//	public function isNew(){
-//		return $this->offsetIsEmpty('id');
-//	}
-//
-//	/**
-//	 * Признак, можно ли объект сохранять
-//	 * @param bool|null $can_save Если будево значение, то выполняется установка признака в соответсвующее значение
-//	 * @return bool
-//	 */
-//	public function canSave($can_save = null){
-//		if (is_bool($can_save)){
-//			$this->_can_save = $can_save;
-//			if ($can_save && ($parent = $this->parent())){
-//				$parent->canSave(true);
-//			}
-//		}
-//		return $this->_can_save;
-//	}
-//
-
-//
-//	/**
-//	 * Проверка, является ли объект подчиенным для указанного?
-//	 * @param \Engine\Entity $parent
-//	 * @return bool
-//	 * @todo
-//	 */
-//	public function isChildOf($parent){
-//		if (!$parent) return false;
-//		if ($this['section'] == $parent['section']){
-//			$key = '_id'.$parent['_level'];
-//			if (isset($this[$key]) && $this[$key] == $parent['id']){
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-//
-//	/**
-//	 * Проверка, является ли объект родителем для указанного?
-//	 * @param \Engine\Entity child
-//	 * @return bool
-//	 */
-//	public function isParentOf($child){
-//		if (!$child) return false;
-//		return $child->isChildOf($this);
-//	}
-//
-//	/**
-//	 * Проверка, наследуется ли объект от указанного (является ли налседником)?
-//	 * @param $proto
-//	 * @return bool
-//	 */
-//	public function isHeirOf($proto){
-//		if (!$proto) return false;
-//		if ($this->isEqual($proto)) return true;
-//		$cur = $this;
-//		while ($cur){
-//			if (($cur = $cur->proto()) == $proto) return true;
-//		}
-//		return false;
-//	}
-//
-//	/**
-//	 * Проверка, является ли объект прототипом для указанного?
-//	 * @param \Engine\Entity $heir
-//	 * @return mixed
-//	 */
-//	public function isProtoOf($heir){
-//		if (!$heir) return false;
-//		return $heir->isHeirOf($this);
-//	}
-//
-//	/**
-//	 * Запуск сущности
-//	 * @param \Engine\Commands $commands Команды для исполнения в соответствующих сущностях
-//	 * @param bool $previous Признак, были ли объекты до текущего. Если false, то не были.
-//	 * @param \Engine\Input $input Входящие данные
-//	 * @return void|mixed Результат выполнения контроллера
-//	 */
-//	public function start($commands, $previous, $input){
-//		$result = '';
-//		//Проверка возможности работы
-//		if ($this->canWork($commands, $previous, $input)){
-//			$this->_start_args = array(
-//				'commands' => $commands,
-//				'prviews' => false,
-//				'input' => $input->getShifted($this->_params_shift)
-//			);
-//			//Выполнение подчиненных
-//			//$sub = $this->subStart($commands, $input);
-//			ob_start();
-//				// Выполненеие своей работы
-//				$result = $this->work($commands, array(), $input);
-//				$result = ob_get_contents().$result;
-//			ob_end_clean();
-//		}
-//		return $result;
-//	}
-//
-//	/**
-//	 * Проверка возможности работы
-//	 * @param \Engine\Commands $commands Команды для исполнения в соответствующих объектах
-//	 * @param bool $previous Признак, были ли объекты до текущего. Если false, то не были.
-//	 * @param \Engine\Input $input Входящие данные
-//	 * @param bool $check_input Признак, работать если нет ошибок во входящих данных.
-//	 * @return bool Признак, может ли работать объект или нет
-//	 */
-//	public function canWork($commands, $previous, $input, $check_input = true){
-//		$result = true;
-//		if ($input instanceof Values){
-//			$this->loadAllSub();
-//			// Условие на URL
-//			$pattern = (string)$this->url_pattern;
-//			if ($pattern){
-//				// Сверка с текущим URL и выборка необходимых данных из него
-//				$result = $input->match($pattern, $this->_params_shift);
-//			}
-//			// Проверка входящих данных
-//			$this->_input_filtered = $input->getArray($this->_input_rule, $this->_input_errors);
-//			if ($check_input && $this->_input_errors->isExist()){
-//				return false;
-//			}
-//		}
-//		return $result;
-//	}
-//
-//	/**
-//	 * Запуск подчиненного по имени
-//	 * @param $path Имя подчиненного или путь на него
-//	 * @return null
-//	 */
-//	public function startSub($path){
-//		if ($sub = $this->getSubByPath($path)){
-//			$result = $sub->start($this->_start_args['commands'], $this->_start_args['prviews'], clone $this->_start_args['input']);
-//			if ($result){
-//				$this->_start_args['prviews'] = true;
-//				return $result;
-//			}
-//		}
-//		return null;
-//	}
-//
-//	/**
-//	 * Работа подчиненных объектов
-//	 * @param \Engine\Commands $commands Команды для исполнения в соответствующих объектах
-//	 * @param \Engine\Input $input Входящие данные
-//	 * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
-//	 */
-//	public function subStart($commands, $input){
-//        $results = array();
-//		$list = array();
-//		$object = $this;
-//		$names = array();
-//		do{
-//			$sub = $object->loadAllSub();
-//			$cnt = sizeof($sub);
-//			for ($i=0; $i<$cnt; ++$i){
-//				if (!in_array($sub[$i]['name'], $this->_ignore_start) &&
-//					!$sub[$i]['is_hidden'] && !$sub[$i]['is_delete'] && !$sub[$i]['is_temp'] &&
-//					!$sub[$i]->isNew() && !isset($names[$sub[$i]['name']])){
-//					$list[(int)$sub[$i]['order']][] = $sub[$i];
-//				}
-//				$names[$sub[$i]['name']] = true;
-//			}
-//			$object = $object->proto();
-//		}while($object);
-//
-//		ksort($list, SORT_NUMERIC);
-//		foreach ($list as $key => $objects){
-//			// В обратном порядке, чтоб сначала исполнялись подчиенные прототипов, а уже потом свои
-//			for ($i=sizeof($objects)-1; $i>=0; --$i){
-//				$out = $objects[$i]->start($commands, !empty($results), $input->getShifted($this->_params_shift));
-//				if ($out){
-//					$results[$objects[$i]['name']] = $out;
-//				}
-//			}
-//		}
-//		return $results;
-//	}
-//
-//	/**
-//	 * Работа объекта. Обработка запроса и формирование вывода
-//	 * Результат выводится функциями echo, print или другими. Или возвращается через return
-//	 * @param \Engine\Commands $commands Команды для исполнения в соответствующих объектах
-//	 * @param array $v Результаты подчиненных объектов
-//	 * @param \Engine\Input $input Входящие данные
-//	 * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
-//	 */
-//	public function work($commands, $v = array(), $input){
-//		return $this['value'].implode('', $v);
-//	}
-//
-//	/**
-//	 * Путь на объект от корня сайта
-//	 * Используется для определения пути на файл объекта для его чтения или создания
-//	 * @param string $file_name
-//	 * @param bool $find_existing
-//	 * @return bool|string
-//	 */
-//	public function getPath($file_name = '', $find_existing = true){
-//		if (!$find_existing && $this->_dir) return $this->_dir.$file_name;
-//		$object = $this;
-//		do{
-//			if ($parent = $object->parent()){
-//				$root_dir = $parent->getPath('', false);
-//			}else{
-//				$root_dir = $object['section'].'/';
-//			}
-//
-////			$parent = $object;
-////			$path = '';
-////			while ($parent){
-////				$path = $parent['name'].'/'.$path;
-////				$parent = $parent->parent();
-////			}
-////			$path = $root_dir.$path.$file_name;
-//			$path = $root_dir.$object['name'].'/'.$file_name;
-//			if ($find_existing && !file_exists(DIR_PROJECT.$path)){
-//				$path = false;
-//				$object = $object->proto();
-////				if (get_class($object) == 'Engine\\Entity'){
-////					$object = null;
-////				}
-//			}else{
-//				$object = null;
-//			}
-//		}while($object);
-//		if ($path){
-//			return $path;
-//		}
-//		return false;
-//	}
-//
-//	/**
-//	 * Проверка возможности ассоциировать файл с объектом
-//	 * @param $file Путь на файл
-//	 * @return bool
-//	 */
-//	public function isAssociated($file){
-//		// Если указаны возможные расширения файла
-//		if (!empty($this->_valid_extensions)){
-//			$info = File::FileInfo($file);
-//			return in_array($info['ext'], $this->_valid_extensions);
-//		}
-//		return true;
-//	}
-//
-//	/**
-//	 * Установка класса
-//	 * Инициализация объекта, который будет ассоциирован с данным классом
-//	 * @param \Engine\Values $input Данные, полученные от пользователя, если он запрашивались методом self::InstallPrepare()
-//	 * @return void
-//	 */
-//	public function install($input){
-//		$keys = $input->getKeys();
-//		foreach ($keys as $key){
-//			$this->{$key} = $input->get($key);
-//		}
-//	}
-//
 	/**
 	 * Клонирование объекта
 	 */
@@ -1179,6 +784,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 			$this->__set($name, clone $child);
 		}
 	}
+
 	/**
 	 * Значения внутренных свойств объекта для трасировки при отладки
 	 * @return array
@@ -1194,5 +800,87 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		//$trace['_parent'] = $this->_parent;
 		$trace['_children'] = $this->_children;
 		return $trace;
+	}
+
+	#################################################
+	#                                               #
+	#            Исполнение объекта                 #
+	#                                               #
+	#################################################
+
+	/**
+	 * Запуск объекта
+	 * @param \Engine\Commands $commands Команды для исполнения в соответствующих сущностях
+	 * @param \Engine\Input $input Входящие данные
+	 * @return null|string Результат выполнения контроллера
+	 */
+	public function start(Commands $commands, Input $input){
+		// Команды и входящие данные запоминаем, чтобы использовать их и передвать подчиенным по требованию
+		$this->_commands = $commands;
+		$this->_input = $input->getCopy($this->getInputRule());
+		//Проверка возможности работы
+		if ($this->canWork()){
+			// Подчиненные не запускались ещё
+			$this->_input['previous'] = false;
+			//Выполнение подчиненных
+			ob_start();
+				// Выполненеие своей работы
+				$result = $this->work();
+				$result = ob_get_contents().$result;
+			ob_end_clean();
+		}else{
+			$result = null;
+		}
+		unset($this->_input);
+		return $result;
+	}
+
+	/**
+	 * Проверка возможности работы
+	 * По умолчанию проверяются входящие данные на соответсвие правилу
+	 * @return bool Признак, может ли работать объект или нет
+	 */
+	public function canWork(){
+		return $this->_input->filter();
+	}
+
+	/**
+	 * Работа объекта. Обработка запроса и формирование вывода
+	 * Результат выводится функциями echo, print или возвращается через return
+	 * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
+	 */
+	public function work(){
+		return $this['value'];
+	}
+
+	/**
+	 * Запуск подчиненного по имени
+	 * @param $name Имя подчиненного
+	 * @return null|string
+	 */
+	public function startChild($name){
+		$result = $this->{$name}->start($this->_commands, $this->_input);
+		if ($result){
+			$this->_input['previous'] = true;
+		}
+		return $result;
+	}
+
+	/**
+	 * Запуск всех подчиненных объектов
+	 * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
+	 */
+	public function startChildren(){
+        $result = array();
+		$list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
+		foreach ($list as $key => $child){
+			/** @var $child \Engine\Entity */
+			$out = $child->start($this->_commands, $this->_input);
+			if ($out){
+				$result[$key] = $out;
+				$this->_input['previous'] = true;
+			}
+		}
+		return $result;
 	}
 }
