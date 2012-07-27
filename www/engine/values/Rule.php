@@ -22,8 +22,12 @@ namespace Engine;
  * @method static \Engine\Rule values() Объект класса \Engine\Values
  * @method static \Engine\Rule any() Любое правило из перечисленных или любой тип значения, если не перечислены варианты правил
  * @method static \Engine\Rule forbidden() Запрещенный. Требуется отсутствие элемента
+ * @method static \Engine\Rule is() Равен указанному значению
+ * @method static \Engine\Rule not() Не равен указанному значению
  * @method static \Engine\Rule in() Допустимые значения. Через запятую или массив
  * @method static \Engine\Rule not_in() Недопустимые значения. Через запятую или массив
+ * @method static \Engine\Rule escape() Экранирование html символов
+ * @method static \Engine\Rule striptags() Вырезание html тегов
  * @method static \Engine\Rule email() Email адрес
  * @method static \Engine\Rule url() URL
  * @method static \Engine\Rule uri() URI = URL + URN, возможно отсутсвие части URL или URN
@@ -37,6 +41,8 @@ namespace Engine;
  * @method \Engine\Rule min($min) Минимальное значение. Левая граница отрезка
  * @method \Engine\Rule less($less) Меньше указанного значения. Правая граница интервала
  * @method \Engine\Rule more($more) Больше указанного значения. Левая граница интервала
+ * @method \Engine\Rule is() Равен указанному значению
+ * @method \Engine\Rule not() Не равен указанному значению
  * @method \Engine\Rule in() Допустимые значения. Через запятую или массив
  * @method \Engine\Rule not_in() Недопустимые значения. Через запятую или массив
  * @method \Engine\Rule required() Должен существовать
@@ -44,6 +50,7 @@ namespace Engine;
  * @method \Engine\Rule ignore() Коды игнорируемых ошибок
  * @method \Engine\Rule trim() Обрезание строки
  * @method \Engine\Rule escape() Экранирование html символов
+ * @method \Engine\Rule striptags() Вырезание html тегов
  * @method \Engine\Rule email() Email адрес
  * @method \Engine\Rule url() URL
  * @method \Engine\Rule uri() URI = URL + URN, возможно отсутсвие части URL или URN

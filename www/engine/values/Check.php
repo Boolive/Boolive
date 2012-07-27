@@ -408,7 +408,6 @@ class Check{
 	 */
 	static function more($value, &$error, Rule $rule){
 		$more = isset($rule->more[0])? $rule->more[0] : null;
-		trace($more);
 		if ((is_int($value) || is_double($value)) && !($value > $more)){
 			$value = $more + 1;
 			$error = new Error(array('Значение не больше чем "%s"', $more), 'more');
@@ -418,6 +417,38 @@ class Check{
 		}else
 		if (is_array($value) && !(sizeof($value) > $more)){
 			$error = new Error(array('Значение не больше чем "%s"', $more), 'more');
+		}
+		return $value;
+	}
+
+	/**
+	 * Проверка на равенство указанному значению
+	 * @param $value Проверяемое значение
+	 * @param null &$error Возвращаемый объект исключения, если значение не соответсвует правилу
+	 * @param \Engine\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+	 * @return mixed
+	 */
+	static function is($value, &$error, Rule $rule){
+		$is = isset($rule->is[0])? $rule->is[0] : null;
+		if ($value!=$is){
+			$value = $is;
+			$error = new Error('Значение неравно указанному', 'is');
+		}
+		return $value;
+	}
+
+	/**
+	 * Проверка на неравенство указанному значению
+	 * @param $value Проверяемое значение
+	 * @param null &$error Возвращаемый объект исключения, если значение не соответсвует правилу
+	 * @param \Engine\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+	 * @return mixed
+	 */
+	static function not($value, &$error, Rule $rule){
+		$not = isset($rule->not[0])? $rule->not[0] : null;
+		if ($value==$not){
+			$value = null;
+			$error = new Error('Значение равно указанному', 'not');
 		}
 		return $value;
 	}
@@ -483,6 +514,23 @@ class Check{
 		if (is_scalar($value)){
 			$result = htmlentities($value, ENT_QUOTES, 'UTF-8');
 			if ($result != $value) $error = new Error('Имеются html символы в строке', 'escape');
+			return $result;
+		}
+		return $value;
+	}
+
+	/**
+	 * Вырезание html тегов
+	 * @param $value Фильтруемое значение
+	 * @param null &$error Возвращаемый объект исключения, если значение не соответсвует правилу
+	 * @param \Engine\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+	 * @return mixed
+	 */
+	static function strip_tags($value, &$error, Rule $rule){
+		if (is_scalar($value)){
+			$tags = $rule->strip_tags[1];
+			$result = strip_tags($value, $tags);
+			if ($result != $value) $error = new Error('Имеются запрещенные html теги в строке', 'strip_tags');
 			return $result;
 		}
 		return $value;
