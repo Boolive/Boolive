@@ -34,19 +34,14 @@ $config = array(
 			),
 		'table' => 'site'
 	),
-	/*// Библиотека
-	'/Library' => array(
+	// Библиотека
+	'/library' => array(
 		'extends' => '',
 		'table' => 'library'
 	),
-	// Содержимое
-	'/Connect' => array(
-		'extends' => '',
-		'table' => 'contents'
-	),
 	// Интерфейс
-	'/Interfaces' => array(
+	'/interfaces' => array(
 		'extends' => '',
 		'table' => 'interfaces'
-	)*/
+	)
 );
