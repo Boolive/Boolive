@@ -209,16 +209,20 @@ namespace Engine{
 					}
 					$list = self::ObjToArray($var);
 				}
-				$cnt = sizeof($list);
-				if ($cnt > 0){
-					foreach ($list as $name => $value){
-						$cnt--;
-						if ($cnt){
-							$new_pfx = $pfx.' '.$sp;
-						}else{
-							$new_pfx = $pfx.' '.$sp3;
+				if (!is_array($list)){
+					$out.= "\n".$pfx.self::Format($list, $trace_buf, $pfx);
+				}else{
+					$cnt = sizeof($list);
+					if ($cnt > 0){
+						foreach ($list as $name => $value){
+							$cnt--;
+							if ($cnt){
+								$new_pfx = $pfx.' '.$sp;
+							}else{
+								$new_pfx = $pfx.' '.$sp3;
+							}
+							$out.= "\n".$pfx.'['.$name.'] => '.self::Format($value, $trace_buf, $new_pfx);
 						}
-						$out.= "\n".$pfx.'['.$name.'] => '.self::Format($value, $trace_buf, $new_pfx);
 					}
 				}
 			}
@@ -234,9 +238,10 @@ namespace Engine{
 		 * @param object|ITrace $object
 		 * @return array
 		 */
-		static public function ObjToArray(&$object){
+		static private function ObjToArray(&$object){
 			if ($object instanceof ITrace){
 				$arr = $object->trace();
+				if (!is_array($arr)) return $arr;
 			}else{
 				$arr = (array)$object;
 			}
