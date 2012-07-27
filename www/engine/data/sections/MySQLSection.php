@@ -297,22 +297,22 @@ class MySQLSection extends Section{
 	public function install(){
 		$this->db->exec('
 			CREATE TABLE `'.$this->table.'` (
-			  `uri` VARCHAR(255) NOT NULL DEFAULT "" COMMENT "Унифицированный идентификатор (путь на объект)",
-			  `lang` INT(11) NOT NULL DEFAULT "0" COMMENT "Язык",
-			  `owner` INT(11) NOT NULL DEFAULT "0" COMMENT "Владелец",
-			  `date` INT(11) NOT NULL COMMENT "Дата создания объекта",
-			  `level` INT(11) NOT NULL DEFAULT "1" COMMENT "Уровень вложенности относительно корня",
-			  `order` INT(11) NOT NULL DEFAULT "1" COMMENT "Порядковый номер",
-			  `is_history` TINYINT(4) NOT NULL DEFAULT "1" COMMENT "Признак, является ли запись историей",
-			  `is_delete` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, удален объект или нет",
-			  `is_hidden` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, скрытый объект или нет",
-			  `is_logic` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, есть ли класс у объекта",
-			  `is_file` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Является ли объект файлом",
-			  `proto` VARCHAR(255) DEFAULT NULL COMMENT "uri прототипа",
-			  `value` VARCHAR(255) DEFAULT NULL COMMENT "Значение",
-			  PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
-			  KEY `orders` (`order`),
-			  KEY `state` (`is_history`, `is_delete`, `is_hidden`)
+				`uri` VARCHAR(255) NOT NULL DEFAULT "" COMMENT "Унифицированный идентификатор (путь на объект)",
+				`lang` CHAR(3) NOT NULL DEFAULT "" COMMENT "Код языка по ISO 639-3",
+				`owner` INT(11) NOT NULL DEFAULT "0" COMMENT "Владелец",
+				`date` INT(11) NOT NULL COMMENT "Дата создания объекта",
+				`level` INT(11) NOT NULL DEFAULT "1" COMMENT "Уровень вложенности относительно корня",
+				`order` INT(11) NOT NULL DEFAULT "1" COMMENT "Порядковый номер",
+				`proto` VARCHAR(255) DEFAULT NULL COMMENT "uri прототипа",
+				`value` VARCHAR(255) DEFAULT NULL COMMENT "Значение",
+				`is_logic` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, есть ли класс у объекта",
+				`is_file` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Является ли объект файлом",
+				`is_history` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, является ли запись историей",
+				`is_delete` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, удален объект или нет",
+				`is_hidden` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, скрытый объект или нет",
+				PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
+				KEY `orders` (`order`),
+				KEY `sate` (`is_history`,`is_delete`,`is_hidden`)
 			) ENGINE=INNODB DEFAULT CHARSET=utf8'
 		);
 	}
