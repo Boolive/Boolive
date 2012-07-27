@@ -66,6 +66,10 @@ class Engine{
 		if (ini_get('magic_quotes_runtime')){
 			$requirements[] = 'В настройках PHP отключите "магические кавычки для функций" (magic_quotes_runtime Off)';
 		}
+		if (ini_get('magic_quotes_gpc')){
+			$requirements[] = 'В настройках PHP отключите "магические кавычки для входящих данных" (magic_quotes_gpc Off)';
+		}
+
 		// Проверка наличия модуля mod_rewrite
 		if (function_exists('apache_get_modules') && !in_array('mod_rewrite', apache_get_modules())){
 			$requirements[] = 'Требуется включить модуль "mod_rewrite" для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.

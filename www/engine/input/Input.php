@@ -3,7 +3,7 @@
  * Входящие данные
  * Объединяет в одном контейнере суперглобальные массивы GET, POST, COOKIE, FILES, HTTP_RAW_POST_DATA, SERVER
  * Дополнительно обрабатывает их для нормализазии.
- * Из GET создаются params и args.
+ * Из GET создаются path и args.
  * * path - элементы пути URI после адреса хоста: /param0/param1/param2
  * * args - именованные значения из части запроса URI - то, что после "?":  arg1=value&arg2=value2
  * Если система запущена из командной строки, то переданные аргументы окажутся в args
@@ -41,12 +41,10 @@ class Input extends Values{
 			'GET' => isset($_GET)? $_GET : array(),
 			'POST' => isset($_POST)? $_POST : array(),
 			'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
-			'COOKIE' => isset($_COOKIE)? $_COOKIE : array()
+			'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
+			'RAW' => empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA, // Неформатированные данные
+			'SERVER' => $_SERVER
 		);
-		// Удаление экранирования
-		if (get_magic_quotes_gpc()){
-			array_walk_recursive($values, function(&$value){$value = stripslashes($value);});
-		}
 		// Элементы пути URI
 		if (isset($values['GET']['path']) && ($path = trim($values['GET']['path'],'/ '))){
 			$values['path'] = explode('/', $path);
@@ -70,10 +68,7 @@ class Input extends Values{
 		}
 		// Аргументы из консоли в get (режим CLI)
 		if (empty($values['args']) && isset($_SERVER['argv'])) $values['args'] = $_SERVER['argv'];
-		// Неформатированные данные
-		$values['RAW'] = empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA;
-		// Информация о сервере и среде исполнения
-		$values['SERVER'] = $_SERVER;
+
 		// Создание контейнера
 		self::$input = new Input($values);
 	}
