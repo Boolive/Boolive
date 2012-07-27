@@ -20,6 +20,8 @@ define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
 
+/** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */
+define('TIMESTAMP', '1');
 /**
  * Определение корневой директории сервера
  * @return string
