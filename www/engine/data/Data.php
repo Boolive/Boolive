@@ -15,7 +15,7 @@ class Data {
 	/** @var array Загруженная конфигурация секция */
 	private static $config;
 	/** @var array Экземплярв используемых секций */
-	private static $sections;
+	public  static $sections;
 
 	/**
 	 * Возвращает объект по пути на него
@@ -29,14 +29,9 @@ class Data {
 	 */
 	static function Object($uri, $lang = '', $owner = 0, $date = null){
 		if (is_string($uri)){
-			if ($uri==='')	return self::MakeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'site.php')));
-			// Определеяем, в какой секции начать поиск.
-			// Для этого берется начало адреса
-			$names = explode('/', $uri, 2);
-			if ($s = self::Section($names[0])){
-				// Поиск выполнит секция
-				return $s->read($uri, $lang, $owner, $date);
-			}
+			if ($uri==='') return self::MakeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'site.php')));
+			// Опредление секции объекта и поиск объекта в секции
+			if ($s = self::Section($uri, true)) return $s->read($uri, $lang, $owner, $date);
 		}
 		return null;
 	}
@@ -45,21 +40,31 @@ class Data {
 	 * Взвращает экземпляр секции, назначенную для подчиенных объекта
 	 * Если секции на указнный объект не назначена, то возвращается null
 	 * @param $uri Путь на объект
+	 * @param $self Признак, искать секцию объекта (true) или его подчиненных (false)?
+	 * @param bool $strong Признак, искать точное указание на uri (true) или учитывать подчиенность (false)
 	 * @return \Engine\Section|null Экземпляр секции, если имеется или null, если нет
 	 */
-	static function Section($uri){
+	static function Section($uri, $self, $strong = false){
+		if ($self) $uri = mb_substr($uri, 0, mb_strrpos($uri, '/'));
 		if (empty(self::$sections[$uri])){
 			self::$sections[$uri] = null;
-			if ($config = self::GetConfig($uri)){
-				// Наследование конфигурации
-				if (isset($config['extends'])){
-					$extends = self::GetConfig($config['extends']);
-					$config = array_replace($extends, $config);
+			$find_uri = $uri;
+			while (!($config = self::GetConfig($find_uri)) && !$strong && !empty($find_uri)){
+				$find_uri = mb_substr($find_uri, 0, mb_strrpos($find_uri, '/'));
+			}
+			if ($config){
+				if (empty(self::$sections[$find_uri])){
+					// Наследование конфигурации
+					if (isset($config['extends'])){
+						$extends = self::GetConfig($config['extends']);
+						$config = array_replace($extends, $config);
+					}
+					// Создание экземпляара секции
+					if (isset($config['class']) && Classes::IsExist(trim($config['class'],'\\'))){
+						self::$sections[$find_uri] = new $config['class']($config);
+					}
 				}
-				// Создание экземпляара секции
-				if (isset($config['class']) && Classes::IsExist(trim($config['class'],'\\'))){
-					self::$sections[$uri] = new $config['class']($config);
-				}
+				self::$sections[$uri] = self::$sections[$find_uri];
 			}
 		}
 		return self::$sections[$uri];

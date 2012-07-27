@@ -20,10 +20,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	protected $_attribs;
 	/** @var array Подчиненные объекты (выгруженные из бд или новые, то есть не обязательно все существующие) */
 	protected $_children = array();
-	/** @var \Engine\Section Экземпляр секции, которой реализуется сохранение и выбор себя (атрибутов) */
-	protected $_section_self;
-	/** @var \Engine\Section Экземпляр секции, которой реализуется сохранение и выбор подчиенных объектов */
-	protected $_section_children;
 	/** @var \Engine\Rule Правило для проверки атрибутов */
 	protected $_rule;
 	/** @var \Engine\Entity Экземпляр прототипа */
@@ -48,7 +44,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * Если строка, то определяет базовое имя, к кторому будут подбираться числа для уникальности
 	 * @var bool|string */
 	protected $_rename = false;
-
 	/**
 	 * Кoнтейнер входящих данных.
 	 * Инициализируется в методе start()
@@ -63,11 +58,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 */
 	protected $_commands;
 
-
-
-	public function __construct($attribs = array(), $section = null){
+	public function __construct($attribs = array()){
 		$this->_attribs = $attribs;
-		$this->_section_self = $section;
 	}
 
 	/**
@@ -116,36 +108,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 */
 	public function getInputRule(){
 		return Rule::any();
-	}
-
-	/**
-	 * Cекции объекта
-	 * Секцией реализуется сохранение и выборка атрибутов объекта
-	 * @return \Engine\Section|null
-	 */
-	public function sectionSelf(){
-		if (empty($this->_section_self) && $parent = $this->parent()){
-			$this->_section_self = $parent->sectionChildren();
-		}
-		return $this->_section_self;
-	}
-
-	/**
-	 * Секция подчиненных объектов
-	 * Секцией реализуется сохранение и выборка подчиненных объектов
-	 * Секция подчиненных может совпадать с секцией самого объекта
-	 * @return \Engine\Section
-	 */
-	public function sectionChildren(){
-		if (empty($this->_section_children)){
-			// Назначена ли секция для подчиненных?
-			$this->_section_children = Data::Section($this['uri']);
-			if (empty($this->_section_children)){
-				// Используем свою секцию
-				$this->_section_children = $this->sectionSelf();
-			}
-		}
-		return $this->_section_children;
 	}
 
 	#################################################
@@ -202,8 +164,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 					}
 					$this->updateName($value);
 				}
-				$this->_section_children = null;
-				$this->_section_self = null;
 				$this->_name = null;
 				$this->_parent_uri = null;
 				$this->_virtual = true; // @todo Возможно, объект с указанным uri существует и он не виртуальный
@@ -295,7 +255,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		}else{
 			$uri = $this['uri'].'/'.$name;
 			// Если объекта нет в секции, то создается виртуальный
-			if (!($s = $this->sectionChildren())||!($obj = $s->read($uri, (string)$this['lang'], (int)$this['owner']))){
+			if (!($s = Data::Section($this['uri'], false))||!($obj = $s->read($uri, (string)$this['lang'], (int)$this['owner']))){
 				// Поиск прототипа для объекта
 				// Прототип тоже может оказаться виртуальным!
 				if ($proto = $this->proto()){
@@ -386,7 +346,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * @return array
 	 */
 	public function find($cond = array(), $load = false){
-		if ($s = $this->sectionChildren()){
+		if ($s = Data::Section($this['uri'], false)){
 			if (!empty($cond['where'])){
 				$cond['where'].=' AND uri like ? AND level=?';
 			}else{
@@ -431,6 +391,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 			foreach ($sub as $child){
 				/** @var \Engine\Entity $child */
 				$name = $child->getName();
+				$attr = $child->_attribs;
 				// Если не удален, не скрыт, существует, ещё не выбран с таким же именем и нет среди прототипов
 				if (!isset($names[$name]) && !isset($proto[$child['uri']])){
                     if ($prototype){
@@ -439,7 +400,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 						$child['uri'] = $this['uri'].'/'.$name;
 					}
 					// Добавляем с учетом порядкового номера
-					$list[(int)$child['order']][] = $child;
+					$list[$attr['order']][] = $child;
                 }
                 $names[$name] = true;
 				$proto[$child['proto']] = true;
@@ -449,10 +410,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
         }while($object);
 		// Сортировка групп
 		if (!empty($cond['order']) && preg_match('/`order`\s*(ASC|DESC)?/iu', $cond['order'], $math)){
-			if (empty($math[1]) || strtolower($math[1])!='desc'){
-				ksort($list, SORT_NUMERIC);
-			}else{
+			if (!empty($math[1]) && strtolower($math[1])=='desc'){
 				krsort($list, SORT_NUMERIC);
+			}else{
+				ksort($list, SORT_NUMERIC);
 			}
 		}
 		// Слияние групп в один массив
@@ -564,7 +525,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 				if ($history) $this->_attribs['date'] = time();
 				// Сохранение себя
 				if ($this->_changed){
-					if ($s = $this->sectionSelf()){
+					if ($s = Data::Section($this['uri'], true)){
 						$s->put($this);
 						$this->_virtual = false;
 						$this->_changed = false;
@@ -654,7 +615,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * @return null|void
 	 */
 	public function __call($method, $args){
-		if ($s = $this->sectionSelf()){
+		if ($s = Data::Section($this['uri'], true)){
 			$s->call($method, $args);
 		}
 	}
@@ -850,7 +811,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
 	 */
 	public function work(){
-		return $this['value'];
+		return (string)$this;
 	}
 
 	/**
