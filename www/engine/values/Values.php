@@ -24,11 +24,11 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	/** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
 	protected $_filtered;
 	/** @var array Объекты \Engine\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
-	private $_interfaces;
+	protected $_interfaces;
 	/** @var \Engine\Values Родитель объекта для оповещения об изменениях значения. Используется при отложенном связывании */
-	private $_maker;
+	protected $_maker;
 	/** @var string Имя для элемента в родителе. Используется при отложенном связывании */
-	private $_name;
+	protected $_name;
 
 	/**
 	 * Конструктор
@@ -62,6 +62,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 		// Правило на элемент
 		if (isset($name)){
 			if ($this->_rule instanceof Rule){
+				// Если правило на массив
 				if (isset($this->_rule->arrays)){
 					// Нормализация аргументов
 					$args = array(array(), null, false);
@@ -85,6 +86,10 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 						// Правило на элемент
 						return $args[0][$name];
 					}
+					// Если правило рекурсивно и есть общее на все элементы, то создаётся два варианта правила
+					if ($args[1] instanceof Rule && $args[2]){
+						return Rule::any($args[1], $this->_rule);
+					}
 					// Правило по умолчанию, если есть
 					return $args[1] instanceof Rule ? $args[1] : null;
 				}
@@ -106,9 +111,9 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 
 	/**
 	 * Выбор значения с применением правила
-	 * @param null $rule
+	 * @param null|\Engine\Rule $rule
 	 * @param null $error
-	 * @return array|mixed|null
+	 * @return mixed
 	 */
 	public function get($rule = null, &$error = null){
 		// Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
@@ -202,9 +207,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * @return \Engine\Values
 	 */
 	public function getCopy($rule = null){
-		$copy = clone $this;
-		$copy->_rule = $rule;
-		return $copy;
+		return new static($this->_value, $rule);
 	}
 
 	/**
@@ -281,14 +284,14 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * Если значение не являются массивом, то оно будет заменено на пустой массив.
 	 * Если элемента с указанным именем нет, то он будет создан со значением null
 	 * @param mixed $name Ключ элемента
-	 * @return \Engine\Values|mixed
+	 * @return \Engine\Values
 	 */
 	public function offsetGet($name){
 		if (is_null($name)) return $this;
 		if (!isset($this->_interfaces[$name])){
 			// Создание объекта Values для запрашиваемого значения.
 			// Объекту устанавливается правило в соответсвии с правилом данного объекта Values и запрашиваемого элемента
-			$this->_interfaces[$name] = $interface = new Values(null, $this->getRule($name));
+			$this->_interfaces[$name] = $interface = new static(null, $this->getRule($name));
 			$interface->_maker = $this;
 			if (is_array($this->_value) && array_key_exists($name, $this->_value)){
 				// Если элемент существует, то делаем ссылку на него из нового объекта Values
@@ -474,13 +477,18 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	}
 
 	/**
-	 * Вызов неопределённого метода
+	 * Выбор значения, фильтруя его
+	 * Правило фильтра создаётся из имени вызванного метода и его аргументов,
+	 * таким образом, правило может иметь только один фильтр.
+	 * Используется как альтернатива get() в простых ситуациях
 	 * @param string $name Имя метода
 	 * @param array $args Аргументы
 	 * @return null
 	 */
 	public function __call($name, $args){
-		return null;
+		$rule = new Rule();
+		$rule->__set($name, $args);
+		return $this->get($rule);
 	}
 
 	/**
