@@ -54,4 +54,9 @@ $classes = array(
 	'Engine\Input'		=> 'input/Input.php',
 	// Команды
 	'Engine\Commands'	=> 'commands/Commands.php',
+	// Шаблонизаторы
+	'Engine\Template'						=> 'template/Template.php',
+	'Engine\Template\PHPTemplate'			=> 'template/php/PHPTemplate.php',
+	'Engine\Template\PHPTemplateValues'		=> 'template/php/PHPTemplateValues.php',
+	'Engine\Template\TextTemplate'			=> 'template/text/TextTemplate.php',
 );
