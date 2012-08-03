@@ -47,10 +47,10 @@ class PHPTemplateValues extends Values{
 	public function offsetGet($name){
 		$start = (!$this->offsetExists($name) && isset($this->_entity));
 		$sub = parent::offsetGet($name);
-//		if ($start){
-//			$sub->_entity = $this->_entity->{$name};
-//			$sub->_value = $this->_entity->startChild($name);
-//		}
+		if ($start){
+			$sub->_entity = $this->_entity->{$name};
+			$sub->_value = $this->_entity->startChild($name);
+		}
 		return $sub;
 	}
 }
