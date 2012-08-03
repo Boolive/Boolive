@@ -14,13 +14,18 @@ abstract class Section extends Entity{
 	public function __construct($config){
 
 	}
+
 	/**
 	 * Выбор объекта по его uri
-	 * @param $uri
+	 * @param string $uri URI объекта
+	 * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
+	 * @param int $owner Код владельца. Если не указан, то выбирается общий
+	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+	 * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
 	 * @return \Engine\Entity|null
 	 */
-	public function read($uri){
-
+	public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false){
+		return null;
 	}
 
 	/**

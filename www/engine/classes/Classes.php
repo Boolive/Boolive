@@ -45,16 +45,18 @@ class Classes{
 				// Активация указанного класса
 				if (!isset(self::$classes[$class_name])){
 					// Система не знает о классе
-					throw new Error(array('Модуль "%s" не установлен', $class_name));
-				}else{
-					include(DOCUMENT_ROOT.self::$classes[$class_name]);
-					self::$included[$class_name] = $class_name;
-					if (!isset(self::$activated[$class_name])){
-						// Активация класса (модуля)
-						if (method_exists($class_name, 'Activate')){
-							call_user_func(array($class_name, 'Activate'));
-							self::$activated[$class_name] = $class_name;
-						}
+					$class = mb_substr($class_name, mb_strrpos($class_name, '\\')+1);
+					$path = str_replace('\\','/',$class_name).'/'.$class.'.php';
+					self::AddProjectClasse($path, $class_name);
+					//throw new Error(array('Модуль "%s" не установлен', $class_name));
+				}
+				include(DOCUMENT_ROOT.self::$classes[$class_name]);
+				self::$included[$class_name] = $class_name;
+				if (!isset(self::$activated[$class_name])){
+					// Активация класса (модуля)
+					if (method_exists($class_name, 'Activate')){
+						call_user_func(array($class_name, 'Activate'));
+						self::$activated[$class_name] = $class_name;
 					}
 				}
 			}

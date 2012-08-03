@@ -255,7 +255,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		}else{
 			$uri = $this['uri'].'/'.$name;
 			// Если объекта нет в секции, то создается виртуальный
-			if (!($s = Data::Section($this['uri'], false))||!($obj = $s->read($uri, (string)$this['lang'], (int)$this['owner']))){
+			if (!($obj = Data::Object($uri, (string)$this['lang'], (int)$this['owner']))){
 				// Поиск прототипа для объекта
 				// Прототип тоже может оказаться виртуальным!
 				if ($proto = $this->proto()){
@@ -571,7 +571,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 */
 	public function parent(){
 		if ($this->_parent === false){
-			$this->_parent = Data::Object($this->getParentUri());
+			$this->_parent = Data::Object($this->getParentUri(), '', 0, null, null, true);
 		}
 		return $this->_parent;
 	}
@@ -584,7 +584,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		if ($this->_proto === false){
 			if (isset($this['proto'])){
 				$info = Data::getURIInfo($this['proto']);
-				$this->_proto = Data::Object($info['uri'], $info['lang'], $info['owner']);
+				$this->_proto = Data::Object($info['uri'], $info['lang'], $info['owner'], null, null, true);
 			}else{
 				$this->_proto = null;
 			}
@@ -776,7 +776,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * @return null|string Результат выполнения контроллера
 	 */
 	public function start(Commands $commands, Input $input){
-		// Команды и входящие данные запоминаем, чтобы использовать их и передвать подчиенным по требованию
+		// Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
 		$this->_commands = $commands;
 		$this->_input = $input->getCopy($this->getInputRule());
 		//Проверка возможности работы
@@ -785,7 +785,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 			$this->_input['previous'] = false;
 			//Выполнение подчиненных
 			ob_start();
-				// Выполненеие своей работы
+				// Выполнение своей работы
 				$result = $this->work();
 				$result = ob_get_contents().$result;
 			ob_end_clean();

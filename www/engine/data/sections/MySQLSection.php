@@ -37,16 +37,23 @@ class MySQLSection extends Section{
 	 * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
 	 * @param int $owner Код владельца. Если не указан, то выбирается общий
 	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+	 * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
 	 * @return \Engine\Entity|null
 	 */
-	public function read($uri, $lang = '', $owner = 0, $date = null){
+	public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false){
+		$where = 'uri=? AND lang=? AND owner=?';
+		$values = array($uri, $lang, $owner);
 		if (isset($date)){
-			$q = $this->db->prepare('SELECT * FROM `'.$this->table.'`WHERE uri=? AND lang=? AND owner=? AND date=? LIMIT 0,1');
-			$q->execute(array($uri, $lang, $owner, $date));
-		}else{
-			$q = $this->db->prepare('SELECT * FROM `'.$this->table.'`WHERE uri=? AND lang=? AND owner=? AND is_history=0 LIMIT 0,1');
-			$q->execute(array($uri, $lang, $owner));
+			$where.=' AND date=?';
+			$values[] = $date;
+			$is_history = null;
 		}
+		if (isset($is_history)){
+			$where.=' AND is_history=?';
+			$values[] = (int)$is_history;
+		}
+		$q = $this->db->prepare('SELECT * FROM `'.$this->table.'`WHERE '.$where.' LIMIT 0,1');
+		$q->execute($values);
 		if ($row = $q->fetch(DB::FETCH_ASSOC)){
 			$obj = Data::MakeObject($row);
 			$obj->_virtual = false;

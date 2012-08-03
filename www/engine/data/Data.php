@@ -15,7 +15,9 @@ class Data {
 	/** @var array Загруженная конфигурация секция */
 	private static $config;
 	/** @var array Экземплярв используемых секций */
-	public  static $sections;
+	private static $sections;
+	/** @var array Загруженные объекты */
+	private static $buffer = array();
 
 	/**
 	 * Возвращает объект по пути на него
@@ -25,15 +27,39 @@ class Data {
 	 * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
 	 * @param int $owner Код владельца. Если не указан, то выбирается общий
 	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+	 * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
+	 * @param bool $virtual
 	 * @return \Engine\Entity|null Экземпляр объекта, если найден или null, если не найден
 	 */
-	static function Object($uri, $lang = '', $owner = 0, $date = null){
+	static function Object($uri, $lang = '', $owner = 0, $date = null, $is_history = false, $virtual = false){
+		$object = null;
 		if (is_string($uri)){
 			if ($uri==='') return self::MakeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'site.php')));
 			// Опредление секции объекта и поиск объекта в секции
-			if ($s = self::Section($uri, true)) return $s->read($uri, $lang, $owner, $date);
+			if ($s = self::Section($uri, true)){
+				$object = $s->read($uri, $lang, $owner, $date, $is_history);
+			}
+			// Если объект не найден и нужно искать виртуального, то ищем
+			if (!isset($object) && $virtual){
+				// Поиск не виртуального родителя по всей глубине
+				$parent_uri = $uri;
+				do{
+					$parent_uri = mb_substr($parent_uri, 0, mb_strrpos($parent_uri, '/'));
+					if ($s = self::Section($parent_uri, true)){
+						$parent = $s->read($parent_uri, '', 0, null);
+					}
+				}while(!isset($parent)&&!empty($parent_uri));
+				// Если родитель найден и у него есть прототип, то ищем свой объект у прототипа
+				if (isset($parent['proto'])){
+					$proto_uri = $parent['proto'].mb_substr($uri, mb_strlen($parent_uri));
+					if ($proto = self::Object($proto_uri, $lang, $owner, null, null, true)){
+						$object = $proto->birth();
+						$object['uri'] = $uri;
+					}
+				}
+			}
 		}
-		return null;
+		return $object;
 	}
 
 	/**
@@ -94,6 +120,8 @@ class Data {
 				// Проверяем существование класса
 				if (Classes::IsExist($class)){
 					return new $class($attribs);
+				}else{
+
 				}
 			}catch(\ErrorException $e){
 				// Если файл не найден, то будет использовать класс прототипа или Entity
@@ -161,5 +189,19 @@ class Data {
 		}else{
 			return self::$config;
 		}
+	}
+
+	public function BufferAdd($object){
+		if (isset(self::$buffer['uri'])){
+			self::$buffer[$object['uri']] = $object;
+		}
+	}
+
+	public function BufferGet($uri){
+		return isset(self::$buffer['uri'])? self::$buffer[$uri] : null;
+	}
+
+	public function BufferRemove($uri){
+		unset(self::$buffer[$uri]);
 	}
 }
