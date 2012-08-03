@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace library\basic;
+namespace library\basic\javascripts;
 
 use Engine\Entity;
 
