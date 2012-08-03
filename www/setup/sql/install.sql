@@ -2,8 +2,7 @@
 SQLyog Ultimate v8.32 
 MySQL - 5.0.22-community-nt : Database - boolive-git
 *********************************************************************
-*/
-
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -37,7 +36,7 @@ CREATE TABLE `interfaces` (
 
 /*Data for the table `interfaces` */
 
-insert  into `interfaces`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`is_history`,`is_delete`,`is_hidden`,`is_logic`,`is_file`,`proto`,`value`) values ('/interfaces/html','',0,0,3,1,0,0,0,0,0,'/library/basic/html',NULL),('/interfaces/html/body/content2','',0,0,5,2,0,0,0,0,0,NULL,' World!');
+insert  into `interfaces`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`proto`,`value`,`is_logic`,`is_file`,`is_history`,`is_delete`,`is_hidden`) values ('/interfaces/html','',0,0,3,1,'/library/basic/html',NULL,0,0,0,0,0),('/interfaces/html/body/hello','',0,0,5,2,'/library/basic/widgets/widget','hello.tpl',1,1,0,0,0),('/interfaces/html/body/hello/jquery.hello','',0,0,6,2,'/library/basic/javascripts/jqueryscript','jquery.hello.js',0,1,0,0,0),('/interfaces/html/body/hello/style','',0,0,6,1,'/library/basic/css','style.css',0,1,0,0,0);
 
 /*Table structure for table `library` */
 
@@ -64,7 +63,7 @@ CREATE TABLE `library` (
 
 /*Data for the table `library` */
 
-insert  into `library`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`is_history`,`is_delete`,`is_hidden`,`is_logic`,`is_file`,`proto`,`value`) values ('/library/basic','',0,0,3,1,0,0,0,0,0,'/library/basic/package',NULL),('/library/basic/css','',0,0,3,1,0,0,0,1,0,NULL,NULL),('/library/basic/group','',0,0,4,2,0,0,0,1,0,NULL,NULL),('/library/basic/html','',0,0,4,3,0,0,0,1,1,NULL,'html.tpl'),('/library/basic/html/body','',0,0,5,1,0,0,0,1,0,'/library/basic/group',NULL),('/library/basic/html/body/content','',0,0,6,1,0,0,0,0,0,NULL,'Hello'),('/library/basic/javascripts','',0,0,4,4,0,0,0,0,0,'/library/basic/package',NULL),('/library/basic/javascripts/javascript','',0,0,5,1,0,0,0,1,0,NULL,NULL),('/library/basic/javascripts/javascript/depends','',0,0,6,1,0,0,0,0,0,'/library/basic/group',NULL),('/library/basic/javascripts/jquery','',0,0,5,2,0,0,0,0,1,'/library/basic/javascripts/javascript',NULL),('/library/basic/javascripts/jqueryscript','',0,0,5,3,0,0,0,1,0,'/library/basic/javascripts/javascript',NULL),('/library/basic/javascripts/jqueryscript/depends/jquery','',0,0,7,1,0,0,0,0,0,'/library/basic/javascripts/jquery',NULL),('/library/basic/package','',0,0,4,5,0,0,0,0,0,NULL,NULL);
+insert  into `library`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`proto`,`value`,`is_logic`,`is_file`,`is_history`,`is_delete`,`is_hidden`) values ('/library/basic','',0,0,3,1,'/library/basic/package',NULL,0,0,0,0,0),('/library/basic/css','',0,0,3,1,NULL,NULL,1,0,0,0,0),('/library/basic/group','',0,0,4,2,NULL,NULL,1,0,0,0,0),('/library/basic/html','',0,0,4,3,NULL,'html.tpl',1,1,0,0,0),('/library/basic/html/body','',0,0,5,1,'/library/basic/group',NULL,1,0,0,0,0),('/library/basic/javascripts','',0,0,4,4,'/library/basic/package',NULL,0,0,0,0,0),('/library/basic/javascripts/javascript','',0,0,5,1,NULL,NULL,1,0,0,0,0),('/library/basic/javascripts/javascript/depends','',0,0,6,1,'/library/basic/group',NULL,0,0,0,0,0),('/library/basic/javascripts/jquery','',0,0,5,2,'/library/basic/javascripts/javascript','jquery.js',0,1,0,0,0),('/library/basic/javascripts/jqueryscript','',0,0,5,3,'/library/basic/javascripts/javascript',NULL,1,0,0,0,0),('/library/basic/javascripts/jqueryscript/depends','',0,0,6,1,'/library/basic/javascripts/javascript/depends',NULL,0,0,1,1,1),('/library/basic/javascripts/jqueryscript/depends/jquery','',0,0,7,1,'/library/basic/javascripts/jquery',NULL,0,0,0,0,0),('/library/basic/package','',0,0,4,5,NULL,NULL,0,0,0,0,0),('/library/basic/widgets','',0,0,4,1,'/library/basic/package',NULL,0,0,0,0,0),('/library/basic/widgets/widget','',0,0,5,1,NULL,NULL,1,0,0,0,0);
 
 /*Table structure for table `site` */
 
@@ -91,7 +90,7 @@ CREATE TABLE `site` (
 
 /*Data for the table `site` */
 
-insert  into `site`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`is_history`,`is_delete`,`is_hidden`,`is_logic`,`is_file`,`proto`,`value`) values ('/interfaces','',0,1342082233,2,1,0,0,0,0,0,'/library/basic/group',NULL),('/library','',0,1342077181,2,2,0,0,0,0,0,NULL,NULL);
+insert  into `site`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`proto`,`value`,`is_logic`,`is_file`,`is_history`,`is_delete`,`is_hidden`) values ('/interfaces','',0,1342082233,2,1,'/library/basic/group',NULL,0,0,0,0,0),('/library','',0,1342077181,2,2,NULL,NULL,0,0,0,0,0);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
