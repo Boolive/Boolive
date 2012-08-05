@@ -12,7 +12,7 @@
  * $c = new Commands();
  * // создание команды addHtml с двумя аргументами
  * $c->addHtml('link', array('rel'=>'stylesheet', 'type'=>'text/css', 'href'=>'style.css'));
- *
+ * @link http://boolive.ru/createcms/processing-request
  * @version 1.0
  */
 namespace Engine;

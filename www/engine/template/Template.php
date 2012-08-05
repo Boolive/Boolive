@@ -1,7 +1,8 @@
 <?php
 /**
- * Шаблонизация
- *
+ * Шаблонизатор
+ * "Мост" к конкретным шаблонизаторам. Выбор происходит автоматически по расширениям файлов-шаблонов
+ * @link http://boolive.ru/createcms/making-page
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
@@ -11,9 +12,9 @@ use Engine\Error,
 	Engine\Data;
 
 class Template{
-	/** @const  Файл конфигурации секци */
+	/** @const  Файл с ассоциациями расширений файлов на шаблонизаторы */
 	const CONFIG_FILE = 'config.templates.php';
-	/** @var array Массив названий классов - шаблонизаторов */
+	/** @var array Массив названий классов шаблонизаторов */
 	static private $engines;
 
 	/**

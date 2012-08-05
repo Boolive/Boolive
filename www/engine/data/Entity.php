@@ -3,6 +3,7 @@
  * Сущность
  * Базовая логика для объектов модели данных.
  * @version 1.0
+ * @link http://boolive.ru/createcms/data-and-entity
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Engine;

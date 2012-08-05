@@ -8,7 +8,7 @@
  * 	$v[0] = 'A&B';
  * 	echo $v[0]; // A&amp;B
  *  echo $v->html(0); //A&B
- * 
+ * @link http://boolive.ru/createcms/making-page
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */

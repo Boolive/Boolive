@@ -1,7 +1,7 @@
 <?php
 /**
  * Шаблонизация с помощью PHP
- *
+ * @link http://boolive.ru/createcms/making-page
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */

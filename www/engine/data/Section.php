@@ -2,6 +2,7 @@
 /**
  * Класс секции
  *
+ * @link http://boolive.ru/createcms/sectioning
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */

@@ -2,6 +2,7 @@
 /**
  * Модуль данных
  *
+ * @link http://boolive.ru/createcms/data-and-entity
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */

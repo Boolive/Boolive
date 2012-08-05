@@ -9,8 +9,7 @@
  * Если система запущена из командной строки, то переданные аргументы окажутся в args
  * Для получения всех данных используется Input::all()
  * При выборки из контейнера значения фильтруются в соответствии с указанным правилом или правилом по умочланию
- * @link http://boolive.ru/createcms/dangerous-data
- * @link
+ * @link http://boolive.ru/createcms/processing-request
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
