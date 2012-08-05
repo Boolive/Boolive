@@ -1,18 +1,16 @@
-#hello{
-	width: 200px;
-	height: 60px;
+.hello{
 	position: absolute;
 	background: #555;
 	color: #FFF;
-	font-size: 24pt;
+	font-size: 22pt;
 	font-family: Arial;
 	text-align: center;
-	padding: 50px;
+	padding: 30px 40px;
 	cursor: pointer;
 	display: block;
 	text-decoration: none;
 	}
-	#hello:hover{
+	.hello:hover{
 		background: #2a96fa;
 		color: #FFF;
 		}
