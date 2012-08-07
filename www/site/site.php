@@ -8,24 +8,15 @@
 use Engine\Entity,
 	Engine\Rule;
 
-class site extends Entity{
-
-//	public function getInputRule(){
-//		return Rule::arrays(array(
-//			'GET' => Rule::arrays(array(
-//				'path' => Rule::in('admin'),
-//				'q' => Rule::string()->required()
-//				)
-//			)
-//		));
-//	}
-
+class site extends Entity
+{
 	/**
 	 * Исполнение объекта
 	 * Запуск подчиенного - интерфейс
 	 * @return null|string|void
 	 */
-	public function work(){
+	public function work()
+	{
 		return $this->startChild('interfaces');
 	}
 }
