@@ -27,7 +27,7 @@ $classes = array(
 
 	// База данных
 	'Engine\DB'					=> 'database/DB.php',
-	'Engine\DebugDBStatement'	=> 'database/DebugDBStatement.php',
+	'Engine\DBStatementDebug'	=> 'database/DBStatementDebug.php',
 
 	// Отложенные вызовы
 	'Engine\Calls'			=> 'calls/Calls.php',

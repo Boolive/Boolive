@@ -15,7 +15,7 @@ use PDO,
 	Engine\Trace,
 	Engine\Benchmark;
 
-class DebugDBStatement{
+class DBStatementDebug{
 	/** @var PDOStatement */
 	private $stmt;
 	private $values = array();

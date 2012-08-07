@@ -166,13 +166,13 @@ class DB extends PDO{
 	 * @param string $sql Строка SQL запроса с параметрами
 	 * @param array $driver_options
 	 * @throws Error
-	 * @return \Engine\DebugDBStatement|\PDOStatement
+	 * @return \Engine\DBStatementDebug|\PDOStatement
 	 */
 	public function prepare($sql, $driver_options = array()){
 		if ($this->debug){
 			$stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
 			if ($stmt instanceof PDOStatement){
-				return new DebugDBStatement($stmt);
+				return new DBStatementDebug($stmt);
 			}else{
 				throw new Error('PDO does not return PDOStatement');
 			}
