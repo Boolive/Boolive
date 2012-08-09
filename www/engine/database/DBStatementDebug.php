@@ -8,12 +8,12 @@
  * @link http://boolive.ru/createcms/working-with-databases
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\database;
 
 use PDO,
 	PDOStatement,
-	Engine\Trace,
-	Engine\Benchmark;
+	Boolive\develop\Trace,
+	Boolive\develop\Benchmark;
 
 class DBStatementDebug{
 	/** @var PDOStatement */

@@ -13,9 +13,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\input;
 
-use Engine\Values;
+use Boolive\values\Values;
 
 /**
  * @property \Engine\Values path Элементы пути URI

@@ -12,10 +12,10 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine\Template;
+namespace Boolive\template\php;
 
-use Engine\Values,
-	Engine\Rule;
+use Boolive\values\Values,
+	Boolive\values\Rule;
 
 class PHPTemplateValues extends Values{
 	/** @var \Engine\Entity Сущность, к которой обращаться за недостающими значениями*/

@@ -4,8 +4,15 @@
  * @version 1.0
  * @link http://boolive.ru/createcms/cms-engine
  * @author Vladimir Shestakov <boolive@yandex.ru>
+ * @author Azat Galiev <AzatGaliev@live.ru>
  */
-namespace Engine;
+namespace Boolive;
+
+use Boolive\events\Events,
+    Boolive\data\Data,
+    Boolive\commands\Commands,
+    Boolive\input\Input,
+    Boolive\classes\Classes;
 
 class Engine{
 	/**
@@ -13,16 +20,23 @@ class Engine{
 	 */
 	static function Start(){
 		// Регистрация метода-обработчка завершения выполнения системы
-		register_shutdown_function(array('\Engine\Engine', 'Stop'));
+		register_shutdown_function(array('\Boolive\Engine', 'Stop'));
+
 		// Подключение файла класса для управления всеми классами.
 		// Остальные файлы классов будут подключаться автоматически при первом обращении
 		include_once DIR_SERVER_ENGINE.'classes/Classes.php';
-		// Принудельная активация необходимых системе классов
-		Classes::Activate('Engine\Classes');
-		Classes::Activate('Engine\Benchmark');
-		Classes::Activate('Engine\Trace');
-		Classes::Activate('Engine\Unicode');
-		Classes::Activate('Engine\ErrorsHandler');
+
+        // Регистрация корневых namespace'ов
+        Classes::registerNamespace("Boolive", DIR_SERVER_ENGINE);
+        Classes::registerNamespace("site", DIR_SERVER_PROJECT);
+
+        // Принудельная активация необходимых системе классов
+        Classes::Activate('Boolive\classes\Classes');
+		Classes::Activate('Boolive\develop\Benchmark');
+		Classes::Activate('Boolive\develop\Trace');
+		Classes::Activate('Boolive\unicode\Unicode');
+		Classes::Activate('Boolive\errors\ErrorsHandler');
+
 		// При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
 		Events::Send('START');
 		Engine::Work();

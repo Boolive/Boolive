@@ -11,7 +11,7 @@
  * @version	1.3
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine{
+namespace Boolive\develop{
 
 	class Trace{
 		/** @var \Engine\Trace Список всех объектов трассировки */
@@ -253,17 +253,6 @@ namespace Engine{
 			}
 			return $result;
 		}
-	}
-
-	/**
-	 * Интерфейс получения от объекта значений для трассировки (вывода)
-	 */
-	interface ITrace{
-		/**
-		 * @abstract
-		 * @return array
-		 */
-		public function trace();
 	}
 }
 

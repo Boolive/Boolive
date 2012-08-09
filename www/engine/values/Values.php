@@ -11,21 +11,21 @@
  * @version	3.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\values;
 
 use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
-	Engine\Rule, Engine\Error, Engine\Check, Engine\Trace;
+	Boolive\errors\Error, Boolive\develop\Trace, Boolive\errors\ITrace;
 
 class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	/** @var mixed|array Значение */
 	protected $_value;
-	/** @var \Engine\Rule Правило по умолчанию для значения */
+	/** @var \Boolive\values\Rule Правило по умолчанию для значения */
 	protected $_rule;
 	/** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
 	protected $_filtered;
 	/** @var array Объекты \Engine\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
 	protected $_interfaces;
-	/** @var \Engine\Values Родитель объекта для оповещения об изменениях значения. Используется при отложенном связывании */
+	/** @var \Boolive\values\Values Родитель объекта для оповещения об изменениях значения. Используется при отложенном связывании */
 	protected $_maker;
 	/** @var string Имя для элемента в родителе. Используется при отложенном связывании */
 	protected $_name;
@@ -33,7 +33,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	/**
 	 * Конструктор
 	 * @param null|mixed $value Значение
-	 * @param null|\Engine\Rule $rule Правило проверки значений по умолчанию
+	 * @param null|\Boolive\values\Rule $rule Правило проверки значений по умолчанию
 	 */
 	public function __construct($value = null, $rule = null){
 		$this->_value = $value;
@@ -54,7 +54,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * Правило проверки по умолчанию
 	 * Правило используется если в аргументах методов не указывается правило
 	 * @param null $name Ключ элемента, для которого требуется правило. Если не указан, то возвращается общее правило
-	 * @return \Engine\Rule
+	 * @return \Boolive\values\Rule
 	 */
 	public function getRule($name = null){
 		// Если правила нет по умолчанию, то пробуем его установить
@@ -111,7 +111,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 
 	/**
 	 * Выбор значения с применением правила
-	 * @param null|\Engine\Rule $rule
+	 * @param null|\Boolive\values\Rule $rule
 	 * @param null $error
 	 * @return mixed
 	 */
@@ -149,8 +149,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 
 	/**
 	 * Проверка значения
-	 * @param \Engine\Rule $rule Правило проверки
-	 * @param \Engine\Error | null $error Ошибки после проверки
+	 * @param \Boolive\values\Rule $rule Правило проверки
+	 * @param \Boolive\errors\Error | null $error Ошибки после проверки
 	 * @return bool
 	 */
 	public function check($rule = null, &$error = null){
@@ -165,7 +165,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * @example
 	 * 1. choose(array('name1', 'name2'));
 	 * 2. choose('name1', 'name2', 'name3');
-	 * @return \Engine\Values Ссылка на себя
+	 * @return \Boolive\values\Values Ссылка на себя
 	 */
 	public function choose(){
 		if (!is_array($this->_value)) $this->_value = array();
@@ -203,8 +203,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 
 	/**
 	 * Создание копии с указанием нового правила по умолчанию
-	 * @param null|\Engine\Rule $rule
-	 * @return \Engine\Values
+	 * @param null|\Boolive\values\Rule $rule
+	 * @return \Boolive\values\Values
 	 */
 	public function getCopy($rule = null){
 		return new static($this->_value, $rule);
@@ -284,7 +284,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * Если значение не являются массивом, то оно будет заменено на пустой массив.
 	 * Если элемента с указанным именем нет, то он будет создан со значением null
 	 * @param mixed $name Ключ элемента
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	public function offsetGet($name){
 		if (is_null($name)) return $this;
@@ -410,7 +410,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	 * Всегда возвращется Values, даже если нет запрашиваемого элемента (Values будет пустым тогда)
 	 * @example $v = $values->v1;
 	 * @param string $name Ключ элемента
-	 * @return array|\Engine\Values
+	 * @return array|\Boolive\values\Values
 	 */
 	public function __get($name){
 		return $this->offsetGet($name);

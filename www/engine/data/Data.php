@@ -6,9 +6,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\data;
 
-use Engine\Classes;
+use Boolive\classes\Classes;
 
 class Data {
 	/** @const  Файл конфигурации секци */

@@ -5,9 +5,9 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine\Template;
+namespace Boolive\template\text;
 
-use Engine\Entity;
+use Boolive\data\Entity;
 
 class TextTemplate{
 	/**

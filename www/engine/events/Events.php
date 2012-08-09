@@ -6,10 +6,9 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @todo При установке проверить возмоэжность записи в файл конфига
  */
-namespace Engine;
+namespace Boolive\events;
 
-use Engine\Classes,
-	Engine\EventResult;
+use Boolive\classes\Classes;
 
 class Events{
 	/** @const Названия файла со сведениями о зарегистрированных обработчиков */

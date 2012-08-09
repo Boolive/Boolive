@@ -15,7 +15,7 @@
  * @link http://boolive.ru/createcms/processing-request
  * @version 1.0
  */
-namespace Engine;
+namespace Boolive\commands;
 
 class Commands{
 	/**

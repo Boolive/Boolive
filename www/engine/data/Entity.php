@@ -6,26 +6,30 @@
  * @link http://boolive.ru/createcms/data-and-entity
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\data;
 
 use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
-	Engine\Values,
-	Engine\Error,
-	Engine\Data,
-	Engine\Trace,
-	Engine\File,
-	Exception;
+	Boolive\values\Values,
+    Boolive\errors\Error,
+    Boolive\data\Data,
+    Boolive\develop\Trace,
+    Boolive\file\File,
+	Exception,
+    Boolive\errors\ITrace,
+    Boolive\values\Rule,
+    Boolive\commands\Commands,
+    Boolive\input\Input;
 
 class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	/** @var array Атрибуты */
 	protected $_attribs;
 	/** @var array Подчиненные объекты (выгруженные из бд или новые, то есть не обязательно все существующие) */
 	protected $_children = array();
-	/** @var \Engine\Rule Правило для проверки атрибутов */
+	/** @var \Boolive\data\Rule Правило для проверки атрибутов */
 	protected $_rule;
-	/** @var \Engine\Entity Экземпляр прототипа */
+	/** @var \Boolive\data\Entity Экземпляр прототипа */
 	protected $_proto = false;
-	/** @var \Engine\Entity Экземпляр родителя */
+	/** @var \Boolive\data\Entity Экземпляр родителя */
 	protected $_parent = false;
 	/** @var bool Принзнак, объект в процессе сохранения? */
 	protected $_is_saved = false;
@@ -49,13 +53,13 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * Кoнтейнер входящих данных.
 	 * Инициализируется в методе start()
 	 * В качестве правила по умолчанию используется $this->getInputRule()
-	 * @var \Engine\Input
+	 * @var \Boolive\input\Input
 	 */
 	protected $_input;
 	/**
 	 * Команды, передающиеся по всем исполняемым объектам.
 	 * Инициализируется в методе start()
-	 * @var \Engine\Commands
+	 * @var \Boolive\commands\Commands
 	 */
 	protected $_commands;
 
@@ -105,7 +109,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * Возвращает правило на входящие данные
 	 * Используется, если объект исполняется как контроллер для обработки запроса
 	 * По умолчанию любые значения
-	 * @return null|\Engine\Rule
+	 * @return null|\Boolive\values\Rule
 	 */
 	public function getInputRule(){
 		return Rule::any();
@@ -232,7 +236,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	protected function updateName($uri){
 		$this->_attribs['uri'] = $uri;
 		foreach ($this->_children as $child_name => $child){
-			/* @var \Engine\Entity $child */
+			/* @var \Boolive\data\Entity $child */
 			$child->updateName($uri.'/'.$child_name);
 		}
 	}
@@ -286,7 +290,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 */
 	public function __set($name, $value){
 		if ($value instanceof Entity){
-			/** @var \Engine\Entity $value */
+			/** @var \Boolive\data\Entity $value */
 			// Если имя неопределенно, то потрубуется подобрать уникальное автоматически при сохранении
 			// Перед сохранением используется временное имя
 			if (is_null($name)){
@@ -390,7 +394,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
             // Поиск у себя и у всех наследуемых по цепочке объектов
 			$sub = $object->find($cond);
 			foreach ($sub as $child){
-				/** @var \Engine\Entity $child */
+				/** @var \Boolive\data\Entity $child */
 				$name = $child->getName();
 				$attr = $child->_attribs;
 				// Если не удален, не скрыт, существует, ещё не выбран с таким же именем и нет среди прототипов
@@ -478,7 +482,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 		// Проверка подчиненных
 		foreach ($this->_children as $name => $child){
 			$error = null;
-			/** @var \Engine\Entity $child */
+			/** @var \Boolive\data\Entity $child */
 			if (!$child->check($error)){
 				$errors->_children->add($error);
 			}
@@ -498,8 +502,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * Проверка подчиненного в рамках его родителей
 	 * Возможно обращение к родителям выше уровнем, чтобы объект проверялся в ещё более глобальном окружении,
 	 * например для проверки уникальности значения по всему разделу/базе.
-	 * @param \Engine\Entity $child Проверяемый подчиненный
-	 * @param \Engine\Error $error Объект ошибок подчиненного
+	 * @param \Boolive\data\Entity $child Проверяемый подчиненный
+	 * @param \Boolive\errors\Error $error Объект ошибок подчиненного
 	 * @return bool Признак, корректен объект (true) или нет (false)
 	 */
 	protected function checkChild(Entity $child, Error $error){
@@ -536,7 +540,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 				// Сохранение подчиененных
 				$children = $this->getChildren();
 				foreach ($children as $child){
-					/** @var \Engine\Entity $child */
+					/** @var \Boolive\data\Entity $child */
 					$child->save();
 				}
 				$this->_is_saved = false;
@@ -559,7 +563,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 
 	/**
 	 * Создание нового объекта прототипированием от себя
-	 * @return \Engine\Entity
+	 * @return \Boolive\data\Entity
 	 */
 	public function birth(){
 		$class = get_class($this);
@@ -568,7 +572,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 
 	/**
 	 * Родитель объекта
-	 * @return \Engine\Entity|null
+	 * @return \Boolive\data\Entity|null
 	 */
 	public function parent(){
 		if ($this->_parent === false){
@@ -579,7 +583,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 
 	/**
 	 * Прототип объекта
-	 * @return \Engine\Entity|null
+	 * @return \Boolive\data\Entity|null
 	 */
 	public function proto(){
 		if ($this->_proto === false){
@@ -706,7 +710,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 
 	/**
 	 * Сравнение объектов по uri
-	 * @param \Engine\Entity $entity
+	 * @param \Boolive\data\Entity $entity
 	 * @return bool
 	 */
 	public function isEqual($entity){
@@ -772,8 +776,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 
 	/**
 	 * Запуск объекта
-	 * @param \Engine\Commands $commands Команды для исполнения в соответствующих сущностях
-	 * @param \Engine\Input $input Входящие данные
+	 * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
+	 * @param \Boolive\input\Input $input Входящие данные
 	 * @return null|string Результат выполнения контроллера
 	 */
 	public function start(Commands $commands, Input $input){
@@ -836,7 +840,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
         $result = array();
 		$list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
 		foreach ($list as $key => $child){
-			/** @var $child \Engine\Entity */
+			/** @var $child \Boolive\data\Entity */
 			$out = $child->start($this->_commands, $this->_input);
 			if ($out){
 				$result[$key] = $out;

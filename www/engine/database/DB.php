@@ -16,12 +16,15 @@
  * @link http://boolive.ru/createcms/working-with-databases
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\database;
 
 use PDO,
 	PDOStatement,
 	PDOException,
-	Engine\F;
+	Boolive\functions\F,
+    Boolive\errors\Error,
+    Boolive\develop\Trace,
+    Boolive\develop\Benchmark;
 
 class DB extends PDO{
 	/** @var array Установленные соединения */
@@ -45,7 +48,7 @@ class DB extends PDO{
 	 *  'options' => array(),
 	 *  'prefix' => ''
 	 * )
-	 * @return \Engine\DB
+	 * @return DB
 	 */
 	static function Connect($config = null){
 		if (!empty($config['dsn'])){
@@ -166,7 +169,7 @@ class DB extends PDO{
 	 * @param string $sql Строка SQL запроса с параметрами
 	 * @param array $driver_options
 	 * @throws Error
-	 * @return \Engine\DBStatementDebug|\PDOStatement
+	 * @return DBStatementDebug|PDOStatement
 	 */
 	public function prepare($sql, $driver_options = array()){
 		if ($this->debug){

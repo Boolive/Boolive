@@ -6,10 +6,10 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\template;
 
-use Engine\Error,
-	Engine\Data;
+use Boolive\errors\Error,
+	Boolive\data\Data;
 
 class Template{
 	/** @const  Файл с ассоциациями расширений файлов на шаблонизаторы */

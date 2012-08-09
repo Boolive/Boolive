@@ -10,9 +10,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\calls;
 
-use Engine\Events;
+use Boolive\events\Events;
 
 class Calls{
 	/** @var Многомерная очередь с информацией для вызова методов */

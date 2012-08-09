@@ -7,7 +7,7 @@
  * @version	2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\develop;
 
 class Benchmark{
 	/** @var array Начальные значения замеров */

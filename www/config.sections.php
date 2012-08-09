@@ -15,16 +15,16 @@ $config = array(
 				// Тип СУБД
 				'driver' => 'mysql',
 				// Имя базы данных
-				'dbname' => 'boolive-git',
+				'dbname' => 'boolive',
 				// Адрес сервера
 				'host' => 'localhost',
 				// Порт
 				'port' => '3306'
 			),
 			// Имя пользователя для подключения к базе данных
-			'user' => 'root',
+			'user' => 'mysql_user',
 			// Пароль
-			'password' => 'proot',
+			'password' => '147',
 			// Опции подключения
 			'options' => array(
 				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_general_ci"'

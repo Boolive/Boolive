@@ -6,13 +6,13 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine\Sections;
+namespace Boolive\data\sections;
 
-use Engine\DB,
-	Engine\File,
-	Engine\Section,
-	Engine\Data,
-	Engine\Calls;
+use Boolive\database\DB,
+    Boolive\file\File,
+    Boolive\data\Section,
+    Boolive\data\Data,
+    Boolive\calls\Calls;
 
 class MySQLSection extends Section{
 	/** @var \Engine\DB */

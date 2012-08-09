@@ -6,9 +6,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\file;
 
-use Engine\Error;
+use Boolive\errors\Error;
 
 class File{
 	/**

@@ -7,9 +7,9 @@
  * @version	2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\classes;
 
-use Engine\Error;
+use Boolive\errors\Error;
 
 class Classes{
 	/** @var array Именна классов с путями к их файлам */
@@ -21,47 +21,62 @@ class Classes{
 	/** @var array Список классов из конфига ядра */
 	static private $engine_classes;
 
+    /** @var array Список корневых namespace'ов */
+    private static $ns;
+
+    /** @var string Расширение файлов классов */
+    public static $ext = '.php';
+
 	/**
 	 * Активаация класса
 	 * @param string $class_name - Имя класса
-	 * @throws \Engine\Error
+	 * @throws \Boolive\errors\Error
 	 * @throws \ErrorException
 	 */
 	static function Activate($class_name){
 		$class_name = ltrim($class_name, '\\');
 		// Если ещё не подключен
 		if (!self::IsIncluded($class_name)){
-			if ($class_name == 'Engine\Classes'){
+			if ($class_name == 'Boolive\classes\Classes'){
 				// Актвация самого себя
+
 				self::$classes = array();
 				self::$activated = array();
 				self::$included = array();
 				self::$engine_classes = array();
-				// Загрузка путей на классы ядра
-				self::LoadEngineClasses(DIR_SERVER_ENGINE.'config.classes.php', DIR_WEB_ENGINE);
+
 				// Регистрация метода-обработчика автозагрузки классов
-				spl_autoload_register(array('\Engine\Classes', 'Activate'));
+				spl_autoload_register(array('\Boolive\classes\Classes', 'Activate'));
 			}else{
-				// Активация указанного класса
-				if (!isset(self::$classes[$class_name])){
-					// Система не знает о классе
-					$class = mb_substr($class_name, mb_strrpos($class_name, '\\')+1);
-					$path = str_replace('\\','/',$class_name).'/'.$class.'.php';
-					self::AddProjectClasse($path, $class_name);
-					//throw new Error(array('Модуль "%s" не установлен', $class_name));
-				}
-				include(DOCUMENT_ROOT.self::$classes[$class_name]);
-				self::$included[$class_name] = $class_name;
-				if (!isset(self::$activated[$class_name])){
-					// Активация класса (модуля)
-					if (method_exists($class_name, 'Activate')){
-						call_user_func(array($class_name, 'Activate'));
-						self::$activated[$class_name] = $class_name;
-					}
-				}
+                $rootNamespaceArray = explode('\\', $class_name);
+                $rootNamespace = $rootNamespaceArray[0];
+                if (self::$ns[$rootNamespace] != null) {
+                    $path = strtr($class_name, array('\\' => DIRECTORY_SEPARATOR));
+                    $path = preg_replace('/^(' . $rootNamespace . ')/i',
+                        self::$ns[$rootNamespace], $path);
+                    $path .= self::$ext;
+                    include_once($path);
+                    self::$included[$class_name] = $class_name;
+                } else {
+                    throw new Error(array("Неизвестный корневой namespace - {$rootNamespace}"));
+                }
 			}
 		}
 	}
+
+    /**
+     * Регистрация нового корневого namespace'а
+     *
+     * @static
+     * @param string $ns Корневой namespace
+     * @param string $path Путь до корня корневого namespace'а
+     */
+    public static function registerNamespace($ns, $path)
+    {
+        $ns = trim($ns, '\\ ');
+        $path = rtrim($path, '\\/');
+        self::$ns[$ns] = $path;
+    }
 
 	/**
 	 * Загрузка конфигурационного файла

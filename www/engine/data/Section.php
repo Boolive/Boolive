@@ -6,7 +6,7 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Engine;
+namespace Boolive\data;
 
 abstract class Section extends Entity{
 	/**

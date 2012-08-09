@@ -5,8 +5,8 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-use Engine\Entity,
-	Engine\Rule;
+use Boolive\data\Entity,
+	Boolive\values\Rule;
 
 class site extends Entity
 {
