@@ -606,15 +606,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * @return mixed
 	 */
 	public function __toString(){
-        try {
-            $value = $this->offsetGet('value');
-            if (is_null($value) && ($proto = $this->proto())){
-                $value = $proto->__toString();
-            }
-        } catch (Exception $e) {
-            echo $e->getMessage();
+        $value = $this->offsetGet('value');
+        if (is_null($value) && ($proto = $this->proto())){
+            $value = $proto->__toString();
         }
-
 		return (string)$value;
 	}
 
