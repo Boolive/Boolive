@@ -294,7 +294,7 @@ class Check{
 	 * @return Entity|null
 	 */
 	static function entity($value, &$error, Rule $rule){
-		$class = isset($rule->entity[0])? $rule->entity[0] : '\Engine\Entity';
+		$class = isset($rule->entity[0])? $rule->entity[0] : '\Boolive\data\Entity';
 		if (is_string($value)){
 			// Пробуем получить объект по uri
 			$value = Data::Object($value);

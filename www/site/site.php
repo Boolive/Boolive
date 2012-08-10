@@ -5,10 +5,13 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
+
+namespace Site;
+
 use Boolive\data\Entity,
 	Boolive\values\Rule;
 
-class site extends Entity
+class Site extends Entity
 {
 	/**
 	 * Исполнение объекта

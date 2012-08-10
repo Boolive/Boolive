@@ -12,20 +12,10 @@ namespace Boolive\classes;
 use Boolive\errors\Error;
 
 class Classes{
-	/** @var array Именна классов с путями к их файлам */
-	static public $classes;
 	/** @var array Список активированных классов */
 	static private $activated;
 	/** @var array Список подключенных классов */
 	static private $included;
-	/** @var array Список классов из конфига ядра */
-	static private $engine_classes;
-
-    /** @var array Список корневых namespace'ов */
-    private static $ns;
-
-    /** @var string Расширение файлов классов */
-    public static $ext = '.php';
 
 	/**
 	 * Активаация класса
@@ -40,82 +30,35 @@ class Classes{
 			if ($class_name == 'Boolive\classes\Classes'){
 				// Актвация самого себя
 
-				self::$classes = array();
 				self::$activated = array();
 				self::$included = array();
-				self::$engine_classes = array();
 
 				// Регистрация метода-обработчика автозагрузки классов
 				spl_autoload_register(array('\Boolive\classes\Classes', 'Activate'));
 			}else{
                 $rootNamespaceArray = explode('\\', $class_name);
                 $rootNamespace = $rootNamespaceArray[0];
-                if (self::$ns[$rootNamespace] != null) {
-                    $path = strtr($class_name, array('\\' => DIRECTORY_SEPARATOR));
-                    $path = preg_replace('/^(' . $rootNamespace . ')/i',
-                        self::$ns[$rootNamespace], $path);
-                    $path .= self::$ext;
+                if ($rootNamespace == "Boolive" || $rootNamespace == "Site") {
+                    if ($rootNamespace == "Boolive") {
+                        $rootNamespacePath = DIR_SERVER_ENGINE;
+                    } else if ($rootNamespace == "Site") {
+                        $rootNamespacePath = DIR_SERVER_PROJECT;
+                    }
+                    $path = $class_name;
+                    $path = preg_replace('/^(' . preg_quote($rootNamespace . "\\", "/") . ')/i',
+                        $rootNamespacePath, $path) . ".php";
                     include_once($path);
                     self::$included[$class_name] = $class_name;
+                    if (self::$activated[$class_name] == null) {
+                        if (method_exists($class_name, "Activate")) {
+                            $class_name::Activate();
+                        }
+                    }
                 } else {
                     throw new Error(array("Неизвестный корневой namespace - {$rootNamespace}"));
                 }
 			}
 		}
-	}
-
-    /**
-     * Регистрация нового корневого namespace'а
-     *
-     * @static
-     * @param string $ns Корневой namespace
-     * @param string $path Путь до корня корневого namespace'а
-     */
-    public static function registerNamespace($ns, $path)
-    {
-        $ns = trim($ns, '\\ ');
-        $path = rtrim($path, '\\/');
-        self::$ns[$ns] = $path;
-    }
-
-	/**
-	 * Загрузка конфигурационного файла
-	 * @param $config_file Имя файла конфигурации
-	 * @param $base_dir Путь к имени файла конфигурации
-	 */
-	private static function LoadEngineClasses($config_file, $base_dir){
-		include $config_file;
-		if (isset($classes)){
-			foreach ($classes as $key => $path){
-				self::$classes[$key] = self::$engine_classes[$key] = $base_dir.$path;
-			}
-		}
-	}
-
-	/**
-	 * Добавление класса проекта
-	 * @param $path
-	 * @param $name
-	 * @throws Error
-	 */
-	public static function AddProjectClasse($path, $name){
-		$path = DIR_WEB_PROJECT.trim($path, ' /\\');
-		if (isset(self::$classes[$name]) && self::$classes[$name] != $path){
-			throw new Error(array('Classes: class name %s is already exist', $name));
-		}
-		self::$classes[$name] = $path;
-	}
-
-	/**
-	 * Путь на файл класса относительно корня сайта
-	 * @param $class_name Имя класса
-	 * @return mixed
-	 */
-	public static function GetPath($class_name){
-		if (isset(self::$classes[$class_name])){
-			return self::$classes[$class_name];
-		}
-		return false;
 	}
 
 	/**
@@ -134,14 +77,6 @@ class Classes{
 	 */
 	public static function GetIncluded(){
 		return self::$included;
-	}
-
-	/**
-	 * Список установленных классов. Классы, о которых знает система.
-	 * @return array Названия классов
-	 */
-	public static function GetLoaded(){
-		return array_keys(self::$classes);
 	}
 
 	/**
@@ -171,19 +106,7 @@ class Classes{
 	 * @return bool
 	 */
 	public static function IsExist($class_name){
-		if (isset(self::$classes[$class_name])){
-			return class_exists($class_name, true);
-		}
-		return false;
-	}
-
-	/**
-	 * Проверка, принадлежит ли указанный класс ядру
-	 * @param string $class_name Имя класса с учетом namespace
-	 * @return bool
-	 */
-	public static function IsEngine($class_name){
-		return isset(self::$engine_classes[$class_name]);
+		return true;
 	}
 
 	/**

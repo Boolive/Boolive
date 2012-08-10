@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace library\basic;
+namespace Site\library\basic\css;
 
-use Engine\Entity;
+use Boolive\data\Entity;
 
 class css extends Entity{
 

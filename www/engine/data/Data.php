@@ -8,7 +8,8 @@
  */
 namespace Boolive\data;
 
-use Boolive\classes\Classes;
+use Boolive\classes\Classes,
+    Boolive\functions\F;
 
 class Data {
 	/** @const  Файл конфигурации секци */
@@ -108,22 +109,14 @@ class Data {
 			try{
 				// Имеется свой класс?
 				if ($attribs['uri']===''){
-					$path = 'site.php';
-					$class = 'site';
+					$class = 'Site\Site';
 				}else{
-					$names = F::splitRight('/', $attribs['uri']);
+				$names = F::splitRight('/', $attribs['uri']);
 					$class = str_replace('/', '\\', trim($names[0],'/'));
-					if (!empty($class)) $class.='\\';
-					$class.=$names[1];
-					$path = $attribs['uri'].'/'.$names[1].'.php';
+					$class .= '\\' . $names[1] . '\\' . $names[1];
+                    $class = "Site\\" . $class;
 				}
-				Classes::AddProjectClasse($path, $class);
-				// Проверяем существование класса
-				if (Classes::IsExist($class)){
-					return new $class($attribs);
-				}else{
-
-				}
+				return new $class($attribs);
 			}catch(\ErrorException $e){
 				// Если файл не найден, то будет использовать класс прототипа или Entity
 				if ($e->getCode() != 2) throw $e;

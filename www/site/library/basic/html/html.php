@@ -5,12 +5,12 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace library\basic;
+namespace Site\library\basic\html;
 
-use Engine\Entity,
-	Engine\Rule,
-	Engine\Template,
-	Engine\Input;
+use Boolive\data\Entity,
+	Boolive\values\Rule,
+	Boolive\template\Template,
+	Boolive\input\Input;
 
 class html extends Entity{
 

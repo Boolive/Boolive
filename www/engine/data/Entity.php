@@ -18,7 +18,8 @@ use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
     Boolive\errors\ITrace,
     Boolive\values\Rule,
     Boolive\commands\Commands,
-    Boolive\input\Input;
+    Boolive\input\Input,
+    Boolive\functions\F;
 
 class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	/** @var array Атрибуты */
@@ -605,10 +606,15 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 	 * @return mixed
 	 */
 	public function __toString(){
-		$value = $this->offsetGet('value');
-		if (is_null($value) && ($proto = $this->proto())){
-			$value = $proto->__toString();
-		}
+        try {
+            $value = $this->offsetGet('value');
+            if (is_null($value) && ($proto = $this->proto())){
+                $value = $proto->__toString();
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
 		return (string)$value;
 	}
 

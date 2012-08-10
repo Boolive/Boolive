@@ -16,14 +16,11 @@ define('DIR_WEB_ENGINE', DIR_WEB.'engine/');
 define('DIR_WEB_PROJECT', DIR_WEB.'site/');
 
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */
-define('DIR_SERVER', strtr(DOCUMENT_ROOT.DIR_WEB, array('\\' => DIRECTORY_SEPARATOR,
-                                                        '/' => DIRECTORY_SEPARATOR)));
+define('DIR_SERVER', DOCUMENT_ROOT.DIR_WEB);
 /** @cont string Директория ядра на сервере. Слеш в конце обязателен! */
-define('DIR_SERVER_ENGINE', strtr(DOCUMENT_ROOT.DIR_WEB_ENGINE, array('\\' => DIRECTORY_SEPARATOR,
-                                                                      '/' => DIRECTORY_SEPARATOR)));
+define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
-define('DIR_SERVER_PROJECT', strtr(DOCUMENT_ROOT.DIR_WEB_PROJECT, array('\\' => DIRECTORY_SEPARATOR,
-                                                                        '/' => DIRECTORY_SEPARATOR)));
+define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
 
 /** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */
 define('TIMESTAMP', '1');
@@ -37,10 +34,6 @@ function get_doc_root(){
 		// Если переменной окружения нет, то вычисляем из пути на исполняемый файл
 		$_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
 	}
-    $_SERVER['DOCUMENT_ROOT'] = strtr($_SERVER['DOCUMENT_ROOT'], array(
-        '\\' => DIRECTORY_SEPARATOR,
-        '/' => DIRECTORY_SEPARATOR,
-    ));
 	return rtrim($_SERVER['DOCUMENT_ROOT'],'/\\');
 }
 

@@ -23,7 +23,7 @@ class Events{
 	 */
 	static function Activate(){
 		self::LoadHandlers();
-		self::AddHandler('STOP', '\\Engine\\Events', 'Stop', false);
+		self::AddHandler('STOP', '\\Boolive\\events\\Events', 'Stop', false);
 	}
 
 	/**

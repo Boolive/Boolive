@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace library\basic;
+namespace Site\library\basic\group;
 
-use Engine\Entity;
+use Boolive\data\Entity;
 
 class group extends Entity{
 

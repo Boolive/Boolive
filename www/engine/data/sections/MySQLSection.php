@@ -12,7 +12,8 @@ use Boolive\database\DB,
     Boolive\file\File,
     Boolive\data\Section,
     Boolive\data\Data,
-    Boolive\calls\Calls;
+    Boolive\calls\Calls,
+    Boolive\errors\Error;
 
 class MySQLSection extends Section{
 	/** @var \Engine\DB */
@@ -28,7 +29,7 @@ class MySQLSection extends Section{
 			$this->table = $config['table'];
 		}
 		if (empty($this->db) || empty($this->table)){
-			throw new \Engine\Error('MySQLSection: Incorrect configuration');
+			throw new Error('MySQLSection: Incorrect configuration');
 		}
 	}
 

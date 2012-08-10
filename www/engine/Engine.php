@@ -26,10 +26,6 @@ class Engine{
 		// Остальные файлы классов будут подключаться автоматически при первом обращении
 		include_once DIR_SERVER_ENGINE.'classes/Classes.php';
 
-        // Регистрация корневых namespace'ов
-        Classes::registerNamespace("Boolive", DIR_SERVER_ENGINE);
-        Classes::registerNamespace("site", DIR_SERVER_PROJECT);
-
         // Принудельная активация необходимых системе классов
         Classes::Activate('Boolive\classes\Classes');
 		Classes::Activate('Boolive\develop\Benchmark');

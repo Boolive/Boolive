@@ -8,7 +8,8 @@
 namespace Boolive\errors;
 
 use Exception,
-	ErrorException;
+	ErrorException,
+    Boolive\events\Events;
 
 class ErrorsHandler{
 	static private $error_reporting;
@@ -18,9 +19,9 @@ class ErrorsHandler{
 	static function Activate(){
 		self::$error_reporting = error_reporting();
 		// Регистрация обработчика исключений
-		set_exception_handler(array('\Engine\ErrorsHandler', 'ExceptionHandler'));
+		set_exception_handler(array('\Boolive\errors\ErrorsHandler', 'ExceptionHandler'));
 		// Регистрация обработчика ошибок
-		set_error_handler(array('\Engine\ErrorsHandler', 'ErrorHandler'));
+		set_error_handler(array('\Boolive\errors\ErrorsHandler', 'ErrorHandler'));
 	}
 
 	/**

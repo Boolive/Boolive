@@ -264,6 +264,6 @@ namespace {
 	 * @return \Engine\Trace Объект трассировки
 	 */
 	function trace($var = null){
-		return \Engine\Trace::Groups('trace')->group()->set($var)->out();
+		return \Boolive\develop\Trace::Groups('trace')->group()->set($var)->out();
 	}
 }
