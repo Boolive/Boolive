@@ -19,7 +19,7 @@ class MySQLSection extends Section{
 	private $db;
 	private $table;
 
-	public function __construct($config){
+    public function __construct($config){
 		parent::__construct($config);
 		if (isset($config['connect'])){
 			$this->db = DB::Connect($config['connect']);

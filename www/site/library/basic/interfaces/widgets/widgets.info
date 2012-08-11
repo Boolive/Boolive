@@ -1,0 +1,5 @@
+{
+    "title": "Виджеты",
+    "description": "Визуальные элементы для HTML страниц сайта",
+    "proto": "Site/library/basic/Package"
+}

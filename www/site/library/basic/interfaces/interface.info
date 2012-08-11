@@ -1,0 +1,5 @@
+{
+    "title": "Интерфейсы",
+    "description": "Объекты для формирования интерфейса сайта",
+    "proto": "Site/library/basic/Package"
+}
