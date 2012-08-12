@@ -2,6 +2,7 @@
 /**
  * Классы движка (ядра системы)
  */
+
 $classes = array(
 	// Ядро
 	'Engine\Engine'			=> 'Engine.php',
