@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\basic\javascripts\javascript;
+namespace library\basic\javascripts\javascript;
 
 use Boolive\data\Entity;
 

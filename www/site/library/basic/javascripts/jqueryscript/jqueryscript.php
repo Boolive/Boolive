@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\basic\javascripts\jqueryscript;
+namespace library\basic\javascripts\jqueryscript;
 
-use Site\library\basic\javascripts\javascript\javascript;
+use library\basic\javascripts\javascript\javascript;
 
 class jqueryscript extends javascript{
 

@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\basic\css;
+namespace library\basic\css;
 
 use Boolive\data\Entity;
 

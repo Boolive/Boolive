@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\basic\group;
+namespace library\basic\group;
 
 use Boolive\data\Entity;
 

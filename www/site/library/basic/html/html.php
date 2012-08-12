@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\basic\html;
+namespace library\basic\html;
 
 use Boolive\data\Entity,
 	Boolive\values\Rule,

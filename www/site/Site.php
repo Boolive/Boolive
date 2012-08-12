@@ -6,8 +6,6 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 
-namespace Site;
-
 use Boolive\data\Entity,
 	Boolive\values\Rule;
 
