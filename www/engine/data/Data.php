@@ -111,10 +111,9 @@ class Data {
 				if ($attribs['uri']===''){
 					$class = 'Site\Site';
 				}else{
-				$names = F::splitRight('/', $attribs['uri']);
+				    $names = F::splitRight('/', $attribs['uri']);
 					$class = str_replace('/', '\\', trim($names[0],'/'));
 					$class .= '\\' . $names[1] . '\\' . $names[1];
-                    $class = "Site\\" . $class;
 				}
 				return new $class($attribs);
 			}catch(\ErrorException $e){

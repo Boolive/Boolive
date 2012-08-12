@@ -38,24 +38,21 @@ class Classes{
 			}else{
                 $rootNamespaceArray = explode('\\', $class_name);
                 $rootNamespace = $rootNamespaceArray[0];
-                if ($rootNamespace == "Boolive" || $rootNamespace == "Site") {
-                    if ($rootNamespace == "Boolive") {
-                        $rootNamespacePath = DIR_SERVER_ENGINE;
-                    } else if ($rootNamespace == "Site") {
-                        $rootNamespacePath = DIR_SERVER_PROJECT;
-                    }
+                if ($rootNamespace == "Boolive") {
+                    $rootNamespacePath = DIR_SERVER_ENGINE;
                     $path = $class_name;
                     $path = preg_replace('/^(' . preg_quote($rootNamespace . "\\", "/") . ')/i',
                         $rootNamespacePath, $path) . ".php";
-                    include_once($path);
-                    self::$included[$class_name] = $class_name;
-                    if (self::$activated[$class_name] == null) {
-                        if (method_exists($class_name, "Activate")) {
-                            $class_name::Activate();
-                        }
-                    }
                 } else {
-                    throw new Error(array("Неизвестный корневой namespace - {$rootNamespace}"));
+                    $path = $class_name;
+                    $path = DIR_SERVER_PROJECT . $path . '.php';
+                }
+                include_once($path);
+                self::$included[$class_name] = $class_name;
+                if (self::$activated[$class_name] == null) {
+                    if (method_exists($class_name, "Activate")) {
+                        $class_name::Activate();
+                    }
                 }
 			}
 		}
