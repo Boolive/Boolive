@@ -8,7 +8,7 @@
 $config = array(
 	// Корневая секция
 	'' => array(
-		'class' => '\Engine\Sections\MySQLSection',
+		'class' => '\Boolive\data\Sections\MySQLSection',
 		'connect' => array(
 			// Имя источника данных
 			'dsn' => array(
@@ -43,5 +43,20 @@ $config = array(
 	'/interfaces' => array(
 		'extends' => '',
 		'table' => 'interfaces'
+	),
+    // Пользователи
+	'/members' => array(
+		'extends' => '',
+		'table' => 'members'
+	),
+    // Содержимое
+	'/contents' => array(
+		'extends' => '',
+		'table' => 'contents'
+	),
+    // Ключевые слова
+	'/keywords' => array(
+		'extends' => '',
+		'table' => 'keywords'
 	)
 );
