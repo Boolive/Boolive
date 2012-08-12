@@ -6,7 +6,7 @@
  */
 namespace library\basic\members\User;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class User extends Entity
 {

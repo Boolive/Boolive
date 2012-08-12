@@ -32,7 +32,7 @@ class Template{
 
 	/**
 	 * Возвращает шаблонизатор для указанного объекта (контроллера/виджета)
-	 * @param \Engine\Entity $entity
+	 * @param \Boolive\data\Entity $entity
 	 * @return
 	 */
 	static function getEngine($entity){
@@ -53,7 +53,7 @@ class Template{
 	 * Создание текста из шаблона
 	 * В шаблон вставляются переданные значения
 	 * При обработки шаблона могут довыбираться значения из $entity и создаваться команды в $commands
-	 * @param \Engine\Entity $entity
+	 * @param \Boolive\data\Entity $entity
 	 * @param array $v
 	 * @throws Error
 	 * @return string

@@ -13,8 +13,10 @@
  */
 namespace Boolive\develop{
 
+    use Boolive\develop\ITrace;
+
 	class Trace{
-		/** @var \Engine\Trace Список всех объектов трассировки */
+		/** @var \Boolive\develop\Trace Список всех объектов трассировки */
 		static private $trace;
 		/** @var mixed Трассируемое значение */
 		private $value;
@@ -40,7 +42,7 @@ namespace Boolive\develop{
 		 * Установка трассируемого значения.
 		 * @param mixed $value Значения для трассировки
 		 * @param bool $clone Признак, клонировать значение, если является объектом?
-		 * @return \Engine\Trace
+		 * @return \Boolive\develop\Trace
 		 */
 		public function set($value, $clone = true){
 			if ($clone && is_object($value) && !$value instanceof \Exception){
@@ -70,7 +72,7 @@ namespace Boolive\develop{
 
 		/**
 		 * Запись форматированного значения в лог файл
-		 * @return \Engine\Trace
+		 * @return \Boolive\develop\Trace
 		 */
 		public function log(){
 			error_log(self::Format($this));
@@ -79,7 +81,7 @@ namespace Boolive\develop{
 
 		/**
 		 * Вывод форматированного значения в HTML
-		 * @return \Engine\Trace $this
+		 * @return \Boolive\develop\Trace $this
 		 */
 		public function out(){
 			echo '<pre>'.self::Format($this).'</pre>';
@@ -89,7 +91,7 @@ namespace Boolive\develop{
 		/**
 		 * Получения вложенного объекта трассировки
 		 * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
-		 * @return \Engine\Trace Объект трассировки
+		 * @return \Boolive\develop\Trace Объект трассировки
 		 */
 		public function group($key = null){
 			if (empty($key)) $key = sizeof($this->list);
@@ -102,7 +104,7 @@ namespace Boolive\develop{
 		/**
 		 * Получения вложенного объекта трассировки
 		 * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
-		 * @return \Engine\Trace Объект трассировки
+		 * @return \Boolive\develop\Trace Объект трассировки
 		 */
 		public function __get($key = null){
 			return $this->group($key);
@@ -121,7 +123,7 @@ namespace Boolive\develop{
 		/**
 		 * Корневой объект трассировки
 		 * @param null $key Ключ подчиенного объекта трассировки. Если отсутствует, то будет создан
-		 * @return \Engine\Trace
+		 * @return \Boolive\develop\Trace
 		 */
 		static function Groups($key = null){
 			if (!isset(self::$trace)) self::$trace = new Trace('TRACE');
@@ -195,7 +197,7 @@ namespace Boolive\develop{
 			if (is_object($var)){
 				$class_name = get_class($var);
 				if (isset($trace_buf[spl_object_hash($var)])){
-//					if ($var instanceof \Engine\Entity){
+//					if ($var instanceof \Boolive\data\Entity){
 //						$list = array('id' => $var['id'], 'name'=> $var['name']);
 //					}else{
 						$list = array();
@@ -261,7 +263,7 @@ namespace {
 	 * Трассировка переменной с автоматическим выводом значения
 	 * Сделано из-за лени обращаться к классу Trace :)
 	 * @param mixed $var Значение для трассировки
-	 * @return \Engine\Trace Объект трассировки
+	 * @return \Boolive\develop\Trace Объект трассировки
 	 */
 	function trace($var = null){
 		return \Boolive\develop\Trace::Groups('trace')->group()->set($var)->out();

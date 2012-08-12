@@ -4,7 +4,6 @@
  * @version 1.0
  * @link http://boolive.ru/createcms/cms-engine
  * @author Vladimir Shestakov <boolive@yandex.ru>
- * @author Azat Galiev <AzatGaliev@live.ru>
  */
 namespace Boolive;
 
@@ -29,10 +28,9 @@ class Engine{
         // Принудельная активация необходимых системе классов
         Classes::Activate('Boolive\classes\Classes');
 		Classes::Activate('Boolive\develop\Benchmark');
-		Classes::Activate('Boolive\develop\Trace');
+        Classes::Activate('Boolive\develop\Trace');
 		Classes::Activate('Boolive\unicode\Unicode');
 		Classes::Activate('Boolive\errors\ErrorsHandler');
-
 		// При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
 		Events::Send('START');
 		Engine::Work();
@@ -44,7 +42,7 @@ class Engine{
 	 */
 	static function Work(){
 		// Исполнение корневого объекта и вывод клиенту результата
-		echo Data::Object('')->start(new Commands(), Input::all());
+        echo Data::Object('')->start(new Commands(), Input::all());
 	}
 
 	/**

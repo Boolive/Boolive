@@ -71,7 +71,7 @@ class Events{
 	 *
 	 * @param string $event_name Имя события
 	 * @param array|mixed $params Параметры события
-	 * @return \Engine\EventResult Объект события с результатами его обработки
+	 * @return \Boolive\events\EventResult Объект события с результатами его обработки
 	 */
 	static function Send($event_name, $params=array()){
 		$r = new EventResult();

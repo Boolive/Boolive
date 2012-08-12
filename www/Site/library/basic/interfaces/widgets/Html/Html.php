@@ -5,12 +5,12 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace library\basic\widgets\Html;
+namespace library\basic\interfaces\widgets\Html;
 
-use Boolive\Entity,
-    Boolive\Rule,
-    Boolive\Template,
-    Boolive\Input;
+use Boolive\data\Entity,
+    Boolive\values\Rule,
+    Boolive\template\Template,
+    Boolive\input\Input;
 
 class Html extends Entity
 {

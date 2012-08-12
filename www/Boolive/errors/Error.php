@@ -12,10 +12,11 @@
 
 namespace Boolive\errors;
 
-use Exception;
+use Exception,
+    Boolive\develop\ITrace;
 
 class Error extends Exception implements ITrace{
-	/** @var \Engine\Error Родительское  исключение */
+	/** @var \Boolive\errors\Error Родительское  исключение */
 	protected $parent;
 	/** @var array Массив исключений */
 	private $list;
@@ -62,9 +63,9 @@ class Error extends Exception implements ITrace{
 
 	/**
 	 * Перегрузка метода получения исключения. @example $e = $error->user->min;
-	 * Всегда возвращется \Engine\Error, даже если нет запрашиваемого исключения (возвратитя временный \Engine\Error)
+	 * Всегда возвращется \Boolive\errors\Error, даже если нет запрашиваемого исключения (возвратитя временный \Boolive\errors\Error)
 	 * @param string $name Имя параметра
-	 * @return \Engine\Error
+	 * @return \Boolive\errors\Error
 	 */
 	public function __get($name){
 		return $this->get($name);
@@ -74,7 +75,7 @@ class Error extends Exception implements ITrace{
 	 * Перегрузка установки исключения: @example $error->user = "min";
 	 * Итогом будет цепочка из трех исключений.
 	 * @param string $name Имя подчиеннего исключения
-	 * @param string|\Engine\Error $error Добавляемое исключение
+	 * @param string|\Boolive\errors\Error $error Добавляемое исключение
 	 */
 	public function __set($name, $error){
 		// Создание подчиенненого списка исключений $name
@@ -86,8 +87,8 @@ class Error extends Exception implements ITrace{
 
 	/**
 	 * Добавление исключениея
-	 * @param \Engine\Error|string $error Код исключения или объект исключения
-	 * @return array|\Engine\Error |\Engine\Error
+	 * @param \Boolive\errors\Error|string $error Код исключения или объект исключения
+	 * @return array|\Boolive\errors\Error |\Boolive\errors\Error
 	 */
 	public function add($error){
 		// Если был временным
@@ -128,7 +129,7 @@ class Error extends Exception implements ITrace{
 	/**
 	 * Получение исключения с указнным именем (ключом)
 	 * @param string $name Название (ключ) исключения
-	 * @return \Engine\Error
+	 * @return \Boolive\errors\Error
 	 */
 	public function get($name){
 		if (isset($this->list[$name])){
@@ -210,7 +211,7 @@ class Error extends Exception implements ITrace{
 		if ($all_sub && $this->isExist()){
 			$message = '';
 			foreach ($this->list as $e){
-				/** @var $e \Engine\Error */
+				/** @var $e \Boolive\errors\Error */
 				$message.= $e->getUserMessage($all_sub, $postfix);
 			}
 			return $message;
@@ -228,7 +229,7 @@ class Error extends Exception implements ITrace{
 	public function __toString(){
 		$result = "{$this->message}\n";
 		foreach ($this->list as $e){
-			/** @var $e \Engine\Error */
+			/** @var $e \Boolive\errors\Error */
 			$result.=' - '.$e->__toString()."\n";
 		}
 		return $result;

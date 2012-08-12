@@ -8,14 +8,12 @@
  */
 namespace Boolive\data;
 
-use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
+use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
 	Boolive\values\Values,
     Boolive\errors\Error,
     Boolive\data\Data,
-    Boolive\develop\Trace,
     Boolive\file\File,
-	Exception,
-    Boolive\errors\ITrace,
+    Boolive\develop\ITrace,
     Boolive\values\Rule,
     Boolive\commands\Commands,
     Boolive\input\Input,
@@ -481,7 +479,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable{
 			$errors->_attribs->add($error->getAll());
 		}
 		// Проверка подчиненных
-		foreach ($this->_children as $name => $child){
+		foreach ($this->_children as $child){
 			$error = null;
 			/** @var \Boolive\data\Entity $child */
 			if (!$child->check($error)){

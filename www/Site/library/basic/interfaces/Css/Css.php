@@ -7,7 +7,7 @@
  */
 namespace library\basic\interfaces\Css;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class Css extends Entity
 {
@@ -24,9 +24,11 @@ class Css extends Entity
         if (($proto = $this->proto()) && ($proto instanceof self)){
             $proto->start($this->_commands, $this->_input);
         }
+
         // Подключение CSS файла
         if ($file = $this->getFile()){
             $this->_commands->addHtml('link', array('rel'=>"stylesheet", 'type'=>"text/css", 'href'=>$file));
         }
+
     }
 }

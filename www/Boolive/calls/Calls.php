@@ -80,7 +80,7 @@ class Calls{
 	/**
 	 * Добавление функции в текущую очередь на выполнение
 	 * Если очереди нет, то функция сразу исполняется
-	 * @param callback $callback Имя функции или массив из имени класса или объекта и именем метода
+	 * @param array $callback Имя функции или массив из имени класса или объекта и именем метода
 	 * @param array $args Значения аргументов метода
 	 * @return mixed
 	 */
@@ -89,7 +89,7 @@ class Calls{
 			self::$commands[self::$level][] = array($callback, $args);
 			return true;
 		}else{
-			call_user_func_array($callback, $args);
+			return call_user_func_array($callback, $args);
 		}
 	}
 

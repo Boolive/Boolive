@@ -10,7 +10,7 @@
 
 namespace Boolive\values;
 
-use Boolive\errors\ITrace;
+use Boolive\develop\ITrace;
 
 /**
  * Стандартные фильтры к правилу.

@@ -6,7 +6,7 @@
  */
 namespace library\basic\contents\Keyword;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class Keyword extends Entity
 {

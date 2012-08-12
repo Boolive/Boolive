@@ -6,7 +6,7 @@
  */
 namespace library\basic\contents\Comment;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class Comment extends Entity
 {

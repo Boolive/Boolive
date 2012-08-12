@@ -18,15 +18,15 @@ use Boolive\values\Values,
 	Boolive\values\Rule;
 
 class PHPTemplateValues extends Values{
-	/** @var \Engine\Entity Сущность, к которой обращаться за недостающими значениями*/
+	/** @var \Boolive\data\Entity Сущность, к которой обращаться за недостающими значениями*/
 	private $_entity;
 
 	/**
 	 * Конструктор
 	 * Все вложенные массивы преобразуются в объект TemplatePHPValues
 	 * @param null $value Массив значений любого типа
-	 * @param null|\Engine\Rule $rule Правило проверки значений по умолчанию
-	 * @param \Engine\Entity|null $entity Сущность, к которой обращаться за недостающими значениями
+	 * @param null|\Boolive\values\Rule $rule Правило проверки значений по умолчанию
+	 * @param \Boolive\data\Entity|null $entity Сущность, к которой обращаться за недостающими значениями
 	 */
 	function __construct($value = null, $rule = null, $entity = null){
 		parent::__construct($value, $rule);
@@ -42,7 +42,7 @@ class PHPTemplateValues extends Values{
 	 * Если элемента с указанным именем нет, то будет исполнены одноименный подчиенный $this->_entity и
 	 * элементу установится результат его работы
 	 * @param mixed $name Ключ элемента
-	 * @return \Engine\Template\PHPTemplateValues
+	 * @return \Boolive\template\php\PHPTemplateValues
 	 */
 	public function offsetGet($name){
 		$start = (!$this->offsetExists($name) && isset($this->_entity));

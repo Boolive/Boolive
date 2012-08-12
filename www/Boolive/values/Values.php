@@ -14,7 +14,8 @@
 namespace Boolive\values;
 
 use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
-	Boolive\errors\Error, Boolive\develop\Trace, Boolive\errors\ITrace;
+	Boolive\errors\Error,
+    Boolive\develop\ITrace;
 
 class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	/** @var mixed|array Значение */
@@ -23,7 +24,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace{
 	protected $_rule;
 	/** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
 	protected $_filtered;
-	/** @var array Объекты \Engine\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
+	/** @var array Объекты \Boolive\values\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
 	protected $_interfaces;
 	/** @var \Boolive\values\Values Родитель объекта для оповещения об изменениях значения. Используется при отложенном связывании */
 	protected $_maker;

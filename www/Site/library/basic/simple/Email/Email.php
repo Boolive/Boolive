@@ -6,8 +6,8 @@
  */
 namespace library\basic\simple\Email;
 
-use Boolive\Entity,
-    Boolive\Rule;
+use Boolive\data\Entity,
+    Boolive\values\Rule;
 
 class Email extends Entity
 {

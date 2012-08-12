@@ -31,7 +31,7 @@ class Data {
 	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
 	 * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
 	 * @param bool $virtual
-	 * @return \Engine\Entity|null Экземпляр объекта, если найден или null, если не найден
+	 * @return \Boolive\data\Entity|null Экземпляр объекта, если найден или null, если не найден
 	 */
 	static function Object($uri, $lang = '', $owner = 0, $date = null, $is_history = false, $virtual = false){
 		$object = null;
@@ -70,7 +70,7 @@ class Data {
 	 * @param $uri Путь на объект
 	 * @param $self Признак, искать секцию объекта (true) или его подчиненных (false)?
 	 * @param bool $strong Признак, искать точное указание на uri (true) или учитывать подчиенность (false)
-	 * @return \Engine\Section|null Экземпляр секции, если имеется или null, если нет
+	 * @return \Boolive\data\Section|null Экземпляр секции, если имеется или null, если нет
 	 */
 	static function Section($uri, $self, $strong = false){
 		if ($self) $uri = mb_substr($uri, 0, mb_strrpos($uri, '/'));
@@ -98,22 +98,22 @@ class Data {
 		return self::$sections[$uri];
 	}
 
-	/**
-	 * Создание объекта данных из атрибутов
-	 * @param $attribs
-	 * @throws \ErrorException
-	 * @return \Engine\Entity
-	 */
+    /**
+     * Создание объекта данных из атрибутов
+     * @param $attribs
+     * @throws \ErrorException
+     * @return \Boolive\data\Entity
+     */
 	static function MakeObject($attribs){
 		if (isset($attribs['uri']) && !empty($attribs['is_logic'])){
 			try{
 				// Имеется свой класс?
 				if ($attribs['uri']===''){
-					$class = 'Site\Site';
+					$class = 'Site';
 				}else{
-				    $names = F::splitRight('/', $attribs['uri']);
-					$class = str_replace('/', '\\', trim($names[0],'/'));
-					$class .= '\\' . $names[1] . '\\' . $names[1];
+				    $uri = trim($attribs['uri'],'/');
+                    $names = F::splitRight('/', $attribs['uri']);
+					$class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
 				}
 				return new $class($attribs);
 			}catch(\ErrorException $e){

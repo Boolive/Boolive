@@ -23,7 +23,7 @@ abstract class Section extends Entity{
 	 * @param int $owner Код владельца. Если не указан, то выбирается общий
 	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
 	 * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
-	 * @return \Engine\Entity|null
+	 * @return \Boolive\data\Entity|null
 	 */
 	public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false){
 		return null;
@@ -31,7 +31,7 @@ abstract class Section extends Entity{
 
 	/**
 	 * Запись объекта. Путь указывается в атриубте uri объекта
-	 * @param \Engine\Entity $entity Записываемый объект
+	 * @param \Boolive\data\Entity $entity Записываемый объект
 	 * @return bool Если были изменения, то true
 	 */
 	public function put($entity){

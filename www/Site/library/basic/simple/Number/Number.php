@@ -6,8 +6,8 @@
  */
 namespace library\basic\simple\Number;
 
-use Boolive\Entity,
-    Boolive\Rule;
+use Boolive\data\Entity,
+    Boolive\values\Rule;
 
 class Number extends Entity
 {

@@ -6,7 +6,7 @@
  */
 namespace library\basic\contents\Image;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class Image extends Entity
 {

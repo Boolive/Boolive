@@ -6,7 +6,7 @@
  */
 namespace library\basic\members\Group;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class Group extends Entity
 {

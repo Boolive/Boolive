@@ -8,7 +8,8 @@
  */
 namespace Boolive\file;
 
-use Boolive\errors\Error;
+use Boolive\errors\Error,
+    Boolive\unicode\Unicode;
 
 class File{
 	/**

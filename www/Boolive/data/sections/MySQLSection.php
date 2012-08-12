@@ -16,7 +16,7 @@ use Boolive\database\DB,
     Boolive\errors\Error;
 
 class MySQLSection extends Section{
-	/** @var \Engine\DB */
+	/** @var \Boolive\database\DB */
 	private $db;
 	private $table;
 
@@ -40,7 +40,7 @@ class MySQLSection extends Section{
 	 * @param int $owner Код владельца. Если не указан, то выбирается общий
 	 * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
 	 * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
-	 * @return \Engine\Entity|null
+	 * @return \Boolive\data\Entity|null
 	 */
 	public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false){
 		$where = 'uri=? AND lang=? AND owner=?';
@@ -68,7 +68,7 @@ class MySQLSection extends Section{
 	/**
 	 * Обновление объекта или добавление, если объект не существует
 	 * Идентификация объекта выполняется по uri
-	 * @param \Engine\Entity $entity
+	 * @param \Boolive\data\Entity $entity
 	 * @return mixed
 	 */
 	public function put($entity){
@@ -178,9 +178,8 @@ class MySQLSection extends Section{
 				if (isset($current['order'])) $attr['order'] = $current['order'];
 			}
 
-
 			// Если редактирование записи, при этом старая запись имеет файл, а новая нет, то удаляем файл
-			if (!$add && $attr['is_history']==$current['is_history']){
+			if (!$add && $attr['is_history'] == $current['is_history']){
 				if ($attr['is_file']==0 && $current['is_file']==1){
 					// Удаление файла
 					if ($current['is_history']){

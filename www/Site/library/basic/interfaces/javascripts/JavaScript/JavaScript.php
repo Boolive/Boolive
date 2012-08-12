@@ -7,7 +7,7 @@
  */
 namespace library\basic\interfaces\javascripts\JavaScript;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class JavaScript extends Entity
 {

@@ -18,14 +18,14 @@ namespace Boolive\input;
 use Boolive\values\Values;
 
 /**
- * @property \Engine\Values path Элементы пути URI
- * @property \Engine\Values args Аргументы URI или командной строки
- * @property \Engine\Values GET GET данные
- * @property \Engine\Values POST POST данные
- * @property \Engine\Values FILES Загруженные файлы
- * @property \Engine\Values COOKIE Куки
- * @property \Engine\Values RAW Неформатированные данные
- * @property \Engine\Values SERVER Информация о сервере и среде исполнения
+ * @property \Boolive\values\Values path Элементы пути URI
+ * @property \Boolive\values\Values args Аргументы URI или командной строки
+ * @property \Boolive\values\Values GET GET данные
+ * @property \Boolive\values\Values POST POST данные
+ * @property \Boolive\values\Values FILES Загруженные файлы
+ * @property \Boolive\values\Values COOKIE Куки
+ * @property \Boolive\values\Values RAW Неформатированные данные
+ * @property \Boolive\values\Values SERVER Информация о сервере и среде исполнения
  */
 class Input extends Values{
 	/** @var \Engine\Input Общий контейнер всех входящих данных */
@@ -82,7 +82,7 @@ class Input extends Values{
 
 	/**
 	 * Элементы пути URI
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function path(){
 		return self::$input->path;
@@ -90,7 +90,7 @@ class Input extends Values{
 
 	/**
 	 * Аргументы URI
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function args(){
 		return self::$input->args;
@@ -98,7 +98,7 @@ class Input extends Values{
 
 	/**
 	 * POST данные
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function POST(){
 		return self::$input->POST;
@@ -106,7 +106,7 @@ class Input extends Values{
 
 	/**
 	 * Загруженные файлы
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function FILES(){
 		return self::$input->FILES;
@@ -114,7 +114,7 @@ class Input extends Values{
 
 	/**
 	 * Куки
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function COOKIE(){
 		return self::$input->COOKIE;
@@ -122,7 +122,7 @@ class Input extends Values{
 
 	/**
 	 * Неформатированные данные
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function RAW(){
 		return self::$input->RAW;
@@ -130,7 +130,7 @@ class Input extends Values{
 
 	/**
 	 * Информация о сервере и среде исполнения
-	 * @return \Engine\Values
+	 * @return \Boolive\values\Values
 	 */
 	static function SERVER(){
 		return self::$input->SERVER;

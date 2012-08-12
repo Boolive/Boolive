@@ -6,7 +6,7 @@
  */
 namespace library\basic\contents\Page;
 
-use Boolive\Entity;
+use Boolive\data\Entity;
 
 class Page extends Entity
 {

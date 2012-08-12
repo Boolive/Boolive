@@ -8,12 +8,10 @@ define('DOCUMENT_ROOT', get_doc_root());
 
 /** @cont string Директория сайта относительно домена (там, где файл index.php). Слеш в начале и конце обязателен! */
 define('DIR_WEB', get_web_dir());
-
 /** @cont string Директория ядра (движка) относительно домена. Слеш в конце обязателен! */
-define('DIR_WEB_ENGINE', DIR_WEB.'engine/');
-
+define('DIR_WEB_ENGINE', DIR_WEB.'Boolive/');
 /** @cont string Директория проекта относительно домена. Слеш в конце обязателен! */
-define('DIR_WEB_PROJECT', DIR_WEB.'site/');
+define('DIR_WEB_PROJECT', DIR_WEB.'Site/');
 
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER', DOCUMENT_ROOT.DIR_WEB);
