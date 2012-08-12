@@ -1,3 +1,4 @@
 {
-    "title": "Email, куда отправлять сообщения"
+    "title": "Email, куда отправлять сообщения",
+    "proto": "/library/basic/simple/Email"
 }

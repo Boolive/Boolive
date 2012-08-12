@@ -1,3 +1,4 @@
 {
-    "title": "Email отправителя"
+    "title": "Email отправителя",
+    "proto": "/library/basic/simple/Email"
 }
