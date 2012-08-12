@@ -1,5 +1,5 @@
 {
     "title": "jQuery",
     "description": "JavaScript-библиотека для взаимодействия с HTML",
-    "proto": "Site/library/basic/interfaces/javascripts/JavaScript"
+    "proto": "/library/basic/interfaces/javascripts/JavaScript"
 }

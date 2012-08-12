@@ -5,10 +5,10 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-use Engine\Entity,
-	Engine\Rule;
+use Boolive\Entity,
+	Boolive\Rule;
 
-class site extends Entity
+class Site extends Entity
 {
 	/**
 	 * Исполнение объекта

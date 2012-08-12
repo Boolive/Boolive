@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\contents\Comment;
+namespace library\basic\contents\Comment;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class Comment extends Entity
 {

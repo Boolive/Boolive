@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\widgets\Widget;
+namespace library\basic\widgets\Widget;
 
-use Engine\Entity,
-    Engine\Template;
+use Boolive\Entity,
+    Boolive\Template;
 
 class Widget extends Entity
 {

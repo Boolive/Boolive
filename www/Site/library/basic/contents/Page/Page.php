@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\contents\Page;
+namespace library\basic\contents\Page;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class Page extends Entity
 {

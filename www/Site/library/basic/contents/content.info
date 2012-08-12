@@ -1,5 +1,5 @@
 {
     "title": "Содержимое",
     "description": "Объекты для создания содержимого сайта. Статьи, комментарии, тексты...",
-    "proto": "Site/library/basic/Package"
+    "proto": "/library/basic/Package"
 }

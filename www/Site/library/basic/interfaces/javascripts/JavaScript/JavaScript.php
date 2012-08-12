@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\basic\interfaces\javascripts\JavaScript;
+namespace library\basic\interfaces\javascripts\JavaScript;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class JavaScript extends Entity
 {

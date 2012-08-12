@@ -1,5 +1,5 @@
 {
     "title": "Используемые компоненты",
     "description": "Скрипты и любые другие объекты, необходиыме для работы",
-    "proto": "Site/library/basic/interfaces/Group"
+    "proto": "/library/basic/interfaces/Group"
 }

@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\contents\Keyword;
+namespace library\basic\contents\Keyword;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class Keyword extends Entity
 {

@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\members\User;
+namespace library\basic\members\User;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class User extends Entity
 {

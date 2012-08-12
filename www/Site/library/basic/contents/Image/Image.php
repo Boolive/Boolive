@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\contents\Image;
+namespace library\basic\contents\Image;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class Image extends Entity
 {

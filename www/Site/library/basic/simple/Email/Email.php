@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\simple\Email;
+namespace library\basic\simple\Email;
 
-use Engine\Entity,
-    Engine\Rule;
+use Boolive\Entity,
+    Boolive\Rule;
 
 class Email extends Entity
 {

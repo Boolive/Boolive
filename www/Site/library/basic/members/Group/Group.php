@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\members\Group;
+namespace library\basic\members\Group;
 
-use Engine\Entity;
+use Boolive\Entity;
 
 class Group extends Entity
 {

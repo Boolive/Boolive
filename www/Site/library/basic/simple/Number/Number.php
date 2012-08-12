@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\simple\Number;
+namespace library\basic\simple\Number;
 
-use Engine\Entity,
-    Engine\Rule;
+use Boolive\Entity,
+    Boolive\Rule;
 
 class Number extends Entity
 {
