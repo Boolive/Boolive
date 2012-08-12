@@ -43,5 +43,20 @@ $config = array(
 	'/interfaces' => array(
 		'extends' => '',
 		'table' => 'interfaces'
+	),
+    // Пользователи
+	'/members' => array(
+		'extends' => '',
+		'table' => 'members'
+	),
+    // Содержимое
+	'/contents' => array(
+		'extends' => '',
+		'table' => 'contents'
+	),
+    // Ключевые слова
+	'/keywords' => array(
+		'extends' => '',
+		'table' => 'keywords'
 	)
 );
