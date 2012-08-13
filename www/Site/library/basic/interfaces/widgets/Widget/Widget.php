@@ -13,6 +13,6 @@ class Widget extends Entity
 {
     public function work($v = array())
     {
-        return Template::Render($this, $v);
+        return Template::render($this, $v);
     }
 }

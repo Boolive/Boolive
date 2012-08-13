@@ -7,14 +7,16 @@
  */
 namespace Boolive\events;
 
-class EventResult{
-	/** @var int Количество исполненных методов-обработчиков */
-	public $count;
-	/** @var mixed Результат вызова методов-обработчиков */
-	public $value;
+class EventResult
+{
+    /** @var int Количество исполненных методов-обработчиков */
+    public $count;
+    /** @var mixed Результат вызова методов-обработчиков */
+    public $value;
 
-	function __construct(){
-		$this->count = 0;
-		$this->value = null;
-	}
+    function __construct()
+    {
+        $this->count = 0;
+        $this->value = null;
+    }
 }

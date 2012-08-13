@@ -46,6 +46,6 @@ class Html extends Entity
                 $v['head'].="\n";
             }
         }
-        return Template::Render($this, $v);
+        return Template::render($this, $v);
     }
 }

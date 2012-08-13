@@ -15,7 +15,8 @@
  */
 namespace Boolive\input;
 
-use Boolive\values\Values;
+use Boolive\values\Values,
+    Boolive\functions\F;
 
 /**
  * @property \Boolive\values\Values path Элементы пути URI
@@ -27,15 +28,17 @@ use Boolive\values\Values;
  * @property \Boolive\values\Values RAW Неформатированные данные
  * @property \Boolive\values\Values SERVER Информация о сервере и среде исполнения
  */
-class Input extends Values{
-	/** @var \Engine\Input Общий контейнер всех входящих данных */
+class Input extends Values
+{
+	/** @var \Boolive\input\Input Общий контейнер всех входящих данных */
 	private static $input;
 
 	/**
 	 * Активация модуля
 	 * Создание общего контейнера входящих данных
 	 */
-	static function Activate(){
+	static function activate()
+    {
 		$values = array(
 			'GET' => isset($_GET)? $_GET : array(),
 			'POST' => isset($_POST)? $_POST : array(),
@@ -74,9 +77,10 @@ class Input extends Values{
 
 	/**
 	 * Все входящие данные
-	 * @return \Engine\Input
+	 * @return \Boolive\input\Input
 	 */
-	static function all(){
+	static function all()
+    {
 		return self::$input;
 	}
 
@@ -84,7 +88,8 @@ class Input extends Values{
 	 * Элементы пути URI
 	 * @return \Boolive\values\Values
 	 */
-	static function path(){
+	static function path()
+    {
 		return self::$input->path;
 	}
 
@@ -92,7 +97,8 @@ class Input extends Values{
 	 * Аргументы URI
 	 * @return \Boolive\values\Values
 	 */
-	static function args(){
+	static function args()
+    {
 		return self::$input->args;
 	}
 
@@ -100,7 +106,8 @@ class Input extends Values{
 	 * POST данные
 	 * @return \Boolive\values\Values
 	 */
-	static function POST(){
+	static function POST()
+    {
 		return self::$input->POST;
 	}
 
@@ -108,7 +115,8 @@ class Input extends Values{
 	 * Загруженные файлы
 	 * @return \Boolive\values\Values
 	 */
-	static function FILES(){
+	static function FILES()
+    {
 		return self::$input->FILES;
 	}
 
@@ -116,7 +124,8 @@ class Input extends Values{
 	 * Куки
 	 * @return \Boolive\values\Values
 	 */
-	static function COOKIE(){
+	static function COOKIE()
+    {
 		return self::$input->COOKIE;
 	}
 
@@ -124,7 +133,8 @@ class Input extends Values{
 	 * Неформатированные данные
 	 * @return \Boolive\values\Values
 	 */
-	static function RAW(){
+	static function RAW()
+    {
 		return self::$input->RAW;
 	}
 
@@ -132,7 +142,8 @@ class Input extends Values{
 	 * Информация о сервере и среде исполнения
 	 * @return \Boolive\values\Values
 	 */
-	static function SERVER(){
+	static function SERVER()
+    {
 		return self::$input->SERVER;
 	}
 
@@ -140,7 +151,8 @@ class Input extends Values{
 	 * Нормализация массива $_FILES в соответствии с именованием полей формы
 	 * @return array
 	 */
-	private static function normalizeFiles(){
+	private static function normalizeFiles()
+    {
 		// Перегруппировка элементов массива $_FILES
 		$rec_to_array = function ($array, $name) use (&$rec_to_array){
 			$result = array();
@@ -171,7 +183,8 @@ class Input extends Values{
 	 * Правила по умолчанию
 	 * Правило отсутствует, поэтому без явного указания правиал при выборки значений значения не получить
 	 */
-	protected function defineRule(){
+	protected function defineRule()
+    {
 		$this->_rule = null;
 	}
 }

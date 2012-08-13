@@ -10,13 +10,13 @@ use Boolive\data\Entity,
 
 class Site extends Entity
 {
-	/**
-	 * Исполнение объекта
-	 * Запуск подчиенного - интерфейс
-	 * @return null|string|void
-	 */
-	public function work()
-	{
-		return $this->startChild('interfaces');
-	}
+    /**
+     * Исполнение объекта
+     * Запуск подчиенного - интерфейс
+     * @return null|string|void
+     */
+    public function work()
+    {
+        return $this->startChild('interfaces');
+    }
 }

@@ -12,4 +12,4 @@ require 'config.php';
 // Подключение главного класса системы
 require DIR_SERVER_ENGINE.'Engine.php';
 // Запуск системы
-Boolive\Engine::Start();
+Boolive\Engine::start();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Базовая конфигурация.
+ * Базовая конфигурация
  * @version 1.0
  */
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
@@ -28,11 +28,11 @@ define('TIMESTAMP', '1');
  * @return string
  */
 function get_doc_root(){
-	if (empty($_SERVER['DOCUMENT_ROOT'])){
-		// Если переменной окружения нет, то вычисляем из пути на исполняемый файл
-		$_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
-	}
-	return rtrim($_SERVER['DOCUMENT_ROOT'],'/\\');
+    if (empty($_SERVER['DOCUMENT_ROOT'])){
+        // Если переменной окружения нет, то вычисляем из пути на исполняемый файл
+        $_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
+    }
+    return rtrim($_SERVER['DOCUMENT_ROOT'],'/\\');
 }
 
 /**
@@ -40,9 +40,9 @@ function get_doc_root(){
  * @return string
  */
 function get_web_dir(){
-	preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)index\.php$|', $_SERVER['SCRIPT_FILENAME'], $find);
+    preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)index\.php$|', $_SERVER['SCRIPT_FILENAME'], $find);
     if ($find[1] == null) {
         $find[1] = "/";
     }
-	return $find[1];
+    return $find[1];
 }

@@ -24,18 +24,18 @@ class Classes
      * @throws \Boolive\errors\Error
      * @throws \ErrorException
      */
-    static function Activate($class_name)
+    static function activate($class_name)
     {
         $class_name = ltrim($class_name, '\\');
         // Если ещё не подключен
-        if (!self::IsIncluded($class_name)){
+        if (!self::isIncluded($class_name)){
 
             if ($class_name == 'Boolive\classes\Classes'){
                 // Актвация самого себя
                 self::$activated = array();
                 self::$included = array();
                 // Регистрация метода-обработчика автозагрузки классов
-                spl_autoload_register(array('\Boolive\classes\Classes', 'Activate'));
+                spl_autoload_register(array('\Boolive\classes\Classes', 'activate'));
             }else{
                 $names = explode('\\', $class_name, 2);
                 $path = str_replace('\\', '/', $class_name);
@@ -48,7 +48,7 @@ class Classes
                 self::$included[$class_name] = $class_name;
                 if (!isset(self::$activated[$class_name])) {
                     if (method_exists($class_name, "Activate")) {
-                        $class_name::Activate();
+                        $class_name::activate();
                     }
                 }
             }
@@ -60,7 +60,7 @@ class Classes
      * Классы, у которых был вызован метод Activate().
      * @return array Названия классов
      */
-    public static function GetActivated()
+    public static function getActivated()
     {
         return self::$activated;
     }
@@ -70,7 +70,7 @@ class Classes
      * Классы, php-файлы которых подключены (include)
      * @return array Названия классов
      */
-    public static function GetIncluded()
+    public static function getIncluded()
     {
         return self::$included;
     }
@@ -80,7 +80,7 @@ class Classes
      * @param string $class Имя класса
      * @return bool
      */
-    public static function IsActivate($class)
+    public static function isActivate($class)
     {
         $class = ltrim($class, '\\');
         return isset(self::$activated[$class]);
@@ -91,7 +91,7 @@ class Classes
      * @param string $class Имя класса
      * @return bool
      */
-    public static function IsIncluded($class)
+    public static function isIncluded($class)
     {
         $class = ltrim($class, '\\');
         return isset(self::$included[$class]);
@@ -103,7 +103,7 @@ class Classes
      * @param string $class_name Имя класса
      * @return bool
      */
-    public static function IsExist($class_name)
+    public static function isExist($class_name)
     {
         return true;
     }
@@ -113,7 +113,7 @@ class Classes
      * @param string $class_name Имя класса с учетом namespace
      * @return bool
      */
-    public static function IsCompleteClass($class_name)
+    public static function isCompleteClass($class_name)
     {
         $result = class_exists($class_name);
         if ($result){
@@ -128,7 +128,7 @@ class Classes
      * Установка класса
      * @param $input
      */
-    static public function Install($input)
+    static public function install($input)
     {
 
     }

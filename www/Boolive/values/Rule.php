@@ -63,88 +63,97 @@ use Boolive\develop\ITrace;
  * @method \Boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
  * @method \Boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
  */
-class Rule implements ITrace{
-	/** @var array Фильтры */
-	private $filters = array();
+class Rule implements ITrace
+{
+    /** @var array Фильтры */
+    private $filters = array();
 
-	/**
-	 * Создание правила.
-	 * Создаётся и возвращается объект правила с добавленным первым фильтром, название которого соответсвует
-	 * названию вызванного метода. Аргументы правила являются аргументами вызыванного метода.
-	 * @static
-	 * @example Rule::int();
-	 * @param string $method Название фильтра (метода)
-	 * @param $args Аргументы фильтра (метода)
-	 * @return \Boolive\values\Rule Новый объект правила
-	 */
-	static function __callStatic($method, $args){
-		$rule = new Rule();
-		$rule->filters[$method] = $args;
-		return $rule;
-	}
+    /**
+     * Создание правила.
+     * Создаётся и возвращается объект правила с добавленным первым фильтром, название которого соответсвует
+     * названию вызванного метода. Аргументы правила являются аргументами вызыванного метода.
+     * @static
+     * @example Rule::int();
+     * @param string $method Название фильтра (метода)
+     * @param $args Аргументы фильтра (метода)
+     * @return \Boolive\values\Rule Новый объект правила
+     */
+    static function __callStatic($method, $args)
+    {
+        $rule = new Rule();
+        $rule->filters[$method] = $args;
+        return $rule;
+    }
 
-	/**
-	 * Установка фильтра
-	 * Если фильтр уже установлен, то он будет заменен новым
-	 * @example Rule::int()->max(10)->filter2($arg);
-	 * @param $name Имя фильтра
-	 * @param $args Аргументы фильтра
-	 * @return \Boolive\values\Rule
-	 */
-	public function __call($name, $args){
-		$this->filters[$name] = $args;
-		return $this;
-	}
+    /**
+     * Установка фильтра
+     * Если фильтр уже установлен, то он будет заменен новым
+     * @example Rule::int()->max(10)->filter2($arg);
+     * @param $name Имя фильтра
+     * @param $args Аргументы фильтра
+     * @return \Boolive\values\Rule
+     */
+    public function __call($name, $args)
+    {
+        $this->filters[$name] = $args;
+        return $this;
+    }
 
-	/**
-	 * Выбор фильтра по имени
-	 * @example $f = $rule->int->max;
-	 * @param $name Название фильтра
-	 * @return array Аргументы фильтра
-	 */
-	public function &__get($name){
-		return $this->filters[$name];
-	}
+    /**
+     * Выбор фильтра по имени
+     * @example $f = $rule->int->max;
+     * @param $name Название фильтра
+     * @return array Аргументы фильтра
+     */
+    public function &__get($name)
+    {
+        return $this->filters[$name];
+    }
 
-	/**
-	 * Установка фильтра через присвоение
-	 * @example $rule->max = 10; //установка фильтра max с аргументом 10
-	 * @param $name Название фильтра
-	 * @param mixed $args Массив аргументов. Если не является массивом, то значение будет помещено в массив
-	 */
-	public function __set($name, $args){
-		if (!is_array($args)) $args = array($args);
-		$this->filters[$name] = $args;
-	}
+    /**
+     * Установка фильтра через присвоение
+     * @example $rule->max = 10; //установка фильтра max с аргументом 10
+     * @param $name Название фильтра
+     * @param mixed $args Массив аргументов. Если не является массивом, то значение будет помещено в массив
+     */
+    public function __set($name, $args)
+    {
+        if (!is_array($args)) $args = array($args);
+        $this->filters[$name] = $args;
+    }
 
-	/**
-	 * Проверка существования фильтра
-	 * @example $is_exist = isset($rule->max);
-	 * @param $name Название фильтра
-	 * @return bool
-	 */
-	public function __isset($name){
-		return isset($this->filters[$name]);
-	}
+    /**
+     * Проверка существования фильтра
+     * @example $is_exist = isset($rule->max);
+     * @param $name Название фильтра
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->filters[$name]);
+    }
 
-	/**
-	 * Удаление фильтра
-	 * @example unset($rule->max);
-	 * @param $name Название фильтра
-	 */
-	public function __unset($name){
-		unset($this->filters[$name]);
-	}
+    /**
+     * Удаление фильтра
+     * @example unset($rule->max);
+     * @param $name Название фильтра
+     */
+    public function __unset($name)
+    {
+        unset($this->filters[$name]);
+    }
 
-	/**
-	 * Выбор всех фильтров
-	 * @return array Ассоциативный массив фильтров, где ключ элемента - название фильтра, а значение - аргументы фильтра
-	 */
-	public function getFilters(){
-		return $this->filters;
-	}
+    /**
+     * Выбор всех фильтров
+     * @return array Ассоциативный массив фильтров, где ключ элемента - название фильтра, а значение - аргументы фильтра
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
 
-	public function trace(){
-		return $this->filters;
-	}
+    public function trace()
+    {
+        return $this->filters;
+    }
 }

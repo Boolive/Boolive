@@ -5,10 +5,10 @@
  * @author Azat Galiev <AzatGaliev@live.ru>
  * @version 2.0
  */
-
 namespace Boolive\develop;
 
-interface ITrace{
+interface ITrace
+{
     /**
      * Возвращает значения для трассировки
      * @return array
