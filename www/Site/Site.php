@@ -6,7 +6,7 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 use Boolive\data\Entity,
-	Boolive\values\Rule;
+    Boolive\values\Rule;
 
 class Site extends Entity
 {

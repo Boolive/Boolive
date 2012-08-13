@@ -4,9 +4,9 @@
  *
  * @example 
  * Пример использования:
- * 	$v = new TemplatePHPValues();
- * 	$v[0] = 'A&B';
- * 	echo $v[0]; // A&amp;B
+ *  $v = new TemplatePHPValues();
+ *  $v[0] = 'A&B';
+ *  echo $v[0]; // A&amp;B
  *  echo $v->html(0); //A&B
  * @link http://boolive.ru/createcms/making-page
  * @version 2.0
@@ -15,7 +15,7 @@
 namespace Boolive\template\php;
 
 use Boolive\values\Values,
-	Boolive\values\Rule;
+    Boolive\values\Rule;
 
 class PHPTemplateValues extends Values
 {

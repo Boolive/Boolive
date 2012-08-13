@@ -24,7 +24,7 @@
  *   исключения не выкидываются, а возвращается созданный объект исключения.
  *
  * @link http://boolive.ru/createcms/rules-for-filter (про правила и создание нового фильтра)
- * @version	2.1
+ * @version 2.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Boolive\values;
@@ -365,7 +365,7 @@ class Check
         }else{
             $result = $value;
         }
-        if ($value != $result)	$error = new Error(array('Значение больше чем "%s"', $max), 'max');
+        if ($value != $result) $error = new Error(array('Значение больше чем "%s"', $max), 'max');
         return $result;
     }
 
@@ -382,7 +382,7 @@ class Check
         $result = $value;
         if (is_int($value) || is_double($value)){
             $result = max($min, $value);
-            if ($value != $result)	$error = new Error(array('Значение меньше чем "%s"', $min), 'min');
+            if ($value != $result) $error = new Error(array('Значение меньше чем "%s"', $min), 'min');
         }else
         if (is_string($value) && mb_strlen($value) < $min){
             $error = new Error(array('Значение меньше чем "%s"', $min), 'min');
@@ -414,7 +414,7 @@ class Check
         }else{
             $result = $value;
         }
-        if ($value != $result)	$error = new Error(array('Значение не меньше чем "%s"', $less), 'less');
+        if ($value != $result) $error = new Error(array('Значение не меньше чем "%s"', $less), 'less');
         return $result;
     }
 

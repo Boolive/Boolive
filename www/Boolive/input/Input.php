@@ -30,161 +30,161 @@ use Boolive\values\Values,
  */
 class Input extends Values
 {
-	/** @var \Boolive\input\Input Общий контейнер всех входящих данных */
-	private static $input;
+    /** @var \Boolive\input\Input Общий контейнер всех входящих данных */
+    private static $input;
 
-	/**
-	 * Активация модуля
-	 * Создание общего контейнера входящих данных
-	 */
-	static function activate()
+    /**
+     * Активация модуля
+     * Создание общего контейнера входящих данных
+     */
+    static function activate()
     {
-		$values = array(
-			'GET' => isset($_GET)? $_GET : array(),
-			'POST' => isset($_POST)? $_POST : array(),
-			'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
-			'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
-			'RAW' => empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA, // Неформатированные данные
-			'SERVER' => $_SERVER
-		);
-		// Элементы пути URI
-		if (isset($values['GET']['path']) && ($path = trim($values['GET']['path'],'/ '))){
-			$values['path'] = explode('/', $path);
-		}else{
-			$values['path'] = array();
-		}
-		// Аргументы из URI
-		$values['args'] = array();
-		if (!empty($values['GET'])){
-			$list = $values['GET'];
-			unset($list['path']);
-			$i = 0;
-			foreach ($list as $key => $value){
-				if ($value !== ''){
-					$values['args'][$key] = $value;
-				}else{
-					$values['args'][$i] = $key;
-				}
-				$i++;
-			}
-		}
-		// Аргументы из консоли в get (режим CLI)
-		if (empty($values['args']) && isset($_SERVER['argv'])) $values['args'] = $_SERVER['argv'];
+        $values = array(
+            'GET' => isset($_GET)? $_GET : array(),
+            'POST' => isset($_POST)? $_POST : array(),
+            'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
+            'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
+            'RAW' => empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA, // Неформатированные данные
+            'SERVER' => $_SERVER
+        );
+        // Элементы пути URI
+        if (isset($values['GET']['path']) && ($path = trim($values['GET']['path'],'/ '))){
+            $values['path'] = explode('/', $path);
+        }else{
+            $values['path'] = array();
+        }
+        // Аргументы из URI
+        $values['args'] = array();
+        if (!empty($values['GET'])){
+            $list = $values['GET'];
+            unset($list['path']);
+            $i = 0;
+            foreach ($list as $key => $value){
+                if ($value !== ''){
+                    $values['args'][$key] = $value;
+                }else{
+                    $values['args'][$i] = $key;
+                }
+                $i++;
+            }
+        }
+        // Аргументы из консоли в get (режим CLI)
+        if (empty($values['args']) && isset($_SERVER['argv'])) $values['args'] = $_SERVER['argv'];
 
-		// Создание контейнера
-		self::$input = new Input($values);
-	}
+        // Создание контейнера
+        self::$input = new Input($values);
+    }
 
-	/**
-	 * Все входящие данные
-	 * @return \Boolive\input\Input
-	 */
-	static function all()
+    /**
+     * Все входящие данные
+     * @return \Boolive\input\Input
+     */
+    static function all()
     {
-		return self::$input;
-	}
+        return self::$input;
+    }
 
-	/**
-	 * Элементы пути URI
-	 * @return \Boolive\values\Values
-	 */
-	static function path()
+    /**
+     * Элементы пути URI
+     * @return \Boolive\values\Values
+     */
+    static function path()
     {
-		return self::$input->path;
-	}
+        return self::$input->path;
+    }
 
-	/**
-	 * Аргументы URI
-	 * @return \Boolive\values\Values
-	 */
-	static function args()
+    /**
+     * Аргументы URI
+     * @return \Boolive\values\Values
+     */
+    static function args()
     {
-		return self::$input->args;
-	}
+        return self::$input->args;
+    }
 
-	/**
-	 * POST данные
-	 * @return \Boolive\values\Values
-	 */
-	static function POST()
+    /**
+     * POST данные
+     * @return \Boolive\values\Values
+     */
+    static function POST()
     {
-		return self::$input->POST;
-	}
+        return self::$input->POST;
+    }
 
-	/**
-	 * Загруженные файлы
-	 * @return \Boolive\values\Values
-	 */
-	static function FILES()
+    /**
+     * Загруженные файлы
+     * @return \Boolive\values\Values
+     */
+    static function FILES()
     {
-		return self::$input->FILES;
-	}
+        return self::$input->FILES;
+    }
 
-	/**
-	 * Куки
-	 * @return \Boolive\values\Values
-	 */
-	static function COOKIE()
+    /**
+     * Куки
+     * @return \Boolive\values\Values
+     */
+    static function COOKIE()
     {
-		return self::$input->COOKIE;
-	}
+        return self::$input->COOKIE;
+    }
 
-	/**
-	 * Неформатированные данные
-	 * @return \Boolive\values\Values
-	 */
-	static function RAW()
+    /**
+     * Неформатированные данные
+     * @return \Boolive\values\Values
+     */
+    static function RAW()
     {
-		return self::$input->RAW;
-	}
+        return self::$input->RAW;
+    }
 
-	/**
-	 * Информация о сервере и среде исполнения
-	 * @return \Boolive\values\Values
-	 */
-	static function SERVER()
+    /**
+     * Информация о сервере и среде исполнения
+     * @return \Boolive\values\Values
+     */
+    static function SERVER()
     {
-		return self::$input->SERVER;
-	}
+        return self::$input->SERVER;
+    }
 
-	/**
-	 * Нормализация массива $_FILES в соответствии с именованием полей формы
-	 * @return array
-	 */
-	private static function normalizeFiles()
+    /**
+     * Нормализация массива $_FILES в соответствии с именованием полей формы
+     * @return array
+     */
+    private static function normalizeFiles()
     {
-		// Перегруппировка элементов массива $_FILES
-		$rec_to_array = function ($array, $name) use (&$rec_to_array){
-			$result = array();
-			foreach ($array as $key => $value){
-				if (is_array($value)){
-					$result[$key] = $rec_to_array($value, $name);
-				}else{
-					$result[$key][$name] = $value;
-				}
-			}
-			return $result;
-		};
-		$result = array();
-		foreach ($_FILES as $field => $data){
-			$result[$field] = array();
-			foreach ($data as $name => $value){
-				if (is_array($value)){
-					$result[$field] = F::arrayMergeRecursive($result[$field], $rec_to_array($value, $name));
-				}else{
-					$result[$field][$name] = $value;
-				}
-			}
-		}
-		return $result;
-	}
+        // Перегруппировка элементов массива $_FILES
+        $rec_to_array = function ($array, $name) use (&$rec_to_array){
+            $result = array();
+            foreach ($array as $key => $value){
+                if (is_array($value)){
+                    $result[$key] = $rec_to_array($value, $name);
+                }else{
+                    $result[$key][$name] = $value;
+                }
+            }
+            return $result;
+        };
+        $result = array();
+        foreach ($_FILES as $field => $data){
+            $result[$field] = array();
+            foreach ($data as $name => $value){
+                if (is_array($value)){
+                    $result[$field] = F::arrayMergeRecursive($result[$field], $rec_to_array($value, $name));
+                }else{
+                    $result[$field][$name] = $value;
+                }
+            }
+        }
+        return $result;
+    }
 
-	/**
-	 * Правила по умолчанию
-	 * Правило отсутствует, поэтому без явного указания правиал при выборки значений значения не получить
-	 */
-	protected function defineRule()
+    /**
+     * Правила по умолчанию
+     * Правило отсутствует, поэтому без явного указания правиал при выборки значений значения не получить
+     */
+    protected function defineRule()
     {
-		$this->_rule = null;
-	}
+        $this->_rule = null;
+    }
 }

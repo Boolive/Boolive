@@ -11,9 +11,9 @@
 namespace Boolive\database;
 
 use PDO,
-	PDOStatement,
-	Boolive\develop\Trace,
-	Boolive\develop\Benchmark;
+    PDOStatement,
+    Boolive\develop\Trace,
+    Boolive\develop\Benchmark;
 
 class DBStatementDebug
 {

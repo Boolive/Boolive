@@ -8,13 +8,13 @@
  * таким образом сохраняется полная изоляция опасных значений.
  *
  * @link http://boolive.ru/createcms/dangerous-data
- * @version	3.0
+ * @version 3.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Boolive\values;
 
 use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
-	Boolive\errors\Error,
+    Boolive\errors\Error,
     Boolive\develop\ITrace;
 
 class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
@@ -124,7 +124,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     public function get($rule = null, &$error = null)
     {
         // Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
-        if (!$rule && $this->_filtered)	return $this->_value;
+        if (!$rule && $this->_filtered) return $this->_value;
         // Если правило не указано, то берём по умолчанию
         if (!$rule) $rule = $this->getRule();
         // Если правило определено

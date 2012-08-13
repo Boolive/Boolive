@@ -4,7 +4,7 @@
  * Выполняет автоматическую загрузку классов по требованию
  * Информация о классах загружается из конфигурационного файла "engine/config.classes.php" и БД
  *
- * @version	2.0
+ * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Boolive\classes;

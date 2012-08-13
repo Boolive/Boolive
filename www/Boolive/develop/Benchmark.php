@@ -4,7 +4,7 @@
  * 1. Подсчет времени выполнеия
  * 2. Подсчет используемой оперативной памяти
  *
- * @version	2.0
+ * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Boolive\develop;

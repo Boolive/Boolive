@@ -79,7 +79,7 @@ class F
     static function splitRight($delim, $str)
     {
         $pos = mb_strrpos($str, $delim);
-        if ($pos === false)	return array(null, $str);
+        if ($pos === false) return array(null, $str);
         return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+1));
     }
 

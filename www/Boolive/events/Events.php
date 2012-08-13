@@ -2,7 +2,7 @@
 /**
  * Управление событиями
  *
- * @version	2.0
+ * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @todo При установке проверить возмоэжность записи в файл конфига
  */

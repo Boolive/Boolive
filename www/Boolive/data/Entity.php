@@ -9,7 +9,7 @@
 namespace Boolive\data;
 
 use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
-	Boolive\values\Values,
+    Boolive\values\Values,
     Boolive\errors\Error,
     Boolive\data\Data,
     Boolive\file\File,
@@ -74,7 +74,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     protected function defineRule()
     {
         $this->_rule = Rule::arrays(array(
-                'uri'		 => Rule::uri()->max(255)->required(), // URI - идентификатор объекта. Уникален в рамках проекта
+                'uri'    	 => Rule::uri()->max(255)->required(), // URI - идентификатор объекта. Уникален в рамках проекта
                 'lang'		 => Rule::string()->max(3)->default(0)->required(), // Язык (код)
                 'owner'		 => Rule::int()->default(0)->required(), // Владелец (код)
                 'date'		 => Rule::int(), // Дата создания в секундах
@@ -85,7 +85,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 'is_logic'	 => Rule::bool()->int(), // Имеется ли у объекта свой класс в его директории. Имя класса по uri
                 'is_file'	 => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
                 'proto'		 => Rule::any(Rule::uri()->max(255), Rule::null()), // URI прототипа
-                'value'	 	 => Rule::any(Rule::null(),	Rule::string()), // Значение любой длины
+                'value'	 	 => Rule::any(Rule::null(), Rule::string()), // Значение любой длины
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'		 => Rule::arrays(array(
                                     'tmp_name'	=> Rule::string()->more(0)->required(), // Путь на связываемый файл
@@ -377,7 +377,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             $cond['values'][] = $this['uri'].'/%';
             $cond['values'][] = $this->getLevel()+1;
             $results = $s->select($cond);
-            if ($load)	$this->_children = $results;
+            if ($load) $this->_children = $results;
             return $results;
         }
         return array();
@@ -445,7 +445,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 $results[$objects[$i]->getName()] = $objects[$i];
             }
         }
-        if ($load)	$this->_children = $results;
+        if ($load) $this->_children = $results;
         return $results;
     }
 
@@ -803,7 +803,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         $trace['_changed'] = $this->_changed;
         $trace['_virtual'] = $this->_virtual;
         $trace['_checked'] = $this->_checked;
-        /*if ($this->_rename)	*/$trace['_rename'] = $this->_rename;
+        /*if ($this->_rename) */$trace['_rename'] = $this->_rename;
         //$trace['_proto'] = $this->_proto;
         //$trace['_parent'] = $this->_parent;
         $trace['_children'] = $this->_children;

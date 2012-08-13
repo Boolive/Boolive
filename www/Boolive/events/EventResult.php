@@ -2,7 +2,7 @@
 /**
  * Класс результата вызова обработчиков события
  *
- * @version	1.0
+ * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Boolive\events;

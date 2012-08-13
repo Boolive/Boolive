@@ -8,7 +8,7 @@
  * Trace::group()->group('db')->group('query')->set($sql); // ...альтернативное указание групп
  * Trace::group()->db->out(); // Вывод группы db
  * Trace::group()->out(); // Вывод всех трассировок
- * @version	1.3
+ * @version 1.3
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 namespace Boolive\develop
