@@ -97,7 +97,7 @@ namespace Boolive\develop
 
         /**
          * Получения вложенного объекта трассировки
-         * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
+         * @param string|null $key Ключ трассировки. Если не существует, то создаётся новый объект трассировки.
          * @return \Boolive\develop\Trace Объект трассировки
          */
         public function group($key = null)

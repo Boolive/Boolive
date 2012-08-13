@@ -74,7 +74,8 @@ class Data
      * @param bool $strong Признак, искать точное указание на uri (true) или учитывать подчиенность (false)
      * @return \Boolive\data\Section|null Экземпляр секции, если имеется или null, если нет
      */
-    static function section($uri, $self, $strong = false){
+    static function section($uri, $self, $strong = false)
+    {
         if ($self) $uri = mb_substr($uri, 0, mb_strrpos($uri, '/'));
         if (empty(self::$sections[$uri])){
             self::$sections[$uri] = null;
