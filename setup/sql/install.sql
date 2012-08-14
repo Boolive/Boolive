@@ -88,6 +88,8 @@ CREATE TABLE `keywords` (
 
 /*Data for the table `keywords` */
 
+insert  into `keywords`(`uri`,`lang`,`owner`,`date`,`level`,`order`,`proto`,`value`,`is_logic`,`is_file`,`is_history`,`is_delete`,`is_hidden`) values ('/keywords/cms','',0,0,3,1,'/library/basic/contents/Keyword','0',0,0,0,0,0),('/keywords/framework','',0,0,3,1,'/library/basic/contents/Keyword','0',0,0,0,0,0),('/keywords/php','',0,0,3,1,'/library/basic/contents/Keyword','0',0,0,0,0,0);
+
 /*Table structure for table `library` */
 
 DROP TABLE IF EXISTS `library`;
