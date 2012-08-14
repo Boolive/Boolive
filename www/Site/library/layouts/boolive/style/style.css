@@ -1,0 +1,40 @@
+body{
+    background-color: #F7FAFC;
+    padding: 0;
+    margin: 0;
+}
+#layout{
+    }
+    #layout-head{
+        background-color: #161616;
+        height: 90px;
+        padding: 0 5% 0 5%;
+        margin: 0;
+        }
+    #layout-middle{
+        padding: 0 5% 0 5%;
+        margin: 0;
+        }
+        #layout-middle .top{
+
+        }
+        #layout-middle .sidebar{
+            float: right;
+            margin: 0;
+            padding: 0 0 0 2%;
+            width: 28%;
+        }
+        #layout-middle .content{
+            float: left;
+            margin: 0;
+            padding: 0;
+            width: 70%;
+        }
+    #layout-bottom{
+        clear: both;
+        padding: 0 5% 0 5%;
+        margin: 0;
+        }
+    .layout-wrapper{
+        width: 100%;
+        }

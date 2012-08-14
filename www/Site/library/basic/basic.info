@@ -1,5 +1,5 @@
 {
     "title": "Базовый",
     "description": "Пакет с базовыми объектами, являющимися основой для создания чего-либо",
-    "proto": "/library/basic/package"
+    "proto": "/library/basic/Package"
 }
