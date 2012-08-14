@@ -2,7 +2,7 @@
 AddDefaultCharset UTF-8
 
 # Файлы, к которым запрщено обращаться напрямую
-<Files ~ "((readme\.txt)|(readme)|(\.(htaccess|sql|php|cache|tpl)))$">
+<Files ~ "((readme\.txt)|(readme)|(\.(htaccess|sql|php|cache|tpl|info)))$">
     Order deny,allow
     Deny from all
 </Files>
