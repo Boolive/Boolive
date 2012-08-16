@@ -48,8 +48,8 @@ class Input extends Values
             'SERVER' => $_SERVER
         );
         // Элементы пути URI
-        if (isset($values['GET']['path']) && ($path = trim($values['GET']['path'],'/ '))){
-            $values['path'] = explode('/', $path);
+        if (isset($values['GET']['path']) && ($values['GET']['path'] = trim($values['GET']['path'],'/ '))){
+            $values['path'] = explode('/', $values['GET']['path']);
         }else{
             $values['path'] = array();
         }
