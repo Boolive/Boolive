@@ -398,9 +398,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * );
      * </code>
      * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
+     * @param string $group_by Атрибут, по которому группировать (реализована группировка по имени и значеню)
      * @return array
      */
-    public function findAll($cond = array(), $load = false)
+    public function findAll($cond = array(), $load = false, $group_by = 'name')
     {
         $results = array();
         $list = array();
@@ -442,7 +443,12 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         // Слияние групп в один массив
         foreach ($list as $objects){
             for ($i=sizeof($objects)-1; $i>=0; --$i){
-                $results[$objects[$i]->getName()] = $objects[$i];
+                if ($group_by == 'value'){
+                    $key = $objects[$i]->getValue();
+                }else{
+                    $key = $objects[$i]->getName();
+                }
+                $results[$key] = $objects[$i];
             }
         }
         if ($load) $this->_children = $results;
@@ -634,11 +640,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function __toString()
     {
-        $value = $this->offsetGet('value');
-        if (is_null($value) && ($proto = $this->proto())){
-            $value = $proto->__toString();
-        }
-        return (string)$value;
+        return (string)$this->getValue();
     }
 
     /**
@@ -690,6 +692,19 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             }
         }
         return $this->_name;
+    }
+
+    /**
+     * Значение объекта с учётом прототипирования
+     * @return string|null
+     */
+    public function getValue()
+    {
+        $value = $this->offsetGet('value');
+        if (is_null($value) && ($proto = $this->proto())){
+            $value = $proto->getValue();
+        }
+        return $value;
     }
 
     /**
@@ -845,8 +860,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
-     * Проверка возможности работы
-     * По умолчанию проверяются входящие данные на соответсвие правилу
+     * Проверка возможности работы.
+     * По умолчанию проверяются входящие данные на соответсвие правилу.
      * @return bool Признак, может ли работать объект или нет
      */
     public function canWork()
@@ -855,7 +870,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
-     * Работа объекта. Обработка запроса и формирование вывода
+     * Работа объекта. Обработка запроса и формирование вывода.
      * Результат выводится функциями echo, print или возвращается через return
      * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
      */

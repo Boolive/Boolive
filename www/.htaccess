@@ -2,7 +2,7 @@
 AddDefaultCharset UTF-8
 
 # Файлы, к которым запрщено обращаться напрямую
-<Files ~ "((readme\.txt)|(readme)|(\.(htaccess|sql|php|cache|tpl|info)))$">
+<Files ~ "(\.(htaccess|sql|php|cache|tpl|info|md))$">
     Order deny,allow
     Deny from all
 </Files>
@@ -33,11 +33,11 @@ DirectoryIndex Off
     RewriteBase /
 
     # Не изменять ссылки на файлы
-    RewriteCond %{REQUEST_URI} !\.[a-zA-Z]{1,4}[\?0-9]*/?$ [NC]
+    RewriteCond %{REQUEST_URI} !\.[a-z]{1,4}[\?0-9]*/?$ [NC]
 
     # Правило изменения ссылок. Всё после адреса сайта присваивается параметру "path" GET запроса
     # http://boolive.ru/news/first => 'http://boolive.ru/index.php?path=news/first'.
-    RewriteRule ^(.*)$ index.php?path=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteRule .* index.php?path=%{REQUEST_URI} [E=REMOTE_USER:%{HTTP:Authorization},QSA]
 
 </IfModule>
 
