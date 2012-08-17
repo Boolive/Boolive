@@ -855,7 +855,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         }else{
             $result = null;
         }
-        unset($this->_input);
+        $this->_input = null;
         return $result;
     }
 
