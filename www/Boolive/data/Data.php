@@ -38,7 +38,7 @@ class Data
     {
         $object = null;
         if (is_string($uri)){
-            if ($uri==='') return self::makeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'site.php')));
+            if ($uri==='') return self::makeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'Site.php')));
             // Опредление секции объекта и поиск объекта в секции
             if ($s = self::section($uri, true)){
                 $object = $s->read($uri, $lang, $owner, $date, $is_history);

@@ -8,7 +8,7 @@
 $config = array(
     // Корневая секция
     '' => array(
-        'class' => '\Boolive\data\Sections\MySQLSection',
+        'class' => '\Boolive\data\sections\MySQLSection',
         'connect' => array(
             // Имя источника данных
             'dsn' => array(
