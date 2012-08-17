@@ -19,20 +19,43 @@ use Boolive\values\Rule,
 
 class ViewObjectsList extends Widget
 {
-//    public function getInputRule(){
-//        return Rule::arrays(array(
-//            'objects_list' => Rule::entity()->required(), // объекты, которые отображать
-//            //'view' => Rule::string() // имя виджета, которым отображать принудительно
-//        ));
-//    }
+    public function getInputRule()
+    {
+        return Rule::arrays(array(
+            'GET' => Rule::arrays(array(
+                'objects_list' => Rule::arrays(Rule::entity())->required(), // список объектов, которые отображать
+                ), Rule::any() // не удалять другие элементы
+            )), Rule::any() // не удалять другие элементы
+        );
+    }
 
-    public function work($v = array()){
-        // Определение всех uri объекта
+    public function work($v = array())
+    {
+        $v['objects_list'] = array();
+        // Все варианты отображений для последующего поиска нужного
+        $options = $this->findAll(array(), false, 'value');
+        $objects_list = $this->_input->GET->objects_list->get();
 
-        // Поиск группы виджетов по uri
-
-        // Исполнение найденных виджетов пока один из них не выполнится
-        $v = array();
+        foreach ($objects_list as $obj){
+            $this->_input->GET->object = $obj;
+            // Поиск варианта отображения для объекта
+            while ($obj){
+                $out = null;
+                if (isset($options[$obj['uri']])){
+                    $out = $options[$obj['uri']]->start($this->_commands, $this->_input);
+                    if ($out){
+                        $this->_input['previous'] = true;
+                        $v['objects_list'][] = $out;
+                    }
+                }
+                // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
+                if (!$out){
+                    $obj = $obj->proto();
+                }else{
+                    $obj = null;//чтоб остановить цикл
+                }
+            }
+        }
         return parent::work($v);
     }
 }
