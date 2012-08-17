@@ -19,42 +19,28 @@ use Boolive\values\Rule,
 
 class ViewObject extends Widget
 {
-    public function getInputRule(){
+    public function getInputRule()
+    {
         return Rule::arrays(array(
             'GET' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // объект, который отображать
-                'view' => Rule::string() // имя виджета, которым отображать принудительно
                 ), Rule::any() // не удалять другие элементы
             )), Rule::any() // не удалять другие элементы
         );
     }
 
-    public function work($v = array()){
+    public function work($v = array())
+    {
         // Все варианты отображений для последующего поиска нужного
-        $views = $this->findAll(array(), false, 'value');
-        $view_name = $this->_input->GET->view->string();
+        $options = $this->findAll(array(), false, 'value');
         $obj = $this->_input->GET->object->get();
         $v['object'] = null;
         // Поиск варианта отображения для объекта
         while ($obj){
-            if (isset($views[$obj['uri']])){
-                // Запускаем по очереди виджеты варианта, пока один из виджетов не сработает
-                if ($view_name){
-                    // Если указано, каким отображать, то только его пробуем запустить
-                    $widgets = array($views[$obj['uri']]->{$view_name});
-                }else{
-                    // Все виджеты варианта
-                    $widgets = $views[$obj['uri']]->findAll(array('order'=>'`order` ASC'));
-                }
-                $wg = reset($widgets);
-                while ($wg){
-                    $v['object'] = $wg->start($this->_commands, $this->_input);
-                    if ($v['object'] != null){
-                        $this->_input['previous'] = true;
-                        $wg = null;//чтоб оставновить цикл
-                    }else{
-                        $wg = next($widgets);
-                    }
+            if (isset($options[$obj['uri']])){
+                $v['object'] = $options[$obj['uri']]->start($this->_commands, $this->_input);
+                if ($v['object'] != null){
+                    $this->_input['previous'] = true;
                 }
             }
             // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
