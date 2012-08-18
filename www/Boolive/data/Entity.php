@@ -364,9 +364,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * );
      * </code>
      * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
+     * @param null $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
      * @return array
      */
-    public function find($cond = array(), $load = false)
+    public function find($cond = array(), $load = false, $key_by = null)
     {
         if ($s = Data::section($this['uri'], false)){
             if (!empty($cond['where'])){
@@ -378,6 +379,23 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             $cond['values'][] = $this->getLevel()+1;
             $results = $s->select($cond);
             if ($load) $this->_children = $results;
+            // Смена ключей масива
+            if ($key_by){
+                $list = array();
+                $cnt = sizeof($results);
+                for ($i=0; $i<$cnt; $i++){
+                    switch ($key_by){
+                        case 'name': $key = $results[$i]->getName();
+                            break;
+                        case 'value': $key = $results[$i]->getValue();
+                            break;
+                        default: $key = $results[$i][$key_by];
+                    }
+                    $list[$key] = $results[$i];
+                }
+                $results = $list;
+            }
+
             return $results;
         }
         return array();
@@ -385,7 +403,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 
     /**
      * Поиск подчиненных объектов с учетом унаследованных
-     * @todo Сортировка между своими и унаследованными подчиненными по любым атрибутам (сделано только по order)
      * @todo Ограничение количества выборки..
      * @param array $cond Услвоие поиска
      * <code>
@@ -398,60 +415,54 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * );
      * </code>
      * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
-     * @param string $group_by Атрибут, по которому группировать (реализована группировка по имени и значеню)
+     * @param null $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
+     * @param bool $req Признак рекурсивного вызова метода (используется самим методом)
      * @return array
      */
-    public function findAll($cond = array(), $load = false, $group_by = 'name')
+    public function findAll($cond = array(), $load = false, $key_by = 'name', $req = false)
     {
-        $results = array();
-        $list = array();
-        $object = $this;
-        $names = array();
-        $proto = array();
-        $prototype = false;
-        do{
-            // Поиск у себя и у всех наследуемых по цепочке объектов
-            $sub = $object->find($cond);
-            foreach ($sub as $child){
-                /** @var \Boolive\data\Entity $child */
-                $name = $child->getName();
-                $attr = $child->_attribs;
-                // Если не удален, не скрыт, существует, ещё не выбран с таким же именем и нет среди прототипов
-                if (!isset($names[$name]) && !isset($proto[$child['uri']])){
-                    if ($prototype){
-                        // Объект виртуальный для $this, поэтому прототипируем его
-                        $child = $child->birth();
-                        $child['uri'] = $this['uri'].'/'.$name;
+        $results = $this->find($cond, false, 'name');
+        if ($proto = $this->proto()){
+            $proto_sub = $proto->findAll($cond, false, 'name', true);
+            foreach ($proto_sub as $key => $child){
+                if (!isset($results[$key])){
+                    $results[$key] = $child->birth();
+                    $results[$key]['uri'] = $this['uri'].'/'.$key;
+                    $results[$key]['order'] = $child['order'];
+                }
+            }
+        }
+        if (!$req){
+            // Смена ключей, если требуется
+            if (empty($key_by)){
+                $results = array_values($results);
+            }else
+            if ($key_by != 'name'){
+                $list = array();
+                foreach ($results as $child){
+                    switch ($key_by){
+                        case null: $list[] = $child;
+                            break;
+                        case 'value': $list[$child->getValue()] = $child;
+                            break;
+                        default: $list[$child[$key_by]] = $child;
                     }
-                    // Добавляем с учетом порядкового номера
-                    $list[$attr['order']][] = $child;
                 }
-                $names[$name] = true;
-                $proto[$child['proto']] = true;
+                $results = $list;
             }
-            $object = $object->proto();
-            $prototype = true;
-        }while($object);
-        // Сортировка групп
-        if (!empty($cond['order']) && preg_match('/`order`\s*(ASC|DESC)?/iu', $cond['order'], $math)){
-            if (!empty($math[1]) && strtolower($math[1])=='desc'){
-                krsort($list, SORT_NUMERIC);
-            }else{
-                ksort($list, SORT_NUMERIC);
+            // Сортировки
+            if (!empty($cond['order']) && preg_match('/`([a-z_]+)`\s*(DESC)?/iu', $cond['order'], $math)){
+                uasort($results, function($a, $b) use ($math){
+                    if ($a[$math[1]] == $b[$math[1]]){
+                        return 0;
+                    }
+                    $comp = $a[$math[1]] < $b[$math[1]]? -1: 1;
+                    return (!empty($math[2]))? -1*$comp : $comp;
+                });
             }
+            // Запоминаем результат в экземпляре
+            if ($load) $this->_children = $results;
         }
-        // Слияние групп в один массив
-        foreach ($list as $objects){
-            for ($i=sizeof($objects)-1; $i>=0; --$i){
-                if ($group_by == 'value'){
-                    $key = $objects[$i]->getValue();
-                }else{
-                    $key = $objects[$i]->getName();
-                }
-                $results[$key] = $objects[$i];
-            }
-        }
-        if ($load) $this->_children = $results;
         return $results;
     }
 
@@ -701,7 +712,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function getValue()
     {
         $value = $this->offsetGet('value');
-        if (is_null($value) && ($proto = $this->proto())){
+        if (!isset($value) && ($proto = $this->proto())){
             $value = $proto->getValue();
         }
         return $value;
@@ -797,6 +808,14 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         return $this->_is_saved;
     }
 
+    /**
+	 * Проверка, является ли объект подчиенным для указанного?
+	 * @param \Boolive\data\Entity $parent
+	 * @return bool
+	 */
+    public function isChildOf($parent){
+        return $parent['uri'].'/' == mb_substr($this['uri'],0,mb_strlen($parent['uri'])+1);
+    }
     /**
      * Клонирование объекта
      */
