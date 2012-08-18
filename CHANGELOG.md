@@ -8,6 +8,7 @@ Version 2.0 preview work in progress
 - new #4: Add CHANGELOG.md file (AzatGaliev)
 - new #10: Update all objects in "library/basic" with added contents, members and simple objects (VladimirShestakov)
 - new #14: Added layout widget "boolive" in the "library/layouts" and "interfaces/html/body" (VladimirShestakov)
+- new #15: Added widget logo to display an logo (AzatGaliev)
 - new #16: Added widget ViewObject to display an object (VladimirShestakov)
 - new #17: Added widget ViewObjectsList to display list of objects (VladimirShestakov)
 - new #18: Added widget Content to the boolive layout (VladimirShestakov)
