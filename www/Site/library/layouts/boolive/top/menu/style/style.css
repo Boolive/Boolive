@@ -1,0 +1,20 @@
+.menu-top {
+    padding: 1px 0 2px 0;
+	}
+    .menu-top ul {
+        display: inline;
+        margin: 0;
+        padding: 0;
+        }
+        .menu-top ul li {
+            padding: 0;
+            display: inline;
+            margin: 0 20px 0 0;
+            font-size: 13pt;
+            }
+            .menu-top ul li a {
+                text-decoration: none;
+                }
+                .menu-top ul li a:hover {
+                    text-decoration: underline;
+                    }
