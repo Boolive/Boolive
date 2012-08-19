@@ -37,6 +37,7 @@ class DB extends PDO
     /** @var bool Признак, включен или нет режим отладки */
     private $debug = false;
 
+    private $statements = array();
     /**
      * Создание экземпляра DB, представляющего соединение с базой данных
      * Если соединение с указанными параметрами уже существует, то оно будет возращено вместо создания нового
@@ -181,15 +182,18 @@ class DB extends PDO
      */
     public function prepare($sql, $driver_options = array())
     {
+        if (isset($this->statements[$sql])){
+            return $this->statements[$sql];
+        }
         if ($this->debug){
             $stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
             if ($stmt instanceof PDOStatement){
-                return new DBStatementDebug($stmt);
+                return $this->statements[$sql] = new DBStatementDebug($stmt);
             }else{
                 throw new Error('PDO does not return PDOStatement');
             }
         }
-        return parent::prepare($this->addPrefixes($sql), $driver_options);
+        return $this->statements[$sql] = parent::prepare($this->addPrefixes($sql), $driver_options);
     }
 
     /**

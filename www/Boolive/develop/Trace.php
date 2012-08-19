@@ -276,10 +276,11 @@ namespace {
      * Трассировка переменной с автоматическим выводом значения
      * Сделано из-за лени обращаться к классу Trace :)
      * @param mixed $var Значение для трассировки
+     * @param null $key
      * @return \Boolive\develop\Trace Объект трассировки
      */
-    function trace($var = null)
+    function trace($var = null, $key = null)
     {
-        return \Boolive\develop\Trace::groups('trace')->group()->set($var)->out();
+        return \Boolive\develop\Trace::groups('trace')->group($key)->set($var)->out();
     }
 }

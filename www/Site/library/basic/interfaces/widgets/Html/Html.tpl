@@ -6,6 +6,9 @@
     </head>
     <body>
         <?php echo $v['body']->string(); ?>
-
+        <?php
+        trace(\Boolive\develop\Benchmark::stop('all', true), 'Benchmark');
+        \Boolive\develop\Trace::groups('DB')->out();
+        ?>
     </body>
 </html>

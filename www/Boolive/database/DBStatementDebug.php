@@ -39,7 +39,7 @@ class DBStatementDebug
         Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
         Benchmark::start('sql');
         $result = $this->stmt->execute($params);
-        Trace::groups('DB')->group('query')->group()->set(array(
+        Trace::groups('DB')->group('query')->group($this->stmt->queryString)->group()->set(array(
             'sql' => $this->stmt->queryString,
             'values' => $params?$params:$this->values,
             'benchmark' => Benchmark::stop('sql', true)

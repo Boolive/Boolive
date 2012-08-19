@@ -22,6 +22,8 @@ class MySQLSection extends Section
     /** @var string Имя таблицы */
     private $table;
 
+    private $buffer = array();
+
     public function __construct($config)
     {
         parent::__construct($config);
@@ -47,21 +49,25 @@ class MySQLSection extends Section
      */
     public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false)
     {
-        $where = 'uri=? AND lang=? AND owner=?';
-        $values = array($uri, $lang, $owner);
-        if (isset($date)){
-            $where.=' AND date=?';
-            $values[] = $date;
-            $is_history = null;
+        $key = $uri.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
+        if (!isset($this->buffer[$key])){
+            $where = 'uri=? AND lang=? AND owner=?';
+            $values = array($uri, $lang, $owner);
+            if (isset($date)){
+                $where.=' AND date=?';
+                $values[] = $date;
+                $is_history = null;
+            }
+            if (isset($is_history)){
+                $where.=' AND is_history=?';
+                $values[] = (int)$is_history;
+            }
+            $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE '.$where.' LIMIT 0,1');
+            $q->execute($values);
+            $this->buffer[$key] = $q->fetch(DB::FETCH_ASSOC);
         }
-        if (isset($is_history)){
-            $where.=' AND is_history=?';
-            $values[] = (int)$is_history;
-        }
-        $q = $this->db->prepare('SELECT * FROM `'.$this->table.'`WHERE '.$where.' LIMIT 0,1');
-        $q->execute($values);
-        if ($row = $q->fetch(DB::FETCH_ASSOC)){
-            $obj = Data::makeObject($row);
+        if ($this->buffer[$key]){
+            $obj = Data::makeObject($this->buffer[$key]);
             $obj->_virtual = false;
             $obj->_changed = false;
             return $obj;
