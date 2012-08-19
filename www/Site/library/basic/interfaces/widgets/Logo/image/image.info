@@ -1,3 +1,4 @@
 {
-    "value": "logo.png"
+    "value": "logo.png",
+    "proto": "/library/basic/contents/Image"
 }

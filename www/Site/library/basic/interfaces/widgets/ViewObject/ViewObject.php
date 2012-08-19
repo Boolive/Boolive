@@ -24,9 +24,8 @@ class ViewObject extends Widget
         return Rule::arrays(array(
             'GET' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // объект, который отображать
-                ), Rule::any() // не удалять другие элементы
-            )), Rule::any() // не удалять другие элементы
-        );
+            ), Rule::any()), // не удалять другие элементы
+        ), Rule::any()); // не удалять другие элементы
     }
 
     public function work($v = array())
