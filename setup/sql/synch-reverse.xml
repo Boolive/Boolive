@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job version="8.21">
+<syncjob>
+<fkcheck check="yes" />
+<dontdelfromtarget dontdel="yes" />
+<source>
+<host>localhost</host>
+<user>root</user>
+<pwd>proot</pwd>
+<port>3306</port>
+
+<compressed>0</compressed>
+<ssl>0</ssl>
+<sslauth>0</sslauth>
+<clientkey></clientkey>
+<clientcert></clientcert>
+<cacert></cacert>
+<cipher></cipher>
+<charset></charset>
+<database>boolive-git-merge</database>
+</source>
+<target>
+<host>localhost</host>
+<user>root</user>
+<pwd>proot</pwd>
+<port>3306</port>
+
+<compressed>1</compressed>
+<ssl>0</ssl>
+<sslauth>0</sslauth>
+<clientkey></clientkey>
+<clientcert></clientcert>
+<cacert></cacert>
+<cipher></cipher>
+<charset></charset>
+<database>boolive-git</database>
+</target>
+<tables all="yes" />
+<sync_action type="all" >
+<file>D:\SERVER\Sites\home\boolive2-git\setup\sql\changes.sql</file>
+</sync_action><abortonerror abort="no" />
+<sendreport send="no" /></syncjob>
+</job>
