@@ -31,11 +31,11 @@ class Focuser extends Widget
                 $object = reset($object);
             }
             // ищем в /contents
-            if (!$object && !empty($uri)) $object = Data::object('/contents/'.$uri);
+            if (!$object && !empty($uri)) $object = Data::object('/contents'.$uri);
             // точное соответсвие uri
-            if (!$object) $object = Data::object('/'.$uri);
+            if (!$object) $object = Data::object($uri);
             // корнеь
-            if (!$object && $uri == 'Site') $object = Data::object('');
+            if (!$object && $uri == '/Site/') $object = Data::object('');
             // Установка во входящие данные
             $this->_input->GET->object = $object;
         }
