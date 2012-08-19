@@ -40,15 +40,18 @@ class Input extends Values
     static function activate()
     {
         $values = array(
-            'GET' => isset($_GET)? $_GET : array(),
+            'GET' => array(),//isset($_GET)? $_GET : array(),
             'POST' => isset($_POST)? $_POST : array(),
             'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
             'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
             'RAW' => empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA, // Неформатированные данные
             'SERVER' => $_SERVER
         );
+        if (isset($_SERVER['REQUEST_URI'])){
+            parse_str('path='.urldecode($_SERVER['REQUEST_URI']), $values['GET']);
+        }
         // Элементы пути URI
-        if (isset($values['GET']['path']) && ($values['GET']['path'] = trim($values['GET']['path'],'/ '))){
+        if (isset($values['GET']['path']) && ($values['GET']['path'] = rtrim($values['GET']['path'],'/ '))){
             $values['path'] = explode('/', $values['GET']['path']);
         }else{
             $values['path'] = array();

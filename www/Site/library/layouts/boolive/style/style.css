@@ -2,7 +2,48 @@ body{
     background-color: #F7FAFC;
     padding: 0;
     margin: 0;
+    font-family: Arial,serif;
+	color: #444;
 }
+a {
+	color: #105289; /*#0A5564*/;
+	text-decoration: underline;
+	}
+    a:hover {
+        text-decoration: underline;
+        color: #126DBA;
+        }
+small {
+	font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 0.8em;
+	}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Arial';
+	color: #2176c9;
+	}
+h1, h2, h3, h4, h6 {
+	font-weight: normal;
+	}
+h5 {
+	font-weight: bold;
+	}
+h1 {
+	font-size: 24pt;
+	}
+h2 {
+	font-size: 19pt;
+	}
+h3 {
+	font-size: 13pt;
+	}
+h4 {
+	font-size: 11pt;
+	}
+h5, h6 {
+	font-size: 9pt;
+	}
+
 #layout{
     }
     #layout-head{
@@ -16,20 +57,25 @@ body{
         margin: 0;
         }
         #layout-middle .top{
-
-        }
+            border-top: 2px solid #2591FA;
+            background: #dfe9f3;
+            margin: 0 0 0 0;
+            padding: 7px 25px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            }
         #layout-middle .sidebar{
             float: right;
-            margin: 0;
+            margin: 20px 0;
             padding: 0 0 0 2%;
             width: 28%;
-        }
-        #layout-middle .content{
+            }
+        #layout-middle .center{
             float: left;
-            margin: 0;
+            margin: 20px 0;
             padding: 0;
             width: 70%;
-        }
+            }
     #layout-bottom{
         clear: both;
         padding: 0 5% 0 5%;
