@@ -15,7 +15,7 @@ use library\basic\interfaces\widgets\Widget\Widget;
 
 class logo extends Widget
 {
-    public function work()
+    public function work($v = array())
     {
         $v['image'] = $this->image->getFile();
 
