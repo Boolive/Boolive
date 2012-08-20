@@ -43,7 +43,7 @@ class Engine
     static function work()
     {
         // Исполнение корневого объекта и вывод клиенту результата
-        echo Data::object('')->start(new Commands(), Input::all()->any());
+        echo Data::object('')->start(new Commands(), Input::getSource());
     }
 
     /**

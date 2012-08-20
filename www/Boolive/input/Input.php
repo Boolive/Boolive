@@ -79,15 +79,6 @@ class Input extends Values
     }
 
     /**
-     * Все входящие данные
-     * @return \Boolive\input\Input
-     */
-    static function all()
-    {
-        return self::$input;
-    }
-
-    /**
      * Элементы пути URI
      * @return \Boolive\values\Values
      */
@@ -148,6 +139,23 @@ class Input extends Values
     static function SERVER()
     {
         return self::$input->SERVER;
+    }
+
+    /**
+     * Все входящие данные
+     * @return \Boolive\input\Input
+     */
+    static function ALL()
+    {
+        return self::$input;
+    }
+
+    /**
+     * Выбор исходных неотфильтрованных всех данных
+     * @return mixed
+     */
+    static function getSource(){
+        return self::$input->getValue();
     }
 
     /**
