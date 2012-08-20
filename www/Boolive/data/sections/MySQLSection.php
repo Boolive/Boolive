@@ -314,6 +314,32 @@ class MySQLSection extends Section
         return $result;
     }
 
+    /**
+     * Выбор количества бъектов по условию
+     * @param array $cond Услвоие поиска
+     * @return int
+     */
+    public function select_count($cond){
+        // Услвоие, сортировка и ограничение количества
+        $cond = array_replace(array('where' => '', 'values' => array(), 'order' => '', 'count' => 0, 'start' => 0), $cond);
+        $filter = '';
+        if ($cond['where']) $filter.= ' WHERE '.$cond['where'];
+        if ($cond['order']) $filter.= ' ORDER BY '.$cond['order'];
+        // Подготовка и исполнение запроса
+        $q = $this->db->prepare("SELECT count(*) as cnt FROM {$this->table} {$filter}");
+        $cnt = sizeof($cond['values']);
+        for ($i = 0; $i < $cnt; $i++){
+            $q->bindValue($i+1, $cond['values'][$i]);
+        }
+        $q->execute();
+        // Создание экземпляров
+        $result = array();
+        if ($row = $q->fetch(DB::FETCH_ASSOC)){
+            return $row['cnt'];
+        }
+        return 0;
+    }
+
     public function install()
     {
         $this->db->exec('

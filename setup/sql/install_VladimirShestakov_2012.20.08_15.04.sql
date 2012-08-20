@@ -403,3 +403,4 @@ INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `
 ('/interfaces', '', 0, 1342082233, 2, 1, '/library/basic/interfaces/Group', NULL, 0, 0, 0, 0, 0),
 ('/keywords', '', 0, 1342077181, 2, 1, NULL, NULL, 0, 0, 0, 0, 0),
 ('/library', '', 0, 1342077181, 2, 2, NULL, NULL, 0, 0, 0, 0, 0),
+('/members', '', 0, 1342077181, 2, 1, '/library/basic/members/Group', NULL, 0, 0, 0, 0, 0);

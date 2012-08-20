@@ -52,11 +52,21 @@ abstract class Section extends Entity
     }
 
     /**
-     * @param $cond
+     * Выбор объектов по условию
+     * @param array $cond Услвоие поиска
      * @return array
      */
     public function select($cond)
     {
         return array();
+    }
+
+    /**
+     * Выбор количества бъектов по условию
+     * @param array $cond Услвоие поиска
+     * @return int
+     */
+    public function select_count($cond){
+        return 0;
     }
 }

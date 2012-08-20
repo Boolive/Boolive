@@ -35,16 +35,17 @@ class ViewObjectsList extends Widget
         // Все варианты отображений для последующего поиска нужного
         $options = $this->findAll(array(), false, 'value');
         $objects_list = $this->_input->GET->objects_list->get();
-
+        $input = $this->_input->getCopy($this->_input->getRule());
         foreach ($objects_list as $obj){
-            $this->_input->GET->object = $obj;
-            // Поиск варианта отображения для объекта
+            $input->GET->object = $obj;
+             // Поиск варианта отображения для объекта
             while ($obj){
                 $out = null;
                 if (isset($options[$obj['uri']])){
-                    $out = $options[$obj['uri']]->start($this->_commands, $this->_input);
+                    $out = $options[$obj['uri']]->start($this->_commands, $input);
                     if ($out){
                         $this->_input['previous'] = true;
+                        $input['previous'] = true;
                         $v['objects_list'][] = $out;
                     }
                 }
@@ -56,6 +57,7 @@ class ViewObjectsList extends Widget
                 }
             }
         }
+
         return parent::work($v);
     }
 }

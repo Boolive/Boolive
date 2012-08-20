@@ -223,19 +223,21 @@ namespace Boolive\develop
                     }
                     $list = self::objToArray($var);
                 }
-                if (!is_array($list)){
-                    $out.= "\n".$pfx.self::format($list, $trace_buf, $pfx);
-                }else{
-                    $cnt = sizeof($list);
-                    if ($cnt > 0){
-                        foreach ($list as $name => $value){
-                            $cnt--;
-                            if ($cnt){
-                                $new_pfx = $pfx.' '.$sp;
-                            }else{
-                                $new_pfx = $pfx.' '.$sp3;
+                if (isset($list)){
+                    if (!is_array($list)){
+                        $out.= "\n".$pfx.self::format($list, $trace_buf, $pfx);
+                    }else{
+                        $cnt = sizeof($list);
+                        if ($cnt > 0){
+                            foreach ($list as $name => $value){
+                                $cnt--;
+                                if ($cnt){
+                                    $new_pfx = $pfx.' '.$sp;
+                                }else{
+                                    $new_pfx = $pfx.' '.$sp3;
+                                }
+                                $out.= "\n".$pfx.'['.$name.'] => '.self::format($value, $trace_buf, $new_pfx);
                             }
-                            $out.= "\n".$pfx.'['.$name.'] => '.self::format($value, $trace_buf, $new_pfx);
                         }
                     }
                 }
