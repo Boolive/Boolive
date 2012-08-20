@@ -415,7 +415,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * );
      * </code>
      * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
-     * @param null $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
+     * @param null|string $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
      * @param bool $req Признак рекурсивного вызова метода (используется самим методом)
      * @return array
      */
@@ -464,6 +464,42 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             if ($load) $this->_children = $results;
         }
         return $results;
+    }
+
+    /**
+     * Количество подчиенных удовлетворяющих условию
+     * @param array $cond Услвоие поиска
+     * @return int
+     */
+    public function findCount($cond = array()){
+        if ($s = Data::section($this['uri'], false)){
+            if (!empty($cond['where'])){
+                $cond['where'].=' AND uri like ? AND level=?';
+            }else{
+                $cond['where'] = 'uri like ? AND level=?';
+            }
+            $cond['values'][] = $this['uri'].'/%';
+            $cond['values'][] = $this->getLevel()+1;
+            return $s->select_count($cond);
+        }
+        return 0;
+    }
+
+    /**
+     * Количество подчиенных удовлетворяющих условию с учётом прототипирования
+     * @param array $cond Услвоие поиска
+     * @param bool $req
+     * @return int
+     */
+    public function findCountAll($cond = array(), $req = false)
+    {
+        $results = $this->find($cond, false, 'name');
+        if ($proto = $this->proto()){
+            $proto_sub = $proto->findCountAll($cond, true);
+            $results = array_replace($results, $proto_sub);
+        }
+        if ($req) return $results;
+        return count($results);
     }
 
     /**
