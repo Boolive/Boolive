@@ -25,12 +25,15 @@ class Part extends ViewObjectsList
     public function canWork()
     {
         if ($result = parent::canWork()){
+            $count_per_page = max(1, $this->count_per_page->getValue());
+            $obj = $this->_input->GET->object->get();
             // Выбираем подчиненных раздела с учётом текущей страницы
-            $this->_input->GET->objects_list = $this->_input->GET->object->get()->findAll(array(
+            $this->_input->GET->objects_list = $obj->findAll(array(
                 'order' =>'`order` ASC',
-                'start' => ($this->_input->GET->page->int() - 1) * 4,
-                'count' => 4
+                'start' => ($this->_input->GET->page->int() - 1) * $count_per_page,
+                'count' => $count_per_page
             ));
+            $this->_input->GET->page_count = ceil($obj->findCountAll()/$count_per_page);
         }
         return $result;
     }
