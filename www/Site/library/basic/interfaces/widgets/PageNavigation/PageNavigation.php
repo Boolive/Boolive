@@ -22,10 +22,10 @@ class PageNavigation extends Widget
     }
 
     public function work($v = array()){
-        $obj = $this->_input['GET']['object']->get();
+        $obj = $this->_input['GET']['object'];
         $v['uri'] = substr($obj['uri'], 9);
-        $v['count'] = $this->_input['GET']['page_count']->get();
-        $v['current'] = min($v['count'], $this->_input['GET']['page']->get());
+        $v['count'] = $this->_input['GET']['page_count'];
+        $v['current'] = min($v['count'], $this->_input['GET']['page']);
         return parent::work($v);
     }
 }

@@ -26,14 +26,14 @@ class Part extends ViewObjectsList
     {
         if ($result = parent::canWork()){
             $count_per_page = max(1, $this->count_per_page->getValue());
-            $obj = $this->_input->GET->object->get();
+            $obj = $this->_input['GET']['object'];
             // Выбираем подчиненных раздела с учётом текущей страницы
-            $this->_input->GET->objects_list = $obj->findAll(array(
+            $this->_input['GET']['objects_list'] = $obj->findAll(array(
                 'order' =>'`order` ASC',
-                'start' => ($this->_input->GET->page->int() - 1) * $count_per_page,
+                'start' => ($this->_input['GET']['page'] - 1) * $count_per_page,
                 'count' => $count_per_page
             ));
-            $this->_input->GET->page_count = ceil($obj->findCountAll()/$count_per_page);
+            $this->_input['GET']['page_count'] = ceil($obj->findCountAll()/$count_per_page);
         }
         return $result;
     }

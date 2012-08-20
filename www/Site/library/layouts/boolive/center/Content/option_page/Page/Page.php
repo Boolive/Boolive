@@ -25,7 +25,7 @@ class Page extends ViewObjectsList
     {
         if ($result = parent::canWork()){
             // Выбираем всех подчиненных страницы
-            $this->_input->GET->objects_list = $this->_input->GET->object->get()->findAll(array(
+            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->findAll(array(
                 'order' =>'`order` ASC'
             ));
         }

@@ -10,6 +10,7 @@ namespace Boolive\data;
 
 use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
     Boolive\values\Values,
+    Boolive\values\Check,
     Boolive\errors\Error,
     Boolive\data\Data,
     Boolive\file\File,
@@ -50,12 +51,17 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * @var bool|string */
     protected $_rename = false;
     /**
-     * Кoнтейнер входящих данных.
+     * Отфильтрованные входящих данных.
      * Инициализируется в методе start()
      * В качестве правила по умолчанию используется $this->getInputRule()
-     * @var \Boolive\input\Input
+     * @var array
      */
     protected $_input;
+    /**
+     * Ошибки при проверки входящих данных
+     * @var \Boolive\errors\Error
+     */
+    protected $_input_error;
     /**
      * Команды, передающиеся по всем исполняемым объектам.
      * Инициализируется в методе start()
@@ -889,14 +895,14 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     /**
      * Запуск объекта
      * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
-     * @param \Boolive\input\Input $input Входящие данные
+     * @param mixed $input Входящие данные
      * @return null|string Результат выполнения контроллера
      */
-    public function start(Commands $commands, Input $input)
+    public function start(Commands $commands, $input)
     {
         // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
         $this->_commands = $commands;
-        $this->_input = $input->getCopy($this->getInputRule());
+        $this->_input = Check::filter($input, $this->getInputRule(), $this->_input_error);
         //Проверка возможности работы
         if ($this->canWork()){
             // Подчиненные не запускались ещё
@@ -916,12 +922,12 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 
     /**
      * Проверка возможности работы.
-     * По умолчанию проверяются входящие данные на соответсвие правилу.
+     * По умолчанию проверяются отсутствие ошибок во входящих данных
      * @return bool Признак, может ли работать объект или нет
      */
     public function canWork()
     {
-        return $this->_input->filter();
+        return !isset($this->_input_error);
     }
 
     /**

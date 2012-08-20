@@ -34,10 +34,10 @@ class ViewObjectsList extends Widget
         $v['objects_list'] = array();
         // Все варианты отображений для последующего поиска нужного
         $options = $this->findAll(array(), false, 'value');
-        $objects_list = $this->_input->GET->objects_list->get();
-        $input = $this->_input->getCopy($this->_input->getRule());
+        $objects_list = $this->_input['GET']['objects_list'];
+        $input = $this->_input;
         foreach ($objects_list as $obj){
-            $input->GET->object = $obj;
+            $input['GET']['object'] = $obj;
              // Поиск варианта отображения для объекта
             while ($obj){
                 $out = null;

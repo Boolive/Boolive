@@ -10,20 +10,31 @@
 namespace library\basic\interfaces\widgets\Focuser;
 
 use library\basic\interfaces\widgets\Widget\Widget,
-    Boolive\data\Data;
+    Boolive\data\Data,
+    Boolive\values\Rule;
 
 class Focuser extends Widget
 {
+    public function getInputRule()
+    {
+        return Rule::arrays(array(
+            'GET' => Rule::arrays(array(
+                'path' => Rule::string(),
+                ), Rule::any()
+            )), Rule::any()
+        );
+    }
+
     public function canWork()
     {
         if ($result = parent::canWork()){
             // По URL определяем объект и номер страницы
-            $uri = $this->_input->GET->path->string();
+            $uri = $this->_input['GET']['path'];
             if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){
                 $uri = $match[1];
-                $this->_input->GET->page = $match[2];
+                $this->_input['GET']['page'] = $match[2];
             }else{
-                $this->_input->GET->page = 1;
+                $this->_input['GET']['page'] = 1;
             }
             $object = null;
             // объект по умолчанию
@@ -37,7 +48,7 @@ class Focuser extends Widget
             // корнеь
             if (!$object && $uri == '/Site/') $object = Data::object('');
             // Установка во входящие данные
-            $this->_input->GET->object = $object;
+            $this->_input['GET']['object'] = $object;
         }
         return $result;
     }

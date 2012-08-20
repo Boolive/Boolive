@@ -25,13 +25,13 @@ class Title extends \library\basic\interfaces\widgets\Widget\Widget
     {
         if ($result = parent::canWork()){
             // По URL определяем объект и номер страницы
-            $this->_input->GET->objects_list = $this->_input->GET->object->get()->findAll();
+            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->findAll();
         }
         return $result;
     }
 
     public function work($v = array())
     {
-        echo '<h2>'.$this->_input->GET->object->get().'</h2>';
+        echo '<h2>'.$this->_input['GET']['object']->getValue().'</h2>';
     }
 }

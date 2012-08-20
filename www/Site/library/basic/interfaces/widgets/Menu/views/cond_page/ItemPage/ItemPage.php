@@ -25,7 +25,7 @@ class ItemPage extends views
 
     public function work($v = array())
     {
-        $obj = $this->_input->GET->object->get();
+        $obj = $this->_input['GET']['object'];
         // Название пункта
         $v['item_text'] = $obj->title->getValue();
         $v['item_title'] = $v['item_text'];
@@ -40,7 +40,7 @@ class ItemPage extends views
             $v['item_href'] = '';
         }
         // Активность пункта
-        $active = $this->_input->GET->object_active->get();
+        $active = $this->_input['GET']['object_active'];
         if ($real->isEqual($active)){
 			$v['item_class'] = 'active';
         }else
@@ -51,9 +51,9 @@ class ItemPage extends views
         }
         // Подчиненные пункты
         if ($obj->not_auto->getValue() == 1){
-            $this->_input->GET->objects_list = $this->_input->GET->object->get()->find(array('order' =>'`order` ASC'));
+            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->find(array('order' =>'`order` ASC'));
         }else{
-            $this->_input->GET->objects_list = $this->_input->GET->object->get()->findAll(array('order' =>'`order` ASC'));
+            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->findAll(array('order' =>'`order` ASC'));
         }
         return parent::work($v);
     }

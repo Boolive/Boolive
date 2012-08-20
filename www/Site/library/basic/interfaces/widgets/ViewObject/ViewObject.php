@@ -32,7 +32,7 @@ class ViewObject extends Widget
     {
         // Все варианты отображений для последующего поиска нужного
         $options = $this->findAll(array(), false, 'value');
-        $obj = $this->_input->GET->object->get();
+        $obj = $this->_input['GET']['object'];
         $v['object'] = null;
         // Поиск варианта отображения для объекта
         while ($obj){

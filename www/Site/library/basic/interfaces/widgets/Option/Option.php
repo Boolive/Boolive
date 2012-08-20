@@ -22,7 +22,7 @@ class Option extends Entity
     {
         return Rule::arrays(array(
             'GET' => Rule::arrays(array(
-                'view' => Rule::string() // имя виджета, которым отображать принудительно
+                'view' => Rule::string()->default('')->required() // имя виджета, которым отображать принудительно
                 ), Rule::any() // не удалять другие элементы
             )), Rule::any() // не удалять другие элементы
         );
@@ -31,9 +31,9 @@ class Option extends Entity
     public function work($v = array())
     {
         // Запускаем по очереди подчиненных варианта, пока один из них не сработает
-        if ($view_name = $this->_input->GET->view->string()){
+        if ($this->_input['GET']['view']){
             // Если указано, каким отображать, то только его пробуем запустить
-            $views = array($this->{$view_name});
+            $views = array($this->{$this->_input['GET']['view']});
         }else{
             // Все виджеты варианта
             $views = $this->findAll(array('order'=>'`order` ASC'));

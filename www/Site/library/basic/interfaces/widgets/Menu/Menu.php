@@ -23,9 +23,9 @@ class Menu extends Widget
 
     public function work($v = array()){
         // Выбираем пункты меню
-        $this->_input->GET->objects_list = $this->items->findAll(array('order' =>'`order` ASC'));
+        $this->_input['GET']['objects_list'] = $this->items->findAll(array('order' =>'`order` ASC'));
         // Активный пункт меню
-        $this->_input->GET->object_active = $this->_input->GET->object->get();
+        $this->_input['GET']['object_active'] = $this->_input['GET']['object'];
         // Отображение всех пунктов с помощью подчиненного views
         $v['views'] = $this->startChild('views');
         return parent::work($v);
