@@ -14,6 +14,7 @@ class PageNavigation extends Widget
     public function getInputRule(){
         return Rule::arrays(array(
             'GET' => Rule::arrays(array(
+                'object' => Rule::entity()->required(), // объект, который отображается постранично
                 'page' => Rule::int()->default(1)->required(),
                 'page_count' => Rule::int()->default(1)->required()
             ))
@@ -21,8 +22,10 @@ class PageNavigation extends Widget
     }
 
     public function work($v = array()){
-        echo $this->_input->GET->page.' ';
-        echo $this->_input->GET->page_count;
+        $obj = $this->_input['GET']['object']->get();
+        $v['uri'] = substr($obj['uri'], 9);
+        $v['count'] = $this->_input['GET']['page_count']->get();
+        $v['current'] = min($v['count'], $this->_input['GET']['page']->get());
         return parent::work($v);
     }
 }
