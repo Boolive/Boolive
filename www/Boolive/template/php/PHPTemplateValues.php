@@ -53,7 +53,7 @@ class PHPTemplateValues extends Values
         $sub = parent::offsetGet($name);
         if ($start){
             $sub->_entity = $this->_entity->{$name};
-            $sub->_value = $this->_entity->startChild($name);
+            $sub->set($this->_entity->startChild($name));
         }
         return $sub;
     }

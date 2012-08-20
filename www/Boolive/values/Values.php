@@ -20,16 +20,16 @@ use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
 class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
 {
     /** @var mixed|array Значение */
-    protected $_value;
+    private $_value;
     /** @var \Boolive\values\Rule Правило по умолчанию для значения */
     protected $_rule;
     /** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
     protected $_filtered;
     /** @var array Объекты \Boolive\values\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
     protected $_interfaces;
-    /** @var \Boolive\values\Values Родитель объекта для оповещения об изменениях значения. Используется при отложенном связывании */
+    /** @var \Boolive\values\Values Родитель объекта для оповещения об изменениях значения */
     protected $_maker;
-    /** @var string Имя для элемента в родителе. Используется при отложенном связывании */
+    /** @var string Имя для элемента в родителе */
     protected $_name;
 
     /**
@@ -42,6 +42,19 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
         $this->_value = $value;
         $this->_rule = $rule;
         $this->_filtered = false;
+    }
+
+    /**
+     * Внутренний выбор значения
+     * @return array|mixed|null
+     */
+    protected function getValue(){
+        if (isset($this->_maker, $this->_name)){
+            $parent = $this->_maker->getValue(); // Берется значения родителя
+            return isset($parent[$this->_name])? $parent[$this->_name] : null; // Из него выбирается своё
+        }else{
+            return $this->_value;
+        }
     }
 
     /**
@@ -82,8 +95,9 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
                             $args[2] = $arg;
                         }
                     }
+                    $value = $this->getValue();
                     // Если элемент массив и правило рекурсивно, то отдаём всё правило
-                    if (isset($this->_value[$name]) && is_array($this->_value[$name]) && $args[2]){
+                    if (isset($value[$name]) && is_array($value[$name]) && $args[2]){
                         return $this->_rule;
                     }
                     // Выбор правила для элемента
@@ -110,9 +124,15 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function set($value)
     {
-        $this->_value = $value;
-        $this->_interfaces = array();
-        $this->notFiltered();
+        if (isset($this->_maker, $this->_name)){
+            $parent = $this->_maker->getValue(); // Берется значение родителя
+            $parent[$this->_name] = $value; // В него добавляется своё
+            $this->_maker->set($parent); // Значение родителя переписывается
+        }else{
+            $this->_value = $value;
+        }
+        //$this->_interfaces = array();
+        $this->_filtered = false;
     }
 
     /**
@@ -124,12 +144,12 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     public function get($rule = null, &$error = null)
     {
         // Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
-        if (!$rule && $this->_filtered) return $this->_value;
+        if (!$rule && $this->_filtered) return $this->getValue();
         // Если правило не указано, то берём по умолчанию
         if (!$rule) $rule = $this->getRule();
         // Если правило определено
         if ($rule instanceof Rule){
-            return Check::filter($this->_value, $rule, $error);
+            return Check::filter($this->getValue(), $rule, $error);
         }
         $error = new Error(array('Нет правила'), 'NO_RULE');
         return null;
@@ -178,12 +198,13 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function choose()
     {
-        if (!is_array($this->_value)) $this->_value = array();
+        $value = $this->getValue();
+        if (!is_array($value)) $value= array();
         $arg = func_get_args();
         if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
         $list = array();
         foreach ($arg as $name){
-            if (array_key_exists($name, $this->_value)) $list[$name] = $this->_value[$name];
+            if (array_key_exists($name, $value)) $list[$name] = $value[$name];
         }
         $this->set($list);
         return $this;
@@ -196,7 +217,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function getValues()
     {
-        $v = is_array($this->_value)? $this->_value : array($this->_value);
+        $values = $this->getValue();
+        $v = is_array($values)? $values : array($values);
         $r = array();
         foreach ($v as $name => $value){
             $r[$name] = new Values($value);
@@ -210,7 +232,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function getKeys()
     {
-        return array_keys((array)$this->_value);
+        return array_keys((array)$this->getValue());
     }
 
     /**
@@ -220,7 +242,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function getCopy($rule = null)
     {
-        return new static($this->_value, $rule);
+        return new static($this->getValue(), $rule);
     }
 
     /**
@@ -232,9 +254,12 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     public function replaceArray($list)
     {
         if ((is_array($list)||$list instanceof \ArrayAccess) &&!empty($list)){
+            $value = $this->getValue();
+            if (!is_array($value)) $value = array();
             foreach ($list as $key => $value){
-                $this->offsetSet($key, $value);
+                $value[$key] = $value;
             }
+            $this->set($value);
         }
     }
 
@@ -245,36 +270,19 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function shiftKeys($shift = 0)
     {
-        if (is_array($this->_value)){
+        $value = $this->getValue();
+        if (is_array($value)){
             if ($shift){
                 $list = array();
                 foreach ((array)$this as $key => $value){
                     if (is_numeric($key)){
-                        $list[-$shift + $key] = $this->_value[$key];
+                        $list[-$shift + $key] = $value[$key];
                     }else{
-                        $list[$key] = $this->_value[$key];
+                        $list[$key] = $value[$key];
                     }
                 }
                 $this->set($list);
             }
-        }
-    }
-
-    /**
-     * Установка признака наличия изменений
-     * Если объект изменился, то изменяют все родители
-     */
-    public function notFiltered()
-    {
-        $this->_filtered = false;
-        // Отложенное связывание с родителем
-        if (isset($this->_maker)){
-            if (isset($this->_name)){
-                $v = &$this->_maker->_value;
-                $v[$this->_name] = &$this->_value;
-                unset($this->_name);
-            }
-            $this->_maker->notFiltered();
         }
     }
 
@@ -294,7 +302,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function count()
     {
-        return is_array($this->_value) ? count($this->_value) : 1;
+        $value = $this->getValue();
+        return is_array($value) ? count($value) : 1;
     }
 
     /**
@@ -312,17 +321,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
             // Объекту устанавливается правило в соответсвии с правилом данного объекта Values и запрашиваемого элемента
             $this->_interfaces[$name] = $interface = new static(null, $this->getRule($name));
             $interface->_maker = $this;
-            if (is_array($this->_value) && array_key_exists($name, $this->_value)){
-                // Если элемент существует, то делаем ссылку на него из нового объекта Values
-                $interface->_value = &$this->_value[$name];
-            }else{
-                // Если элемента нет, то фиксируем его название, чтобы при изменении значения
-                // в новом Values связать его значение с ещё не сущесвтующим элементом в данном объекте Values.
-                // Это необходимо сделать, чтобы новые элементы появлялись при явной их установке,
-                // а не при обращении к ним, но оставляя возможность обращаться к несуществующим элементам.
-                $interface->_value = null;
-                $interface->_name = $name;
-            }
+            $interface->_name = $name;
         }
         return $this->_interfaces[$name];
     }
@@ -335,14 +334,15 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function offsetSet($name, $value)
     {
-        if (!is_array($this->_value)) $this->_value = array();
+        $v = $this->getValue();
+        if (!is_array($v)) $v = array();
         if (is_null($name)){
-            $this->_value[] = $value;
+            $v[] = $value;
         }else{
-            $this->_value[$name] = $value;
+            $v[$name] = $value;
             if (isset($this->_interfaces[$name])) unset($this->_interfaces[$name]);
         }
-        $this->notFiltered();
+        $this->set($v);
     }
 
     /**
@@ -352,7 +352,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function offsetExists($name)
     {
-        return is_array($this->_value) && array_key_exists($name, $this->_value);
+        $v = $this->getValue();
+        return is_array($v) && array_key_exists($name, $v);
     }
 
     /**
@@ -363,15 +364,16 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function offsetEmpty($name, $number = false)
     {
-        if (is_array($this->_value) && $this->offsetExists($name)){
-            if (is_string($this->_value[$name])){
+        $v = $this->getValue();
+        if (is_array($v) && $this->offsetExists($name)){
+            if (is_string($v[$name])){
                 if ($number) {
-                    $value = trim($this->_value[$name]);
+                    $value = trim($v[$name]);
                     return empty($value);
                 }
-                return trim($this->_value[$name]) == '';
+                return trim($v[$name]) == '';
             }
-            return (empty($this->_value[$name]));
+            return (empty($v[$name]));
         }
         return true;
     }
@@ -382,11 +384,12 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function offsetUnset($name)
     {
-        if (is_array($this->_value) && $this->offsetExists($name)){
+        $v = $this->getValue();
+        if (is_array($v) && $this->offsetExists($name)){
             $this->_interfaces[$name]->_maker = null;
             unset($this->_interfaces[$name]);
-            unset($this->_value[$name]);
-            $this->notFiltered();
+            unset($v[$name]);
+            $this->set($v);
         }
     }
 
@@ -396,10 +399,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function offsetUnsetAll()
     {
-        foreach ($this->_interfaces as $i) $i->_maker = null;
-        $this->_value = null;
-        $this->_interfaces = array();
-        $this->notFiltered();
+//        foreach ($this->_interfaces as $i) $i->_maker = null;
+        $this->set(null);
     }
 
     /**
@@ -411,12 +412,16 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function offsetUnsetList()
     {
-        if (is_array($this->_value)){
+        $v = $this->getValue();
+        if (is_array($v)){
             $arg = func_get_args();
             if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
             foreach ($arg as $name){
-                $this->offsetUnset($name);
+                $this->_interfaces[$name]->_maker = null;
+                unset($this->_interfaces[$name]);
+                unset($v[$name]);
             }
+            $this->set($v);
         }
     }
 
@@ -462,7 +467,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function __isset($name)
     {
-        return is_array($this->_value) && isset($this->_value['values']);
+        $v = $this->getValue();
+        return is_array($v) && isset($v['values']);
     }
 
     /**
@@ -494,6 +500,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      */
     public function __clone()
     {
+        $this->_value = $this->getValue();
         if (is_array($this->_value)){
             foreach ($this->_value as $key => $item){
                 if (is_object($item)){
