@@ -25,13 +25,8 @@ class PagePreview extends ViewObjectsList
     {
         if ($result = parent::canWork()){
             // По URL определяем объект и номер страницы
-            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->findAll();
+            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->findAll(array('order'=>'`order` ASC'));
         }
         return $result;
-    }
-
-    public function work($v = array())
-    {
-        echo 'PagePreview';
     }
 }

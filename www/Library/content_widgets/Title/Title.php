@@ -21,17 +21,18 @@ class Title extends Widget
         );
     }
 
-    public function canWork()
-    {
-        if ($result = parent::canWork()){
-            // По URL определяем объект и номер страницы
-            $this->_input['GET']['objects_list'] = $this->_input['GET']['object']->findAll();
-        }
-        return $result;
-    }
-
     public function work($v = array())
     {
-        echo '<h2>'.$this->_input['GET']['object']->getValue().'</h2>';
+        $v['value'] = $this->_input['GET']['object']->getValue();
+        if ($parent = $this->_input['GET']['object']->parent()){
+            $v['parent_uri'] = $parent['uri'];
+            if (mb_substr($v['parent_uri'],0,10)=='/Contents/'){
+                $v['parent_uri'] = mb_substr($v['parent_uri'],10);
+            }
+        }else{
+            $v['parent_uri'] = '';
+        }
+
+        return parent::work($v);
     }
 }

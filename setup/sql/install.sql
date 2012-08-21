@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Авг 21 2012 г., 21:43
+-- Время создания: Авг 21 2012 г., 22:51
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -309,10 +309,15 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Page/option_text/Text', '', 0, 0, 5, 1, '/Library/content_widgets/RichText', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/option_title', '', 0, 0, 4, 4, '/Library/basic/widgets/Option', '/Library/content_samples/Page/title', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/option_title/Title', '', 0, 0, 5, 1, '/Library/content_widgets/Title', NULL, 0, 0, 0, 0, 0),
-('/Library/content_widgets/PagePreview', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
+('/Library/content_widgets/PagePreview', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'PagePreview.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/PagePreview/option_text', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Page/text', 0, 0, 0, 0, 0),
+('/Library/content_widgets/PagePreview/option_text/Text', '', 0, 0, 5, 1, '/Library/content_widgets/RichText', NULL, 1, 0, 0, 0, 0),
+('/Library/content_widgets/PagePreview/option_title', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Page/title', 0, 0, 0, 0, 0),
+('/Library/content_widgets/PagePreview/option_title/Title', '', 0, 0, 5, 1, '/Library/content_widgets/Title', 'Title.tpl', 0, 1, 0, 0, 0),
+('/Library/content_widgets/PagePreview/style', '', 0, 0, 4, 1, '/Library/basic/Css', 'style.css', 0, 1, 0, 0, 0),
 ('/Library/content_widgets/Paragraph', '', 0, 0, 3, 1, '/Library/basic/widgets/Widget', 'Paragraph.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Part', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'Part.tpl', 1, 1, 0, 0, 0),
-('/Library/content_widgets/Part/count_per_page', '', 0, 0, 4, 9, NULL, '2', 0, 0, 0, 0, 0),
+('/Library/content_widgets/Part/count_per_page', '', 0, 0, 4, 9, NULL, '4', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Part/option_page', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Page', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Part/option_page/PagePreview', '', 0, 0, 5, 1, '/Library/content_widgets/PagePreview', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Part/option_part', '', 0, 0, 4, 2, '/Library/basic/widgets/Option', '/Library/content_samples/Part', 0, 0, 0, 0, 0),
@@ -330,7 +335,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/RichText/option_img/img', '', 0, 0, 5, 1, '/Library/content_widgets/Image', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/option_p', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Paragraph', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/option_p/paragraph', '', 0, 0, 5, 1, '/Library/content_widgets/Paragraph', NULL, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Title', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
+('/Library/content_widgets/Title', '', 0, 0, 3, 1, NULL, 'Title.tpl', 1, 1, 0, 0, 0),
 ('/Library/layouts', '', 0, 0, 2, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive', '', 0, 0, 3, 1, '/Library/basic/widgets/Focuser', 'boolive.tpl', 0, 1, 0, 0, 0),
 ('/Library/layouts/boolive/bottom', '', 0, 0, 4, 1, '/Library/basic/Group', NULL, 0, 0, 0, 0, 0),

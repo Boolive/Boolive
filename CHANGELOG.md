@@ -25,6 +25,7 @@ Version 2.0 preview work in progress
 - new #24: Added widget for view Image in text (VladimirShestakov)
 - new #32: Added widget for view Part (VladimirShestakov)
 - new #33: Added widget Focuser (VladimirShestakov)
+- new #34: Added widget PagePreview with style (VladimirShestakov)
 - new #35: Added widget PageNavigation in the basic package and layout boolive for widget the part (VladimirShestakov)
 - new: Added object the Option for automatic views (VladimirShestakov)
 - new: Added top menu and sidebar menu in the boolive layout (VladimirShestakov)
