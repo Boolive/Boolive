@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\PageNavigation;
+namespace Library\basic\interfaces\widgets\PageNavigation;
 
-use library\basic\interfaces\widgets\Widget\Widget,
+use Library\basic\interfaces\widgets\Widget\Widget,
     Boolive\values\Rule;
 
 class PageNavigation extends Widget

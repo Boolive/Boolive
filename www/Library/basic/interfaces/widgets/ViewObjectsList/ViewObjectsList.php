@@ -12,10 +12,10 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\ViewObjectsList;
+namespace Library\basic\interfaces\widgets\ViewObjectsList;
 
 use Boolive\values\Rule,
-    library\basic\interfaces\widgets\Widget\Widget;
+    Library\basic\interfaces\widgets\Widget\Widget;
 
 class ViewObjectsList extends Widget
 {

@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\layouts\boolive\center\Content\option_page\Page\option_text\Text;
+namespace Library\layouts\boolive\center\Content\option_page\Page\option_text\Text;
 
-use library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList,
+use Library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList,
     Boolive\values\Rule;
 
 class Text extends ViewObjectsList

@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\Menu\views\cond_page\ItemPage;
+namespace Library\basic\interfaces\widgets\Menu\views\cond_page\ItemPage;
 
-use library\basic\interfaces\widgets\Menu\views\views,
+use Library\basic\interfaces\widgets\Menu\views\views,
     Boolive\values\Rule,
     Boolive\template\Template;
 

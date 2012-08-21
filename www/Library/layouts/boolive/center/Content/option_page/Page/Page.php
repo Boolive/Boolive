@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\layouts\boolive\center\Content\option_page\Page;
+namespace Library\layouts\boolive\center\Content\option_page\Page;
 
-use library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList,
+use Library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList,
     Boolive\values\Rule;
 
 class Page extends ViewObjectsList

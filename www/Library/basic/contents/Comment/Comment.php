@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\contents\Comment;
+namespace Library\basic\contents\Comment;
 
 use Boolive\data\Entity;
 

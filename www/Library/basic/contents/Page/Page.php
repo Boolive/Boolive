@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\contents\Page;
+namespace Library\basic\contents\Page;
 
 use Boolive\data\Entity;
 

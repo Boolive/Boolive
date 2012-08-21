@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\Menu;
+namespace Library\basic\interfaces\widgets\Menu;
 
-use library\basic\interfaces\widgets\Widget\Widget,
+use Library\basic\interfaces\widgets\Widget\Widget,
     Boolive\values\Rule;
 
 class Menu extends Widget

@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace library\basic\interfaces\widgets\Html;
+namespace Library\basic\interfaces\widgets\Html;
 
 use Boolive\data\Entity,
     Boolive\values\Rule,

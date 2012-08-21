@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\contents\Keyword;
+namespace Library\basic\contents\Keyword;
 
 use Boolive\data\Entity;
 

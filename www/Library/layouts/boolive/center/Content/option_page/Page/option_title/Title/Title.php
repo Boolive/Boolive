@@ -4,12 +4,12 @@
  *
  * @version 1.0
  */
-namespace library\layouts\boolive\center\Content\option_page\Page\option_title\Title;
+namespace Library\layouts\boolive\center\Content\option_page\Page\option_title\Title;
 
-use library\basic\interfaces\widgets\Widget\Widget,
+use Library\basic\interfaces\widgets\Widget\Widget,
     Boolive\values\Rule;
 
-class Title extends \library\basic\interfaces\widgets\Widget\Widget
+class Title extends Widget
 {
     public function getInputRule()
     {

@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\Menu\views;
+namespace Library\basic\interfaces\widgets\Menu\views;
 
-use library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList;
+use Library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList;
 
 class views extends ViewObjectsList
 {

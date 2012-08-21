@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\members\Group;
+namespace Library\basic\members\Group;
 
 use Boolive\data\Entity;
 

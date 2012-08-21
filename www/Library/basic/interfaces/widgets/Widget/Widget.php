@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\Widget;
+namespace Library\basic\interfaces\widgets\Widget;
 
 use Boolive\data\Entity,
     Boolive\template\Template;

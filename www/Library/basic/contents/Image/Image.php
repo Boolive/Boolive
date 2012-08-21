@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\contents\Image;
+namespace Library\basic\contents\Image;
 
 use Boolive\data\Entity;
 

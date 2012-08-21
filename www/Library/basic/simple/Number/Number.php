@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\simple\Number;
+namespace Library\basic\simple\Number;
 
 use Boolive\data\Entity,
     Boolive\values\Rule;

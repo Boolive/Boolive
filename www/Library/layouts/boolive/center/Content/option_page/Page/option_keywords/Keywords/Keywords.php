@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace library\layouts\boolive\center\Content\option_page\Page\option_keywords\Keywords;
+namespace Library\layouts\boolive\center\Content\option_page\Page\option_keywords\Keywords;
 
-use library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList,
+use Library\basic\interfaces\widgets\ViewObjectsList\ViewObjectsList,
     Boolive\values\Rule;
 
 class Keywords extends ViewObjectsList

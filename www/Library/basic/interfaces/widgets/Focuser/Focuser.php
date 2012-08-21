@@ -7,9 +7,9 @@
  * Используется в качестве эталона для макетов сайта.
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\Focuser;
+namespace Library\basic\interfaces\widgets\Focuser;
 
-use library\basic\interfaces\widgets\Widget\Widget,
+use Library\basic\interfaces\widgets\Widget\Widget,
     Boolive\data\Data,
     Boolive\values\Rule;
 

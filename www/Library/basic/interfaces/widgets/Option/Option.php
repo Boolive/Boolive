@@ -10,7 +10,7 @@
  *
  * @version 1.0
  */
-namespace library\basic\interfaces\widgets\Option;
+namespace Library\basic\interfaces\widgets\Option;
 
 use Boolive\data\Entity,
     Boolive\values\Rule,

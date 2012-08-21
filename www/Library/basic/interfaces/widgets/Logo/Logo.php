@@ -9,9 +9,9 @@
  * @version 1.0
  */
 
-namespace library\basic\interfaces\widgets\logo;
+namespace Library\basic\interfaces\widgets\logo;
 
-use library\basic\interfaces\widgets\Widget\Widget;
+use Library\basic\interfaces\widgets\Widget\Widget;
 
 class logo extends Widget
 {
