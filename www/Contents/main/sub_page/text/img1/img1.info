@@ -1,5 +1,5 @@
 {
-    "proto": "/Library/basic/contents/Image",
+    "proto": "/Library/content_samples/Image",
     "order": 4,
     "is_file": true,
     "value": "img1.jpg"

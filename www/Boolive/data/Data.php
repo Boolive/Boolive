@@ -34,7 +34,7 @@ class Data
      * @param bool $virtual
      * @return Entity|null Экземпляр объекта, если найден или null, если не найден
      */
-    static function object($uri, $lang = '', $owner = 0, $date = null, $is_history = false, $virtual = false)
+    static function object($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false, $virtual = false)
     {
         $object = null;
         if (is_string($uri)){

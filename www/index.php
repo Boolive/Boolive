@@ -5,19 +5,18 @@
  *
  * @version 2
  * @author Vladimir Shestakov <boolive@yandex.ru>
- * @see http://boolive.ru
+ * @link http://boolive.ru
  */
 use Boolive\Boolive,
     Boolive\data\Data,
     Boolive\commands\Commands,
     Boolive\input\Input;
 
-// Подключение базовой конфигурации сайта
+// Подключение конфигурации путей
 require 'config.php';
-
-// Подключение и активация движка Boolive
+// Подключение главного класса движка Boolive
 require DIR_SERVER_ENGINE.'Boolive.php';
+// Активация Boolive
 Boolive::activate();
-
-// Исполнение корневого объекта сайта и вывод результата
-echo Data::object('')->start(new Commands(), Input::getSource());
+// Исполнение объекта интерфейса. Вывод результата клиенту
+echo Data::object('/Interfaces')->start(new Commands, Input::getSource());
