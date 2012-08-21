@@ -8,7 +8,7 @@
  */
 namespace Boolive\data;
 
-use Boolive\classes\Classes,
+use Boolive\Boolive,
     Boolive\functions\F;
 
 class Data
@@ -32,7 +32,7 @@ class Data
      * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
      * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
      * @param bool $virtual
-     * @return \Boolive\data\Entity|null Экземпляр объекта, если найден или null, если не найден
+     * @return Entity|null Экземпляр объекта, если найден или null, если не найден
      */
     static function object($uri, $lang = '', $owner = 0, $date = null, $is_history = false, $virtual = false)
     {
@@ -72,7 +72,7 @@ class Data
      * @param $uri Путь на объект
      * @param $self Признак, искать секцию объекта (true) или его подчиненных (false)?
      * @param bool $strong Признак, искать точное указание на uri (true) или учитывать подчиенность (false)
-     * @return \Boolive\data\Section|null Экземпляр секции, если имеется или null, если нет
+     * @return Section|null Экземпляр секции, если имеется или null, если нет
      */
     static function section($uri, $self, $strong = false)
     {
@@ -91,7 +91,7 @@ class Data
                         $config = array_replace($extends, $config);
                     }
                     // Создание экземпляара секции
-                    if (isset($config['class']) && Classes::isExist(trim($config['class'],'\\'))){
+                    if (isset($config['class']) && Boolive::isExist(trim($config['class'],'\\'))){
                         self::$sections[$find_uri] = new $config['class']($config);
                     }
                 }
@@ -105,7 +105,7 @@ class Data
      * Создание объекта данных из атрибутов
      * @param $attribs
      * @throws \ErrorException
-     * @return \Boolive\data\Entity
+     * @return Entity
      */
     static function makeObject($attribs)
     {

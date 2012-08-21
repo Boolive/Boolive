@@ -8,7 +8,7 @@
  */
 namespace Boolive\events;
 
-use Boolive\classes\Classes;
+use Boolive\Boolive;
 
 class Events
 {
@@ -76,7 +76,7 @@ class Events
      *
      * @param string $event_name Имя события
      * @param array|mixed $params Параметры события
-     * @return \Boolive\events\EventResult Объект события с результатами его обработки
+     * @return EventResult Объект события с результатами его обработки
      */
     static function send($event_name, $params=array())
     {
@@ -87,8 +87,8 @@ class Events
                 if (!is_array($params)){
                     $params = array($params);
                 }
-                if (!Classes::isIncluded(self::$handlers[$event_name][$i][0])){
-                    Classes::activate(self::$handlers[$event_name][$i][0]);
+                if (!Boolive::isIncluded(self::$handlers[$event_name][$i][0])){
+                    Boolive::activate(self::$handlers[$event_name][$i][0]);
                 }
                 if (method_exists(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1])){
                     $value = call_user_func_array(array(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]), $params);

@@ -7,9 +7,17 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @see http://boolive.ru
  */
-// Подключение базовой конфигурации проекта
+use \Boolive\Boolive,
+    \Boolive\data\Data,
+    \Boolive\commands\Commands,
+    \Boolive\input\Input;
+
+// Подключение базовой конфигурации сайта
 require 'config.php';
-// Подключение главного класса системы
-require DIR_SERVER_ENGINE.'Engine.php';
-// Запуск системы
-Boolive\Engine::start();
+
+// Подключение и активация движка Boolive
+require DIR_SERVER_ENGINE.'Boolive.php';
+Boolive::activate();
+
+// Исполнение корневого объекта сайта и вывод результата
+echo Data::object('')->start(new Commands(), Input::getSource());

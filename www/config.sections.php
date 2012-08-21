@@ -35,27 +35,27 @@ $config = array(
         'table' => 'site'
     ),
     // Библиотека
-    '/library' => array(
+    '/Library' => array(
         'extends' => '',
         'table' => 'library'
     ),
     // Интерфейс
-    '/interfaces' => array(
+    '/Interfaces' => array(
         'extends' => '',
         'table' => 'interfaces'
     ),
     // Пользователи
-    '/members' => array(
+    '/Members' => array(
         'extends' => '',
         'table' => 'members'
     ),
     // Содержимое
-    '/contents' => array(
+    '/Contents' => array(
         'extends' => '',
         'table' => 'contents'
     ),
     // Ключевые слова
-    '/keywords' => array(
+    '/Keywords' => array(
         'extends' => '',
         'table' => 'keywords'
     )

@@ -1,7 +1,0 @@
-{
-    "value": "hash_of_password",
-    "proto": "/library/basic/members/User",
-
-    "name": "Вова",
-    "email": "boolive@yandex.ru"
-}

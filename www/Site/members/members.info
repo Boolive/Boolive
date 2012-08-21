@@ -1,5 +1,0 @@
-{
-    "title": "Пользователи",
-    "description": "Пользователи и группы пользователей сайта",
-    "proto": "/library/basic/members/Group"
-}

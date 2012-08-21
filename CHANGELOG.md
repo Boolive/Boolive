@@ -5,6 +5,7 @@ Version 2.0 preview work in progress
 ------------------------------------
 - enh #1: Remove engine\config.classes.php, update classes autoloading (AzatGaliev)
 - enh #3: Changed the style code in all files (VladimirShestakov)
+- ech #39: Moved all the directories in the root of the Site. Created a class Boolive instead Engine and Classes. The core file is index.php  (VladimirShestakov)
 - bug: Updated algorithm of working embedded values ​​in the class \Boolive\values\Values. Removed references to property _value
 - new #4: Add CHANGELOG.md file (AzatGaliev)
 - new #10: Update all objects in "library/basic" with added contents, members and simple objects (VladimirShestakov)
