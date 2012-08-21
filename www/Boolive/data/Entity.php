@@ -767,7 +767,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function getLevel()
     {
-        return mb_substr_count($this['uri'], '/')+1;
+        return mb_substr_count($this['uri'], '/');
     }
 
     /**
