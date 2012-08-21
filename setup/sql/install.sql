@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Авг 21 2012 г., 19:29
+-- Время создания: Авг 21 2012 г., 21:43
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -296,6 +296,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Content/option_page/page', '', 0, 0, 5, 1, '/Library/content_widgets/Page', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Content/option_part', '', 0, 0, 4, 2, '/Library/basic/widgets/Option', '/Library/content_samples/Part', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Content/option_part/part', '', 0, 0, 5, 1, '/Library/content_widgets/Part', NULL, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Feedback', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'Feedback.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/basic/widgets/Widget', 'Head.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/basic/widgets/Widget', 'Image.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
 ('/Library/content_widgets/Page', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'Page.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Page/option_comments', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Page/comments', 0, 0, 0, 0, 0),
@@ -307,6 +310,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Page/option_title', '', 0, 0, 4, 4, '/Library/basic/widgets/Option', '/Library/content_samples/Page/title', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/option_title/Title', '', 0, 0, 5, 1, '/Library/content_widgets/Title', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/PagePreview', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
+('/Library/content_widgets/Paragraph', '', 0, 0, 3, 1, '/Library/basic/widgets/Widget', 'Paragraph.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Part', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'Part.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Part/count_per_page', '', 0, 0, 4, 9, NULL, '2', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Part/option_page', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Page', 0, 0, 0, 0, 0),
@@ -318,6 +322,14 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Part/pagesnum', '', 0, 0, 4, 10, '/Library/basic/widgets/PageNavigation', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/PartPreview', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'RichText.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/RichText/option_feedback', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Feedback', 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_feedback/feedback', '', 0, 0, 5, 1, '/Library/content_widgets/Feedback', NULL, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_h', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Head', 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_h/head', '', 0, 0, 5, 1, '/Library/content_widgets/Head', NULL, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_img', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Image', 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_img/img', '', 0, 0, 5, 1, '/Library/content_widgets/Image', NULL, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_p', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Paragraph', 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/option_p/paragraph', '', 0, 0, 5, 1, '/Library/content_widgets/Paragraph', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Title', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
 ('/Library/layouts', '', 0, 0, 2, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive', '', 0, 0, 3, 1, '/Library/basic/widgets/Focuser', 'boolive.tpl', 0, 1, 0, 0, 0),
