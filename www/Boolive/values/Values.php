@@ -48,7 +48,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Внутренний выбор значения
      * @return array|mixed|null
      */
-    protected function getValue(){
+    protected function getValue()
+    {
         if (isset($this->_maker, $this->_name)){
             $parent = $this->_maker->getValue(); // Берется значения родителя
             return isset($parent[$this->_name])? $parent[$this->_name] : null; // Из него выбирается своё

@@ -154,7 +154,8 @@ class Input extends Values
      * Выбор исходных неотфильтрованных всех данных
      * @return mixed
      */
-    static function getSource(){
+    static function getSource()
+    {
         return self::$input->getValue();
     }
 

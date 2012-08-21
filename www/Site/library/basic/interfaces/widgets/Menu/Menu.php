@@ -21,7 +21,8 @@ class Menu extends Widget
         );
     }
 
-    public function work($v = array()){
+    public function work($v = array())
+    {
         // Выбираем пункты меню
         $this->_input['GET']['objects_list'] = $this->items->findAll(array('order' =>'`order` ASC'));
         // Активный пункт меню

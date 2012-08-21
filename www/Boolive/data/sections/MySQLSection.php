@@ -319,7 +319,8 @@ class MySQLSection extends Section
      * @param array $cond Услвоие поиска
      * @return int
      */
-    public function select_count($cond){
+    public function select_count($cond)
+    {
         // Услвоие, сортировка и ограничение количества
         $cond = array_replace(array('where' => '', 'values' => array(), 'order' => '', 'count' => 0, 'start' => 0), $cond);
         $filter = '';

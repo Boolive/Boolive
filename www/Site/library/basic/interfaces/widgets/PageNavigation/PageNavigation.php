@@ -11,7 +11,8 @@ use library\basic\interfaces\widgets\Widget\Widget,
 
 class PageNavigation extends Widget
 {
-    public function getInputRule(){
+    public function getInputRule()
+    {
         return Rule::arrays(array(
             'GET' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // объект, который отображается постранично
@@ -21,7 +22,8 @@ class PageNavigation extends Widget
         ));
     }
 
-    public function work($v = array()){
+    public function work($v = array())
+    {
         $obj = $this->_input['GET']['object'];
         $v['uri'] = substr($obj['uri'], 9);
         $v['count'] = $this->_input['GET']['page_count'];

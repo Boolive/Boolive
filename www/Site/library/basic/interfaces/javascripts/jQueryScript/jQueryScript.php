@@ -11,7 +11,8 @@ use library\basic\interfaces\javascripts\JavaScript\JavaScript;
 
 class jQueryScript extends JavaScript
 {
-    public function defineRule(){
+    public function defineRule()
+    {
         parent::defineRule();
         $this->_rule->arrays[0]['file']->arrays[0]['name']->ospatterns('jquery.*.js');
     }

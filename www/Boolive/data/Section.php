@@ -66,7 +66,8 @@ abstract class Section extends Entity
      * @param array $cond Услвоие поиска
      * @return int
      */
-    public function select_count($cond){
+    public function select_count($cond)
+    {
         return 0;
     }
 }

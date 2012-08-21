@@ -18,7 +18,8 @@ class ErrorsHandler
     /**
      * Активация модуля
      */
-    static function activate(){
+    static function activate()
+    {
         self::$error_reporting = error_reporting();
         // Регистрация обработчика исключений
         set_exception_handler(array('\Boolive\errors\ErrorsHandler', 'exceptionHandler'));

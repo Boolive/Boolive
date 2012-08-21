@@ -477,7 +477,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * @param array $cond Услвоие поиска
      * @return int
      */
-    public function findCount($cond = array()){
+    public function findCount($cond = array())
+    {
         if ($s = Data::section($this['uri'], false)){
             if (!empty($cond['where'])){
                 $cond['where'].=' AND uri like ? AND level=?';
@@ -855,7 +856,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 	 * @param \Boolive\data\Entity $parent
 	 * @return bool
 	 */
-    public function isChildOf($parent){
+    public function isChildOf($parent)
+    {
         return $parent['uri'].'/' == mb_substr($this['uri'],0,mb_strlen($parent['uri'])+1);
     }
     /**
