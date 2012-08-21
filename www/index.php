@@ -7,10 +7,10 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @see http://boolive.ru
  */
-use \Boolive\Boolive,
-    \Boolive\data\Data,
-    \Boolive\commands\Commands,
-    \Boolive\input\Input;
+use Boolive\Boolive,
+    Boolive\data\Data,
+    Boolive\commands\Commands,
+    Boolive\input\Input;
 
 // Подключение базовой конфигурации сайта
 require 'config.php';
