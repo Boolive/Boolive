@@ -302,7 +302,7 @@ class Check
      * @param $value Значение для проверки
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \Boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
-     * @return Entity|null
+     * @return \Boolive\data\Entity|null
      */
     static function entity($value, &$error, Rule $rule)
     {
@@ -311,12 +311,10 @@ class Check
             // Пробуем получить объект по uri
             $value = Data::object($value);
         }
-        if ($value instanceof Entity && (empty($class) || $value instanceof $class)){
-            // Вызов проверки средствами объекта
-
+        if ($value instanceof Entity && (empty($class) || $value instanceof $class) && $value->isExist()){
             return $value;
         }else{
-            $error = new Error(array('Значение не является объектом данных класса %s', $class), 'entity');
+            $error = new Error(array('Значение не является объектом класса %s', $class), 'entity');
             return null;
         }
     }

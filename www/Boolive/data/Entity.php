@@ -36,6 +36,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     protected $_is_saved = false;
     /** @var bool Признак, виртуальный объект или нет. Если объект не сохранен в секции, то он виртуальный */
     protected $_virtual = true;
+    /** @var bool Признак, сущесвтует объект или нет. Объект не существует, если виртуальный и все его прототипы виртуальные */
+    protected $_exist = false;
     /** @var bool Признак, изменены ли атрибуты объекта */
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
@@ -69,9 +71,11 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     protected $_commands;
 
-    public function __construct($attribs = array())
+    public function __construct($attribs = array(), $virtual = true, $exist = false)
     {
         $this->_attribs = $attribs;
+        $this->_virtual = (bool)$virtual;
+        $this->_exist = (bool)$exist;
     }
 
     /**
@@ -267,30 +271,16 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 
     /**
      * Получение подчиненного объекта по имени
-     * Если объекта нет, то будет выгружен из секции или создан виртуальный
      * @example $sub = $obj->sub;
-     * @param string $name
-     * @return array|Values|void
+     * @param string $name Имя подчиенного объекта
+     * @return \Boolive\data\Entity
      */
     public function __get($name)
     {
         if (isset($this->_children[$name])){
             return $this->_children[$name];
         }else{
-            $uri = $this['uri'].'/'.$name;
-            // Если объекта нет в секции, то создается виртуальный
-            if (!($obj = Data::object($uri, (string)$this['lang'], (int)$this['owner']))){
-                // Поиск прототипа для объекта
-                // Прототип тоже может оказаться виртуальным!
-                if ($proto = $this->proto()){
-                    $proto = $proto->{$name};
-                }
-                if ($proto){
-                    $obj = $proto->birth();
-                }else{
-                    $obj = new Entity(array('uri'=>$uri, 'lang'=>$this['lang'], 'owner'=>$this['owner']));
-                }
-            }
+            $obj = Data::object($this['uri'].'/'.$name, (string)$this['lang'], (int)$this['owner']);
             $this->__set($name, $obj);
             return $obj;
         }
@@ -617,6 +607,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                     if ($s = Data::section($this['uri'], true)){
                         $s->put($this);
                         $this->_virtual = false;
+                        $this->_exist = true;
                         $this->_changed = false;
                     }
                 }
@@ -653,7 +644,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function birth()
     {
         $class = get_class($this);
-        return new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])));
+        $object = new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])));
+        $object->_exist = $this->_exist;
+        return $object;
     }
 
     /**
@@ -663,7 +656,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function parent()
     {
         if ($this->_parent === false){
-            $this->_parent = Data::object($this->getParentUri(), '', 0, null, null, true);
+            $this->_parent = Data::object($this->getParentUri());
         }
         return $this->_parent;
     }
@@ -677,7 +670,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         if ($this->_proto === false){
             if (isset($this['proto'])){
                 $info = Data::getURIInfo($this['proto']);
-                $this->_proto = Data::object($info['uri'], $info['lang'], $info['owner'], null, null, true);
+                $this->_proto = Data::object($info['uri'], $info['lang'], $info['owner']);
             }else{
                 $this->_proto = null;
             }
@@ -843,6 +836,15 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
+     * Признак, сущесвтует объект или нет. Объект не существует, если виртуальный и все его прототипы виртуальные.
+     * @return bool
+     */
+    public function isExist()
+    {
+        return $this->_exist;
+    }
+
+    /**
      * Признак, находится ли объект в процессе сохранения?
      * @return bool
      */
@@ -880,6 +882,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         $trace['_attribs'] = $this->_attribs;
         $trace['_changed'] = $this->_changed;
         $trace['_virtual'] = $this->_virtual;
+        $trace['_exist'] = $this->_exist;
         $trace['_checked'] = $this->_checked;
         /*if ($this->_rename) */$trace['_rename'] = $this->_rename;
         //$trace['_proto'] = $this->_proto;

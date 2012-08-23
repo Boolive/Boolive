@@ -31,34 +31,30 @@ class Data
      * @param int $owner Код владельца. Если не указан, то выбирается общий
      * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
      * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
-     * @param bool $virtual
      * @return Entity|null Экземпляр объекта, если найден или null, если не найден
      */
-    static function object($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false, $virtual = false)
+    static function object($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false)
     {
         $object = null;
         if (is_string($uri)){
-            if ($uri==='') return self::makeObject(array('uri'=>'', 'value'=>null, 'is_logic' => file_exists(DIR_SERVER_PROJECT.'Site.php')));
+            if ($uri === '') return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
             // Опредление секции объекта и поиск объекта в секции
             if ($s = self::section($uri, true)){
                 $object = $s->read($uri, $lang, $owner, $date, $is_history);
             }
             // Если объект не найден и нужно искать виртуального, то ищем
-            if (!isset($object) && $virtual){
-                // Поиск не виртуального родителя по всей глубине
-                $parent_uri = $uri;
-                do{
-                    $parent_uri = mb_substr($parent_uri, 0, mb_strrpos($parent_uri, '/'));
-                    if ($s = self::section($parent_uri, true)){
-                        $parent = $s->read($parent_uri, '', 0, null);
+            if (!isset($object)){
+                // Выбор родителя
+                $names = F::splitRight('/', $uri);
+                if ($parent = self::object($names[0])){
+                    if ($proto = $parent->proto()){
+                        $proto = $proto->{$names[1]};
                     }
-                }while(!isset($parent)&&!empty($parent_uri));
-                // Если родитель найден и у него есть прототип, то ищем свой объект у прототипа
-                if (isset($parent['proto'])){
-                    $proto_uri = $parent['proto'].mb_substr($uri, mb_strlen($parent_uri));
-                    if ($proto = self::object($proto_uri, $lang, $owner, null, null, true)){
+                    if ($proto){
                         $object = $proto->birth();
                         $object['uri'] = $uri;
+                    }else{
+                        $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner));
                     }
                 }
             }
@@ -104,22 +100,25 @@ class Data
     /**
      * Создание объекта данных из атрибутов
      * @param $attribs
+     * @param bool $exist
+     * @param bool $virtual
      * @throws \ErrorException
      * @return Entity
      */
-    static function makeObject($attribs)
+    static function makeObject($attribs, $virtual = true, $exist = false)
     {
         if (isset($attribs['uri']) && !empty($attribs['is_logic'])){
             try{
                 // Имеется свой класс?
                 if ($attribs['uri']===''){
                     $class = 'Site';
+                    $exist = true;
+                    $virtual = true;
                 }else{
-                    $uri = trim($attribs['uri'],'/');
                     $names = F::splitRight('/', $attribs['uri']);
                     $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
                 }
-                return new $class($attribs);
+                return new $class($attribs, $virtual, $exist);
             }catch(\ErrorException $e){
                 // Если файл не найден, то будет использовать класс прототипа или Entity
                 if ($e->getCode() != 2) throw $e;
@@ -128,10 +127,10 @@ class Data
         if (!empty($attribs['proto']) && ($proto = self::object($attribs['proto']))){
             // Класс прототипа
             $class = get_class($proto);
-            $obj = new $class($attribs);
+            $obj = new $class($attribs, $virtual, $exist);
         }else{
             // Базовый класс
-            $obj = new Entity($attribs);
+            $obj = new Entity($attribs, $virtual, $exist);
         }
         return $obj;
     }

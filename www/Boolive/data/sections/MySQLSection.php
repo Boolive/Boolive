@@ -13,7 +13,8 @@ use Boolive\database\DB,
     Boolive\data\Section,
     Boolive\data\Data,
     Boolive\calls\Calls,
-    Boolive\errors\Error;
+    Boolive\errors\Error,
+    Boolive\develop\Trace;
 
 class MySQLSection extends Section
 {
@@ -50,29 +51,30 @@ class MySQLSection extends Section
     public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false)
     {
         $key = $uri.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
-        if (!isset($this->buffer[$key])){
-            $where = 'uri=? AND lang=? AND owner=?';
-            $values = array($uri, $lang, $owner);
-            if (isset($date)){
-                $where.=' AND date=?';
-                $values[] = $date;
-                $is_history = null;
-            }
-            if (isset($is_history)){
-                $where.=' AND is_history=?';
-                $values[] = (int)$is_history;
-            }
-            $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE '.$where.' LIMIT 0,1');
-            $q->execute($values);
-            $this->buffer[$key] = $q->fetch(DB::FETCH_ASSOC);
+        if (array_key_exists($key, $this->buffer)) return $this->buffer[$key];
+
+        $where = 'uri=? AND lang=? AND owner=?';
+        $values = array($uri, $lang, $owner);
+        if (isset($date)){
+            $where.=' AND date=?';
+            $values[] = $date;
+            $is_history = null;
         }
-        if ($this->buffer[$key]){
-            $obj = Data::makeObject($this->buffer[$key]);
-            $obj->_virtual = false;
-            $obj->_changed = false;
-            return $obj;
+        if (isset($is_history)){
+            $where.=' AND is_history=?';
+            $values[] = (int)$is_history;
         }
-        return null;
+        $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE '.$where.' LIMIT 0,1');
+        $q->execute($values);
+
+        if ($attrs = $q->fetch(DB::FETCH_ASSOC)){
+            //Trace::groups('DB')->group('real_count')->set(Trace::groups('DB')->group('real_count')->get()+1);
+            $obj = Data::makeObject($attrs, false, true);
+            return $this->buffer[$key] = $obj;
+        }else{
+            //Trace::groups('DB')->group('virtual_count')->set(Trace::groups('DB')->group('virtual_count')->get()+1);
+        }
+        return $this->buffer[$key] = null;
     }
 
     /**
@@ -293,6 +295,10 @@ class MySQLSection extends Section
     {
         // Услвоие, сортировка и ограничение количества
         $cond = array_replace(array('where' => '', 'values' => array(), 'order' => '', 'count' => 0, 'start' => 0), $cond);
+
+        $key = serialize($cond);
+        if (isset($this->buffer[$key])) return $this->buffer[$key];
+
         $filter = '';
         if ($cond['where']) $filter.= ' WHERE '.$cond['where'];
         if ($cond['order']) $filter.= ' ORDER BY '.$cond['order'];
@@ -307,11 +313,11 @@ class MySQLSection extends Section
         // Создание экземпляров
         $result = array();
         while ($attr = $q->fetch(DB::FETCH_ASSOC)){
-            $obj = Data::makeObject($attr);
-            $obj->_virtual = false;
+            $obj = Data::makeObject($attr, false, true);
             $result[] = $obj;
         }
-        return $result;
+        //Trace::groups('DB')->group('select_count')->set(Trace::groups('DB')->group('select_count')->get()+1);
+        return $this->buffer[$key] = $result;
     }
 
     /**

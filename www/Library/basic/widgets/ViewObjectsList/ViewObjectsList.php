@@ -46,7 +46,7 @@ class ViewObjectsList extends Widget
                     if ($out){
                         $this->_input['previous'] = true;
                         $input['previous'] = true;
-                        $v['objects_list'][] = $out;
+                        $v['objects_list'][$input['GET']['object']->getName()] = $out;
                     }
                 }
                 // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
