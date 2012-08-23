@@ -8,6 +8,7 @@ body{
 a {
 	color: #105289; /*#0A5564*/;
 	text-decoration: underline;
+    outline: none;
 	}
     a:hover {
         text-decoration: underline;
@@ -43,7 +44,10 @@ h4 {
 h5, h6 {
 	font-size: 9pt;
 	}
-
+img{
+    border: none;
+    outline: none;
+}
 #layout{
     }
     #layout-head{
@@ -66,7 +70,7 @@ h5, h6 {
             }
         #layout-middle .sidebar{
             float: right;
-            margin: 20px 0;
+            margin: 30px 0;
             padding: 0 0 0 2%;
             width: 28%;
             }

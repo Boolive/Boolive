@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Авг 21 2012 г., 22:51
+-- Время создания: Авг 23 2012 г., 11:48
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -45,7 +45,7 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/contacts/text/feedback', '', 0, 0, 4, 3, '/Library/content_samples/Feedback', NULL, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/feedback/email_from', '', 0, 0, 5, 1, '/Library/content_samples/Feedback/email_from', '', 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/feedback/email_to', '', 0, 0, 5, 2, '/Library/content_samples/Feedback/email_to', 'info@boolive.ru', 0, 0, 0, 0, 0),
-('/Contents/contacts/text/feedback/message', '', 0, 0, 5, 3, '/Library/content_samples/Feedback/mesage', '', 0, 0, 0, 0, 0),
+('/Contents/contacts/text/feedback/message', '', 0, 0, 5, 3, '/Library/content_samples/Feedback/message', '', 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/head1', '', 0, 0, 4, 0, '/Library/content_samples/Head', 'Наш адрес', 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/p1', '', 0, 0, 4, 1, '/Library/content_samples/Paragraph', 'г. Екатеринбург, ул Ленина, дом 1, офис 999', 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/p2', '', 0, 0, 4, 2, '/Library/content_samples/Paragraph', 'Работаем груглосуточно', 0, 0, 0, 0, 0),
@@ -143,7 +143,8 @@ INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `pro
 ('/Interfaces/html/body/hello/style', '', 0, 0, 5, 1, '/Library/basic/Css', 'style.css', 0, 1, 0, 1, 0),
 ('/Interfaces/html/body/hello2', '', 0, 0, 4, 3, '/Interfaces/html/body/hello', NULL, 0, 0, 0, 1, 0),
 ('/Interfaces/html/body/hello3', '', 0, 0, 4, 4, '/Interfaces/html/body/hello', NULL, 0, 0, 0, 1, 0),
-('/Interfaces/html/body/hello4', '', 0, 0, 4, 5, '/Interfaces/html/body/hello', NULL, 0, 0, 0, 1, 0);
+('/Interfaces/html/body/hello4', '', 0, 0, 4, 5, '/Interfaces/html/body/hello', NULL, 0, 0, 0, 1, 0),
+('/Interfaces/form_handler', '', 0, 0, 2, 0, '/Library/basic/FormHandler', NULL, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -211,6 +212,8 @@ CREATE TABLE `library` (
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`) VALUES 
 ('/Library/basic', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0),
 ('/Library/basic/Css', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
+('/Library/basic/FormHandler', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
+('/Library/basic/FormHandler/title', '', 0, 0, 4, 1, NULL, 'Обработчик форм', 0, 0, 0, 0, 0),
 ('/Library/basic/Group', '', 0, 0, 3, 2, NULL, NULL, 1, 0, 0, 0, 0),
 ('/Library/basic/interfaces', '', 0, 0, 3, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0),
 ('/Library/basic/javascripts', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0),
@@ -266,8 +269,10 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_samples/Comment/text', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback', '', 0, 0, 3, 2, NULL, NULL, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/email_from', '', 0, 0, 4, 1, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback/email_from/title', '', 0, 0, 5, 1, NULL, 'Email адрес', 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/email_to', '', 0, 0, 4, 2, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/message', '', 0, 0, 4, 3, NULL, NULL, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback/message/title', '', 0, 0, 5, 1, NULL, 'Сообщение', 0, 0, 0, 0, 0),
 ('/Library/content_samples/Head', '', 0, 0, 3, 3, NULL, NULL, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Image', '', 0, 0, 3, 4, NULL, NULL, 1, 0, 0, 0, 0),
 ('/Library/content_samples/Keyword', '', 0, 0, 3, 5, NULL, NULL, 1, 0, 0, 0, 0),
@@ -297,6 +302,11 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Content/option_part', '', 0, 0, 4, 2, '/Library/basic/widgets/Option', '/Library/content_samples/Part', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Content/option_part/part', '', 0, 0, 5, 1, '/Library/content_widgets/Part', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Feedback', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'Feedback.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/Feedback/option_mail', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Feedback/email_from', 0, 0, 0, 0, 0),
+('/Library/content_widgets/Feedback/option_mail/EmailField', '', 0, 0, 5, 1, '/Library/basic/widgets/Widget', 'EmailField.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/Feedback/option_message', '', 0, 0, 4, 2, '/Library/basic/widgets/Option', '/Library/content_samples/Feedback/message', 0, 0, 0, 0, 0),
+('/Library/content_widgets/Feedback/option_message/MessageField', '', 0, 0, 5, 1, '/Library/basic/widgets/Widget', 'MessageField.tpl', 1, 1, 0, 0, 0),
+('/Library/content_widgets/Feedback/style', '', 0, 0, 4, 5, '/Library/basic/Css', 'style.css', 0, 1, 0, 0, 0),
 ('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/basic/widgets/Widget', 'Head.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/basic/widgets/Widget', 'Image.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0),
@@ -309,6 +319,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Page/option_text/Text', '', 0, 0, 5, 1, '/Library/content_widgets/RichText', NULL, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/option_title', '', 0, 0, 4, 4, '/Library/basic/widgets/Option', '/Library/content_samples/Page/title', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/option_title/Title', '', 0, 0, 5, 1, '/Library/content_widgets/Title', NULL, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Page/style', '', 0, 0, 4, 5, '/Library/basic/Css', 'style.css', 0, 1, 0, 0, 0),
 ('/Library/content_widgets/PagePreview', '', 0, 0, 3, 1, '/Library/basic/widgets/ViewObjectsList', 'PagePreview.tpl', 1, 1, 0, 0, 0),
 ('/Library/content_widgets/PagePreview/option_text', '', 0, 0, 4, 1, '/Library/basic/widgets/Option', '/Library/content_samples/Page/text', 0, 0, 0, 0, 0),
 ('/Library/content_widgets/PagePreview/option_text/Text', '', 0, 0, 5, 1, '/Library/content_widgets/RichText', NULL, 1, 0, 0, 0, 0),
