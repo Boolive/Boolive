@@ -13,6 +13,9 @@ class Widget extends Entity
 {
     public function work($v = array())
     {
+        // Подключаем необходимые ресурсы перед шаблонизацией
+        $this->startChild('res');
+        
         return Template::render($this, $v);
     }
 }
