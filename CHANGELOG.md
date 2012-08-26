@@ -6,6 +6,7 @@ Version 2.0 preview work in progress
 - enh #1: Remove engine\config.classes.php, update classes autoloading (AzatGaliev)
 - enh #3: Changed the style code in all files (VladimirShestakov)
 - enh #39: Moved all the directories in the root of the Site. Created a class Boolive instead Engine and Classes. The core file is index.php  (VladimirShestakov)
+- enh #42: Add child res for base widget /Library/basic/widgets/Widget
 - enh: Create a package "contents_widgets" and "content_samples". Existing objects are moved into them. (VladimirShestakov)
 - enh: Numbering nesting level starts at zero. A root object level = 0 (VladimirShestakov)
 - bug: Updated algorithm of working embedded values ​​in the class \Boolive\values\Values. Removed references to property _value (VladimirShestakov)
