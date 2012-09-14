@@ -50,7 +50,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
      * Если строка, то определяет базовое имя, к кторому будут подбираться числа для уникальности
-     * @var bool|string */
+     * @var bool|string
+     */
     protected $_rename = false;
     /**
      * Отфильтрованные входящих данных.
@@ -89,13 +90,15 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 'owner'		 => Rule::int()->default(0)->required(), // Владелец (код)
                 'date'		 => Rule::int(), // Дата создания в секундах
                 'order'		 => Rule::any(Rule::null(), Rule::int()), // Порядковый номер. Уникален в рамках родителя
+                'proto'		 => Rule::any(Rule::uri()->max(255), Rule::null()), // URI прототипа
+                'value'	 	 => Rule::any(Rule::null(), Rule::string()), // Значение любой длины
+                'is_logic'	 => Rule::bool()->int(), // Имеется ли у объекта свой класс в его директории. Имя класса по uri
+                'is_file'	 => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
                 'is_history' => Rule::bool()->int()->default(0)->required(), // В истории или нет
                 'is_delete'	 => Rule::bool()->int(), // Удаленный или нет
                 'is_hidden'	 => Rule::bool()->int(), // Скрытый или нет
-                'is_logic'	 => Rule::bool()->int(), // Имеется ли у объекта свой класс в его директории. Имя класса по uri
-                'is_file'	 => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
-                'proto'		 => Rule::any(Rule::uri()->max(255), Rule::null()), // URI прототипа
-                'value'	 	 => Rule::any(Rule::null(), Rule::string()), // Значение любой длины
+                'is_link'	 => Rule::bool()->int(), // Ссылка или нет
+                'override'	 => Rule::bool()->int(), // Переопределять всех подчиенных от прототипа или нет
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'		 => Rule::arrays(array(
                                     'tmp_name'	=> Rule::string()->more(0)->required(), // Путь на связываемый файл
@@ -118,17 +121,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         return $this->_rule;
     }
 
-    /**
-     * Возвращает правило на входящие данные
-     * Используется, если объект исполняется как контроллер для обработки запроса
-     * По умолчанию любые значения
-     * @return null|\Boolive\values\Rule
-     */
-    public function getInputRule()
-    {
-        return Rule::any();
-    }
-
     #################################################
     #                                               #
     #            Управление атрибутами              #
@@ -144,7 +136,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function offsetGet($name)
     {
-        if ($this->offsetExists($name)){
+        if (isset($this->_attribs[$name]) || array_key_exists($name, $this->_attribs)){
             if ($name == 'value' && !empty($this->_attribs['is_file'])){
                 if (mb_substr($this->_attribs[$name], mb_strlen($this->_attribs[$name])-6) == '.value'){
                     try{
@@ -168,7 +160,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function offsetSet($name, $value)
     {
-        if (!$this->offsetExists($name) || $this->offsetGet($name)!=$value){
+        if (!isset($this->_attribs[$name]) || $this->offsetGet($name)!=$value){
             // Если не виртуальный, то запретить менять uri, lang, owner, date
             //if (!$this->_virtual && in_array($name, array('uri', 'lang', 'owner', 'date'))) return;
 
@@ -177,9 +169,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             }else
             if ($name == 'uri'){
                 // Обновление uri текущих подчиненных
-                if ($this->offsetExists($name)){
+                if (isset($this->_attribs['uri'])){
                     // Удаление себя из текущего родителя, так как родитель поменяется
-                    if ($this->_parent instanceof Entity){
+                    if (!empty($this->_parent)){
                         $this->_parent->offsetUnset($this->getName());
                         $this->_parent = null;
                     }
@@ -201,7 +193,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function offsetUnset($name)
     {
-        if (!$this->offsetExists($name)) unset($this->_attribs[$name]);
+        if (isset($this->_attribs[$name])) unset($this->_attribs[$name]);
         $this->_changed = true;
         $this->_checked = false;
     }
@@ -213,7 +205,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function offsetExists($name)
     {
-        return array_key_exists($name, $this->_attribs);
+        return isset($this->_attribs[$name]) || array_key_exists($name, $this->_attribs);
     }
 
     /**
@@ -308,13 +300,13 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 $rename = 'entity';
             }
             // Если у объект есть uri и он отличается от необходимого, то прототипируем объект
-            if (isset($value->_attribs['uri']) && $value->_attribs['uri']!= $this->_attribs['uri'].'/'.$name){
+            if (isset($value->_attribs['uri']) && isset($this->_attribs['uri']) && $value->_attribs['uri']!= $this->_attribs['uri'].'/'.$name){
                 // В качестве базового имени - имя прототипа.
                 if (isset($rename)) $rename = $value->getName();
                 $value = $value->birth();
             }
             // Установка uri для объекта, если есть свой uri
-            if (isset($this['uri'])) $value['uri'] = $this['uri'].'/'.$name;
+            if (isset($this->_attribs['uri'])) $value->_attribs['uri'] = $this->_attribs['uri'].'/'.$name;
             if (isset($rename)) $value->_rename = $rename;
             $value->_parent = $this;
             $this->_children[$name] = $value;
@@ -371,7 +363,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             }else{
                 $cond['where'] = 'uri like ? AND level=?';
             }
-            $cond['values'][] = $this['uri'].'/%';
+            $cond['values'][] = $this->_attribs['uri'].'/%';
             $cond['values'][] = $this->getLevel()+1;
             $results = $s->select($cond);
             if ($load) $this->_children = $results;
@@ -418,13 +410,25 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function findAll($cond = array(), $load = false, $key_by = 'name', $req = false)
     {
         $results = $this->find($cond, false, 'name');
-        if ($proto = $this->proto()){
+        if (empty($this->_attribs['override']) && $proto = $this->proto()){
             $proto_sub = $proto->findAll($cond, false, 'name', true);
             foreach ($proto_sub as $key => $child){
                 if (!isset($results[$key])){
-                    $results[$key] = $child->birth();
-                    $results[$key]['uri'] = $this['uri'].'/'.$key;
-                    $results[$key]['order'] = $child['order'];
+                    $bkey = $this['uri'].'/'.$key;//.' '.$this['lang'].' '.(int)$this['owner'];
+                    if (Data::bufferExist($bkey)){
+                        $results[$key] = Data::bufferGet($bkey);
+                    }else{
+                        $results[$key] = $child->birth();
+                        $results[$key]['uri'] = $this['uri'].'/'.$key;
+                        $results[$key]['order'] = $child['order'];
+                        $results[$key]['lang'] = $child['lang'];
+                        $results[$key]['owner'] = $child['owner'];
+                        // Объект ссылка?
+                        if (!empty($this->_attribs['is_link']) || !empty($proto->_attribs['is_link'])){
+                            $results[$key]['is_link'] = 1;
+                        }
+                        Data::bufferAdd($bkey, $results[$key]);
+                    }
                 }
             }
         }
@@ -475,7 +479,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             }else{
                 $cond['where'] = 'uri like ? AND level=?';
             }
-            $cond['values'][] = $this['uri'].'/%';
+            $cond['values'][] = $this->_attribs['uri'].'/%';
             $cond['values'][] = $this->getLevel()+1;
             return $s->select_count($cond);
         }
@@ -633,7 +637,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function delete()
     {
-        $this['is_delete'] = true;
+        $this->_attribs['is_delete'] = true;
         return $this;
     }
 
@@ -644,8 +648,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function birth()
     {
         $class = get_class($this);
-        $object = new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])));
-        $object->_exist = $this->_exist;
+        $object = new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])), true, $this->_exist);
         return $object;
     }
 
@@ -668,14 +671,26 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function proto()
     {
         if ($this->_proto === false){
-            if (isset($this['proto'])){
-                $info = Data::getURIInfo($this['proto']);
+            if (isset($this->_attribs['proto'])){
+                $info = Data::getURIInfo($this->_attribs['proto']);
                 $this->_proto = Data::object($info['uri'], $info['lang'], $info['owner']);
             }else{
                 $this->_proto = null;
             }
         }
         return $this->_proto;
+    }
+
+    /**
+     * Возращает данный объект ($this) или первый из его прототипов не являющимся ссылкой (is_link=0)
+     * Если объект и все его прототипы являются ссылками, то возвращается null
+     * @return \Boolive\data\Entity|null
+     */
+    public function notLink()
+    {
+        if (empty($this->_attribs['is_link'])) return $this;
+        if ($proto = $this->proto()) return $proto->notLink();
+        return null;
     }
 
     /**
@@ -699,9 +714,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function __call($method, $args)
     {
-        if ($s = Data::section($this['uri'], true)){
-            $s->call($method, $args);
-        }
+        return null;
+//        if ($s = Data::section($this['uri'], true)){
+//            $s->call($method, $args);
+//        }
     }
 
     /**
@@ -711,8 +727,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function getParentUri()
     {
         if (!isset($this->_parent_uri)){
-            if (isset($this['uri'])){
-                $names = F::splitRight('/',$this['uri']);
+            if (isset($this->_attribs['uri'])){
+                $names = F::splitRight('/',$this->_attribs['uri']);
                 $this->_parent_uri = $names[0];
                 $this->_name = $names[1];
             }else
@@ -732,8 +748,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function getName()
     {
         if (!isset($this->_parent_uri)){
-            if (isset($this['uri'])){
-                $names = F::splitRight('/',$this['uri']);
+            if (isset($this->_attribs['uri'])){
+                $names = F::splitRight('/',$this->_attribs['uri']);
                 $this->_parent_uri = $names[0];
                 $this->_name = $names[1];
             }
@@ -785,9 +801,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function getFile($root = false)
     {
-        if ($this['is_file']){
+        if (!empty($this->_attribs['is_file'])){
             $file = $this->getDir($root);
-            if ($this->_attribs['is_history']) $file.='_history_/'.$this->_attribs['date'].'_';
+            if (!empty($this->_attribs['is_history'])) $file.='_history_/'.$this['date'].'_';
             return $file.$this->_attribs['value'];
         }else
         if (!isset($this->_attribs['value']) && $proto = $this->proto()){
@@ -803,7 +819,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function isFile()
     {
-        return !empty($this['is_file']) || (!isset($this['value']) && ($proto = $this->proto()) && $proto->isFile());
+        return !empty($this->_attribs['is_file']) || (!isset($this->_attribs['value']) && ($proto = $this->proto()) && $proto->isFile());
     }
 
     /**
@@ -814,7 +830,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function isEqual($entity)
     {
         if (!$entity) return false;
-        return ($this->offsetExists('uri') && $this->offsetGet('uri') == $entity->offsetGet('uri'));
+        return $this['uri'] == $entity['uri'];
     }
 
     /**
@@ -862,6 +878,23 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     {
         return $parent['uri'].'/' == mb_substr($this['uri'],0,mb_strlen($parent['uri'])+1);
     }
+
+    /**
+     * Проверка, имеется ли у объекта указанный прототип
+     * @param $uri
+     * @return bool
+     */
+    public function is($uri){
+        $obj = $this;
+        // Поиск варианта отображения для объекта
+        do{
+            // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
+            if ($obj['uri'] == $uri || $obj['proto'] == $uri){
+                return true;
+            }
+        }while($obj = $obj->proto());
+        return false;
+    }
     /**
      * Клонирование объекта
      */
@@ -896,85 +929,92 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     #            Исполнение объекта                 #
     #                                               #
     #################################################
-
-    /**
-     * Запуск объекта
-     * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
-     * @param mixed $input Входящие данные
-     * @return null|string Результат выполнения контроллера
-     */
-    public function start(Commands $commands, $input)
-    {
-        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
-        $this->_commands = $commands;
-        $this->_input = Check::filter($input, $this->getInputRule(), $this->_input_error);
-        //Проверка возможности работы
-        if ($this->canWork()){
-            // Подчиненные не запускались ещё
-            $this->_input['previous'] = false;
-            //Выполнение подчиненных
-            ob_start();
-                // Выполнение своей работы
-                $result = $this->work();
-                $result = ob_get_contents().$result;
-            ob_end_clean();
-        }else{
-            $result = null;
-        }
-        $this->_input = null;
-        return $result;
-    }
-
-    /**
-     * Проверка возможности работы.
-     * По умолчанию проверяются отсутствие ошибок во входящих данных
-     * @return bool Признак, может ли работать объект или нет
-     */
-    public function canWork()
-    {
-        return !isset($this->_input_error);
-    }
-
-    /**
-     * Работа объекта. Обработка запроса и формирование вывода.
-     * Результат выводится функциями echo, print или возвращается через return
-     * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
-     */
-    public function work()
-    {
-        return (string)$this;
-    }
-
-    /**
-     * Запуск подчиненного по имени
-     * @param $name Имя подчиненного
-     * @return null|string
-     */
-    public function startChild($name)
-    {
-        $result = $this->{$name}->start($this->_commands, $this->_input);
-        if ($result){
-            $this->_input['previous'] = true;
-        }
-        return $result;
-    }
-
-    /**
-     * Запуск всех подчиненных объектов
-     * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
-     */
-    public function startChildren()
-    {
-        $result = array();
-        $list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
-        foreach ($list as $key => $child){
-            /** @var $child \Boolive\data\Entity */
-            $out = $child->start($this->_commands, $this->_input);
-            if ($out){
-                $result[$key] = $out;
-                $this->_input['previous'] = true;
-            }
-        }
-        return $result;
-    }
+//
+//    /**
+//     * Возвращает правило на входящие данные
+//     * Используется, если объект исполняется как контроллер для обработки запроса
+//     * По умолчанию любые значения
+//     * @return null|\Boolive\values\Rule
+//     */
+//    public function getInputRule()
+//    {
+//        return null;
+//    }
+//
+//    /**
+//     * Запуск объекта
+//     * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
+//     * @param mixed $input Входящие данные
+//     * @return null|string Результат выполнения контроллера
+//     */
+//    public function start(Commands $commands, $input)
+//    {
+//        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
+//        $this->_commands = $commands;
+//        $this->_input = Check::filter($input, $this->getInputRule(), $this->_input_error);
+//        //Проверка возможности работы
+//        if ($this->canWork()){
+//            // Подчиненные не запускались ещё
+//            $this->_input['previous'] = false;
+//            //Выполнение подчиненных
+//            ob_start();
+//                // Выполнение своей работы
+//                $result = $this->work();
+//                $result = ob_get_contents().$result;
+//            ob_end_clean();
+//        }else{
+//            $result = null;
+//        }
+//        $this->_input = null;
+//        return $result;
+//    }
+//
+//    /**
+//     * Проверка возможности работы.
+//     * По умолчанию проверяются отсутствие ошибок во входящих данных
+//     * @return bool Признак, может ли работать объект или нет
+//     */
+//    public function canWork()
+//    {
+//        return !isset($this->_input_error);
+//    }
+//
+//    /**
+//     * Работа объекта. Обработка запроса и формирование вывода.
+//     * Результат выводится функциями echo, print или возвращается через return
+//     * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
+//     */
+//    public function work()
+//    {
+//        return (string)$this;
+//    }
+//
+//    /**
+//     * Запуск подчиненного по имени
+//     * @param $name Имя подчиненного
+//     * @param null $input Входящие данные для подчиненного объекта
+//     * @return null|string
+//     */
+//    public function startChild($name)
+//    {
+//        if (!isset($input)) $input = Input::getSource();
+//        if ($result = $this->{$name}->start($this->_commands, $input)){
+//            $this->_input['previous'] = true;
+//        }
+//        return $result;
+//    }
+//
+//    /**
+//     * Запуск всех подчиненных объектов
+//     * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
+//     */
+//    public function startChildren()
+//    {
+//        $result = array();
+//        $list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'), true, 'name');
+//        foreach ($list as $key => $child){
+//            if ($out = $this->startChild($key)) $result[$key] = $out;
+//        }
+//        return $result;
+//    }
 }

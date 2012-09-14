@@ -21,14 +21,11 @@ class Template
     /**
      * Загрузка шаблонизаторов
      */
-    static private function loadEngines()
-    {
-        if (!isset(self::$engines)){
-            self::$engines = array();
-            if (file_exists(DIR_SERVER.self::CONFIG_FILE)){
-                include DIR_SERVER.self::CONFIG_FILE;
-                if (isset($config)) self::$engines = $config;
-            }
+    static function activate(){
+        self::$engines = array();
+        if (is_file(DIR_SERVER.self::CONFIG_FILE)){
+            include DIR_SERVER.self::CONFIG_FILE;
+            if (isset($config)) self::$engines = $config;
         }
     }
 
@@ -39,7 +36,6 @@ class Template
      */
     static function getEngine($entity)
     {
-        self::loadEngines();
         $file = $entity->getFile();
         foreach (self::$engines as $pattern => $engine){
             if (fnmatch($pattern, $file)){

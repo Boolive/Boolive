@@ -1,1 +1,1 @@
-<h2><?php echo $v['value']->string();?></h2>
+<h2><?php echo $v['value']?></h2>

@@ -1,4 +1,3 @@
-<?php $v->style; ?>
 <div id="layout">
     <div id="layout-head">
         <div class="layout-wrapper" data-place="head">

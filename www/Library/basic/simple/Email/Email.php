@@ -17,6 +17,6 @@ class Email extends Entity
     protected function defineRule()
     {
         parent::defineRule();
-        $this->_rule->arrays['value']->any[1] = Rule::email();
+        $this->_rule->arrays[0]['value']->any[1] = Rule::email();
     }
 }

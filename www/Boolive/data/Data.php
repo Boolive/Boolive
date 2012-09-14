@@ -20,8 +20,16 @@ class Data
     /** @var array Экземплярв используемых секций */
     private static $sections;
     /** @var array Загруженные объекты */
-    private static $buffer = array();
+    public static $buffer = array();
 
+    static function activate(){
+        if (is_file($file = DIR_SERVER.self::CONFIG_FILE)){
+            include $file;
+            if (isset($config)) self::$config = $config;
+        }else{
+            self::$config = array();
+        }
+    }
     /**
      * Возвращает объект по пути на него
      * Путь может указывать как на собственный объект, так и на любой внешний.
@@ -35,6 +43,9 @@ class Data
      */
     static function object($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false)
     {
+        $key = $uri;//.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
+        if (self::bufferExist($key)) return self::bufferGet($key);
+
         $object = null;
         if (is_string($uri)){
             if ($uri === '') return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
@@ -56,9 +67,14 @@ class Data
                     }else{
                         $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner));
                     }
+                    // Объект ссылка?
+                    if (!empty($parent['is_link']) || !empty($proto['is_link'])){
+                        $object['is_link'] = 1;
+                    }
                 }
             }
         }
+        self::bufferAdd($key, $object);
         return $object;
     }
 
@@ -76,15 +92,16 @@ class Data
         if (empty(self::$sections[$uri])){
             self::$sections[$uri] = null;
             $find_uri = $uri;
-            while (!($config = self::getConfig($find_uri)) && !$strong && !empty($find_uri)){
+            while (!isset(self::$config[$find_uri]) && !$strong && !empty($find_uri)){
                 $find_uri = mb_substr($find_uri, 0, mb_strrpos($find_uri, '/'));
             }
-            if ($config){
+            if (isset(self::$config[$find_uri])){
+                $config = &self::$config[$find_uri];
                 if (empty(self::$sections[$find_uri])){
                     // Наследование конфигурации
                     if (isset($config['extends'])){
-                        $extends = self::getConfig($config['extends']);
-                        $config = array_replace($extends, $config);
+                        $config = array_replace(self::$config[$config['extends']], $config);
+                        unset($config['extends']);
                     }
                     // Создание экземпляара секции
                     if (isset($config['class']) && Boolive::isExist(trim($config['class'],'\\'))){
@@ -173,12 +190,6 @@ class Data
      */
     private static function getConfig($uri = null)
     {
-        if (file_exists(DIR_SERVER.self::CONFIG_FILE)){
-            include DIR_SERVER.self::CONFIG_FILE;
-            if (isset($config)) self::$config = $config;
-        }else{
-            return false;
-        }
         if (isset($uri)){
             if (isset(self::$config[$uri])){
                 return self::$config[$uri];
@@ -190,20 +201,42 @@ class Data
         }
     }
 
-    public function bufferAdd($object)
+    /**
+     * Проверка объекта в буфере
+     * @param $key
+     * @return bool
+     */
+    public static function bufferExist($key)
     {
-        if (isset(self::$buffer['uri'])){
-            self::$buffer[$object['uri']] = $object;
-        }
+        return isset(self::$buffer[$key]) || array_key_exists($key, self::$buffer);
     }
 
-    public function bufferGet($uri)
+    /**
+     * Добавление объекта в буфер
+     * @param $key
+     * @param $object
+     */
+    public static function bufferAdd($key, $object)
     {
-        return isset(self::$buffer['uri'])? self::$buffer[$uri] : null;
+        self::$buffer[$key] = $object;
     }
 
-    public function bufferRemove($uri)
+    /**
+     * Выбор объекта из буфера
+     * @param $key
+     * @return mixed
+     */
+    public static function bufferGet($key)
     {
-        unset(self::$buffer[$uri]);
+        return  self::$buffer[$key];
+    }
+
+    /**
+     * Удаление объекта из буфера
+     * @param $key
+     */
+    public static function bufferRemove($key)
+    {
+        unset(self::$buffer[$key]);
     }
 }

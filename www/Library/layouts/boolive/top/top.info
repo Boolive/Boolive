@@ -1,3 +1,4 @@
 {
-    "proto": "/Library/basic/Group"
+    "title": "Верх области содержимого",
+    "proto": "/Library/views/ViewGroup"
 }

@@ -31,3 +31,10 @@ Version 2.0 preview work in progress
 - new #44: Added indication that the object exists (VladimirShestakov)
 - new: Added object the Option for automatic views (VladimirShestakov)
 - new: Added top menu and sidebar menu in the boolive layout (VladimirShestakov)
+- new #45: Added property "object" for all widget. Widget views self object or object from input (VladimirShestakov)
+- new #48: Overriding prototype properties. Added attribute "override" (VladimirShestakov)
+- new #49: Object as a reference. Added attribute "is_link" (VladimirShestakov)
+- new #50: Added method Entity :: is () to check prototype exists
+- new #51: Added executable object "View" in package "Library/views" (VladimirShestakov)
+- new #52: Added widgets AutoWidget and  AutoWidgetList for automatic views objects (VladimirShestakov)
+- enh: Update prototype in all widgets and other view objects. Added package /Library/views (VladimirShestakov)

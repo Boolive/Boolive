@@ -1,3 +1,4 @@
 {
-    "proto": "/Library/basic/Group"
+    "title": "Боковая панель",
+    "proto": "/Library/views/ViewGroup"
 }

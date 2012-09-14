@@ -50,8 +50,8 @@ class MySQLSection extends Section
      */
     public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false)
     {
-        $key = $uri.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
-        if (array_key_exists($key, $this->buffer)) return $this->buffer[$key];
+        //$key = $uri.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
+        //if (array_key_exists($key, $this->buffer)) return $this->buffer[$key];
 
         $where = 'uri=? AND lang=? AND owner=?';
         $values = array($uri, $lang, $owner);
@@ -70,11 +70,11 @@ class MySQLSection extends Section
         if ($attrs = $q->fetch(DB::FETCH_ASSOC)){
             //Trace::groups('DB')->group('real_count')->set(Trace::groups('DB')->group('real_count')->get()+1);
             $obj = Data::makeObject($attrs, false, true);
-            return $this->buffer[$key] = $obj;
+            return /*$this->buffer[$key] = */$obj;
         }else{
             //Trace::groups('DB')->group('virtual_count')->set(Trace::groups('DB')->group('virtual_count')->get()+1);
         }
-        return $this->buffer[$key] = null;
+        return /*$this->buffer[$key] = */null;
     }
 
     /**
@@ -313,7 +313,13 @@ class MySQLSection extends Section
         // Создание экземпляров
         $result = array();
         while ($attr = $q->fetch(DB::FETCH_ASSOC)){
-            $obj = Data::makeObject($attr, false, true);
+            $key = $attr['uri'];//.' '.$attr['lang'].' '.$attr['owner'].' '.$attr['date'].' '.(bool)$attr['is_history'];
+            if (Data::bufferExist($key)){
+                $obj = Data::bufferGet($key);
+            }else{
+                $obj = Data::makeObject($attr, false, true);
+                Data::bufferAdd($key, $obj);
+            }
             $result[] = $obj;
         }
         //Trace::groups('DB')->group('select_count')->set(Trace::groups('DB')->group('select_count')->get()+1);
@@ -360,13 +366,15 @@ class MySQLSection extends Section
                 `proto` VARCHAR(255) DEFAULT NULL COMMENT "uri прототипа",
                 `value` VARCHAR(255) DEFAULT NULL COMMENT "Значение",
                 `is_logic` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, есть ли класс у объекта",
-                `is_file` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Является ли объект файлом",
+                `is_file` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, Является ли объект файлом",
                 `is_history` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, является ли запись историей",
                 `is_delete` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, удален объект или нет",
                 `is_hidden` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, скрытый объект или нет",
+                `is_link` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, является ли объект ссылкой",
+                `override` TINYINT(4) NOT NULL DEFAULT "0" COMMENT "Признак, не использовать подчиненных прототипа",
                 PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
-                KEY `orders` (`order`),
-                KEY `sate` (`is_history`,`is_delete`,`is_hidden`)
+                KEY `orders` (`level`, `order`),
+                KEY `state` (`is_history`,`is_delete`,`is_hidden`)
             ) ENGINE=INNODB DEFAULT CHARSET=utf8'
         );
     }

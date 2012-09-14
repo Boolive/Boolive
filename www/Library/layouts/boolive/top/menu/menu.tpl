@@ -1,4 +1,3 @@
-<?php $v->style; ?>
 <div class="menu-top">
-    <?php echo $v['views']->string();?>
+    <?php echo $v['view']->string();?>
 </div>

@@ -51,7 +51,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     protected function getValue()
     {
         if (isset($this->_maker, $this->_name)){
-            $parent = $this->_maker->getValue(); // Берется значения родителя
+            $parent = $this->_maker->getValue(); // Берется значения родителя (родитель, возможно, берет значения у своего родителя..)
             return isset($parent[$this->_name])? $parent[$this->_name] : null; // Из него выбирается своё
         }else{
             return $this->_value;
@@ -321,6 +321,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
             // Создание объекта Values для запрашиваемого значения.
             // Объекту устанавливается правило в соответсвии с правилом данного объекта Values и запрашиваемого элемента
             $this->_interfaces[$name] = $interface = new static(null, $this->getRule($name));
+            // Присваивая maker и name объект $interfaces будет обращаться за значением к родителю
             $interface->_maker = $this;
             $interface->_name = $name;
         }

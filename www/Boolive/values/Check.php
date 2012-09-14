@@ -40,39 +40,41 @@ class Check
     /**
      * Универсальный фильтр значения по правилу
      * @param $value Значение для проверки и фильтра
-     * @param \Boolive\values\Rule $rule Объект правила
+     * @param null|\Boolive\values\Rule $rule Объект правила
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @return mixed
      */
-    static function filter($value, Rule $rule, &$error = null)
+    static function filter($value, $rule, &$error = null)
     {
         $result = null;
-        $filters = $rule->getFilters();
-        // Подготовка специальных Фильтров. Удаление из общего списка обработки
-        if (isset($filters['required'])) unset($filters['required']);
-        if (isset($filters['default']))	unset($filters['default']);
-        if (isset($filters['ignore'])){
-            $ignore = $filters['ignore'];
-            if (sizeof($ignore) == 1 && is_array($ignore[0])) $ignore = $ignore[0];
-            unset($filters['ignore']);
-        }else{
-            $ignore = array();
-        }
-        // Фильтр значений
-        foreach ($filters as $filter => $args){
-            $value = self::$filter($value, $error, $rule);
-            if ($error){
-                if ($ignore && in_array($error->getMessage(), $ignore)){
-                    $error = null;
-                }else{
-                    break;
+        if ($rule instanceof Rule){
+            $filters = $rule->getFilters();
+            // Подготовка специальных Фильтров. Удаление из общего списка обработки
+            if (isset($filters['required'])) unset($filters['required']);
+            if (isset($filters['default']))	unset($filters['default']);
+            if (isset($filters['ignore'])){
+                $ignore = $filters['ignore'];
+                if (sizeof($ignore) == 1 && is_array($ignore[0])) $ignore = $ignore[0];
+                unset($filters['ignore']);
+            }else{
+                $ignore = array();
+            }
+            // Фильтр значений
+            foreach ($filters as $filter => $args){
+                $value = self::$filter($value, $error, $rule);
+                if ($error){
+                    if ($ignore && in_array($error->getMessage(), $ignore)){
+                        $error = null;
+                    }else{
+                        break;
+                    }
                 }
             }
-        }
-        // Значение по умолчанию, если определено и имеется ошибка
-        if ($error && isset($rule->default)){
-            $error = null;
-            $value = $rule->default[0];
+            // Значение по умолчанию, если определено и имеется ошибка
+            if ($error && isset($rule->default)){
+                $error = null;
+                $value = $rule->default[0];
+            }
         }
         return $value;
     }
@@ -310,6 +312,27 @@ class Check
         if (is_string($value)){
             // Пробуем получить объект по uri
             $value = Data::object($value);
+        }else
+        if (is_array($value)){
+            $value = Data::makeObject($value);
+
+            if (isset($value['uri'])){
+                $obj = Data::object($value);
+            }else
+            if (isset($value['proto'])){
+                $obj = Data::object($value['proto'])->birth();
+                if (isset($value['parent']) && $parent = Data::object($value['parent'])){
+                    $parent->__set(null, $obj);
+                }
+            }
+            unset($value['uri'], $value['proto'], $value['value']);
+            // Подгрузка или установка подчиенных
+            if (isset($obj) && isset($value['_children']) && is_array($value['_children'])){
+                foreach ($value['_children'] as $name => $child){
+
+                }
+            }
+
         }
         if ($value instanceof Entity && (empty($class) || $value instanceof $class) && $value->isExist()){
             return $value;
