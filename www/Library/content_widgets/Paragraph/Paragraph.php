@@ -12,7 +12,7 @@ class Paragraph extends Widget
 {
     public function work($v = array())
     {
-        $v['value'] = $this->_input['GET']['object']->getValue();
+        $v['value'] = $this->_input['REQUEST']['object']->getValue();
         return parent::work($v);
     }
 }

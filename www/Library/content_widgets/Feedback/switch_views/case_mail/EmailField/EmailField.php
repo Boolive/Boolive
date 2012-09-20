@@ -43,9 +43,9 @@ class EmailField extends Widget
 //                }
 //            }
 //        }else{
-            $v['title'] = $this->_input['GET']['object']->title->getValue();
-            $v['value'] = $this->_input['GET']['object']->getValue();
-            $v['name'] = 'object[_children]['.$this->_input['GET']['object']->getName().'][value]';
+            $v['title'] = $this->_input['REQUEST']['object']->title->getValue();
+            $v['value'] = $this->_input['REQUEST']['object']->getValue();
+            $v['name'] = 'object[_children]['.$this->_input['REQUEST']['object']->getName().'][value]';
             $v['id'] = $this['uri'];
             return parent::work($v);
 //        }

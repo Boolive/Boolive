@@ -13,7 +13,7 @@ class AutoWidget extends Widget
     protected function initInputChild($input)
     {
         parent::initInputChild($input);
-        $this->_input_child['GET']['object'] = $this->_input['GET']['object'];
+        $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
     }
 
     public function work($v = array())

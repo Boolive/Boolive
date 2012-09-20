@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Сен 14 2012 г., 17:35
+-- Время создания: Сен 18 2012 г., 16:33
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -31,7 +31,7 @@ CREATE TABLE `contents` (
   `is_delete` tinyint(4) NOT NULL default '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL default '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак не использовать свойства прототипа',
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -105,7 +105,8 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/news/news4/text', '', 0, 0, 4, 2, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news4/text/p1', '', 0, 0, 5, 1, '/Library/content_samples/Paragraph', 'Текст новости в виде одного абзаца', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news4/title', '', 0, 0, 4, 1, '/Library/content_samples/Page/title', 'Четвертая новость', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/news/title', '', 0, 0, 3, 1, '/Library/content_samples/Part/title', 'Лента новостей', 0, 0, 0, 0, 0, 0, 0);
+('/Contents/news/title', '', 0, 0, 3, 1, '/Library/content_samples/Part/title', 'Лента новостей', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -128,7 +129,7 @@ CREATE TABLE `interfaces` (
   `is_delete` tinyint(4) NOT NULL default '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL default '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -140,7 +141,9 @@ CREATE TABLE `interfaces` (
 
 INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
 ('/Interfaces/html', '', 0, 0, 2, 1, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0);
+('/Interfaces/html/body/admin', '', 0, 0, 4, 1, '/Library/layouts/Admin', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/title', '', 0, 0, 2, 3, NULL, 'Интерфейс', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -163,7 +166,7 @@ CREATE TABLE `keywords` (
   `is_delete` tinyint(4) NOT NULL default '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL default '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -176,7 +179,8 @@ CREATE TABLE `keywords` (
 INSERT INTO `keywords` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
 ('/Keywords/cms', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords/framework', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '0', 0, 0, 0, 0, 0, 0, 0),
-('/Keywords/php', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0);
+('/Keywords/php', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0),
+('/Keywords/title', '', 0, 0, 2, 1, NULL, 'Ключевые слова', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -199,7 +203,7 @@ CREATE TABLE `library` (
   `is_delete` tinyint(4) NOT NULL default '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL default '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -210,6 +214,18 @@ CREATE TABLE `library` (
 -- 
 
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
+('/Library/admin_widgets', '', 0, 0, 2, 5, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer', '', 0, 0, 3, 2, '/Library/views/AutoWidgetList', 'Explorer.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/description', '', 0, 0, 4, 2, '/Library/views/AutoWidgetList/description', 'Отображает списком свойства объекта', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/switch_views', '', 0, 0, 4, 3, '/Library/views/AutoWidgetList/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/switch_views/case_default', '', 0, 0, 5, 1, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/switch_views/case_default/ObjectItem', '', 0, 0, 6, 1, '/Library/admin_widgets/ObjectItem', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/title', '', 0, 0, 4, 1, '/Library/views/AutoWidgetList/title', 'Обозреватель', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem', '', 0, 0, 3, 1, '/Library/views/Widget', 'ObjectItem.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображение объекта в виде пункта списка', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Виджет объекта', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User', '', 0, 0, 4, 1, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -306,7 +322,15 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/RichText/switch_views/case_p/paragraph', '', 0, 0, 6, 1, '/Library/content_widgets/Paragraph', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Title', '', 0, 0, 3, 1, '/Library/views/Widget', 'Title.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts', '', 0, 0, 2, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/boolive', '', 0, 0, 3, 1, '/Library/views/Focuser', 'boolive.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin', '', 0, 0, 3, 2, '/Library/views/Focuser', 'Admin.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/programs', '', 0, 0, 4, 4, '/Library/views/AutoWidget', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/programs/description', '', 0, 0, 5, 2, '/Library/views/AutoWidget/description', 'Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/programs/switch_views', '', 0, 0, 5, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/programs/switch_views/case_default', '', 0, 0, 6, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/programs/switch_views/case_default/Explorer', '', 0, 0, 7, 1, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/programs/title', '', 0, 0, 5, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/boolive', '', 0, 0, 3, 1, '/Library/views/Focuser', 'boolive.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/bottom', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/center', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/center/Content', '', 0, 0, 5, 1, '/Library/content_widgets/Content', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -326,6 +350,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/boolive/top/menu/object/main', '', 0, 0, 7, 1, '/Contents/main', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/object/news', '', 0, 0, 7, 2, '/Contents/news', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/res/style', '', 0, 0, 7, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/title', '', 0, 0, 2, 1, NULL, 'Библиотека', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget', '', 0, 0, 3, 9, '/Library/views/Widget', 'AutoWidget.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает любой объект в соответсвии с установленными вараинтами', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/switch_views', '', 0, 0, 4, 3, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -422,7 +447,7 @@ CREATE TABLE `members` (
   `is_delete` tinyint(4) NOT NULL default '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL default '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -441,7 +466,8 @@ INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Members/registered/admins/vova', '', 0, 0, 4, 2, '/Library/basic/members/User', 'password_hash', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/vova/email', '', 0, 0, 5, 2, '/Library/basic/members/User/email', 'boolive@yandex.ru', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/vova/name', '', 0, 0, 5, 1, '/Library/basic/members/User/name', 'Вова', 0, 0, 0, 0, 0, 0, 0),
-('/Members/registered/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Зарегистрированные', 0, 0, 0, 0, 0, 0, 0);
+('/Members/registered/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Зарегистрированные', 0, 0, 0, 0, 0, 0, 0),
+('/Members/title', '', 0, 0, 2, 1, NULL, 'Пользователи и группы', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -464,7 +490,7 @@ CREATE TABLE `site` (
   `is_delete` tinyint(4) NOT NULL default '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL default '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL default '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -479,4 +505,5 @@ INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `
 ('/Interfaces', '', 0, 1342082233, 1, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords', '', 0, 1342077181, 1, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library', '', 0, 1342077181, 1, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Members', '', 0, 1342077181, 1, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0);
+('/Members', '', 0, 1342077181, 1, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/title', '', 0, 0, 1, 1, NULL, 'Сайт', 0, 0, 0, 0, 0, 0, 0);

@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\QueryScript;
+namespace Library\views\jQueryScript;
 
 use Library\views\JavaScript\JavaScript;
 

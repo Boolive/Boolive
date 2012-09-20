@@ -20,9 +20,7 @@ use Boolive\values\Values,
 
 /**
  * @property \Boolive\values\Values path Элементы пути URI
- * @property \Boolive\values\Values args Аргументы URI или командной строки
- * @property \Boolive\values\Values GET GET данные
- * @property \Boolive\values\Values POST POST данные
+ * @property \Boolive\values\Values REQUEST GET+POST данные или аргументы командной строки
  * @property \Boolive\values\Values FILES Загруженные файлы
  * @property \Boolive\values\Values COOKIE Куки
  * @property \Boolive\values\Values RAW Неформатированные данные
@@ -40,40 +38,32 @@ class Input extends Values
     static function activate()
     {
         $values = array(
-            'GET' => array(),//isset($_GET)? $_GET : array(),
-            'POST' => isset($_POST)? $_POST : array(),
+            //'GET' => array(),//isset($_GET)? $_GET : array(),
+            //'POST' => isset($_POST)? $_POST : array(),
+            'REQUEST' => array(),
             'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
             'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
             'RAW' => empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA, // Неформатированные данные
             'SERVER' => $_SERVER
         );
         if (isset($_SERVER['REQUEST_URI'])){
-            parse_str('path='.urldecode($_SERVER['REQUEST_URI']), $values['GET']);
+            parse_str('path='.urldecode($_SERVER['REQUEST_URI']), $values['REQUEST']);
         }
         // Элементы пути URI
-        if (isset($values['GET']['path']) && ($values['GET']['path'] = rtrim($values['GET']['path'],'/ '))){
-            $values['path'] = explode('/', $values['GET']['path']);
+        if (isset($values['REQUEST']['path']) && ($values['REQUEST']['path'] = rtrim($values['REQUEST']['path'],'/ '))){
+            $values['PATH'] = explode('/', trim($values['REQUEST']['path'],' /'));
         }else{
-            $values['path'] = array();
+            $values['PATH'] = array();
         }
-        // Аргументы из URI
-        $values['args'] = array();
-        if (!empty($values['GET'])){
-            $list = $values['GET'];
-            unset($list['path']);
-            $i = 0;
-            foreach ($list as $key => $value){
-                if ($value !== ''){
-                    $values['args'][$key] = $value;
-                }else{
-                    $values['args'][$i] = $key;
-                }
-                $i++;
-            }
+        if (isset($_POST)){
+            $values['REQUEST'] = array_replace_recursive($values['REQUEST'], $_POST);
         }
         // Аргументы из консоли в get (режим CLI)
-        if (empty($values['args']) && isset($_SERVER['argv'])) $values['args'] = $_SERVER['argv'];
-
+        if (empty($values['REQUEST']) && isset($_SERVER['argv'])) $values['REQUEST'] = $_SERVER['argv'];
+        // Метод запроса
+        if (isset($values['SERVER']['REQUEST_METHOD'])){
+            $values['REQUEST']['method'] = $values['SERVER']['REQUEST_METHOD'];
+        }
         // Создание контейнера
         self::$input = new Input($values);
     }
@@ -88,21 +78,12 @@ class Input extends Values
     }
 
     /**
-     * Аргументы URI
-     * @return \Boolive\values\Values
-     */
-    static function args()
-    {
-        return self::$input->args;
-    }
-
-    /**
      * POST данные
      * @return \Boolive\values\Values
      */
-    static function POST()
+    static function REQUEST()
     {
-        return self::$input->POST;
+        return self::$input->REQUEST;
     }
 
     /**

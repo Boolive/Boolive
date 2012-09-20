@@ -19,7 +19,7 @@ class Widget extends View
     public function getInputRule()
     {
         return Rule::arrays(array(
-                'GET' => Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->default($this->object)->required()
                     )
                 )
@@ -30,6 +30,7 @@ class Widget extends View
     public function work($v = array())
     {
         $this->startChild('res');
+        $v['view_uri'] = $this['uri'];
         return Template::render($this, $v);
     }
 }

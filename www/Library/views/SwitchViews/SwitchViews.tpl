@@ -1,1 +1,1 @@
-<?php echo $v['object']->string();?>
+<div class="SwitchViews"><?php echo $v['object']->string();?></div>

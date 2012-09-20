@@ -13,8 +13,8 @@ class MessageField extends Widget
 {
     public function work($v = array())
     {
-        $v['title'] = $this->_input['GET']['object']->title->getValue();
-        $v['value'] = $this->_input['GET']['object']->getValue();
+        $v['title'] = $this->_input['REQUEST']['object']->title->getValue();
+        $v['value'] = $this->_input['REQUEST']['object']->getValue();
         $v['name'] = $this->getName();
         $v['id'] = $this['uri'];
         return parent::work($v);

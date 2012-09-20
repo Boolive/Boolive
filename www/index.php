@@ -18,6 +18,6 @@ require DIR_SERVER_ENGINE.'Boolive.php';
 // Активация Boolive
 Boolive::activate();
 //// Исполнение объектов интерфейса. Вывод результата клиенту
-echo Data::object('/Interfaces')->start(new Commands, Input::getSource());
+//echo Data::object('/Interfaces')->start(new Commands, Input::getSource());
 
-//trace(array_keys(Data::$buffer));
+return mb_substr_count(, '/');

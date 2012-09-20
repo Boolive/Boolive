@@ -18,7 +18,7 @@ class Focuser extends Widget
     public function getInputRule()
     {
         return Rule::arrays(array(
-            'GET' => Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
                 'path' => Rule::string(),
                 )
             ))
@@ -28,12 +28,12 @@ class Focuser extends Widget
     protected function initInputChild($input){
         parent::initInputChild($input);
         // По URL определяем объект и номер страницы
-        $uri = $this->_input['GET']['path'];
+        $uri = $this->_input['REQUEST']['path'];
         if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){
             $uri = $match[1];
-            $this->_input_child['GET']['page'] = $match[2];
+            $this->_input_child['REQUEST']['page'] = $match[2];
         }else{
-            $this->_input_child['GET']['page'] = 1;
+            $this->_input_child['REQUEST']['page'] = 1;
         }
         $object = null;
         // объект по умолчанию
@@ -47,6 +47,6 @@ class Focuser extends Widget
         // корнеь
         if (!$object && $uri == '/Site/') $object = Data::object('');
         // Установка во входящие данные
-        $this->_input_child['GET']['object'] = $object;
+        $this->_input_child['REQUEST']['object'] = $object;
     }
 }

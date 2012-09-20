@@ -16,15 +16,15 @@ class AutoWidgetList extends Widget
         $list = $this->getList();
         $v['view'] = array();
         foreach ($list as $object){
-            $this->_input_child['GET']['object'] = $object;
+            $this->_input_child['REQUEST']['object'] = $object;
             $v['view'][$object->getName()] = $this->startChild('switch_views');
         }
-        $this->_input_child['GET']['object'] = $this->_input['GET']['object'];
+        $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
         return parent::work($v);
     }
 
     protected function getList(){
         // @todo Сделать настраиваемый фильтр
-        return $this->_input['GET']['object']->findAll(array('order' =>'`order` ASC'));
+        return $this->_input['REQUEST']['object']->findAll(array('order' =>'`order` ASC'));
     }
 }

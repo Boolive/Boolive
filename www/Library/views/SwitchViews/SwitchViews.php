@@ -22,7 +22,7 @@ class SwitchViews extends Widget
     public function getInputRule()
     {
         return Rule::arrays(array(
-                'GET' => Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->default(null)->required(),
                     )
                 )
@@ -39,21 +39,30 @@ class SwitchViews extends Widget
     {
         // Все варианты отображений для последующего поиска нужного
         $options = $this->getCases();
-        $obj = $this->_input['GET']['object'];
+        $obj = $this->_input['REQUEST']['object'];
         $v['object'] = null;
+        $uri = $obj['uri'];
+        $do = true;
         // Поиск варианта отображения для объекта
-        while ($obj){
-            if (isset($options[$obj['uri']])){
-                $v['object'] = $options[$obj['uri']]->start($this->_commands, $this->_input_child);
+        while ($do){
+            if (isset($options[$uri])){
+                $v['object'] = $options[$uri]->start($this->_commands, $this->_input_child);
                 if ($v['object'] != null){
                     $this->_input_child['previous'] = true;
                 }
             }
             // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
             if ($v['object'] == null){
-                $obj = $obj->proto();
+                if ($uri == 'all'){
+                    $do = false;
+                }else
+                if (isset($obj) && ($obj = $obj->proto())){
+                    $uri = $obj['uri'];
+                }else{
+                    $uri = 'all';
+                }
             }else{
-                $obj = null;//чтоб остановить цикл
+                $do = false;//чтоб остановить цикл
             }
         }
         return parent::work($v);

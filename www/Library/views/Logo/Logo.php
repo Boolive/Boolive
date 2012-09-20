@@ -19,13 +19,13 @@ class Logo extends Widget
     {
         parent::initInput($input);
         if ($this->use_object->getValue()){
-            $this->_input['GET']['object'] = $this->object;
+            $this->_input['REQUEST']['object'] = $this->object;
         }
     }
 
     public function work($v = array())
     {
-        $v['image'] = $this->_input['GET']['object']->getFile();
+        $v['image'] = $this->_input['REQUEST']['object']->getFile();
         return parent::work($v);
     }
 }

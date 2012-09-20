@@ -23,7 +23,6 @@ class Html extends Widget
     {
         // Вызов всех подчиенных, чтобы исполнить после их команды добавления тегов
         $v = $this->startChildren();
-
         // Обработка своих команд для вставки тегов в заголовок HTML
         $v['head'] = '';
         $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB));

@@ -12,6 +12,6 @@ class Text extends RichText
 {
     protected function getList(){
         // @todo Сделать настраиваемый фильтр
-        return $this->_input['GET']['object']->findAll(array('order' =>'`order` ASC', 'count'=>2));
+        return $this->_input['REQUEST']['object']->findAll(array('order' =>'`order` ASC', 'count'=>2));
     }
 }

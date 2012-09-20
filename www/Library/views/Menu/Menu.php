@@ -15,9 +15,9 @@ class Menu extends Widget
         parent::initInputChild($input);
         // Подчиенным нужно передать активный пункт меню и отображаемый объект меню
         // Входящий объект используется как активный пункт меню
-        $this->_input_child['GET']['active'] = $this->_input['GET']['object'];
+        $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['object'];
         // Отображется всегда свой объект
-        $this->_input_child['GET']['object'] = $this->object;
+        $this->_input_child['REQUEST']['object'] = $this->object;
     }
 
     public function work($v = array()){
