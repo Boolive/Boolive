@@ -61,7 +61,7 @@ class SwitchCase extends View
 
     protected function getViews(){
         if (!isset($this->_views)){
-            $this->_views = $this->findAll(array('order'=>'`order` ASC'));
+            $this->_views = $this->findAll(array('where' => 'is_history=0 and is_delete=0', 'order'=>'`order` ASC'));
             unset($this->_views['title'], $this->_views['description']);
         }
         return $this->_views;

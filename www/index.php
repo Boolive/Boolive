@@ -20,4 +20,4 @@ Boolive::activate();
 //// Исполнение объектов интерфейса. Вывод результата клиенту
 echo Data::object('/Interfaces')->start(new Commands, Input::getSource());
 
-//trace(array_keys(Data::$buffer));
+//trace(Input::getSource());
