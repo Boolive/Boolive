@@ -29,7 +29,7 @@ class Widget extends View
 
     public function work($v = array())
     {
-        //$this->startChild('res');
+        $this->startChild('res');
         return Template::render($this, $v);
     }
 }

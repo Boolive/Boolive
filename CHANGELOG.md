@@ -24,6 +24,7 @@ Version 2.0 preview work in progress
 - new #22: Added widget for view Head of text (VladimirShestakov)
 - new #23: Added widget for view Paragraph of text (VladimirShestakov)
 - new #24: Added widget for view Image in text (VladimirShestakov)
+- new #30: Added widget for view List in text (AzatGaliev)
 - new #32: Added widget for view Part (VladimirShestakov)
 - new #33: Added widget Focuser (VladimirShestakov)
 - new #34: Added widget PagePreview with style (VladimirShestakov)

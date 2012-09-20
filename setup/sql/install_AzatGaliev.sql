@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Сен 20 2012 г., 22:56
+-- Время создания: Сен 21 2012 г., 01:02
 -- Версия сервера: 5.5.24
 -- Версия PHP: 5.3.10-1ubuntu3.4
 
@@ -93,20 +93,20 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1', '', 0, 0, 4, 5, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1', '', 0, 0, 5, 1, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/list1/item1/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 1, 0, 0, 0),
+('/Contents/main/text/list1/item1/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1/text/p1', '', 0, 0, 7, 1, '/Library/content_samples/Paragraph', 'Хей-хей-хей! Я - пункт меню!', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1/text/p2', '', 0, 0, 7, 2, '/Library/content_samples/Paragraph', 'А я - второй параграф =)', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item2', '', 0, 0, 5, 2, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/list1/item2/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 1, 0, 0, 0),
+('/Contents/main/text/list1/item2/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item2/text/img1', '', 0, 0, 7, 1, '/Library/content_samples/Image', 'nota.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item2/text/p1', '', 0, 0, 7, 2, '/Library/content_samples/Paragraph', 'Ля-ля-ля, ля-ля-ля!', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/list1/item3', '', 0, 0, 5, 3, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 1, 0, 0, 0),
+('/Contents/main/text/list1/item3', '', 0, 0, 5, 3, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1', '', 0, 0, 6, 1, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1/item1', '', 0, 0, 7, 1, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/list1/item3/list1/item1/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 1, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item1/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1/item1/text/p1', '', 0, 0, 9, 1, '/Library/content_samples/Paragraph', 'А вот пункт', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1/item2', '', 0, 0, 7, 2, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/list1/item3/list1/item2/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 1, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item2/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1/item2/text/p1', '', 0, 0, 9, 1, '/Library/content_samples/Paragraph', 'вложенного меню', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/p1', '', 0, 0, 4, 2, '/Library/content_samples/Paragraph', 'Добро пожаловать на тестовый сайт. Сайт работает на новой системе Boolive 2', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/p2', '', 0, 0, 4, 4, '/Library/content_samples/Paragraph', 'Hello World :)', 0, 0, 0, 0, 0, 0, 0),
@@ -297,9 +297,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/views/Widget', 'Head.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/views/Widget', 'Image.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/ListView', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'ListView.tpl', 1, 1, 0, 0, 0, 0, 0),
-('/Library/content_widgets/ListView/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/ListView/switch_views/case_item', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/Item', 1, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'ListView.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/Item', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item/Item', '', 0, 0, 6, 1, '/Library/views/AutoWidgetList', 'Item.tpl', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views', '', 0, 0, 7, 1, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_list', '', 0, 0, 8, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/List', 0, 0, 0, 0, 0, 0, 0),

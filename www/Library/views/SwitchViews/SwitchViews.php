@@ -41,7 +41,6 @@ class SwitchViews extends Widget
         $options = $this->getCases();
         $obj = $this->_input['GET']['object'];
         $v['object'] = null;
-        $i = 0;
         // Поиск варианта отображения для объекта
         while ($obj){
             if (isset($options[$obj['uri']])){
@@ -56,9 +55,7 @@ class SwitchViews extends Widget
             }else{
                 $obj = null;//чтоб остановить цикл
             }
-            echo (isset($options[$obj['uri']])) ? $options[$obj['uri']] . '<br>' : '';
         }
-        echo $i;
         return parent::work($v);
     }
 
