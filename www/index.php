@@ -17,7 +17,5 @@ require 'config.php';
 require DIR_SERVER_ENGINE.'Boolive.php';
 // Активация Boolive
 Boolive::activate();
-//// Исполнение объектов интерфейса. Вывод результата клиенту
-//echo Data::object('/Interfaces')->start(new Commands, Input::getSource());
-
-return mb_substr_count(, '/');
+// Исполнение объектов интерфейса. Вывод результата клиенту
+echo Data::object('/Interfaces')->start(new Commands, Input::getSource());

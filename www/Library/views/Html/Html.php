@@ -34,7 +34,14 @@ class Html extends Widget
                 }else{
                     $text='';
                 }
-                if (isset($com[1]['src'])) $com[1]['src'] = $com[1]['src'].'?'.TIMESTAMP;
+                if (isset($com[1]['src'])){
+                    if (mb_strpos($com[1]['src'], '?')===false){
+                        $com[1]['src'] = $com[1]['src'].'?'.TIMESTAMP;
+                    }else{
+                        $com[1]['src'] = $com[1]['src'].'&'.TIMESTAMP;
+                    }
+
+                }
                 if (isset($com[1]['href']) && $com[0]!='base') $com[1]['href'] = $com[1]['href'].'?'.TIMESTAMP;
                 $attr = '';
                 foreach ($com[1] as $name => $value) $attr.=' '.$name.'="'.$value.'"';

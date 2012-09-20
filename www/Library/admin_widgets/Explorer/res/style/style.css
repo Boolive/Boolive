@@ -1,0 +1,10 @@
+.Explorer{
+
+	}
+	.Explorer > h1{
+		margin: 0;
+		padding: 25px;
+		font-size: 22pt;
+		font-weight: normal;
+		line-height: 36px;
+		}

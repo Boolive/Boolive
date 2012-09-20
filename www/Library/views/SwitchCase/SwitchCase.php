@@ -43,6 +43,7 @@ class SwitchCase extends View
         if ($this->_input['REQUEST']['view_name']){
             // Если указано, каким отображать, то только его пробуем запустить
             $views = array($this->{$this->_input['REQUEST']['view_name']});
+            unset($this->_input_child['REQUEST']['view_name']);
         }else{
             // Все виджеты варианта
             $views = $this->getViews();
