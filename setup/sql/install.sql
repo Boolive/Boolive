@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Сен 25 2012 г., 15:28
+-- Время создания: Сен 25 2012 г., 19:19
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -81,6 +81,23 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/main/text', '', 0, 0, 3, 2, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/head1', '', 0, 0, 4, 1, '/Library/content_samples/Head', 'Заголовок главной страницы', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1', '', 0, 0, 4, 5, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item1', '', 0, 0, 5, 1, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item1/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item1/text/p1', '', 0, 0, 7, 1, '/Library/content_samples/Paragraph', 'Хей-хей-хей! Я - пункт меню!', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item1/text/p2', '', 0, 0, 7, 2, '/Library/content_samples/Paragraph', 'А я - второй параграф =)', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item2', '', 0, 0, 5, 2, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item2/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item2/text/img1', '', 0, 0, 7, 1, '/Library/content_samples/Image', 'nota.png', 0, 1, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item2/text/p1', '', 0, 0, 7, 2, '/Library/content_samples/Paragraph', 'Ля-ля-ля, ля-ля-ля!', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3', '', 0, 0, 5, 3, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1', '', 0, 0, 6, 1, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item1', '', 0, 0, 7, 1, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item1/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item1/text/p1', '', 0, 0, 9, 1, '/Library/content_samples/Paragraph', 'А вот пункт', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item2', '', 0, 0, 7, 2, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item2/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1/item3/list1/item2/text/p1', '', 0, 0, 9, 1, '/Library/content_samples/Paragraph', 'вложенного меню', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/p1', '', 0, 0, 4, 2, '/Library/content_samples/Paragraph', 'Добро пожаловать на тестовый сайт. Сайт работает на новой системе Boolive 2', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/p2', '', 0, 0, 4, 4, '/Library/content_samples/Paragraph', 'Hello World :)', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/title', '', 0, 0, 3, 1, '/Library/content_samples/Page/title', 'Главная', 0, 0, 0, 0, 0, 0, 0),
@@ -106,7 +123,9 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/news/news4/text/p1', '', 0, 0, 5, 1, '/Library/content_samples/Paragraph', 'Текст новости в виде одного абзаца', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news4/title', '', 0, 0, 4, 1, '/Library/content_samples/Page/title', 'Четвертая новость', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/title', '', 0, 0, 3, 1, '/Library/content_samples/Part/title', 'Лента новостей', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0);
+('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/switch_views/case_list', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/List', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/switch_views/case_list/ListView', '', 0, 0, 6, 1, '/Library/content_widgets/ListView', NULL, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -141,7 +160,7 @@ CREATE TABLE `interfaces` (
 
 INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
 ('/Interfaces/direct_handler', '', 0, 0, 2, 1, '/Library/views/DirectHandler', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Interfaces/html', '', 0, 0, 2, 2, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html', '', 0, 0, 2, 1, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/admin', '', 0, 0, 4, 1, '/Library/layouts/Admin', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/title', '', 0, 0, 2, 3, NULL, 'Интерфейс', 0, 0, 0, 0, 0, 0, 0);
@@ -296,6 +315,15 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/views/Widget', 'Head.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/views/Widget', 'Image.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'ListView.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/Item', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item/Item', '', 0, 0, 6, 1, '/Library/views/AutoWidgetList', 'Item.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views', '', 0, 0, 7, 1, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_list', '', 0, 0, 8, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/List', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_list/ListView', '', 0, 0, 9, 1, '/Library/content_widgets/ListView', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext', '', 0, 0, 8, 1, '/Library/views/SwitchCase', '/Library/content_samples/RichText', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext/RichText', '', 0, 0, 9, 1, '/Library/content_widgets/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Page.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/switch_views/case_comments', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Page/comments', 0, 0, 0, 0, 0, 0, 0),
@@ -330,6 +358,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/RichText/switch_views/case_h/head', '', 0, 0, 6, 1, '/Library/content_widgets/Head', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_img', '', 0, 0, 5, 3, '/Library/views/SwitchCase', '/Library/content_samples/Image', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_img/img', '', 0, 0, 6, 1, '/Library/content_widgets/Image', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/switch_views/case_list', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/List', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/RichText/switch_views/case_list/List', '', 0, 0, 6, 1, '/Library/content_widgets/ListView', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_p', '', 0, 0, 5, 4, '/Library/views/SwitchCase', '/Library/content_samples/Paragraph', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_p/paragraph', '', 0, 0, 6, 1, '/Library/content_widgets/Paragraph', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Title', '', 0, 0, 3, 1, '/Library/views/Widget', 'Title.tpl', 1, 1, 0, 0, 0, 0, 0),
