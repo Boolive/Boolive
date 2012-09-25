@@ -1,5 +1,3 @@
-nbproject/
-.idea/
-.settings/
-.project
-.buildpath
+/.idea/
+/error.log
+/*.log
