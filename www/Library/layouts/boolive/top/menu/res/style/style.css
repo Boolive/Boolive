@@ -18,3 +18,10 @@
                 .menu-top ul li a:hover {
                     text-decoration: underline;
                     }
+    .menu-top .SwitchViews{
+        display: inline;
+        }
+        /*.menu-top .SwitchViews:hover{*/
+            /*border: 1px dotted #000;*/
+            /*margin: -1px;*/
+        /*}*/

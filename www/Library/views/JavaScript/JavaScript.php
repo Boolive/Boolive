@@ -21,6 +21,10 @@ class JavaScript extends View
     {
         // Исполнение зависимых объектов
         $this->depends->start($this->_commands, $this->_input);
+        // Подключение скрипта прототипа - наследование скриптов
+//        if (($proto = $this->proto()) && ($proto instanceof self)){
+//            $proto->start($this->_commands, $this->_input);
+//        }
         // Подключение javascript файла
         if ($file = $this->getFile()){
             $this->_commands->addHtml('script', array('type'=>'text/javascript', 'src'=>$file));

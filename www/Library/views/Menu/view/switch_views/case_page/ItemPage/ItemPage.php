@@ -15,7 +15,7 @@ class ItemPage extends view
     public function getInputRule()
     {
         return Rule::arrays(array(
-            'GET' => Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity(), // Объект для пункта меню
                 'active' => Rule::entity()->default(null)// Активный объект (пункт меню)
                 )
@@ -25,7 +25,7 @@ class ItemPage extends view
 
     public function work($v = array())
     {
-        $obj = $this->_input['GET']['object'];
+        $obj = $this->_input['REQUEST']['object'];
         // Название пункта
         $v['item_text'] = $obj->title->getValue();
         $v['item_title'] = $v['item_text'];
@@ -44,7 +44,7 @@ class ItemPage extends view
             $v['item_href'] = '';
         }
         // Активность пункта
-        $active = $this->_input['GET']['active'];
+        $active = $this->_input['REQUEST']['active'];
         if ($real->isEqual($active)){
 			$v['item_class'] = 'active';
         }else

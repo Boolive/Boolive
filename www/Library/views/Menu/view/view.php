@@ -13,7 +13,7 @@ class view extends AutoWidgetList
 {
     public function getInputRule(){
         return Rule::arrays(array(
-            'GET' => Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // Объект для пункта меню
                 'active' => Rule::entity()->default(null)->required()// Активный объект (пункт меню)
                 )
@@ -23,8 +23,8 @@ class view extends AutoWidgetList
 
     protected function initInputChild($input){
         parent::initInputChild($input);
-        $this->_input_child['GET']['active'] = $this->_input['GET']['active'];
-        $this->_input_child['GET']['object'] = $this->_input['GET']['object'];
+        $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['active'];
+        $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
     }
 
     public function work($v = array()){
@@ -33,7 +33,7 @@ class view extends AutoWidgetList
 
     protected function getList(){
         // @todo Сделать настраиваемый фильтр
-        $list = $this->_input['GET']['object']->findAll(array('order' =>'`order` ASC'));
+        $list = $this->_input['REQUEST']['object']->findAll(array('order' =>'`order` ASC'));
         foreach ($list as $key => $object){
             /** @var $object \Boolive\data\Entity */
             if (!$object->is('/Library/content_samples/Page') && !$object->is('/Library/content_samples/Part')){

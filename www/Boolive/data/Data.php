@@ -124,21 +124,25 @@ class Data
      */
     static function makeObject($attribs, $virtual = true, $exist = false)
     {
-        if (isset($attribs['uri']) && !empty($attribs['is_logic'])){
-            try{
-                // Имеется свой класс?
-                if ($attribs['uri']===''){
-                    $class = 'Site';
-                    $exist = true;
-                    $virtual = true;
-                }else{
-                    $names = F::splitRight('/', $attribs['uri']);
-                    $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
+        if (isset($attribs['uri'])){
+            if ($attribs['uri']===''){
+                $exist = true;
+                $virtual = true;
+            }
+            if (!empty($attribs['is_logic'])){
+                try{
+                    // Имеется свой класс?
+                    if ($attribs['uri']===''){
+                        $class = 'Site';
+                    }else{
+                        $names = F::splitRight('/', $attribs['uri']);
+                        $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
+                    }
+                    return new $class($attribs, $virtual, $exist);
+                }catch(\ErrorException $e){
+                    // Если файл не найден, то будет использовать класс прототипа или Entity
+                    if ($e->getCode() != 2) throw $e;
                 }
-                return new $class($attribs, $virtual, $exist);
-            }catch(\ErrorException $e){
-                // Если файл не найден, то будет использовать класс прототипа или Entity
-                if ($e->getCode() != 2) throw $e;
             }
         }
         if (!empty($attribs['proto']) && ($proto = self::object($attribs['proto']))){

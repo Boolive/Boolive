@@ -23,9 +23,9 @@ class SwitchCase extends View
     public function getInputRule()
     {
         return Rule::arrays(array(
-                'GET' => Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->default(null)->required(),
-                        'view' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
+                        'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
                     )
                 )
             )
@@ -40,9 +40,10 @@ class SwitchCase extends View
     public function work($v = array())
     {
         // Запускаем по очереди подчиненных варианта, пока один из них не сработает
-        if ($this->_input['GET']['view']){
+        if ($this->_input['REQUEST']['view_name']){
             // Если указано, каким отображать, то только его пробуем запустить
-            $views = array($this->{$this->_input['GET']['view']});
+            $views = array($this->{$this->_input['REQUEST']['view_name']});
+            unset($this->_input_child['REQUEST']['view_name']);
         }else{
             // Все виджеты варианта
             $views = $this->getViews();

@@ -9,8 +9,11 @@ Version 2.0 preview work in progress
 - enh #42: Add child res for base widget /Library/basic/widgets/Widget
 - enh: Create a package "contents_widgets" and "content_samples". Existing objects are moved into them. (VladimirShestakov)
 - enh: Numbering nesting level starts at zero. A root object level = 0 (VladimirShestakov)
+- enh: Update prototype in all widgets and other view objects. Added package /Library/views (VladimirShestakov)
+- enh #56: Added element "REQUEST" in input data instead of "GET" and "POST" (VladimirShestakov)
 - bug: Updated algorithm of working embedded values ​​in the class \Boolive\values\Values. Removed references to property _value (VladimirShestakov)
 - bug: Fix some paths in code for compatibility with UNIX (AzatGaliev)
+- bug: Fixed order of cases in the SwitchView (VladimirShestakov)
 - new #4: Add CHANGELOG.md file (AzatGaliev)
 - new #10: Update all objects in "library/basic" with added contents, members and simple objects (VladimirShestakov)
 - new #14: Added layout widget "boolive" in the "library/layouts" and "interfaces/html/body" (VladimirShestakov)
@@ -39,4 +42,7 @@ Version 2.0 preview work in progress
 - new #50: Added method Entity :: is () to check prototype exists
 - new #51: Added executable object "View" in package "Library/views" (VladimirShestakov)
 - new #52: Added widgets AutoWidget and  AutoWidgetList for automatic views objects (VladimirShestakov)
-- enh: Update prototype in all widgets and other view objects. Added package /Library/views (VladimirShestakov)
+- new #53: Added admin interface without edit functions (only explorer) (VladimirShestakov)
+- new #55 Added handler for directed request "DirectHandler" (for ajax process) (VladimirShestakov)
+- new: Added package "admin_widgets" for admins widgets (VladimirShestakov)
+- new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)

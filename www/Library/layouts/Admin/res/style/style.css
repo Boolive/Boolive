@@ -1,0 +1,83 @@
+@charset "utf-8";
+html{
+	height: 100%;
+	}
+body {
+	margin: 0px;
+	background-repeat: repeat;
+	height: 100%;
+	background-color: #f5f5f5;
+	}
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	color: #000;
+	}
+a, a:active{
+	color: #006ad6;
+	outline: none;
+	}
+	a:hover {
+		color: #0065c9;
+		}
+
+
+.Admin{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	}
+	.Admin > .left{
+		height: 100%;
+		width: 150px;
+		left: 0;
+		top: 0;
+		position: absolute;
+		z-index: 2;
+		overflow:hidden;
+		box-shadow: inset -1px 0px 0px 0px #D8D8D8,
+					inset -5px 0px 5px -5px #E0E0E0;
+		/*-webkit-box-shadow: inset -1px 0px 0px 0px #D8D8D8,
+							inset -3px 0px 5px 0px #E0E0E0;
+		-moz-box-shadow: inset -1px 0px 0px 0px #D8D8D8,
+						 inset -3px 0px 5px 0px #E0E0E0;*/
+		}
+		.maximize-left .Admin > .left{
+			width: 48px;
+			}
+    .Admin > .right{
+		width: 150px;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		position: absolute;
+		z-index: 3;
+		overflow:hidden;
+		box-shadow: inset 1px 0 0 0 #D8D8D8,
+					inset 5px 0 5px -5px #E0E0E0;
+		-webkit-box-shadow: inset 1px 0 0 0 #D8D8D8,
+					inset 5px 0 5px -5px #E0E0E0;
+		padding: 0;
+		}
+		.maximize-right .Admin > .right{
+			width: 48px;
+			}
+
+	.Admin > .center{
+		height: 100%;
+        background-color: #FFF;
+		position: absolute;
+		/*top: 0;*/
+		right: 0;
+		left: 150px;
+		right: 150px;
+		overflow:auto;
+		z-index: 1;
+		}
+		.maximize-left .Admin > .center{
+			left: 48px;
+			}
+        .maximize-right .Admin .center{
+			right: 48px;
+			}

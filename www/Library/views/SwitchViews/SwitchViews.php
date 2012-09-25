@@ -22,7 +22,7 @@ class SwitchViews extends Widget
     public function getInputRule()
     {
         return Rule::arrays(array(
-                'GET' => Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->default(null)->required(),
                     )
                 )
@@ -38,22 +38,34 @@ class SwitchViews extends Widget
     public function work($v = array())
     {
         // Все варианты отображений для последующего поиска нужного
-        $options = $this->getCases();
-        $obj = $this->_input['GET']['object'];
+        $cases = $this->getCases();
+        $obj = $this->_input['REQUEST']['object'];
         $v['object'] = null;
-        // Поиск варианта отображения для объекта
-        while ($obj){
-            if (isset($options[$obj['uri']])){
-                $v['object'] = $options[$obj['uri']]->start($this->_commands, $this->_input_child);
-                if ($v['object'] != null){
-                    $this->_input_child['previous'] = true;
+        //$uri = $obj['uri'];
+        $cnt = count($cases);
+        $case = null;
+        for ($i = 0; $i < $cnt; ++$i){
+            if ($cases[$i] instanceof \Library\views\SwitchCase\SwitchCase){
+                $uri = $cases[$i]->getValue();
+                if ($uri=='all'){
+                    $case = $cases[$i];
+                }else{
+                    $obj = $this->_input['REQUEST']['object'];
+                    while ($obj && !$case){
+                        if ($obj['uri'] == $uri){
+                            $case = $cases[$i];
+                        }else{
+                            $obj = $obj->proto();
+                        }
+                    }
                 }
             }
-            // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
-            if ($v['object'] == null){
-                $obj = $obj->proto();
-            }else{
-                $obj = null;//чтоб остановить цикл
+            if ($case) $i = $cnt;
+        }
+        if ($case){
+            $v['object'] = $case->start($this->_commands, $this->_input_child);
+            if ($v['object'] != null){
+                $this->_input_child['previous'] = true;
             }
         }
         return parent::work($v);
@@ -61,7 +73,7 @@ class SwitchViews extends Widget
 
     protected function getCases(){
         if (!isset($this->_cases)){
-            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0'), false, 'value');
+            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0'), false, null);
         }
         return $this->_cases;
     }

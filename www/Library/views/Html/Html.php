@@ -23,7 +23,6 @@ class Html extends Widget
     {
         // Вызов всех подчиенных, чтобы исполнить после их команды добавления тегов
         $v = $this->startChildren();
-
         // Обработка своих команд для вставки тегов в заголовок HTML
         $v['head'] = '';
         $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB));
@@ -35,7 +34,14 @@ class Html extends Widget
                 }else{
                     $text='';
                 }
-                if (isset($com[1]['src'])) $com[1]['src'] = $com[1]['src'].'?'.TIMESTAMP;
+                if (isset($com[1]['src'])){
+                    if (mb_strpos($com[1]['src'], '?')===false){
+                        $com[1]['src'] = $com[1]['src'].'?'.TIMESTAMP;
+                    }else{
+                        $com[1]['src'] = $com[1]['src'].'&'.TIMESTAMP;
+                    }
+
+                }
                 if (isset($com[1]['href']) && $com[0]!='base') $com[1]['href'] = $com[1]['href'].'?'.TIMESTAMP;
                 $attr = '';
                 foreach ($com[1] as $name => $value) $attr.=' '.$name.'="'.$value.'"';
