@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Сен 25 2012 г., 19:19
+-- Время создания: Сен 26 2012 г., 17:13
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -160,7 +160,7 @@ CREATE TABLE `interfaces` (
 
 INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
 ('/Interfaces/direct_handler', '', 0, 0, 2, 1, '/Library/views/DirectHandler', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Interfaces/html', '', 0, 0, 2, 1, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html', '', 0, 0, 2, 2, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/admin', '', 0, 0, 4, 1, '/Library/layouts/Admin', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/title', '', 0, 0, 2, 3, NULL, 'Интерфейс', 0, 0, 0, 0, 0, 0, 0);
@@ -389,8 +389,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/Admin/Programs/switch_views/case_default', '', 0, 0, 6, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views/case_default/Add', '', 0, 0, 7, 4, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views/case_default/Explorer', '', 0, 0, 7, 3, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default2', '', 0, 0, 6, 4, '/Library/views/SwitchCase', '/Interfaces', 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default2/Delete', '', 0, 0, 7, 5, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default2', '', 0, 0, 6, 5, '/Library/views/SwitchCase', '/Interfaces', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default2/Delete', '', 0, 0, 7, 1, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/title', '', 0, 0, 5, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu', '', 0, 0, 4, 5, '/Library/views/Widget', 'ProgramsMenu.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Меню автоматически формируется в зависимости от отображаемого объекта и доступного для него программ', 0, 0, 0, 0, 0, 0, 0),

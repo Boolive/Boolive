@@ -39,7 +39,7 @@ class SwitchViews extends Widget
     {
         // Все варианты отображений для последующего поиска нужного
         $cases = $this->getCases();
-        $obj = $this->_input['REQUEST']['object'];
+        //$obj = $this->_input['REQUEST']['object'];
         $v['object'] = null;
         //$uri = $obj['uri'];
         $cnt = count($cases);
@@ -60,12 +60,14 @@ class SwitchViews extends Widget
                     }
                 }
             }
-            if ($case) $i = $cnt;
-        }
-        if ($case){
-            $v['object'] = $case->start($this->_commands, $this->_input_child);
-            if ($v['object'] != null){
-                $this->_input_child['previous'] = true;
+            if ($case){
+                $v['object'] = $case->start($this->_commands, $this->_input_child);
+                if ($v['object'] != null){
+                    $this->_input_child['previous'] = true;
+                    $i = $cnt;
+                }else{
+                    $case = null;
+                }
             }
         }
         return parent::work($v);
@@ -73,7 +75,7 @@ class SwitchViews extends Widget
 
     protected function getCases(){
         if (!isset($this->_cases)){
-            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0'), false, null);
+            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC'), false, null);
         }
         return $this->_cases;
     }

@@ -37,6 +37,17 @@ class SwitchCase extends View
         parent::initInputChild(array_replace_recursive($input, $this->_input));
     }
 
+    public function canWork()
+    {
+        if ($result = parent::canWork()){
+            if (!empty($this->_input['REQUEST']['view_name'])){
+                // Если указано, каким отображать, то только его пробуем запустить
+                $result = $this->{$this->_input['REQUEST']['view_name']}->isExist();
+            }
+        }
+        return $result;
+    }
+
     public function work($v = array())
     {
         // Запускаем по очереди подчиненных варианта, пока один из них не сработает

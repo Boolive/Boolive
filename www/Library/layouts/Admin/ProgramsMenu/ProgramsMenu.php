@@ -18,12 +18,12 @@ class ProgramsMenu extends Widget
             if ($case instanceof \Library\views\SwitchCase\SwitchCase){
                 $uri = $case->getValue();
                 if ($uri=='all'){
-                    $programs = array_merge($case->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC')), $programs);
+                    $programs = array_merge($programs, $case->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC')));
                 }else{
                     $obj = $this->_input['REQUEST']['object'];
                     while ($obj){
                         if ($obj['uri'] == $uri){
-                            $programs = array_merge($case->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC')), $programs);
+                            $programs = array_merge($programs, $case->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC')));
                             $obj = null;
                         }else{
                             $obj = $obj->proto();
