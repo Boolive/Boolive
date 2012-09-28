@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Сен 29 2012 г., 01:37
+-- Время создания: Сен 29 2012 г., 03:35
 -- Версия сервера: 5.5.24
 -- Версия PHP: 5.3.10-1ubuntu3.4
 
@@ -329,7 +329,13 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Feedback/switch_views/case_message/MessageField', '', 0, 0, 6, 1, '/Library/views/Widget', 'MessageField.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/views/Widget', 'Head.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/views/Widget', 'Image.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keyword', '', 0, 0, 3, 1, '/Library/views/Widget', 'Keyword.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keywords/res', '', 0, 0, 4, 1, '/Library/views/Widget/res', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keywords/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keywords/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', 'switch_views.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keywords/switch_views/case_keyword', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Keyword', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keywords/switch_views/case_keyword/Keyword', '', 0, 0, 6, 1, '/Library/content_widgets/Keyword', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'ListView.tpl', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/Item', 0, 0, 0, 0, 0, 0, 0),

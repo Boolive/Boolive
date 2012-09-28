@@ -12,6 +12,6 @@ class Keywords extends AutoWidgetList
 {
     public function work($v = array())
     {
-        echo 'Keywords';
+        return parent::work($v);
     }
 }
