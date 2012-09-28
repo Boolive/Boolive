@@ -330,7 +330,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/views/Widget', 'Head.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/views/Widget', 'Image.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keyword', '', 0, 0, 3, 1, '/Library/views/Widget', 'Keyword.tpl', 1, 1, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Keywords.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords/res', '', 0, 0, 4, 1, '/Library/views/Widget/res', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', 'switch_views.tpl', 0, 1, 0, 0, 0, 0, 0),
