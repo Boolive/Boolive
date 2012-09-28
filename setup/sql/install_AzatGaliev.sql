@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Сен 21 2012 г., 01:02
+-- Время создания: Сен 29 2012 г., 01:37
 -- Версия сервера: 5.5.24
 -- Версия PHP: 5.3.10-1ubuntu3.4
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `contents` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак не использовать свойства прототипа',
   PRIMARY KEY (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -133,6 +133,7 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/news/news4/text/p1', '', 0, 0, 5, 1, '/Library/content_samples/Paragraph', 'Текст новости в виде одного абзаца', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news4/title', '', 0, 0, 4, 1, '/Library/content_samples/Page/title', 'Четвертая новость', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/title', '', 0, 0, 3, 1, '/Library/content_samples/Part/title', 'Лента новостей', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_list', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/List', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_list/ListView', '', 0, 0, 6, 1, '/Library/content_widgets/ListView', NULL, 0, 0, 0, 0, 0, 0, 0);
 
@@ -157,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `interfaces` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -168,8 +169,11 @@ CREATE TABLE IF NOT EXISTS `interfaces` (
 --
 
 INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
-('/Interfaces/html', '', 0, 0, 2, 1, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0);
+('/Interfaces/direct_handler', '', 0, 0, 2, 1, '/Library/views/DirectHandler', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html', '', 0, 0, 2, 2, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html/body/admin', '', 0, 0, 4, 1, '/Library/layouts/Admin', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/title', '', 0, 0, 2, 3, NULL, 'Интерфейс', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -192,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `keywords` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -205,7 +209,8 @@ CREATE TABLE IF NOT EXISTS `keywords` (
 INSERT INTO `keywords` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Keywords/cms', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords/framework', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '0', 0, 0, 0, 0, 0, 0, 0),
-('/Keywords/php', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0);
+('/Keywords/php', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0),
+('/Keywords/title', '', 0, 0, 2, 1, NULL, 'Ключевые слова', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -228,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `library` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -239,6 +244,29 @@ CREATE TABLE IF NOT EXISTS `library` (
 --
 
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('/Library/admin_widgets', '', 0, 0, 2, 5, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add', '', 0, 0, 3, 4, '/Library/views/Widget', 'Add.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Предоставляет выбор объекта для добавления его в отображаемый объект', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Добавить', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Delete', '', 0, 0, 3, 5, '/Library/views/Widget', 'Delete.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Delete/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает диалоговое окно для подтверждения удаления и осуществляет удаление (пермещение в корзину)', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Delete/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Delete/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Удалить', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer', '', 0, 0, 3, 2, '/Library/views/AutoWidgetList', 'Explorer.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/description', '', 0, 0, 4, 2, '/Library/views/AutoWidgetList/description', 'Отображает списком свойства объекта', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/res/jquery.ui.Explorer', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Explorer.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/switch_views', '', 0, 0, 4, 3, '/Library/views/AutoWidgetList/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/switch_views/case_default', '', 0, 0, 5, 1, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/switch_views/case_default/ObjectItem', '', 0, 0, 6, 1, '/Library/admin_widgets/ObjectItem', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Explorer/title', '', 0, 0, 4, 1, '/Library/views/AutoWidgetList/title', 'Обозреватель', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem', '', 0, 0, 3, 1, '/Library/views/Widget', 'ObjectItem.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображение объекта в виде пункта списка', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.ObjectItem.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/ObjectItem/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Виджет объекта', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User', '', 0, 0, 4, 1, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -282,7 +310,12 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_samples/tables/Row', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/tables/Table', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Comments', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Comment', '', 0, 0, 3, 1, '/Library/views/Widget', 'Comment.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Comments', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Comments.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Comments/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Comments/switch_views', '', 0, 0, 4, 1, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Comments/switch_views/case_comment', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Comment', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Comments/switch_views/case_comment/Comment', '', 0, 0, 6, 1, '/Library/content_widgets/Comment', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Content', '', 0, 0, 3, 1, '/Library/views/AutoWidget', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Content/switch_views/case_page', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Page', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Content/switch_views/case_page/page', '', 0, 0, 6, 1, '/Library/content_widgets/Page', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -345,8 +378,45 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/RichText/switch_views/case_p', '', 0, 0, 5, 4, '/Library/views/SwitchCase', '/Library/content_samples/Paragraph', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/RichText/switch_views/case_p/paragraph', '', 0, 0, 6, 1, '/Library/content_widgets/Paragraph', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Title', '', 0, 0, 3, 1, '/Library/views/Widget', 'Title.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins', '', 0, 0, 2, 7, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/description', '', 0, 0, 3, 2, '/Library/basic/Package/description', 'Пакет плагинов (скриптов) на JavaScript с использованием различный библиотек', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/HistoryAPI', '', 0, 0, 3, 5, '/Library/views/JavaScript', 'HistoryAPI.js', 1, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/HistoryAPI/basepath', '', 0, 0, 4, 3, NULL, '/admin/', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/HistoryAPI/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'Библиотека эмулирует HTML5 History API в старых браузерах.', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/HistoryAPI/redirect', '', 0, 0, 4, 6, NULL, '1', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/HistoryAPI/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'HTML5-History-API', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/HistoryAPI/type', '', 0, 0, 4, 5, NULL, '', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.include', '', 0, 0, 3, 3, '/Library/views/jQueryScript', 'jquery.include.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.include/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'Плагин для динамической загрузки JavaScript и CSS файлов со стороны клиента (браузера)', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.include/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'Загрузчик JS/CSS файлов', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget', '', 0, 0, 3, 4, '/Library/views/jQueryUIScript', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.include', '', 0, 0, 5, 1, '/Library/javascript_plugins/jquery.include', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.ui.AjaxWidget', '', 0, 0, 5, 3, '/Library/views/JavaScript', 'jquery.ui.AjaxWidget.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'jQueryUI виджет с функцией обновления без полной перегрузки страницы', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'Виджет с обновлением по Ajax', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/title', '', 0, 0, 3, 1, '/Library/basic/Package/title', 'Плагины на JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts', '', 0, 0, 2, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/boolive', '', 0, 0, 3, 1, '/Library/views/Focuser', 'boolive.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin', '', 0, 0, 3, 2, '/Library/views/Focuser', 'Admin.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs', '', 0, 0, 4, 4, '/Library/views/AutoWidget', 'Programs.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/description', '', 0, 0, 5, 2, '/Library/views/AutoWidget/description', 'Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/res/jquery.ui.Programs', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views', '', 0, 0, 5, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default', '', 0, 0, 6, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default/Add', '', 0, 0, 7, 4, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default/Explorer', '', 0, 0, 7, 3, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default2', '', 0, 0, 6, 5, '/Library/views/SwitchCase', '/Interfaces', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default2/Delete', '', 0, 0, 7, 1, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/title', '', 0, 0, 5, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/ProgramsMenu', '', 0, 0, 4, 5, '/Library/views/Widget', 'ProgramsMenu.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/ProgramsMenu/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Меню автоматически формируется в зависимости от отображаемого объекта и доступного для него программ', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/ProgramsMenu/programs', '', 0, 0, 5, 4, '/Library/layouts/Admin/Programs', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/ProgramsMenu/res/jquery.ui.ProgramsMenu', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.ProgramsMenu.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/ProgramsMenu/res/style', '', 0, 0, 6, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/ProgramsMenu/title', '', 0, 0, 5, 1, '/Library/views/Widget/title', 'Меню программ', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/res/jquery.ui.Admin', '', 0, 0, 5, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Admin.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/res/jquery.ui.Admin/depends/history_api', '', 0, 0, 7, 4, '/Library/javascript_plugins/HistoryAPI', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/boolive', '', 0, 0, 3, 1, '/Library/views/Focuser', 'boolive.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/bottom', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/center', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/center/Content', '', 0, 0, 5, 1, '/Library/content_widgets/Content', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -366,6 +436,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/boolive/top/menu/object/main', '', 0, 0, 7, 1, '/Contents/main', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/object/news', '', 0, 0, 7, 2, '/Contents/news', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/res/style', '', 0, 0, 7, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/title', '', 0, 0, 2, 1, NULL, 'Библиотека', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget', '', 0, 0, 3, 9, '/Library/views/Widget', 'AutoWidget.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает любой объект в соответсвии с установленными вараинтами', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/switch_views', '', 0, 0, 4, 3, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -379,6 +450,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Css', '', 0, 0, 3, 3, '/Library/views/View', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Css/description', '', 0, 0, 4, 2, '/Library/views/View/description', 'Каскадная таблица стилей для оформления HTML-документа', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Css/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'CSS', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/DirectHandler', '', 0, 0, 3, 17, '/Library/views/View', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/DirectHandler/description', '', 0, 0, 4, 2, '/Library/views/View/description', 'По запросу клиента запускается требуемое представление и возвращается результат работы в JSON. Используется для обновления частей страницы без полной их перегрузки, а также для обработки форм и выполнения иных действий со стороны клиента.', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/DirectHandler/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Обработчик направленных запросов', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser', '', 0, 0, 3, 12, '/Library/views/Widget', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'По URL запроса определяет объект и номер страницы для последующего оперирования ими подчиненными виджетами. Найденный объект и номер страницы помещаются во входящие данные для подчиненных виджетов. Может использоваться для макета сайта.', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Фокусировщик', 0, 0, 0, 0, 0, 0, 0),
@@ -394,11 +468,17 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/JavaScript/description', '', 0, 0, 4, 2, '/Library/views/View/description', 'Клиентский скрипт на языке JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/JavaScript/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript', '', 0, 0, 3, 5, '/Library/views/JavaScript', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/depends/jQuery', '', 0, 0, 6, 1, '/Library/views/JavaScript', 'jquery.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/depends/jQuery/description', '', 0, 0, 7, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для взаимодействия с HTML', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/depends/jQuery/title', '', 0, 0, 7, 1, '/Library/views/JavaScript/title', 'jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/depends/jquery-1.8.1.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-1.8.1.min.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/depends/jquery-1.8.1.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для взаимодействия с HTML', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/depends/jquery-1.8.1.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.8.23.min.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'jQuery UI скрипт', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Logo', '', 0, 0, 3, 14, '/Library/views/Widget', 'Logo.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Logo/object', '', 0, 0, 4, 2, '/Library/content_samples/Image', 'object.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Logo/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Логотип', 0, 0, 0, 0, 0, 0, 0),
@@ -439,7 +519,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Widget/res', '', 0, 0, 4, 3, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res/description', '', 0, 0, 5, 2, '/Library/views/ViewGroup/description', 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res/title', '', 0, 0, 5, 1, '/Library/views/ViewGroup/title', 'Ресурсы', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/Widget/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Виджет', 0, 0, 0, 0, 0, 0, 0);
+('/Library/views/Widget/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Виджет', 0, 0, 0, 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -462,7 +542,7 @@ CREATE TABLE IF NOT EXISTS `members` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -481,7 +561,8 @@ INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Members/registered/admins/vova', '', 0, 0, 4, 2, '/Library/basic/members/User', 'password_hash', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/vova/email', '', 0, 0, 5, 2, '/Library/basic/members/User/email', 'boolive@yandex.ru', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/vova/name', '', 0, 0, 5, 1, '/Library/basic/members/User/name', 'Вова', 0, 0, 0, 0, 0, 0, 0),
-('/Members/registered/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Зарегистрированные', 0, 0, 0, 0, 0, 0, 0);
+('/Members/registered/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Зарегистрированные', 0, 0, 0, 0, 0, 0, 0),
+('/Members/title', '', 0, 0, 2, 1, NULL, 'Пользователи и группы', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -504,7 +585,7 @@ CREATE TABLE IF NOT EXISTS `site` (
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, удален объект или нет',
   `is_hidden` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, скрытый объект или нет',
   `is_link` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, является ли объект ссылкой',
-  `override` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Признак, не использовать подчиненных прототипа',
+  `override` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
@@ -519,7 +600,8 @@ INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `
 ('/Interfaces', '', 0, 1342082233, 1, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords', '', 0, 1342077181, 1, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library', '', 0, 1342077181, 1, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Members', '', 0, 1342077181, 1, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0);
+('/Members', '', 0, 1342077181, 1, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/title', '', 0, 0, 1, 1, NULL, 'Сайт', 0, 0, 0, 0, 0, 0, 0);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

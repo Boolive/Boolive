@@ -1,0 +1,20 @@
+.comments
+{
+    margin-top: 10px;
+}
+    .comments .comments
+    {
+        margin-top: 0;
+    }
+
+.comment
+{
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: -1px 1px 3px 0px gainsboro, inset -10px -5px 10px 0px #FEFEFE;
+}
+    .comment td
+    {
+        padding: 5px;
+        background: white;
+    }

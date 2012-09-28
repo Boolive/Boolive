@@ -27,6 +27,8 @@ Version 2.0 preview work in progress
 - new #22: Added widget for view Head of text (VladimirShestakov)
 - new #23: Added widget for view Paragraph of text (VladimirShestakov)
 - new #24: Added widget for view Image in text (VladimirShestakov)
+- new #26: Added widget for view list of comments in page (AzatGaliev)
+- new #27: Added widget for view single comment in comments set (AzatGaliev)
 - new #30: Added widget for view List in text (AzatGaliev)
 - new #32: Added widget for view Part (VladimirShestakov)
 - new #33: Added widget Focuser (VladimirShestakov)
