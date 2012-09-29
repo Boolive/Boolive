@@ -26,11 +26,11 @@ class PHPTemplate
             try{
                 include($entity->getFile(true));
             }catch (\Exception $e){
-                if ($e->getCode() == 2){
-                    echo "Template file '{$entity->getFile()}' not found";
-                }else{
+//                if ($e->getCode() == 2){
+//                    echo "Template file '{$entity->getFile()}' not found";
+//                }else{
                     throw $e;
-                }
+//                }
             }
             $result = ob_get_contents();
         ob_end_clean();

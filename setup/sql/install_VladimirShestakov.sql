@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Хост: localhost
--- Время создания: Сен 26 2012 г., 17:13
+-- Время создания: Сен 29 2012 г., 21:49
 -- Версия сервера: 5.0.22
 -- Версия PHP: 5.3.9
 -- 
@@ -267,17 +267,23 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/basic/members/UserGroup/title', '', 0, 0, 5, 1, NULL, 'Группа пользователей', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/Package', '', 0, 0, 3, 5, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple', '', 0, 0, 3, 4, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/basic/simple/Email', '', 0, 0, 4, 1, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/basic/simple/Number', '', 0, 0, 4, 2, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Email', '', 0, 0, 4, 3, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Number', '', 0, 0, 4, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Text', '', 0, 0, 4, 5, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Text/description', '', 0, 0, 5, 2, NULL, 'Строковое значение длиной до 65535 символа (64Кбайт)', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Text/title', '', 0, 0, 5, 1, NULL, 'Текст', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Comment', '', 0, 0, 3, 1, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Comment/text', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_samples/Feedback', '', 0, 0, 3, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback', '', 0, 0, 3, 2, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/email_from', '', 0, 0, 4, 1, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/email_from/title', '', 0, 0, 5, 1, NULL, 'Email адрес', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/email_to', '', 0, 0, 4, 2, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_samples/Feedback/message', '', 0, 0, 4, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback/error_message', '', 0, 0, 4, 7, '/Library/basic/simple/Text', 'Имеются ошибки', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback/message', '', 0, 0, 4, 3, '/Library/basic/simple/Text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Feedback/message/title', '', 0, 0, 5, 1, NULL, 'Сообщение', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback/result_message', '', 0, 0, 4, 6, '/Library/basic/simple/Text', 'Спасибо, сообщение успешно отправлено', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/Feedback/title', '', 0, 0, 4, 1, NULL, 'Обратная связь', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Head', '', 0, 0, 3, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Image', '', 0, 0, 3, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Keyword', '', 0, 0, 3, 5, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -309,9 +315,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/Feedback', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Feedback.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Feedback/res/style', '', 0, 0, 5, 5, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Feedback/switch_views/case_mail', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Feedback/email_from', 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Feedback/switch_views/case_mail/EmailField', '', 0, 0, 6, 1, '/Library/views/Widget', 'EmailField.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Feedback/switch_views/case_mail/EmailField', '', 0, 0, 6, 1, '/Library/views/FormField', 'EmailField.tpl', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Feedback/switch_views/case_message', '', 0, 0, 5, 2, '/Library/views/SwitchCase', '/Library/content_samples/Feedback/message', 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Feedback/switch_views/case_message/MessageField', '', 0, 0, 6, 1, '/Library/views/Widget', 'MessageField.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Feedback/switch_views/case_message/MessageField', '', 0, 0, 6, 1, '/Library/views/FormField', 'MessageField.tpl', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Head', '', 0, 0, 3, 1, '/Library/views/Widget', 'Head.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Image', '', 0, 0, 3, 1, '/Library/views/Widget', 'Image.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Keywords', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -441,6 +447,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Focuser', '', 0, 0, 3, 12, '/Library/views/Widget', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'По URL запроса определяет объект и номер страницы для последующего оперирования ими подчиненными виджетами. Найденный объект и номер страницы помещаются во входящие данные для подчиненных виджетов. Может использоваться для макета сайта.', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Фокусировщик', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormField', '', 0, 0, 3, 18, '/Library/views/Widget', 'FormField.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/views/FormField/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Поле формы', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Html', '', 0, 0, 3, 11, '/Library/views/Widget', 'Html.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Html/body', '', 0, 0, 4, 3, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Html/body/title', '', 0, 0, 5, 1, '/Library/views/ViewGroup/title', 'Основная область вставки', 0, 0, 0, 0, 0, 0, 0),
