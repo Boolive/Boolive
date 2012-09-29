@@ -14,15 +14,6 @@ use Library\views\Widget\Widget,
 
 class Comment extends Widget
 {
-    public function getInputRule()
-    {
-        return Rule::arrays(array(
-            'REQUEST' => Rule::arrays(array(
-                'object' => Rule::entity()->require(),
-            )),
-        ));
-    }
-
     public function work($v = array())
     {
         $object = $this->_input['REQUEST']['object'];
@@ -33,7 +24,7 @@ class Comment extends Widget
         $i = 1;
         $sub_comments_flag = false;
         foreach ($object->_children as $child) {
-            if ($child['proto'] == '/Library/content_samples/Comment') {
+            if ($child->is('/Library/content_samples/Comment')) {
                 $sub_comments_flag = true;
                 $this->_input_child['REQUEST']['object']->{'comment' . $i} = $child;
             }
