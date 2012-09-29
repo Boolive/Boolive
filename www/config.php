@@ -3,6 +3,7 @@
  * Конфигурация путей
  * @version 1.0
  */
+
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_doc_root());
 
@@ -20,6 +21,8 @@ define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
 
+// Адрес сайта, например: boolive.ru
+define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_HOST']);
 /** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */
 define('TIMESTAMP', '1');
 

@@ -38,8 +38,6 @@ class Input extends Values
     static function activate()
     {
         $values = array(
-            //'GET' => array(),//isset($_GET)? $_GET : array(),
-            //'POST' => isset($_POST)? $_POST : array(),
             'REQUEST' => array(),
             'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
             'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
@@ -47,7 +45,10 @@ class Input extends Values
             'SERVER' => $_SERVER
         );
         if (isset($_SERVER['REQUEST_URI'])){
+            $_SERVER['REQUEST_URI'] = preg_replace('#\?{1}#u', '&', $_SERVER['REQUEST_URI'], 1);
             parse_str('path='.urldecode($_SERVER['REQUEST_URI']), $values['REQUEST']);
+            $values['SERVER']['argv'] = $values['REQUEST'];
+            $values['SERVER']['argc'] = sizeof($values['REQUEST']);
         }
         // Элементы пути URI
         if (isset($values['REQUEST']['path']) && ($values['REQUEST']['path'] = rtrim($values['REQUEST']['path'],'/ '))){
@@ -58,7 +59,7 @@ class Input extends Values
         if (isset($_POST)){
             $values['REQUEST'] = array_replace_recursive($values['REQUEST'], $_POST);
         }
-        // Аргументы из консоли в get (режим CLI)
+        // Аргументы из консоли (режим CLI)
         if (empty($values['REQUEST']) && isset($_SERVER['argv'])) $values['REQUEST'] = $_SERVER['argv'];
         // Метод запроса
         if (isset($values['SERVER']['REQUEST_METHOD'])){
@@ -72,9 +73,9 @@ class Input extends Values
      * Элементы пути URI
      * @return \Boolive\values\Values
      */
-    static function path()
+    static function PATH()
     {
-        return self::$input->path;
+        return self::$input->PATH;
     }
 
     /**
@@ -179,5 +180,69 @@ class Input extends Values
     protected function defineRule()
     {
         $this->_rule = null;
+    }
+
+    /**
+     * Создание URL на основе текущего.
+     * Если не указан ни один параметр, то возвращается URL текущего запроса
+     * @param null|string|array $path Путь uri. Если не указан, то используется текущий путь
+     * @param int $shift С какого парметра пути текущего URL делать замену на $path
+     * @param array $args Массив аргументов.
+     * @param bool $append Добавлять ли текущие аргументы к новым?
+     * @param bool $host Добавлять ли адрес сайта (http://site.ru)
+     * @param string $shema Схема url. Указывается, если указан $host
+     * @return string
+     */
+    static function url($path = null, $shift = 0, $args = null, $append = false, $host = false, $shema = 'http://')
+    {
+        if (is_string($path)){
+			$path = explode('/',$path);
+		}
+        if (!isset($path)) $path = array();
+        $url = '';
+        // Параметры
+        // Текущие параметры (текщего адреса) заменяем на указанные в $params
+        $cur_path = self::PATH()->getValue();
+        $index = sizeof($cur_path);
+        if (is_array($path) and sizeof($path) > 0){
+            foreach ($path as $index => $value){
+                $cur_path[$index + $shift] = $value;
+            }
+            $index+=$shift + 1;
+        }else
+        if ($shift > 0){
+            $index = $shift;
+        }
+        // Все текущие параметры после поcледнего из измененных отсекаются
+        for ($i = 0; $i < $index; $i++){
+            if (isset($cur_path[$i])){
+                $url.=$cur_path[$i].'/';
+            }else{
+                $url.='/';
+            }
+        }
+
+		if (strlen($url) > 0){
+			$url = trim($url,'//');
+		}
+		// Аргументы
+		if (!isset($args)){
+            $args = self::SERVER()->argv->getValue();
+        }else{
+            if ($append){
+                $args = array_merge(self::SERVER()->argv->getValue(), $args);
+            }
+        }
+        if (isset($args['path'])) unset($args['path']);
+		if (is_array($args)){
+			foreach ($args as $name => $value){
+				$url .= '&'.$name.'='.$value;
+			}
+		}
+		if ($host){
+			return $shema.HTTP_HOST.DIR_WEB.$url;
+		}else{
+			return DIR_WEB.$url;
+		}
     }
 }

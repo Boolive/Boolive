@@ -35,6 +35,7 @@ Version 2.0 preview work in progress
 - new #33: Added widget Focuser (VladimirShestakov)
 - new #34: Added widget PagePreview with style (VladimirShestakov)
 - new #35: Added widget PageNavigation in the basic package and layout boolive for widget the part (VladimirShestakov)
+- new #40: Added widget Feedback (VladimirShestakov)
 - new #43: Added handler forms in the package "basic" and in /Interfaces (VladimirShestakov)
 - new #44: Added indication that the object exists (VladimirShestakov)
 - new: Added object the Option for automatic views (VladimirShestakov)
@@ -49,3 +50,4 @@ Version 2.0 preview work in progress
 - new #55 Added handler for directed request "DirectHandler" (for ajax process) (VladimirShestakov)
 - new: Added package "admin_widgets" for admins widgets (VladimirShestakov)
 - new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)
+- new: Added method Input::url() for create or get current URL (VladimirShestakov)

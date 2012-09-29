@@ -19,7 +19,8 @@ class Mail
 	 * @param string $from Валидный e-mail отправителя
 	 * @param string $reply Валидный e-mail того, кому будет посылаться ответ на письмо
 	 */
-	static function Send($to, $subject, $message, $from, $reply = null){
+	static function send($to, $subject, $message, $from, $reply = null)
+    {
 		// Подготавливаем заголовки
 		if (empty($reply)){
 			$reply = $from;
@@ -33,7 +34,7 @@ class Mail
 		$subject = mb_encode_mimeheader($subject, 'UTF-8', 'B', "\r\n", 9);
 
 		// Отправляем либо кладем в очередь
-		mail($to, $subject, $message, $headers);
+		return mail($to, $subject, $message, $headers);
 	}
 }
 ?>

@@ -24,6 +24,10 @@ class Html extends Widget
         // Вызов всех подчиенных, чтобы исполнить после их команды добавления тегов
         $v = $this->startChildren();
         // Обработка своих команд для вставки тегов в заголовок HTML
+        if ($redirect = $this->_commands->get('redirect')){
+            header('Location: '.$redirect[0][0]);
+            return true;
+        }
         $v['head'] = '';
         $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB));
         foreach ($this->_commands->get('addHtml') as $com){

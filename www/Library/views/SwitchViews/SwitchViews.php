@@ -61,8 +61,7 @@ class SwitchViews extends Widget
                 }
             }
             if ($case){
-                $v['object'] = $case->start($this->_commands, $this->_input_child);
-                if ($v['object'] != null){
+                if ($v['object'] = $case->start($this->_commands, $this->_input_child)){
                     $this->_input_child['previous'] = true;
                     $i = $cnt;
                 }else{
@@ -70,7 +69,11 @@ class SwitchViews extends Widget
                 }
             }
         }
-        return parent::work($v);
+        if (isset($v['object'])){
+            return parent::work($v);
+        }else{
+            return false;
+        }
     }
 
     protected function getCases(){

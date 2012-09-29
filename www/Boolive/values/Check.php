@@ -182,7 +182,7 @@ class Check
      */
     static function null($value, &$error, Rule $rule)
     {
-        if (isset($value) && !(is_string($value) && in_array(strtolower($value), array('null', '')))){
+        if (isset($value)/* && !(is_string($value) && in_array(strtolower($value), array('null')))*/){
             $error = new Error('Значение не является неопределённым', 'null');
         }
         return null;
@@ -454,7 +454,11 @@ class Check
             $error = new Error(array('Значение не больше чем "%s"', $more), 'more');
         }else
         if (is_string($value) && !(mb_strlen($value) > $more)){
-            $error = new Error(array('Значение не больше чем "%s"', $more), 'more');
+            if ($more==0){
+                $error = new Error('Пустое значение', 'more');
+            }else{
+                $error = new Error(array('Значение короче "%s" символов(а)', $more+1), 'more');
+            }
         }else
         if (is_array($value) && !(sizeof($value) > $more)){
             $error = new Error(array('Значение не больше чем "%s"', $more), 'more');
