@@ -61,14 +61,13 @@ class SwitchCase extends View
         }
         $view = reset($views);
         while ($view){
-            $v['view'] = $view->start($this->_commands, $this->_input_child);
-            if ($v['view'] != null){
+            if ($v['view'] = $view->start($this->_commands, $this->_input_child)){
                 $this->_input_child['previous'] = true;
                 return $v['view'];
             }
             $view = next($views);
         }
-        return null;
+        return false;
     }
 
     protected function getViews(){

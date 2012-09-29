@@ -17,7 +17,9 @@ class AutoWidgetList extends Widget
         $v['view'] = array();
         foreach ($list as $object){
             $this->_input_child['REQUEST']['object'] = $object;
-            $v['view'][$object->getName()] = $this->startChild('switch_views');
+            if ($result = $this->startChild('switch_views')){
+                $v['view'][$object->getName()] = $result;
+            }
         }
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
         return parent::work($v);
@@ -25,6 +27,6 @@ class AutoWidgetList extends Widget
 
     protected function getList(){
         // @todo Сделать настраиваемый фильтр
-        return $this->_input['REQUEST']['object']->findAll(array('where' => 'is_history=0 and is_delete=0', 'order' =>'`order` ASC'));
+        return $this->_input['REQUEST']['object']->findAll(array('where' => 'is_history=0 and is_delete=0', 'order' =>'`order` ASC'), true);
     }
 }

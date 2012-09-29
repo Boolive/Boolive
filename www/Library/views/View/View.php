@@ -87,7 +87,11 @@ class View extends Entity
             ob_start();
                 // Выполнение своей работы
                 $result = $this->work();
-                $result = ob_get_contents().$result;
+                if ($result === false){
+                    return $result;
+                }else{
+                    $result = ob_get_contents().$result;
+                }
             ob_end_clean();
             $this->_input_child = null;
         }else{
