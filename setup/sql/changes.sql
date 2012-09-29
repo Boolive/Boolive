@@ -14,50 +14,31 @@ MySQL - 5.0.22-community-nt
 SET AUTOCOMMIT = 0;
 /* SYNC TABLE : `contents` */
 
-	/*Start of batch : 1 */
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item1/text/p1', '', '0', '0', '7', '1', '/Library/content_samples/Paragraph', 'Хей-хей-хей! Я - пункт меню!', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Library/content_widgets/RichText/switch_views/case_list', '', '0', '0', '5', '1', '/Library/views/SwitchCase', '/Library/content_samples/lists/List', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1/item2/text/p1', '', '0', '0', '9', '1', '/Library/content_samples/Paragraph', 'вложенного меню', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1/item2/text', '', '0', '0', '8', '1', '/Library/content_samples/Page/text', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1/item2', '', '0', '0', '7', '2', '/Library/content_samples/lists/Item', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1/item1/text/p1', '', '0', '0', '9', '1', '/Library/content_samples/Paragraph', 'А вот пункт', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1/item1/text', '', '0', '0', '8', '1', '/Library/content_samples/Page/text', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1/item1', '', '0', '0', '7', '1', '/Library/content_samples/lists/Item', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3/list1', '', '0', '0', '6', '1', '/Library/content_samples/lists/List', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item3', '', '0', '0', '5', '3', '/Library/content_samples/lists/Item', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item2/text/p1', '', '0', '0', '7', '2', '/Library/content_samples/Paragraph', 'Ля-ля-ля, ля-ля-ля!', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item2/text/img1', '', '0', '0', '7', '1', '/Library/content_samples/Image', 'nota.png', '0', '1', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item2/text', '', '0', '0', '6', '1', '/Library/content_samples/RichText', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item2', '', '0', '0', '5', '2', '/Library/content_samples/lists/Item', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item1/text/p2', '', '0', '0', '7', '2', '/Library/content_samples/Paragraph', 'А я - второй параграф =)', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Library/content_widgets/RichText/switch_views/case_list/ListView', '', '0', '0', '6', '1', '/Library/content_widgets/ListView', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item1/text', '', '0', '0', '6', '1', '/Library/content_samples/RichText', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1/item1', '', '0', '0', '5', '1', '/Library/content_samples/lists/Item', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `contents` VALUES ('/Contents/main/text/list1', '', '0', '0', '4', '5', '/Library/content_samples/lists/List', NULL, '0', '0', '0', '0', '0', '0', '0');
-	/*End   of batch : 1 */
 /* SYNC TABLE : `interfaces` */
 
-	/*Start of batch : 1 */
-UPDATE `interfaces` SET `uri`='/Interfaces/html', `lang`='', `owner`='0', `date`='0', `level`='2', `order`='1', `proto`='/Library/views/Html', `value`=NULL, `is_logic`='0', `is_file`='0', `is_history`='0', `is_delete`='0', `is_hidden`='0', `is_link`='0', `override`='0'  WHERE (`uri` = '/Interfaces/html' AND `lang` = '' AND `owner` = 0 AND `date` = 0) ;
-	/*End   of batch : 1 */
 /* SYNC TABLE : `keywords` */
 
-	/*Start of batch : 1 */
-	/*End   of batch : 1 */
 /* SYNC TABLE : `library` */
 
 	/*Start of batch : 1 */
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views', '', '0', '0', '4', '1', '/Library/views/SwitchViews', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/RichText/switch_views/case_list/List', '', '0', '0', '6', '1', '/Library/content_widgets/ListView', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/RichText/switch_views/case_list', '', '0', '0', '5', '1', '/Library/views/SwitchCase', '/Library/content_samples/lists/List', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item', '', '0', '0', '5', '1', '/Library/views/SwitchCase', '/Library/content_samples/lists/Item', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext/RichText', '', '0', '0', '9', '1', '/Library/content_widgets/RichText', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext', '', '0', '0', '8', '1', '/Library/views/SwitchCase', '/Library/content_samples/RichText', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_list/ListView', '', '0', '0', '9', '1', '/Library/content_widgets/ListView', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_list', '', '0', '0', '8', '1', '/Library/views/SwitchCase', '/Library/content_samples/lists/List', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views', '', '0', '0', '7', '1', '/Library/views/SwitchViews', NULL, '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView/switch_views/case_item/Item', '', '0', '0', '6', '1', '/Library/views/AutoWidgetList', 'Item.tpl', '0', '1', '0', '0', '0', '0', '0');
-INSERT INTO `library` VALUES ('/Library/content_widgets/ListView', '', '0', '0', '3', '1', '/Library/views/AutoWidgetList', 'ListView.tpl', '0', '1', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Keywords/switch_views/case_keyword/Keyword', '', '0', '0', '6', '1', '/Library/content_widgets/Keyword', NULL, '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Keywords/switch_views', '', '0', '0', '4', '1', '/Library/views/SwitchViews', 'switch_views.tpl', '0', '1', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Keywords/res/style', '', '0', '0', '5', '1', '/Library/views/Css', 'style.css', '0', '1', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Keywords/res', '', '0', '0', '4', '1', '/Library/views/Widget/res', NULL, '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Keyword', '', '0', '0', '3', '1', '/Library/views/Widget', 'Keyword.tpl', '1', '1', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Comments/switch_views/case_comment/Comment', '', '0', '0', '6', '1', '/Library/content_widgets/Comment', NULL, '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Comments/switch_views/case_comment', '', '0', '0', '5', '1', '/Library/views/SwitchCase', '/Library/content_samples/Comment', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Comments/switch_views', '', '0', '0', '4', '1', '/Library/views/SwitchViews', NULL, '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Comments/res/style', '', '0', '0', '5', '1', '/Library/views/Css', 'style.css', '0', '1', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Comment', '', '0', '0', '3', '1', '/Library/views/Widget', 'Comment.tpl', '1', '1', '0', '0', '0', '0', '0');
+INSERT INTO `library` VALUES ('/Library/content_widgets/Keywords/switch_views/case_keyword', '', '0', '0', '5', '1', '/Library/views/SwitchCase', '/Library/content_samples/Keyword', '0', '0', '0', '0', '0', '0', '0');
+UPDATE `library` SET `uri`='/Library/content_widgets/Keywords', `lang`='', `owner`='0', `date`='0', `level`='3', `order`='1', `proto`='/Library/views/AutoWidgetList', `value`='Keywords.tpl', `is_logic`='1', `is_file`='1', `is_history`='0', `is_delete`='0', `is_hidden`='0', `is_link`='0', `override`='0'  WHERE (`uri` = '/Library/content_widgets/Keywords' AND `lang` = '' AND `owner` = 0 AND `date` = 0) ;
+UPDATE `library` SET `uri`='/Library/content_widgets/Comments', `lang`='', `owner`='0', `date`='0', `level`='3', `order`='1', `proto`='/Library/views/AutoWidgetList', `value`='Comments.tpl', `is_logic`='1', `is_file`='1', `is_history`='0', `is_delete`='0', `is_hidden`='0', `is_link`='0', `override`='0'  WHERE (`uri` = '/Library/content_widgets/Comments' AND `lang` = '' AND `owner` = 0 AND `date` = 0) ;
+/*End   of batch : 1 */
+/* SYNC TABLE : `members` */
+
+/* SYNC TABLE : `site` */
+
 
 COMMIT;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
