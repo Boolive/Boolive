@@ -37,7 +37,7 @@ class PHPTemplateValues extends Values
 
     protected function defineRule()
     {
-        $this->_rule = Rule::arrays(Rule::string()->escape(), true);
+        $this->_rule = Rule::arrays(Rule::any(Rule::string()->escape(), Rule::null()), true);
     }
 
     /**
