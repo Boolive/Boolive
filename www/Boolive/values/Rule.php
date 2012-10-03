@@ -26,7 +26,7 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule values() Объект класса \Boolive\values\Values
  * @method static \Boolive\values\Rule any() Любое правило из перечисленных или любой тип значения, если не перечислены варианты правил
  * @method static \Boolive\values\Rule forbidden() Запрещенный. Требуется отсутствие элемента
- * @method static \Boolive\values\Rule is() Равен указанному значению
+ * @method static \Boolive\values\Rule eq() Равен указанному значению
  * @method static \Boolive\values\Rule not() Не равен указанному значению
  * @method static \Boolive\values\Rule in() Допустимые значения. Через запятую или массив
  * @method static \Boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
@@ -39,13 +39,15 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule regexp() Проверка на совпадение одному из регулярных выражений. Выражения через запятую или массив
  * @method static \Boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
  * @method static \Boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
+ * @method static \Boolive\values\Rule lowercase() Преобразует строку в нижний регистр
+ * @method static \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
  *
  * Методы добавления фильтра к объекту правила.
  * @method \Boolive\values\Rule max($max) Максимальное значение. Правая граница отрезка
  * @method \Boolive\values\Rule min($min) Минимальное значение. Левая граница отрезка
  * @method \Boolive\values\Rule less($less) Меньше указанного значения. Правая граница интервала
  * @method \Boolive\values\Rule more($more) Больше указанного значения. Левая граница интервала
- * @method \Boolive\values\Rule is() Равен указанному значению
+ * @method \Boolive\values\Rule eq() Равен указанному значению
  * @method \Boolive\values\Rule not() Не равен указанному значению
  * @method \Boolive\values\Rule in() Допустимые значения. Через запятую или массив
  * @method \Boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
@@ -62,6 +64,9 @@ use Boolive\develop\ITrace;
  * @method \Boolive\values\Rule regexp() Проверка на совпадение одному из регулярных выражений. Выражения через запятую или массив
  * @method \Boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
  * @method \Boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
+ * @method \Boolive\values\Rule file_upload() Информация о загружаемом файле в виде массива
+ * @method \Boolive\values\Rule lowercase() Преобразует строку в нижний регистр
+ * @method \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
  */
 class Rule implements ITrace
 {

@@ -63,7 +63,7 @@ class Check
             foreach ($filters as $filter => $args){
                 $value = self::$filter($value, $error, $rule);
                 if ($error){
-                    if ($ignore && in_array($error->getMessage(), $ignore)){
+                    if ($ignore && in_array($error->getCode(), $ignore)){
                         $error = null;
                     }else{
                         break;
@@ -110,7 +110,7 @@ class Check
         if (is_scalar($value)){
             return (bool)$value;
         }else{
-            $error = new Error('Значение не является и не может быть логическим', 'bool');
+            $error = new Error('Значение не является и не может быть логическим.', 'bool');
             return false;
         }
     }
@@ -130,7 +130,7 @@ class Check
         if (is_bool($value) || (is_scalar($value) && preg_match('/^[-\+]?[0-9]+$/', strval($value)) == 1)){
             return intval($value);
         }else{
-            $error = new Error('Значение не является целым числом', 'int');
+            $error = new Error('Значение не является целым числом.', 'int');
             return is_object($value)?1:intval($value);
         }
     }
@@ -151,7 +151,7 @@ class Check
         if (is_numeric($value)){
             return doubleval($value);
         }else{
-            $error = new Error('Значение не является действительным числом', 'double');
+            $error = new Error('Значение не является действительным числом.', 'double');
             return is_object($value)?1:doubleval($value);
         }
     }
@@ -168,7 +168,7 @@ class Check
         if (isset($value) && is_scalar($value)){
             return strval($value);
         }else{
-            $error = new Error('Значение не является строкой', 'string');
+            $error = new Error('Значение не является строкой.', 'string');
             return '';
         }
     }
@@ -183,7 +183,7 @@ class Check
     static function null($value, &$error, Rule $rule)
     {
         if (isset($value)/* && !(is_string($value) && in_array(strtolower($value), array('null')))*/){
-            $error = new Error('Значение не является неопределённым', 'null');
+            $error = new Error('Значение не является неопределённым.', 'null');
         }
         return null;
     }
@@ -200,7 +200,7 @@ class Check
         $result = array();
         if (is_array($value)){
             // Контейнер для ошибок на элементы
-            $error = new Error('Неверная структура массива', 'arrays');
+            $error = new Error('Неверная структура массива.', 'arrays');
             // Сведения о правиле
             $rule_sub = array();
             $rule_default = null;
@@ -222,7 +222,7 @@ class Check
                 if (isset($rule_sub[$key])){
                     // Отсутствие элемента
                     if (isset($rule_sub[$key]->forbidden)){
-                        $sub_error = new Error(array('Элемент "%s" должен отсутствовать', $key), 'forbidden');
+                        $sub_error = new Error(array('Элемент "%s" должен отсутствовать.', $key), 'forbidden');
                     }else{
                         $result[$key] = self::filter($v, $rule_sub[$key], $sub_error);
                     }
@@ -260,7 +260,7 @@ class Check
                 $error = null;
             }
         }else{
-            $error = new Error('Значение не является массивом', 'arrays');
+            $error = new Error('Значение не является массивом.', 'arrays');
         }
         return $result;
     }
@@ -278,7 +278,7 @@ class Check
         if (is_object($value) && (empty($class) || $value instanceof $class)){
             return $value;
         }
-        $error = new Error(array('Значение не является объектом класса %s', $class), 'object');
+        $error = new Error(array('Значение не является объектом класса %s.', $class), 'object');
         return null;
     }
 
@@ -294,7 +294,7 @@ class Check
         if ($value instanceof Values){
             return $value;
         }
-        $error = new Error('Значение не является объектом Values', 'values');
+        $error = new Error('Значение не является объектом Values.', 'values');
         return new Values($value);
     }
 
@@ -337,7 +337,7 @@ class Check
         if ($value instanceof Entity && (empty($class) || $value instanceof $class) && $value->isExist()){
             return $value;
         }else{
-            $error = new Error(array('Значение не является объектом класса %s', $class), 'entity');
+            $error = new Error(array('Значение не является объектом класса %s.', $class), 'entity');
             return null;
         }
     }
@@ -386,7 +386,7 @@ class Check
         }else{
             $result = $value;
         }
-        if ($value != $result) $error = new Error(array('Значение больше чем "%s"', $max), 'max');
+        if ($value != $result) $error = new Error(array('Значение больше чем "%s".', $max), 'max');
         return $result;
     }
 
@@ -403,13 +403,13 @@ class Check
         $result = $value;
         if (is_int($value) || is_double($value)){
             $result = max($min, $value);
-            if ($value != $result) $error = new Error(array('Значение меньше чем "%s"', $min), 'min');
+            if ($value != $result) $error = new Error(array('Значение меньше чем "%s".', $min), 'min');
         }else
         if (is_string($value) && mb_strlen($value) < $min){
-            $error = new Error(array('Значение меньше чем "%s"', $min), 'min');
+            $error = new Error(array('Значение меньше чем "%s".', $min), 'min');
         }else
         if (is_array($value) && sizeof($value) < $min){
-            $error = new Error(array('Значение меньше чем "%s"', $min), 'min');
+            $error = new Error(array('Значение меньше чем "%s".', $min), 'min');
         }
         return $result;
     }
@@ -435,7 +435,7 @@ class Check
         }else{
             $result = $value;
         }
-        if ($value != $result) $error = new Error(array('Значение не меньше чем "%s"', $less), 'less');
+        if ($value != $result) $error = new Error(array('Значение не меньше чем "%s".', $less), 'less');
         return $result;
     }
 
@@ -451,17 +451,17 @@ class Check
         $more = isset($rule->more[0])? $rule->more[0] : null;
         if ((is_int($value) || is_double($value)) && !($value > $more)){
             $value = $more + 1;
-            $error = new Error(array('Значение не больше чем "%s"', $more), 'more');
+            $error = new Error(array('Значение не больше чем "%s".', $more), 'more');
         }else
         if (is_string($value) && !(mb_strlen($value) > $more)){
             if ($more==0){
-                $error = new Error('Пустое значение', 'more');
+                $error = new Error('Пустое значение.', 'more');
             }else{
-                $error = new Error(array('Значение короче "%s" символов(а)', $more+1), 'more');
+                $error = new Error(array('Значение короче "%s" символов(а).', $more+1), 'more');
             }
         }else
         if (is_array($value) && !(sizeof($value) > $more)){
-            $error = new Error(array('Значение не больше чем "%s"', $more), 'more');
+            $error = new Error(array('Значение не больше чем "%s".', $more), 'more');
         }
         return $value;
     }
@@ -473,12 +473,12 @@ class Check
      * @param \Boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
      */
-    static function is($value, &$error, Rule $rule)
+    static function eq($value, &$error, Rule $rule)
     {
-        $is = isset($rule->is[0])? $rule->is[0] : null;
-        if ($value!=$is){
-            $value = $is;
-            $error = new Error('Значение неравно указанному', 'is');
+        $eq = isset($rule->eq[0])? $rule->eq[0] : null;
+        if ($value!=$eq){
+            $value = $eq;
+            $error = new Error('Значение неравно указанному.', 'eq');
         }
         return $value;
     }
@@ -495,7 +495,7 @@ class Check
         $not = isset($rule->not[0])? $rule->not[0] : null;
         if ($value==$not){
             $value = null;
-            $error = new Error('Значение равно указанному', 'not');
+            $error = new Error('Значение равно указанному.', 'not');
         }
         return $value;
     }
@@ -513,7 +513,7 @@ class Check
         if (sizeof($list) == 1 && is_array($list[0])) $list = $list[0];
         if (!in_array($value, $list)){
             $value = null;
-            $error = new Error('Значение не в списке допустимых', 'in');
+            $error = new Error('Значение не в списке допустимых.', 'in');
         }
         return $value;
     }
@@ -531,7 +531,7 @@ class Check
         if (sizeof($list) == 1 && is_array($list[0])) $list = $list[0];
         if (in_array($value, $list)){
             $value = null;
-            $error = new Error('Значение в списке запрещенных', 'not_in');
+            $error = new Error('Значение в списке запрещенных.', 'not_in');
         }
         return $value;
     }
@@ -547,7 +547,7 @@ class Check
     {
         if (is_scalar($value)){
             $result = trim($value);
-            if ($result != $value) $error = new Error('Имеются пробельные символы по краям строки', 'trim');
+            if ($result != $value) $error = new Error('Имеются пробельные символы по краям строки.', 'trim');
             return $result;
         }
         return $value;
@@ -564,7 +564,7 @@ class Check
     {
         if (is_scalar($value)){
             $result = htmlentities($value, ENT_QUOTES, 'UTF-8');
-            if ($result != $value) $error = new Error('Имеются html символы в строке', 'escape');
+            if ($result != $value) $error = new Error('Имеются html символы в строке.', 'escape');
             return $result;
         }
         return $value;
@@ -582,7 +582,7 @@ class Check
         if (is_scalar($value)){
             $tags = $rule->strip_tags[1];
             $result = strip_tags($value, $tags);
-            if ($result != $value) $error = new Error('Имеются запрещенные html теги в строке', 'strip_tags');
+            if ($result != $value) $error = new Error('Имеются запрещенные html теги в строке.', 'strip_tags');
             return $result;
         }
         return $value;
@@ -598,7 +598,7 @@ class Check
     static function email($value, &$error, Rule $rule)
     {
         if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)){
-            $error = new Error('Значение не является Email адресом', 'email');
+            $error = new Error('Значение не является Email адресом.', 'email');
         }
         return $value;
     }
@@ -613,7 +613,7 @@ class Check
     static function url($value, &$error, Rule $rule)
     {
         if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_URL)){
-            $error = new Error('Значение не URL', 'url');
+            $error = new Error('Значение не URL.', 'url');
         }
         return $value;
     }
@@ -632,7 +632,7 @@ class Check
             $check = 'http://'.trim($check, '/');
         }
         if (!is_string($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
-            $error = new Error('Значение не URI', 'uri');
+            $error = new Error('Значение не URI.', 'uri');
         }
         return $value;
     }
@@ -647,7 +647,7 @@ class Check
     static function ip($value, &$error, Rule $rule)
     {
         if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_IP)){
-            $error = new Error('Значение не является IP адресом', 'ip');
+            $error = new Error('Значение не является IP адресом.', 'ip');
         }
         return $value;
     }
@@ -668,7 +668,7 @@ class Check
                 if (preg_match($pattern, $value)) return $value;
             }
         }
-        $error = new Error('Значение не соответствует ни одному регулярному выражению', 'regexp');
+        $error = new Error('Значение не соответствует ни одному регулярному выражению.', 'regexp');
         return $value;
     }
 
@@ -688,7 +688,7 @@ class Check
                 if (fnmatch($pattern, $value)) return $value;
             }
         }
-        $error = new Error('Значение не соответствует ни одному шаблону', 'ospatterns');
+        $error = new Error('Значение не соответствует ни одному шаблону.', 'ospatterns');
         return $value;
     }
 
@@ -707,7 +707,39 @@ class Check
                 return '#'.$value;
             }
         }
-        $error = new Error('Значение не является кодом цвета', 'color');
+        $error = new Error('Значение не является кодом цвета.', 'color');
         return '#000000';
+    }
+
+    /**
+     * Строка в нижнем регистре
+     * @param $value Фильтруемое значение
+     * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
+     * @param \Boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+     * @return string
+     */
+    static function lowercase($value, &$error, Rule $rule)
+    {
+        $result = mb_strtolower($value, 'utf-8');
+        if ($value != $result){
+            $error = new Error('Не все символы в нижнем регистре', 'lowercase');
+        }
+        return $result;
+    }
+
+    /**
+     * Строка в верхнем регистре
+     * @param $value Фильтруемое значение
+     * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
+     * @param \Boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+     * @return string
+     */
+    static function uppercase($value, &$error, Rule $rule)
+    {
+        $result = mb_strtoupper($value, 'utf-8');
+        if ($value != $result){
+            $error = new Error('Не все символы в верхнем регистре', 'uppercase');
+        }
+        return $result;
     }
 }
