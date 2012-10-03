@@ -1,3 +1,7 @@
 /.idea/
 /error.log
 /*.log
+/.buildpath
+/.project
+/.settings/
+
