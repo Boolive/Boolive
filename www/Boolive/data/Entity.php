@@ -102,7 +102,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'		 => Rule::arrays(array(
                                     'tmp_name'	=> Rule::string()->more(0)->required(), // Путь на связываемый файл
-                                    'name'		=> Rule::ospatterns('*.*')->required(), // Имя файла, из которого будет взято расширение
+                                    'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore(array('lowercase')), // Имя файла, из которого будет взято расширение
                                     'size'		=> Rule::int(), // Размер в байтах
                                     'error'		=> Rule::in(0) // Код ошибки. Если 0, то ошибки нет
                                 )
