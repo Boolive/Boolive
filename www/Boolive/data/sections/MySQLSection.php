@@ -139,7 +139,7 @@ class MySQLSection extends Section
             // По умолчанию считаем, что запись добавляется
             $add = true;
             // Проверяем, может запись с указанной датой существует и её тогда редактировать?
-            if (!empty($attr['date'])){
+            if (isset($attr['date'])){
                 // Поиск записи по полному ключю uri+lang+owner+date
                 $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE uri=? AND lang=? AND owner=? AND date=? LIMIT 0,1');
                 $q->execute(array($attr['uri'], $attr['lang'], $attr['owner'], $attr['date']));
@@ -158,7 +158,7 @@ class MySQLSection extends Section
                 $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE uri=? AND lang=? AND owner=? AND is_history=? ORDER BY `date` DESC LIMIT 0,1');
                 $q->execute(array($attr['uri'], $attr['lang'], $attr['owner'], $attr['is_history']));
                 if ($current = $q->fetch(DB::FETCH_ASSOC)){
-                    if (empty($attr['file']) && $current['value']==$attr['value'] && $current['is_file']==$attr['is_file']){
+                    if (empty($attr['file']) && $current['value']==$attr['value'] && (!isset($attr['is_file']) || $current['is_file']==$attr['is_file'])){
                         $add = false;
                         $entity->_virtual = false;
                         $attr['date'] = $current['date'];
@@ -193,7 +193,7 @@ class MySQLSection extends Section
 
             // Если редактирование записи, при этом старая запись имеет файл, а новая нет, то удаляем файл
             if (!$add && $attr['is_history'] == $current['is_history']){
-                if ($attr['is_file']==0 && $current['is_file']==1){
+                if (isset($attr['is_file']) && $attr['is_file']==0 && $current['is_file']==1){
                     // Удаление файла
                     if ($current['is_history']){
                         $path = $entity->getDir(true).'_history_/'.$current['date'].'_'.$current['value'];
@@ -205,7 +205,7 @@ class MySQLSection extends Section
             }else
             // Если старое значение является файлом и выполняется редактирование со сменой is_history или
             // добавляется новая актуальная запись, то перемещаем старый файл либо в историю, либо из неё
-            if ($current['is_file']==1 && (!$add || ($add && !$entity->isVirtual() && $attr['is_history']==0))){
+            if ((!$add || ($add && !$entity->isVirtual() && $attr['is_history']==0)) && $current['is_file']==1){
                 if ($current['is_history']==0){
                     $to = $entity->getDir(true).'_history_/'.$current['date'].'_'.$current['value'];
                     $from = $entity->getDir(true).$current['value'];
@@ -245,7 +245,7 @@ class MySQLSection extends Section
 
             // Текущую акуальную запись в историю
             // Если добавление новой актуальной записи или востановление из истории
-            if ((!$entity->isVirtual() || $current['is_histroy']) && $attr['is_history']==0){
+            if ((($add && !$entity->isVirtual()) || (!$add && $current['is_history'])) && (isset($attr['is_history']) && $attr['is_history']==0)){
                 // Смена истории, если есть уже записи.
                 $q = $this->db->prepare('
                     UPDATE `'.$this->table.'` SET `is_history` = 1

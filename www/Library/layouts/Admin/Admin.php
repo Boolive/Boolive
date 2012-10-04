@@ -20,7 +20,7 @@ class Admin extends Focuser
                     )
                 ),
                 'PATH' => Rule::arrays(array(
-                    0 => Rule::is('admin')->required()
+                    0 => Rule::eq('admin')->required()
                     )
                 )
             )

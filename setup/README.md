@@ -10,7 +10,7 @@
 
   SQL запрос для создания базы данных:
 
-  CREATE DATABASE `boolive` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+  CREATE DATABASE `boolive` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 
 * Выполните SQL запрос из файла setup/sql/install.sql
   Или сделайте импорт этого файла в phpmyadmin или подобной ему программе

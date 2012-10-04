@@ -18,7 +18,8 @@
 			self.element.click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
-                self.element.trigger('before-select-object', [self._object]);
+                self.element.trigger('before-entry-object', [self._object]);
+                //self.element.trigger('before-select-object', [self._object]);
 			});
         },
 

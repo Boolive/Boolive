@@ -16,7 +16,6 @@ use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
     Boolive\file\File,
     Boolive\develop\ITrace,
     Boolive\values\Rule,
-    Boolive\commands\Commands,
     Boolive\input\Input,
     Boolive\functions\F;
 
@@ -53,24 +52,6 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * @var bool|string
      */
     protected $_rename = false;
-    /**
-     * Отфильтрованные входящих данных.
-     * Инициализируется в методе start()
-     * В качестве правила по умолчанию используется $this->getInputRule()
-     * @var array
-     */
-    protected $_input;
-    /**
-     * Ошибки при проверки входящих данных
-     * @var \Boolive\errors\Error
-     */
-    protected $_input_error;
-    /**
-     * Команды, передающиеся по всем исполняемым объектам.
-     * Инициализируется в методе start()
-     * @var \Boolive\commands\Commands
-     */
-    protected $_commands;
 
     public function __construct($attribs = array(), $virtual = true, $exist = false)
     {
@@ -86,7 +67,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     {
         $this->_rule = Rule::arrays(array(
                 'uri'    	 => Rule::uri()->max(255)->required(), // URI - идентификатор объекта. Уникален в рамках проекта
-                'lang'		 => Rule::string()->max(3)->default(0)->required(), // Язык (код)
+                'lang'		 => Rule::string()->max(3)->default('')->required(), // Язык (код)
                 'owner'		 => Rule::int()->default(0)->required(), // Владелец (код)
                 'date'		 => Rule::int(), // Дата создания в секундах
                 'order'		 => Rule::any(Rule::null(), Rule::int()), // Порядковый номер. Уникален в рамках родителя
@@ -101,11 +82,11 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 'override'	 => Rule::bool()->int(), // Переопределять всех подчиенных от прототипа или нет
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'		 => Rule::arrays(array(
-                                    'tmp_name'	=> Rule::string()->more(0)->required(), // Путь на связываемый файл
-                                    'name'		=> Rule::ospatterns('*.*')->required(), // Имя файла, из которого будет взято расширение
-                                    'size'		=> Rule::int(), // Размер в байтах
-                                    'error'		=> Rule::in(0) // Код ошибки. Если 0, то ошибки нет
-                                )
+                        'tmp_name'	=> Rule::string(), // Путь на связываемый файл
+                        'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
+                        'size'		=> Rule::int(), // Размер в байтах
+                        'error'		=> Rule::int()->eq(0, true) // Код ошибки. Если 0, то ошибки нет
+                    )
                 )
             )
         );
@@ -923,98 +904,4 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         $trace['_children'] = $this->_children;
         return $trace;
     }
-
-    #################################################
-    #                                               #
-    #            Исполнение объекта                 #
-    #                                               #
-    #################################################
-//
-//    /**
-//     * Возвращает правило на входящие данные
-//     * Используется, если объект исполняется как контроллер для обработки запроса
-//     * По умолчанию любые значения
-//     * @return null|\Boolive\values\Rule
-//     */
-//    public function getInputRule()
-//    {
-//        return null;
-//    }
-//
-//    /**
-//     * Запуск объекта
-//     * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
-//     * @param mixed $input Входящие данные
-//     * @return null|string Результат выполнения контроллера
-//     */
-//    public function start(Commands $commands, $input)
-//    {
-//        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
-//        $this->_commands = $commands;
-//        $this->_input = Check::filter($input, $this->getInputRule(), $this->_input_error);
-//        //Проверка возможности работы
-//        if ($this->canWork()){
-//            // Подчиненные не запускались ещё
-//            $this->_input['previous'] = false;
-//            //Выполнение подчиненных
-//            ob_start();
-//                // Выполнение своей работы
-//                $result = $this->work();
-//                $result = ob_get_contents().$result;
-//            ob_end_clean();
-//        }else{
-//            $result = null;
-//        }
-//        $this->_input = null;
-//        return $result;
-//    }
-//
-//    /**
-//     * Проверка возможности работы.
-//     * По умолчанию проверяются отсутствие ошибок во входящих данных
-//     * @return bool Признак, может ли работать объект или нет
-//     */
-//    public function canWork()
-//    {
-//        return !isset($this->_input_error);
-//    }
-//
-//    /**
-//     * Работа объекта. Обработка запроса и формирование вывода.
-//     * Результат выводится функциями echo, print или возвращается через return
-//     * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
-//     */
-//    public function work()
-//    {
-//        return (string)$this;
-//    }
-//
-//    /**
-//     * Запуск подчиненного по имени
-//     * @param $name Имя подчиненного
-//     * @param null $input Входящие данные для подчиненного объекта
-//     * @return null|string
-//     */
-//    public function startChild($name)
-//    {
-//        if (!isset($input)) $input = Input::getSource();
-//        if ($result = $this->{$name}->start($this->_commands, $input)){
-//            $this->_input['previous'] = true;
-//        }
-//        return $result;
-//    }
-//
-//    /**
-//     * Запуск всех подчиненных объектов
-//     * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
-//     */
-//    public function startChildren()
-//    {
-//        $result = array();
-//        $list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'), true, 'name');
-//        foreach ($list as $key => $child){
-//            if ($out = $this->startChild($key)) $result[$key] = $out;
-//        }
-//        return $result;
-//    }
 }

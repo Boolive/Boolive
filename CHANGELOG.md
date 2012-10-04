@@ -48,6 +48,7 @@ Version 2.0 preview work in progress
 - new #52: Added widgets AutoWidget and  AutoWidgetList for automatic views objects (VladimirShestakov)
 - new #53: Added admin interface without edit functions (only explorer) (VladimirShestakov)
 - new #55 Added handler for directed request "DirectHandler" (for ajax process) (VladimirShestakov)
+- new #59 Added widget Attributes for admin (VladimirShestakov)
 - new: Added package "admin_widgets" for admins widgets (VladimirShestakov)
 - new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)
 - new: Added method Input::url() for create or get current URL (VladimirShestakov)
