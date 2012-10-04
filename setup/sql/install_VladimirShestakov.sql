@@ -1,30 +1,34 @@
 -- phpMyAdmin SQL Dump
--- version 2.9.2
+-- version 3.5.2.2
 -- http://www.phpmyadmin.net
--- 
+--
 -- Хост: localhost
--- Время создания: Сен 29 2012 г., 22:07
--- Версия сервера: 5.0.22
+-- Время создания: Окт 04 2012 г., 18:08
+-- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
--- 
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
 -- База данных: `boolive-git`
--- 
+--
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Структура таблицы `contents`
--- 
+--
 
-CREATE TABLE `contents` (
-  `uri` varchar(255) NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
-  `lang` char(3) NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
+CREATE TABLE IF NOT EXISTS `contents` (
+  `uri` varchar(255) collate utf8_bin NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
+  `lang` char(3) collate utf8_bin NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
   `owner` int(11) NOT NULL default '0' COMMENT 'Владелец',
   `date` int(11) NOT NULL COMMENT 'Дата создания объекта',
   `level` int(11) NOT NULL default '1' COMMENT 'Уровень вложенности относительно корня',
   `order` int(11) NOT NULL default '1' COMMENT 'Порядковый номер',
-  `proto` varchar(255) default NULL COMMENT 'uri прототипа',
-  `value` varchar(255) default NULL COMMENT 'Значение',
+  `proto` varchar(255) collate utf8_bin default NULL COMMENT 'uri прототипа',
+  `value` varchar(255) collate utf8_bin default NULL COMMENT 'Значение',
   `is_logic` tinyint(4) NOT NULL default '0' COMMENT 'Признак, есть ли класс у объекта',
   `is_file` tinyint(4) NOT NULL default '0' COMMENT 'Признак, Является ли объект файлом',
   `is_history` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли запись историей',
@@ -35,13 +39,13 @@ CREATE TABLE `contents` (
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- 
+--
 -- Дамп данных таблицы `contents`
--- 
+--
 
-INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
+INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Contents/contacts', '', 0, 0, 2, 2, '/Library/content_samples/Page', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text', '', 0, 0, 3, 2, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/feedback', '', 0, 0, 4, 3, '/Library/content_samples/Feedback', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -79,9 +83,10 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/main/sub_page/text/p2', '', 0, 0, 5, 3, '/Library/content_samples/Paragraph', 'Второй абзац подчиенной страницы... текст... текст...', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/sub_page/title', '', 0, 0, 4, 0, '/Library/content_samples/Page/title', 'Подстраница', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text', '', 0, 0, 3, 2, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/head1', '', 0, 0, 4, 1, '/Library/content_samples/Head', 'Заголовок главной страницы', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
-('/Contents/main/text/list1', '', 0, 0, 4, 5, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/head1', '', 0, 0, 4, 2, '/Library/content_samples/Head', 'Заголовок главной страницы', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 1, 0, 0, 0, 0),
+('/Contents/main/text/img1', '', 0, 1349234641, 4, 1, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
+('/Contents/main/text/list1', '', 0, 0, 4, 6, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1', '', 0, 0, 5, 1, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1/text/p1', '', 0, 0, 7, 1, '/Library/content_samples/Paragraph', 'Хей-хей-хей! Я - пункт меню!', 0, 0, 0, 0, 0, 0, 0),
@@ -98,8 +103,8 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/main/text/list1/item3/list1/item2', '', 0, 0, 7, 2, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1/item2/text', '', 0, 0, 8, 1, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item3/list1/item2/text/p1', '', 0, 0, 9, 1, '/Library/content_samples/Paragraph', 'вложенного меню', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/p1', '', 0, 0, 4, 2, '/Library/content_samples/Paragraph', 'Добро пожаловать на тестовый сайт. Сайт работает на новой системе Boolive 2', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/p2', '', 0, 0, 4, 4, '/Library/content_samples/Paragraph', 'Hello World :)', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/p1', '', 0, 0, 4, 3, '/Library/content_samples/Paragraph', 'Добро пожаловать на тестовый сайт. Сайт работает на новой системе Boolive 2', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/p2', '', 0, 0, 4, 5, '/Library/content_samples/Paragraph', 'p2.value', 0, 1, 0, 0, 0, 0, 0),
 ('/Contents/main/title', '', 0, 0, 3, 1, '/Library/content_samples/Page/title', 'Главная', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news', '', 0, 0, 2, 3, '/Library/content_samples/Part', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news1', '', 0, 0, 3, 2, '/Library/content_samples/Page', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -123,25 +128,23 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/news/news4/text/p1', '', 0, 0, 5, 1, '/Library/content_samples/Paragraph', 'Текст новости в виде одного абзаца', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news4/title', '', 0, 0, 4, 1, '/Library/content_samples/Page/title', 'Четвертая новость', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/title', '', 0, 0, 3, 1, '/Library/content_samples/Part/title', 'Лента новостей', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/RichText/switch_views/case_list', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/lists/List', 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/RichText/switch_views/case_list/ListView', '', 0, 0, 6, 1, '/Library/content_widgets/ListView', NULL, 0, 0, 0, 0, 0, 0, 0);
+('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Структура таблицы `interfaces`
--- 
+--
 
-CREATE TABLE `interfaces` (
-  `uri` varchar(255) NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
-  `lang` char(3) NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
+CREATE TABLE IF NOT EXISTS `interfaces` (
+  `uri` varchar(255) collate utf8_bin NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
+  `lang` char(3) collate utf8_bin NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
   `owner` int(11) NOT NULL default '0' COMMENT 'Владелец',
   `date` int(11) NOT NULL COMMENT 'Дата создания объекта',
   `level` int(11) NOT NULL default '1' COMMENT 'Уровень вложенности относительно корня',
   `order` int(11) NOT NULL default '1' COMMENT 'Порядковый номер',
-  `proto` varchar(255) default NULL COMMENT 'uri прототипа',
-  `value` varchar(255) default NULL COMMENT 'Значение',
+  `proto` varchar(255) collate utf8_bin default NULL COMMENT 'uri прототипа',
+  `value` varchar(255) collate utf8_bin default NULL COMMENT 'Значение',
   `is_logic` tinyint(4) NOT NULL default '0' COMMENT 'Признак, есть ли класс у объекта',
   `is_file` tinyint(4) NOT NULL default '0' COMMENT 'Признак, Является ли объект файлом',
   `is_history` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли запись историей',
@@ -152,13 +155,13 @@ CREATE TABLE `interfaces` (
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- 
+--
 -- Дамп данных таблицы `interfaces`
--- 
+--
 
-INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
+INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Interfaces/direct_handler', '', 0, 0, 2, 1, '/Library/views/DirectHandler', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html', '', 0, 0, 2, 2, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/admin', '', 0, 0, 4, 1, '/Library/layouts/Admin', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -167,19 +170,19 @@ INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `pro
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Структура таблицы `keywords`
--- 
+--
 
-CREATE TABLE `keywords` (
-  `uri` varchar(255) NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
-  `lang` char(3) NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
+CREATE TABLE IF NOT EXISTS `keywords` (
+  `uri` varchar(255) collate utf8_bin NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
+  `lang` char(3) collate utf8_bin NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
   `owner` int(11) NOT NULL default '0' COMMENT 'Владелец',
   `date` int(11) NOT NULL COMMENT 'Дата создания объекта',
   `level` int(11) NOT NULL default '1' COMMENT 'Уровень вложенности относительно корня',
   `order` int(11) NOT NULL default '1' COMMENT 'Порядковый номер',
-  `proto` varchar(255) default NULL COMMENT 'uri прототипа',
-  `value` varchar(255) default NULL COMMENT 'Значение',
+  `proto` varchar(255) collate utf8_bin default NULL COMMENT 'uri прототипа',
+  `value` varchar(255) collate utf8_bin default NULL COMMENT 'Значение',
   `is_logic` tinyint(4) NOT NULL default '0' COMMENT 'Признак, есть ли класс у объекта',
   `is_file` tinyint(4) NOT NULL default '0' COMMENT 'Признак, Является ли объект файлом',
   `is_history` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли запись историей',
@@ -190,13 +193,13 @@ CREATE TABLE `keywords` (
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- 
+--
 -- Дамп данных таблицы `keywords`
--- 
+--
 
-INSERT INTO `keywords` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
+INSERT INTO `keywords` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Keywords/cms', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords/framework', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '0', 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords/php', '', 0, 0, 2, 1, '/Library/content_samples/Keyword', '1', 0, 0, 0, 0, 0, 0, 0),
@@ -204,19 +207,19 @@ INSERT INTO `keywords` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Структура таблицы `library`
--- 
+--
 
-CREATE TABLE `library` (
-  `uri` varchar(255) NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
-  `lang` char(3) NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
+CREATE TABLE IF NOT EXISTS `library` (
+  `uri` varchar(255) collate utf8_bin NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
+  `lang` char(3) collate utf8_bin NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
   `owner` int(11) NOT NULL default '0' COMMENT 'Владелец',
   `date` int(11) NOT NULL COMMENT 'Дата создания объекта',
   `level` int(11) NOT NULL default '1' COMMENT 'Уровень вложенности относительно корня',
   `order` int(11) NOT NULL default '1' COMMENT 'Порядковый номер',
-  `proto` varchar(255) default NULL COMMENT 'uri прототипа',
-  `value` varchar(255) default NULL COMMENT 'Значение',
+  `proto` varchar(255) collate utf8_bin default NULL COMMENT 'uri прототипа',
+  `value` varchar(255) collate utf8_bin default NULL COMMENT 'Значение',
   `is_logic` tinyint(4) NOT NULL default '0' COMMENT 'Признак, есть ли класс у объекта',
   `is_file` tinyint(4) NOT NULL default '0' COMMENT 'Признак, Является ли объект файлом',
   `is_history` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли запись историей',
@@ -227,18 +230,25 @@ CREATE TABLE `library` (
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- 
+--
 -- Дамп данных таблицы `library`
--- 
+--
 
-INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
+INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Library/admin_widgets', '', 0, 0, 2, 5, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add', '', 0, 0, 3, 4, '/Library/views/Widget', 'Add.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Предоставляет выбор объекта для добавления его в отображаемый объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Добавить', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs', '', 0, 0, 3, 6, '/Library/views/Widget', 'Attribs.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Редактор атрибутов любого объекта', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs/res/jquery.form', '', 0, 0, 5, 4, '/Library/javascript_plugins/jquery.form', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs/res/jquery.ui.Attribs', '', 0, 0, 5, 5, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Attribs.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Attribs/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Атрибуты', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Delete', '', 0, 0, 3, 5, '/Library/views/Widget', 'Delete.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Delete/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает диалоговое окно для подтверждения удаления и осуществляет удаление (пермещение в корзину)', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Delete/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
@@ -258,6 +268,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/admin_widgets/ObjectItem/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/ObjectItem/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Виджет объекта', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/Package', '', 0, 0, 3, 5, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User', '', 0, 0, 4, 1, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User/email', '', 0, 0, 5, 3, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -265,7 +276,6 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/basic/members/User/title', '', 0, 0, 5, 1, NULL, 'Пользователь', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/UserGroup', '', 0, 0, 4, 2, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/UserGroup/title', '', 0, 0, 5, 1, NULL, 'Группа пользователей', 0, 0, 0, 0, 0, 0, 0),
-('/Library/basic/Package', '', 0, 0, 3, 5, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple', '', 0, 0, 3, 4, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Email', '', 0, 0, 4, 3, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Number', '', 0, 0, 4, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -287,9 +297,6 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_samples/Head', '', 0, 0, 3, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Image', '', 0, 0, 3, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Keyword', '', 0, 0, 3, 5, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/content_samples/lists', '', 0, 0, 3, 6, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_samples/lists/Item', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_samples/lists/List', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Page', '', 0, 0, 3, 11, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Page/comments', '', 0, 0, 4, 4, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/Page/description', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -301,6 +308,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_samples/Part/title', '', 0, 0, 4, 1, NULL, 'Раздел', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/RichText', '', 0, 0, 3, 9, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/RichText/title', '', 0, 0, 4, 1, NULL, 'Форматированный текст', 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/lists', '', 0, 0, 3, 6, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/lists/Item', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_samples/lists/List', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/tables', '', 0, 0, 3, 7, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/tables/Cell', '', 0, 0, 4, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_samples/tables/Row', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -357,6 +367,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/PagePreview/switch_views/case_text/Text', '', 0, 0, 6, 1, '/Library/content_widgets/RichText', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/PagePreview/switch_views/case_title', '', 0, 0, 5, 2, '/Library/views/SwitchCase', '/Library/content_samples/Page/title', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/PagePreview/switch_views/case_title/Title', '', 0, 0, 6, 1, '/Library/content_widgets/Title', 'Title.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/content_widgets/PagePreview/title', '', 0, 1349349439, 4, 1, '/Library/views/AutoWidgetList/title', 'Превью страницы ', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Paragraph', '', 0, 0, 3, 1, '/Library/views/Widget', 'Paragraph.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Part', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Part.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Part/count_per_page', '', 0, 0, 4, 9, NULL, '4', 0, 0, 0, 0, 0, 0, 0),
@@ -381,21 +392,24 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/RichText/switch_views/case_p/paragraph', '', 0, 0, 6, 1, '/Library/content_widgets/Paragraph', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Title', '', 0, 0, 3, 1, '/Library/views/Widget', 'Title.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins', '', 0, 0, 2, 7, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/javascript_plugins/description', '', 0, 0, 3, 2, '/Library/basic/Package/description', 'Пакет плагинов (скриптов) на JavaScript с использованием различный библиотек', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/HistoryAPI', '', 0, 0, 3, 5, '/Library/views/JavaScript', 'HistoryAPI.js', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/HistoryAPI/basepath', '', 0, 0, 4, 3, NULL, '/admin/', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/HistoryAPI/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'Библиотека эмулирует HTML5 History API в старых браузерах.', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/HistoryAPI/redirect', '', 0, 0, 4, 6, NULL, '1', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/HistoryAPI/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'HTML5-History-API', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/HistoryAPI/type', '', 0, 0, 4, 5, NULL, '', 0, 0, 0, 0, 0, 0, 0),
-('/Library/javascript_plugins/jquery.include', '', 0, 0, 3, 3, '/Library/views/jQueryScript', 'jquery.include.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/javascript_plugins/jquery.include/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'Плагин для динамической загрузки JavaScript и CSS файлов со стороны клиента (браузера)', 0, 0, 0, 0, 0, 0, 0),
-('/Library/javascript_plugins/jquery.include/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'Загрузчик JS/CSS файлов', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/description', '', 0, 0, 3, 2, '/Library/basic/Package/description', 'Пакет плагинов (скриптов) на JavaScript с использованием различный библиотек', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget', '', 0, 0, 3, 4, '/Library/views/jQueryUIScript', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.include', '', 0, 0, 5, 1, '/Library/javascript_plugins/jquery.include', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.ui.AjaxWidget', '', 0, 0, 5, 3, '/Library/views/JavaScript', 'jquery.ui.AjaxWidget.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'jQueryUI виджет с функцией обновления без полной перегрузки страницы', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'Виджет с обновлением по Ajax', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.form', '', 0, 0, 3, 7, '/Library/views/jQueryScript', 'jquery.form.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.form/description', '', 0, 0, 4, 1, '/Library/views/jQueryScript/description', 'Отправка форм', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.form/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'Плагин для для отправки пользовательских форм по AJAX без перегрузки страницы', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.include', '', 0, 0, 3, 3, '/Library/views/jQueryScript', 'jquery.include.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.include/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'Плагин для динамической загрузки JavaScript и CSS файлов со стороны клиента (браузера)', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.include/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'Загрузчик JS/CSS файлов', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/title', '', 0, 0, 3, 1, '/Library/basic/Package/title', 'Плагины на JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts', '', 0, 0, 2, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin', '', 0, 0, 3, 2, '/Library/views/Focuser', 'Admin.tpl', 1, 1, 0, 0, 0, 0, 0),
@@ -404,10 +418,10 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/Admin/Programs/res/jquery.ui.Programs', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views', '', 0, 0, 5, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views/case_default', '', 0, 0, 6, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default/Add', '', 0, 0, 7, 4, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default/Add', '', 0, 0, 7, 5, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default/Attribs', '', 0, 0, 7, 4, '/Library/admin_widgets/Attribs', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/switch_views/case_default/Delete', '', 0, 0, 7, 6, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views/case_default/Explorer', '', 0, 0, 7, 3, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default2', '', 0, 0, 6, 5, '/Library/views/SwitchCase', '/Interfaces', 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default2/Delete', '', 0, 0, 7, 1, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/title', '', 0, 0, 5, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu', '', 0, 0, 4, 5, '/Library/views/Widget', 'ProgramsMenu.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Меню автоматически формируется в зависимости от отображаемого объекта и доступного для него программ', 0, 0, 0, 0, 0, 0, 0),
@@ -439,6 +453,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/boolive/top/menu/object/news', '', 0, 0, 7, 2, '/Contents/news', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/res/style', '', 0, 0, 7, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/title', '', 0, 0, 2, 1, NULL, 'Библиотека', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget', '', 0, 0, 3, 9, '/Library/views/Widget', 'AutoWidget.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает любой объект в соответсвии с установленными вараинтами', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/switch_views', '', 0, 0, 4, 3, '/Library/views/SwitchViews', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -471,18 +486,6 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/JavaScript/depends/title', '', 0, 0, 5, 1, '/Library/views/ViewGroup/title', 'Используемые скрипты', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/JavaScript/description', '', 0, 0, 4, 2, '/Library/views/View/description', 'Клиентский скрипт на языке JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/JavaScript/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'JavaScript', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript', '', 0, 0, 3, 5, '/Library/views/JavaScript', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/depends/jquery-1.8.1.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-1.8.1.min.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/depends/jquery-1.8.1.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для взаимодействия с HTML', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/depends/jquery-1.8.1.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.8.23.min.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'jQuery UI скрипт', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Logo', '', 0, 0, 3, 14, '/Library/views/Widget', 'Logo.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Logo/object', '', 0, 0, 4, 2, '/Library/content_samples/Image', 'object.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Logo/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Логотип', 0, 0, 0, 0, 0, 0, 0),
@@ -523,23 +526,35 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Widget/res', '', 0, 0, 4, 3, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res/description', '', 0, 0, 5, 2, '/Library/views/ViewGroup/description', 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res/title', '', 0, 0, 5, 1, '/Library/views/ViewGroup/title', 'Ресурсы', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/Widget/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Виджет', 0, 0, 0, 0, 0, 1, 0);
+('/Library/views/Widget/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Виджет', 0, 0, 0, 0, 0, 1, 0),
+('/Library/views/jQueryScript', '', 0, 0, 3, 5, '/Library/views/JavaScript', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/depends/jquery-1.8.1.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-1.8.1.min.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/depends/jquery-1.8.1.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для взаимодействия с HTML', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/depends/jquery-1.8.1.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.8.23.min.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'jQuery UI скрипт', 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Структура таблицы `members`
--- 
+--
 
-CREATE TABLE `members` (
-  `uri` varchar(255) NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
-  `lang` char(3) NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
+CREATE TABLE IF NOT EXISTS `members` (
+  `uri` varchar(255) collate utf8_bin NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
+  `lang` char(3) collate utf8_bin NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
   `owner` int(11) NOT NULL default '0' COMMENT 'Владелец',
   `date` int(11) NOT NULL COMMENT 'Дата создания объекта',
   `level` int(11) NOT NULL default '1' COMMENT 'Уровень вложенности относительно корня',
   `order` int(11) NOT NULL default '1' COMMENT 'Порядковый номер',
-  `proto` varchar(255) default NULL COMMENT 'uri прототипа',
-  `value` varchar(255) default NULL COMMENT 'Значение',
+  `proto` varchar(255) collate utf8_bin default NULL COMMENT 'uri прототипа',
+  `value` varchar(255) collate utf8_bin default NULL COMMENT 'Значение',
   `is_logic` tinyint(4) NOT NULL default '0' COMMENT 'Признак, есть ли класс у объекта',
   `is_file` tinyint(4) NOT NULL default '0' COMMENT 'Признак, Является ли объект файлом',
   `is_history` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли запись историей',
@@ -550,13 +565,13 @@ CREATE TABLE `members` (
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- 
+--
 -- Дамп данных таблицы `members`
--- 
+--
 
-INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
+INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Members/guests', '', 0, 0, 2, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Members/guests/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Гости', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered', '', 0, 0, 2, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -570,19 +585,19 @@ INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Структура таблицы `site`
--- 
+--
 
-CREATE TABLE `site` (
-  `uri` varchar(255) NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
-  `lang` char(3) NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
+CREATE TABLE IF NOT EXISTS `site` (
+  `uri` varchar(255) collate utf8_bin NOT NULL default '' COMMENT 'Унифицированный идентификатор (путь на объект)',
+  `lang` char(3) collate utf8_bin NOT NULL default '' COMMENT 'Код языка по ISO 639-3',
   `owner` int(11) NOT NULL default '0' COMMENT 'Владелец',
   `date` int(11) NOT NULL COMMENT 'Дата создания объекта',
   `level` int(11) NOT NULL default '1' COMMENT 'Уровень вложенности относительно корня',
   `order` int(11) NOT NULL default '1' COMMENT 'Порядковый номер',
-  `proto` varchar(255) default NULL COMMENT 'uri прототипа',
-  `value` varchar(255) default NULL COMMENT 'Значение',
+  `proto` varchar(255) collate utf8_bin default NULL COMMENT 'uri прототипа',
+  `value` varchar(255) collate utf8_bin default NULL COMMENT 'Значение',
   `is_logic` tinyint(4) NOT NULL default '0' COMMENT 'Признак, есть ли класс у объекта',
   `is_file` tinyint(4) NOT NULL default '0' COMMENT 'Признак, Является ли объект файлом',
   `is_history` tinyint(4) NOT NULL default '0' COMMENT 'Признак, является ли запись историей',
@@ -593,16 +608,17 @@ CREATE TABLE `site` (
   PRIMARY KEY  (`uri`,`lang`,`owner`,`date`),
   KEY `orders` (`level`,`order`),
   KEY `state` (`is_history`,`is_delete`,`is_hidden`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
--- 
+--
 -- Дамп данных таблицы `site`
--- 
+--
 
-INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES 
-('/Contents', '', 0, 1342077181, 1, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Interfaces', '', 0, 1342082233, 1, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Keywords', '', 0, 1342077181, 1, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library', '', 0, 1342077181, 1, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Members', '', 0, 1342077181, 1, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/title', '', 0, 0, 1, 1, NULL, 'Сайт', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('', '0', 0, 1349348313, 0, 1, NULL, '1', 0, 0, 0, 0, 0, 0, 0),
+('/Contents', '', 0, 1342077181, 1, 1, NULL, 'Contents.png', 0, 1, 0, 0, 0, 0, 0),
+('/Interfaces', '', 0, 1342082233, 1, 2, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Keywords', '', 0, 1342077181, 1, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library', '', 0, 1342077181, 1, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Members', '', 0, 1342077181, 1, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/title', '', 0, 0, 1, 2, NULL, 'Сайт', 0, 0, 0, 0, 0, 0, 0);

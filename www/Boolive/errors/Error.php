@@ -13,9 +13,11 @@
 namespace Boolive\errors;
 
 use Exception,
-    Boolive\develop\ITrace;
+    Boolive\develop\ITrace,
+    IteratorAggregate,
+    ArrayIterator;
 
-class Error extends Exception implements ITrace
+class Error extends Exception implements ITrace, IteratorAggregate
 {
     /** @var \Boolive\errors\Error Родительское  исключение */
     protected $parent;
@@ -56,7 +58,6 @@ class Error extends Exception implements ITrace
         }
         parent::__construct($message, 0, $previous);
         $this->code = $code;
-
         $this->parent = null;
         $this->list = array();
         $this->temp_list = array();
@@ -116,23 +117,6 @@ class Error extends Exception implements ITrace
     }
 
     /**
-     * Удаление признака временности исключения
-     */
-    protected function untemp()
-    {
-        if ($this->is_temp){
-            $this->is_temp = false;
-            if (isset($this->parent)){
-                // В родитле пермещаем себя в основной список
-                $this->parent->list[$this->code] = $this;
-                unset($this->parent->temp_list[$this->code]);
-                // Возможно, родитель тоже временный
-                $this->parent->untemp();
-            }
-        }
-    }
-
-    /**
      * Получение исключения с указнным именем (ключом)
      * @param string $name Название (ключ) исключения
      * @return \Boolive\errors\Error
@@ -146,7 +130,7 @@ class Error extends Exception implements ITrace
             $this->temp_list[$name];
         }else{
             // Делавем временный подчиненный список исключений
-            $this->temp_list[$name] = new Error('', $name);
+            $this->temp_list[$name] = new Error('Ошибки', $name);
             $this->temp_list[$name]->is_temp = true;
             $this->temp_list[$name]->parent = $this;
             return $this->temp_list[$name];
@@ -218,7 +202,7 @@ class Error extends Exception implements ITrace
      * @param string $postfix Строка, которую добавлять в конец каждого сообщения.
      * @return string
      */
-    public function getUserMessage($all_sub = false, $postfix = "\n")
+    public function getUserMessage($all_sub = false, $postfix = "")
     {
         // Объединение сообщений подчиенных исключений
         if ($all_sub && $this->isExist()){
@@ -235,6 +219,23 @@ class Error extends Exception implements ITrace
         return vsprintf($this->message.$postfix, $this->args);
     }
 
+    public function getUserMessageList($all_sub = false)
+    {
+        // Объединение сообщений подчиенных исключений
+        if ($all_sub && $this->isExist()){
+            $message = array();
+            foreach ($this->list as $e){
+                /** @var $e \Boolive\errors\Error */
+                $message = array_merge($message, $e->getUserMessageList($all_sub));
+            }
+            return $message;
+        }
+        // @TODO Поиск пользовательского сообщения...
+
+        // Сообщение по-умолчанию
+        return array(vsprintf($this->message, $this->args));
+    }
+
     /**
      * Сообщение об ошибках
      * @return string
@@ -247,6 +248,31 @@ class Error extends Exception implements ITrace
             $result.=' - '.$e->__toString()."\n";
         }
         return $result;
+    }
+
+    /**
+     * Итератор по вложенным исключениям (для foreach)
+     * @return \ArrayIterator|\Traversable
+     */
+    public function getIterator() {
+        return new ArrayIterator($this->list);
+    }
+
+    /**
+     * Удаление признака временности исключения
+     */
+    protected function untemp()
+    {
+        if ($this->is_temp){
+            $this->is_temp = false;
+            if (isset($this->parent)){
+                // В родитле пермещаем себя в основной список
+                $this->parent->list[$this->code] = $this;
+                unset($this->parent->temp_list[$this->code]);
+                // Возможно, родитель тоже временный
+                $this->parent->untemp();
+            }
+        }
     }
 
     public function trace()

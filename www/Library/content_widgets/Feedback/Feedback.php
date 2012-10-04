@@ -22,7 +22,7 @@ class Feedback extends AutoWidgetList
                                 'submit' => Rule::string()
                             )
                         ),
-                        'ok' => Rule::is(md5($this['uri']))->default(false)->required()
+                        'ok' => Rule::eq(md5($this['uri']))->default(false)->required()
                     )
                 )
             )

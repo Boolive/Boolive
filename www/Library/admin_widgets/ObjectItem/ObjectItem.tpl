@@ -5,7 +5,7 @@
 		<span class="colmain" title="Выделить">
 			<!--<span class="col1"></span>-->
 			<span class="col2">
-				<a title="Войти" href="<?php echo $v['uri'];?>" class="enter"></a>
+				<!--<a title="Войти" href="<?php echo $v['uri'];?>" class="enter"></a>-->
 				<span class="name"><?php echo $v['name'];?></span>
 				<?php if (!empty($v['value'])):?><span class="value"><?php echo $v['value'];?></span><?php endif;?>
 			</span>

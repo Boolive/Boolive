@@ -139,7 +139,7 @@ class MySQLSection extends Section
             // По умолчанию считаем, что запись добавляется
             $add = true;
             // Проверяем, может запись с указанной датой существует и её тогда редактировать?
-            if (!empty($attr['date'])){
+            if (isset($attr['date'])){
                 // Поиск записи по полному ключю uri+lang+owner+date
                 $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE uri=? AND lang=? AND owner=? AND date=? LIMIT 0,1');
                 $q->execute(array($attr['uri'], $attr['lang'], $attr['owner'], $attr['date']));

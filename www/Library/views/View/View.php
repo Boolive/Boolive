@@ -21,18 +21,18 @@ class View extends Entity
      * В качестве правила по умолчанию используется $this->getInputRule()
      * @var mixed
      */
-    //protected $_input;
+    protected $_input;
     /**
      * Ошибки при проверки входящих данных
      * @var \Boolive\errors\Error
      */
-    //protected $_input_error;
+    protected $_input_error;
     /**
      * Команды, передающиеся по всем исполняемым объектам.
      * Инициализируется в методе start()
      * @var \Boolive\commands\Commands
      */
-    //protected $_commands;
+    protected $_commands;
     /**
      * Входящие данные для подчиенных объектов
      * @var mixed

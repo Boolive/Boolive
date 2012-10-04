@@ -27,7 +27,7 @@ $config = array(
             'password' => 'proot',
             // Опции подключения
             'options' => array(
-                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_general_ci"'
+                PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'
             ),
             // Признак, включен или нет режим отладки. В режиме отладки трассируются запросы и подсчитывается их кол-во
             'debug' => false

@@ -18,7 +18,7 @@ class boolive extends Focuser
                 'path' => Rule::string(),
                 )
             ),
-            'previous' => Rule::is(false)
+            'previous' => Rule::eq(false)
             )
         );
     }

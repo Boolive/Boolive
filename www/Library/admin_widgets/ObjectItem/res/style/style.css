@@ -26,6 +26,12 @@
 			border-bottom: 1px solid #E6F1FA;
 			margin: -1px 0 0 0px;
 			}
+            .ObjectItem .view:active{
+                background-color: #d9ecff;
+			    border-top: 1px solid #d2e8fa;
+			    border-bottom: 1px solid #d2e8fa;
+                }
+
 		.ObjectItem .view .colright {
 			color: #999;
 			margin: 0;
@@ -102,12 +108,12 @@
 					min-width: 200px;
 					max-width: 300px;
 					text-overflow: ellipsis;
-					padding: 7px 0 2px 0;
-					font-size: 12pt;
+					padding: 7px 0 2px 10px;
+					font-size: 13pt;
 					color: #111;
 					}
 				.ObjectItem .view .colmain .col2 .value{
-					color: #444;
+					color: #666;
 
 					}
 				.ObjectItem .view .colmain .col2 .state{

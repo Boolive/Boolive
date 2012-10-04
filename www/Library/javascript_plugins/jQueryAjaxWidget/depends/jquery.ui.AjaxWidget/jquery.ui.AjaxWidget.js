@@ -21,9 +21,14 @@
             if (!this.options.default_url){
                 this.options.default_url = location.pathname;
             }
-            this.element.ajaxError(function(event, request, settings) {
-               alert('AJAX '+request.statusText);
+            var self = this;
+            this.element.ajaxError(function(e, jqxhr, settings, exception) {
+                console.log(settings);
             });
+        },
+
+        ajaxError: function(event, request, settings){
+            alert('AJAX '+request.statusText);
         },
 
         /**
@@ -31,8 +36,9 @@
          */
         reload: function(url, data, callbacks){
 			var self = this;
-            data.view = self.options.view_uri;
+            data.direct = self.options.view_uri;
             $.ajax({
+                owner: "boolive.AjaxWidget",
                 type: 'POST',
                 url: (typeof url == 'string')?url:self.options.default_url,
                 data: data,
@@ -74,12 +80,15 @@
             });
         },
 
-        _call: function(method, args, callbacks){
+        _call: function(method, data, callbacks){
             var self = this;
+            data.direct = self.options.view_uri;
+            data.call = method;
             $.ajax({
+                owner: "boolive.AjaxWidget",
                 type: 'POST',
                 url: self.options.default_url,
-                data: {view:self.options.view_uri, call:method, args: args},
+                data: data,
                 dataType: 'json',
                 context: self.element,
                 success: function(result, textStatus, jqXHR){
@@ -126,7 +135,7 @@
 		 */
 		loadsub: function(container, url, data, sub_name, append, callbacks){
 			var self = this;
-            data.view = self.options.view_uri+'/'+sub_name;
+            data.direct = self.options.view_uri+'/'+sub_name;
 			$.ajax({
 				type: 'POST',
                 url: (typeof url == 'string')?url:self.options.default_url,
