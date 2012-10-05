@@ -76,6 +76,9 @@
             this.loadsub(this.element.find('.center'), '/', this._state, 'Programs', true, function(){
                 self.select(self._state_start.object, false);
             });
+            this.loadsub(this.element.find('.top'), '/', this._state, 'BreadcrumbsMenu', true, function(){
+                self.select(self._state_start.object, false);
+            });
             this.loadsub(this.element.find('.right'), '/', this._state, 'ProgramsMenu', true, function(){
                 self.select(self._state_start.object, false);
             });

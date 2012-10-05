@@ -27,6 +27,6 @@ class AutoWidgetList extends Widget
 
     protected function getList(){
         // @todo Сделать настраиваемый фильтр
-        return $this->_input['REQUEST']['object']->findAll(array('where' => 'is_history=0 and is_delete=0', 'order' =>'`order` ASC'), true);
+        return $this->_input['REQUEST']['object']->findAll(array('where' => 'is_history=0 and is_delete=0 and is_hidden=0', 'order' =>'`order` ASC'), true);
     }
 }

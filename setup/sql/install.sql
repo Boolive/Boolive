@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 04 2012 г., 18:08
+-- Время создания: Окт 05 2012 г., 09:46
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -52,7 +52,7 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/contacts/text/feedback/email_from', '', 0, 0, 5, 1, '/Library/content_samples/Feedback/email_from', '', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/feedback/email_to', '', 0, 0, 5, 2, '/Library/content_samples/Feedback/email_to', 'info@boolive.ru', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/feedback/message', '', 0, 0, 5, 3, '/Library/content_samples/Feedback/message', '', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/contacts/text/head1', '', 0, 0, 4, 0, '/Library/content_samples/Head', 'Наш адрес', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/contacts/text/head1', '', 0, 0, 4, 0, '/Library/content_samples/Head', 'Наш адрес!', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/p1', '', 0, 0, 4, 1, '/Library/content_samples/Paragraph', 'г. Екатеринбург, ул Ленина, дом 1, офис 999', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/p2', '', 0, 0, 4, 2, '/Library/content_samples/Paragraph', 'Работаем груглосуточно', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/title', '', 0, 0, 3, 1, '/Library/content_samples/Page/title', 'Контакты', 0, 0, 0, 0, 0, 0, 0),
@@ -128,7 +128,7 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/news/news4/text/p1', '', 0, 0, 5, 1, '/Library/content_samples/Paragraph', 'Текст новости в виде одного абзаца', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/news4/title', '', 0, 0, 4, 1, '/Library/content_samples/Page/title', 'Четвертая новость', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/news/title', '', 0, 0, 3, 1, '/Library/content_samples/Part/title', 'Лента новостей', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 0, 0, 0);
+('/Contents/title', '', 0, 0, 2, 1, NULL, 'Содержимое', 0, 0, 0, 0, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -413,6 +413,11 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/javascript_plugins/title', '', 0, 0, 3, 1, '/Library/basic/Package/title', 'Плагины на JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts', '', 0, 0, 2, 2, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin', '', 0, 0, 3, 2, '/Library/views/Focuser', 'Admin.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/BreadcrumbsMenu', '', 0, 0, 4, 6, '/Library/views/Widget', 'BreadcrumbsMenu.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/BreadcrumbsMenu/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Отображает путь на текущий объект с возможностью перехода к его родителям', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/BreadcrumbsMenu/res/jquery.ui.BreadcrumbsMenu', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.BreadcrumbsMenu.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/BreadcrumbsMenu/res/style', '', 0, 0, 6, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/BreadcrumbsMenu/title', '', 0, 0, 5, 1, '/Library/views/Widget/title', 'Меню "хлебные крошки"', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs', '', 0, 0, 4, 4, '/Library/views/AutoWidget', 'Programs.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/description', '', 0, 0, 5, 2, '/Library/views/AutoWidget/description', 'Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/res/jquery.ui.Programs', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
@@ -452,7 +457,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/boolive/top/menu/object/main', '', 0, 0, 7, 1, '/Contents/main', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/object/news', '', 0, 0, 7, 2, '/Contents/news', NULL, 0, 0, 0, 0, 0, 1, 1),
 ('/Library/layouts/boolive/top/menu/res/style', '', 0, 0, 7, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
-('/Library/title', '', 0, 0, 2, 1, NULL, 'Библиотека', 0, 0, 0, 0, 0, 0, 0),
+('/Library/title', '', 0, 0, 2, 1, NULL, 'Библиотека', 0, 0, 0, 0, 1, 0, 0),
 ('/Library/views', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget', '', 0, 0, 3, 9, '/Library/views/Widget', 'AutoWidget.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/AutoWidget/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает любой объект в соответсвии с установленными вараинтами', 0, 0, 0, 0, 0, 0, 0),
@@ -621,4 +626,4 @@ INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `
 ('/Keywords', '', 0, 1342077181, 1, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library', '', 0, 1342077181, 1, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Members', '', 0, 1342077181, 1, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/title', '', 0, 0, 1, 2, NULL, 'Сайт', 0, 0, 0, 0, 0, 0, 0);
+('/title', '', 0, 0, 1, 2, NULL, 'Сайт', 0, 0, 0, 0, 1, 0, 0);

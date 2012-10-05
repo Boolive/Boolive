@@ -63,21 +63,32 @@ a, a:active{
 		.maximize-right .Admin > .right{
 			width: 48px;
 			}
-
-	.Admin > .center{
-		height: 100%;
-        background-color: #FFF;
-		position: absolute;
-		/*top: 0;*/
-		right: 0;
-		left: 150px;
+    .Admin > .wrap{
+        height: 100%;
+        position: absolute;
+        left: 150px;
 		right: 150px;
-		overflow:auto;
+
 		z-index: 1;
-		}
-		.maximize-left .Admin > .center{
+        }
+        .maximize-left .Admin > .wrap{
 			left: 48px;
 			}
-        .maximize-right .Admin .center{
+        .maximize-right .Admin .wrap{
 			right: 48px;
 			}
+	.Admin > .wrap > .center{
+        background-color: #FFF;
+		position: absolute;
+        overflow:auto;
+        top: 32px;
+		right: 0;
+        left:0;
+        bottom: 0;
+		}
+	.Admin > .wrap > .top{
+        height: 32px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        }

@@ -2,8 +2,13 @@
 	<div class="left">
 
     </div>
-    <div class="center">
-		<?php //echo $v['Programs']->string();?>
+    <div class="wrap">
+        <div class="top">
+            <?php //echo $v['BreadcrumbsMenu']->string();?>
+        </div>
+        <div class="center">
+            <?php //echo $v['Programs']->string();?>
+        </div>
     </div>
     <div class="right">
         <?php //echo $v['ProgramsMenu']->string();?>
