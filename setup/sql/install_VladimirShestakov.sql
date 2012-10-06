@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 05 2012 г., 15:41
+-- Время создания: Окт 06 2012 г., 16:28
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -84,8 +84,7 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/main/sub_page/title', '', 0, 0, 4, 0, '/Library/content_samples/Page/title', 'Подстраница', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text', '', 0, 0, 3, 2, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/head1', '', 0, 0, 4, 2, '/Library/content_samples/Head', 'Заголовок главной страницы', 0, 0, 0, 0, 0, 0, 0),
-('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 1, 0, 0, 0, 0),
-('/Contents/main/text/img1', '', 0, 1349234641, 4, 1, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
+('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1', '', 0, 0, 4, 6, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1', '', 0, 0, 5, 1, '/Library/content_samples/lists/Item', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1/item1/text', '', 0, 0, 6, 1, '/Library/content_samples/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -252,6 +251,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/admin_widgets/Delete', '', 0, 0, 3, 5, '/Library/views/Widget', 'Delete.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Delete/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Отображает диалоговое окно для подтверждения удаления и осуществляет удаление (пермещение в корзину)', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Delete/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Delete/res/jquery.ui.Delete', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Delete.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Delete/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Delete/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Удалить', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Explorer', '', 0, 0, 3, 2, '/Library/views/AutoWidgetList', 'Explorer.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Explorer/description', '', 0, 0, 4, 2, '/Library/views/AutoWidgetList/description', 'Отображает списком свойства объекта', 0, 0, 0, 0, 0, 0, 0),
@@ -421,6 +422,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/Admin/Programs', '', 0, 0, 4, 5, '/Library/views/AutoWidget', 'Programs.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/description', '', 0, 0, 5, 2, '/Library/views/AutoWidget/description', 'Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/res/jquery.ui.Programs', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs/res/style', '', 0, 0, 6, 2, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views', '', 0, 0, 5, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views/case_default', '', 0, 0, 6, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/Programs/switch_views/case_default/Add', '', 0, 0, 7, 5, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
