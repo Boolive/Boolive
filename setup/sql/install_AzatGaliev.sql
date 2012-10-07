@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 05 2012 г., 19:35
+-- Время создания: Окт 07 2012 г., 16:54
 -- Версия сервера: 5.5.24
 -- Версия PHP: 5.3.10-1ubuntu3.4
 
@@ -357,9 +357,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_list/ListView', '', 0, 0, 9, 1, '/Library/content_widgets/ListView', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext', '', 0, 0, 8, 1, '/Library/views/SwitchCase', '/Library/content_samples/RichText', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext/RichText', '', 0, 0, 9, 1, '/Library/content_widgets/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/content_widgets/NextPrevPage', '', 0, 0, 3, 1, '/Library/views/Widget', 'NextPrevPage.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Page.tpl', 1, 1, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Page/NextPrevPage', '', 0, 0, 1, 1, '/Library/content_widgets/NextPrevPage', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Page/NextPrevNavigation', '', 0, 0, 1, 1, '/Library/views/NextPrevNavigation', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/switch_views/case_comments', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Page/comments', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/switch_views/case_comments/Comments', '', 0, 0, 6, 1, '/Library/content_widgets/Comments', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -510,6 +509,14 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Menu/view/switch_views/case_part', '', 0, 0, 6, 2, '/Library/views/SwitchCase', '/Library/content_samples/Part', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Menu/view/switch_views/case_part/ItemPart', '', 0, 0, 7, 1, '/Library/views/Menu/view/switch_views/case_page/ItemPage', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Menu/view/switch_views/case_part/ItemPart/title', '', 0, 0, 8, 1, '/Library/views/Menu/view/switch_views/case_page/ItemPage/title', 'Пункт меню раздела', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation', '', 0, 0, 3, 1, '/Library/views/Widget', 'NextPrevNavigation.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation/object_types', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation/object_types/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Список объектов, по которым разрешена навигация', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation/object_types/page', '', 0, 0, 5, 3, '/Library/content_samples/Page', NULL, 0, 0, 0, 0, 0, 1, 0),
+('/Library/views/NextPrevNavigation/object_types/page/title', '', 0, 0, 1, 1, NULL, 'Страницы', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation/object_types/part', '', 0, 0, 5, 4, '/Library/content_samples/Part', NULL, 0, 0, 0, 0, 0, 1, 0),
+('/Library/views/NextPrevNavigation/object_types/title', '', 0, 0, 5, 1, '/Library/views/Widget/title', 'Список разрешенных объектов', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation/title', '', 0, 0, 4, 1, NULL, 'Виджет навигации по страницам', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/PageNavigation', '', 0, 0, 3, 15, '/Library/views/Widget', 'PageNavigation.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/PageNavigation/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Используется при отображении списков с постраничным разделением вывода', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/PageNavigation/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),

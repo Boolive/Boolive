@@ -14,6 +14,7 @@ Version 2.0 preview work in progress
 - bug: Updated algorithm of working embedded values ​​in the class \Boolive\values\Values. Removed references to property _value (VladimirShestakov)
 - bug: Fix some paths in code for compatibility with UNIX (AzatGaliev)
 - bug: Fixed order of cases in the SwitchView (VladimirShestakov)
+- bug: Entity::brith(): Won't add is_link = true when brith an object (AzatGaliev)
 - new #4: Add CHANGELOG.md file (AzatGaliev)
 - new #10: Update all objects in "library/basic" with added contents, members and simple objects (VladimirShestakov)
 - new #14: Added layout widget "boolive" in the "library/layouts" and "interfaces/html/body" (VladimirShestakov)

@@ -6,22 +6,33 @@
  * @author Azat Galiev <AzatXaker@gmail.com>
  */
 
-namespace Library\content_widgets\NextPrevPage;
+namespace Library\views\NextPrevNavigation;
 
 use Library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\values\Check,
     Boolive\errors\Error;
 
-class NextPrevPage extends Widget
+class NextPrevNavigation extends Widget
 {
 	protected function initInput($input)
     {
-        $this->_input = Check::filter($input, $this->getInputRule(), $this->_input_error);
-        if (!$this->_input['REQUEST']['object']->is('/Library/content_samples/Page')) {
-            // Объект не является страницей
+        parent::initInput($input);
+
+        $object_types = $this->object_types->findAll();
+        $correct = false;
+
+        foreach ($object_types as $type) {
+            if ($this->_input['REQUEST']['object']->is($type['value'])) {
+
+                $correct = true;
+            }
+        }
+
+        if (!$correct) {
+            // Объект не является разрешенным
             if (!isset($this->_input_error)) {
-                $this->_input_error = new Error('Объект не является страницей', 'page');
+                $this->_input_error = new Error('Объект не является разрешенным', 'page');
             }
         }
     }
@@ -29,6 +40,24 @@ class NextPrevPage extends Widget
     public function work($v = array())
     {
         $object = $this->_input['REQUEST']['object'];
+
+        $object_types = $this->object_types->findAll();
+
+        $proto_in = '(';
+        foreach ($object_types as $type) {
+            if ($type->getName() == 'title' || $type->getName() == 'description')
+                continue;
+
+            $proto = $type->notLink();
+
+            if ($proto_in == '(') {
+                $proto_in .= '\'' . $proto['uri'] . '\'';
+            } else {
+                $proto_in .= ', \'' . $proto['uri'] . '\'';
+            }
+        }
+        $proto_in .= ')';
+
         /*$next = array();
         $prev = array();
 
@@ -56,13 +85,13 @@ class NextPrevPage extends Widget
 
         //if (!isset($next)) {
             $next = $object->parent()->find(array(
-                'where' => '`order` > ' . $object['order'] . ' and `proto` = \'/Library/content_samples/Page\'',
+                'where' => '`order` > ' . $object['order'] . ' and `proto` IN ' . $proto_in,
                 'count' => 1,
                 'order' => '`order` ASC',
             ));
         //}
         $prev = $object->parent()->find(array(
-            'where' => '`order` < ' . $object['order'] . ' and `proto` = \'/Library/content_samples/Page\'',
+            'where' => '`order` < ' . $object['order'] . ' and `proto` IN ' . $proto_in,
             'count' => 1,
             'order' => '`order` DESC',
         ));
