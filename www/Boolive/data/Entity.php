@@ -630,6 +630,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     {
         $class = get_class($this);
         $object = new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])), true, $this->_exist);
+        if (!empty($this['is_link']))
+            $object['is_link'] = true;
         return $object;
     }
 
