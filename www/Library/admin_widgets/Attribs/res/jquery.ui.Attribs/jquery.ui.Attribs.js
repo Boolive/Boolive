@@ -179,10 +179,10 @@
             })
             .on('change-attrib', function(change){
                 if (change){
-                    form.find('.submit').text('Сохранить').removeClass('disable');
+                    form.find('.submit').text('Сохранить').removeClass('btn-disable');
                     form.find('.reset').removeClass('hide');
                 }else{
-                    form.find('.submit').text('Сохранено').addClass('disable');
+                    form.find('.submit').text('Сохранено').addClass('btn-disable');
                     form.find('.reset').addClass('hide');
                 }
             });
@@ -192,7 +192,7 @@
                 form.find('.submit-message').text(value);
             }).
             on('change-error', function(error){
-                form.find('.submit').text('Сохранить ещё раз').removeClass('disable');
+                form.find('.submit').text('Сохранить ещё раз').removeClass('btn-disable');
                 form.find('.reset').removeClass('hide');
                 form.find('.item-'+error.name).addClass('error').find('.error-message').text(error.value);
             }).
@@ -203,10 +203,10 @@
             on('change-process:start', function(value){
                 //self.element.find('.submit-message').text(value);
                 if (value){
-                    form.find('.submit').text('Сохраняется...').removeClass('disable');
+                    form.find('.submit').text('Сохраняется...').removeClass('btn-disable');
                     form.find('.reset').addClass('hide');
                 }else{
-                    form.find('.submit').text('Сохранено').addClass('disable');
+                    form.find('.submit').text('Сохранено').addClass('btn-disable');
                     form.find('.submit-message').text('');
                 }
             }).
@@ -257,7 +257,7 @@
             })
             .on('click', '.submit', function(e){
                 e.preventDefault();
-                if (!$(this).hasClass('disable')){
+                if (!$(this).hasClass('btn-disable')){
                     // Ошибка при обработки запроса
                     form.ajaxError(function(e, jqxhr, settings, exception) {
                         if (settings.owner == "boolive.Attribs"){
@@ -273,7 +273,6 @@
                         beforeSubmit: function(arr, form, options){
                             self.model.set_process('start', true);
                             self.model.clear_errors();
-                            //self.submit_btn.text('Сохраняется...').removeClass('disable');
                         },
                         uploadProgress: function(e, position, total, percent){
                             self.model.set_process('percent', percent);

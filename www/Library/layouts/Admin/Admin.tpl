@@ -11,6 +11,7 @@
         </div>
     </div>
     <div class="right">
+        <div class="shadow"></div>
         <?php //echo $v['ProgramsMenu']->string();?>
     </div>
 </div>

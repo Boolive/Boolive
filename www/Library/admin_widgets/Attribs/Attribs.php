@@ -45,6 +45,7 @@ class Attribs extends Widget
         }
         // Передача шаблона, скриптов, стилей
         $v['object_uri'] = $this->_input['REQUEST']['object']['uri'];
+        $v['head'] = $this->title->getValue();
         return parent::work($v);
     }
 

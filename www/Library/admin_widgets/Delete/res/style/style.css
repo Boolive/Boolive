@@ -4,38 +4,14 @@
     height: 100%;
 	}
     .Delete .main{
-        /*position: absolute;
-        top: 0;
-        bottom: 100px;*/
         width: 100%;
         }
     .Delete .bottom{
-        /*position: absolute;*/
         height: 100px;
-        /*bottom: 0;*/
         width: 100%;
 
         }
-    .Delete .content{
-        padding: 30px;
-        }
-    .Delete h1{
-		color: #e60909;
-        font-size: 30pt;
-		font-weight: normal;
-		margin: 0;
-		padding: 0;
-		}
-    .Delete p{
-        font-size: 11pt;
-        color: #222;
-        margin: 5px 0;
-        padding: 0;
-    }
-    .Delete p.mini{
-        font-size: 10pt;
-        color: #555;
-        }
+
     .Delete .info{
         margin: 20px 0;
         }
@@ -54,40 +30,8 @@
             color: #999;
             padding: 2px 5px;
             border-radius: 3px;
+            font-family: verdana;
         }
-	.Delete .button{
-        display: block;
-        height: 25px;
-        margin: 0 10px;
-        padding: 8px 14px 4px 14px;
-        min-width: 80px;
-        cursor: pointer;
-        overflow: hidden;
-        text-decoration: none;
-        /*border-radius: 3px;*/
+	.Delete .btn {
         float: right;
-        text-align: center;
 		}
-		.Delete .button:hover{
-
-            }
-        .Delete .submit{
-            background-color: #FF5752;
-		    color: #FFF;
-		    border: 1px solid #e64e4c;
-            }
-            .Delete .submit:hover{
-                color: #FFF;
-				background-color: #ff0c08;
-				border: 1px solid #e60909;
-                }
-        .Delete .cancel{
-            background-color: #b3b3b3;
-		    color: #FFF;
-		    border: 1px solid #a6a6a6;
-            }
-            .Delete .cancel:hover{
-                background-color: #999999;
-		        color: #FFF;
-		        border: 1px solid #8c8c8c;
-                }

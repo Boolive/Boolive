@@ -2,7 +2,6 @@
 	display: block;
 	color: #222;
 	position: relative;
-    padding: 0 25px;
 	}
 	.ObjectItem .view{
 		overflow: hidden;
@@ -13,13 +12,8 @@
 		min-width: 100px;
 		cursor: pointer;
 		position: relative;
-		/*border-top: 1px solid #ebf3fa;*/
 		border-bottom: 1px solid #E6F1FA;
-		/*background-color: #f7f7f7;*/
 		}
-		/*.odd .ObjectItem .view{*/
-			/*background-color: #fCfCfC;*/
-			/*}*/
 		.ObjectItem .view:hover{
 			background-color: #EBF5FF;
 			border-top: 1px solid #E6F1FA;
@@ -42,7 +36,6 @@
 			font-size: 10pt;
 			height: 34px;
 			width: 280px;
-			/*box-shadow: -20px 0 10px 0 #FFF;*/
 			}
 			.ObjectItem .view .colright > *{
 				margin: 0 10px;

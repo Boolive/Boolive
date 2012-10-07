@@ -54,3 +54,4 @@ Version 2.0 preview work in progress
 - new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)
 - new: Added method Input::url() for create or get current URL (VladimirShestakov)
 - new: Added BreadcrumbsMenu widget for admin (VladimirShestakov)
+- new: Added theme style in the Admin. Clear styles of other widgets  (VladimirShestakov)
