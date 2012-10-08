@@ -1,0 +1,7 @@
+{
+    "title": "Виджет отображения списка",
+    "description": "Отображает нумерованные и ненумерованные списки (пока что все ненумерованные)",
+    "proto": "/Library/views/AutoWidgetList",
+    "value": "ListView.tpl",
+    "is_file": 1
+}

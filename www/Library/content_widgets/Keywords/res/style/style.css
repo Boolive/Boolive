@@ -1,0 +1,9 @@
+.keyword
+{
+    padding: 5px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: -1px 1px 3px 0px gainsboro, inset -10px -5px 10px 0px #FEFEFE;
+    color: grey;
+    font-style: italic;
+}

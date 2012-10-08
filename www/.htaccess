@@ -2,13 +2,13 @@
 AddDefaultCharset UTF-8
 
 # Файлы, к которым запрщено обращаться напрямую
-<Files ~ "((readme\.txt)|(readme)|(\.(htaccess|sql|php|cache|tpl)))$">
-	Order deny,allow
-	Deny from all
+<Files ~ "(\.(htaccess|sql|php|cache|tpl|info|md))$">
+    Order deny,allow
+    Deny from all
 </Files>
 
 <Files "index.php">
-	Allow from all
+    Allow from all
 </Files>
 
 Options -Indexes
@@ -20,28 +20,27 @@ DirectoryIndex Off
 # Правила изменеия запросов ("чистые" ссылки)
 <IfModule mod_rewrite.c>
 
-	RewriteEngine On
-	
-	# Директория сайта относительно домена
-	# Если Boolive CMS расположена в поддиректории, например в http://localhost/boolive, то
-	# следует изменить параметр RewriteBase, указав название поддиректории:
-	# RewriteBase /boolive
-	#
-	# Если сайт в корневой директории, например его адрес: http://localhost, то установите:
-	# RewriteBase /
+    RewriteEngine On
 
-	RewriteBase /
-	
-	# Не изменять ссылки на файлы
-	RewriteCond %{REQUEST_URI} !\.[a-zA-Z]{1,4}[\?0-9]*/?$ [NC]
+    # Директория сайта относительно домена
+    # Если Boolive CMS расположена в поддиректории, например в http://localhost/boolive, то
+    # следует изменить параметр RewriteBase, указав название поддиректории:
+    # RewriteBase /boolive
+    #
+    # Если сайт в корневой директории, например его адрес: http://localhost, то установите:
+    # RewriteBase /
 
-	# Правило изменения ссылок. Всё после адреса сайта присваивается параметру "path" GET запроса
-	# http://boolive.ru/news/first => 'http://boolive.ru/index.php?path=news/first'.
-	RewriteRule ^(.*)$ index.php?path=$1 [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
+    RewriteBase /
+
+    # Не изменять ссылки на файлы
+    RewriteCond %{REQUEST_URI} !\.[a-z]{1,4}[\?0-9]*/?$ [NC]
+
+    # Все запросы переадресовываются в index.php без параметров. GET парметры вычисляются в движке из REQUEST_URI
+    RewriteRule ^.*$ index.php [E=REMOTE_USER:%{HTTP:Authorization},QSA]
 
 </IfModule>
 
 # Если mod_rewrite отключен, то устанвливаем index файл
 <IfDefine !RewriteEngine>
-	DirectoryIndex index.php
+    DirectoryIndex index.php
 </IfDefine>

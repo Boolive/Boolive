@@ -1,0 +1,246 @@
+<?php
+/**
+ * Модуль данных
+ *
+ * @link http://boolive.ru/createcms/data-and-entity
+ * @version 1.0
+ * @author Vladimir Shestakov <boolive@yandex.ru>
+ */
+namespace Boolive\data;
+
+use Boolive\Boolive,
+    Boolive\functions\F;
+
+class Data
+{
+    /** @const  Файл конфигурации секци */
+    const CONFIG_FILE = 'config.sections.php';
+    /** @var array Загруженная конфигурация секция */
+    private static $config;
+    /** @var array Экземплярв используемых секций */
+    private static $sections;
+    /** @var array Загруженные объекты */
+    public static $buffer = array();
+
+    static function activate(){
+        if (is_file($file = DIR_SERVER.self::CONFIG_FILE)){
+            include $file;
+            if (isset($config)) self::$config = $config;
+        }else{
+            self::$config = array();
+        }
+    }
+    /**
+     * Возвращает объект по пути на него
+     * Путь может указывать как на собственный объект, так и на любой внешний.
+     * @todo Кодировать язык и владельца в URI
+     * @param string $uri URI объекта
+     * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
+     * @param int $owner Код владельца. Если не указан, то выбирается общий
+     * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+     * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
+     * @return Entity|null Экземпляр объекта, если найден или null, если не найден
+     */
+    static function object($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false)
+    {
+        $key = $uri;//.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
+        if (self::bufferExist($key)) return self::bufferGet($key);
+
+        $object = null;
+        if (is_string($uri)){
+            if ($uri === '') return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
+            // Опредление секции объекта и поиск объекта в секции
+            if ($s = self::section($uri, true)){
+                $object = $s->read($uri, $lang, $owner, $date, $is_history);
+            }
+            // Если объект не найден и нужно искать виртуального, то ищем
+            if (!isset($object)){
+                // Выбор родителя
+                $names = F::splitRight('/', $uri);
+                if ($parent = self::object($names[0])){
+                    if ($proto = $parent->proto()){
+                        $proto = $proto->{$names[1]};
+                    }
+                    if ($proto){
+                        $object = $proto->birth();
+                        $object['uri'] = $uri;
+                    }else{
+                        $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner));
+                    }
+                    // Объект ссылка?
+                    if (!empty($parent['is_link']) || !empty($proto['is_link'])){
+                        $object['is_link'] = 1;
+                    }
+                }
+            }
+        }
+        self::bufferAdd($key, $object);
+        return $object;
+    }
+
+    /**
+     * Взвращает экземпляр секции, назначенную для подчиенных объекта
+     * Если секции на указнный объект не назначена, то возвращается null
+     * @param $uri Путь на объект
+     * @param $self Признак, искать секцию объекта (true) или его подчиненных (false)?
+     * @param bool $strong Признак, искать точное указание на uri (true) или учитывать подчиенность (false)
+     * @return Section|null Экземпляр секции, если имеется или null, если нет
+     */
+    static function section($uri, $self, $strong = false)
+    {
+        if ($self) $uri = mb_substr($uri, 0, mb_strrpos($uri, '/'));
+        if (empty(self::$sections[$uri])){
+            self::$sections[$uri] = null;
+            $find_uri = $uri;
+            while (!isset(self::$config[$find_uri]) && !$strong && !empty($find_uri)){
+                $find_uri = mb_substr($find_uri, 0, mb_strrpos($find_uri, '/'));
+            }
+            if (isset(self::$config[$find_uri])){
+                $config = &self::$config[$find_uri];
+                if (empty(self::$sections[$find_uri])){
+                    // Наследование конфигурации
+                    if (isset($config['extends'])){
+                        $config = array_replace(self::$config[$config['extends']], $config);
+                        unset($config['extends']);
+                    }
+                    // Создание экземпляара секции
+                    if (isset($config['class']) && Boolive::isExist(trim($config['class'],'\\'))){
+                        self::$sections[$find_uri] = new $config['class']($config);
+                    }
+                }
+                self::$sections[$uri] = self::$sections[$find_uri];
+            }
+        }
+        return self::$sections[$uri];
+    }
+
+    /**
+     * Создание объекта данных из атрибутов
+     * @param $attribs
+     * @param bool $exist
+     * @param bool $virtual
+     * @throws \ErrorException
+     * @return Entity
+     */
+    static function makeObject($attribs, $virtual = true, $exist = false)
+    {
+        if (isset($attribs['uri'])){
+            if ($attribs['uri']===''){
+                $exist = true;
+                $virtual = true;
+            }
+            if (!empty($attribs['is_logic'])){
+                try{
+                    // Имеется свой класс?
+                    if ($attribs['uri']===''){
+                        $class = 'Site';
+                    }else{
+                        $names = F::splitRight('/', $attribs['uri']);
+                        $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
+                    }
+                    return new $class($attribs, $virtual, $exist);
+                }catch(\ErrorException $e){
+                    // Если файл не найден, то будет использовать класс прототипа или Entity
+                    if ($e->getCode() != 2) throw $e;
+                }
+            }
+        }
+        if (!empty($attribs['proto']) && ($proto = self::object($attribs['proto']))){
+            // Класс прототипа
+            $class = get_class($proto);
+            $obj = new $class($attribs, $virtual, $exist);
+        }else{
+            // Базовый класс
+            $obj = new Entity($attribs, $virtual, $exist);
+        }
+        return $obj;
+    }
+
+    /**
+     * Парсинг URI.
+     * Возвращается чистый URI, язык и код владельца
+     * @param string $uri URI, в котором содержится язык и код владельца
+     * @return array
+     */
+    static function getURIInfo($uri)
+    {
+        $uri = F::splitRight('/', $uri);
+        $names = F::explode('@', $uri[1], -3);
+        return array(
+            'uri' => $uri[0].'/'.$names[0],
+            'owner' => isset($names[1]) && is_numeric($names[1]) ? $names[1] : 0,
+            'lang' => isset($names[2])? $names[2]: (isset($names[1]) && !is_numeric($names[1])? $names[1] : '')
+        );
+    }
+
+    /**
+     * Создание полного URI, в котором содержится сам uri, язык и код владельца
+     * @param $path Чистый URI
+     * @param string $lang Код языка из 3 символов
+     * @param int $owner Код владельцы числом
+     * @return string
+     */
+    static function makeURI($path, $lang = '', $owner = 0)
+    {
+        if ($owner) $path.='@'.$owner;
+        if ($lang) $path.='@'.$lang;
+        return $path;
+    }
+
+    /**
+     * Конфигурация всех секций или секции по URI
+     * @param null $uri URI объекта, для которого требуется конфигурация секции
+     * @return bool|array Если $uri не указан, то вся конфигурация, иначе под указанный объект, если есть
+     */
+    private static function getConfig($uri = null)
+    {
+        if (isset($uri)){
+            if (isset(self::$config[$uri])){
+                return self::$config[$uri];
+            }else{
+                return false;
+            }
+        }else{
+            return self::$config;
+        }
+    }
+
+    /**
+     * Проверка объекта в буфере
+     * @param $key
+     * @return bool
+     */
+    public static function bufferExist($key)
+    {
+        return isset(self::$buffer[$key]) || array_key_exists($key, self::$buffer);
+    }
+
+    /**
+     * Добавление объекта в буфер
+     * @param $key
+     * @param $object
+     */
+    public static function bufferAdd($key, $object)
+    {
+        self::$buffer[$key] = $object;
+    }
+
+    /**
+     * Выбор объекта из буфера
+     * @param $key
+     * @return mixed
+     */
+    public static function bufferGet($key)
+    {
+        return  self::$buffer[$key];
+    }
+
+    /**
+     * Удаление объекта из буфера
+     * @param $key
+     */
+    public static function bufferRemove($key)
+    {
+        unset(self::$buffer[$key]);
+    }
+}

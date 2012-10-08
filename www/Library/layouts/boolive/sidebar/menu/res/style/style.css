@@ -1,0 +1,29 @@
+.menu{
+    font-size: 10pt;
+    /*line-height: 12pt;*/
+    margin: 0 15px;
+    }
+    .menu h2{
+        margin: 0.2em 0 0.6em 0;
+	    padding: 0;
+        font-size: 16pt;
+        }
+    .menu ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+        .menu ul li{
+            background: url(img/page.png) no-repeat 0 1px;
+	        margin: 6px 5px 7px 0;
+	        padding: 0 0 0 19px;
+            }
+            .menu ul li a{
+
+                }
+            .menu ul li:hover a{
+
+                }
+            .menu ul li ul{
+
+            }

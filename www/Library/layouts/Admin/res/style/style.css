@@ -1,0 +1,77 @@
+.Admin{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	}
+	.Admin > .left{
+		height: 100%;
+		width: 150px;
+		left: 0;
+		top: 0;
+		position: absolute;
+		z-index: 2;
+		overflow:hidden;
+		box-shadow: inset -1px 0px 0px 0px #D8D8D8,
+					inset -5px 0px 5px -5px #E0E0E0;
+		/*-webkit-box-shadow: inset -1px 0px 0px 0px #D8D8D8,
+							inset -3px 0px 5px 0px #E0E0E0;
+		-moz-box-shadow: inset -1px 0px 0px 0px #D8D8D8,
+						 inset -3px 0px 5px 0px #E0E0E0;*/
+		}
+		.maximize-left .Admin > .left{
+			width: 48px;
+			}
+    .Admin > .right{
+		width: 150px;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		position: absolute;
+		z-index: 3;
+		overflow:hidden;
+
+		padding: 0;
+		}
+        .Admin > .right .shadow{
+            position: absolute;
+            width: 100%;
+            top: 32px;
+            bottom: 0;
+            box-shadow: inset 1px 0 0 0 #D8D8D8,
+					inset 5px 0 5px -5px #E0E0E0;
+		    -webkit-box-shadow: inset 1px 0 0 0 #D8D8D8,
+					inset 5px 0 5px -5px #E0E0E0;
+            }
+		.maximize-right .Admin > .right{
+			width: 48px;
+			}
+    .Admin > .wrap{
+        height: 100%;
+        position: absolute;
+        left: 150px;
+		right: 150px;
+
+		z-index: 1;
+        }
+        .maximize-left .Admin > .wrap{
+			left: 48px;
+			}
+        .maximize-right .Admin .wrap{
+			right: 48px;
+			}
+	.Admin > .wrap > .center{
+        background-color: #FFF;
+		position: absolute;
+        overflow:auto;
+        top: 32px;
+		right: 0;
+        left:0;
+        bottom: 0;
+		}
+	.Admin > .wrap > .top{
+        height: 32px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        }

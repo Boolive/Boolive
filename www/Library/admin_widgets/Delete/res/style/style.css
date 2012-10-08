@@ -1,0 +1,38 @@
+.Delete{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+	}
+    .Delete .main{
+        width: 100%;
+        }
+    .Delete .bottom{
+        height: 100px;
+        width: 100%;
+
+        }
+
+    .Delete .info{
+        margin: 20px 0;
+        }
+        .Delete .info > .name{
+            font-size: 17pt;
+            display: inline-block;
+            color: #1e7fff;
+            padding: 5px 0px;
+            border-radius: 3px;
+            }
+        .Delete .info > .uri{
+            font-size: 9pt;
+            margin: 0 15px;
+            display: inline-block;
+            background-color: #F5F5F5;
+            color: #999;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: verdana;
+        }
+	.Delete .btn {
+        float: right;
+        margin-right: 0;
+		}

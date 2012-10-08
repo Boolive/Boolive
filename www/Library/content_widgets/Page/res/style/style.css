@@ -1,0 +1,43 @@
+.post {
+	border-radius: 5px;
+	box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;
+	clear: both;
+	margin: 10px 0px 15px 0;
+	padding: 15px 25px 25px 55px;
+	background: #FFF;
+	}
+    .post h1 {
+        line-height: normal;
+        font-size: 26pt; /*margin-top: 15px;*/
+        }
+    .post h1 a {
+        text-decoration: none;
+        }
+    .post h1 a:hover {
+        text-decoration: underline;
+        }
+    .post h2 {
+        margin: 30px 0 0 0;
+        padding: 0;
+        text-align: left;
+        font-size: 18pt;
+        }
+    .post h3 {
+        margin: 25px 0 0 0;
+        font-size: 1.30em;
+        }
+    .post h4 {
+        margin: 10px 0 0 0;
+        font-size: 1.05em;
+        font-style: italic;
+        font-family: Georgia, "Times New Roman";
+        }
+    .post h5 {
+        font-size: 1.0em;
+        }
+    .post h6 {
+        font-size: 0.9em;
+        }
+    .post img{
+        max-width: 100%;
+    }

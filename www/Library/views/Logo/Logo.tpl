@@ -1,0 +1,1 @@
+<a href="/" title="На главную"><img src="<?= $v['image'] ?>" alt="Логотип"></a>

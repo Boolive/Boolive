@@ -1,0 +1,40 @@
+.Feedback{
+    padding: 5px 15px;
+    }
+    .Feedback > h3{
+        padding: 0;
+        margin: 0;
+    }
+    .Feedback label{
+        width: 100px;
+        display: inline-block;
+        }
+    .Feedback input[type=text]{
+        width: 300px;
+    }
+    .Feedback textarea{
+        height: 200px;
+        width: 95%;
+        }
+    .Feedback .form_ok{
+        border: 1px solid #31baf5;
+        background: #f0f9fc;
+        color: #1d6d8f;
+        padding: 25px;
+        margin: 25px 0;
+    }
+    .Feedback .form_error{
+        border: 1px solid #ff663a;
+        background: #fff5f2;
+        color: #80260d;
+        padding: 25px;
+        margin: 25px 0;
+    }
+    .Feedback .error_message{
+        font-size: 10pt;
+        margin: 5px 0;
+        color: #ff663a;
+    }
+    .Feedback form > .SwitchViews{
+        margin: 15px 0;
+    }

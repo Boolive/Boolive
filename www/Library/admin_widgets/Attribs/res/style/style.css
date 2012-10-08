@@ -1,0 +1,122 @@
+.Attribs{
+    font-size: 12pt;
+    }
+    /* Пункт формы */
+    .Attribs .item{
+        margin: 1px 0;
+        min-height: 29px;
+        }
+        /*Колонки*/
+        .Attribs .item > .col1{
+            float: left;
+            width: 140px;
+            display: block;
+            text-align: right;
+            padding: 5px 15px 5px 0;
+            }
+        .Attribs .item > .col2{
+            margin: 0 0 0 155px;
+            border-radius: 3px;
+            padding: 5px;
+            }
+        /* Сообщение об ошибке по умолчанию */
+        .Attribs .item .error-message{
+                display: none;
+                }
+        .Attribs .item > .item-date{
+            margin-top: 10px;
+            color: #444;
+            font-size: 11pt;
+            }
+    /* Пункт с ошибкой */
+    .Attribs .error{
+        background-color: #FF514C;
+        }
+        .Attribs .error .error-message{
+            color: #FFF;
+            display: inline-block;
+            font-size: 10pt;
+            margin: 2px 0 0 0;
+            }
+
+
+        /*Поля*/
+        .Attribs .item input.order{
+            width: 80px;
+            text-align: right;
+            }
+        .Attribs .item input[type=checkbox] + label{
+            font-size: 12pt;
+            color: #000;
+            }
+        .Attribs .item .value{
+            position: relative;
+            display: block;
+            }
+            .Attribs .item .value textarea{
+                font-size: 12pt;
+                margin: 0;
+                padding: 0;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                min-width: 100%;
+                }
+            .Attribs .item .value .tags{
+                height: 22px;
+                padding: 2px 0 0 0;
+                }
+            /* Теги значения*/
+            .Attribs .item .value .tag{
+                background-color: #F5F5F5;
+                color: #bfbfbf;
+                font-size: 10pt;
+                padding: 3px 5px;
+                margin: 0 0 0 2px;
+                float: right;
+                cursor: pointer;
+                }
+                .Attribs .item .value .tag:active{
+                    padding: 4px 5px 2px 5px;
+                    }
+                .Attribs .item .value .tag:hover{
+                    color: #FFF;
+                    background-color: #499df2;
+                    }
+                /* Активный тег*/
+                .Attribs .item .value .active{
+                    color: #FFF;
+                    background-color: #418dd9;
+                    }
+                /* Тег-поле выбора файла*/
+                .Attribs .item .value .file{
+                    position: relative;
+                    overflow: hidden;
+                    }
+                    .Attribs .item .value .file input{
+                        font-size: 15pt;
+                        cursor:pointer;
+                        padding: 0;
+                        margin: 0;
+                        border: none;
+                        opacity: 0;
+                        position: absolute;
+                        top: 0;
+                        right:0;
+                        filter: alpha(opacity:0);
+                        }
+        /* Кнопки */
+        .Attribs .btn {
+            float: right;
+            margin-right: 0;
+            }
+        /* Сообщение*/
+        .Attribs .item .submit-message{
+            display: block;
+            height: 25px;
+            margin: 15px 5px 0 0;
+            padding: 8px 14px 0 14px;
+            float: right;
+            font-style: italic;
+            color: #555;
+            }

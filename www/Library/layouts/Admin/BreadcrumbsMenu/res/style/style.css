@@ -1,0 +1,125 @@
+.BreadcrumbsMenu{
+	overflow: hidden;
+	height: 32px;
+	margin: 0;
+	box-shadow: inset 0 -1px 0 0 #D8D8D8,
+                inset 0 -3px 3px -2px #E5E5E5;
+	-webkit-box-shadow: inset 0 -1px 0 0 #D8D8D8,
+                        inset 0 -3px 3px -2px #E5E5E5;
+	}
+.BreadcrumbsMenu ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0 10px 0 0;
+	position:relative;
+	height: 31px;
+	z-index: 8;
+	}
+	.BreadcrumbsMenu ul li{
+		display: block;
+		float: left;
+		padding: 0;
+		position:relative;
+		margin: 0;
+		font-size: 10pt;
+		border-bottom: 1px solid #DDDDDD;
+		}
+		.BreadcrumbsMenu ul li a{
+			display:block;
+			position:relative;
+			background-color: #f9f9f9;
+			padding: 8px 1px 7px 25px;
+			text-decoration: none;
+			color: #555;
+			box-shadow:
+				inset 20px 2px 15px -15px #FFF,
+				inset 0px -5px 3px -5px #DDDDDD;
+			-webkit-box-shadow:
+				inset 20px 2px 15px -15px #FFF,
+				inset 0px -5px 3px -5px #DDDDDD;
+			}
+		.BreadcrumbsMenu ul li:first-child a{
+			padding-left: 10px;
+			}
+
+		.BreadcrumbsMenu ul li:after{
+			display: block;
+			position: absolute;
+			top: 0px;
+			right: -16px;
+			content: '';
+			width: 0;
+			height: 0;
+			border-top: 16px solid transparent;
+			border-top: 16px solid rgba(255,255,255,0);
+			border-left: 16px solid #D5D5D5;
+			border-bottom: 16px solid transparent;
+			border-bottom: 16px solid rgba(250,250,250,0);
+			z-index: 100;
+			}
+		.BreadcrumbsMenu ul li a:after{
+			display: block;
+			position: absolute;
+			top: 0px;
+			right: -15px;
+			content: '';
+			width: 0;
+			height: 0;
+			border-top: 16px solid transparent;
+			border-top: 16px solid rgba(250,250,250,0);
+			border-left: 15px solid #f9f9f9;
+			border-bottom: 16px solid transparent;
+			border-bottom: 16px solid rgba(250,250,250,0);
+			z-index: 101;
+			}
+		.BreadcrumbsMenu ul li:hover a{
+			background-color: #FFF;
+			/*color: #0065c9;*/
+			color: #000;
+			}
+			.BreadcrumbsMenu ul li:hover a:after{
+				border-left: 15px solid #FFF;
+				}
+
+	.BreadcrumbsMenu ul li:hover{
+
+		}
+
+
+	.BreadcrumbsMenu ul li.preactive{
+				border-bottom: 1px solid #CFDBE8;
+				}
+				.BreadcrumbsMenu ul li.preactive a{
+					background-color: #EBF5FF;
+					color: #444;
+					box-shadow:
+						inset 0px -5px 3px -5px #E4EEF7;
+					-webkit-box-shadow:
+						inset 0px -5px 3px -5px #E4EEF7;
+					}
+				.BreadcrumbsMenu ul li.preactive:after{
+					border-left: 16px solid #CFDBE8;
+					}
+					.BreadcrumbsMenu ul li.preactive a:after{
+						border-left: 15px solid #EBF5FF;
+						}
+
+	.BreadcrumbsMenu ul li.active{
+		border-bottom: 1px solid #0060C2;
+		}
+		.BreadcrumbsMenu ul li.active a{
+			background-color: #007FFF;
+			color: #FFF;
+			box-shadow:
+				inset 0px -5px 3px -5px #0062C4;
+			-webkit-box-shadow:
+				inset 0px -5px 3px -5px #0062C4;
+			}
+		.BreadcrumbsMenu ul li.active:after{
+			border-left: 16px solid #0060C2;
+			}
+			.BreadcrumbsMenu ul li.active a:after{
+				border-left: 15px solid #007FFF;
+				}
+
+

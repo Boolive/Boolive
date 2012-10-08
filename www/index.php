@@ -1,15 +1,21 @@
 <?php
 /**
- * Boolive CMS
- * Главный исполняемый файл. Запуск системы
+ * Boolive!
+ * Главный исполняемый файл. Запуск движка и проекта
  *
  * @version 2
  * @author Vladimir Shestakov <boolive@yandex.ru>
- * @see http://boolive.ru
+ * @link http://boolive.ru
  */
-// Подключение базовой конфигурации проекта
+use Boolive\Boolive,
+    Boolive\data\Data,
+    Boolive\commands\Commands,
+    Boolive\input\Input;
+// Подключение конфигурации путей
 require 'config.php';
-// Подключение главного класса системы
-require DIR_SERVER_ENGINE.'Engine.php';
-// Запуск системы
-Engine\Engine::Start();
+// Подключение движка Boolive
+require DIR_SERVER_ENGINE.'Boolive.php';
+// Активация Boolive
+Boolive::activate();
+// Исполнение объектов интерфейса. Вывод результата клиенту
+echo Data::object('/Interfaces')->start(new Commands, Input::getSource());
