@@ -306,11 +306,11 @@
             }).
             on('click', '[data-name="lang-show"]:first', function(e){
                 e.preventDefault();
-                alert('Выбор языка ещё не реализован');
+                alert('Выбор языка ещё нереализован');
             }).
             on('click', '[data-name="owner-show"]:first', function(e){
                 e.preventDefault();
-                alert('Выбор владельца не реализован');
+                alert('Выбор владельца нереализован');
             });
 
             //

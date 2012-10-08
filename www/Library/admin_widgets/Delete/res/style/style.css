@@ -34,4 +34,5 @@
         }
 	.Delete .btn {
         float: right;
+        margin-right: 0;
 		}

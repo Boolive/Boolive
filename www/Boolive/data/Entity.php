@@ -25,7 +25,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     protected $_attribs;
     /** @var array Подчиненные объекты (выгруженные из бд или новые, то есть не обязательно все существующие) */
     protected $_children = array();
-    /** @var \Boolive\data\Rule Правило для проверки атрибутов */
+    /** @var \Boolive\values\Rule Правило для проверки атрибутов */
     protected $_rule;
     /** @var \Boolive\data\Entity Экземпляр прототипа */
     protected $_proto = false;
@@ -269,6 +269,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * @example $object->sub = $sub;
      * @param $name
      * @param $value
+     * @return \Boolive\data\Entity
      */
     public function __set($name, $value)
     {
@@ -291,11 +292,23 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             if (isset($rename)) $value->_rename = $rename;
             $value->_parent = $this;
             $this->_children[$name] = $value;
+            return $value;
         }else{
             // Установка значения для подчиненного
             $this->__get($name)->offsetSet('value', $value);
-            return;
+            return $this->__get($name);
         }
+    }
+
+    /**
+     * Добавление подчиненного с автоматическим именованием
+     * @param $value
+     * @return \Boolive\data\Entity
+     */
+    public function add($value){
+        $obj = $this->__set(null, $value);
+        $obj->_changed = true;
+        return $obj;
     }
 
     /**

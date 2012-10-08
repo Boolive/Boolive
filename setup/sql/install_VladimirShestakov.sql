@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 07 2012 г., 14:51
+-- Время создания: Окт 08 2012 г., 11:46
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -46,6 +46,11 @@ CREATE TABLE IF NOT EXISTS `contents` (
 --
 
 INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('/Contents/Object', '', 0, 1349674621, 2, 4, '/Library/basic/simple/Object', NULL, 0, 0, 0, 1, 0, 0, 0),
+('/Contents/Object7754843', '', 0, 1349674696, 2, 5, '/Library/basic/simple/Object', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/Object7754843/Object', '', 0, 1349674997, 3, 1, '/Library/basic/simple/Object', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/Object7754843/Object7755215', '', 0, 1349675068, 3, 2, '/Library/basic/simple/Object', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Contents/Object7754866', '', 0, 1349674719, 2, 6, '/Library/basic/simple/Object', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts', '', 0, 0, 2, 2, '/Library/content_samples/Page', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text', '', 0, 0, 3, 2, '/Library/content_samples/Page/text', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/contacts/text/feedback', '', 0, 0, 4, 3, '/Library/content_samples/Feedback', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -236,10 +241,16 @@ CREATE TABLE IF NOT EXISTS `library` (
 --
 
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('', '', 0, 0, 1, 1, NULL, 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets', '', 0, 0, 2, 5, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add', '', 0, 0, 3, 4, '/Library/views/Widget', 'Add.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Предоставляет выбор объекта для добавления его в отображаемый объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/res/jquery.ui.Add', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Add.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/switch_views', '', 0, 0, 4, 4, '/Library/views/AutoWidgetList/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/switch_views/case_default', '', 0, 0, 5, 1, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/switch_views/case_default/ObjectItem', '', 0, 0, 6, 1, '/Library/admin_widgets/ObjectItem', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Добавить', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Attribs', '', 0, 0, 3, 6, '/Library/views/Widget', 'Attribs.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Attribs/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Редактор атрибутов любого объекта', 0, 0, 0, 0, 0, 0, 0),
@@ -280,6 +291,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/basic/simple', '', 0, 0, 3, 4, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Email', '', 0, 0, 4, 3, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Number', '', 0, 0, 4, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Object', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Object/description', '', 0, 0, 5, 2, NULL, 'Базовый объект для создания любых новых объектов', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Object/title', '', 0, 0, 5, 1, NULL, 'Объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Text', '', 0, 0, 4, 5, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Text/description', '', 0, 0, 5, 2, NULL, 'Строковое значение длиной до 65535 символа (64Кбайт)', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Text/title', '', 0, 0, 5, 1, NULL, 'Текст', 0, 0, 0, 0, 0, 0, 0),

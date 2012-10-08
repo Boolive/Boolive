@@ -49,6 +49,7 @@ Version 2.0 preview work in progress
 - new #53: Added admin interface without edit functions (only explorer) (VladimirShestakov)
 - new #55 Added handler for directed request "DirectHandler" (for ajax process) (VladimirShestakov)
 - new #57 Added widget Delete in admin (VladimirShestakov)
+- new #58 Added widget Add in admin (VladimirShestakov)
 - new #59 Added widget Attributes in admin (VladimirShestakov)
 - new: Added package "admin_widgets" for admins widgets (VladimirShestakov)
 - new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)
