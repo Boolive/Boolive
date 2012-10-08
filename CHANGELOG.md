@@ -1,7 +1,11 @@
 Boolive Change Log
 ==================
 
-Version 2.0 preview work in progress
+Version 2.0 work in progress
+----------------------------
+
+
+Version 2.0 preview October, 8 2012
 ------------------------------------
 - enh #1: Remove engine\config.classes.php, update classes autoloading (AzatGaliev)
 - enh #3: Changed the style code in all files (VladimirShestakov)
