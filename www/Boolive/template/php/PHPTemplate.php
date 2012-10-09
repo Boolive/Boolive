@@ -22,18 +22,19 @@ class PHPTemplate
     {
         // Массив $v достпуен в php-файле шаблона, подключамом ниже
         $v = new PHPTemplateValues($v, null, $entity);
-        ob_start();
-            try{
-                include($entity->getFile(true));
-            }catch (\Exception $e){
-//                if ($e->getCode() == 2){
-//                    echo "Template file '{$entity->getFile()}' not found";
-//                }else{
-                    throw $e;
-//                }
-            }
+        try{
+            ob_start();
+            include($entity->getFile(true));
             $result = ob_get_contents();
-        ob_end_clean();
+            ob_end_clean();
+        }catch (\Exception $e){
+            ob_end_clean();
+//          if ($e->getCode() == 2){
+//              echo "Template file '{$entity->getFile()}' not found";
+//          }else{
+                throw $e;
+//          }
+        }
         return $result;
     }
 }
