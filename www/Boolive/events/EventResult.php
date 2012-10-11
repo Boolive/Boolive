@@ -12,11 +12,11 @@ class EventResult
     /** @var int Количество исполненных методов-обработчиков */
     public $count;
     /** @var mixed Результат вызова методов-обработчиков */
-    public $value;
+    public $result;
 
     function __construct()
     {
         $this->count = 0;
-        $this->value = null;
+        $this->result = null;
     }
 }

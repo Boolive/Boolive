@@ -87,9 +87,9 @@ class Check
      */
     static function __callStatic($method, $args)
     {
-        $result = Events::send('Check::filter_'.$method, $args);
+        $result = Events::trigger('Check::filter_'.$method, $args);
         if ($result->count > 0){
-            return $result->value;
+            return $result->result;
         }else{
             return $args[0];
         }

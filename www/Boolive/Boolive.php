@@ -1,10 +1,13 @@
 <?php
 /**
- * Движок Boolive
+ * Модуль-ядро Boolive
  *
- * Активирует работу движка. Осуществляет автоматическую загрузку модулей (классов).
- * Генерирует события активации и деактивации, чтобы другие модули могли что-либо сделать
- * @version 1.0
+ * Подготавливает услвоия для работы проекта.
+ * Осуществляет автоматическую загрузку модулей (классов).
+ * Генерирует события активации и деактивации.
+ * Обрабатывает ошибки и исключения, сообщает о них генерацией события.
+ * @author Vladimir Shestakov <boolive@yandex.ru>
+ * @version 2.0
  */
 namespace Boolive
 {
@@ -21,10 +24,16 @@ namespace Boolive
         /** @var Текущий уровень фиксации ошибок в настройках PHP */
         static private $error_reporting;
 
+        /**
+         * Активация ядра, если вызван без параметров
+         * Активация указанного в аргументах класса (модуля).
+         * @param string $class_name Имя подключаемого класса
+         */
         static function activate($class_name = ''){
             $class_name = ltrim($class_name, '\\');
             // Если ещё не подключен
             if (!self::isIncluded($class_name)){
+
                 if (empty($class_name)){
                     // Актвация самого себя
                     self::$activated = array();
@@ -42,10 +51,11 @@ namespace Boolive
                     mb_internal_encoding('UTF-8');
                     mb_regex_encoding('UTF-8');
                     mb_http_output('UTF-8');
-
                     // При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
-                    Events::send('activate');
+                    Events::trigger('Boolive::activate');
+
                 }else{
+
                     // Подключение и активация запрашиваемого модуля
                     $names = explode('\\', $class_name, 2);
                     $path = str_replace('\\', '/', $class_name);
@@ -57,10 +67,11 @@ namespace Boolive
                     include_once($path);
                     self::$included[$class_name] = $class_name;
                     if (!isset(self::$activated[$class_name])) {
-                        if (method_exists($class_name, "activate")) {
+                        if (method_exists($class_name, 'activate')) {
                             $class_name::activate();
                         }
                     }
+
                 }
             }
         }
@@ -72,8 +83,7 @@ namespace Boolive
          */
         static function deactivate()
         {
-            // Любой класс может выполнить завершающие действия при звершении работы системы, обработав событие deactivate
-            Events::send('deactivate');
+            Events::trigger('Boolive::deactivate');
         }
 
         /**
@@ -84,14 +94,16 @@ namespace Boolive
          */
         static function exception($e)
         {
-            Events::send('error', $e);
-            error_log((string)$e);
-            // @TODO Заменить на юзабильное отображение
-            if (isset($e->xdebug_message)){
-                echo '<table cellspacing="0" cellpadding="1" border="1" dir="ltr">'.$e->xdebug_message.'</table>';
-            }else{
-                trace($e, 'error');
-            }
+            // Если обработчики событий не вернут положительный результат, то
+            // обрабатываем исключение по умолчанию
+            if (!Events::trigger('Boolive::error', $e)->result){
+                error_log((string)$e);
+                if (isset($e->xdebug_message)){
+                    echo '<table cellspacing="0" cellpadding="1" border="1" dir="ltr">'.$e->xdebug_message.'</table>';
+                }else{
+                    trace($e, 'error');
+                }
+            };
         }
 
         /**
@@ -228,7 +240,7 @@ namespace Boolive
         }
 
         /**
-         * Установка класса
+         * Установка ядра
          *
          */
         static function install()
