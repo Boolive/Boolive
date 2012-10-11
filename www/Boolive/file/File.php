@@ -8,9 +8,7 @@
  */
 namespace Boolive\file;
 
-use Boolive\errors\Error,
-    Boolive\unicode\Unicode,
-    Boolive\functions\F;
+use Boolive\functions\F;
 
 class File
 {
@@ -245,7 +243,7 @@ class File
      */
     static function clearFileName($filename)
     {
-        $filename = str_replace(' ', '_', Unicode::translit($filename));
+        $filename = str_replace(' ', '_', F::translit($filename));
         return preg_replace('/[^0-9A-Z\x5F\x61-\x7A\x2D\x5F\x5B\x5D\x2E\x28\x29]/u', '', $filename);
     }
 

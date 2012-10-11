@@ -23,6 +23,7 @@ class Benchmark
     static function activate()
     {
         self::start('all');
+        self::$start['all']['time'] = $_SERVER['REQUEST_TIME'];
     }
 
     /**

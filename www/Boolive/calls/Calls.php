@@ -27,7 +27,7 @@ class Calls
     static function activate()
     {
         // Регистрация на событие системной ошибки
-        Events::addHandler('ERRORS_SYSTEM', '\\Boolive\\calls\\Calls', 'onError');
+        Events::addHandler('error', '\\Boolive\\calls\\Calls', 'onError');
     }
     /**
      * Перовод в состояние ожидания.

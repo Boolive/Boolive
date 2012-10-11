@@ -18,7 +18,8 @@ class Mail
 	 * @param string $message Текст письма
 	 * @param string $from Валидный e-mail отправителя
 	 * @param string $reply Валидный e-mail того, кому будет посылаться ответ на письмо
-	 */
+     * @return bool
+     */
 	static function send($to, $subject, $message, $from, $reply = null)
     {
 		// Подготавливаем заголовки
