@@ -1,4 +1,4 @@
-<div class="BreadcrumbsMenu" data-view_uri="<?php echo $v['view_uri'];?>">
+<div class="BreadcrumbsMenu" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="BreadcrumbsMenu">
 	<ul>
 		<?php for ($i = sizeof($v['items'])-1; $i>=0; $i--):?>
 			<li class="<?php echo $v['items'][$i]['active']->bool()?'active':''?>" style="z-index: <?php echo $i?>;">
@@ -7,8 +7,3 @@
 		<?php endfor; ?>
 	</ul>
 </div>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('.BreadcrumbsMenu[widget!="true"]').BreadcrumbsMenu();
-	});
-</script>

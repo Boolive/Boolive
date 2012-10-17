@@ -1,8 +1,13 @@
 /**
- * jQueryUI widget with reloading function
+ * Базовый виджет для админки Boolive.
+ * С функциями обновления по Ajax и связывния со своими подчиненными и родителем для передачи им команд
+ * Query UI widget
+ * Copyright 2012 (C) Boolive
  */
-(function($){
-
+(function($, undefined){
+    /**
+     * Виджет на основе JQuery UI Widget
+     */
     $.widget("boolive.AjaxWidget", {
 
         options: {
@@ -10,25 +15,124 @@
             view_uri: '',
 			wait_window: null // Окно ожидания. jQuery объект
         },
+        _parent: null, // Родитель
+        _children: null, // Подчиненные виджеты
 
 		_is_wait: false, // признак, находится ли виджет в режиме загрузки окна
 
+        /**
+         * Конструктор объекта
+         * @private
+         */
         _create: function() {
-			this.element.attr('widget',true);
+            // ссылка на себя
+            var self = this;
+
+            this._children = {};
+            // URI виджета
             if (!this.options.view_uri){
                 this.options.view_uri = this.element.attr('data-view_uri');
             }
+            // URL для ajax запросов
             if (!this.options.default_url){
                 this.options.default_url = location.pathname;
             }
-            var self = this;
+            // Обработка Ajax ошибок
             this.element.ajaxError(function(e, jqxhr, settings, exception) {
-                console.log(settings);
+                alert('AJAX error: '+ jqxhr.statusText);
             });
+            // Добавление нового подчиненного в свой список
+            this.element.on('_create', function(e, widget){
+                return !self._addChild(widget);
+            });
+            // Удаление подчиенного из списка
+            this.element.on('_destroy', function(e, widget){
+                return !self._deleteChild(widget);
+            });
+            // Сообщаем родителю о своём создании
+            this.element.trigger('_create', [this]);
         },
 
-        ajaxError: function(event, request, settings){
-            alert('AJAX '+request.statusText);
+        /**
+         * Деструктор объекта
+         * @private
+         */
+        _destroy: function() {
+            // Сообщаем родителю о своём удалении
+            this.element.trigger('_destroy', [this]);
+            this._parent = null;
+		},
+
+        /**
+         * Добавление подчиненного виджета
+         * @param widget Объект виджета
+         * @return {Boolean}
+         * @private
+         */
+        _addChild: function(widget){
+            if (widget != this){
+                this._children[widget.uuid] = widget;
+                widget._parent = this;
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Удаление подчиненного виджета
+         * @param widget Объект виджета
+         * @return {Boolean}
+         * @private
+         */
+        _deleteChild: function(widget){
+            if (widget != this){
+                delete this._children[widget.uuid];
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Вызов дейсвтия у родителя
+         * @param action Название действия
+         * @param args Аргументы
+         * @param target Объект, иницировавший вызов действия
+         */
+        before: function(action, args, target){
+            if (!target) target = null;
+            var stop = undefined;
+            if (target && target!=this){
+                if ($.isFunction(this['before_'+action])){
+                    stop = this['before_'+action].apply(this, args);
+                }
+            }
+            if (stop !== undefined){
+                return stop;
+            }else
+            if (this._parent){
+                return this._parent.before(action, args, target || this);
+            }
+            return undefined;
+        },
+
+        /**
+         * Вызов действия завершения у всех подчиненных
+         * @param action Название действия
+         * @param args Аргументы
+         * @param target Объект, иницировавший вызов действия
+         */
+        after: function(action, args, target){
+            var stop = false;
+            if (target && target!=this){
+                if ($.isFunction(this['after_'+action])){
+                    stop = this['after_'+action].apply(this, args);
+                }
+            }
+            if (!stop){
+                for (var child in this._children){
+                    this._children[child].after(action, args, target || this);
+                }
+            }
         },
 
         /**
@@ -36,6 +140,7 @@
          */
         reload: function(url, data, callbacks){
 			var self = this;
+            data = $.extend({}, data);
             data.direct = self.options.view_uri;
             $.ajax({
                 owner: "boolive.AjaxWidget",
@@ -68,6 +173,7 @@
 //									self.element.attr(attribs[i].name, attribs[i].value);
 //								}
 //							}
+                            $(document).trigger('load-html', [self.element]);
 							if (typeof callbacks == 'function'){
 								callbacks(result, textStatus, jqXHR);
 							}else
@@ -82,6 +188,7 @@
 
         _call: function(method, data, callbacks){
             var self = this;
+            data = $.extend({}, data);
             data.direct = self.options.view_uri;
             data.call = method;
             $.ajax({
@@ -135,6 +242,7 @@
 		 */
 		loadsub: function(container, url, data, sub_name, append, callbacks){
 			var self = this;
+            data = $.extend({}, data);
             data.direct = self.options.view_uri+'/'+sub_name;
 			$.ajax({
 				type: 'POST',
@@ -151,6 +259,8 @@
                             container.empty();
 						    container.html(result.out);
                         }
+                        $(document).trigger('load-html', [container]);
+
 						if (typeof callbacks == 'function'){
 							callbacks(result, textStatus, jqXHR);
 						}else
@@ -162,9 +272,7 @@
 			});
         },
 
-        destroy: function() {
-			$.Widget.prototype.destroy.call( this );
-		},
+
 
 		escape: function (str){
 			if( str)
@@ -172,5 +280,5 @@
 			else
 				return str;
 		}
-    })
+    });
 })(jQuery);

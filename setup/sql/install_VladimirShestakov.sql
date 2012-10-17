@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 08 2012 г., 11:46
+-- Время создания: Окт 17 2012 г., 16:47
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -83,6 +83,7 @@ INSERT INTO `contents` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto
 ('/Contents/main/sub_page/text/p2', '', 0, 0, 5, 3, '/Library/content_samples/Paragraph', 'Второй абзац подчиенной страницы... текст... текст...', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/sub_page/title', '', 0, 0, 4, 0, '/Library/content_samples/Page/title', 'Подстраница', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text', '', 0, 0, 3, 2, '/Library/content_samples/Page/text', '', 0, 0, 0, 0, 0, 0, 0),
+('/Contents/main/text/Paragraph', '', 0, 1350470502, 4, 7, '/Library/content_samples/Paragraph', '111', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/head1', '', 0, 0, 4, 2, '/Library/content_samples/Head', 'Заголовок главной страницы', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents/main/text/img1', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'img1.jpg', 0, 1, 0, 0, 0, 0, 0),
 ('/Contents/main/text/list1', '', 0, 0, 4, 6, '/Library/content_samples/lists/List', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -236,9 +237,10 @@ CREATE TABLE IF NOT EXISTS `library` (
 --
 
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
-('', '', 0, 0, 1, 1, NULL, 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets', '', 0, 0, 2, 5, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add', '', 0, 0, 3, 4, '/Library/views/Widget', 'Add.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/SelectObject', '', 0, 0, 4, 4, '/Library/admin_widgets/SelectObject', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/SelectObject/title', '', 0, 0, 5, 1, '/Library/admin_widgets/SelectObject/title', 'Добавить', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Предоставляет выбор объекта для добавления его в отображаемый объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/res/jquery.ui.Add', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Add.js', 0, 1, 0, 0, 0, 0, 0),
@@ -274,6 +276,25 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.ObjectItem.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/ObjectItem/res/style', '', 0, 0, 5, 3, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/ObjectItem/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Виджет объекта', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs', '', 0, 0, 3, 7, '/Library/views/AutoWidget', 'Programs.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/description', '', 0, 0, 4, 2, '/Library/views/AutoWidget/description', 'Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/res/jquery.ui.Programs', '', 0, 0, 5, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/res/style', '', 0, 0, 5, 2, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views', '', 0, 0, 4, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_default', '', 0, 0, 5, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_default/Add', '', 0, 0, 6, 5, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_default/Attribs', '', 0, 0, 6, 4, '/Library/admin_widgets/Attribs', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_default/Delete', '', 0, 0, 6, 6, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_default/Explorer', '', 0, 0, 6, 3, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/title', '', 0, 0, 4, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject', '', 0, 0, 3, 8, '/Library/views/Widget', 'SelectObject.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/cancel_title', '', 0, 0, 4, 3, NULL, 'Отмена', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Представляет собой обозреватель объектов с функцией выбора объекта', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/programs', '', 0, 0, 4, 5, '/Library/admin_widgets/Programs', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/res/jquery.ui.SelectObject', '', 0, 0, 5, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.SelectObject.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/submit_title', '', 0, 0, 4, 4, NULL, 'Выбрать', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/SelectObject/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Виджет выбора объекта', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/Package', '', 0, 0, 3, 5, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -362,7 +383,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext', '', 0, 0, 8, 1, '/Library/views/SwitchCase', '/Library/content_samples/RichText', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/ListView/switch_views/case_item/Item/switch_views/case_richtext/RichText', '', 0, 0, 9, 1, '/Library/content_widgets/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page', '', 0, 0, 3, 1, '/Library/views/AutoWidgetList', 'Page.tpl', 1, 1, 0, 0, 0, 0, 0),
-('/Library/content_widgets/Page/NextPrevNavigation', '', 0, 0, 1, 1, '/Library/views/NextPrevNavigation', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/content_widgets/Page/NextPrevNavigation', '', 0, 0, 4, 1, '/Library/views/NextPrevNavigation', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/switch_views/case_comments', '', 0, 0, 5, 1, '/Library/views/SwitchCase', '/Library/content_samples/Page/comments', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/content_widgets/Page/switch_views/case_comments/Comments', '', 0, 0, 6, 1, '/Library/content_widgets/Comments', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -411,10 +432,14 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/javascript_plugins/HistoryAPI/type', '', 0, 0, 4, 5, NULL, '', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/description', '', 0, 0, 3, 2, '/Library/basic/Package/description', 'Пакет плагинов (скриптов) на JavaScript с использованием различный библиотек', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget', '', 0, 0, 3, 4, '/Library/views/jQueryUIScript', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.include', '', 0, 0, 5, 1, '/Library/javascript_plugins/jquery.include', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.ui.AjaxWidget', '', 0, 0, 5, 3, '/Library/views/JavaScript', 'jquery.ui.AjaxWidget.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.autoload', '', 0, 0, 5, 6, '/Library/javascript_plugins/jquery.autobind', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.include', '', 0, 0, 5, 4, '/Library/javascript_plugins/jquery.include', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jQueryAjaxWidget/depends/jquery.ui.AjaxWidget', '', 0, 0, 5, 5, '/Library/views/JavaScript', 'jquery.ui.AjaxWidget.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'jQueryUI виджет с функцией обновления без полной перегрузки страницы', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jQueryAjaxWidget/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'Виджет с обновлением по Ajax', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.autobind', '', 0, 0, 3, 8, '/Library/views/jQueryScript', 'jquery.autobind.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.autobind/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'Автоматически подключает плагины jquery к тегам с атрибутом data-plugin. Имя плагина берется из атрибута data-plugin', 0, 0, 0, 0, 0, 0, 0),
+('/Library/javascript_plugins/jquery.autobind/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'Автоподключение jquery плагинов', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jquery.form', '', 0, 0, 3, 7, '/Library/views/jQueryScript', 'jquery.form.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jquery.form/description', '', 0, 0, 4, 1, '/Library/views/jQueryScript/description', 'Отправка форм', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/javascript_plugins/jquery.form/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'Плагин для для отправки пользовательских форм по AJAX без перегрузки страницы', 0, 0, 0, 0, 0, 0, 0),
@@ -429,17 +454,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/Admin/BreadcrumbsMenu/res/jquery.ui.BreadcrumbsMenu', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.BreadcrumbsMenu.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/BreadcrumbsMenu/res/style', '', 0, 0, 6, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/BreadcrumbsMenu/title', '', 0, 0, 5, 1, '/Library/views/Widget/title', 'Меню "хлебные крошки"', 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs', '', 0, 0, 4, 5, '/Library/views/AutoWidget', 'Programs.tpl', 1, 1, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/description', '', 0, 0, 5, 2, '/Library/views/AutoWidget/description', 'Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты', 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/res/jquery.ui.Programs', '', 0, 0, 6, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/res/style', '', 0, 0, 6, 2, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views', '', 0, 0, 5, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default', '', 0, 0, 6, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default/Add', '', 0, 0, 7, 5, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default/Attribs', '', 0, 0, 7, 4, '/Library/admin_widgets/Attribs', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default/Delete', '', 0, 0, 7, 6, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/switch_views/case_default/Explorer', '', 0, 0, 7, 3, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/Admin/Programs/title', '', 0, 0, 5, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/Admin/Programs', '', 0, 0, 4, 5, '/Library/admin_widgets/Programs', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu', '', 0, 0, 4, 6, '/Library/views/Widget', 'ProgramsMenu.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Меню автоматически формируется в зависимости от отображаемого объекта и доступного для него программ', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/Admin/ProgramsMenu/programs', '', 0, 0, 5, 4, '/Library/layouts/Admin/Programs', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -566,9 +581,10 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.8.23.min.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.8.23.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.9.min.js', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Library/views/jQueryUIScript/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'jQuery UI скрипт', 0, 0, 0, 0, 0, 0, 0);
 

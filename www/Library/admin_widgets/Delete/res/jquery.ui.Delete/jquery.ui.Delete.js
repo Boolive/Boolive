@@ -1,6 +1,13 @@
+/**
+ * Виджет удаление выбранного объекта
+ * Реализует функции подтверждения и отмены удаления.
+ * В случаи подтверждения отправляет команду на сервер
+ * Query UI widget
+ * Copyright 2012 (C) Boolive
+ */
 (function($) {
 	$.widget("boolive.Delete", $.boolive.AjaxWidget, {
-
+        // Удаляемый объект
         object: null,
 
         _create: function() {
@@ -12,7 +19,8 @@
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 self._call('delete', {object: self.object}, function(result, textStatus, jqXHR){
-                    self.element.trigger('before-entry-object', [self.getParentOfUri(self.object)]);
+                    // Вход в родительский объект
+                    self.before('setState', [{object: self.getParentOfUri(self.object), view_name: null}]);
                 });
             });
             self.element.find('.cancel').click(function(e){
@@ -21,6 +29,11 @@
             });
         },
 
+        /**
+         * Возвращает URI родительского объекта
+         * @param uri
+         * @return {*}
+         */
         getParentOfUri: function(uri){
             var m = uri.match(/^(.*)\/[^\\\/]*$/);
             if (m){
@@ -28,10 +41,6 @@
             }else{
                 return '';
             }
-        },
-
-		destroy: function() {
-			$.boolive.AjaxWidget.prototype.destroy.call(this);
-		}
+        }
 	})
 })(jQuery);

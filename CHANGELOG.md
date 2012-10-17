@@ -3,7 +3,11 @@ Boolive Change Log
 
 Version 2.0 work in progress
 ----------------------------
-
+- new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
+- enh #58: Added selecting other objects for add new (VladimirShestakov)
+- new #62: Added multiwindow admin interface with the common navigation widgets (VladimirShestakov)
+- new #63: Added SelectObject widget. It use as window (VladimirShestakov)
+- new: New model of interaction jQuery UI widgets based on AjaxWidget (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
 ------------------------------------

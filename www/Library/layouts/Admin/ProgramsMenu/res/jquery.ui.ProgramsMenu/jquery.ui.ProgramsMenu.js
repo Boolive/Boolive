@@ -1,3 +1,9 @@
+/**
+ * Меню выбора программы (способы отображения текущего объекта)
+ * Автоматически обновляется при смене текущего объекта
+ * JQuery UI widget
+ * Copyright 2012 (C) Boolive
+ */
 (function($) {
 	$.widget("boolive.ProgramsMenu", $.boolive.AjaxWidget, {
         _state: {object: null, select: null, view_name: null},
@@ -7,31 +13,46 @@
             var self = this;
             self.element.on('click', 'li a', function(e){
                 e.preventDefault();
-				self.element.trigger('before-choice-view', $(this).attr('href'));
+                self.before('setState', [{
+                    view_name: $(this).attr('href')
+                }]);
             });
-            $(document).on('after-select-object', function(e, state){
-                if (self._state.select != state.select){
-                    self._state = $.extend({}, state);
-                    self.reload('/', {object:state.select}, function(){self.select();});
-                }else{
-                    self._state = $.extend({}, state);
-                    self.select();
-                }
-            });
+            this.after_setState(this.before('getState'));
         },
 
-        select: function(){
-            //alert(this._state.object+' | '+this._state.select);
+        /**
+         * При любом изменении состояния (вход, выделение объекта, выбор программы)
+         * загрузка пунктов меню программ и выделение текущего пункта
+         * @param state
+         */
+        after_setState: function(state){
+            var self = this;
+            if (self._state.select != state.select){
+                self._state = $.extend({}, state);
+                self.reload('/', {object:state.select}, function(){
+                    self.select(state);
+                });
+            }else{
+                self._state = $.extend({}, state);
+                self.select(state);
+            }
+        },
+
+        /**
+         * Выделение пункта программы с учётом состояния
+         * @param state
+         */
+        select: function(state){
             // Выделение, если не выделен подчиенный объект
-            if (this._state.object == this._state.select){
+            if (state.object == state.select){
                 var sel = null;
                 // Если view_name не указан, то выделяется первая закладка
-                if (!this._state.view_name){
+                if (!state.view_name){
                     sel = this.element.find('> ul > li:first-child');
                 }else{
-                    sel = this.element.find('> ul > li a[href="'+this._state.view_name+'"]').parent();
+                    sel = this.element.find('> ul > li a[href="' + state.view_name+'"]').parent();
                 }
-                if (sel!=this._active_items){
+                if (sel != this._active_items){
                     if (this._active_items) this._active_items.removeClass('active');
                     this._active_items = sel;
                     this._active_items.addClass('active');
@@ -40,10 +61,6 @@
                 if (this._active_items) this._active_items.removeClass('active');
                 this._active_items = null;
             }
-        },
-
-		destroy: function() {
-			$.boolive.AjaxWidget.prototype.destroy.call(this);
-		}
+        }
 	})
 })(jQuery);

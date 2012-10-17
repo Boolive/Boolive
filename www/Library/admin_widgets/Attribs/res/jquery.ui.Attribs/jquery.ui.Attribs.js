@@ -1,3 +1,8 @@
+/**
+ * Виджет - редактор атрибутов
+ * Query UI widget
+ * Copyright 2012 (C) Boolive
+ */
 (function($) {
 	$.widget("boolive.Attribs", $.boolive.AjaxWidget, {
         /**
@@ -250,6 +255,10 @@
                     file_input.replaceWith(file_input.clone(true));
                 }
             })
+            .on('click', '.cancel', function(e){
+                e.preventDefault();
+                history.back();
+            })
             .on('click', '.reset', function(e){
                 e.preventDefault();
                 self.model.init(self.model.attrib_start);
@@ -298,7 +307,8 @@
             }).
             on('click', '[data-name="proto-uri"]:first', function(e){
                 e.preventDefault();
-                self.element.trigger('before-entry-object', $(this).attr('href'));
+                self.before('setState', [{object: $(this).attr('href')}]);
+                //self.element.trigger('before-entry-object', $(this).attr('href'));
             }).
             on('click', '[data-name="proto-show"]:first', function(e){
                 e.preventDefault();
@@ -325,10 +335,11 @@
             this.submit_msg = this.element.find('.submit-message');
         },
 
-		destroy: function() {
-			$.boolive.AjaxWidget.prototype.destroy.call(this);
-		},
-
+        /**
+         * Последний параметр в pathname URI
+         * @param uri
+         * @return {*}
+         */
         getLastParam: function(uri){
             var m = uri.match(/([^\\\/]*)$/)
             if (m){

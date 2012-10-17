@@ -72,7 +72,7 @@
 			width: 100%;
 			padding: 0 0;
 			text-decoration: none;
-			color: #BBB;
+			color: #111;
 			}
 			.ObjectItem .view .colmain .col1 {
 				left: 0;
@@ -103,7 +103,6 @@
 					text-overflow: ellipsis;
 					padding: 7px 0 2px 10px;
 					font-size: 13pt;
-					color: #111;
 					}
 				.ObjectItem .view .colmain .col2 .value{
 					color: #666;
@@ -118,26 +117,23 @@
 					/*color: #CCC;*/
 					}
 
-.selected *{
+.selected{
 	color: #FFF;
-	}
-	.selected .ObjectItem{
-		margin: -1px 0 0 0px;
-		}
-		.selected .ObjectItem .view{
-			background-color: #61B0FF;
-			border-top: 1px solid #FFF;
-			border-bottom: 1px solid #FFF;
-			color: #FFF;
-			}
-		.selected .ObjectItem .view .colmain .col2 * {
-			color: #FFF;
-			}
-		.selected .ObjectItem .enter, .selected .ObjectItem .view .colmain .col2 .enter{
-			background: url(img/enter-invert.png) no-repeat center center;
-			opacity: 0.5;
-
-			}
-			.selected .ObjectItem .enter:hover, .selected .ObjectItem .view .colmain .col2 .enter:hover{
-				opacity: 1;
-				}
+    margin: -1px 0 0 0px;
+    }
+    .selected .view, .selected .view:hover{
+        background-color: #61B0FF;
+        border-top: 1px solid #FFF;
+        border-bottom: 1px solid #FFF;
+        color: #FFF;
+        }
+    .selected .view .colmain .col2 * {
+        color: #FFF;
+        }
+    .selected .enter, .selected .view .colmain .col2 .enter{
+        background: url(img/enter-invert.png) no-repeat center center;
+        opacity: 0.5;
+        }
+        .selected .enter:hover, .selected .view .colmain .col2 .enter:hover{
+            opacity: 1;
+            }

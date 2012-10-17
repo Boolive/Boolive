@@ -1,4 +1,4 @@
-<div class="ObjectItem" data-view_uri="<?php echo $v['view_uri'];?>" data-object="<?php echo $v['uri'];?>">
+<div class="ObjectItem" data-view_uri="<?=$v['view_uri']?>" data-object="<?=$v['uri']?>" data-plugin="ObjectItem">
 	<div class="view">
 		<span class="colright">
 		</span>
@@ -12,9 +12,3 @@
 		</span>
 	</div>
 </div>
-<script type="text/javascript">
-	$(function(){
-		$('.ObjectItem[widget!="true"]').ObjectItem();
-	});
-</script>
- 

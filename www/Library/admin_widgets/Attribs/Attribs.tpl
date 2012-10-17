@@ -1,4 +1,4 @@
-<div class="Attribs" data-view_uri="<?php echo $v['view_uri'];?>">
+<div class="Attribs" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="Attribs">
     <div class="content">
         <h1><?php echo $v['head'];?></h1>
         <form action="" enctype="multipart/form-data" type="POST">
@@ -126,7 +126,8 @@
             <div class="item">
                 <div class="col1"></div>
                 <div class="col2">
-                    <a class="btn hide reset">Отмена</a>
+                    <a class="btn cancel" href="#">Отмена</a>
+                    <a class="btn hide reset">Восстановить</a>
                     <a class="btn btn-success btn-disable submit" href="#">Сохранено</a>
                     <pre class="submit-message"></pre>
                 </div>
@@ -134,8 +135,3 @@
         </form>
     </div>
 </div>
-<script type="text/javascript">
-	$(function(){
-		$('.Attribs[widget!="true"]').Attribs();
-	});
-</script>

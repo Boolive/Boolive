@@ -40,6 +40,12 @@
 			}
 		.BreadcrumbsMenu ul li:first-child a{
 			padding-left: 10px;
+            border-left: 1px solid #e6e6e6;
+            /*box-shadow:*/
+                /*inset 10px 0px 10px 0px #DDDDDD;*/
+			/*-webkit-box-shadow:*/
+				/*inset 10px 0px 10px 0px #F5F5F5;*/
+
 			}
 
 		.BreadcrumbsMenu ul li:after{

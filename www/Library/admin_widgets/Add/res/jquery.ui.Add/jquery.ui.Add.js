@@ -1,7 +1,14 @@
+/**
+ * Виджет добавления объекта
+ * Выбор из часто используемых или среди всех сущесвтующих
+ * Query UI widget
+ * Copyright 2012 (C) Boolive
+ */
 (function($) {
 	$.widget("boolive.Add", $.boolive.AjaxWidget, {
-
+        // Объект, в который добавлять (родитель)
         object: null,
+        // Выделенный объект (прототип для новового)
         object_select: null,
 
         _create: function() {
@@ -9,45 +16,76 @@
             var self = this;
             // uri объекта
             self.object = this.element.attr('data-object');
-
-            // Выделение объекта
-            self.element.on('before-entry-object', function(e, object){
-                e.stopPropagation();
-                self.select(object);
-			}).on('before-select-object', function(e, object){
-				e.stopPropagation();
-                self.select(object);
-			});
-
             // Отмена выделения при клике на свободную центральную область
             self.element.click(function(e){
                 e.stopPropagation();
-                self.select(null);
+                self._select(null);
             });
-
-            self.element.find('.submit').click(function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                self._call('add', {
-                    object: self.object,
-                    proto: self.object_select
-                }, function(result, textStatus, jqXHR){
-                    self.element.parent().trigger('before-entry-object', [self.object]);
-                });
-            });
+            // Отмена
             self.element.find('.cancel').click(function(e){
                 e.preventDefault();
                 e.stopPropagation();
                 history.back();
             });
+            // Добавление
+            self.element.find('.submit').click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                self._add();
+            });
+            // Выбор и добавление другого объекта
             self.element.find('.other').click(function(e){
                 e.preventDefault();
                 e.stopPropagation();
-                alert('Выбор других объектов нереализован');
+                self.before('openWindow', [null,
+                    {
+                        url: "/",
+                        data: {
+                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                            object: '' //какой объект показать
+                        }
+                    },
+                    function(result, params){
+                        if (result == 'submit' && 'select' in params){
+                            self.object_select = params.select;
+                            self._add();
+                        }
+                    }
+                ]);
             });
         },
 
-        select: function(object){
+        /**
+         * При выделении в списке часто используемых
+         * @param state
+         * @return {Boolean}
+         */
+        before_setState: function(state){
+            if (state.object || state.select){
+                this._select(state.object || state.select);
+            }
+            return true;
+        },
+
+        /**
+         * Добавление выбранного и возврат на предыдущую страницу
+         * @private
+         */
+        _add: function(){
+            var self = this;
+            self._call('add', {
+                object: self.object,
+                proto: self.object_select
+            }, function(result, textStatus, jqXHR){
+                history.back();
+            });
+        },
+        /**
+         * Выделение объекта в списке часто используемых
+         * @param object
+         * @private
+         */
+        _select: function(object){
             if (object != this.object_select){
                 this.element.find('.selected').removeClass('selected');
                 if (object !=null){
@@ -58,19 +96,6 @@
                 }
                 this.object_select = object;
             }
-        },
-
-        getParentOfUri: function(uri){
-            var m = uri.match(/^(.*)\/[^\\\/]*$/);
-            if (m){
-                return m[1];
-            }else{
-                return '';
-            }
-        },
-
-		destroy: function() {
-			$.boolive.AjaxWidget.prototype.destroy.call(this);
-		}
+        }
 	})
 })(jQuery);

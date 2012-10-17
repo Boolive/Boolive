@@ -1,4 +1,4 @@
-<div class="ProgramsMenu" data-view_uri="<?php echo $v['view_uri'];?>">
+<div class="ProgramsMenu" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="ProgramsMenu">
 	<ul>
 		<?php foreach ($v['items']->arrays(\Boolive\values\Rule::any()) as $item):?>
 			<li>
@@ -9,8 +9,3 @@
 		<?php endforeach; ?>
 	</ul>
 </div>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('.ProgramsMenu[widget!="true"]').ProgramsMenu();
-	});
-</script>

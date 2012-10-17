@@ -1,3 +1,9 @@
+/**
+ * Виджет объекта в виде элемента списка
+ * Инициирует команды входа в отображаемый объект
+ * Query UI widget
+ * Copyright 2012 (C) Boolive
+ */
 (function($) {
 	$.widget("boolive.ObjectItem", $.boolive.AjaxWidget, {
         // uri отображаемого объекта
@@ -8,23 +14,15 @@
             var self = this;
             // uri объекта
             self._object = this.element.attr('data-object');
-            // Вход в объект
-			self.element.find('.enter').click(function(e){
-				e.stopPropagation();
-                e.preventDefault();
-				self.element.trigger('before-entry-object', [self._object]);
-			});
-            // Выделение объекта
+            // Вход в объекта
 			self.element.click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
-                self.element.trigger('before-entry-object', [self._object]);
-                //self.element.trigger('before-select-object', [self._object]);
+                // Сначала выделяем себя
+                self.before('setState', [{select:  self._object}]);
+                // Теперь входим
+                self.before('setState', [{object:  self._object}]);
 			});
-        },
-
-		destroy: function() {
-			$.boolive.AjaxWidget.prototype.destroy.call(this);
-		}
-	})
+        }
+	});
 })(jQuery);
