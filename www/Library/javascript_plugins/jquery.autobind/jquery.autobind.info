@@ -1,0 +1,5 @@
+{
+	"title": "Автоподключение jquery плагинов",
+	"description": "Автоматически подключает плагины jquery к тегам с атрибутом data-plugin. Имя плагина берется из атрибута data-plugin",
+	"proto": "/Library/views/jQueryScript"
+}
