@@ -64,6 +64,9 @@ class Data
                     if ($proto){
                         $object = $proto->birth();
                         $object['uri'] = $uri;
+                        $object['order'] = $proto['order'];
+                        $object['lang'] = $lang;
+                        $object['owner'] = $owner;
                     }else{
                         $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner));
                     }
