@@ -149,13 +149,14 @@
             if (!id) id = ++this._windows_cnt;
             var self = this;
             // Есть ли требуемое окно?
-            var window = this._windows.find('#'+id+':first');
+            var window = this._windows.find('> #'+id+':last');
             if (window.length){
                 // Скрыть текущее окно
-                self._window_current.hide();
+                //self._window_current.hide();
                 // Показываем. Тег перенести в начало списка.
-                self._windows.prepend(window);
-                self._window_current = self._windows.find('#'+id+':first');
+                self._windows.append(window);
+                self.review_windows();
+                self._window_current = self._windows.find('> #'+id+':last');
                 self._state = self._window_current.data('state');
                 self.refresh_state();
                 window.show();
@@ -171,9 +172,10 @@
                         if (!result.links) result.links = [];
                         $.include(result.links, function(){
                             // Скрыть текущее окно
-                            self._window_current.hide();
-                            self._windows.prepend('<div class="window" id="' + id + '">' + result.out + '</div>');
-                            self._window_current = self._windows.find('#'+id+':first');
+                            //self._window_current.hide();
+                            self._windows.append('<div class="window" id="' + id + '">' + result.out + '</div>');
+                            self.review_windows();
+                            self._window_current = self._windows.find('> #'+id+':last');
                             self._window_current
                                 .data('state', {
                                     object: request.data.object ? request.data.object : '',
@@ -205,23 +207,33 @@
          */
         before_closeWindow: function(result, params){
             // Удаление тега окна
-            var window = this._windows.find(':visible');
+            var window = this._windows.find('> :last');
             var dh = 0;
             if (window.length){
                 dh = window.data('state').history_o - window.data('state').history_i;
                 if (typeof window.data('close_callback') == 'function'){
                     window.data('close_callback')(result, params);
                 }
-                this._windows.find(':visible').remove();
+                window.remove();
+                this.review_windows();
             }
             // Открытие первого окна с спике
-            this._window_current = this._windows.find('> :first');
+            this._window_current = this._windows.find('> :last');
             this._state = this._window_current.data('state');
-            this._window_current.show();
+            //this._window_current.show();
             // Сброс истории барузера до момента смены окна
             if (dh!=0) history.go(dh);
             // Сообщаем всем о смене состояния
             this.refresh_state();
+        },
+
+        review_windows: function(){
+            var left = 0;
+            var dl = 10;
+            this._windows.children().each(function(){
+                $(this).css('margin-left', left +'px');
+               left+=dl;
+            });
         },
 
         /**

@@ -71,8 +71,14 @@
         .Admin .center > div{
             overflow:auto;
             position: absolute;
-            width: 100%;
+            left: 0;
+            right: 0;
             height: 100%;
+            background-color: #FFF;
+            box-shadow: -1px 0 0 0 #DDDDDD,
+					5px 0 5px 5px #E0E0E0;
+		    -webkit-box-shadow: 1px 0 0 0 #D8D8D8,
+					5px 0 5px -5px #E0E0E0;;
             }
 	.Admin .top{
         height: 32px;
