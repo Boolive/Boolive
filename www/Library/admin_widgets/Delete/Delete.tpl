@@ -1,14 +1,15 @@
 <div class="Delete" data-view_uri="<?php echo $v['view_uri'];?>" data-object="<?php echo $v['object']['uri'];?>" data-plugin="Delete">
     <div class="main">
         <div class="content">
-            <h1><?php echo $v['title'];?></h1>
-            <p>Вы действительно желаете удалить этот объект?</p>
+            <h2><?php echo $v['title'];?></h2>
+            <p>Вы действительно желаете удалить
+                <span class="txt-primary"><?php echo $v['object']['title'];?></span>
+                <?php if ($v['object']['uri']->string()):?>
+                <span class="txt-tag"><?php echo $v['object']['uri'];?></span>
+                <?php endif;?>?
+            </p>
             <p class="mini">Объект будет перемещён в корзину, его можно будет восстановить.</p>
-            <div class="info">
-                <span class="name"><?php echo $v['object']['title'];?></span>
-                <span class="inline-hint"><?php echo $v['object']['uri'];?></span>
-            </div>
-        </div>
+         </div>
     </div>
     <div class="bottom">
         <div class="content">

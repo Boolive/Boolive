@@ -1,6 +1,6 @@
 <div class="Attribs" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="Attribs">
     <div class="content">
-        <h1><?php echo $v['head'];?></h1>
+        <h2><?php echo $v['head'];?></h2>
         <form action="" enctype="multipart/form-data" type="POST">
             <div style="display: none;">
                 <input type="hidden" name="direct" value="<?php echo $v['view_uri'];?>">
@@ -12,7 +12,7 @@
                     <label>Название</label>
                 </div>
                 <div class="col2 item-name">
-                    <span class="name" data-name="name"></span><span data-name="uri" class="inline-hint"></span>
+                    <span class="name" data-name="name"></span><span data-name="uri" class="txt-tag"></span>
                     <span class="error-message"></span>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                     <label>Прототип</label>
                 </div>
                 <div class="col2 item-proto">
-                    <a class="internal" href="proto" data-name="proto-show"></a><a href="" data-name="proto-uri" class="inline-hint"></a>
+                    <a class="internal" href="proto" data-name="proto-show"></a><a href="" data-name="proto-uri" class="txt-tag"></a>
                     <input type="hidden" name="attrib[proto]" value="">
                     <span class="error-message"></span>
                 </div>
@@ -119,7 +119,7 @@
                     <label>Дата обновления</label>
                 </div>
                 <div class="col2 item-date">
-                    <span data-name="date" class="inline-hint"></span>
+                    <span data-name="date" class="txt-tag"></span>
                     <span class="error-message"></span>
                 </div>
             </div>

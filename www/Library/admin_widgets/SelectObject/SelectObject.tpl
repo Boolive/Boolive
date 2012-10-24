@@ -1,7 +1,7 @@
 <div class="SelectObject" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="SelectObject">
     <div class="main">
         <div class="content">
-            <h1><?php echo $v['title'];?></h1>
+            <h2><?php echo $v['title'];?></h2>
             <p><?php echo $v['message'];?></p>
             <div class="view">
                 <?php echo $v['programs']->string();?>
