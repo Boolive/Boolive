@@ -25,33 +25,35 @@
             self.element.find('.cancel').click(function(e){
                 e.preventDefault();
                 e.stopPropagation();
-                history.back();
+                if (!$(this).hasClass('btn-disable')) history.back();
             });
             // Добавление
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 e.stopPropagation();
-                self._add();
+                if (!$(this).hasClass('btn-disable')) self._add();
             });
             // Выбор и добавление другого объекта
             self.element.find('.other').click(function(e){
                 e.preventDefault();
                 e.stopPropagation();
-                self.before('openWindow', [null,
-                    {
-                        url: "/",
-                        data: {
-                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
-                            object: '' //какой объект показать
+                if (!$(this).hasClass('btn-disable')){
+                    self.before('openWindow', [null,
+                        {
+                            url: "/",
+                            data: {
+                                direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                                object: '' //какой объект показать
+                            }
+                        },
+                        function(result, params){
+                            if (result == 'submit' && 'select' in params){
+                                self.object_select = params.select;
+                                self._add();
+                            }
                         }
-                    },
-                    function(result, params){
-                        if (result == 'submit' && 'select' in params){
-                            self.object_select = params.select;
-                            self._add();
-                        }
-                    }
-                ]);
+                    ]);
+                }
             });
         },
 
@@ -89,7 +91,7 @@
             if (object != this.object_select){
                 this.element.find('.selected').removeClass('selected');
                 if (object !=null){
-                    this.element.find('[data-object="'+self.escape(object)+'"]').parent().addClass('selected');
+                    this.element.find('[data-object="'+self.escape(object)+'"]').addClass('selected');
                     this.element.find('.submit').removeClass('btn-disable');
                 }else{
                     this.element.find('.submit').addClass('btn-disable');
