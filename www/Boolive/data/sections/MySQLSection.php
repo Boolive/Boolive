@@ -313,12 +313,12 @@ class MySQLSection extends Section
         // Создание экземпляров
         $result = array();
         while ($attr = $q->fetch(DB::FETCH_ASSOC)){
-            $key = $attr['uri'];//.' '.$attr['lang'].' '.$attr['owner'].' '.$attr['date'].' '.(bool)$attr['is_history'];
-            if (Data::bufferExist($key)){
-                $obj = Data::bufferGet($key);
+            $key2 = $attr['uri'];//.' '.$attr['lang'].' '.$attr['owner'].' '.$attr['date'].' '.(bool)$attr['is_history'];
+            if (Data::bufferExist($key2)){
+                $obj = Data::bufferGet($key2);
             }else{
                 $obj = Data::makeObject($attr, false, true);
-                Data::bufferAdd($key, $obj);
+                Data::bufferAdd($key2, $obj);
             }
             $result[] = $obj;
         }
