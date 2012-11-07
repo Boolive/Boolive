@@ -15,6 +15,7 @@ use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
     Boolive\data\Data,
     Boolive\file\File,
     Boolive\develop\ITrace,
+    Boolive\develop\Trace,
     Boolive\values\Rule,
     Boolive\input\Input,
     Boolive\functions\F;
@@ -236,6 +237,15 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         }
     }
 
+    /**
+     * Все атрибуты объекта
+     * @return array
+     */
+    public function getAllAttribs()
+    {
+        return $this->_attribs;
+    }
+
     #################################################
     #                                               #
     #     Управление подчиненными объектами         #
@@ -253,7 +263,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         if (isset($this->_children[$name])){
             return $this->_children[$name];
         }else{
-            $obj = Data::object($this['uri'].'/'.$name, (string)$this['lang'], (int)$this['owner']);
+            $obj = Data::read($this['uri'].'/'.$name, (string)$this['lang'], (int)$this['owner']);
             $this->__set($name, $obj);
             return $obj;
         }
@@ -351,7 +361,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function find($cond = array(), $load = false, $key_by = null)
     {
-        if ($s = Data::section($this['uri'], false)){
+        if ($s = Data::getSection($this['uri'], false)){
             if (!empty($cond['where'])){
                 $cond['where'].=' AND uri like ? AND level=?';
             }else{
@@ -456,8 +466,26 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             }
             // Запоминаем результат в экземпляре
             if ($load) $this->_children = $results;
+
+            //Trace::groups('DB')->group('findAll_count')->set(Trace::groups('DB')->group('findAll_count')->get()+1);
         }
         return $results;
+    }
+
+    public function findAll2($cond = array(), $load = false, $key_by = 'name')
+    {
+        $cond['from'] = array($this['uri'], 1);
+        $result = Data::select($cond, $key_by);
+        if ($load){
+            if ($key_by == 'name'){
+                $this->_children = $result;
+            }else{
+                foreach ($result as $obj){
+                    $this->_children[$obj->getName()] = $obj;
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -467,7 +495,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function findCount($cond = array())
     {
-        if ($s = Data::section($this['uri'], false)){
+        if ($s = Data::getSection($this['uri'], false)){
             if (!empty($cond['where'])){
                 $cond['where'].=' AND uri like ? AND level=?';
             }else{
@@ -602,7 +630,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 if ($history) $this->_attribs['date'] = time();
                 // Сохранение себя
                 if ($this->_changed){
-                    if ($s = Data::section($this['uri'], true)){
+                    if ($s = Data::getSection($this['uri'], true)){
                         $s->put($this);
                         $this->_virtual = false;
                         $this->_exist = true;
@@ -637,15 +665,26 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 
     /**
      * Создание нового объекта прототипированием от себя
+     * @param null|\Boolive\data\Entity $for Для кого создаётся новый объект?
      * @return \Boolive\data\Entity
      */
-    public function birth()
+    public function birth($for = null)
     {
         $class = get_class($this);
-        $object = new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])), true, $this->_exist);
-        if (!empty($this['is_link']))
-            $object['is_link'] = true;
-        return $object;
+        if (isset($for)){
+            $attr = $this->_attribs;
+            $attr['uri'] = $for['uri'].'/'.$this->getName();
+            $attr['value'] = null;
+            $attr['is_file'] = 0;
+            $attr['is_logic'] = 0;
+            if (isset($attr['level'])) $attr['level'] = mb_substr_count($attr['uri'], '/');
+            if (!empty($for->_attribs['is_link'])) $attr['is_link'] = 1;
+        }else{
+            $attr = array();
+        }
+        $attr['proto'] = Data::makeURI($this['uri'], $this['lang'], $this['owner']);
+        if (!empty($this['is_link'])) $attr['is_link'] = true;
+        return new $class($attr, true, $this->_exist);
     }
 
     /**
@@ -655,7 +694,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function parent()
     {
         if ($this->_parent === false){
-            $this->_parent = Data::object($this->getParentUri());
+            $this->_parent = Data::read($this->getParentUri());
         }
         return $this->_parent;
     }
@@ -664,12 +703,16 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * Прототип объекта
      * @return \Boolive\data\Entity|null
      */
-    public function proto()
+    public function proto($use_index = true)
     {
         if ($this->_proto === false){
             if (isset($this->_attribs['proto'])){
                 $info = Data::getURIInfo($this->_attribs['proto']);
-                $this->_proto = Data::object($info['uri'], $info['lang'], $info['owner']);
+                if ($use_index){
+                    $this->_proto = Data::read($info['uri'], $info['lang'], $info['owner']);
+                }else{
+                    $this->_proto = Data::getObject($info['uri'], $info['lang'], $info['owner']);
+                }
             }else{
                 $this->_proto = null;
             }
@@ -689,6 +732,20 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         return null;
     }
 
+    /**
+     * Все прототипы объекта
+     * @return array Список URI прототипов
+     */
+    public function getAllProto($use_index = true)
+    {
+        $result = array();
+        $obj = $this;
+        while ($obj && !empty($obj->_attribs['proto'])){
+            $result[] = $obj->_attribs['proto'];
+            $obj = $obj->proto($use_index);
+        }
+        return $result;
+    }
     /**
      * При обращении к объекту как к скалярному значению (строке), возвращается значение атрибута value
      * @example
@@ -757,11 +814,11 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * Значение объекта с учётом прототипирования
      * @return string|null
      */
-    public function getValue()
+    public function getValue($use_index = true)
     {
         $value = $this->offsetGet('value');
-        if (!isset($value) && ($proto = $this->proto())){
-            $value = $proto->getValue();
+        if (!isset($value) && ($proto = $this->proto($use_index))){
+            $value = $proto->getValue($use_index);
         }
         return $value;
     }
@@ -813,9 +870,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * Проверяется с учетом прототипа
      * @return bool
      */
-    public function isFile()
+    public function isFile($use_index = true)
     {
-        return !empty($this->_attribs['is_file']) || (!isset($this->_attribs['value']) && ($proto = $this->proto()) && $proto->isFile());
+        return !empty($this->_attribs['is_file']) || (!isset($this->_attribs['value']) && ($proto = $this->proto($use_index)) && $proto->isFile($use_index));
     }
 
     /**

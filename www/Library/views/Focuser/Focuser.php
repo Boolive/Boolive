@@ -37,15 +37,15 @@ class Focuser extends Widget
         }
         $object = null;
         // объект по умолчанию
-        if (empty($uri) && ($object = Data::object('/Contents')->find(array('count'=>1, 'order'=>'`order` ASC')))){
+        if (empty($uri) && ($object = Data::read('/Contents')->find(array('count'=>1, 'order'=>'`order` ASC')))){
             $object = reset($object);
         }
         // ищем в /Contents
-        if (!$object && !empty($uri)) $object = Data::object('/Contents'.$uri);
+        if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri);
         // точное соответсвие uri
-        if (!$object) $object = Data::object($uri);
+        if (!$object) $object = Data::read($uri);
         // корнеь
-        if (!$object && $uri == '/Site/') $object = Data::object('');
+        if (!$object && $uri == '/Site/') $object = Data::read('');
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = $object;
     }

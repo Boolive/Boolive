@@ -19,7 +19,7 @@ class NextPrevNavigation extends Widget
     {
         parent::initInput($input);
 
-        $object_types = $this->object_types->findAll();
+        $object_types = $this->object_types->findAll2();
         $correct = false;
 
         foreach ($object_types as $type) {
@@ -41,7 +41,7 @@ class NextPrevNavigation extends Widget
     {
         $object = $this->_input['REQUEST']['object'];
 
-        $object_types = $this->object_types->findAll();
+        $object_types = $this->object_types->findAll2();
 
         $proto_in = '(';
         foreach ($object_types as $type) {

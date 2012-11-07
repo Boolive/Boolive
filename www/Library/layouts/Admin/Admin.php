@@ -39,6 +39,6 @@ class Admin extends Focuser
         }
         $uri = mb_substr($uri, 6);
         // Установка во входящие данные
-        $this->_input_child['REQUEST']['object'] = Data::object($uri);
+        $this->_input_child['REQUEST']['object'] = Data::read($uri);
     }
 }
