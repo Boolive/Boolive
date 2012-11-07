@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Окт 17 2012 г., 16:47
+-- Время создания: Ноя 07 2012 г., 11:54
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -240,7 +240,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/admin_widgets', '', 0, 0, 2, 5, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add', '', 0, 0, 3, 4, '/Library/views/Widget', 'Add.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/SelectObject', '', 0, 0, 4, 4, '/Library/admin_widgets/SelectObject', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/admin_widgets/Add/SelectObject/title', '', 0, 0, 5, 1, '/Library/admin_widgets/SelectObject/title', 'Добавить', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Add/SelectObject/title', '', 0, 0, 5, 1, '/Library/admin_widgets/SelectObject/title', 'Выбор другого объекта', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Предоставляет выбор объекта для добавления его в отображаемый объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/icon', '', 0, 0, 4, 3, '/Library/content_samples/Image', 'icon.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Add/res/jquery.ui.Add', '', 0, 0, 5, 4, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Add.js', 0, 1, 0, 0, 0, 0, 0),
@@ -281,11 +281,13 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/admin_widgets/Programs/res/jquery.ui.Programs', '', 0, 0, 5, 2, '/Library/javascript_plugins/jQueryAjaxWidget', 'jquery.ui.Programs.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/res/style', '', 0, 0, 5, 2, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/switch_views', '', 0, 0, 4, 3, '/Library/views/AutoWidget/switch_views', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/admin_widgets/Programs/switch_views/case_default', '', 0, 0, 5, 4, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_default', '', 0, 0, 5, 10, '/Library/views/SwitchCase', 'all', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/switch_views/case_default/Add', '', 0, 0, 6, 5, '/Library/admin_widgets/Add', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/switch_views/case_default/Attribs', '', 0, 0, 6, 4, '/Library/admin_widgets/Attribs', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/switch_views/case_default/Delete', '', 0, 0, 6, 6, '/Library/admin_widgets/Delete', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/switch_views/case_default/Explorer', '', 0, 0, 6, 3, '/Library/admin_widgets/Explorer', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_richtext', '', 0, 0, 5, 3, '/Library/views/SwitchCase', '/Library/content_samples/RichText', 0, 0, 0, 0, 0, 0, 0),
+('/Library/admin_widgets/Programs/switch_views/case_richtext/RichText', '', 0, 0, 6, 1, '/Library/content_widgets/RichText', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/Programs/title', '', 0, 0, 4, 1, '/Library/views/AutoWidget/title', 'Программы для работы с объектами', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/SelectObject', '', 0, 0, 3, 8, '/Library/views/Widget', 'SelectObject.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/admin_widgets/SelectObject/cancel_title', '', 0, 0, 4, 3, NULL, 'Отмена', 0, 0, 0, 0, 0, 0, 0),
@@ -581,10 +583,10 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.9.min.js', 0, 1, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0);
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.9.min.js', 0, 1, 0, 0, 0, 0, 0);
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/title', '', 0, 0, 4, 1, '/Library/views/jQueryScript/title', 'jQuery UI скрипт', 0, 0, 0, 0, 0, 0, 0);
 
@@ -663,7 +665,6 @@ CREATE TABLE IF NOT EXISTS `site` (
 --
 
 INSERT INTO `site` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
-('', '0', 0, 1349348313, 0, 1, NULL, '1', 0, 0, 0, 0, 0, 0, 0),
 ('/Contents', '', 0, 1342077181, 1, 1, NULL, 'Contents.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Interfaces', '', 0, 1342082233, 1, 2, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Keywords', '', 0, 1342077181, 1, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
