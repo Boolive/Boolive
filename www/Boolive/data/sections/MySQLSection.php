@@ -40,44 +40,6 @@ class MySQLSection extends Section
     }
 
     /**
-     * Выбор объекта по его uri
-     * @param string $uri URI объекта
-     * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
-     * @param int $owner Код владельца. Если не указан, то выбирается общий
-     * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
-     * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
-     * @return \Boolive\data\Entity|null
-     */
-    public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false)
-    {
-        //$key = $uri.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
-        //if (array_key_exists($key, $this->buffer)) return $this->buffer[$key];
-
-        $where = 'uri=? AND lang=? AND owner=?';
-        $values = array($uri, $lang, $owner);
-        if (isset($date)){
-            $where.=' AND date=?';
-            $values[] = $date;
-            $is_history = null;
-        }
-        if (isset($is_history)){
-            $where.=' AND is_history=?';
-            $values[] = (int)$is_history;
-        }
-        $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE '.$where.' LIMIT 0,1');
-        $q->execute($values);
-
-        if ($attrs = $q->fetch(DB::FETCH_ASSOC)){
-            //Trace::groups('DB')->group('real_count')->set(Trace::groups('DB')->group('real_count')->get()+1);
-            $obj = Data::makeObject($attrs, false, true);
-            return /*$this->buffer[$key] = */$obj;
-        }else{
-            //Trace::groups('DB')->group('virtual_count')->set(Trace::groups('DB')->group('virtual_count')->get()+1);
-        }
-        return /*$this->buffer[$key] = */null;
-    }
-
-    /**
      * Обновление объекта или добавление, если объект не существует
      * Идентификация объекта выполняется по uri
      * @param \Boolive\data\Entity $entity
@@ -280,6 +242,71 @@ class MySQLSection extends Section
     }
 
     /**
+     * Выбор объекта по его uri
+     * @param string $uri URI объекта
+     * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
+     * @param int $owner Код владельца. Если не указан, то выбирается общий
+     * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+     * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
+     * @return \Boolive\data\Entity|null
+     */
+    public function read($uri, $lang = '', $owner = 0, $date = null, $is_history = false)
+    {
+        //$key = $uri.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
+        //if (array_key_exists($key, $this->buffer)) return $this->buffer[$key];
+
+        $where = 'uri=? AND lang=? AND owner=?';
+        $values = array($uri, $lang, $owner);
+        if (isset($date)){
+            $where.=' AND date=?';
+            $values[] = $date;
+            $is_history = null;
+        }
+        if (isset($is_history)){
+            $where.=' AND is_history=?';
+            $values[] = (int)$is_history;
+        }
+        $q = $this->db->prepare('SELECT * FROM `'.$this->table.'` WHERE '.$where.' LIMIT 0,1');
+        $q->execute($values);
+
+        if ($attrs = $q->fetch(DB::FETCH_ASSOC)){
+            //Trace::groups('DB')->group('real_count')->set(Trace::groups('DB')->group('real_count')->get()+1);
+            $obj = Data::makeObject($attrs, false, true);
+            return /*$this->buffer[$key] = */$obj;
+        }else{
+            //Trace::groups('DB')->group('virtual_count')->set(Trace::groups('DB')->group('virtual_count')->get()+1);
+        }
+        return /*$this->buffer[$key] = */null;
+    }
+
+    /**
+     * Выбор записей без условий
+     * @param $from URI родительского объекта, чьих подчиненных выбирать
+     * @param $start Смещение от первого найденного объекта, с которого начинать выбор
+     * @param $count Количество выбираемых объектов
+     * @param bool $with_history
+     * @return array Выбранные объекты.
+     */
+    public function select2($from, $start, $count, $with_history = false)
+    {
+        $result = array();
+        $q = $this->db->prepare("SELECT * FROM {$this->table} WHERE uri like ? AND level=?"
+            .($with_history?'':' AND is_history=0')
+            .' LIMIT ?,?'
+        );
+        $q->bindValue(1, $from.'/%');
+        $q->bindValue(2, mb_substr_count($from, '/') + 1, DB::PARAM_INT);
+        $q->bindValue(3, $start, DB::PARAM_INT);
+        $q->bindValue(4, $count, DB::PARAM_INT);
+        $q->execute();
+        while ($attr = $q->fetch(DB::FETCH_ASSOC)){
+            $obj = Data::makeObject($attr, false, true);
+            $result[] = $obj;
+        }
+        return $result;
+    }
+
+    /**
      * Выбор объектов по условию
      * @param array $cond Услвоие поиска
      * $cond = array(
@@ -353,6 +380,73 @@ class MySQLSection extends Section
         return 0;
     }
 
+    /**
+     * Преобразование структуированного условия  в SQL
+     * @param array $cond Структуированное условие на массивах
+     * @return array Ассоциативнный массив из строки SQL услвоия и массива вставляемых значений
+     */
+    static public function toSQLCond($cond)
+    {
+        $sql = '';
+        $binds = array();
+        // Условие
+        if (isset($cond['where'])){
+            $convert = function($cond, $glue = ' AND ') use (&$convert, &$binds){
+                if ($cond[0] == 'any' || $cond[0] == 'all'){
+                    $glue = $cond[0] == 'any'?' OR ':' AND ';
+                    $cond = $cond[1];
+                }
+                foreach ($cond as $i => $c){
+                    if (is_array($c)){
+                        if ($c[0]=='attr'){
+                            $cond[$i] = '`'.$c[1].'` '.$c[2].' ?';
+                            $binds[] = $c[3];
+                        }else
+                        if ($c[0]=='parent'){
+                            $cond[$i] = '`uri` LIKE ?';
+                            $binds[] = $c[1].'%';
+                        }else
+                        if ($c[0]=='any'){
+                            $cond[$i] = '('.$convert($c[1], ' OR ').')';
+                        }else
+                        if ($c[0]=='all'){
+                            $cond[$i] = '('.$convert($c[1], ' AND ').')';
+                        }else
+                        if ($c[0]=='not'){
+                            $cond[$i] = '!('.$convert($c[1], ' AND ').')';
+                        }else{
+                            unset($cond[$i]);
+                        }
+                    }
+                }
+                return implode($glue, $cond);
+            };
+            $sql = $convert($cond['where']);
+        }
+        // Сортировка
+        if (isset($cond['order'])){
+            $order = '';
+            $cnt = sizeof($cond['order']);
+            for ($i=0; $i<$cnt; $i++){
+                if (sizeof($cond['order'][$i])==2){
+                    if ($order) $order.=', ';
+                    $order.= $cond['order'][$i][0].' '.$cond['order'][$i][1];
+                }
+            }
+            if ($order) $sql.=' ORDER BY '.$order;
+        }
+        // Ограничения
+        if (isset($cond['limit'])){
+            $sql.=' LIMIT ?,?';
+            $binds[] = $cond['limit'][0];
+            $binds[] = $cond['limit'][1];
+        }
+        return array('sql'=>$sql, 'binds'=>$binds);
+    }
+
+    /**
+     * Устновка модуля
+     */
     public function install()
     {
         $this->db->exec('

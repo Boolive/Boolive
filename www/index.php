@@ -18,4 +18,4 @@ require DIR_SERVER_ENGINE.'Boolive.php';
 // Активация Boolive
 Boolive::activate();
 // Исполнение корневого объекта. Вывод результата клиенту
-echo Data::object()->start(new Commands(), Input::getSource());
+echo Data::getObject()->start(new Commands(), Input::getSource());

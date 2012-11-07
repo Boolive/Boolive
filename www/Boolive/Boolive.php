@@ -35,6 +35,7 @@ namespace Boolive
             if (!self::isIncluded($class_name)){
 
                 if (empty($class_name)){
+                    $_SERVER['BOOLIVE_TIME'] = microtime(true);
                     // Актвация самого себя
                     self::$activated = array();
                     self::$included = array();

@@ -311,17 +311,17 @@ class Check
         $class = isset($rule->entity[0])? $rule->entity[0] : '\Boolive\data\Entity';
         if (is_string($value)){
             // Пробуем получить объект по uri
-            $value = Data::object($value);
+            $value = Data::read($value);
         }else
         if (is_array($value)){
             $value = Data::makeObject($value);
 
             if (isset($value['uri'])){
-                $obj = Data::object($value);
+                $obj = Data::read($value);
             }else
             if (isset($value['proto'])){
-                $obj = Data::object($value['proto'])->birth();
-                if (isset($value['parent']) && $parent = Data::object($value['parent'])){
+                $obj = Data::read($value['proto'])->birth();
+                if (isset($value['parent']) && $parent = Data::read($value['parent'])){
                     $parent->__set(null, $obj);
                 }
             }

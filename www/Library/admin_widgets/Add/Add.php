@@ -52,7 +52,7 @@ class Add extends AutoWidgetList
 
     protected function getList(){
         // @todo Сделать выбор часто используемых объектов
-        $obj = \Boolive\data\Data::object('/Library/basic/simple/Object');
+        $obj = \Boolive\data\Data::read('/Library/basic/simple/Object');
         return array($obj);
     }
 }

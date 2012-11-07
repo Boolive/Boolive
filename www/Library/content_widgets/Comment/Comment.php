@@ -32,7 +32,7 @@ class Comment extends Widget
         }
         if ($sub_comments_flag) {
             $this->_input_child['show_title'] = false;
-            $v['sub_comments'] = Data::object('/Library/content_widgets/Comments')->start($this->_commands, $this->_input_child);
+            $v['sub_comments'] = Data::read('/Library/content_widgets/Comments')->start($this->_commands, $this->_input_child);
         }
         return parent::work($v);
     }

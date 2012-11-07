@@ -9,7 +9,8 @@
 namespace Boolive\template;
 
 use Boolive\errors\Error,
-    Boolive\data\Data;
+    Boolive\data\Data,
+    Boolive\functions\F;
 
 class Template
 {
@@ -22,11 +23,7 @@ class Template
      * Загрузка шаблонизаторов
      */
     static function activate(){
-        self::$engines = array();
-        if (is_file(DIR_SERVER.self::CONFIG_FILE)){
-            include DIR_SERVER.self::CONFIG_FILE;
-            if (isset($config)) self::$engines = $config;
-        }
+        self::$engines = F::loadConfig(DIR_SERVER.self::CONFIG_FILE);
     }
 
     /**

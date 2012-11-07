@@ -33,13 +33,24 @@ class view extends AutoWidgetList
 
     protected function getList(){
         // @todo Сделать настраиваемый фильтр
-        $list = $this->_input['REQUEST']['object']->findAll(array('order' =>'`order` ASC'));
-        foreach ($list as $key => $object){
-            /** @var $object \Boolive\data\Entity */
-            if (!$object->is('/Library/content_samples/Page') && !$object->is('/Library/content_samples/Part')){
-                unset($list[$key]);
-            }
-        }
+        $list = $this->_input['REQUEST']['object']->findAll2(array(
+            'where' => array(
+                array('attr', 'is_history', '=', 0),
+                array('attr', 'is_delete', '=', 0),
+                array('is', '/Library/content_samples/Page', '/Library/content_samples/Part')
+            ),
+            'order' => array(
+                array('order', 'ASC')
+            )
+        ));
+
+//            findAll(array('order' =>'`order` ASC'));
+//        foreach ($list as $key => $object){
+//            /** @var $object \Boolive\data\Entity */
+//            if (!$object->is('/Library/content_samples/Page') && !$object->is('/Library/content_samples/Part')){
+//                unset($list[$key]);
+//            }
+//        }
         return $list;
     }
 }

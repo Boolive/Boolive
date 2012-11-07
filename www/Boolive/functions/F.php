@@ -220,4 +220,18 @@ class F
         }
         return @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', str_replace(array_keys(self::$translit_table), array_values(self::$translit_table), $string));
     }
+
+    /**
+     * Загрзка файла конфигурации
+     * @param $file
+     * @return array
+     */
+    static function loadConfig($file)
+    {
+        if (is_file($file)){
+            include $file;
+            if (isset($config)) return $config;
+        }
+        return array();
+    }
 }

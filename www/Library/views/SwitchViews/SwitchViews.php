@@ -78,7 +78,16 @@ class SwitchViews extends Widget
 
     protected function getCases(){
         if (!isset($this->_cases)){
-            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC'), false, null);
+            $this->_cases = $this->findAll2(array(
+                'where' => array(
+                    array('attr', 'is_history', '=', 0),
+                    array('attr', 'is_delete', '=', 0),
+                ),
+                'order' => array(
+                    array('order', 'ASC')
+                )
+            ), false, null);
+//            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC'), false, null);
         }
         return $this->_cases;
     }

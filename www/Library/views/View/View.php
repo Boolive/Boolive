@@ -138,7 +138,17 @@ class View extends Entity
     public function startChildren()
     {
         $result = array();
-        $list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
+        $list = $this->findAll2(array(
+            'where' => array(
+                array('attr', 'is_history', '=', 0),
+                array('attr', 'is_delete', '=', 0)
+            ),
+            'order' => array(
+                array('order', 'ASC')
+            )
+        ));
+
+        //findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $out = $child->start($this->_commands, $this->_input_child);

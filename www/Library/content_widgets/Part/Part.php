@@ -26,13 +26,20 @@ class Part extends AutoWidgetList
     protected function getList(){
         $count_per_page = max(1, $this->count_per_page->getValue());
         $obj = $this->_input['REQUEST']['object'];
-        $list = $obj->findAll(array(
-                'order' =>'`order` ASC',
-                'start' => ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
-                'count' => $count_per_page
+        $list = $obj->findAll2(array(
+            'order' => array(array('order', 'ASC')),
+            'limit' => array(
+                ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
+                $count_per_page
             )
-        );
-        $this->_input_child['REQUEST']['page_count'] = ceil($obj->findCountAll()/$count_per_page);
+        ));
+//        $list = $obj->findAll(array(
+//                'order' =>'`order` ASC',
+//                'start' => ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
+//                'count' => $count_per_page
+//            )
+//        );
+        $this->_input_child['REQUEST']['page_count'] = ceil($obj->findAll2(array('select'=>'count'))/$count_per_page);
         return $list;
     }
 }
