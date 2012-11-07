@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Ноя 07 2012 г., 11:54
+-- Время создания: Ноя 07 2012 г., 16:38
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -300,12 +300,14 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/basic', '', 0, 0, 2, 1, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/Package', '', 0, 0, 3, 5, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/basic/members/User', '', 0, 0, 4, 1, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member', '', 0, 0, 4, 2, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/title', '', 0, 0, 5, 1, NULL, 'Член', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/User', '', 0, 0, 4, 3, '/Library/basic/members/Member', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User/email', '', 0, 0, 5, 3, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User/name', '', 0, 0, 5, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/basic/members/User/title', '', 0, 0, 5, 1, NULL, 'Пользователь', 0, 0, 0, 0, 0, 0, 0),
-('/Library/basic/members/UserGroup', '', 0, 0, 4, 2, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/basic/members/UserGroup/title', '', 0, 0, 5, 1, NULL, 'Группа пользователей', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/User/title', '', 0, 0, 5, 1, '/Library/basic/members/Member/title', 'Пользователь', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/UserGroup', '', 0, 0, 4, 4, '/Library/basic/members/Member', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/UserGroup/title', '', 0, 0, 5, 1, '/Library/basic/members/Member/title', 'Группа пользователей', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple', '', 0, 0, 3, 4, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Email', '', 0, 0, 4, 3, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Number', '', 0, 0, 4, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -581,10 +583,10 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/jQueryScript/depends/jquery-1.8.1.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для взаимодействия с HTML', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/depends/jquery-1.8.1.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.9.min.js', 0, 1, 0, 0, 0, 0, 0);
+('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.9.min.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery UI', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/description', '', 0, 0, 4, 2, '/Library/views/jQueryScript/description', 'JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI', 0, 0, 0, 0, 0, 0, 0),

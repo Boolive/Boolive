@@ -12,7 +12,7 @@ class Auth
 {
     /**
      * Текущий пользователь
-     * @return \Boolive\data\Entity
+     * @return \Library\basic\members\Member\Member
      */
     static function getUser()
     {
