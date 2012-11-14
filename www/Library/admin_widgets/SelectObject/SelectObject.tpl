@@ -4,7 +4,7 @@
             <h2><?php echo $v['title'];?></h2>
             <p><?php echo $v['message'];?></p>
             <div class="view">
-                <?php echo $v['programs']->string();?>
+                <?php echo $v->programs->string();?>
             </div>
         </div>
     </div>
