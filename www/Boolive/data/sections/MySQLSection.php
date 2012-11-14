@@ -45,7 +45,7 @@ class MySQLSection extends Section
      * @param \Boolive\data\Entity $entity
      * @return mixed
      */
-    public function put($entity)
+    public function write($entity)
     {
         if ($entity->check()){
             // Атрибуты отфильтрованы, так как нет ошибок
@@ -238,7 +238,9 @@ class MySQLSection extends Section
             $entity->_attribs = $attr;
             $entity->_virtual = false;
             $entity->_changed = false;
+            return true;
         }
+        return false;
     }
 
     /**

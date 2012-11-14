@@ -18,7 +18,8 @@ use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
     Boolive\develop\Trace,
     Boolive\values\Rule,
     Boolive\input\Input,
-    Boolive\functions\F;
+    Boolive\functions\F,
+    Boolive\auth\Auth;
 
 class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 {
@@ -38,6 +39,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     protected $_virtual = true;
     /** @var bool Признак, сущесвтует объект или нет. Объект не существует, если виртуальный и все его прототипы виртуальные */
     protected $_exist = false;
+    /** @var bool Признак, доступен объект или нет */
+    protected $_accessible = true;
     /** @var bool Признак, изменены ли атрибуты объекта */
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
@@ -54,11 +57,12 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     protected $_rename = false;
 
-    public function __construct($attribs = array(), $virtual = true, $exist = false)
+    public function __construct($attribs = array(), $virtual = true, $exist = false, $accessible = true)
     {
         $this->_attribs = $attribs;
         $this->_virtual = (bool)$virtual;
         $this->_exist = (bool)$exist;
+        $this->_accessible = (bool)$accessible;
     }
 
     /**
@@ -130,6 +134,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 }
             }
             return $this->_attribs[$name];
+        }else
+        if ($proto = $this->proto()){
+            return $proto[$name];
         }
         return null;
     }
@@ -295,12 +302,13 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             if (isset($value->_attribs['uri']) && isset($this->_attribs['uri']) && $value->_attribs['uri']!= $this->_attribs['uri'].'/'.$name){
                 // В качестве базового имени - имя прототипа.
                 if (isset($rename)) $rename = $value->getName();
-                $value = $value->birth();
+                $value = $value->birth($this);
             }
             // Установка uri для объекта, если есть свой uri
             if (isset($this->_attribs['uri'])) $value->_attribs['uri'] = $this->_attribs['uri'].'/'.$name;
             if (isset($rename)) $value->_rename = $rename;
             $value->_parent = $this;
+
             $this->_children[$name] = $value;
             return $value;
         }else{
@@ -342,135 +350,135 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         unset($this->_children[$name]);
     }
 
-    /**
-     * Поиск подчиенных объектов
-     * @todo По умолчанию указать язык и владельца
-     * @param array $cond Услвоие поиска
-     * <code>
-     * $cond = array(
-     *   'where' => '', // Условие на атрибуты объекта. Условие как в SQL на колонки таблицы.
-     *   'values' => array(), // Массив значений для вставки в условие вместо "?"
-     *   'order' => '', // Способ сортировки. Задается как в SQL, например: `order` DESC, `value` ASC
-     *   'count' => 0, // Количество выбираемых объектов
-     *   'start' => 0 // Смещение от первого найденного объекта, с которого начинать выбор
-     * );
-     * </code>
-     * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
-     * @param null $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
-     * @return array
-     */
-    public function find($cond = array(), $load = false, $key_by = null)
-    {
-        if ($s = Data::getSection($this['uri'], false)){
-            if (!empty($cond['where'])){
-                $cond['where'].=' AND uri like ? AND level=?';
-            }else{
-                $cond['where'] = 'uri like ? AND level=?';
-            }
-            $cond['values'][] = $this->_attribs['uri'].'/%';
-            $cond['values'][] = $this->getLevel()+1;
-            $results = $s->select($cond);
-            if ($load) $this->_children = $results;
-            // Смена ключей масива
-            if ($key_by){
-                $list = array();
-                $cnt = sizeof($results);
-                for ($i=0; $i<$cnt; $i++){
-                    switch ($key_by){
-                        case 'name': $key = $results[$i]->getName();
-                            break;
-                        case 'value': $key = $results[$i]->getValue();
-                            break;
-                        default: $key = $results[$i][$key_by];
-                    }
-                    $list[$key] = $results[$i];
-                }
-                $results = $list;
-            }
+//    /**
+//     * Поиск подчиенных объектов
+//     * @todo По умолчанию указать язык и владельца
+//     * @param array $cond Услвоие поиска
+//     * <code>
+//     * $cond = array(
+//     *   'where' => '', // Условие на атрибуты объекта. Условие как в SQL на колонки таблицы.
+//     *   'values' => array(), // Массив значений для вставки в условие вместо "?"
+//     *   'order' => '', // Способ сортировки. Задается как в SQL, например: `order` DESC, `value` ASC
+//     *   'count' => 0, // Количество выбираемых объектов
+//     *   'start' => 0 // Смещение от первого найденного объекта, с которого начинать выбор
+//     * );
+//     * </code>
+//     * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
+//     * @param null $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
+//     * @return array
+//     */
+//    public function find($cond = array(), $load = false, $key_by = null)
+//    {
+//        if ($s = Data::getSection($this['uri'], false)){
+//            if (!empty($cond['where'])){
+//                $cond['where'].=' AND uri like ? AND level=?';
+//            }else{
+//                $cond['where'] = 'uri like ? AND level=?';
+//            }
+//            $cond['values'][] = $this->_attribs['uri'].'/%';
+//            $cond['values'][] = $this->getLevel()+1;
+//            $results = $s->select($cond);
+//            if ($load) $this->_children = $results;
+//            // Смена ключей масива
+//            if ($key_by){
+//                $list = array();
+//                $cnt = sizeof($results);
+//                for ($i=0; $i<$cnt; $i++){
+//                    switch ($key_by){
+//                        case 'name': $key = $results[$i]->getName();
+//                            break;
+//                        case 'value': $key = $results[$i]->getValue();
+//                            break;
+//                        default: $key = $results[$i][$key_by];
+//                    }
+//                    $list[$key] = $results[$i];
+//                }
+//                $results = $list;
+//            }
+//
+//            return $results;
+//        }
+//        return array();
+//    }
 
-            return $results;
-        }
-        return array();
-    }
-
-    /**
-     * Поиск подчиненных объектов с учетом унаследованных
-     * @todo Ограничение количества выборки..
-     * @param array $cond Услвоие поиска
-     * <code>
-     * $cond = array(
-     *   'where' => '', // Условие на атрибуты объекта. Условие как в SQL на колонки таблицы.
-     *   'values' => array(), // Массив значений для вставки в условие вместо "?"
-     *   'order' => '', // Способ сортировки. Задается как в SQL, например: `order` DESC, `value` ASC
-     *   'count' => 0, // Количество выбираемых объектов
-     *   'start' => 0 // Смещение от первого найденного объекта, с которого начинать выбор
-     * );
-     * </code>
-     * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
-     * @param null|string $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
-     * @param bool $req Признак рекурсивного вызова метода (используется самим методом)
-     * @return array
-     */
-    public function findAll($cond = array(), $load = false, $key_by = 'name', $req = false)
-    {
-        $results = $this->find($cond, false, 'name');
-        if (empty($this->_attribs['override']) && $proto = $this->proto()){
-            $proto_sub = $proto->findAll($cond, false, 'name', true);
-            foreach ($proto_sub as $key => $child){
-                if (!isset($results[$key])){
-                    $bkey = $this['uri'].'/'.$key;//.' '.$this['lang'].' '.(int)$this['owner'];
-                    if (Data::bufferExist($bkey)){
-                        $results[$key] = Data::bufferGet($bkey);
-                    }else{
-                        $results[$key] = $child->birth();
-                        $results[$key]['uri'] = $this['uri'].'/'.$key;
-                        $results[$key]['order'] = $child['order'];
-                        $results[$key]['lang'] = $child['lang'];
-                        $results[$key]['owner'] = $child['owner'];
-                        // Объект ссылка?
-                        if (!empty($this->_attribs['is_link']) || !empty($proto->_attribs['is_link'])){
-                            $results[$key]['is_link'] = 1;
-                        }
-                        Data::bufferAdd($bkey, $results[$key]);
-                    }
-                }
-            }
-        }
-        if (!$req){
-            // Смена ключей, если требуется
-            if (empty($key_by)){
-                $results = array_values($results);
-            }else
-            if ($key_by != 'name'){
-                $list = array();
-                foreach ($results as $child){
-                    switch ($key_by){
-                        case null: $list[] = $child;
-                            break;
-                        case 'value': $list[$child->getValue()] = $child;
-                            break;
-                        default: $list[$child[$key_by]] = $child;
-                    }
-                }
-                $results = $list;
-            }
-            // Сортировки
-            if (!empty($cond['order']) && preg_match('/`([a-z_]+)`\s*(DESC)?/iu', $cond['order'], $math)){
-                uasort($results, function($a, $b) use ($math){
-                    if ($a[$math[1]] == $b[$math[1]]){
-                        return 0;
-                    }
-                    $comp = $a[$math[1]] < $b[$math[1]]? -1: 1;
-                    return (!empty($math[2]))? -1*$comp : $comp;
-                });
-            }
-            // Запоминаем результат в экземпляре
-            if ($load) $this->_children = $results;
-
-            //Trace::groups('DB')->group('findAll_count')->set(Trace::groups('DB')->group('findAll_count')->get()+1);
-        }
-        return $results;
-    }
+//    /**
+//     * Поиск подчиненных объектов с учетом унаследованных
+//     * @todo Ограничение количества выборки..
+//     * @param array $cond Услвоие поиска
+//     * <code>
+//     * $cond = array(
+//     *   'where' => '', // Условие на атрибуты объекта. Условие как в SQL на колонки таблицы.
+//     *   'values' => array(), // Массив значений для вставки в условие вместо "?"
+//     *   'order' => '', // Способ сортировки. Задается как в SQL, например: `order` DESC, `value` ASC
+//     *   'count' => 0, // Количество выбираемых объектов
+//     *   'start' => 0 // Смещение от первого найденного объекта, с которого начинать выбор
+//     * );
+//     * </code>
+//     * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
+//     * @param null|string $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
+//     * @param bool $req Признак рекурсивного вызова метода (используется самим методом)
+//     * @return array
+//     */
+//    public function findAll($cond = array(), $load = false, $key_by = 'name', $req = false)
+//    {
+//        $results = $this->find($cond, false, 'name');
+//        if (empty($this->_attribs['override']) && $proto = $this->proto()){
+//            $proto_sub = $proto->findAll($cond, false, 'name', true);
+//            foreach ($proto_sub as $key => $child){
+//                if (!isset($results[$key])){
+//                    $bkey = $this['uri'].'/'.$key;//.' '.$this['lang'].' '.(int)$this['owner'];
+//                    if (Data::bufferExist($bkey)){
+//                        $results[$key] = Data::bufferGet($bkey);
+//                    }else{
+//                        $results[$key] = $child->birth();
+//                        $results[$key]['uri'] = $this['uri'].'/'.$key;
+//                        $results[$key]['order'] = $child['order'];
+//                        $results[$key]['lang'] = $child['lang'];
+//                        $results[$key]['owner'] = $child['owner'];
+//                        // Объект ссылка?
+//                        if (!empty($this->_attribs['is_link']) || !empty($proto->_attribs['is_link'])){
+//                            $results[$key]['is_link'] = 1;
+//                        }
+//                        Data::bufferAdd($bkey, $results[$key]);
+//                    }
+//                }
+//            }
+//        }
+//        if (!$req){
+//            // Смена ключей, если требуется
+//            if (empty($key_by)){
+//                $results = array_values($results);
+//            }else
+//            if ($key_by != 'name'){
+//                $list = array();
+//                foreach ($results as $child){
+//                    switch ($key_by){
+//                        case null: $list[] = $child;
+//                            break;
+//                        case 'value': $list[$child->getValue()] = $child;
+//                            break;
+//                        default: $list[$child[$key_by]] = $child;
+//                    }
+//                }
+//                $results = $list;
+//            }
+//            // Сортировки
+//            if (!empty($cond['order']) && preg_match('/`([a-z_]+)`\s*(DESC)?/iu', $cond['order'], $math)){
+//                uasort($results, function($a, $b) use ($math){
+//                    if ($a[$math[1]] == $b[$math[1]]){
+//                        return 0;
+//                    }
+//                    $comp = $a[$math[1]] < $b[$math[1]]? -1: 1;
+//                    return (!empty($math[2]))? -1*$comp : $comp;
+//                });
+//            }
+//            // Запоминаем результат в экземпляре
+//            if ($load) $this->_children = $results;
+//
+//            //Trace::groups('DB')->group('findAll_count')->set(Trace::groups('DB')->group('findAll_count')->get()+1);
+//        }
+//        return $results;
+//    }
 
     public function findAll2($cond = array(), $load = false, $key_by = 'name')
     {
@@ -488,42 +496,110 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         return $result;
     }
 
-    /**
-     * Количество подчиенных удовлетворяющих условию
-     * @param array $cond Услвоие поиска
-     * @return int
-     */
-    public function findCount($cond = array())
-    {
-        if ($s = Data::getSection($this['uri'], false)){
-            if (!empty($cond['where'])){
-                $cond['where'].=' AND uri like ? AND level=?';
-            }else{
-                $cond['where'] = 'uri like ? AND level=?';
-            }
-            $cond['values'][] = $this->_attribs['uri'].'/%';
-            $cond['values'][] = $this->getLevel()+1;
-            return $s->select_count($cond);
-        }
-        return 0;
-    }
+//    /**
+//     * Количество подчиенных удовлетворяющих условию
+//     * @param array $cond Услвоие поиска
+//     * @return int
+//     */
+//    public function findCount($cond = array())
+//    {
+//        if ($s = Data::getSection($this['uri'], false)){
+//            if (!empty($cond['where'])){
+//                $cond['where'].=' AND uri like ? AND level=?';
+//            }else{
+//                $cond['where'] = 'uri like ? AND level=?';
+//            }
+//            $cond['values'][] = $this->_attribs['uri'].'/%';
+//            $cond['values'][] = $this->getLevel()+1;
+//            return $s->select_count($cond);
+//        }
+//        return 0;
+//    }
 
     /**
-     * Количество подчиенных удовлетворяющих условию с учётом прототипирования
-     * @param array $cond Услвоие поиска
-     * @param bool $req
-     * @return int
+     * Проверка объекта соответствию условию
+     * @param array $cond Условие
+     * @return bool
      */
-    public function findCountAll($cond = array(), $req = false)
+    public function verify($cond)
     {
-        $results = $this->find($cond, false, 'name');
-        if ($proto = $this->proto()){
-            $proto_sub = $proto->findCountAll($cond, true);
-            $results = array_replace($results, $proto_sub);
+        if (empty($cond)) return true;
+        if (is_array($cond[0])) $cond = array('all', $cond);
+        switch ($cond[0]){
+            // Все услвоия (AND)
+            case 'all':
+                foreach ($cond[1] as $c){
+                    if (!$this->verify($c)) return false;
+                }
+                return true;
+            // Хотябы одно условие (OR)
+            case 'any':
+                foreach ($cond[1] as $c){
+                    if ($this->verify($c)) return true;
+                }
+                return !sizeof($cond[1]);
+            // Отрицание условия (NOT)
+            case 'not':
+                return !$this->verify($cond[1]);
+            // Сравнение атрибута
+            case 'attr':
+                switch ($cond[2]){
+                    case '=': return $this[$cond[1]] == $cond[3];
+                    case '<': return $this[$cond[1]] < $cond[3];
+                    case '>': return $this[$cond[1]] > $cond[3];
+                    case '>=': return $this[$cond[1]] >= $cond[3];
+                    case '<=': return $this[$cond[1]] <= $cond[3];
+                    case '!=':
+                    case '<>': return $this[$cond[1]] != $cond[3];
+                    case 'like':
+                        $pattern = strtr($cond[3], array('%' => '*', '_' => '?'));
+                        return fnmatch($pattern, $this[$cond[1]]);
+                    case 'in':
+                        if (!is_array($cond[3])) $cond[3] = array($cond[3]);
+                        return in_array($cond[1], $cond[3]);
+                }
+                return false;
+            // Проверка родителя
+            case 'parent':
+                return mb_strpos($this->_attribs['uri'], $cond[1].'/') === 0;
+            // Услвоия на подчиненного
+            case 'child':
+                $child = $this->{$cond[1]};
+                if ($child->isExist()){
+                    if (isset($cond[2])){
+                        return $child->verify($cond[2]);
+                    }
+                    return true;
+                }
+                return false;
+            // Проверка наследования
+            case 'is':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $proto){
+                    if ($this->is($proto)) return true;
+                }
+                return false;
+            // Неподдерживаемые условия
+            default: return false;
         }
-        if ($req) return $results;
-        return count($results);
     }
+
+//    /**
+//     * Количество подчиенных удовлетворяющих условию с учётом прототипирования
+//     * @param array $cond Услвоие поиска
+//     * @param bool $req
+//     * @return int
+//     */
+//    public function findCountAll($cond = array(), $req = false)
+//    {
+//        $results = $this->find($cond, false, 'name');
+//        if ($proto = $this->proto()){
+//            $proto_sub = $proto->findCountAll($cond, true);
+//            $results = array_replace($results, $proto_sub);
+//        }
+//        if ($req) return $results;
+//        return count($results);
+//    }
 
     /**
      * Количество подчиненных в списке выгруженных
@@ -568,9 +644,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function check(&$errors = null)
     {
-        if ($this->_checked) return true;
         // "Контейнер" для ошибок по атрибутам и подчиненным объектам
         $errors = new Error('Неверный объект', $this['uri']);
+        if ($this->_checked) return true;
+
         // Проверка и фильтр атрибутов
         $attribs = new Values($this->_attribs);
         $this->_attribs = $attribs->get($this->getRule(), $error);
@@ -590,7 +667,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         if ($p = $this->parent()) $p->checkChild($this, $errors);
         // Если ошибок нет, то удаляем контейнер для них
         if (!$errors->isExist()){
-            $errors = null;
+            //$errors = null;
             return $this->_checked = true;
         }
         return false;
@@ -629,13 +706,10 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 // Если создаётся история, то нужна новая дата
                 if ($history) $this->_attribs['date'] = time();
                 // Сохранение себя
-                if ($this->_changed){
-                    if ($s = Data::getSection($this['uri'], true)){
-                        $s->put($this);
-                        $this->_virtual = false;
-                        $this->_exist = true;
-                        $this->_changed = false;
-                    }
+                if ($this->_changed && Data::write($this, $error)){
+                    $this->_virtual = false;
+                    $this->_exist = true;
+                    $this->_changed = false;
                 }
                 // @todo Если было переименование из-за _rename, то нужно обновить uri подчиненных
                 // Сохранение подчиененных
@@ -679,12 +753,14 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             $attr['is_logic'] = 0;
             if (isset($attr['level'])) $attr['level'] = mb_substr_count($attr['uri'], '/');
             if (!empty($for->_attribs['is_link'])) $attr['is_link'] = 1;
+            $access = $this->_accessible && $for->isAccessible();
         }else{
             $attr = array();
+            $access = $this->_accessible;
         }
         $attr['proto'] = Data::makeURI($this['uri'], $this['lang'], $this['owner']);
         if (!empty($this['is_link'])) $attr['is_link'] = true;
-        return new $class($attr, true, $this->_exist);
+        return new $class($attr, true, $this->_exist, $access);
     }
 
     /**
@@ -711,7 +787,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 if ($use_index){
                     $this->_proto = Data::read($info['uri'], $info['lang'], $info['owner']);
                 }else{
-                    $this->_proto = Data::getObject($info['uri'], $info['lang'], $info['owner']);
+                    $this->_proto = Data::read($info['uri'], $info['lang'], $info['owner']);
                 }
             }else{
                 $this->_proto = null;
@@ -914,6 +990,23 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
+     * Признак, доступен объект или нет для совершения опредленного действия над ним
+     * Доступность проверяется для текущего пользователя
+     * @param string $action_kind Название действия. По умолчанию дейсвте чтения объекта.
+     * @return bool
+     */
+    public function isAccessible($action_kind = 'read')
+    {
+        if ($this->_accessible){
+            if ($action_kind != 'read'){
+                return $this->verify(Auth::getUser()->getAccessCond($action_kind, $this->getParentUri(), 1));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Признак, находится ли объект в процессе сохранения?
      * @return bool
      */
@@ -969,6 +1062,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         $trace['_changed'] = $this->_changed;
         $trace['_virtual'] = $this->_virtual;
         $trace['_exist'] = $this->_exist;
+        $trace['_accesible'] = $this->_accessible;
         $trace['_checked'] = $this->_checked;
         /*if ($this->_rename) */$trace['_rename'] = $this->_rename;
         //$trace['_proto'] = $this->_proto;

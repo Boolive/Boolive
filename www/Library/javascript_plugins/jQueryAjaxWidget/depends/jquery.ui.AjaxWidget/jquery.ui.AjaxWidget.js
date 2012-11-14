@@ -39,7 +39,7 @@
             }
             // Обработка Ajax ошибок
             this.element.ajaxError(function(e, jqxhr, settings, exception) {
-                alert('AJAX error: '+ jqxhr.statusText);
+                alert('AJAX error: '+ jqxhr.responseText);
             });
             // Добавление нового подчиненного в свой список
             this.element.on('_create', function(e, widget){

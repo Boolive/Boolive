@@ -129,7 +129,7 @@
                     <a class="btn cancel" href="#">Отмена</a>
                     <a class="btn hide reset">Восстановить</a>
                     <a class="btn btn-success btn-disable submit" href="#">Сохранено</a>
-                    <pre class="submit-message"></pre>
+                    <p class="submit-message"></p>
                 </div>
             </div>
         </form>

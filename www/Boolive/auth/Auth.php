@@ -8,6 +8,8 @@
  */
 namespace Boolive\auth;
 
+use Boolive\data\Data;
+
 class Auth
 {
     /**
@@ -16,6 +18,6 @@ class Auth
      */
     static function getUser()
     {
-        return \Boolive\data\Data::getObject('/Members/registered/admins/vova');
+        return Data::read('/Members/registered/admins/vova', '', 0, null, false, false);
     }
 }
