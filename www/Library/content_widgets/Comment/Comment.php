@@ -20,7 +20,15 @@ class Comment extends Widget
         $v['text'] = $object->text->getValue();
         $v['author'] = $object->author;
         $v['sub_comments'] = null;
-        $object->find(array('where' => 'is_history=0 and is_delete=0', 'order' => '`order` ASC'), true);
+        $object->findAll2(array(
+                'where' => array(
+                    array('attr', 'is_history', '=', 0),
+                    array('attr', 'is_delete', '=', 0),
+                ),
+                'order' => array(
+                    array('order', 'ASC')
+                )
+            ), true);
         $i = 1;
         $sub_comments_flag = false;
         foreach ($object->_children as $child) {

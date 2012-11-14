@@ -43,14 +43,6 @@ class view extends AutoWidgetList
                 array('order', 'ASC')
             )
         ));
-
-//            findAll(array('order' =>'`order` ASC'));
-//        foreach ($list as $key => $object){
-//            /** @var $object \Boolive\data\Entity */
-//            if (!$object->is('/Library/content_samples/Page') && !$object->is('/Library/content_samples/Part')){
-//                unset($list[$key]);
-//            }
-//        }
         return $list;
     }
 }

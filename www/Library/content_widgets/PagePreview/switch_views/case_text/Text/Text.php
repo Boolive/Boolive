@@ -23,6 +23,5 @@ class Text extends RichText
             ),
             'limit' => array(0, 2)
         ), false, null);
-        //findAll(array('order' =>'`order` ASC', 'count'=>2));
     }
 }

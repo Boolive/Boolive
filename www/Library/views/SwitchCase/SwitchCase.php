@@ -81,8 +81,6 @@ class SwitchCase extends View
                     array('order', 'ASC')
                 )
             ), false, null);
-
-            //$this->findAll(array('where' => 'is_history=0 and is_delete=0', 'order'=>'`order` ASC'));
             unset($this->_views['title'], $this->_views['description']);
         }
         return $this->_views;
