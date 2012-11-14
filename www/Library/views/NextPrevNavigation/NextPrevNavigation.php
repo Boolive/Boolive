@@ -2,7 +2,7 @@
 /**
  * Виджет навигации по страницам ("Следующая", "Предыдущая")
  *
- * @version 1.0
+ * @version 1.1
  * @author Azat Galiev <AzatXaker@gmail.com>
  */
 
@@ -15,125 +15,97 @@ use Library\views\Widget\Widget,
 
 class NextPrevNavigation extends Widget
 {
-	protected function initInput($input)
+	/** @var array Типы объектов, на которые возможен переход */
+    private $types;
+
+    /**
+     * Типы объектов, на которые возможен переход
+     * @return array
+     */
+    public function getTypes()
     {
-        parent::initInput($input);
-
-        $object_types = $this->object_types->findAll2();
-        $correct = false;
-
-        foreach ($object_types as $type) {
-            if ($this->_input['REQUEST']['object']->is($type['value'])) {
-
-                $correct = true;
+        if (!isset($this->types)){
+            $types = $this->object_types->findAll2();
+            unset($types['title'], $types['description']);
+            foreach ($types as $key => $type) {
+                $type = $type->notLink();
+                $types[$key] = $type['uri'];
             }
+            $this->types = array_values($types);
         }
+        return $this->types;
+    }
 
-        if (!$correct) {
-            // Объект не является разрешенным
-            if (!isset($this->_input_error)) {
-                $this->_input_error = new Error('Объект не является разрешенным', 'page');
-            }
-        }
+    /**
+     * Возвращает правило на входящие данные
+     * @return null|\Boolive\values\Rule
+     */
+    public function getInputRule()
+    {
+        return Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
+                        'object' => Rule::entity(array('is', $this->getTypes()))->default($this->object)->required()
+                    )
+                )
+            )
+        );
     }
 
     public function work($v = array())
     {
         $object = $this->_input['REQUEST']['object'];
-
-        $object_types = $this->object_types->findAll2();
-
-        $proto_in = '(';
-        foreach ($object_types as $type) {
-            if ($type->getName() == 'title' || $type->getName() == 'description')
-                continue;
-
-            $proto = $type->notLink();
-
-            if ($proto_in == '(') {
-                $proto_in .= '\'' . $proto['uri'] . '\'';
-            } else {
-                $proto_in .= ', \'' . $proto['uri'] . '\'';
-            }
-        }
-        $proto_in .= ')';
-
-        /*$next = array();
-        $prev = array();
-
-        $sub_page = $object->find(array(
-            'where' => '`proto` = \'/Library/content_samples/Page\'',
-            'count' => 1,
-            'order' => '`order` ASC'
-        ));
-
-        if (count($sub_page) != 0) {
-            $next = $sub_page[0];
-        }
-
-        if ($object->parent()->is('/Library/content_samples/Page')) {
-            $first = $object->parent()->find(array(
-                'where' => '`proto` = \'/Library/content_samples/Page\'',
-                'count' => 1,
-                'order' => '`order` ASC',
-            ));
-
-            if (count($first) != 0 && $first[0]['order'] == $object['order']) {
-                $prev = $object->parent();
-            }
-        }*/
-
-        //if (!isset($next)) {
-            $next = $object->parent()->find(array(
-                'where' => '`order` > ' . $object['order'] . ' and `proto` IN ' . $proto_in,
-                'count' => 1,
-                'order' => '`order` ASC',
-            ));
-        //}
-        $prev = $object->parent()->find(array(
-            'where' => '`order` < ' . $object['order'] . ' and `proto` IN ' . $proto_in,
-            'count' => 1,
-            'order' => '`order` DESC',
-        ));
-
-        if (!(count($next) == 0 && count($prev) == 0)) {
-            if (count($next) == 0) {
+        // Типы объектов, на которые возможен переход
+        $object_types = $this->getTypes();
+        // Следующая страницы
+        $next = $object->parent()->findAll2(array(
+                'where' => array(
+                    array('attr', 'order', '>', $object['order']),
+                    array('is', $object_types)
+                ),
+                'order' => array(
+                    array('order', 'ASC')
+                ),
+                'limit' => array(0,1)
+            ), false, null
+        );
+        // Предыдущая страница
+        $prev = $object->parent()->findAll2(array(
+            'where' => array(
+                    array('attr', 'order', '<', $object['order']),
+                    array('is', $object_types)
+                ),
+                'order' => array(
+                    array('order', 'DESC')
+                ),
+                'limit' => array(0,1)
+            ), false, null
+        );
+        // Если есть следующая или предыдущая, то виджет отображается
+        if (!empty($next) || !empty($prev)){
+             // Инфо следующей страницы
+            if (empty($next)){
                 $v['next'] = null;
-                $v['prev'] = $prev[0];
-
-                if (substr($v['prev']['uri'], 0, 10) == '/Contents/') {
-                    $v['prev_href'] = substr($v['prev']['uri'], 10);
+            }else{
+                $v['next'] = array('title' => $next[0]->title->getValue());
+                if (substr($next[0]['uri'], 0, 10) == '/Contents/') {
+                    $v['next']['href'] = substr($next[0]['uri'], 10);
                 } else {
-                    $v['prev_href'] = $v['prev']['uri'];
+                    $v['next']['href'] = $next[0]['uri'];
                 }
             }
-            if (count($prev) == 0) {
-                $v['next'] = $next[0];
+            // Инфо предыдущей страницы
+            if (empty($prev)){
                 $v['prev'] = null;
-
-                if (substr($v['next']['uri'], 0, 10) == '/Contents/') {
-                    $v['next_href'] = substr($v['next']['uri'], 10);
+            }else{
+                $v['prev'] = array('title' => $prev[0]->title->getValue());
+                if (substr($prev[0]['uri'], 0, 10) == '/Contents/') {
+                    $v['prev']['href'] = substr($prev[0]['uri'], 10);
                 } else {
-                    $v['next_href'] = $v['next']['uri'];
+                    $v['prev']['href'] = $prev[0]['uri'];
                 }
             }
-            if (count($prev) != 0 && count($next) != 0) {
-                $v['next'] = $next[0];
-                $v['prev'] = $prev[0];
-
-                if (substr($v['next']['uri'], 0, 10) == '/Contents/') {
-                    $v['next_href'] = substr($v['next']['uri'], 10);
-                } else {
-                    $v['next_href'] = $v['next']['uri'];
-                }
-                if (substr($v['prev']['uri'], 0, 10) == '/Contents/') {
-                    $v['prev_href'] = substr($v['prev']['uri'], 10);
-                } else {
-                    $v['prev_href'] = $v['prev']['uri'];
-                }
-            }
-
             return parent::work($v);
         }
+        return false;
     }
 }
