@@ -480,9 +480,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 //        return $results;
 //    }
 
-    public function findAll2($cond = array(), $load = false, $key_by = 'name')
+    public function findAll2($cond = array(), $load = false, $key_by = 'name', $depth = 1)
     {
-        $cond['from'] = array($this['uri'], 1);
+        $cond['from'] = array($this['uri'], $depth);
         $result = Data::select($cond, $key_by);
         if ($load){
             if ($key_by == 'name'){
@@ -562,6 +562,20 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             // Проверка родителя
             case 'parent':
                 return mb_strpos($this->_attribs['uri'], $cond[1].'/') === 0;
+            // Является частью чего-то с учётом наследования
+            // Например заголовок статьи story1 является его частью и частью эталона статьи
+            // Пример из жизни: Ветка является частью дерева, но не конкретезируется, какого именно
+            case 'of':
+                // @todo Учёт наследования
+                if (!isset($cond[2])) $cond[2] = 1;
+                if ($cond[2] == 3){
+                    return $this->_attribs['uri'] == $cond[1];
+                }else
+                if ($cond[2] == 2){
+                    return mb_strpos($this->_attribs['uri'], $cond[1].'/') === 0;
+                }else{
+                    return $this->_attribs['uri'] == $cond[1] || mb_strpos($this->_attribs['uri'], $cond[1].'/') === 0;
+                }
             // Услвоия на подчиненного
             case 'child':
                 $child = $this->{$cond[1]};
@@ -871,6 +885,19 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
+     * Имя родителя
+     * @return string
+     */
+    public function getParentName()
+    {
+        if ($parent_uri = $this->getParentUri()){
+            $names = F::splitRight('/', $parent_uri);
+            return $names[1];
+        }
+        return '';
+    }
+
+    /**
      * Имя объекта
      * @return string|null
      */
@@ -930,14 +957,18 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function getFile($root = false)
     {
+
         if (!empty($this->_attribs['is_file'])){
             $file = $this->getDir($root);
             if (!empty($this->_attribs['is_history'])) $file.='_history_/'.$this['date'].'_';
             return $file.$this->_attribs['value'];
-        }else
-        if (!isset($this->_attribs['value']) && $proto = $this->proto()){
-            return $proto->getFile($root);
+        }else{
+            $proto = $this->proto();
+            if (!isset($this->_attribs['value']) && $proto){
+                return $proto->getFile($root);
+            }
         }
+
         return null;
     }
 
