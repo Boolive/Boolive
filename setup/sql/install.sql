@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Ноя 07 2012 г., 16:38
+-- Время создания: Ноя 17 2012 г., 16:51
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -301,6 +301,17 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/basic/Package', '', 0, 0, 3, 5, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members', '', 0, 0, 3, 3, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/Member', '', 0, 0, 4, 2, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/access', '', 0, 0, 5, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/access/read', '', 0, 0, 6, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/access/read/right1', '', 0, 0, 7, 2, '', '1', 0, 0, 0, 0, 0, 1, 0),
+('/Library/basic/members/Member/access/read/right2', '', 0, 0, 7, 3, '/Contents/news', '-2', 0, 0, 0, 0, 0, 1, 0),
+('/Library/basic/members/Member/access/read/right3', '', 0, 0, 7, 4, '/Contents/news/news1', '1', 0, 0, 0, 0, 0, 1, 0),
+('/Library/basic/members/Member/access/read/right4', '', 0, 0, 7, 5, '/Contents/news/news1/title', '-1', 0, 0, 0, 0, 0, 1, 0),
+('/Library/basic/members/Member/access/read/right5', '', 0, 0, 7, 6, '/Contents/news/title', '3', 0, 0, 0, 0, 0, 1, 0),
+('/Library/basic/members/Member/access/read/title', '', 0, 0, 7, 1, NULL, 'Права на чтение', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/access/title', '', 0, 0, 6, 1, NULL, 'Права доступа', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/access/write', '', 0, 0, 6, 3, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/members/Member/access/write/title', '', 0, 0, 7, 1, NULL, 'Права на запись', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/Member/title', '', 0, 0, 5, 1, NULL, 'Член', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User', '', 0, 0, 4, 3, '/Library/basic/members/Member', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/User/email', '', 0, 0, 5, 3, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -575,7 +586,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Widget/object/description', '', 0, 0, 5, 2, NULL, 'Объект, который отображется и с кторым выполняются действия', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/object/title', '', 0, 0, 5, 1, NULL, 'Объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res', '', 0, 0, 4, 3, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/Widget/res/description', '', 0, 0, 5, 2, '/Library/views/ViewGroup/description', 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/Widget/res/description', '', 0, 0, 5, 2, '/Library/views/ViewGroup/description', 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Library/views/Widget/res/title', '', 0, 0, 5, 1, '/Library/views/ViewGroup/title', 'Ресурсы', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Виджет', 0, 0, 0, 0, 1, 0, 0),
 ('/Library/views/jQueryScript', '', 0, 0, 3, 5, '/Library/views/JavaScript', NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -583,8 +595,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/jQueryScript/depends/jquery-1.8.1.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для взаимодействия с HTML', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/depends/jquery-1.8.1.min/title', '', 0, 0, 6, 1, '/Library/views/JavaScript/title', 'jQuery', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryScript/description', '', 0, 0, 4, 2, '/Library/views/JavaScript/description', 'JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('/Library/views/jQueryScript/title', '', 0, 0, 4, 1, '/Library/views/JavaScript/title', 'jQuery скрипт', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript', '', 0, 0, 3, 16, '/Library/views/jQueryScript', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min', '', 0, 0, 5, 1, '/Library/views/JavaScript', 'jquery-ui-1.9.min.js', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/views/jQueryUIScript/depends/jquery-ui-1.9.min/description', '', 0, 0, 6, 2, '/Library/views/JavaScript/description', 'JavaScript-библиотека для пользовательского интерфейса на основе jQuery', 0, 0, 0, 0, 0, 0, 0),
@@ -628,6 +639,7 @@ INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Members/guests/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Гости', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered', '', 0, 0, 2, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins', '', 0, 0, 3, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/access/read/right5', '', 0, 0, 6, 1, '/Contents/news/news1/title', '-2', 0, 0, 0, 0, 0, 1, 0),
 ('/Members/registered/admins/title', '', 0, 0, 4, 1, '/Library/basic/members/UserGroup/title', 'Администраторы', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/vova', '', 0, 0, 4, 2, '/Library/basic/members/User', 'password_hash', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/vova/email', '', 0, 0, 5, 2, '/Library/basic/members/User/email', 'boolive@yandex.ru', 0, 0, 0, 0, 0, 0, 0),
