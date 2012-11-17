@@ -361,7 +361,7 @@ class Data
         $uri = F::splitRight('/', $uri);
         $names = F::explode('@', $uri[1], -3);
         return array(
-            'uri' => $uri[0].'/'.$names[0],
+            'uri' => (empty($uri[1])?'':$uri[0].'/').$names[0],
             'owner' => isset($names[1]) && is_numeric($names[1]) ? $names[1] : 0,
             'lang' => isset($names[2])? $names[2]: (isset($names[1]) && !is_numeric($names[1])? $names[1] : '')
         );
