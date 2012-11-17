@@ -439,76 +439,95 @@ class MySQLIndexes extends Index
                     $glue = $cond[0] == 'any'?' OR ':' AND ';
                     $cond = $cond[1];
                 }
-                    foreach ($cond as $i => $c){
-                        if (is_array($c) && !empty($c)){
-                            if ($c[0]=='attr'){
-                                // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
-                                if ($c[1] == 'value'){
-                                    $c[1] = is_numeric($c[3]) ? '_fvalue': '_svalue';
-                                }else
-                                // Если is_file, то используем колонку с унаследованным значением
-                                if ($c[1] == 'is_file'){
-                                    $c[1] = '_is_file';
-                                }
-                                // sql услвоие
-                                $cond[$i] = '`'.$table.'`.`'.$c[1].'` '.$c[2];
-                                // Учитываем особенность синтаксиса условия IN
-                                if (mb_strtolower($c[2]) == 'in'){
-                                    if (!is_array($c[3])) $c[3] = array($c[3]);
-                                    $cond[$i].='('.str_repeat('?,', sizeof($c[3])-1).'?)';
-                                    $binds = array_merge($binds, $c[3]);
-                                }else{
-                                    $cond[$i].= '?';
-                                    $binds[] = $c[3];
-                                }
+                foreach ($cond as $i => $c){
+                    if (is_array($c) && !empty($c)){
+                        if ($c[0]=='attr'){
+                            // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
+                            if ($c[1] == 'value'){
+                                $c[1] = is_numeric($c[3]) ? '_fvalue': '_svalue';
                             }else
-                            // Условие на наличие родителя. Сверяется URI объекта по маске
-                            if ($c[0]=='parent'){
+                            // Если is_file, то используем колонку с унаследованным значением
+                            if ($c[1] == 'is_file'){
+                                $c[1] = '_is_file';
+                            }
+                            // sql услвоие
+                            $cond[$i] = '`'.$table.'`.`'.$c[1].'` '.$c[2];
+                            // Учитываем особенность синтаксиса условия IN
+                            if (mb_strtolower($c[2]) == 'in'){
+                                if (!is_array($c[3])) $c[3] = array($c[3]);
+                                $cond[$i].='('.str_repeat('?,', sizeof($c[3])-1).'?)';
+                                $binds = array_merge($binds, $c[3]);
+                            }else{
+                                $cond[$i].= '?';
+                                $binds[] = $c[3];
+                            }
+                        }else
+                        // Условие на наличие родителя. Сверяется URI объекта по маске
+                        if ($c[0]=='parent'){
+                            $cond[$i] = '`'.$table.'`.`uri` LIKE ?';
+                            $binds[] = $c[1].'/%';
+                        }else
+                        // Является частью чего-то с учётом наследования
+                        // Например заголовок статьи story1 является его частью и частью эталона статьи
+                        // Пример из жизни: Ветка является частью дерева, но не конкретезируется, какого именно
+                        if ($c[0]=='of'){
+                            // @todo Учёт наследования
+                            if (!isset($c[2])) $c[2] = 1;
+                            if ($c[2] == 3){
+                                $cond[$i] = '`'.$table.'`.`uri` = ?';
+                                $binds[] = $c[1];
+                            }else
+                            if ($c[2] == 2){
                                 $cond[$i] = '`'.$table.'`.`uri` LIKE ?';
                                 $binds[] = $c[1].'/%';
-                            }else
-                            // OR
-                            if ($c[0]=='any'){
-                                $cond[$i] = '('.$convert($c[1], ' OR ').')';
-                            }else
-                            // AND
-                            if ($c[0]=='all'){
-                                $cond[$i] = '('.$convert($c[1], ' AND ').')';
-                            }else
-                            // NOT - отрицание условий
-                            if ($c[0]=='not'){
-                                $cond[$i] = 'NOT('.$convert($c[1], ' AND ').')';
-                            }else
-                            // Условия на подчиенного
-                            if ($c[0]=='child'){
-                                $joins[$table.'.'.$c[1]] = array($table, $c[1]);
-                                // Если условий на подчиненного нет, то проверяется его наличие
-                                if (empty($c[2])){
-                                    $cond[$i] = '(`'.$table.'.'.$c[1].'`.uuid IS NOT NULL)';
-                                }else{
-                                    $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1]).')';
-                                }
-                            }else
-                            // Условие на наличие прототипа.
-                            if ($c[0]=='is'){
-                                if (is_array($c[1])){
-                                    $c = $c[1];
-                                }else{
-                                    unset($c[0]);
-                                }
-                                $alias = 'is'.$is_cnt;
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {'.$index_table.'_proto} as `'.$alias.'` WHERE '.$alias.'.`o_uuid`=`'.$table.'`.uuid AND '.$alias.'.`p_uuid` IN ('.rtrim(str_repeat('md5(?),', sizeof($c)), ',').') LIMIT 0,1)';
-                                $binds = array_merge($binds, $c);
+                            }else{
+                                $cond[$i] = '(`'.$table.'`.`uri` = ? OR `'.$table.'`.`uri` LIKE ?)';
+                                $binds[] = $c[1];
+                                $binds[] = $c[1].'/%';
                             }
-                            // Не поддерживаемые услвоия игнорируем
-                            else{
-                                unset($cond[$i]);
+                        }else
+                        // OR
+                        if ($c[0]=='any'){
+                            $cond[$i] = '('.$convert($c[1], ' OR ').')';
+                        }else
+                        // AND
+                        if ($c[0]=='all'){
+                            $cond[$i] = '('.$convert($c[1], ' AND ').')';
+                        }else
+                        // NOT - отрицание условий
+                        if ($c[0]=='not'){
+                            $cond[$i] = 'NOT('.$convert($c[1], ' AND ').')';
+                        }else
+                        // Условия на подчиенного
+                        if ($c[0]=='child'){
+                            $joins[$table.'.'.$c[1]] = array($table, $c[1]);
+                            // Если условий на подчиненного нет, то проверяется его наличие
+                            if (empty($c[2])){
+                                $cond[$i] = '(`'.$table.'.'.$c[1].'`.uuid IS NOT NULL)';
+                            }else{
+                                $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1]).')';
                             }
-                        }else{
+                        }else
+                        // Условие на наличие прототипа.
+                        if ($c[0]=='is'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            $alias = 'is'.$is_cnt;
+                            $cond[$i] = 'EXISTS (SELECT 1 FROM {'.$index_table.'_proto} as `'.$alias.'` WHERE '.$alias.'.`o_uuid`=`'.$table.'`.uuid AND '.$alias.'.`p_uuid` IN ('.rtrim(str_repeat('md5(?),', sizeof($c)), ',').') LIMIT 0,1)';
+                            $binds = array_merge($binds, $c);
+                        }
+                        // Не поддерживаемые услвоия игнорируем
+                        else{
                             unset($cond[$i]);
                         }
+                    }else{
+                        unset($cond[$i]);
                     }
-                    return implode($glue, $cond);
+                }
+                return implode($glue, $cond);
             };
             // Еслия услвоия есть, то добавляем их в SQL
             if ($w = $convert($cond['where'])){
