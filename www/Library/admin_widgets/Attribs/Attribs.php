@@ -106,7 +106,9 @@ class Attribs extends Widget
                         /** @var $e \Boolive\errors\Error */
                         $v['error'][$key] = $e->getUserMessage(true,' ');
                     }
+                    $error->delete('_attribs');
                 }
+                $v['error']['_other_'] = $error->getUserMessage(true);
             }else{
                 $v['attrib'] = $this->callLoad();
             }

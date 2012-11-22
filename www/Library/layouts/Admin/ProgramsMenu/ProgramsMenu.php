@@ -12,18 +12,44 @@ class ProgramsMenu extends Widget
 {
     public function work($v = array())
     {
-        $cases = $this->programs->switch_views->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC'), false);
+        $cases = $this->programs->switch_views->findAll2(array(
+                'where' => array(
+                    array('attr', 'is_history', '=', 0),
+                    array('attr', 'is_delete', '=', 0),
+                ),
+                'order' => array(
+                    array('order', 'ASC')
+                )
+            ), false);
         $programs = array();
         foreach ($cases as $case){
             if ($case instanceof \Library\views\SwitchCase\SwitchCase){
                 $uri = $case->getValue();
                 if ($uri=='all'){
-                    $programs = array_merge($programs, $case->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC')));
+                    $programs = array_merge($programs, $case->findAll2(array(
+                            'where' => array(
+                                array('attr', 'is_history', '=', 0),
+                                array('attr', 'is_delete', '=', 0),
+                            ),
+                            'order' => array(
+                                array('order', 'ASC')
+                            )
+                        ))
+                    );
                 }else{
                     $obj = $this->_input['REQUEST']['object'];
                     while ($obj){
                         if ($obj['uri'] == $uri){
-                            $programs = array_merge($programs, $case->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC')));
+                            $programs = array_merge($programs, $case->findAll2(array(
+                                    'where' => array(
+                                        array('attr', 'is_history', '=', 0),
+                                        array('attr', 'is_delete', '=', 0),
+                                    ),
+                                    'order' => array(
+                                        array('order', 'ASC')
+                                    )
+                                ), false, null)
+                            );
                             $obj = null;
                         }else{
                             $obj = $obj->proto();

@@ -111,7 +111,7 @@ class Check
             return (bool)$value;
         }else{
             $error = new Error('Не логическое (да/нет)', 'bool');
-            return false;
+            return (bool)$value;
         }
     }
 
@@ -308,7 +308,7 @@ class Check
      */
     static function entity($value, &$error, Rule $rule)
     {
-        $class = isset($rule->entity[0])? $rule->entity[0] : '\Boolive\data\Entity';
+        $cond = isset($rule->entity[0])? $rule->entity[0] : false;
         if (is_string($value)){
             // Пробуем получить объект по uri
             $value = Data::read($value);
@@ -334,12 +334,21 @@ class Check
             }
 
         }
-        if ($value instanceof Entity && (empty($class) || $value instanceof $class) && $value->isExist()){
-            return $value;
+        if (!$value instanceof Entity){
+            $error = new Error('Не является объектом данных', 'entity');
+        }else
+        if (!empty($cond) && !$value->verify($cond)){
+            $error = new Error('Объект не соответсвует заданному условию', 'entity');
+        }else
+        if (!$value->isExist()){
+            $error = new Error('Объект не существует', 'entity');
+        }else
+        if (!$value->isAccessible()){
+            $error = new Error('Объект недоступен', 'entity');
         }else{
-            $error = new Error(array('Не является объектом класса %s.', $class), 'entity');
-            return null;
+            return $value;
         }
+        return null;
     }
 
     /**

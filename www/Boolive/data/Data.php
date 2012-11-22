@@ -9,7 +9,9 @@
 namespace Boolive\data;
 
 use Boolive\Boolive,
-    Boolive\functions\F;
+    Boolive\functions\F,
+    Boolive\auth\Auth,
+    Boolive\errors\Error;
 
 class Data
 {
@@ -37,34 +39,79 @@ class Data
 
     /**
      * Выбор объекта по его URI
-     * Выборка выполняется по индексу, в котором имеются реальные и виртуальные объекты
+     * Выполняет поиск реального объекта (сохраненного в секции).
+     * Если объекта нет, то создаётся виртуальный.
      * @param string $uri URI объекта
      * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
      * @param int $owner Код владельца. Если не указан, то выбирается общий
      * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
      * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
+     * @param bool $access Признак, проверять или нет доступ
+     * @throws \ErrorException
      * @return Entity|null Экземпляр объекта, если найден или null, если не найден
      */
-    static function read($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false)
+    static function read($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false, $access = true)
     {
-        return self::getObject($uri, $lang, $owner, $date, $is_history);
-        if (is_string($uri)){
-            // Корневой объект
-            if ($uri === ''){
-                return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
+        $key = $uri;//.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
+        if (Buffer::isExist($key)){
+            $object = Buffer::get($key);
+        }else{
+            $object = null;
+            if (is_string($uri)){
+                if ($uri === '') return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
+                // Определение секции объекта и поиск объекта в секции
+                if ($s = self::getSection($uri, true)){
+                    $object = $s->read($uri, $lang, $owner, $date, $is_history);
+                }
+                // Если объект не найден и нужно искать виртуального, то ищем
+                if (!isset($object)){
+                    // Выбор родителя
+                    $names = F::splitRight('/', $uri);
+                    if ($parent = self::read($names[0])){
+                        // Прототип родителя
+                        if (isset($parent['proto']) && !is_null($parent['proto'])){
+                            $info = Data::getURIInfo($parent['proto']);
+                            $proto = Data::read($info['uri'], $info['lang'], $info['owner']);
+                        }else{
+                            $proto = null;
+                        }
+                        // Прототип для объекта
+                        if ($proto/* = $parent->proto()*/){
+                            $proto = Data::read($proto['uri'].'/'.$names[1], (string)$proto['lang'], (int)$proto['owner']);
+                            //$proto = $proto->{$names[1]};
+                        }
+                        if ($proto){
+                            $object = $proto->birth();
+                            $object['uri'] = $uri;
+                            $object['order'] = $proto['order'];
+                            $object['lang'] = $lang;
+                            $object['owner'] = $owner;
+                        }else{
+                            $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner), true, false);
+                        }
+                        // Объект ссылка?
+                        if (!empty($parent['is_link']) || !empty($proto['is_link'])){
+                            $object['is_link'] = 1;
+                        }
+                    }
+                }
             }
-            // Поиск объекта в индексе
-            if ($index = self::getIndex($uri)){
-                return $index->read($uri, $lang, $owner, $date, $is_history);
-            }
+            Buffer::set($key, $object);
         }
-        return null;
+        if ($access && $object){
+            if (!Auth::getUser()->checkAccess('read', $object)){
+                $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner), true, false, false);
+            }
+        };
+        return $object;
     }
 
     /**
      * Поиск объектов
      * Поиск выполняется по индексу
      * @param array $cond Условие поиска в виде многомерного массива.     *
+     * @param string $keys Название атрибута, который использовать для ключей массива результата
+     * @param bool $access
      * @see https://github.com/Boolive/Boolive/issues/7
      * @example
      * $cond = array(
@@ -89,14 +136,31 @@ class Data
      *     ),
      *     'limit' => array(10, 15)                    // ограничение - выбирать с 10-го не более 15 объектов
      * );
-     * @param string $keys Название атрибута, который использовать для ключей массива результата
      * @return mixed|array Массив объектов или результат расчета, например, количество объектов
      */
-    static public function select($cond, $keys = 'name')
+    static function select($cond, $keys = 'name', $access = true)
     {
         // Где искать?
         if (!isset($cond['from'][0])) $cond['from'][0] = '';
         if (!isset($cond['from'][1]) || $cond['from'][1] < 1) $cond['from'][1] = 1;
+        if ($access){
+            $acond = Auth::getUser()->getAccessCond('read', $cond['from'][0], $cond['from'][1]);
+            if (empty($cond['where'])){
+                $cond['where'] = array($acond);
+            }else{
+                if (is_string($cond['where'][0])){
+                    if ($cond['where'][0] == 'all'){
+                       $cond['where'][1][] = $acond;
+                    }else{
+                       $cond['where'] = array($cond['where'], $acond);
+                    }
+                }else{
+                    $cond['where'][] = $acond;
+                }
+            }
+            //trace($cond);
+        }
+
         // Определяем индекс и ищем в нём
         if (isset($cond['from'][0]) && ($index = self::getIndex($cond['from'][0]))){
             return $index->select($cond, $keys);
@@ -104,6 +168,75 @@ class Data
             return null;
         }
     }
+
+    /**
+     * Сохранение объекта
+     * @param Entity $object
+     * @param \Boolive\errors\Error $error
+     * @param bool $access
+     * @return bool
+     */
+    static function write($object, &$error, $access = true)
+    {
+        if (!$access || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
+            if ($s = self::getSection($object['uri'], true)){
+                return $s->write($object);
+            }else{
+                $error->section = new Error('Не определена секция объекта', 'not-exist');
+            }
+        }else{
+            $error->access = new Error('Нет доступа на запись', 'write');
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Выбор объекта по его URI
+     * Выборка выполняется по индексу, в котором имеются реальные и виртуальные объекты
+     * @param string $uri URI объекта
+     * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
+     * @param int $owner Код владельца. Если не указан, то выбирается общий
+     * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
+     * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
+     * @return Entity|null Экземпляр объекта, если найден или null, если не найден
+     */
+    static function read_from_index($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false)
+    {
+        return self::getObject($uri, $lang, $owner, $date, $is_history);
+        if (is_string($uri)){
+            // Корневой объект
+            if ($uri === ''){
+                return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
+            }
+            // Поиск объекта в индексе
+            if ($index = self::getIndex($uri)){
+                return $index->read($uri, $lang, $owner, $date, $is_history);
+            }
+        }
+        return null;
+    }
+
+
 
     /**
      * Взвращает экземпляр секции, назначенную для подчиненных объекта
@@ -176,70 +309,6 @@ class Data
 
 
 
-
-
-
-
-
-    /**
-     * Выбор объекта по его URI
-     * Выполняет поиск реального объекта (сохраненного в секции).
-     * Если объекта нет, то создаётся виртуальный.
-     * @param string $uri URI объекта
-     * @param string $lang Код языка из 3 символов. Если не указан, то выбирается общий
-     * @param int $owner Код владельца. Если не указан, то выбирается общий
-     * @param null|int $date Дата создания (версия). Если не указана, то выбирается актуальная
-     * @param null|bool $is_history Объект в истории (true) или нет (false) или без разницы (null). Если указана дата, то всегда null
-     * @return Entity|null Экземпляр объекта, если найден или null, если не найден
-     */
-    static function getObject($uri = '', $lang = '', $owner = 0, $date = null, $is_history = false)
-    {
-        $key = $uri;//.' '.$lang.' '.$owner.' '.$date.' '.$is_history;
-        if (Buffer::isExist($key)) return Buffer::get($key);
-
-        $object = null;
-        if (is_string($uri)){
-            if ($uri === '') return self::makeObject(array('uri' => '', 'value' => null, 'is_logic' => is_file(DIR_SERVER_PROJECT.'Site.php')), true);
-            // Определение секции объекта и поиск объекта в секции
-            if ($s = self::getSection($uri, true)){
-                $object = $s->read($uri, $lang, $owner, $date, $is_history);
-            }
-            // Если объект не найден и нужно искать виртуального, то ищем
-            if (!isset($object)){
-                // Выбор родителя
-                $names = F::splitRight('/', $uri);
-                if ($parent = self::getObject($names[0])){
-                    // Прототип родителя
-                    if (isset($parent['proto'])){
-                        $info = Data::getURIInfo($parent['proto']);
-                        $proto = Data::getObject($info['uri'], $info['lang'], $info['owner']);
-                    }else{
-                        $proto = null;
-                    }
-                    // Прототип для объекта
-                    if ($proto/* = $parent->proto()*/){
-                        $proto = Data::getObject($proto['uri'].'/'.$names[1], (string)$proto['lang'], (int)$proto['owner']);
-                        //$proto = $proto->{$names[1]};
-                    }
-                    if ($proto){
-                        $object = $proto->birth();
-                        $object['uri'] = $uri;
-                        $object['order'] = $proto['order'];
-                        $object['lang'] = $lang;
-                        $object['owner'] = $owner;
-                    }else{
-                        $object = new Entity(array('uri' => $uri, 'lang' => $lang, 'owner' => $owner));
-                    }
-                    // Объект ссылка?
-                    if (!empty($parent['is_link']) || !empty($proto['is_link'])){
-                        $object['is_link'] = 1;
-                    }
-                }
-            }
-        }
-        return Buffer::set($key, $object);
-    }
-
     /**
      * Создание объекта данных из атрибутов
      * @param $attribs
@@ -271,7 +340,7 @@ class Data
                 }
             }
         }
-        if (!empty($attribs['proto']) && ($proto = self::getObject($attribs['proto']))){
+        if (!empty($attribs['proto']) && ($proto = self::read($attribs['proto'], '', 0, null, false, false))){
             // Класс прототипа
             $class = get_class($proto);
             $obj = new $class($attribs, $virtual, $exist);
@@ -293,7 +362,7 @@ class Data
         $uri = F::splitRight('/', $uri);
         $names = F::explode('@', $uri[1], -3);
         return array(
-            'uri' => $uri[0].'/'.$names[0],
+            'uri' => (empty($uri[1])?'':$uri[0].'/').$names[0],
             'owner' => isset($names[1]) && is_numeric($names[1]) ? $names[1] : 0,
             'lang' => isset($names[2])? $names[2]: (isset($names[1]) && !is_numeric($names[1])? $names[1] : '')
         );

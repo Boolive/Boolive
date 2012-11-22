@@ -22,7 +22,7 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule null() Неопределенное значение. При этом проверяемый элемент должен существовать!
  * @method static \Boolive\values\Rule arrays() Массив
  * @method static \Boolive\values\Rule object() Объект указываемого класса
- * @method static \Boolive\values\Rule entity() Объект класса \Boolive\data\Entity или URI объекта, который можно получить из БД
+ * @method static \Boolive\values\Rule entity() Объект класса \Boolive\data\Entity или URI объекта, который можно получить из БД. В аргументе фильтра указывается услвоие на объект в виде массива.
  * @method static \Boolive\values\Rule values() Объект класса \Boolive\values\Values
  * @method static \Boolive\values\Rule any() Любое правило из перечисленных или любой тип значения, если не перечислены варианты правил
  * @method static \Boolive\values\Rule forbidden() Запрещенный. Требуется отсутствие элемента

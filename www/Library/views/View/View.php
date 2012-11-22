@@ -147,8 +147,6 @@ class View extends Entity
                 array('order', 'ASC')
             )
         ));
-
-        //findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $out = $child->start($this->_commands, $this->_input_child);

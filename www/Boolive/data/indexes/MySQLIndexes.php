@@ -238,7 +238,7 @@ class MySQLIndexes extends Index
         //trace($this->db->errorInfo());
 
         // Заполнение индекса
-        $this->fillIndex($index_name, Data::getObject($from), $depth);
+        $this->fillIndex($index_name, Data::read($from), $depth);
 
         // Возврат информации об индексе
         return array(
@@ -308,6 +308,7 @@ class MySQLIndexes extends Index
                         // Список прототипов
                         // Добавление прототипов в таблицу отношений
                         $protos = $list[$i]->getAllProto(false);
+                        array_unshift($protos, $list[$i]['uri']);
                         $tpl = '(\''.md5($list[$i]['uri']).'\','.$this->db->quote($list[$i]['uri']).', \'';
                         $level = sizeof($protos);
                         foreach ($protos as $p){
@@ -439,7 +440,7 @@ class MySQLIndexes extends Index
                     $cond = $cond[1];
                 }
                 foreach ($cond as $i => $c){
-                    if (is_array($c)){
+                    if (is_array($c) && !empty($c)){
                         if ($c[0]=='attr'){
                             // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
                             if ($c[1] == 'value'){
@@ -466,6 +467,25 @@ class MySQLIndexes extends Index
                             $cond[$i] = '`'.$table.'`.`uri` LIKE ?';
                             $binds[] = $c[1].'/%';
                         }else
+                        // Является частью чего-то с учётом наследования
+                        // Например заголовок статьи story1 является его частью и частью эталона статьи
+                        // Пример из жизни: Ветка является частью дерева, но не конкретезируется, какого именно
+                        if ($c[0]=='of'){
+                            // @todo Учёт наследования
+                            if (!isset($c[2])) $c[2] = 1;
+                            if ($c[2] == 3){
+                                $cond[$i] = '`'.$table.'`.`uri` = ?';
+                                $binds[] = $c[1];
+                            }else
+                            if ($c[2] == 2){
+                                $cond[$i] = '`'.$table.'`.`uri` LIKE ?';
+                                $binds[] = $c[1].'/%';
+                            }else{
+                                $cond[$i] = '(`'.$table.'`.`uri` = ? OR `'.$table.'`.`uri` LIKE ?)';
+                                $binds[] = $c[1];
+                                $binds[] = $c[1].'/%';
+                            }
+                        }else
                         // OR
                         if ($c[0]=='any'){
                             $cond[$i] = '('.$convert($c[1], ' OR ').')';
@@ -490,7 +510,11 @@ class MySQLIndexes extends Index
                         }else
                         // Условие на наличие прототипа.
                         if ($c[0]=='is'){
-                            unset($c[0]);
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
                             $alias = 'is'.$is_cnt;
                             $cond[$i] = 'EXISTS (SELECT 1 FROM {'.$index_table.'_proto} as `'.$alias.'` WHERE '.$alias.'.`o_uuid`=`'.$table.'`.uuid AND '.$alias.'.`p_uuid` IN ('.rtrim(str_repeat('md5(?),', sizeof($c)), ',').') LIMIT 0,1)';
                             $binds = array_merge($binds, $c);
@@ -499,6 +523,8 @@ class MySQLIndexes extends Index
                         else{
                             unset($cond[$i]);
                         }
+                    }else{
+                        unset($cond[$i]);
                     }
                 }
                 return implode($glue, $cond);

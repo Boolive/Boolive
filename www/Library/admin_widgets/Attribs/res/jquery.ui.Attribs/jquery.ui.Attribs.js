@@ -201,6 +201,9 @@
                 form.find('.reset').removeClass('hide');
                 form.find('.item-'+error.name).addClass('error').find('.error-message').text(error.value);
             }).
+            on('change-error:_other_', function(value){
+                form.find('.submit-message').text(value);
+            }).
             on('clear-error', function(value){
                 form.find('.submit-message').text('');
                 form.find('.error').removeClass('error');

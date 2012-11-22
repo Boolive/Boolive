@@ -34,7 +34,7 @@ abstract class Section extends Entity
      * @param \Boolive\data\Entity $entity Записываемый объект
      * @return bool Если были изменения, то true
      */
-    public function put($entity)
+    public function write($entity)
     {
         return false;
     }

@@ -17,11 +17,14 @@ class Feedback extends AutoWidgetList
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
+                        // Модель формы
                         'object' => Rule::entity()->default($this->object)->required(),
+                        // Признак, submit запрос данной формы?
                         $this['uri'] => Rule::arrays(array(
                                 'submit' => Rule::string()
                             )
                         ),
+                        // Признак успешности обработки формы
                         'ok' => Rule::eq(md5($this['uri']))->default(false)->required()
                     )
                 )
@@ -45,6 +48,7 @@ class Feedback extends AutoWidgetList
         if (isset($this->_input['REQUEST'][$this['uri']]['submit'])){
             //Выполнение действия (отправка)
             if ($this->_input_child['REQUEST']['object']->send()){
+                // Редирект на адрес текущего запроса с параметром ok
                 $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this['uri'])), true, true));
             }else{
                 $v['error'] = true;

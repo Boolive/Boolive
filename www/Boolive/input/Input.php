@@ -222,9 +222,7 @@ class Input extends Values
             }
         }
 
-		if (strlen($url) > 0){
-			$url = trim($url,'//');
-		}
+
 		// Аргументы
 		if (!isset($args)){
             $args = self::SERVER()->argv->getValue();
@@ -238,6 +236,9 @@ class Input extends Values
 			foreach ($args as $name => $value){
 				$url .= '&'.$name.'='.$value;
 			}
+		}else
+        if (strlen($url) > 0){
+			$url = trim($url,'//');
 		}
 		if ($host){
 			return $shema.HTTP_HOST.DIR_WEB.$url;

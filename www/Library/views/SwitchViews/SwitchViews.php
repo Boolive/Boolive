@@ -87,7 +87,6 @@ class SwitchViews extends Widget
                     array('order', 'ASC')
                 )
             ), false, null);
-//            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC'), false, null);
         }
         return $this->_cases;
     }
