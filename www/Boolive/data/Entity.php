@@ -305,7 +305,9 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 $value = $value->birth($this);
             }
             // Установка uri для объекта, если есть свой uri
-            if (isset($this->_attribs['uri'])) $value->_attribs['uri'] = $this->_attribs['uri'].'/'.$name;
+            if (isset($this->_attribs['uri'])){
+                $value->_attribs['uri'] = $this->_attribs['uri'].'/'.$name;
+            }
             if (isset($rename)) $value->_rename = $rename;
             $value->_parent = $this;
 
@@ -348,6 +350,15 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     public function __unset($name)
     {
         unset($this->_children[$name]);
+    }
+
+    /**
+     * Подобрать уникальное имя при сохранении
+     * За основу берется текущее имя
+     */
+    public function chooseUniqueName()
+    {
+        $this->_rename = $this->getName();
     }
 
 //    /**
@@ -712,7 +723,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * Сохранение объекта в секции
      * @throws
      */
-    public function save($history = true, &$error = null)
+    public function save($history = true, &$error = null, $access = true)
     {
         if (!$this->_is_saved && $this->check($error)){
             try{
@@ -720,7 +731,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 // Если создаётся история, то нужна новая дата
                 if ($history) $this->_attribs['date'] = time();
                 // Сохранение себя
-                if ($this->_changed && Data::write($this, $error)){
+                if ($this->_changed && Data::write($this, $error, $access)){
                     $this->_virtual = false;
                     $this->_exist = true;
                     $this->_changed = false;
@@ -730,7 +741,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
                 $children = $this->getChildren();
                 foreach ($children as $child){
                     /** @var \Boolive\data\Entity $child */
-                    $child->save();
+                    $child->save($history, $error_child, $access);
                 }
                 $this->_is_saved = false;
             }catch (Exception $e){
@@ -791,6 +802,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
 
     /**
      * Прототип объекта
+     * @param bool $use_index
      * @return \Boolive\data\Entity|null
      */
     public function proto($use_index = true)
@@ -808,6 +820,19 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
             }
         }
         return $this->_proto;
+    }
+
+    /**
+     * Реальный объект
+     * Возвращает себя, если не виртуальный, либо первого реального прототипа объекта
+     * Если реальных прототипов нет, то возвращается null
+     * @return Entity | null
+     */
+    public function real()
+    {
+        $obj = $this;
+        while ($obj && $obj->isVirtual()) $obj = $obj->proto();
+        return $obj;
     }
 
     /**

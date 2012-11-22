@@ -69,7 +69,7 @@ class Data
                     $names = F::splitRight('/', $uri);
                     if ($parent = self::read($names[0])){
                         // Прототип родителя
-                        if (isset($parent['proto'])){
+                        if (isset($parent['proto']) && !is_null($parent['proto'])){
                             $info = Data::getURIInfo($parent['proto']);
                             $proto = Data::read($info['uri'], $info['lang'], $info['owner']);
                         }else{
@@ -173,11 +173,12 @@ class Data
      * Сохранение объекта
      * @param Entity $object
      * @param \Boolive\errors\Error $error
+     * @param bool $access
      * @return bool
      */
-    static function write($object, &$error)
+    static function write($object, &$error, $access = true)
     {
-        if ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object)){
+        if (!$access || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
             if ($s = self::getSection($object['uri'], true)){
                 return $s->write($object);
             }else{
