@@ -1,0 +1,53 @@
+.FormAuth{
+	border-radius: 5px;
+	box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;
+	clear: both;
+	margin: 10px 0px 15px 0;
+	padding: 15px 25px 25px 55px;
+	background: #FFF;
+	}
+    .FormAuth h1 {
+        line-height: normal;
+        font-size: 26pt; /*margin-top: 15px;*/
+        }
+
+    .FormAuth > h3{
+        padding: 0;
+        margin: 0;
+    }
+    .FormAuth label{
+        width: 100px;
+        margin: 2px 0;
+        display: inline-block;
+        }
+    .FormAuth input[type=text],
+    .FormAuth input[type=password]{
+        width: 300px;
+        margin: 2px 0;
+    }
+    .FormAuth textarea{
+        height: 200px;
+        width: 95%;
+        }
+    .FormAuth .form_ok{
+        border: 1px solid #31baf5;
+        background: #f0f9fc;
+        color: #1d6d8f;
+        padding: 25px;
+        margin: 25px 0;
+    }
+    .FormAuth .form_error{
+        border: 1px solid #ff663a;
+        background: #fff5f2;
+        color: #80260d;
+        padding: 25px;
+        margin: 25px 0;
+    }
+    .FormAuth .error_message{
+        font-size: 10pt;
+        margin: 5px 0;
+        color: #ff663a;
+    }
+    .FormAuth form > .SwitchViews{
+        margin: 15px 0;
+    }

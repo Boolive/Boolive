@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Ноя 17 2012 г., 16:51
+-- Время создания: Ноя 22 2012 г., 12:08
 -- Версия сервера: 5.00.15
 -- Версия PHP: 5.3.9
 
@@ -162,10 +162,11 @@ CREATE TABLE IF NOT EXISTS `interfaces` (
 --
 
 INSERT INTO `interfaces` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
-('/Interfaces/direct_handler', '', 0, 0, 2, 3, '/Library/views/DirectHandler', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Interfaces/html', '', 0, 0, 2, 4, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/direct_handler', '', 0, 0, 2, 4, '/Library/views/DirectHandler', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/html', '', 0, 0, 2, 5, '/Library/views/Html', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/admin', '', 0, 0, 4, 1, '/Library/layouts/Admin', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/html/body/boolive', '', 0, 0, 4, 2, '/Library/layouts/boolive', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Interfaces/logout', '', 0, 0, 2, 3, '/Library/views/Logout', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Interfaces/title', '', 0, 0, 2, 1, '/Library/views/ViewGroup/title', 'Интерфейс', 0, 0, 0, 0, 1, 0, 0);
 
 -- --------------------------------------------------------
@@ -320,9 +321,16 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/basic/members/UserGroup', '', 0, 0, 4, 4, '/Library/basic/members/Member', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/members/UserGroup/title', '', 0, 0, 5, 1, '/Library/basic/members/Member/title', 'Группа пользователей', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple', '', 0, 0, 3, 4, '/Library/basic/Package', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Boolean', '', 0, 0, 4, 6, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Boolean/description', '', 0, 0, 5, 2, NULL, 'Логическое значение ДА/НЕТ', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Boolean/title', '', 0, 0, 5, 1, NULL, 'Булево', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Email', '', 0, 0, 4, 3, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Email/description', '', 0, 0, 5, 1, NULL, 'Адрес электронной почты', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Email/title', '', 0, 0, 5, 1, NULL, 'Email', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Number', '', 0, 0, 4, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
-('/Library/basic/simple/Object', '', 0, 0, 4, 1, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Number/description', '', 0, 0, 5, 1, NULL, 'Числовое значение любой величены', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Number/title', '', 0, 0, 5, 1, NULL, 'Число', 0, 0, 0, 0, 0, 0, 0),
+('/Library/basic/simple/Object', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Object/description', '', 0, 0, 5, 2, NULL, 'Базовый объект для создания любых новых объектов', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Object/title', '', 0, 0, 5, 1, NULL, 'Объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/basic/simple/Text', '', 0, 0, 4, 5, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -485,7 +493,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/layouts/boolive/bottom', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/bottom/title', '', 0, 1349410120, 5, 1, '/Library/views/ViewGroup/title', 'Низ', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/center', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/layouts/boolive/center/Content', '', 0, 0, 5, 2, '/Library/content_widgets/Content', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/boolive/center/Content', '', 0, 0, 5, 3, '/Library/content_widgets/Content', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/layouts/boolive/center/FormAuth', '', 0, 0, 5, 2, '/Library/views/FormAuth', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/center/title', '', 0, 1349410143, 5, 1, '/Library/views/ViewGroup/title', 'Центр', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/layouts/boolive/description', '', 0, 0, 4, 2, '/Library/views/Focuser/description', 'Макет сайта boolive.ru', 0, 0, 0, 0, 1, 0, 0),
 ('/Library/layouts/boolive/head', '', 0, 0, 4, 1, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
@@ -527,6 +536,25 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Focuser', '', 0, 0, 3, 12, '/Library/views/Widget', NULL, 1, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'По URL запроса определяет объект и номер страницы для последующего оперирования ими подчиненными виджетами. Найденный объект и номер страницы помещаются во входящие данные для подчиненных виджетов. Может использоваться для макета сайта.', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Focuser/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Фокусировщик', 0, 0, 0, 0, 1, 0, 0),
+('/Library/views/FormAuth', '', 0, 0, 3, 20, '/Library/views/AutoWidgetList', 'FormAuth.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/description', '', 0, 0, 4, 2, '/Library/views/AutoWidgetList/description', 'Форма аутентификации пользователя', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object', '', 0, 0, 4, 4, NULL, NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/email', '', 0, 0, 5, 3, '/Library/basic/simple/Email', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/email/title', '', 0, 0, 6, 1, NULL, 'Email адрес', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/ok_message', '', 0, 0, 5, 6, NULL, 'Успешная авторизация', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/passw', '', 0, 0, 5, 4, '/Library/basic/simple/Text', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/passw/title', '', 0, 0, 6, 1, NULL, 'Пароль', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/remember', '', 0, 0, 5, 5, '/Library/basic/simple/Boolean', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/remember/title', '', 0, 0, 6, 1, NULL, 'Запомнить', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/object/title', '', 0, 0, 5, 1, NULL, 'Модель авторизации', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/switch_views/case_mail', '', 0, 0, 5, 3, '/Library/views/SwitchCase', '/Library/views/FormAuth/object/email', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/switch_views/case_mail/EmailField', '', 0, 0, 6, 1, '/Library/views/FormField', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/switch_views/case_passw', '', 0, 0, 5, 4, '/Library/views/SwitchCase', '/Library/views/FormAuth/object/passw', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/switch_views/case_passw/PasswField', '', 0, 0, 6, 1, '/Library/views/FormField', 'PasswField.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/switch_views/case_remember', '', 0, 0, 5, 5, '/Library/views/SwitchCase', '/Library/views/FormAuth/object/remember', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/switch_views/case_remember/RememberField', '', 0, 0, 6, 1, '/Library/views/FormField', 'RememberField.tpl', 0, 1, 0, 0, 0, 0, 0),
+('/Library/views/FormAuth/title', '', 0, 0, 4, 1, '/Library/views/AutoWidgetList/title', 'Вход', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/FormField', '', 0, 0, 3, 18, '/Library/views/Widget', 'FormField.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/FormField/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Поле формы', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Html', '', 0, 0, 3, 11, '/Library/views/Widget', 'Html.tpl', 1, 1, 0, 0, 0, 0, 0),
@@ -544,6 +572,9 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Logo/object', '', 0, 0, 4, 2, '/Library/content_samples/Image', 'object.png', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Logo/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Логотип', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Logo/use_object', '', 0, 0, 4, 1, NULL, '1', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/Logout', '', 0, 0, 3, 20, '/Library/views/View', NULL, 1, 0, 0, 0, 0, 0, 0),
+('/Library/views/Logout/description', '', 0, 0, 4, 2, '/Library/views/View/description', 'Отмена авторизации', 0, 0, 0, 0, 0, 0, 0),
+('/Library/views/Logout/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Выход', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Menu', '', 0, 0, 3, 13, '/Library/views/Widget', 'Menu.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/Menu/description', '', 0, 0, 4, 2, '/Library/views/View/description', 'Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Menu/object', '', 0, 0, 4, 3, '/Contents', NULL, 0, 0, 0, 0, 0, 1, 0),
@@ -556,7 +587,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Menu/view/switch_views/case_part', '', 0, 0, 6, 2, '/Library/views/SwitchCase', '/Library/content_samples/Part', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Menu/view/switch_views/case_part/ItemPart', '', 0, 0, 7, 1, '/Library/views/Menu/view/switch_views/case_page/ItemPage', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Menu/view/switch_views/case_part/ItemPart/title', '', 0, 0, 8, 1, '/Library/views/Menu/view/switch_views/case_page/ItemPage/title', 'Пункт меню раздела', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/NextPrevNavigation', '', 0, 0, 3, 1, '/Library/views/Widget', 'NextPrevNavigation.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/views/NextPrevNavigation', '', 0, 0, 3, 19, '/Library/views/Widget', 'NextPrevNavigation.tpl', 1, 1, 0, 0, 0, 0, 0),
 ('/Library/views/NextPrevNavigation/object_types', '', 0, 0, 4, 2, NULL, NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/NextPrevNavigation/object_types/description', '', 0, 0, 5, 2, '/Library/views/Widget/description', 'Список объектов, по которым разрешена навигация', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/NextPrevNavigation/object_types/page', '', 0, 0, 5, 3, '/Library/content_samples/Page', NULL, 0, 0, 0, 0, 0, 1, 0),
@@ -564,7 +595,8 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/NextPrevNavigation/object_types/part', '', 0, 0, 5, 4, '/Library/content_samples/Part', NULL, 0, 0, 0, 0, 0, 1, 0),
 ('/Library/views/NextPrevNavigation/object_types/title', '', 0, 0, 5, 1, '/Library/views/Widget/title', 'Список разрешенных объектов', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/NextPrevNavigation/title', '', 0, 0, 4, 1, NULL, 'Виджет навигации по страницам', 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/PageNavigation', '', 0, 0, 3, 15, '/Library/views/Widget', 'PageNavigation.tpl', 1, 1, 0, 0, 0, 0, 0),
+('/Library/views/PageNavigation', '', 0, 0, 3, 15, '/Library/views/Widget', 'PageNavigation.tpl', 1, 1, 0, 0, 0, 0, 0);
+INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Library/views/PageNavigation/description', '', 0, 0, 4, 2, '/Library/views/Widget/description', 'Используется при отображении списков с постраничным разделением вывода', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/PageNavigation/res/style', '', 0, 0, 5, 1, '/Library/views/Css', 'style.css', 0, 1, 0, 0, 0, 0, 0),
 ('/Library/views/PageNavigation/title', '', 0, 0, 4, 1, '/Library/views/Widget/title', 'Меню постраничной навигации', 0, 0, 0, 0, 0, 0, 0),
@@ -586,8 +618,7 @@ INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`
 ('/Library/views/Widget/object/description', '', 0, 0, 5, 2, NULL, 'Объект, который отображется и с кторым выполняются действия', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/object/title', '', 0, 0, 5, 1, NULL, 'Объект', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res', '', 0, 0, 4, 3, '/Library/views/ViewGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
-('/Library/views/Widget/res/description', '', 0, 0, 5, 2, '/Library/views/ViewGroup/description', 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 0);
-INSERT INTO `library` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
+('/Library/views/Widget/res/description', '', 0, 0, 5, 2, '/Library/views/ViewGroup/description', 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/res/title', '', 0, 0, 5, 1, '/Library/views/ViewGroup/title', 'Ресурсы', 0, 0, 0, 0, 0, 0, 0),
 ('/Library/views/Widget/title', '', 0, 0, 4, 1, '/Library/views/View/title', 'Виджет', 0, 0, 0, 0, 1, 0, 0),
 ('/Library/views/jQueryScript', '', 0, 0, 3, 5, '/Library/views/JavaScript', NULL, 1, 0, 0, 0, 0, 0, 0),
@@ -636,14 +667,23 @@ CREATE TABLE IF NOT EXISTS `members` (
 
 INSERT INTO `members` (`uri`, `lang`, `owner`, `date`, `level`, `order`, `proto`, `value`, `is_logic`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `override`) VALUES
 ('/Members/guests', '', 0, 0, 2, 1, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Members/guests/access/read/right1', '', 0, 0, 5, 1, '/Interfaces/html/body/admin', '-1', 0, 0, 0, 0, 0, 1, 0),
 ('/Members/guests/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Гости', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered', '', 0, 0, 2, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins', '', 0, 0, 3, 2, '/Library/basic/members/UserGroup', NULL, 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/access/read/right5', '', 0, 0, 6, 1, '/Contents/news/news1/title', '-2', 0, 0, 0, 0, 0, 1, 0),
+('/Members/registered/admins/azat', '', 0, 0, 4, 3, '/Library/basic/members/User', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/azat/email', '', 0, 0, 5, 2, '/Library/basic/members/User/email', 'AzatXaker@gmail.com', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/azat/name', '', 0, 0, 5, 1, '/Library/basic/members/User/name', 'Azat Galiev', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/azat/passw', '', 0, 0, 5, 3, NULL, '1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/admins/title', '', 0, 0, 4, 1, '/Library/basic/members/UserGroup/title', 'Администраторы', 0, 0, 0, 0, 0, 0, 0),
-('/Members/registered/admins/vova', '', 0, 0, 4, 2, '/Library/basic/members/User', 'password_hash', 0, 0, 0, 0, 0, 0, 0),
-('/Members/registered/admins/vova/email', '', 0, 0, 5, 2, '/Library/basic/members/User/email', 'boolive@yandex.ru', 0, 0, 0, 0, 0, 0, 0),
-('/Members/registered/admins/vova/name', '', 0, 0, 5, 1, '/Library/basic/members/User/name', 'Вова', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova', '', 0, 0, 4, 2, '/Library/basic/members/User', '17b4065f40b4f5c459b747b2ea0f23a19058843566146ee4c6726d5c1d31fca6', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova/access', '', 0, 1353558627, 5, 1, '/Library/basic/members/User/access', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova/access/read', '', 0, 1353558627, 6, 2, '/Library/basic/members/User/access/read', NULL, 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova/email', '', 0, 0, 5, 4, '/Library/basic/members/User/email', 'boolive@yandex.ru', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova/name', '', 0, 0, 5, 3, '/Library/basic/members/User/name', 'Владимир ', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova/passw', '', 0, 0, 5, 6, NULL, '1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23', 0, 0, 0, 0, 0, 0, 0),
+('/Members/registered/admins/vova/visit_time', '', 0, 1353558493, 5, 5, '/Library/basic/members/User/visit_time', '1353563782', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/registered/title', '', 0, 0, 3, 1, '/Library/basic/members/UserGroup/title', 'Зарегистрированные', 0, 0, 0, 0, 0, 0, 0),
 ('/Members/title', '', 0, 0, 2, 1, NULL, 'Пользователи и группы', 0, 0, 0, 0, 0, 0, 0);
 
