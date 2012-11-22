@@ -36,6 +36,7 @@ class Member extends Entity
      */
     public function getAccessCond($action_kind, $parent = '', $depth = null)
     {
+        //return array();
         // Поиск оптимальной ветки условий доступа по $parent
         $find = function($access)use($parent, &$find){
             $f = false;
@@ -87,10 +88,11 @@ class Member extends Entity
             $this->access_info[$action_kind] = array();
             $access_info = array();
             $obj = $this;
+
             $cond = array('where' => array(array('attr', 'is_link', '=', 1)));
             // Выбор прав члена и всех его групп (родителей)
             do{
-                $rights = $obj->access->{$action_kind}->findAll2($cond);
+                $rights = $obj->real()->access->{$action_kind}->findAll2($cond);
                 // Объединяем права в общий список
                 foreach ($rights as $r){
                     $for = $r->notLink();
@@ -99,7 +101,9 @@ class Member extends Entity
                 $obj = $obj->parent();
             }while($obj instanceof Member);
             // По умолчанию нет доступа на всё
-            if (!isset($access_info[''])) $access_info[''] = array('access' => -1, 'level' => 0);
+            if (!isset($access_info[''])){
+                $access_info[''] = array('access' => -1, 'level' => 0);
+            }
             // Упорядочивание "доступов" к объектам
             ksort($access_info);
             // Образование дерева условий и формирования самих условий
