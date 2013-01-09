@@ -12,7 +12,7 @@ class Image extends Widget
 {
     public function work($v = array())
     {
-        $v['file'] = $this->_input['REQUEST']['object']->getFile();
+        $v['file'] = $this->_input['REQUEST']['object']->file();
         return parent::work($v);
     }
 }

@@ -38,11 +38,11 @@ class Delete extends Widget
         }
         // Отображение
         else{
-            $v['title'] = $this->title->getValue();
-            if (!$v['object']['title'] = $this->_input['REQUEST']['object']->title->getValue()){
-                $v['object']['title'] = $this->_input['REQUEST']['object']->getName();
+            $v['title'] = $this->title->value();
+            if (!$v['object']['title'] = $this->_input['REQUEST']['object']->title->value()){
+                $v['object']['title'] = $this->_input['REQUEST']['object']->name();
             }
-            $v['object']['uri'] = $this->_input['REQUEST']['object']['uri'];
+            $v['object']['uri'] = $this->_input['REQUEST']['object']->uri();
             return parent::work($v);
         }
     }

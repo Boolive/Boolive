@@ -70,17 +70,10 @@ class SwitchCase extends View
         return false;
     }
 
-    protected function getViews(){
+    protected function getViews()
+    {
         if (!isset($this->_views)){
-            $this->_views = $this->findAll2(array(
-                'where' => array(
-                    array('attr', 'is_history', '=', 0),
-                    array('attr', 'is_delete', '=', 0),
-                ),
-                'order' => array(
-                    array('order', 'ASC')
-                )
-            ), false, null);
+            $this->_views = $this->find();
             unset($this->_views['title'], $this->_views['description']);
         }
         return $this->_views;

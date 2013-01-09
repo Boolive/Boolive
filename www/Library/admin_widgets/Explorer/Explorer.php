@@ -12,8 +12,8 @@ class Explorer extends AutoWidgetList
 {
     public function work($v = array())
     {
-        $v['head'] = $this->_input['REQUEST']['object']->title->getValue();
-        if (empty($v['head'])) $v['head'] = $this->_input['REQUEST']['object']->getName();
+        $v['head'] = $this->_input['REQUEST']['object']->title->value();
+        if (empty($v['head'])) $v['head'] = $this->_input['REQUEST']['object']->name();
         return parent::work($v);
     }
 }

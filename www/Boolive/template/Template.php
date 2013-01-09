@@ -33,7 +33,7 @@ class Template
      */
     static function getEngine($entity)
     {
-        $file = $entity->getFile();
+        $file = $entity->file();
         foreach (self::$engines as $pattern => $engine){
             if (fnmatch($pattern, $file)){
                 if (is_string($engine)){
@@ -59,7 +59,7 @@ class Template
         if ($engine = self::getEngine($entity)){
             return $engine->render($entity, $v);
         }else{
-            throw new Error(array('Template engine for entity "%s" not found ', $entity['uri']));
+            throw new Error(array('Template engine for entity "%s" not found ', $entity->uri()));
         }
     }
 }

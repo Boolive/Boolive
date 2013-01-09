@@ -314,10 +314,12 @@ class Check
             $value = Data::read($value);
         }else
         if (is_array($value)){
-            $value = Data::makeObject($value);
-
+            //$value = Data::makeObject($value);
+            if (isset($value['id'])){
+                $obj = Data::read($value['id']);
+            }else
             if (isset($value['uri'])){
-                $obj = Data::read($value);
+                $obj = Data::read($value['uri']);
             }else
             if (isset($value['proto'])){
                 $obj = Data::read($value['proto'])->birth();
@@ -364,7 +366,7 @@ class Check
     {
         $rules = $rule->any;
         if (empty($rules)) return $value;
-        if (sizeof($rules) == 1 && is_array($rules[0])) $rules = $rules[0];
+        if (sizeof($rules) == 1 && is_array(reset($rules))) $rules = reset($rules);
         $result = null;
         foreach ($rules as $rule){
             $error = null;
@@ -637,12 +639,13 @@ class Check
      */
     static function uri($value, &$error, Rule $rule)
     {
+        if (empty($value)) return $value;
         $check = $value;
         if (!preg_match('#^([^:/]+://).*$#iu', $check)){
             $check = 'http://'.trim($check, '/');
         }
-        if (!is_string($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
-            $error = new Error('Не URI.', 'uri');
+        if (!is_scalar($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
+            $error = new Error(array('%s Не URI.', $value), 'uri');
         }
         return $value;
     }

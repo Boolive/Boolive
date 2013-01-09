@@ -25,7 +25,7 @@ class PageNavigation extends Widget
     public function work($v = array())
     {
         $obj = $this->_input['REQUEST']['object'];
-        $v['uri'] = substr($obj['uri'], 9);
+        $v['uri'] = substr($obj->uri(), 9);
         $v['count'] = $this->_input['REQUEST']['page_count'];
         $v['current'] = min($v['count'], $this->_input['REQUEST']['page']);
         return parent::work($v);

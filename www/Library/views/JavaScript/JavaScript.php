@@ -26,7 +26,7 @@ class JavaScript extends View
 //            $proto->start($this->_commands, $this->_input);
 //        }
         // Подключение javascript файла
-        if ($file = $this->getFile()){
+        if ($file = $this->file()){
             $this->_commands->addHtml('script', array('type'=>'text/javascript', 'src'=>$file));
         }
     }

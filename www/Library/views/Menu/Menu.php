@@ -6,8 +6,7 @@
  */
 namespace Library\views\Menu;
 
-use Boolive\values\Rule,
-    Library\views\Widget\Widget;
+use Library\views\Widget\Widget;
 
 class Menu extends Widget
 {
@@ -21,7 +20,7 @@ class Menu extends Widget
     }
 
     public function work($v = array()){
-        $v['title'] = $this->title->getValue();
+        $v['title'] = $this->title->value();
         $v['view'] = $this->startChild('view');
         return parent::work($v);
     }

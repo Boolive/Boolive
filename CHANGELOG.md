@@ -5,7 +5,7 @@ Version 2.0 work in progress
 ----------------------------
 - enh #58: Added selecting other objects for add new (VladimirShestakov)
 - enh: Improved Rule::entity() to check object by search condition (VladimirShestakov)
-- ehc, new #31: Improved access control. Added role. Accounting access condition in inheritance objects.
+- enh, new #31: Improved access control. Added role. Accounting access condition in inheritance objects. Updates after changes in Data module  (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
 - new #31: Added access control for read and write. (VladimirShestakov)
 - new #60: Added user authentication and cancellations (VladimirShestakov)

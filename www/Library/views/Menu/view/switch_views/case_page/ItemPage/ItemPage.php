@@ -27,18 +27,18 @@ class ItemPage extends view
     {
         $obj = $this->_input['REQUEST']['object'];
         // Название пункта
-        $v['item_text'] = $obj->title->getValue();
+        $v['item_text'] = $obj->title->value();
         $v['item_title'] = $v['item_text'];
         // Ссылка
-        $real = $obj->notLink();
+        $real = $obj->linked();
 //        while ($real && $real['is_link']){
 //            $real = $real->proto();
 //        }
         if ($real){
-            if (substr($real['uri'], 0, 10) == '/Contents/'){
-                $v['item_href'] = substr($real['uri'], 10);
+            if (substr($real->uri(), 0, 10) == '/Contents/'){
+                $v['item_href'] = substr($real->uri(), 10);
             }else{
-                $v['item_href'] = $real['uri'];
+                $v['item_href'] = $real->uri();
             }
         }else{
             $v['item_href'] = '';
@@ -48,7 +48,7 @@ class ItemPage extends view
         if ($real->isEqual($active)){
 			$v['item_class'] = 'active';
         }else
-        if ($active && $active->isChildOf($real)){
+        if ($active && $active->in($real)){
             $v['item_class'] = 'active-child';
         }else{
             $v['item_class'] = '';

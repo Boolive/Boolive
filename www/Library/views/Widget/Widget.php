@@ -12,6 +12,15 @@ use Boolive\template\Template,
 
 class Widget extends View
 {
+
+    /**
+     * Инициализация
+     */
+    protected function init()
+    {
+        if (!$this->isLink()) $this->find();
+    }
+
     /**
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
@@ -29,8 +38,9 @@ class Widget extends View
 
     public function work($v = array())
     {
+
         $this->startChild('res');
-        $v['view_uri'] = $this['uri'];
+        $v['view_uri'] = $this->uri();
         return Template::render($this, $v);
     }
 }

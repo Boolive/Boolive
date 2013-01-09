@@ -24,9 +24,23 @@ class Part extends AutoWidgetList
     }
 
     protected function getList(){
-        $count_per_page = max(1, $this->count_per_page->getValue());
+        $cases = $this->linked(true)->switch_views->getCases();
+        $cnt = sizeof($cases);
+        $protos = array();
+        while ($cnt > 0){
+            $cnt--;
+            if ($cases[$cnt]->value() == 'all'){
+                $protos = array();
+                $cnt = 0;
+            }else{
+                $protos[] = $cases[$cnt]->value();
+            }
+        }
+
+        $count_per_page = max(1, $this->count_per_page->value());
         $obj = $this->_input['REQUEST']['object'];
-        $list = $obj->findAll2(array(
+        $list = $obj->find(array(
+            'where' => array('is', $protos),
             'order' => array(array('order', 'ASC')),
             'limit' => array(
                 ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
@@ -39,7 +53,7 @@ class Part extends AutoWidgetList
 //                'count' => $count_per_page
 //            )
 //        );
-        $this->_input_child['REQUEST']['page_count'] = ceil($obj->findAll2(array('select'=>'count'))/$count_per_page);
+        $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count'))/$count_per_page);
         return $list;
     }
 }

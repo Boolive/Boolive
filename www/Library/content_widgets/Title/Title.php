@@ -12,9 +12,9 @@ class Title extends Widget
 {
     public function work($v = array())
     {
-        $v['value'] = $this->_input['REQUEST']['object']->getValue();
+        $v['value'] = $this->_input['REQUEST']['object']->value();
         if ($parent = $this->_input['REQUEST']['object']->parent()){
-            $v['parent_uri'] = $parent['uri'];
+            $v['parent_uri'] = $parent->uri();
             if (mb_substr($v['parent_uri'],0,10)=='/Contents/'){
                 $v['parent_uri'] = mb_substr($v['parent_uri'],10);
             }

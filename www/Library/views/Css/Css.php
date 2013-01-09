@@ -26,7 +26,7 @@ class Css extends View
             $proto->start($this->_commands, $this->_input);
         }
         // Подключение CSS файла
-        if ($file = $this->getFile()){
+        if ($file = $this->file()){
             $this->_commands->addHtml('link', array('rel'=>"stylesheet", 'type'=>"text/css", 'href'=>$file));
         }
     }

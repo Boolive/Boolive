@@ -44,8 +44,8 @@ class Attribs extends Widget
             return $this->callSave();
         }
         // Передача шаблона, скриптов, стилей
-        $v['object_uri'] = $this->_input['REQUEST']['object']['uri'];
-        $v['head'] = $this->title->getValue();
+        $v['object_uri'] = $this->_input['REQUEST']['object']->uri();
+        $v['head'] = $this->title->value();
         return parent::work($v);
     }
 
@@ -66,17 +66,17 @@ class Attribs extends Widget
             $attribs = $this->_input['REQUEST']['attrib'];
             // Значение
             if (empty($attribs['value_set_null'])){
-                if (isset($attribs['value'])) $obj['value'] = $attribs['value'];
+                if (isset($attribs['value'])) $obj->value($attribs['value']);
             }else{
                 // Обнуление значения
-                $obj['value'] = null;
+                $obj->value(null);
             }
             // Файл
             if (isset($this->_input['FILES']['attrib']['file'])){
                 $obj['file'] = $this->_input['FILES']['attrib']['file'];
             }else
             if (empty($attribs['is_file'])){
-                $obj['is_file'] = false;
+                $obj->isFile(false);
             }
 
             // Прототип
@@ -87,18 +87,18 @@ class Attribs extends Widget
             //if (isset($attribs['owner'])) $obj['owner'] = $attribs['owner'];
 
             // Порядковый номер
-            if (isset($attribs['order'])) $obj['order'] = $attribs['order'];
+            if (isset($attribs['order'])) $obj->order($attribs['order']);
 
             // Признаки
-            $obj['is_logic'] = !empty($attribs['is_logic']);
-            $obj['is_hidden'] = !empty($attribs['is_hidden']);
-            $obj['is_link'] = !empty($attribs['is_link']);
-            $obj['override'] = !empty($attribs['override']);
+            $obj->isDefaultClass(empty($attribs['is_logic']));
+            $obj->isHidden(!empty($attribs['is_hidden']));
+            $obj->isLink(!empty($attribs['is_link']));
+            $obj->isDefaultChildren(empty($attribs['override']));
 
             // Проверка и сохранение
             /** @var $error \Boolive\errors\Error */
             $error = null;
-            $obj->save(false, $error);
+            $obj->save(false, true, $error);
             if (isset($error) && $error->isExist()){
                 $v['error'] = array();
                 if ($error->isExist('_attribs')){
@@ -125,21 +125,21 @@ class Attribs extends Widget
         /** @var $obj \Boolive\data\Entity */
         $obj  = $this->_input['REQUEST']['object'];
         $v = array(
-            'uri' => $obj['uri'],
-            'proto' => $obj['proto'],
-            'value' => (string)$obj->getValue(),
-            'is_null' => is_null($obj['value']),
-            'value_null' => $obj->proto() ? (string)$obj->proto()->getValue() : '',
+            'uri' => $obj->uri(),
+            'proto' => $obj->_attribs['proto'],
+            'value' => (string)$obj->value(),
+            'is_null' => is_null($obj->value()),
+            'value_null' => $obj->proto() ? (string)$obj->proto()->value() : '',
             'is_file' => $obj->isFile(),
             'is_file_null' => $obj->proto() ? $obj->proto()->isFile() : false,
-            'lang' => $obj['lang'],
+            'lang' => $obj->_attribs['lang'],
             'owner' => '',//$obj['owner'],
-            'date' => date('j.m.Y, G:s', $obj['date']),
-            'order' => $obj['order'],
-            'is_logic' => (bool)$obj['is_logic'],
-            'is_hidden' => (bool)$obj['is_hidden'],
-            'is_link' => (bool)$obj['is_link'],
-            'override' => (bool)$obj['override'],
+            'date' => date('j.m.Y, G:s', $obj->date()),
+            'order' => $obj->order(),
+            'is_logic' => (bool)$obj->isDefaultClass()!=\Boolive\data\stores\MySQLStore::MAX_ID,//['is_logic'],
+            'is_hidden' => (bool)$obj->isHidden(),
+            'is_link' => (bool)$obj->isLink(),
+            'override' => (bool)$obj->isDefaultChildren(),
         );
         return $v;
     }

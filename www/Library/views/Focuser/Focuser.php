@@ -37,17 +37,15 @@ class Focuser extends Widget
         }
         $object = null;
         // объект по умолчанию
-        if (empty($uri) && ($object = Data::read('/Contents')->findAll2(array(
+        if (empty($uri) && ($object = Data::read('/Contents')->find(array(
                 'where' => array(
-                    array('attr', 'is_history', '=', 0),
-                    array('attr', 'is_delete', '=', 0),
                     array('is', '/Library/content_samples/Page')
                 ),
                 'order' => array(
                     array('order', 'ASC')
                 ),
                 'limit' => array(0,1)
-            ), false, null))){
+            ), null))){
             $object = reset($object);
         }
         // ищем в /Contents

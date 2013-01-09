@@ -15,6 +15,7 @@ use Boolive\data\Entity,
 
 class View extends Entity
 {
+    protected $_is_init = false;
     /**
      * Отфильтрованные входящих данных.
      * Инициализируется в методе start()
@@ -38,6 +39,14 @@ class View extends Entity
      * @var mixed
      */
     protected $_input_child;
+
+    /**
+     * Инициализация
+     */
+    protected function init()
+    {
+
+    }
 
     /**
      * Возвращает правило на входящие данные
@@ -77,6 +86,10 @@ class View extends Entity
      */
     public function start(Commands $commands, $input)
     {
+        if (!$this->_is_init){
+            $this->init();
+            $this->_is_init = true;
+        }
         // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
         $this->_commands = $commands;
         $this->initInput($input);
@@ -95,8 +108,6 @@ class View extends Entity
         }else{
             $result = null;
         }
-        $this->_input = null;
-        $this->_commands = null;
         return $result;
     }
 
@@ -125,7 +136,7 @@ class View extends Entity
      */
     public function startChild($name)
     {
-        if ($result = $this->{$name}->start($this->_commands, $this->_input_child)){
+        if ($result = $this->linked(true)->{$name}->start($this->_commands, $this->_input_child)){
             $this->_input_child['previous'] = true;
         }
         return $result;
@@ -138,18 +149,10 @@ class View extends Entity
     public function startChildren()
     {
         $result = array();
-        $list = $this->findAll2(array(
-            'where' => array(
-                array('attr', 'is_history', '=', 0),
-                array('attr', 'is_delete', '=', 0)
-            ),
-            'order' => array(
-                array('order', 'ASC')
-            )
-        ));
+        $list = $this->find();
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
-            $out = $child->start($this->_commands, $this->_input_child);
+            $out = $child->linked(true)->start($this->_commands, $this->_input_child);
             if ($out){
                 $result[$key] = $out;
                 $this->_input_child['previous'] = true;

@@ -13,10 +13,10 @@ class ObjectItem extends Widget
     public function work($v = array())
     {
         $obj = $this->_input['REQUEST']['object'];
-        $v['name'] = $obj->title->getValue();
-        if (empty($v['name'])) $v['name'] = $obj->getName();
-        //$v['value'] = (string)$obj->getValue();
-        $v['uri'] = $obj['uri'];
+        $v['name'] = $obj->title->value();
+        if (empty($v['name'])) $v['name'] = $obj->name();
+        //$v['value'] = (string)$obj->value();
+        $v['uri'] = $obj->uri();
         return parent::work($v);
     }
 }

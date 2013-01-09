@@ -31,18 +31,16 @@ class view extends AutoWidgetList
         return parent::work($v);
     }
 
-    protected function getList(){
-        // @todo Сделать настраиваемый фильтр
-        $list = $this->_input['REQUEST']['object']->findAll2(array(
-            'where' => array(
-                array('attr', 'is_history', '=', 0),
-                array('attr', 'is_delete', '=', 0),
-                array('is', '/Library/content_samples/Page', '/Library/content_samples/Part')
-            ),
-            'order' => array(
-                array('order', 'ASC')
-            )
-        ));
-        return $list;
-    }
+//    protected function getList($protos){
+//        // @todo Сделать настраиваемый фильтр
+//        $list = $this->_input['REQUEST']['object']->find(array(
+//            'where' => array(
+//                array('is', $protos)
+//            ),
+//            'order' => array(
+//                array('order', 'ASC')
+//            )
+//        ));
+//        return $list;
+//    }
 }

@@ -24,13 +24,13 @@ class PHPTemplate
         $v = new PHPTemplateValues($v, null, $entity);
         try{
             ob_start();
-            include($entity->getFile(true));
+            include($entity->file(null, true));
             $result = ob_get_contents();
             ob_end_clean();
         }catch (\Exception $e){
             ob_end_clean();
 //          if ($e->getCode() == 2){
-//              echo "Template file '{$entity->getFile()}' not found";
+//              echo "Template file '{$entity->file()}' not found";
 //          }else{
                 throw $e;
 //          }

@@ -33,24 +33,24 @@ class Add extends AutoWidgetList
                 /** @var $parent \Boolive\data\Entity */
                 $parent = $this->_input['REQUEST']['object'];
                 $obj = $parent->add($this->_input['REQUEST']['proto']);
-                $parent->save(true, $error);
+                $parent->save(true, true, $error);
                 $v['result'] = array(
-                    'object' => $obj['uri'],
-                    'parent' => $parent['uri']
+                    'object' => $obj->uri(),
+                    'parent' => $parent->uri()
                 );
             }
             return $v;
         }else{
-            $v['title'] = $this->title->getValue();
-            if (!$v['object']['title'] = $this->_input['REQUEST']['object']->title->getValue()){
-                $v['object']['title'] = $this->_input['REQUEST']['object']->getName();
+            $v['title'] = $this->title->value();
+            if (!$v['object']['title'] = $this->_input['REQUEST']['object']->title->value()){
+                $v['object']['title'] = $this->_input['REQUEST']['object']->name();
             }
-            $v['object']['uri'] = $this->_input['REQUEST']['object']['uri'];
+            $v['object']['uri'] = $this->_input['REQUEST']['object']->uri();
             return parent::work($v);
         }
     }
 
-    protected function getList(){
+    protected function getList($protos){
         // @todo Сделать выбор часто используемых объектов
         $obj = \Boolive\data\Data::read('/Library/basic/simple/Object');
         return array($obj);

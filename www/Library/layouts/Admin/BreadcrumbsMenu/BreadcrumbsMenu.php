@@ -17,8 +17,8 @@ class BreadcrumbsMenu extends Widget{
 		$v['items'] = array();
 		do{
             $v['items'][] = array(
-                'title' => ($name = $obj->getName()) ? $name : $obj->title->getValue(),
-                'url'	=> $obj['uri'],
+                'title' => ($name = $obj->name()) ? $name : $obj->title->value(),
+                'url'	=> $obj->uri(),
                 'active' => empty($v['items']) // активный первый элемент
             );
 		}while($obj = $obj->parent());

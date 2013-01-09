@@ -19,6 +19,8 @@ class SwitchViews extends Widget
 {
     protected $_cases;
 
+
+
     public function getInputRule()
     {
         return Rule::arrays(array(
@@ -41,18 +43,18 @@ class SwitchViews extends Widget
         $cases = $this->getCases();
         //$obj = $this->_input['REQUEST']['object'];
         $v['object'] = null;
-        //$uri = $obj['uri'];
+        //$uri = $obj->uri();
         $cnt = count($cases);
         $case = null;
         for ($i = 0; $i < $cnt; ++$i){
             if ($cases[$i] instanceof \Library\views\SwitchCase\SwitchCase){
-                $uri = $cases[$i]->getValue();
+                $uri = $cases[$i]->value();
                 if ($uri=='all'){
                     $case = $cases[$i];
                 }else{
                     $obj = $this->_input['REQUEST']['object'];
                     while ($obj && !$case){
-                        if ($obj['uri'] == $uri){
+                        if ($obj->id() == $uri || $obj->uri() == $uri){
                             $case = $cases[$i];
                         }else{
                             $obj = $obj->proto();
@@ -76,17 +78,12 @@ class SwitchViews extends Widget
         }
     }
 
-    protected function getCases(){
+    public function getCases()
+    {
         if (!isset($this->_cases)){
-            $this->_cases = $this->findAll2(array(
-                'where' => array(
-                    array('attr', 'is_history', '=', 0),
-                    array('attr', 'is_delete', '=', 0),
-                ),
-                'order' => array(
-                    array('order', 'ASC')
-                )
-            ), false, null);
+            $this->_cases = $this->find(array(
+                'where' => array('is', '/Library/views/SwitchCase')
+            ), null);
         }
         return $this->_cases;
     }

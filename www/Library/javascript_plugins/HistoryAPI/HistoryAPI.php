@@ -15,15 +15,15 @@ class HistoryAPI extends JavaScript
         // Исполнение зависимых объектов
         $this->depends->start($this->_commands, $this->_input);
         // Подключение javascript файла
-        if ($file = $this->getFile()){
+        if ($file = $this->file()){
             $config = array();
-            if ($type = $this->type->getValue()){
+            if ($type = $this->type->value()){
                 $config[] = 'type='.$type;
             }
-            if ($redirect = $this->redirect->getValue()){
+            if ($redirect = $this->redirect->value()){
                 $config[] = 'redirect=true';
             }
-            if ($basepath = $this->basepath->getValue()){
+            if ($basepath = $this->basepath->value()){
                 $config[] = 'basepath='.$basepath;
             }
             if ($config) $file.='?'.implode('&',$config);

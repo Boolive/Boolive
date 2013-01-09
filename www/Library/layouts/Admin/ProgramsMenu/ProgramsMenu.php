@@ -12,43 +12,18 @@ class ProgramsMenu extends Widget
 {
     public function work($v = array())
     {
-        $cases = $this->programs->switch_views->findAll2(array(
-                'where' => array(
-                    array('attr', 'is_history', '=', 0),
-                    array('attr', 'is_delete', '=', 0),
-                ),
-                'order' => array(
-                    array('order', 'ASC')
-                )
-            ), false);
+        $cases = $this->programs->switch_views->find();
         $programs = array();
         foreach ($cases as $case){
             if ($case instanceof \Library\views\SwitchCase\SwitchCase){
-                $uri = $case->getValue();
+                $uri = $case->value();
                 if ($uri=='all'){
-                    $programs = array_merge($programs, $case->findAll2(array(
-                            'where' => array(
-                                array('attr', 'is_history', '=', 0),
-                                array('attr', 'is_delete', '=', 0),
-                            ),
-                            'order' => array(
-                                array('order', 'ASC')
-                            )
-                        ))
-                    );
+                    $programs = array_merge($programs, $case->find());
                 }else{
                     $obj = $this->_input['REQUEST']['object'];
                     while ($obj){
-                        if ($obj['uri'] == $uri){
-                            $programs = array_merge($programs, $case->findAll2(array(
-                                    'where' => array(
-                                        array('attr', 'is_history', '=', 0),
-                                        array('attr', 'is_delete', '=', 0),
-                                    ),
-                                    'order' => array(
-                                        array('order', 'ASC')
-                                    )
-                                ), false, null)
+                        if ($obj->uri() == $uri){
+                            $programs = array_merge($programs, $case->find(array(), null)
                             );
                             $obj = null;
                         }else{
@@ -62,9 +37,9 @@ class ProgramsMenu extends Widget
         foreach ($programs as $p){
             if ($p instanceof Widget){
                 $item = array(
-                    'title' => $p->title->getValue(),
-                    'view_name' => $p->getName(),
-                    'icon' => $p->icon->getFile()
+                    'title' => $p->title->value(),
+                    'view_name' => $p->name(),
+                    'icon' => $p->icon->file()
                 );
                 $v['items'][] = $item;
             }

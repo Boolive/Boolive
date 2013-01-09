@@ -12,16 +12,22 @@ class Text extends RichText
 {
     protected function getList()
     {
+        $cases = $this->linked(true)->switch_views->getCases();
+        $cnt = sizeof($cases);
+        $protos = array();
+        while ($cnt > 0){
+            $cnt--;
+            if ($cases[$cnt]->value() == 'all'){
+                $protos = array();
+                $cnt = 0;
+            }else{
+                $protos[] = $cases[$cnt]->value();
+            }
+        }
         // @todo Сделать настраиваемый фильтр
-        return $this->_input['REQUEST']['object']->findAll2(array(
-            'where' => array(
-                array('attr', 'is_history', '=', 0),
-                array('attr', 'is_delete', '=', 0),
-            ),
-            'order' => array(
-                array('order', 'ASC')
-            ),
+        return $this->_input['REQUEST']['object']->find(array(
+            'where' => array('is', $protos),
             'limit' => array(0, 2)
-        ), false, null);
+        ), null);
     }
 }

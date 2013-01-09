@@ -18,10 +18,10 @@ class Feedback extends Entity
         if ($this->check()){
             try{
                 return Mail::send(
-                    $this->email_to->getValue(),
-                    Check::filter($this->title->getValue(), Rule::escape()),
-                    Check::filter($this->message->getValue(), Rule::escape()),
-                    $this->email_from->getValue()
+                    $this->email_to->value(),
+                    Check::filter($this->title->value(), Rule::escape()),
+                    Check::filter($this->message->value(), Rule::escape()),
+                    $this->email_from->value()
                 );
             }catch (\Exception $e){
                 return false;
