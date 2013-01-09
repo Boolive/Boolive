@@ -23,7 +23,7 @@ class Member extends Entity
      */
     public function checkAccess($action_kind, $object)
     {
-        return $object->verify($this->getAccessCond($action_kind, $object->getParentUri(), 1));
+        return $object->verify($this->getAccessCond($action_kind, $object->parentUri(), 1));
     }
 
     /**
@@ -92,11 +92,11 @@ class Member extends Entity
             $cond = array('where' => array(array('attr', 'is_link', '=', 1)));
             // Выбор прав члена и всех его групп (родителей)
             do{
-                $rights = $obj->real()->access->{$action_kind}->findAll2($cond);
+                $rights = $obj->access->{$action_kind}->find($cond);
                 // Объединяем права в общий список
                 foreach ($rights as $r){
-                    $for = $r->notLink();
-                    if (!isset($access_info[$for['uri']])) $access_info[$for['uri']] = array('access' => (int)$r->getValue(), 'level' => $for->getLevel());
+                    $for = $r->linked();
+                    if (!isset($access_info[$for->uri()])) $access_info[$for->uri()] = array('access' => (int)$r->value(), 'level' => $for->parentCount());
                 }
                 $obj = $obj->parent();
             }while($obj instanceof Member);

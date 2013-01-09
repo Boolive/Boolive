@@ -14,17 +14,17 @@ use Boolive\data\Data,
 class Auth
 {
     /** Эталон пользователей */
-    const USER = '/Library/basic/members/User';
+    const USER = '/Library/access/User';
     /** Группа гостей */
     const GROUP_GUEST = '/Members/guests';
     /** Группа зарегистрированных */
     const GROUP_REGISTERED = '/Members/registered';
-    /** @var \Library\basic\members\Member\Member Текущий пользователь */
+    /** @var \Library\access\Member\Member Текущий пользователь */
     static private $user;
 
     /**
      * Текущий пользователь
-     * @return \Library\basic\members\Member\Member
+     * @return \Library\access\Member\Member
      */
     static function getUser()
     {
@@ -39,12 +39,12 @@ class Auth
      * Установка текущего пользователя
      * Используется при "ручной" аутентификации, например, формой входа. При этом поиск пользователя
      * по логину, паролю или другим параметрам выполняется моделью формы входа.
-     * @param null | \Library\basic\members\User\User $user Авторизованный пользователь или NULL для отмены авторизации
+     * @param null | \Library\access\User\User $user Авторизованный пользователь или NULL для отмены авторизации
      * @param int $duration Длительность в секундах запоминания пользователя. Если 0, то пользователь запоминается на период работы браузера
      */
     static function setUser($user, $duration = 0)
     {
-        if ($user instanceof \Library\basic\members\User\User){
+        if ($user instanceof \Library\access\User\User){
             self::$user = $user;
             self::remember($duration);
         }else{
@@ -56,7 +56,7 @@ class Auth
 
     /**
      * Вспомнить пользователя
-     * @return \Library\basic\members\Member\Member
+     * @return \Library\access\Member\Member
      */
     static function remind()
     {
@@ -69,13 +69,13 @@ class Auth
         // Если есть кука, то ищем пользователя в БД
         if ($hash){
             $result = Data::select(array(
-                'from' => array('/Members', 5),
+                'from' => array('/Members'),
                 'where' => array(
                     array('attr', 'value', '=', $hash),
                     array('attr', 'is_link', '=', '0')
                 ),
                 'limit' => array(0, 1)
-            ), false, null, false);
+            ), null, false, null, null, false);
             // Пользователь найден и не истекло время его запоминания
             if (!empty($result)){
                 self::$user = $result[0];
@@ -85,9 +85,9 @@ class Auth
         }
         // Новый гость
         if (!self::$user){
-            self::$user = Data::read(self::USER, '', 0, null, false, false)->birth(Data::read(self::GROUP_GUEST, '', 0, null, false, false));
-            self::$user['value'] = $hash;
-            self::$user->chooseUniqueName();
+            self::$user = Data::read(self::USER, null, null, 0, false)->birth(Data::read(self::GROUP_GUEST, null, null, 0, false));
+            self::$user->value($hash);
+            self::$user->name(self::$user->name(), true);
             $duration = 0;
         }
         self::remember($duration);
@@ -100,17 +100,18 @@ class Auth
     static function remember($duration = 0)
     {
         $duration = max(0, min($duration, 3000000)); // не больше месяца (примерно)
-        $hash = self::$user->getValue();
+        $hash = self::$user->value();
+//        $u = self::$user;
         // Запомнить время визита (не чаще раза за 5 минут)
-        $a = !self::$user->isVirtual();
-        $b = self::$user->visit_time['value'];
-        $c = time()-300;
-        if ((!self::$user->isVirtual() && (self::$user->visit_time['value'] < (time()-300)))){
+//        $a = !self::$user->isVirtual();
+//        $b = self::$user->visit_time->value();
+//        $c = time()-300;
+        if (self::$user->isExist() && (self::$user->visit_time->value() < (time()-300))){
             // Обновление hash значения
-            //$hash = self::$user['value'] = self::getUniqHash();
+            //$hash = self::$user->value(self::getUniqHash());
             // Обновление времени визита
             self::$user->visit_time = time();
-            self::$user->save(false, $error, false);
+            self::$user->visit_time->save(false, true, $error, false);
         }
         setcookie('ID', $duration.'|'.$hash, ($duration ? time()+$duration : 0), '/');
     }

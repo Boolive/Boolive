@@ -22,17 +22,17 @@ class object extends Entity
                 'where' => array(
                     array('attr', 'is_link', '=', '0'),
                     array('child', 'email', array(
-                        array('attr', 'value', '=', $this->email->getValue())
+                        array('attr', 'value', '=', $this->email->value())
                     )),
                     array('child', 'passw', array(
-                        array('attr', 'value', '=', Auth::getHash($this->passw->getValue()))
+                        array('attr', 'value', '=', Auth::getHash($this->passw->value()))
                     )),
                 ),
                 'limit' => array(0,1)
             ), null, false);
             // Пользователь найден?
             if ($user){
-                Auth::setUser($user[0], $this->remember->getValue()?2500000:0);
+                Auth::setUser($user[0], $this->remember->value()?2500000:0);
                 return true;
             }
         }
