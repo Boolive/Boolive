@@ -177,7 +177,7 @@ class Trace
         }
         // если не определена или null
         if (!isset($var) || is_null($var)){
-            $out.= "null";
+            $out.= 'null';
         }else
         // если булево
         if (is_bool($var)){
@@ -210,7 +210,7 @@ class Trace
             $class_name = get_class($var);
             if (isset($trace_buf[spl_object_hash($var)])){
                 //if ($var instanceof \Boolive\data\Entity){
-                //	$list = array('id' => $var['id'], 'name'=> $var['name']);
+                //	$list = array('id' => $var['id'], 'name'=> $var->name());
                 //}else{
                 //	$list = array();
                 //}
@@ -241,7 +241,11 @@ class Trace
                     }
                 }
             }
-        }
+        }/*else
+        // Строка
+        if (is_string($var)){
+            $out.= '"'.$var.'"';
+        }*/
         // Иначе
         else{
             $out.= $var;

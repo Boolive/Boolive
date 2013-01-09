@@ -81,7 +81,7 @@ class F
     {
         $pos = mb_strrpos($str, $delim);
         if ($pos === false) return array(null, $str);
-        return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+1));
+        return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+mb_strlen($delim)));
     }
 
     /**

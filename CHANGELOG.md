@@ -13,6 +13,7 @@ Version 2.0 work in progress
 - new: New model of interaction jQuery UI widgets based on AjaxWidget (VladimirShestakov)
 - new: Added method for verify object by search condition (VladimirShestakov)
 - new: Added simple object "Boolean" (VladimirShestakov)
+- new: New structure of the database. Added MySQLStorte instead MySQLSection and MySQLIndex. Updated Data and Entity classes. (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
 ------------------------------------

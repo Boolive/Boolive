@@ -56,14 +56,14 @@ namespace Boolive
                     Events::trigger('Boolive::activate');
 
                 }else{
-
                     // Подключение и активация запрашиваемого модуля
+                    // Путь по имени класса
                     $names = explode('\\', $class_name, 2);
                     $path = str_replace('\\', '/', $class_name);
                     if ($names[0] == "Boolive") {
                         $path = DIR_SERVER_ENGINE . substr($path, 8) . '.php';
-                    } else {
-                        $path = DIR_SERVER_PROJECT . $path . '.php';
+                    }else{
+                         $path = DIR_SERVER_PROJECT . $path . '.php';
                     }
                     include_once($path);
                     self::$included[$class_name] = $class_name;
