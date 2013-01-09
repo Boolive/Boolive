@@ -2728,7 +2728,7 @@ CREATE TABLE IF NOT EXISTS `trees` (
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `level` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`object_id`,`parent_id`,`type`,`level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf32 COMMENT='Индекс по родителям и прототипам';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Индекс по родителям и прототипам';
 
 --
 -- Дамп данных таблицы `trees`
