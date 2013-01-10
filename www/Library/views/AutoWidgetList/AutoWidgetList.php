@@ -42,6 +42,6 @@ class AutoWidgetList extends Widget
         // @todo Сделать настраиваемый фильтр
         return $this->_input['REQUEST']['object']->find(array(
             'where' => array('is', $protos)
-        ));
+        ), 'name', true);
     }
 }

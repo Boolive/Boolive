@@ -885,6 +885,9 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
     /**
      * Поиск подчиненных объектов
      * @param array $cond Условие поиска
+     * @param null|string $keys Имя атрибута, значения которого использовать в качестве ключей массива результата
+     * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
+     * @param int $depth Глубина поиска
      * @see https://github.com/Boolive/Boolive/issues/7
      * @example
      * $cond = array(
@@ -907,11 +910,9 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      *     ),
      *     'limit' => array(10, 15)                    // ограничение - выбирать с 10-го не более 15 объектов
      * );
-     * @param null|string $keys Имя атрибута, значения которого использовать в качестве ключей массива результата
-     * @param int $depth Глубина поиска
      * @return array
      */
-    public function find($cond = array(), $keys = 'name', $depth = 1)
+    public function find($cond = array(), $keys = 'name', $load = true, $depth = 1)
     {
         $all = (empty($cond) && $depth == 1);
 
@@ -938,7 +939,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
             return array();
         }
         // Если загружены все подчиенные, то запоминаем их для предотвращения повторных выборок
-        if ($all){
+        if ($all || $load){
             if ($keys == 'name'){
                 $this->_children = $result;
             }else{
