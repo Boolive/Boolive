@@ -644,7 +644,7 @@ class MySQLStore extends Entity
                             $select_cnt = 0;
                             while ($row = $select->fetch(DB::FETCH_ASSOC)){
                                 $row['id'] = $this->localId($row['uri']);
-                                //if ($from['is_link']) $row['is_link'] = 1;
+                                if ($from['is_link']) $row['is_link'] = 1;
                                 unset($row['uri']);
                                 // Запись объекта
                                 $insert->execute($row);
