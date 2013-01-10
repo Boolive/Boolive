@@ -15,6 +15,7 @@ Version 2.0 work in progress
 - new: Added method for verify object by search condition (VladimirShestakov)
 - new: Added simple object "Boolean" (VladimirShestakov)
 - new: New structure of the database. Added MySQLStorte instead MySQLSection and MySQLIndex. Updated Data and Entity classes. (VladimirShestakov)
+- new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
 - new #70: Added Session module (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
