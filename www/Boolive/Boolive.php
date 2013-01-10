@@ -195,7 +195,7 @@ namespace Boolive
         }
 
         /**
-         * Проверка системных требований для установки класса Engine
+         * Проверка системных требований для установки класса Boolive
          * @return array Массив сообщений - требований для установки
          */
         static function systemRequirements()

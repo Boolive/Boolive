@@ -9,7 +9,8 @@
 namespace Boolive\auth;
 
 use Boolive\data\Data,
-    Boolive\input\Input;
+    Boolive\input\Input,
+    Boolive\events\Events;
 
 class Auth
 {
@@ -52,6 +53,7 @@ class Auth
             Input::COOKIE()->offsetUnset('ID');
             self::remind();
         }
+        \Boolive\events\Events::trigger('Auth::setUser', array(self::getUser()));
     }
 
     /**
@@ -101,14 +103,8 @@ class Auth
     {
         $duration = max(0, min($duration, 3000000)); // не больше месяца (примерно)
         $hash = self::$user->value();
-//        $u = self::$user;
         // Запомнить время визита (не чаще раза за 5 минут)
-//        $a = !self::$user->isVirtual();
-//        $b = self::$user->visit_time->value();
-//        $c = time()-300;
         if (self::$user->isExist() && (self::$user->visit_time->value() < (time()-300))){
-            // Обновление hash значения
-            //$hash = self::$user->value(self::getUniqHash());
             // Обновление времени визита
             self::$user->visit_time = time();
             self::$user->visit_time->save(false, true, $error, false);

@@ -31,7 +31,7 @@ class Buffer
      */
     public static function get($key)
     {
-        return self::isExist($key)? self::$list[$key] : null;
+        return isset(self::$list[$key])? self::$list[$key] : null;
     }
 
     /**

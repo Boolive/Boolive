@@ -43,7 +43,7 @@ class Events
      * @param string $handler_module Имя класса обработчика события
      * @param string $handler_method Имя метода класса обработчика события
      * @param bool $save Признак, сохранять регистрацию на событие?
-     * @param bool $once Признак, одноразовы обработка события
+     * @param bool $once Признак, одноразовая обработка события или нет?
      */
     static function on($event_name, $handler_module, $handler_method, $save = false, $once = false)
     {
