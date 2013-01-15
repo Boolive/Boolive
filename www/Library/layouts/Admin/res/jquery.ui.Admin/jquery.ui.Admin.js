@@ -118,13 +118,16 @@
             }
             if (!$.isEmptyObject(change)){
                 // Запись истории
-                if (!without_history){
-                    if (!without_history && ('object' in change || 'view_name' in change)){
+                if (without_history!==true){
+                    if (without_history!==true && ('object' in change || 'view_name' in change)){
                         this._state.history_i++;
                         history.pushState(this._state, null, this.getURIFromState(this._state));
+
                     }else{
                         history.replaceState(this._state, null, this.getURIFromState(this._state));
                     }
+                }else{
+                    history.replaceState(this._state, null, this.getURIFromState(this._state));
                 }
                 this.after('setState', [this._state, change]);
             }
@@ -152,7 +155,7 @@
             var window = this._windows.find('> #'+id+':last');
             if (window.length){
                 // Скрыть текущее окно
-                //self._window_current.hide();
+                self._window_current.hide();
                 // Показываем. Тег перенести в начало списка.
                 self._windows.append(window);
                 self.review_windows();
@@ -220,11 +223,11 @@
             // Открытие первого окна с спике
             this._window_current = this._windows.find('> :last');
             this._state = this._window_current.data('state');
-            //this._window_current.show();
+            this._window_current.show();
             // Сброс истории барузера до момента смены окна
             if (dh!=0) history.go(dh);
             // Сообщаем всем о смене состояния
-            this.refresh_state();
+            this.refresh_state(false);
         },
 
         review_windows: function(){
@@ -317,7 +320,7 @@
          * @param args Аргументы
          * @param target Объект, иницировавший вызов действия
          */
-        after: function(action, args, target){
+        after: function(action, args, target, all){
             var stop = false;
             if (target && target!=this){
                 // По target опредлить окно и для него вызывать обработчик
@@ -327,11 +330,13 @@
                 }
             }
             if (!stop){
-                var children = this._window_current.data('children');
-                for (var child in children){
-                    children[child].after(action, args, target || this);
-                }
                 // Отправлять виджетам текущего окна и виджетам вне окна
+                if (all!==false){
+                    var children = this._window_current.data('children');
+                    for (var child in children){
+                        children[child].after(action, args, target || this);
+                    }
+                }
                 for (var child in this._children){
                     this._children[child].after(action, args, target || this);
                 }
@@ -343,8 +348,8 @@
          * Делается вид, что оно полностью изменилось, чтоб всех принудить обновиться
          * @private
          */
-        refresh_state: function(){
-            this.after('setState', [this._state, {object: true, select: true, view_name: true}]);
+        refresh_state: function(all){
+            this.after('setState', [this._state, {object: true, select: true, view_name: true}], undefined, all);
         },
 
         /**

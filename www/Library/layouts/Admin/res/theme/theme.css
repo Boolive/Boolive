@@ -4,7 +4,7 @@ html, body {
 	background-repeat: repeat;
 	background-color: #f5f5f5;
 	}
-body,td,th {
+body,td,th,input {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12pt;
 	color: #000;
@@ -15,9 +15,10 @@ a, a:active{
 	outline: none;
 	}
 	a:hover {
-		color: #0065c9;
+		color: #0063bf;
 		}
 a.internal{
+    cursor: pointer;
     text-decoration: none;
     border-bottom: 1px dashed #006ad6;
     }
@@ -100,6 +101,12 @@ h2 + p{
     .btn:active, .btn-min:active{
         padding: 7px 14px 1px 14px;
         }
+    .btn:first-child, .btn-min:first-child{
+        margin-left: 0;
+    }
+    .btn:last-child, .btn-min:last-child{
+        margin-right: 0;
+    }
 
 .btn-min{
     font-size: 10pt;
@@ -145,13 +152,21 @@ h2 + p{
         }
 /* Неактивная кнопка*/
 .btn-disable, .btn-disable:hover, .btn-disable:active {
-    color: #cccccc;
-    background-color: #f5f5f5;
-    border: 1px solid #ebebeb;
+    /*background-color: #f5f5f5;
+    border: 1px solid #ebebeb;*/
     cursor: default;
     padding: 6px 14px 2px 14px;
     }
 
+.btn-icon, .btn-icon-delete {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-bottom: -3px;
+    }
+.btn-icon-delete{
+    background: url(img/delete.png) no-repeat center;
+}
 /* Элементы формы */
 .inpt{
     border: 1px #E0E0E0 solid;
@@ -160,7 +175,7 @@ h2 + p{
     font-size: 11pt;
     padding: 3px;
     margin: 0;
-    box-shadow: inset 0 1px 2px 0 #EEE;
+    box-shadow: inset -1px 1px 3px 0 #f5f5f5;
     border-radius: 3px;
     display: inline-block;
     position: relative;
@@ -181,15 +196,40 @@ label{
     border-radius: 3px;
 }
 .txt-tag{
-    font-family: verdana;
+    font-family: Verdana;
     font-size: 9pt;
-    margin: 0 5px;
+    /*margin: 0 5px;*/
     display: inline-block;
     background-color: #F5F5F5;
     color: #999;
     padding: 2px 5px;
     border-radius: 3px;
 }
+.input-pfx{
+    font-size: 9pt;
+    /*display: inline-block;*/
+    background-color: #F5F5F5;
+    color: #999;
+    padding: 5px 5px 4px 5px;
+    border: 1px #E0E0E0 solid;
+    /*border-bottom: 1px #E0E0E0 solid;
+    border-left: 1px #E0E0E0 solid;*/
+    border-radius: 3px;
+   /* border-bottom-left-radius: 3px;*/
+    /*height: 17px;*/
+    line-height: 26px;
+    min-width: 1px;
+    font-family: Verdana;
+}
+
+.tag-link{
+    cursor: pointer;
+    }
+    .tag-link:hover{
+        background-color: #f2f9ff;
+        color: #999;
+        border: 1px #E0E0E0 solid;
+        }
 
 .hide{
     display: none;

@@ -9,7 +9,8 @@
 namespace Library\admin_widgets\Attribs;
 
 use Library\views\Widget\Widget,
-    Boolive\values\Rule;
+    Boolive\values\Rule,
+    Boolive\data\Data;
 
 class Attribs extends Widget
 {
@@ -64,27 +65,34 @@ class Attribs extends Widget
             $obj  = $this->_input['REQUEST']['object'];
 
             $attribs = $this->_input['REQUEST']['attrib'];
+
+            // Название
+            if (isset($attribs['name']) && $attribs['name']!=$obj->name()) $obj->name($attribs['name'], true);
+
             // Значение
-            if (empty($attribs['value_set_null'])){
+            if (empty($attribs['is_null'])){
                 if (isset($attribs['value'])) $obj->value($attribs['value']);
             }else{
                 // Обнуление значения
-                $obj->value(null);
+                $obj->isDefaultValue(true);
             }
             // Файл
             if (isset($this->_input['FILES']['attrib']['file'])){
-                $obj['file'] = $this->_input['FILES']['attrib']['file'];
+                $obj->file($this->_input['FILES']['attrib']['file']);
             }else
             if (empty($attribs['is_file'])){
-                $obj->isFile(false);
+                $obj->file(false);
             }
 
             // Прототип
-            //if (isset($attribs['proto'])) $obj['proto'] = $attribs['proto'];
+            if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
             // Язык
             //if (isset($attribs['lang'])) $obj['lang'] = $attribs['lang'];
             // Владелец
             //if (isset($attribs['owner'])) $obj['owner'] = $attribs['owner'];
+
+            // Родитель
+            if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
 
             // Порядковый номер
             if (isset($attribs['order'])) $obj->order($attribs['order']);
@@ -93,12 +101,12 @@ class Attribs extends Widget
             $obj->isDefaultClass(empty($attribs['is_logic']));
             $obj->isHidden(!empty($attribs['is_hidden']));
             $obj->isLink(!empty($attribs['is_link']));
-            $obj->isDefaultChildren(empty($attribs['override']));
+            $obj->isDefaultChildren(!empty($attribs['override']));
 
             // Проверка и сохранение
             /** @var $error \Boolive\errors\Error */
             $error = null;
-            $obj->save(false, true, $error);
+            $obj->save(false, false, $error);
             if (isset($error) && $error->isExist()){
                 $v['error'] = array();
                 if ($error->isExist('_attribs')){
@@ -126,14 +134,18 @@ class Attribs extends Widget
         $obj  = $this->_input['REQUEST']['object'];
         $v = array(
             'uri' => $obj->uri(),
-            'proto' => $obj->_attribs['proto'],
-            'value' => (string)$obj->value(),
-            'is_null' => is_null($obj->value()),
+            'name' => $obj->name(),
+            'proto' => ($p = $obj->proto()) ? $p->uri() : 'null',
+            'parent' => ($p = $obj->parent()) ? $p->uri() : 'null',
+            'owner' => ($p = $obj->owner()) ? $p->uri() : 'null',
+            'lang' => ($p = $obj->lang()) ? $p->uri() : 'null',
+            'value' => $obj->value(),
+            'is_null' => $obj->isDefaultValue(),
             'value_null' => $obj->proto() ? (string)$obj->proto()->value() : '',
             'is_file' => $obj->isFile(),
             'is_file_null' => $obj->proto() ? $obj->proto()->isFile() : false,
-            'lang' => $obj->_attribs['lang'],
-            'owner' => '',//$obj['owner'],
+//            'lang' => $obj->_attribs['lang'],
+//            'owner' => $obj->_attribs['owner'],
             'date' => date('j.m.Y, G:s', $obj->date()),
             'order' => $obj->order(),
             'is_logic' => (bool)$obj->isDefaultClass()!=\Boolive\data\stores\MySQLStore::MAX_ID,//['is_logic'],

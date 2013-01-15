@@ -20,11 +20,11 @@ class ProgramsMenu extends Widget
                 if ($uri=='all'){
                     $programs = array_merge($programs, $case->find());
                 }else{
+                    /** @var $obj \Boolive\data\Entity */
                     $obj = $this->_input['REQUEST']['object'];
                     while ($obj){
-                        if ($obj->uri() == $uri){
-                            $programs = array_merge($programs, $case->find(array(), null)
-                            );
+                        if ($obj->id() == $uri || $obj->uri() == $uri){
+                            $programs = array_merge($programs, $case->find(array(), null));
                             $obj = null;
                         }else{
                             $obj = $obj->proto();
@@ -33,6 +33,7 @@ class ProgramsMenu extends Widget
                 }
             }
         }
+
         $v['items'] = array();
         foreach ($programs as $p){
             if ($p instanceof Widget){

@@ -10,8 +10,8 @@
     </div>
     <div class="buttons">
         <div class="content">
-            <a class="btn cancel"><?php echo $v['cancel_title'];?></a>
             <a class="btn btn-success submit"><?php echo $v['submit_title'];?></a>
+            <a class="btn cancel"><?php echo $v['cancel_title'];?></a>
         </div>
     </div>
 </div>

@@ -107,12 +107,8 @@ class MySQLStore extends Entity
         }
 
         $q = $this->db->prepare($sql);
-        try{
-            $q->execute($binds);
-        }catch (\Exception $e){
-            trace($q);
-            throw $e;
-        }
+        $q->execute($binds);
+
         if (($attrs = $q->fetch(DB::FETCH_ASSOC)) && isset($attrs['id'])){
             unset($attrs['id2']);
             $obj = $this->makeObject($attrs);
@@ -154,7 +150,6 @@ class MySQLStore extends Entity
     {
         if ($entity->check()){
             try{
-                $this->db->beginTransaction();
 
                 // Атрибуты отфильтрованы, так как нет ошибок
                 $attr = $entity->_attribs;
@@ -232,6 +227,7 @@ class MySQLStore extends Entity
                     if ($current = $q->fetch(DB::FETCH_ASSOC)){
                         $add = false;
                     }
+                    unset($q);
                 }else{
                     $attr['date'] = time();
                 }
@@ -247,7 +243,10 @@ class MySQLStore extends Entity
                             $attr['date'] = $current['date'];
                         }
                     }
+                    unset($q);
                 }
+
+                $this->db->beginTransaction();
 
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных
                 if ($entity->_rename || (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent']))){
@@ -273,6 +272,7 @@ class MySQLStore extends Entity
                     if (!empty($uri) && is_dir(DIR_SERVER_PROJECT.ltrim($uri, '/'))){
                         File::rename(DIR_SERVER_PROJECT.ltrim($uri, '/'), DIR_SERVER_PROJECT.ltrim($uri_new, '/'));
                     }
+                    unset($q);
                 }
 
                 // Уникальность order, если задано значение и записываемый объект не в истории
@@ -284,6 +284,7 @@ class MySQLStore extends Entity
                         WHERE owner=? AND lang=? AND `id`!=? AND `parent`=? AND is_history=0 AND `order`>=?'
                     );
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['id'], $attr['parent'], $attr['order']));
+                    unset($q);
                 }else
                 // Новое максимальное значение для order, если объект новый или явно указано order=null
                 if (!$entity->isExist() || /*(array_key_exists('order', $attr) && is_null($attr['order']))*/ $attr['order']==self::MAX_ORDER){
@@ -293,6 +294,7 @@ class MySQLStore extends Entity
                     if ($row = $q->fetch(DB::FETCH_ASSOC)){
                         $attr['order'] = $row['m']+1;
                     }
+                    unset($q);
                 }else{
                     if (isset($current['order'])) $attr['order'] = $current['order'];
                 }
@@ -365,76 +367,110 @@ class MySQLStore extends Entity
                         WHERE owner=? AND lang=? AND `id`=? AND is_history=0'
                     );
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['id']));
+                    unset($q);
                 }
 
+                $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
+                        'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_virtual', 'is_default_value', 'is_default_class',
+                        'is_default_children', 'proto_cnt', 'parent_cnt', 'valuef');
+                $cnt = sizeof($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id+owner+lang+date
-                $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
-                    'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_virtual', 'is_default_value', 'is_default_class',
-                    'is_default_children', 'proto_cnt', 'parent_cnt', 'valuef');
-                $cnt = sizeof($attr_names);
-                $q = $this->db->prepare('
-                    INSERT INTO {objects} (`'.implode('`, `', $attr_names).'`)
-                    VALUES ('.str_repeat('?,', $cnt-1).'?)
-                    ON DUPLICATE KEY UPDATE `'.implode('`=?, `', $attr_names).'`=?
-                ');
-                $i = 0;
-                foreach ($attr_names as $name){
-                    $value = $attr[$name];
-                    $i++;
-                    $type = is_int($value)? DB::PARAM_INT : (is_bool($value) ? DB::PARAM_BOOL : (is_null($value)? DB::PARAM_NULL : DB::PARAM_STR));
-                    $q->bindValue($i, $value, $type);
-                    $q->bindValue($i+$cnt, $value, $type);
+                if ($add){
+                    $q = $this->db->prepare('
+                        INSERT INTO {objects} (`'.implode('`, `', $attr_names).'`)
+                        VALUES ('.str_repeat('?,', $cnt-1).'?)
+                        ON DUPLICATE KEY UPDATE `'.implode('`=?, `', $attr_names).'`=?
+                    ');
+                    $i = 0;
+                    foreach ($attr_names as $name){
+                        $value = $attr[$name];
+                        $i++;
+                        $type = is_int($value)? DB::PARAM_INT : (is_bool($value) ? DB::PARAM_BOOL : (is_null($value)? DB::PARAM_NULL : DB::PARAM_STR));
+                        $q->bindValue($i, $value, $type);
+                        $q->bindValue($i+$cnt, $value, $type);
+                    }
+                    $q->execute();
+                }else{
+                    $q = $this->db->prepare('
+                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ?
+                    ');
+                    $i = 0;
+                    foreach ($attr_names as $name){
+                        $value = $attr[$name];
+                        $i++;
+                        $type = is_int($value)? DB::PARAM_INT : (is_bool($value) ? DB::PARAM_BOOL : (is_null($value)? DB::PARAM_NULL : DB::PARAM_STR));
+                        $q->bindValue($i, $value, $type);
+                        //$q->bindValue($i+$cnt, $value, $type);
+                    }
+                    $q->bindValue($i+1, $attr['id']);
+                    $q->execute();
                 }
-                $q->execute();
 
                 // Обновления наследников
                 if (!empty($current)){
-                    // Значение у наследников если изменилось значение, файл или прототип
-                    if ($current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file']){
-                        $q = $this->db->prepare('
-                            UPDATE {objects} SET `value` = :value, `is_file`=:is_file, is_default_value=:proto
-                            WHERE id IN (SELECT * FROM (
-                              SELECT {trees}.object_id FROM {trees}
-                              JOIN {objects} ON ({objects}.owner = :owner AND {objects}.lang = :lang AND {objects}.id={trees}.object_id AND {objects}.is_default_value=:proto AND {objects}.is_history = 0)
-                              WHERE {trees}.parent_id = :obj AND {trees}.object_id!=:obj AND {trees}.`type`=1
-                            )o)
-                        ');
-                        $q->execute(array(
-                            ':value' => $attr['value'],
-                            ':is_file' => $attr['is_file'],
-                            ':proto' => $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'],
-                            ':owner' => $attr['owner'],
-                            ':lang' => $attr['lang'],
-                            ':obj' => $attr['id']
-                        ));
-                        unset($q);
+                    // Если изменился is_default_children на false, то удалить виртуальных у себя и наследников
+                    if ($current['is_default_children'] != $attr['is_default_children'] && $attr['is_default_children'] == false){
+                        $this->removeVirtualChildren($attr['id']);
                     }
-                    // Кол-во наследников у наследников, если изменился proto
-                    if ($current['proto']!=$attr['proto'] && ($dp = ($attr['proto_cnt'] - $current['proto_cnt']))){
+                    // Если изменился родитель, то у старого родителя удалить виртуальных подчинённых
+                    if (($current['parent'] != $attr['parent'] || $current['order'] != $attr['order']) && $current['parent']){
+                        $this->removeVirtualChildren($current['parent']);
+                    }
 
-                        $q = $this->db->prepare('
-                            UPDATE {objects} SET `proto_cnt` = `proto_cnt`+:dp
-                            WHERE id IN (SELECT * FROM (
-                              SELECT {trees}.object_id FROM {trees}
-                              JOIN {objects} ON ({objects}.id={trees}.object_id)
-                              WHERE {trees}.parent_id = :obj AND {trees}.object_id!=:obj AND {trees}.`type`=1
-                            )o)
-                        ');
-                        $q->execute(array(':dp' => $dp, ':obj' => $attr['id']));
-                        unset($q);
+                    // Обновление значения, признака файла, признака наследования значения, класса и кол-во прототипов у наследников
+                    // если что-то из этого изменилось у объекта
+                    $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
+                    if ($current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
+                        $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto'] && $dp)){
+//                        $q = $this->db->prepare('
+//                            SELECT {trees}.object_id FROM {trees}
+//                            WHERE {trees}.parent_id = :obj AND {trees}.object_id!=:obj AND {trees}.`type`=1
+//                            LIMIT :start, 100
+//                        ');
+//                        $start = 0;
+                        $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
+//                        $q->bindValue(':proto', $p);
+//                        $q->bindValue(':obj', $attr['id']);
+//                        do{
+//                            $q->bindValue(':start', (int)$start, DB::PARAM_INT);
+//                            $q->execute();
+//                            if ($childs = $q->fetchAll(DB::FETCH_COLUMN, 0)){
+                                $u = $this->db->prepare('
+                                    UPDATE {objects}, {trees} SET
+                                    `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
+                                    `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
+                                    `is_default_value` = IF(is_default_value=:vproto, :proto, is_default_value),
+                                    `is_default_class` = IF(is_default_class=:cclass, :cproto, is_default_class),
+                                    `proto_cnt` = `proto_cnt`+:dp
+                                    WHERE trees.parent_id = :obj AND objects.id = trees.object_id AND `type`=1 AND trees.object_id!=trees.parent_id
+                                ');
+                                $u->execute(array(
+                                    ':value' => $attr['value'],
+                                    ':is_file' => $attr['is_file'],
+                                    ':vproto' => $current['is_default_value'] ? $current['is_default_value'] : $current['id'],
+                                    ':cclass' => $current['is_default_class'] ? $current['is_default_class'] : $current['id'],
+                                    ':cproto' => $attr['is_default_class'] ? $attr['is_default_class'] : $attr['id'],
+                                    ':proto' => $p,
+                                    ':dp' => $dp,
+                                    ':owner' => $attr['owner'],
+                                    ':lang' => $attr['lang'],
+                                    ':obj' => $attr['id']
+                                ));
+//                            }
+//                            $start+=100;
+//                        }while($cnt==100);
                     }
-                    // Если изменился is_default_children, то удалить виртуальных у себя и наследников, или переиндексировать?
-                    if ($current['is_default_children'] != $attr['is_default_children']){
-                        if ($attr['is_default_children'] == false){
-                            // Удалить виртуальных подчиненных и обнулить индексацию
-                        }else{
-                            // У всех наследников обнулить индексацию
-                        }
+                    // Если был виртуальным, то отмена виртуальности у родителей и прототипов
+                    if ($current['is_virtual'] && !$attr['is_virtual']){
+                        $q = $this->db->prepare('
+                            UPDATE objects, trees SET is_virtual = 0
+                            WHERE objects.id = trees.parent_id AND trees.object_id = ? AND trees.type IN (0,1) AND is_virtual
+                        ');
+                        $q->execute(array($attr['id']));
                     }
                 }
 
-                // Индексация
                 // Создание или обновление отношений
                 if (!$entity->isExist()){
                     $this->makeTree($attr['id'], $attr['parent'], $attr['proto'], false);
@@ -442,9 +478,12 @@ class MySQLStore extends Entity
                 if (!empty($current) && ($attr['parent']!=$current['parent'] || $attr['proto']!=$current['proto'])){
                     $this->makeTree($attr['id'], $attr['parent'], $attr['proto'], true);
                 }
-
-                // Если новый и родитель проиндексирован, то обновить его индексацию?
-                //if ((empty($current) && $attr['parent']) || (!empty($current) && ))
+                //trace(array($current['order'], $attr['order']));
+                // Сброс индексации при смене родителя, прототипа или признака наследования свойств
+                if (!empty($current) && ($attr['parent'] != $current['parent'] || $attr['order'] != $current['order'] || $current['proto']!=$attr['proto'] || $current['is_default_children'] != $attr['is_default_children'])){
+                    $self = $current['proto']!=$attr['proto'] || $current['is_default_children'] != $attr['is_default_children'];
+                    $this->clearIndex($attr['parent'], $self?$attr['id']:0);
+                }
 
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->remoteId($attr['id']);
@@ -452,13 +491,14 @@ class MySQLStore extends Entity
                 $entity->_attribs['value'] = $attr['value'];
                 $entity->_attribs['is_file'] = $attr['is_file'];
                 $entity->_attribs['is_exist'] = 1;
-                //$entity->_rename = false;
                 $entity->_changed = false;
 
                 $this->db->commit();
                 return true;
             }catch (\Exception $e){
                 $this->db->rollBack();
+                //$q = $this->db->query('SHOW ENGINE INNODB STATUS');
+                //trace($q->fetchAll(DB::FETCH_ASSOC));
                 throw $e;
             }
         }
@@ -487,9 +527,6 @@ class MySQLStore extends Entity
         $_lang = isset($lang) ? $this->localId($lang) : self::MAX_ID;
 
         if (isset($cond['from'][0]) && ($cond['from'][0]->_attribs['index_depth']<$depth || $cond['from'][0]->_attribs['index_step']!=0)){
-            if ($cond['from'][0]->uri() == '/Interfaces/html/body/boolive/top/menu/object'){
-                $x = 10;
-            }
             // Индексирование
             $this->makeIndex($this->localId($cond['from'][0]->id()), $_owner, $_lang, $depth);
         }
@@ -695,6 +732,55 @@ class MySQLStore extends Entity
         }catch (\Exception $e){
             $this->db->rollBack();
             throw $e;
+        }
+    }
+
+    /**
+     * Удаление виртуальных подчиненых у объекта и у его наследников
+     * @param $object_id
+     */
+    private function removeVirtualChildren($object_id)
+    {
+        $q = $this->db->prepare('
+            DELETE ids, objects, trees FROM ids, objects, trees
+            WHERE parent_id IN (SELECT * FROM (SELECT object_id FROM trees WHERE parent_id = ? AND `type`=1)t)
+            AND `type` = 0
+            AND object_id != parent_id
+            AND ids.id = object_id
+            AND objects.id = object_id
+            AND objects.is_virtual
+        ');
+        $q->execute(array($object_id));
+    }
+
+    /**
+     * Очистка индекса объекта и его родителей
+     * @param $parent_id
+     * @param int $object_id
+     * @return void
+     * @internal param bool $self Признак, очищать свой индекс (true) или только родителей (false)?
+     */
+    private function clearIndex($parent_id, $object_id = 0)
+    {
+        $q = $this->db->exec('UPDATE objects SET index_depth = 0, index_step = 0');
+        return;
+        // Обнуление своего индекса и наследников
+        if ($object_id){
+            $q = $this->db->prepare('
+                UPDATE objects, trees SET objects.index_depth = 0, objects.index_step = 0
+                WHERE trees.parent_id = ? AND `type`=1 AND objects.id = trees.object_id
+            ');
+            $q->execute(array($object_id));
+        }
+        // Обнуление индекса родителей, родителей наследников
+        if ($parent_id){
+            $q = $this->db->prepare('
+                UPDATE objects p, trees t, (SELECT id, parent_cnt FROM objects, trees WHERE object_id=objects.id AND parent_id=? AND `type`=1) o
+                SET p.index_depth = 0 AND p.index_step = 0
+                WHERE p.id = t.parent_id AND t.object_id = o.id AND t.type=0 AND p.index_depth>0
+                AND (CAST(o.parent_cnt - p.parent_cnt AS SIGNED) - p.index_depth - 1) < 0
+            ');
+            $q->execute(array($parent_id));
         }
     }
 
@@ -1177,7 +1263,7 @@ class MySQLStore extends Entity
                         $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
                     }
                     return new $class($attribs);
-                }catch(\ErrorException $e){
+                }catch(\Exception $e){
                     // Если файл не найден, то будет использоваться класс прототипа или Entity
                     if ($e->getCode() == 2){
                         if ($attribs['proto'] && ($proto = Data::read($attribs['proto'], null, null, 0, false))){

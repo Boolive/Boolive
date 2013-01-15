@@ -20,10 +20,10 @@
     </div>
     <div class="bottom">
         <div class="content">
-
-            <a class="btn cancel" href="#">Отмена</a>
             <a class="btn btn-success  btn-disable submit" href="#">Добавить</a>
             <a class="btn btn-primary other" href="">Другой...</a>
+            <a class="btn cancel" href="#">Отмена</a>
+
         </div>
     </div>
 </div>

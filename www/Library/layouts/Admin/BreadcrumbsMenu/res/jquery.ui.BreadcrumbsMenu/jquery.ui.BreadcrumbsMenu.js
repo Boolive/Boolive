@@ -43,10 +43,11 @@
                         ul.append(tab.clone());
                         path += '/';
                     }
-                    this.element.find('li a[href="'+uri+'"]').parent().addClass('active');
+                    item = this.element.find('li a[href="'+uri+'"]');
+                    item.parent().addClass('active');
                 }else{
                     this.element.find('li').removeClass('active').removeClass('preactive');
-                    this.element.find('li a[href="'+uri+'"]').parent().addClass('active');
+                    item.parent().addClass('active');
                 }
             }
         }

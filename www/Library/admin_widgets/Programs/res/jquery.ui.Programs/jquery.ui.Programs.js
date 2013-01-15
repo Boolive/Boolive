@@ -13,8 +13,9 @@
          * @param changes
          */
         after_setState: function(state, changes){
-            if ('object' in changes || 'view_name' in changes)
-            this.reload('/', state);
+            if ('object' in changes || 'view_name' in changes){
+                this.reload('/', state);
+            }
         }
 	})
 })(jQuery);

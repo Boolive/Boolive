@@ -9,20 +9,26 @@
         /*Колонки*/
         .Attribs .item > .col1{
             float: left;
-            width: 140px;
+            width: 150px;
             display: block;
-            text-align: right;
+            /**text-align: right;*/
             padding: 5px 15px 5px 0;
             }
         .Attribs .item > .col2{
-            margin: 0 0 0 155px;
+            margin: 0 0 0 165px;
             border-radius: 3px;
             padding: 5px;
             }
         /* Сообщение об ошибке по умолчанию */
         .Attribs .item .error-message{
-                display: none;
-                }
+            display: none;
+            }
+        .Attribs .item .description{
+            font-size: 10pt;
+            color: #999;
+            display: inline-block;
+            }
+
         .Attribs .item > .item-date{
             margin-top: 10px;
             color: #444;
@@ -38,9 +44,15 @@
             font-size: 10pt;
             margin: 2px 0 0 0;
             }
-
+        .Attribs .error .description{
+           display: none;
+        }
 
         /*Поля*/
+        .Attribs .item input.name {
+            width: 150px;
+            margin-left: -2px;
+            }
         .Attribs .item input.order{
             width: 80px;
             text-align: right;
@@ -106,9 +118,11 @@
                         filter: alpha(opacity:0);
                         }
         /* Кнопки */
+        .Attribs .submits{
+            margin: 15px 0 0 0;
+        }
         .Attribs .btn {
-            float: right;
-            margin-right: 0;
+            float: left;
             }
         /* Сообщение*/
         .Attribs .item .submit-message{

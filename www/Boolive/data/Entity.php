@@ -291,6 +291,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
         if (isset($new_file)){
             if (empty($new_file)){
                 unset($this->_attribs['file']);
+                $this->_attribs['is_file'] = 0;
             }else{
                 if (is_string($new_file)){
                     $new_file = array(
@@ -300,8 +301,8 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                         'error'	=> is_file($new_file)? 0 : true
                     );
                 }
+                $this->_attribs['file'] = $new_file;
             }
-            $this->_attribs['file'] = $new_file;
             $this->_changed = true;
             $this->_checked = false;
         }
@@ -639,14 +640,6 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 $this->_attribs['is_default_value'] = 0;
                 $this->_proto = null;
             }else{
-                // Смена прототипа
-                $this->_attribs['proto'] = $new_proto->id();
-                $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
-                $this->_proto = $new_proto;
-                // Установка атрибутов, зависимых от прототипа
-                if ($new_proto->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
-                // Обновление доступа
-                if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
                 // Наследование значения
                 if ($this->isDefaultValue()){
                     $this->_attribs['value'] = $new_proto->value();
@@ -657,6 +650,17 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                         $this->_attribs['is_default_value'] = $new_proto->id();
                     }
                 }
+                // Наследование класса
+
+                // Смена прототипа
+                $this->_attribs['proto'] = $new_proto->id();
+                $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
+                $this->_proto = $new_proto;
+                // Установка атрибутов, зависимых от прототипа
+                if ($new_proto->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
+                // Обновление доступа
+                if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
+
             }
             $this->_changed = true;
             $this->_checked = false;
@@ -999,7 +1003,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 if ($this->_lang){
                     $this->_attribs['lang'] = $this->_lang->id();
                 }
-
+                $this->_attribs['is_virtual'] = 0;
                 // Если создаётся история, то нужна новая дата
                 if ($history) $this->_attribs['date'] = time();
                 // Сохранение себя

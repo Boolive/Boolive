@@ -9,10 +9,14 @@
             </div>
             <div class="item">
                 <div class="col1">
-                    <label>Название</label>
+                    <label>Родитель и Название</label>
                 </div>
-                <div class="col2 item-name">
-                    <span class="name" data-name="name"></span><span data-name="uri" class="txt-tag"></span>
+                <div class="col2 item-parent item-name">
+                    <!--<span class="name" data-name="name"></span><span data-name="uri" class="txt-tag"></span>
+                    <span class="error-message"></span>00>-->
+                    <span data-name="parent-uri" class="input-pfx tag-link">&nbsp;</span><input class="attrib inpt name" type="text" id="name" name="attrib[name]" data-name="name" value=""/>
+                    <input type="hidden" name="attrib[parent]" value="">
+                    <span class="description"></span>
                     <span class="error-message"></span>
                 </div>
             </div>
@@ -21,9 +25,11 @@
                     <label>Прототип</label>
                 </div>
                 <div class="col2 item-proto">
-                    <a class="internal" href="proto" data-name="proto-show"></a><a href="" data-name="proto-uri" class="txt-tag"></a>
+                    <span class="input-pfx tag-link" data-name="proto-uri" title="Сменить прототип...">&nbsp;</span>
+                    <a class="btn-icon-delete" href="" data-name="proto-delete" style="display: none;"></a>
                     <input type="hidden" name="attrib[proto]" value="">
                     <span class="error-message"></span>
+                    <span class="description"></span>
                 </div>
             </div>
             <div class="item">
@@ -47,46 +53,57 @@
             </div>
             <div class="item">
                 <div class="col1">
-                    <label>Язык</label>
-                </div>
-                <div class="col2 item-lang">
-                    <a class="internal" href="lang" data-name="lang-show"></a>
-                    <input type="hidden" name="attrib[lang]" value="">
-                    <span class="error-message"></span>
-                </div>
-            </div>
-            <div class="item">
-                <div class="col1">
-                    <label>Владелец</label>
-                </div>
-                <div class="col2 item-owner">
-                    <a class="internal" href="owner" data-name="owner-show"></a>
-                    <input type="hidden" name="attrib[owner]" value="">
-                    <span class="error-message"></span>
-                </div>
-            </div>
-            <div class="item">
-                <div class="col1">
-                    <label for="order">Порядковый номер</label>
+                    <label for="order">Порядковый номер.</label>
                 </div>
                 <div class="col2 item-order">
                     <input class="attrib inpt order" type="text" id="order" name="attrib[order]" data-name="order" value=""/>
                     <span class="error-message"></span>
+                    <span class="description">Используется для упорядочивания объектов по возрастанию.</span>
                 </div>
             </div>
+            <!--<div class="item">
+                <div class="col1">
+                    <label>Родитель</label>
+                </div>
+                <div class="col2 item-parent">
+                    <span class="txt-tag" data-name="uri"></span>
+                    <!--<a class="internal" href="" data-name="name" title="Внтури чего находится редактируемый объект."> </a>-->
+
+                   <!-- <input type="hidden" name="attrib[parent]" value="">
+                    <span class="error-message"></span>
+                    <span class="description"></span>
+                </div>
+            </div>-->
+
+            <!--<div class="item">
+                <div class="col1">
+                    <label>Владелец</label>
+                </div>
+                <div class="col2 item-owner">
+                    <a class="internal" href="owner" data-name="owner-show" title="Чей объект? Объект доступен только владельцу, если не является общим."></a>
+                    <a href="" data-name="owner-delete" class="btn-icon-delete" title="Сделать общим"></a>
+                    <span data-name="owner-uri" class="txt-tag"></span>
+                    <input type="hidden" name="attrib[owner]" value="">
+                    <span class="error-message"></span>
+                    <span class="description"></span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
+                    <label>Язык</label>
+                </div>
+                <div class="col2 item-lang">
+                    <a class="internal" href="lang" data-name="lang-show" title="Если не общий, то объект доступен только на выбранном языке сайта."></a>
+                    <a href="" data-name="lang-delete" class="btn-icon-delete" title="Сделать общим"></a>
+                    <span data-name="lang-uri" class="txt-tag"></span>
+                    <input type="hidden" name="attrib[lang]" value="">
+                    <span class="error-message"></span>
+                    <span class="description"></span>
+                </div>
+            </div>-->
             <div class="item">
                 <div class="col1">
                     <label>Признаки</label>
-                </div>
-                <div class="col2 item-is_logic">
-                    <input class="attrib" type="checkbox" id="is_logic" name="attrib[is_logic]" data-name="is_logic" value="1"/>
-                    <label for="is_logic">Своя логика</label>
-                    <span class="error-message"></span>
-                </div>
-            </div>
-            <div class="item">
-                <div class="col1">
-
                 </div>
                 <div class="col2 item-is_hidden">
                     <input class="attrib" type="checkbox" id="is_hidden" name="attrib[is_hidden]" data-name="is_hidden" value="1"/>
@@ -102,6 +119,7 @@
                     <input class="attrib" type="checkbox" id="is_link" name="attrib[is_link]" data-name="is_link" value="1"/>
                     <label for="is_link">Использовать как ссылку</label>
                     <span class="error-message"></span>
+                    <span class="description"></span>
                 </div>
             </div>
             <div class="item">
@@ -110,10 +128,22 @@
                 </div>
                 <div class="col2 item-overide">
                     <input class="attrib" type="checkbox" id="override" name="attrib[override]" data-name="override" value="1"/>
-                    <label for="override">Не наследовать подчиненных</label>
+                    <label for="override">Наследовать свойства прототипа</label>
                     <span class="error-message"></span>
                 </div>
             </div>
+            <div class="item">
+                <div class="col1">
+
+                </div>
+                <div class="col2 item-is_logic">
+                    <input class="attrib" type="checkbox" id="is_logic" name="attrib[is_logic]" data-name="is_logic" value="1"/>
+                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой классс</label>
+                    <span class="error-message"></span>
+                    <span class="description"></span>
+                </div>
+            </div>
+
             <div class="item">
                 <div class="col1">
                     <label>Дата обновления</label>
@@ -121,14 +151,15 @@
                 <div class="col2 item-date">
                     <span data-name="date" class="txt-tag"></span>
                     <span class="error-message"></span>
+                    <span class="description">Также применяется в качестве версии объекта.</span>
                 </div>
             </div>
-            <div class="item">
+            <div class="item submits">
                 <div class="col1"></div>
                 <div class="col2">
-                    <a class="btn cancel" href="#">Отмена</a>
-                    <a class="btn hide reset">Восстановить</a>
                     <a class="btn btn-success btn-disable submit" href="#">Сохранено</a>
+                    <a class="btn hide reset">Восстановить</a>
+                    <a class="btn cancel" href="#">Отмена</a>
                     <p class="submit-message"></p>
                 </div>
             </div>

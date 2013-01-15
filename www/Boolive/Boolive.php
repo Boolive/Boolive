@@ -65,7 +65,11 @@ namespace Boolive
                     }else{
                          $path = DIR_SERVER_PROJECT . $path . '.php';
                     }
-                    include_once($path);
+                    if (is_file($path)){
+                        include_once($path);
+                    }else{
+                        throw new ErrorException('Class not found', 2);
+                    }
                     self::$included[$class_name] = $class_name;
                     if (!isset(self::$activated[$class_name])) {
                         if (method_exists($class_name, 'activate')) {

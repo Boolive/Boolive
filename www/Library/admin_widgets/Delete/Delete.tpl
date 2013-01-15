@@ -13,8 +13,8 @@
     </div>
     <div class="bottom">
         <div class="content">
-            <a class="btn cancel" href="#">Отмена</a>
             <a class="btn btn-danger submit" href="#">Да</a>
+            <a class="btn cancel" href="#">Отмена</a>
         </div>
     </div>
 </div>

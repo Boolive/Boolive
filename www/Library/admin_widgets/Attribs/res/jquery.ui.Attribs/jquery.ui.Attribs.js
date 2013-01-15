@@ -95,6 +95,10 @@
                     if (this.attrib[name]!=this.attrib_start[name]) return true;
                 }
                 return false;
+            },
+
+            is_change_attrib: function(name){
+                return (this.attrib[name]!=this.attrib_start[name]);
             }
         },
 
@@ -120,19 +124,37 @@
             // Обновление формы (при изменении атрибутов)
             //
             this.model
-            .on('change-attrib:uri', function(value){
-                form.find('[data-name="uri"]:first').text(value);
-                value = value ? self.getLastParam(value) : '<корень>';
-                form.find('[data-name="name"]:first').text(value);
-            })
             .on('change-attrib:proto', function(value){
-                form.find('input[name="attrib[proto]"]:first').val(value);
-                if (!value) value = '';
-                form.find('[data-name="proto-uri"]:first').text(value).attr('href', value);
-
-                value = value ? self.getLastParam(value) : 'Entity';
-                form.find('[data-name="proto-show"]:first').text(value);
+                var item = form.find('.item-proto');
+                item.find('input[name="attrib[proto]"]:first').val(value);
+                if (value!='null'){
+                    item.find('[data-name="proto-uri"]').text(value?value:'/').attr('href', value).show();
+                    item.find('[data-name="proto-delete"]:first').show();
+                }else{
+                    item.find('[data-name="proto-uri"]').text('Entity');
+                    item.find('[data-name="proto-delete"]').hide();
+                }
             })
+
+            .on('change-attrib:name', function(value){
+                form.find('input[name="attrib[name]"]:first').val(value);
+            })
+//            .on('change-attrib:uri', function(value){
+//                if (value){
+//                    form.find('.item-name [data-name="uri"]:first').text(self.getDirParam(value)).show();
+//                }else{
+//                    form.find('.item-name [data-name="uri"]:first').hide();
+//                }
+//            })
+            .on('change-attrib:parent', function(value){
+                form.find('input[name="attrib[parent]"]:first').val(value);
+                if (value!='null'){
+                    form.find('[data-name="parent-uri"]').text(value+'/').attr('href', value).show();
+                }else{
+                    form.find('[data-name="parent-uri"]').text('&nbsp').hide();
+                }
+            })
+
             .on('change-attrib:value', function(value){
                 form.find('textarea[name="attrib[value]"]:first').val(value);
             })
@@ -159,13 +181,30 @@
             })
             .on('change-attrib:lang', function(value){
                 form.find('input[name="attrib[lang]"]:first').val(value);
-                value = value ? self.getLastParam(value) : 'Все';
-                form.find('[data-name="lang-show"]:first').text(value);
+                if (value){
+                    form.find('[data-name="lang-uri"]:first').text(value).attr('href', value).show();
+                    form.find('[data-name="lang-show"]:first').text(self.getLastParam(value));
+                    form.find('[data-name="lang-delete"]:first').show();
+                }else{
+                    form.find('[data-name="lang-delete"]:first').hide();
+                    form.find('[data-name="lang-uri"]:first').hide();
+                    form.find('[data-name="lang-show"]:first').text('нет');
+                }
+//                form.find('[data-name="lang-uri"]:first').text(value).attr('href', value);
+//                value = value ? self.getLastParam(value) : 'нет';
+//                form.find('[data-name="lang-show"]:first').text(value);
             })
             .on('change-attrib:owner', function(value){
                 form.find('input[name="attrib[owner]"]:first').val(value);
-                value = value ? self.getLastParam(value) : 'Общий';
-                form.find('[data-name="owner-show"]:first').text(value);
+                if (value){
+                    form.find('[data-name="owner-uri"]:first').text(value).attr('href', value).show();
+                    form.find('[data-name="owner-show"]:first').text(self.getLastParam(value));
+                    form.find('[data-name="owner-delete"]:first').show();
+                }else{
+                    form.find('[data-name="owner-delete"]:first').hide();
+                    form.find('[data-name="owner-uri"]:first').hide();
+                    form.find('[data-name="owner-show"]:first').text('нет');
+                }
             })
             .on('change-attrib:date', function(value){
                 form.find('[data-name="date"]:first').text(value);
@@ -301,6 +340,9 @@
                                     }
                                 }
                             }else{
+                                if (self.model.is_change_attrib('name') || self.model.is_change_attrib('parent')){
+                                    self.before('setState', [{object: responseText.out.attrib.uri}, true]);
+                                }
                                 self.model.set_process('start', false);
                                 self.model.init(responseText.out.attrib);
                             }
@@ -308,23 +350,91 @@
                     });
                 }
             }).
-            on('click', '[data-name="proto-uri"]:first', function(e){
+            // Выбор прототипа
+            on('click', '.item-proto [data-name="proto-uri"]', function(e){
                 e.preventDefault();
-                self.before('setState', [{object: $(this).attr('href')}]);
-                //self.element.trigger('before-entry-object', $(this).attr('href'));
+                e.stopPropagation();
+                self.before('openWindow', [null,
+                    {
+                        url: "/",
+                        data: {
+                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                            object: self.model.attrib['proto']!='null'?self.model.attrib['proto']:'' //какой объект показать
+                        }
+                    },
+                    function(result, params){
+                        if (result == 'submit' && 'select' in params){
+                            self.model.set_attrib('proto', params.select);
+                        }
+                    }
+                ]);
             }).
-            on('click', '[data-name="proto-show"]:first', function(e){
+            // Удаление прототипа
+            on('click', '.item-proto [data-name="proto-delete"]', function(e){
                 e.preventDefault();
-                alert('Выбор прототипа не реализован');
+                self.model.set_attrib('proto', 'null');
             }).
-            on('click', '[data-name="lang-show"]:first', function(e){
+            // Выбор родителя
+            on('click', '.item-parent [data-name="parent-uri"]', function(e){
                 e.preventDefault();
-                alert('Выбор языка ещё нереализован');
-            }).
-            on('click', '[data-name="owner-show"]:first', function(e){
-                e.preventDefault();
-                alert('Выбор владельца нереализован');
+                e.stopPropagation();
+                self.before('openWindow', [null,
+                    {
+                        url: "/",
+                        data: {
+                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                            object: self.model.attrib['parent']!='null'?self.model.attrib['parent']:'' //какой объект показать
+                        }
+                    },
+                    function(result, params){
+                        if (result == 'submit' && 'select' in params){
+                            self.model.set_attrib('parent', params.select);
+                        }
+                    }
+                ]);
             });
+//            on('click', '[data-name="lang-show"]:first', function(e){
+//                e.preventDefault();
+//                e.stopPropagation();
+//                self.before('openWindow', [null,
+//                    {
+//                        url: "/",
+//                        data: {
+//                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+//                            object: '/Languages' //какой объект показать
+//                        }
+//                    },
+//                    function(result, params){
+//                        if (result == 'submit' && 'select' in params){
+//                            alert('Выбор языка ещё нереализован');
+//                            //self.object_select = params.select;
+//                            //self._add();
+//                        }
+//                    }
+//                ]);
+//
+//            }).
+//            on('click', '[data-name="owner-show"]:first', function(e){
+//                e.preventDefault();
+//                e.stopPropagation();
+//                self.before('openWindow', [null,
+//                    {
+//                        url: "/",
+//                        data: {
+//                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+//                            object: '/Members' //какой объект показать
+//                        }
+//                    },
+//                    function(result, params){
+//                        if (result == 'submit' && 'select' in params){
+//                            alert('Выбор владельца нереализован');
+//                            //self.object_select = params.select;
+//                            //self._add();
+//                        }
+//                    }
+//                ]);
+//
+//            });
 
             //
             // Загрзка начальны данных
@@ -345,6 +455,20 @@
          */
         getLastParam: function(uri){
             var m = uri.match(/([^\\\/]*)$/)
+            if (m){
+                return m[1];
+            }else{
+                return '';
+            }
+        },
+
+        /**
+         * Последний параметр в pathname URI
+         * @param uri
+         * @return {*}
+         */
+        getDirParam: function(uri){
+            var m = uri.match(/^(.*\/)[^\\\/]*$/)
             if (m){
                 return m[1];
             }else{
