@@ -17,6 +17,6 @@ class Number extends Entity
     protected function defineRule()
     {
         parent::defineRule();
-        $this->_rule->arrays['value'] = Rule::double();
+        $this->_rule->arrays[0]['value'] = Rule::double();
     }
 }
