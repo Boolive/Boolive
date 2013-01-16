@@ -25,7 +25,7 @@ class AutoWidgetList extends Widget
         return parent::work($v);
     }
 
-    protected function getList()
+    protected function getList($cond = array())
     {
         $cases = $this->linked(true)->switch_views->getCases();
         $cnt = sizeof($cases);
@@ -39,9 +39,20 @@ class AutoWidgetList extends Widget
                 $protos[] = $cases[$cnt]->value();
             }
         }
-        // @todo Сделать настраиваемый фильтр
-        return $this->_input['REQUEST']['object']->find(array(
-            'where' => array('is', $protos)
-        ), 'name', true);
+        if (empty($cond['where'])){
+            $cond['where'] = array('is', $protos);
+        }else
+        if (is_array($cond['where'][0])){
+            $cond['where'][0][] = array('is', $protos);
+        }else
+        if ($cond['where'][0] == 'all'){
+            $cond['where'][0][] = array('is', $protos);
+        }else{
+            $cond['where'] = array(
+                $cond['where'],
+                array('is', $protos)
+            );
+        }
+        return $this->_input['REQUEST']['object']->find($cond, 'name', true);
     }
 }
