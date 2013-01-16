@@ -160,19 +160,19 @@
             })
             .on('change-attrib:is_null', function(value){
                 if (value){
-                    form.find('[data-name="is_null"]:first').addClass('active');
+                    form.find('[data-name="is_null"]:first').parent().addClass('active');
                     form.find('input[name="attrib[is_null]"]:first').val(1);
                 }else{
-                    form.find('[data-name="is_null"]:first').removeClass('active');
+                    form.find('[data-name="is_null"]:first').parent().removeClass('active');
                     form.find('input[name="attrib[is_null]"]:first').val(0);
                 }
             })
             .on('change-attrib:is_file', function(value){
                 if (value){
-                    form.find('[data-name="is_file"]:first').addClass('active');
+                    form.find('[data-name="is_file"]:first').parent().addClass('active');
                     form.find('input[name="attrib[is_file]"]:first').val(1);
                 }else{
-                    form.find('[data-name="is_file"]:first').removeClass('active');
+                    form.find('[data-name="is_file"]:first').parent().removeClass('active');
                     form.find('input[name="attrib[is_file]"]:first').val(0);
                 }
             })
@@ -288,7 +288,7 @@
 			})
             .on('click', '.default', function(e){
                 e.preventDefault();
-                if (!$(this).hasClass('active')){
+                if (!self.model.attrib['is_null']){
                     self.model.set_attrib('value', self.model.attrib_start.value_null);
                     self.model.set_attrib('is_file', self.model.attrib_start.is_file_null);
                     self.model.set_attrib('is_null', true);

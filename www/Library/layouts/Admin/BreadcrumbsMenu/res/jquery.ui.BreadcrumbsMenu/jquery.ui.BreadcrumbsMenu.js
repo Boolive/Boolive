@@ -17,6 +17,10 @@
                     object: $(this).attr('href')
                 }]);
 			});
+            this.element.on('click', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            });
 		},
 
         /**

@@ -30,17 +30,4 @@ class view extends AutoWidgetList
     public function work($v = array()){
         return parent::work($v);
     }
-
-//    protected function getList($protos){
-//        // @todo Сделать настраиваемый фильтр
-//        $list = $this->_input['REQUEST']['object']->find(array(
-//            'where' => array(
-//                array('is', $protos)
-//            ),
-//            'order' => array(
-//                array('order', 'ASC')
-//            )
-//        ));
-//        return $list;
-//    }
 }

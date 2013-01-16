@@ -5,10 +5,10 @@
 	}
 	.ObjectItem .view{
 		overflow: hidden;
-		padding: 0 300px 0 0px;
+		padding: 0 40px 0 0px;
 		position: relative;
 		white-space: nowrap;
-		height: 34px;
+		height: 38px;
 		min-width: 100px;
 		cursor: pointer;
 		position: relative;
@@ -34,35 +34,44 @@
 			right: 0;
 			text-align: right;
 			font-size: 10pt;
-			height: 34px;
-			width: 280px;
+			height: 38px;
+			width: 185px;
 			}
 			.ObjectItem .view .colright > *{
-				margin: 0 10px;
+				/*margin: 0 10px;
 				height: 24px;
-				padding: 10px 0 0px 0;
+				padding: 10px 0 0px 0;*/
 				display: block;
-				float: right;
+                float: right;
+                height: 38px;
 				}
-			.ObjectItem .view .colright .proto{
-				/*color: #222;*/
+			.ObjectItem .view .colright .value{
+				max-width: 150px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                color: #666;
+                margin: 9px 0 2px 0;
+                padding: 2px 0px;
+                height: auto;
 				}
-			.ObjectItem .view .colright .date{
-				font-size: 9pt;
-				}
+            .ObjectItem .view .colright .default{
+                color: #8040A0;
+            }
+        .ObjectItem .file{
+            width: 20px;
+            background: url(img/file.png) no-repeat center center;
+            opacity: 0.6;
+            }
 
-		.ObjectItem .enter, .ObjectItem .view .colmain .col2 .enter{
+		.ObjectItem .enter{
 			margin: 0;
 			width: 32px;
-			height: 32px;
 			text-align: center;
-			display: block;
-			float: left;
-			background: url(img/enter.png) no-repeat center center;
-			opacity: 0.1;
+			background: url(img/select.png) no-repeat center center;
+			opacity: 0.2;
 			padding: 0;
 			}
-			.ObjectItem .enter:hover, .ObjectItem .view .colmain .col2 .enter:hover{
+			.ObjectItem .enter:hover{
 				opacity: 1;
 				}
 
@@ -80,32 +89,41 @@
 				padding: 0 8px;
 				position: absolute;
 				width: 32px;
-				height: 34px;
+				height: 38px;
 			}
 			.ObjectItem .view .colmain .col2 {
 				overflow: hidden;
-				height: 34px;
+				height: 38px;
 				display: block;
 				/*padding: 0 8px 0 8px;*/
 			}
 			.ObjectItem .view .colmain .col2 > *{
-				display: block;
-				float: left;
+				display: inline-block;
+				/*float: left;
 				overflow: hidden;
 				margin-right: 10px;
 				height: 24px;
-				padding: 9px 0 1px 0;
+				padding: 9px 0 1px 0;*/
 				font-size: 9pt;
 				}
-				.ObjectItem .view .colmain .col2 .name{
-					min-width: 200px;
+				.ObjectItem .view .colmain .col2 .title{
+					/*min-width: 200px;
 					max-width: 300px;
-					text-overflow: ellipsis;
-					padding: 7px 0 2px 10px;
+					text-overflow: ellipsis;*/
+					padding: 9px 0 2px 10px;
 					font-size: 13pt;
+                    color: #000;
+					}
+                .ObjectItem .virtual .colmain .col2 .title{
+                    color: #8040A0;
+                    }
+                .ObjectItem .view .colmain .col2 .name{
+					color: #AAA;
+                    font-size: 8pt;
+                    /*font-style: italic;*/
+                    font-family: Verdana;
 					}
 				.ObjectItem .view .colmain .col2 .value{
-					color: #666;
 
 					}
 				.ObjectItem .view .colmain .col2 .state{
@@ -127,13 +145,21 @@
         border-bottom: 1px solid #FFF;
         color: #FFF;
         }
-    .selected .view .colmain .col2 * {
+    .selected .view .colmain .col2 *,
+    .selected .view .colmain .col2 .title,
+    .selected .view .colmain .col2 .name,
+    .selected .view .colright .value,
+    .selected .view .colright .default{
         color: #FFF;
         }
-    .selected .enter, .selected .view .colmain .col2 .enter{
-        background: url(img/enter-invert.png) no-repeat center center;
-        opacity: 0.5;
+    .selected .enter{
+        background: url(img/select-invert.png) no-repeat center center;
+        opacity: 0.9;
         }
-        .selected .enter:hover, .selected .view .colmain .col2 .enter:hover{
+        .selected .enter:hover{
             opacity: 1;
             }
+    .selected .file{
+        background: url(img/file-invert.png) no-repeat center center;
+        opacity: 0.9;
+        }

@@ -13,7 +13,9 @@
             var self = this;
             self.element.on('click', 'li a', function(e){
                 e.preventDefault();
+                var s = self.before('getState');
                 self.before('setState', [{
+                    object: s.select,
                     view_name: $(this).attr('href')
                 }]);
             });

@@ -200,10 +200,11 @@ label{
     font-size: 9pt;
     /*margin: 0 5px;*/
     display: inline-block;
-    background-color: #F5F5F5;
+    background-color: #F7F7F7;
     color: #999;
     padding: 2px 5px;
     border-radius: 3px;
+    border: 1px solid #EEEEEE;
 }
 .input-pfx{
     font-size: 9pt;

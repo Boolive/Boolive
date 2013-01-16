@@ -23,6 +23,18 @@
                 // Теперь входим
                 self.before('setState', [{object:  self._object}]);
 			});
+            // Вход в объекта
+			self.element.find('.enter').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                // Сначала выделяем себя
+                var s = self.before('getState');
+                if (s.select == self._object){
+                    self.before('setState', [{select: s.object}]);
+                }else{
+                    self.before('setState', [{select: self._object}]);
+                }
+			});
         }
 	});
 })(jQuery);

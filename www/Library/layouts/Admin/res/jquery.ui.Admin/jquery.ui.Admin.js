@@ -42,9 +42,11 @@
             self._init_state();
 
             // Отмена выделения при клике на свободную центральную область
-            self.element.find('.center').click(function(e){
+            self.element.click(function(e){
                 self.before_setState({select: self._state.object});
             });
+
+            self.element.click()
 
             // Назад/Вперед
             $(window).on("popstate", function(e){

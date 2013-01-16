@@ -95,10 +95,12 @@
                     color: #FFF;
                     background-color: #499df2;
                     }
-                /* Активный тег*/
-                .Attribs .item .value .active{
+
+                /** Тег значение по умолчанию */
+                .Attribs .item .value .default:hover,
+                .Attribs .item .value .active .default{
+                    background-color: #8040A0;
                     color: #FFF;
-                    background-color: #418dd9;
                     }
                 /* Тег-поле выбора файла*/
                 .Attribs .item .value .file{
@@ -117,6 +119,11 @@
                         right:0;
                         filter: alpha(opacity:0);
                         }
+                /* Активный тег*/
+                .Attribs .item .value .active .file{
+                    color: #FFF;
+                    background-color: #418dd9;
+                    }
         /* Кнопки */
         .Attribs .submits{
             margin: 15px 0 0 0;
