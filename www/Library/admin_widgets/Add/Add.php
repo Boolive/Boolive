@@ -27,13 +27,19 @@ class Add extends AutoWidgetList
 
     public function work($v = array())
     {
-        // Удаление
+        // Добавление
         if ($this->_input['REQUEST']['call'] == 'add'){
             if (isset($this->_input['REQUEST']['proto']) && isset($this->_input['REQUEST']['object'])){
                 /** @var $parent \Boolive\data\Entity */
                 $parent = $this->_input['REQUEST']['object'];
-                $obj = $parent->add($this->_input['REQUEST']['proto']);
-                $parent->save(true, true, $error);
+                /** @var $proto \Boolive\data\Entity */
+                $proto = $this->_input['REQUEST']['proto'];
+                $obj = $proto->birth($parent);
+                if ($proto->uri() == '/Library/basic/simple/Object'){
+                    $obj->proto(false);
+                }
+                //$obj = $parent->add($this->_input['REQUEST']['proto']);
+                $obj->save(false, false, $error);
                 $v['result'] = array(
                     'object' => $obj->uri(),
                     'parent' => $parent->uri()

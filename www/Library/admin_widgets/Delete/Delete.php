@@ -28,7 +28,7 @@ class Delete extends Widget
     {
         // Удаление
         if ($this->_input['REQUEST']['call'] == 'delete'){
-            $this->_input['REQUEST']['object']['is_delete'] = true;
+            $this->_input['REQUEST']['object']->isDelete(true);
             if ($this->_input['REQUEST']['object']->save()){
                 $v['result'] = true;
             }else{

@@ -240,8 +240,10 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function order($new_order = null)
     {
-        if (isset($new_order)){
+        if (isset($new_order) && (!isset($this->_attribs['order']) || $this->_attribs['order']!=$new_order)){
             $this->_attribs['order'] = $new_order;
+            $this->_changed = true;
+            $this->_checked = false;
         }
         return isset($this->_attribs['order'])? $this->_attribs['order'] : null;
     }
@@ -627,7 +629,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
     /**
      * Прототип объекта
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
-     * @return \Boolive\data\Entity|null
+     * @return \Boolive\data\Entity|null|false
      */
     public function proto($new_proto = null)
     {
@@ -638,6 +640,9 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 $this->_attribs['proto'] = null;
                 $this->_attribs['proto_cnt'] = 0;
                 $this->_attribs['is_default_value'] = 0;
+                if ($this->_attribs['is_default_class'] != 0){
+                    $this->_attribs['is_default_class'] = 4294967295;
+                }
                 $this->_proto = null;
             }else{
                 // Наследование значения
@@ -650,17 +655,21 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                         $this->_attribs['is_default_value'] = $new_proto->id();
                     }
                 }
-                // Наследование класса
-
                 // Смена прототипа
                 $this->_attribs['proto'] = $new_proto->id();
                 $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
                 $this->_proto = $new_proto;
+
+                // Наследование класса
+                if ($this->isDefaultClass()){
+                    $this->_attribs['is_default_class'] = 0; // Чтобы переустановка сработала
+                    $this->isDefaultClass(true);
+                }
+
                 // Установка атрибутов, зависимых от прототипа
                 if ($new_proto->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
                 // Обновление доступа
                 if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
-
             }
             $this->_changed = true;
             $this->_checked = false;
@@ -980,7 +989,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      * @throws \Exception
      * @return bool
      */
-    public function save($history = true, $children = true, &$error = null, $access = true)
+    public function save($history = false, $children = true, &$error = null, $access = true)
     {
         if (!$this->_is_saved && $this->check($error, $children)){
             try{
