@@ -13,7 +13,6 @@
 		display: block;
 		height: auto;
 		font-size: 11pt;
-		margin: 5px 0 0 0;
 		position:relative;
 		padding: 0;
 		z-index:3;
@@ -74,14 +73,12 @@
 					inset 0 0 0 1px #5DABEC,
 					0 0 5px 0 #5DABEC,
 					inset 3px 0 3px -1px #E5E5E5;*/
-				background-color: #FFF;
 				}
 	.ProgramsMenu ul li.active{
 		margin-right: 0px;
 		}
 
 		.ProgramsMenu ul li.active a{
-			background-color:#FFF;
 			background-image: url(img/icon_program.png);
 			/*color: #0065c9;*/
 			color: #000;

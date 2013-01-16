@@ -175,7 +175,7 @@
                         if (!result.links) result.links = [];
                         $.include(result.links, function(){
                             // Скрыть текущее окно
-                            //self._window_current.hide();
+                            self._window_current.hide();
                             self._windows.append('<div class="window" id="' + id + '">' + result.out + '</div>');
                             self.review_windows();
                             self._window_current = self._windows.find('> #'+id+':last');

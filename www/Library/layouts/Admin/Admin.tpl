@@ -5,11 +5,11 @@
     <div class="top">
         <?php //echo $v->BreadcrumbsMenu->string();?>
     </div>
-    <!--<div class="left">
-        <div class="shadow"></div>
-    </div>-->
+    <div class="left">
+        <!--<div class="shadow"></div>-->
+    </div>
     <div class="right">
-        <div class="shadow"></div>
+        <!--<div class="shadow"></div>-->
         <?php //echo $v->ProgramsMenu->string();?>
     </div>
 </div>

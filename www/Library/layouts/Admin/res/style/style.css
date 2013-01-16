@@ -1,29 +1,28 @@
 .Admin{
-	position: absolute;
-	height: 100%;
-	width: 100%;
+	/*position: absolute;*/
+	min-height: 100%;
+	padding: 0 200px;
 	overflow: hidden;
     background-color: #FFF;
 	}
 	.Admin > .left{
 		height: 100%;
-		width: 150px;
+		width: 200px;
 		left: 0;
 		top: 32px;
-		position: absolute;
+		position: fixed;
 		z-index: 2;
 		overflow:hidden;
-        width: 48px;
 		}
         .Admin > .left .shadow{
-            /*position: absolute;
+            position: absolute;
             width: 100%;
-            top: 35px;
+            top: 0;
             bottom: 0;
             box-shadow: inset -1px 0px 0px 0px #D8D8D8,
 					inset -5px 0px 5px -5px #E0E0E0;
 		    -webkit-box-shadow: inset -1px 0px 0px 0px #D8D8D8,
-					inset -5px 0px 5px -5px #E0E0E0;*/
+					inset -5px 0px 5px -5px #E0E0E0;
             }
 		.maximize-left .Admin > .left{
 			width: 48px;
@@ -31,38 +30,38 @@
     .Admin > .right{
 		width: 200px;
 		right: 0;
-		top: 0;
 		bottom: 0;
-		position: absolute;
+		position: fixed;
 		z-index: 3;
 		/*overflow:hidden;*/
 		padding: 0;
         top: 32px;
 		}
         .Admin > .right .shadow{
-            /*position: absolute;
+            position: absolute;
             width: 100%;
-            top: 32px;
+            top: 0;
             bottom: 0;
             box-shadow: inset 1px 0 0 0 #D8D8D8,
 					inset 5px 0 5px -5px #E0E0E0;
 		    -webkit-box-shadow: inset 1px 0 0 0 #D8D8D8,
-					inset 5px 0 5px -5px #E0E0E0;*/
+					inset 5px 0 5px -5px #E0E0E0;
             }
 		.maximize-right .Admin > .right{
 			width: 48px;
 			}
     .Admin > .center{
         /*position: absolute;*/
-        position: absolute;
-        top: 32px;
+        margin: 0 auto;
+        max-width: 920px;
+        padding-top: 32px;
+        /*top: 32px;
         left: 150px;
 		right: 200px;
-        bottom: 0;
+        bottom: 0;*/
 		z-index: 1;
         background-color: #FFF;
         overflow: hidden;
-        left: 150px;
         }
         .maximize-left .Admin > .center,
         .maximize-left .Admin > .top{
@@ -74,9 +73,9 @@
 			}
         .Admin .center > div{
             overflow:auto;
-            position: absolute;
-            left: 0;
-            right: 0;
+            /*position: absolute;*/
+            /*left: 0;
+            right: 0;*/
             height: 100%;
             background-color: #FFF;
             /*box-shadow: -1px 0 0 0 #DDDDDD,
@@ -86,7 +85,8 @@
             }
 	.Admin .top{
         height: 32px;
-        position: absolute;
-        left: 00px;
-		right: 00px;
+        position: fixed;
+        left: 0;
+		right: 0;
+        top: 0;
         }
