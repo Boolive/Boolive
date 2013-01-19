@@ -13,4 +13,9 @@ use Library\access\Member\Member;
 class User extends Member
 {
 
+    public function value($new_value = null, $get = false)
+    {
+        $v = parent::value($new_value);
+        return $get? $v : '';
+    }
 }

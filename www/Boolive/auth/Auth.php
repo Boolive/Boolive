@@ -102,7 +102,7 @@ class Auth
     static function remember($duration = 0)
     {
         $duration = max(0, min($duration, 3000000)); // не больше месяца (примерно)
-        $hash = self::$user->value();
+        $hash = self::$user->value(null, true);
         // Запомнить время визита (не чаще раза за 5 минут)
         if (self::$user->isExist() && (self::$user->visit_time->value() < (time()-300))){
             // Обновление времени визита
