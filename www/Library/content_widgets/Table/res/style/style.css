@@ -1,0 +1,69 @@
+/*
+.ui-selected {
+	background: silver;
+}
+.ui-selected-span {
+	background: silver;
+}
+#table tr td.resizing{
+    cursor: s-resize;
+}
+#panel {
+     display: none;
+}
+#menu li{
+    display: inline;
+}
+#text{
+    border: transparent;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+        
+}
+.tdcontent{
+    position: relative;
+    height:  100%;
+    width: 100%;
+    min-height: 20px;
+    min-width: 50px;
+}
+.ui-resizable-e {
+cursor: e-resize;
+
+}
+.ui-resizable-handle {
+position: absolute;
+font-size: 0.1px;
+display: block;
+}
+.ui-resizable-s {
+cursor: s-resize;
+
+}
+.resizer{
+    background-color: silver;
+    display: block;
+    padding: 10px;
+    position: relative;
+    margin: -10px;
+}
+table {
+    background-color: #ffffff;
+    position: relative;
+    border-collapse: collapse;
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+    border-color: #000000;
+
+
+
+}
+
+table  td{
+    border: 1px solid;
+    border-color: #000000;
+}
+table tr.hidden{
+    visibility: collapse;
+}*/
