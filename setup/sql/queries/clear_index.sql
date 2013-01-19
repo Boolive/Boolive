@@ -1,0 +1,1 @@
+UPDATE objects SET index_depth = 0, index_step = 0
