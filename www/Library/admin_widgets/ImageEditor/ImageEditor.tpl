@@ -1,0 +1,1 @@
+<img contenteditable="false" width="300" height="200" src="<?php echo $v['file']?>" alt=""/>

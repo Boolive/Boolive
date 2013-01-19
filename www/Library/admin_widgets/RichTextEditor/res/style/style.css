@@ -1,0 +1,11 @@
+.RichTextEditor{
+    padding: 32px 0;
+    }
+    .RichTextEditor > *{
+        background-color: #e6e6e6;
+        cursor: text;
+    }
+    .RichTextEditor p{
+        margin: 15px 0;
+        /*background-color: #e6e6e6;*/
+    }
