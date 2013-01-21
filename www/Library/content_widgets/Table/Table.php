@@ -1,7 +1,8 @@
 <?php
 /**
  * Виджет Таблицы
- *
+ *@author: polinа Putrolaynen
+ * @date: 21.01.13
  * @version 1.0
  */
 namespace Library\content_widgets\Table;
@@ -12,48 +13,64 @@ class Table extends Widget
 {
     public function work($v = array())
     {
-        $v['rowheadercount'] = 0;
-        $v['rowfootercount'] = 0;
-        $v['rowcount'] = 0;
         /** @var $object \Boolive\data\Entity */
         $object = $this->_input['REQUEST']['object'];
-        $v['rows'] = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+        $header = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Table/Header'))),null);
+        $footer = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Table/Footer'))),null);
+        $body = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Table/Body'))),null);
+        if(sizeof($header)>0){
+            //Стиль строк заголовка
+            if($header[0]->style->isExist()){
+              $v['header_style'] = $header[0]->style->getStyle();
+            }
+            //строки заголовка
+            $header['rows'] = $header[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+            $v['header']['rows'] = $this->getRowCells($header['rows']);
+        }
+        //Подвал
+        if(sizeof($footer)>0){
+            if($footer[0]->style->isExist()){
+               $v['footer_style'] = $footer[0]->style->getStyle();
+             }
+            $footer['rows'] = $footer[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+            $v['footer']['rows'] = $this->getRowCells($footer['rows']);
+        }
+        //Если есть в таблицы элемент body
+        if(sizeof($body)>0){
+            if($body[0]->style->isExist()){
+               $v['body_style'] = $body[0]->style->getStyle();
+            }
+            $body['rows'] = $body[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+        }else{
+            //Если его нет, то просто выводим все строки
+            $body['rows'] = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+        }
+        $v['body']['rows'] = $this->getRowCells($body['rows']);
+        //Стиль таблицы
+        $v['style'] = $object->style->getStyle();
+        return parent::work($v);
+    }
 
-        $i = 0;
-        foreach ($v['rows'] as $row) {
-            //Определим количество строк в каждой секции таблицы
-           if ($row->header->isExist()) {
-                $v['rowheadercount'] = $v['rowheadercount'] + 1;
-                $v['rows'][$i]['headercells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
-                //сформируем ячейки для  секции thead
-                foreach ($v['rows'][$i]['headercells'] as $cell) {
-                    $this->_input_child['REQUEST']['object'] = $cell;
-                    //запуск виджета ячейки
-                    $v['rows'][$i]['header'][] = $this->startChild('Cell');
-                }
-            }elseif ($row->footer->isExist()) {
-                $v['rowfootercount'] = $v['rowfootercount'] + 1;
-                $v['rows'][$i]['footercells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
-                //сформируем ячейки для  секции tfoot
-                foreach ($v['rows'][$i]['footercells'] as $cell) {
-                    $this->_input_child['REQUEST']['object'] = $cell;
-                    //запуск виджета ячейки
-                    $v['rows'][$i]['footer'][] = $this->startChild('Cell');
-                }
-            }else{
-                $v['rowcount'] = $v['rowcount'] + 1;
-                $v['rows'][$i]['cells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
+    /**
+     * Возвращает сформированные ячейки по строкам
+     * @param $rows объект содержащий строки
+     */
 
-                //сформируем ячейки для  секции tbody
-                foreach ($v['rows'][$i]['cells'] as $cell) {
+    private function getRowCells($rows){
+        $i=0;
+        foreach($rows as $row){
+            if($row->is('/Library/content_samples/tables/Row')){
+                $rows[$i]['cells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
+                foreach($rows[$i]['cells'] as $cell){
                     $this->_input_child['REQUEST']['object'] = $cell;
-                    //запуск виджета ячейки
-                    $v['cells'][] = $this->startChild('Cell');
-
+                    //Запускаем подчиненный виджет - виджет ячейки.
+                    $rows[$i]['cells'][] = $this->startChild('Cell');
                 }
             }
             $i++;
         }
-        return parent::work($v);
+        return $rows;
     }
+
+
 }

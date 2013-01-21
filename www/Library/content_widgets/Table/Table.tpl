@@ -1,11 +1,11 @@
-<table border="1">
+<table style="<?php echo $v['style'];?>">
 <?php
- if($v['rowheadercount']->int()>0){?>
+ if($v['header']){?>
     <thead>
     <?php
-            for($i=0;$i<$v['rowheadercount']->int();$i++){
-                echo '<tr>';
-                foreach ($v['rows'][$i]['header'] as $j) {
+            for($i=0;$i<sizeof($v['header']['rows']);$i++){
+                echo '<tr style="'.$v['header_style'].'">';
+                foreach ($v['header']['rows'][$i]['cells'] as $j) {
                     echo $j->string();
                 }
                 echo '</tr>';
@@ -13,12 +13,12 @@
             ?>
     </thead>
     <?php }
-     if($v['rowfootercount']->int()>0){?>
+    if($v['footer']){?>
     <tfoot>
     <?php
-        for($i=0;$i<$v['rowfootercount']->int();$i++){
-            echo '<tr>';
-            foreach ($v['rows'][$i]['footer'] as $j) {
+        for($i=0;$i<sizeof($v['footer']['rows']);$i++){
+            echo '<tr style="'.$v['footer_style'].'">';
+            foreach ($v['footer']['rows'][$i]['cells'] as $j) {
                 echo $j->string();
             }
             echo '</tr>';
@@ -29,9 +29,9 @@
     <tbody>
     <?php
 
-    for ($i = 0; $i < $v['rowcount']->int(); $i++) {
-        echo '<tr>';
-        foreach ($v['cells'] as $j) {
+    for ($i = 0; $i <sizeof($v['body']['rows']); $i++) {
+        echo '<tr style="'.$v['body_style'].'">';
+        foreach ($v['body']['rows'][$i]['cells'] as $j) {
             echo $j->string();
         }
         echo '</tr>';
