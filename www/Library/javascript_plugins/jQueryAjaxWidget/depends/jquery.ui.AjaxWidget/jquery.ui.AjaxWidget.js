@@ -17,6 +17,7 @@
         },
         _parent: null, // Родитель
         _children: null, // Подчиненные виджеты
+        _children_length: 0, // Кол-во подчиенных
 
 		_is_wait: false, // признак, находится ли виджет в режиме загрузки окна
 
@@ -72,6 +73,7 @@
         _addChild: function(widget){
             if (widget != this){
                 this._children[widget.uuid] = widget;
+                this._children_length++;
                 widget._parent = this;
                 return true;
             }
@@ -87,6 +89,7 @@
         _deleteChild: function(widget){
             if (widget != this){
                 delete this._children[widget.uuid];
+                this._children_length--;
                 return true;
             }
             return false;
@@ -139,7 +142,9 @@
          * Перегрзука html виджета
          */
         reload: function(url, data, callbacks){
-			var self = this;
+
+            var self = this;
+            //self.element.empty();
             data = $.extend({}, data);
             data.direct = self.options.view_uri;
             $.ajax({
@@ -163,8 +168,12 @@
 							expr = new RegExp(tag+'([\\s\\S]*)<\/div>[\\s\\S]*');
 							var html = result.out.replace(expr, '$1');
 							//var x = $(container).html(html);
-							self.element.empty();
-							self.element.html(html);//x.children().children());
+
+							if (callbacks && typeof callbacks == 'object' && typeof callbacks.empty == 'function'){
+								callbacks.empty();
+							}
+
+                            self.element.html(html);//x.children().children());
 
 							// Атрибуты корневого тега виджета
 //							if (container.children.length > 0){
@@ -186,6 +195,13 @@
             });
         },
 
+        /**
+         *
+         * @param method
+         * @param data
+         * @param callbacks
+         * @private
+         */
         _call: function(method, data, callbacks){
             var self = this;
             data = $.extend({}, data);

@@ -13,8 +13,17 @@
          * @param changes
          */
         after_setState: function(state, changes){
+
+            var self = this;
             if ('object' in changes || 'view_name' in changes){
-                this.reload('/', state);
+                this.reload('/', state, {
+                    empty: function(){
+                        self.after('program_hide');
+                    },
+                    success: function(){
+                        self.after('program_show');
+                    }
+                });
             }
         }
 	})

@@ -6,7 +6,6 @@
 (function($) {
     var autobind = function(context){
         context.find('[data-plugin][data-pluginHas!="1"]').each(function(){
-            //alert($(this).attr('data-pluginHas'));
             var plugin = $(this).attr('data-plugin');
             if (typeof $(this)[plugin] == 'function'){
                 $(this)[plugin]().attr('data-pluginHas', 1);
