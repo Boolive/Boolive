@@ -2,7 +2,7 @@
 	<ul>
 		<?php for ($i = sizeof($v['items'])-1; $i>=0; $i--):?>
 			<li class="<?php echo $v['items'][$i]['active']->bool()?'active':''?>" style="z-index: <?php echo $i?>;">
-				<a class="entity" href="<?php echo $v['items'][$i]['url']?>"><?php echo $v['items'][$i]['title']?></a>
+				<a class="entity" href="<?php echo $v['items'][$i]['url']?>" data-object="<?php echo $v['items'][$i]['uri']?>"><span><?php echo $v['items'][$i]['title']?></span></a>
 			</li>
 		<?php endfor; ?>
 	</ul>

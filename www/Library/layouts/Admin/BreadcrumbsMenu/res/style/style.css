@@ -25,14 +25,16 @@
 		margin: 0;
 		font-size: 10pt;
 		border-bottom: 1px solid #f0f0f0;
+
 		}
 		.BreadcrumbsMenu ul li a{
 			display:block;
 			position:relative;
 			background-color: #f9f9f9;
-			padding: 8px 1px 7px 25px;
+			padding: 8px 4px 4px 25px;
 			text-decoration: none;
 			color: #555;
+            height: 19px;
 			/*box-shadow:
 				inset 20px 2px 15px -15px #FFF,
 				inset 0px -5px 3px -5px #DDDDDD;
@@ -40,6 +42,14 @@
 				inset 20px 2px 15px -15px #FFF,
 				inset 0px -5px 3px -5px #DDDDDD;*/
 			}
+            .BreadcrumbsMenu ul li a > span{
+                max-width: 100px;
+                height: 16px;
+                white-space:nowrap;
+                display: inline-block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
 		.BreadcrumbsMenu ul li:first-child a{
 			padding-left: 10px;
             border-left: 1px solid #e6e6e6;
@@ -84,11 +94,14 @@
 			background-color: #FFF;
 			/*color: #0065c9;*/
 			color: #000;
+
 			}
 			.BreadcrumbsMenu ul li:hover a:after{
 				border-left: 15px solid #FFF;
 				}
-
+        .BreadcrumbsMenu ul li:hover a > span{
+            max-width: none;
+            }
 	.BreadcrumbsMenu ul li:hover{
 
 		}
@@ -112,12 +125,13 @@
 						border-left: 15px solid #EBF5FF;
 						}
 
-	.BreadcrumbsMenu ul li.active{
+    .BreadcrumbsMenu ul li.active{
 		border-bottom: 1px solid #0060C2;
 		}
 		.BreadcrumbsMenu ul li.active a{
 			background-color: #007FFF;
 			color: #FFF;
+            max-width: none;
 			/*box-shadow:
 				inset 0px -5px 3px -5px #0062C4;
 			-webkit-box-shadow:
@@ -130,4 +144,6 @@
 				border-left: 15px solid #007FFF;
 				}
 
-
+        .BreadcrumbsMenu ul li.active a > span{
+            max-width: none;
+            }

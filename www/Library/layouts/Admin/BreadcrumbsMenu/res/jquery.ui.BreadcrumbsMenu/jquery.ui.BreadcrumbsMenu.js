@@ -14,7 +14,7 @@
                 e.preventDefault();
                 // Вход в объект
                 self.before('setState', [{
-                    object: $(this).attr('href')
+                    object: $(this).attr('data-object')
                 }]);
 			});
             this.element.on('click', function(e){
@@ -31,24 +31,25 @@
         after_setState: function(state, changes){
             if ('object' in changes){
                 var uri = state.object;
-                var item = this.element.find('li a[href="'+uri+'"]');
+                var item = this.element.find('li a[data-object="'+uri+'"]');
                 if (item.size()==0){
-                    var path = '/';
-                    var names = uri.split('/');
-                    var cnt = names.length;
-                    var ul = this.element.find('> ul:first');
-                    var tab = ul.children('li:first').removeClass('active');
-                    ul.empty();
-                    ul.append(tab.css('z-index', cnt+1).clone());
-                    for (var i = 1; i < cnt; i++){
-                        path += names[i];
-                        tab.css('z-index', cnt-i).children('a').attr('href', path).text(names[i]);
-                        if (i+1 == cnt) tab.addClass('preactive');
-                        ul.append(tab.clone());
-                        path += '/';
-                    }
-                    item = this.element.find('li a[href="'+uri+'"]');
-                    item.parent().addClass('active');
+//                    var path = '/';
+//                    var names = uri.split('/');
+//                    var cnt = names.length;
+//                    var ul = this.element.find('> ul:first');
+//                    var tab = ul.children('li:first').removeClass('active');
+//                    ul.empty();
+//                    ul.append(tab.css('z-index', cnt+1).clone());
+//                    for (var i = 1; i < cnt; i++){
+//                        path += names[i];
+//                        tab.css('z-index', cnt-i).children('a').attr('data-object', path).attr('href', '/admin'+path).text(names[i]);
+//                        if (i+1 == cnt) tab.addClass('preactive');
+//                        ul.append(tab.clone());
+//                        path += '/';
+//                    }
+//                    item = this.element.find('li a[data-object="'+uri+'"]');
+//                    item.parent().addClass('active');
+                    this.reload('/', {direct: this.options.view_uri, object: uri});
                 }else{
                     this.element.find('li').removeClass('active').removeClass('preactive');
                     item.parent().addClass('active');
