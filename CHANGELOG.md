@@ -26,6 +26,7 @@ Version 2.0 work in progress
 - new #70: Added Session module (VladimirShestakov)
 - new: Added samples of paragraphs (P, H1-H2, Code, Blockquote) in /Library/content_samples/paragraphs (VladimirShestakov)
 - new #64: Added RichText editor. You can enter text, select, merge and split paragraphs (VladimirShestakov)
+- new #64: Added Image editor in the RichText editor. You can view, select and resize image (VladimirShestakov)
 - bug: Fixed getting proto and parent if they not exists. (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
