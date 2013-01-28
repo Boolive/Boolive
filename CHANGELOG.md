@@ -24,6 +24,7 @@ Version 2.0 work in progress
 - new: New structure of the database. Added MySQLStorte instead MySQLSection and MySQLIndex. Updated Data and Entity classes. (VladimirShestakov)
 - new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
 - new #70: Added Session module (VladimirShestakov)
+- new: Added samples of paragraphs (P, H1-H2, Code, Blockquote) in /Library/content_samples/paragraphs (VladimirShestakov)
 - bug: Fixed getting proto and parent if they not exists. (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
