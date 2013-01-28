@@ -15,7 +15,7 @@
             // uri объекта
             self._object = this.element.attr('data-object');
             // Вход в объекта
-			self.element.click(function(e){
+			self.element.find('.title').click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
                 // Сначала выделяем себя
@@ -24,7 +24,7 @@
                 self.before('setState', [{object:  self._object}]);
 			});
             // Вход в объекта
-			self.element.find('.enter').click(function(e){
+			self.element.click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
                 // Сначала выделяем себя

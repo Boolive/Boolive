@@ -10,7 +10,6 @@
 		white-space: nowrap;
 		height: 38px;
 		min-width: 100px;
-		cursor: pointer;
 		position: relative;
 		border-bottom: 1px solid #E6F1FA;
 		}
@@ -113,9 +112,14 @@
 					padding: 9px 0 2px 10px;
 					font-size: 13pt;
                     color: #000;
+                    cursor: pointer;
 					}
                 .ObjectItem .virtual .colmain .col2 .title{
                     color: #8040A0;
+
+                    }
+                    .ObjectItem .colmain .col2 .title:hover{
+                        text-decoration: underline;
                     }
                 .ObjectItem .view .colmain .col2 .name{
 					color: #AAA;
@@ -135,31 +139,31 @@
 					/*color: #CCC;*/
 					}
 
-.selected{
+.ObjectItem[class~="selected"]{
 	color: #FFF;
     margin: -1px 0 0 0px;
     }
-    .selected .view, .selected .view:hover{
+    .ObjectItem[class~="selected"] .view, .ObjectItem[class~="selected"] .view:hover{
         background-color: #61B0FF;
         border-top: 1px solid #FFF;
         border-bottom: 1px solid #FFF;
         color: #FFF;
         }
-    .selected .view .colmain .col2 *,
-    .selected .view .colmain .col2 .title,
-    .selected .view .colmain .col2 .name,
-    .selected .view .colright .value,
-    .selected .view .colright .default{
+    .ObjectItem[class~="selected"] .view .colmain .col2 *,
+    .ObjectItem[class~="selected"] .view .colmain .col2 .title,
+    .ObjectItem[class~="selected"] .view .colmain .col2 .name,
+    .ObjectItem[class~="selected"] .view .colright .value,
+    .ObjectItem[class~="selected"] .view .colright .default{
         color: #FFF;
         }
-    .selected .enter{
+    .ObjectItem[class~="selected"] .enter{
         background: url(img/select-invert.png) no-repeat center center;
         opacity: 0.9;
         }
-        .selected .enter:hover{
+        .ObjectItem[class~="selected"] .enter:hover{
             opacity: 1;
             }
-    .selected .file{
+    .ObjectItem[class~="selected"] .file{
         background: url(img/file-invert.png) no-repeat center center;
         opacity: 0.9;
         }

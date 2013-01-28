@@ -11,6 +11,7 @@ Version 2.0 work in progress
 - enh: Determining the conditions of the object selection in the Auto WidgetList (in code) (VladimirShestakov)
 - new: Added methods next() and prev() in the Entity (VladimirShestakov)
 - enh: Makes name unique after birth() Entity (VladimirShestakov)
+- enh: Change selecting objects in the admin explorer (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
 - new #31: Added access control for read and write. (VladimirShestakov)
 - new #60: Added user authentication and cancellations (VladimirShestakov)
