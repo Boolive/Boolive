@@ -36,6 +36,11 @@ p{
         font-size: 10pt;
         color: #555;
         }
+img{
+    max-width: 100%;
+    border: none;
+    outline: none;
+    }
 /* Область содержимого */
 .content{
     padding: 30px;
@@ -81,7 +86,7 @@ h2 + p{
 .btn, .btn-min {
     display: inline-block;
     height: 22px;
-    margin: 0 8px;
+    margin: -1px 8px;
     padding: 6px 14px 2px 14px;
     min-width: 51px;
     font-size: 11pt;
@@ -152,11 +157,16 @@ h2 + p{
         }
 /* Неактивная кнопка*/
 .btn-disable, .btn-disable:hover, .btn-disable:active {
-    /*background-color: #f5f5f5;
-    border: 1px solid #ebebeb;*/
+    background-color: #f5f5f5;
+    border: 1px solid #ebebeb;
+    color: #CCC;
     cursor: default;
     padding: 6px 14px 2px 14px;
     }
+.btn-frozen, .btn-frozen:hover, .btn-frozen:active {
+    cursor: default;
+    padding: 6px 14px 2px 14px;
+}
 
 .btn-icon, .btn-icon-delete {
     display: inline-block;

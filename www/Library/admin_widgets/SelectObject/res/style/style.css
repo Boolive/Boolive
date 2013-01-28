@@ -3,8 +3,8 @@
     /*border-left: 2px solid #71C700;*/
     }
 .SelectObject > .main > .content > .view .content{
-    padding-top: 0px;
-    padding-bottom: 0px;
+    /*padding-top: 0px;*/
+    /*padding-bottom: 0px;*/
     }
 .SelectObject > .main > .content > .view h1{
     /*font-size: 22pt;*/
@@ -14,3 +14,7 @@
         float: left;
         margin-right: 0;
 		}
+.SelectObject > .buttons .content{
+    padding-top: 0;
+    height: 32px;
+    }

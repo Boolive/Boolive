@@ -6,7 +6,7 @@
     .Add .main{
         width: 100%;
         }
-    .Add .bottom{
+    .Add .buttons{
         height: 100px;
         width: 100%;
 
@@ -16,11 +16,16 @@
         }
 
 
-	.Add .bottom .btn {
+	.Add .buttons .btn {
         float: left;
         margin-right: 0;
 		}
-    .Add .bottom .other {
+    .Add .other {
         /*float: left;*/
-        /*margin-left: 0;*/
+        margin-top: 10px;
+
+        }
+    .Add > .buttons .content{
+        padding-top: 0;
+        height: 32px;
         }

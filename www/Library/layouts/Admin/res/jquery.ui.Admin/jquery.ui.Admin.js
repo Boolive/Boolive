@@ -157,6 +157,7 @@
             var window = this._windows.find('> #'+id+':last');
             if (window.length){
                 // Скрыть текущее окно
+                self.after('window_hide');
                 self._window_current.hide();
                 // Показываем. Тег перенести в начало списка.
                 self._windows.append(window);
@@ -164,6 +165,7 @@
                 self._window_current = self._windows.find('> #'+id+':last');
                 self._state = self._window_current.data('state');
                 self.refresh_state();
+                self.after('window_show');
                 window.show();
             }else{
                 if (!(typeof request.data == 'object')) request.data = {};
