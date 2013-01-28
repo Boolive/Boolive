@@ -424,7 +424,7 @@ class MySQLStore extends Entity
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if ($current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
                         $current['is_delete']!=$attr['is_delete'] || $current['is_hidden']!=$attr['is_hidden'] ||
-                        $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto'] && $dp)){
+                        $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto'] && $dp) || $dp!=0){
 //                        $q = $this->db->prepare('
 //                            SELECT {trees}.object_id FROM {trees}
 //                            WHERE {trees}.parent_id = :obj AND {trees}.object_id!=:obj AND {trees}.`type`=1
@@ -611,8 +611,10 @@ class MySQLStore extends Entity
             ');
             $q->execute(array($obj, $owner, $lang));
             $protos = array();
+            $real = array();
             while ($row = $q->fetch(DB::FETCH_ASSOC)){
                 $protos[$row['proto_cnt']] = $row;
+                $real[] = $row;
             }
             // Очередь индексация прототипов
             $stack = array();

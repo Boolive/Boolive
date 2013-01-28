@@ -38,7 +38,6 @@ class Add extends AutoWidgetList
                 if ($proto->uri() == '/Library/basic/simple/Object'){
                     $obj->proto(false);
                 }
-                $obj->name($obj->name(), true);
                 //$obj = $parent->add($this->_input['REQUEST']['proto']);
                 $obj->save(false, false, $error);
                 $v['result'] = array(

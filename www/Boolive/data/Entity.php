@@ -159,6 +159,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function name($new_name = null, $choose_unique = false)
     {
+        if (!isset($new_name) && $choose_unique) $new_name = $this->_attribs['name'];
         // Смена имени
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
             if ($choose_unique){
@@ -571,6 +572,9 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
         if ($this->_parent === false){
             if (isset($this->_attribs['parent'])){
                 $this->_parent = Data::read($this->_attribs['parent'], $this->_attribs['owner'], $this->_attribs['lang']);
+                if (!$this->_parent->isExist()){
+                    $this->_parent = null;
+                }
             }else{
                 $this->_parent = null;
             }
@@ -633,6 +637,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function proto($new_proto = null)
     {
+        if ($new_proto instanceof Entity && !$new_proto->isExist()) $new_proto = null;
         // Смена прототипа
         if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->isEqual($this->proto()))){
             if (empty($new_proto)){
@@ -678,6 +683,9 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
         if ($this->_proto === false){
             if (isset($this->_attribs['proto'])){
                 $this->_proto = Data::read($this->_attribs['proto'], $this->_attribs['owner'], $this->_attribs['lang']);
+                if (!$this->_proto->isExist()){
+                    $this->_proto = null;
+                }
             }else{
                 $this->_proto = null;
             }
@@ -781,6 +789,46 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
             return $proto;
         }
         return $this;
+    }
+
+    /**
+     * Следующий объект
+     */
+    public function next()
+    {
+        if ($next = $this->parent()->find(array(
+                'where' => array(
+                    array('attr', 'order', '>', $this->order()),
+                ),
+                'order' => array(
+                    array('order', 'ASC')
+                ),
+                'limit' => array(0,1)
+            ), null
+        )){
+            return $next[0];
+        }
+        return null;
+    }
+
+    /**
+     * Предыдущий объект
+     */
+    public function prev()
+    {
+        if ($prev = $this->parent()->find(array(
+                'where' => array(
+                    array('attr', 'order', '<', $this->order()),
+                ),
+                'order' => array(
+                    array('order', 'DESC')
+                ),
+                'limit' => array(0,1)
+            ), null
+        )){
+            return $prev[0];
+        }
+        return null;
     }
 
     #################################################
@@ -1066,6 +1114,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
         );
         /** @var $obj Entity */
         $obj = new $class($attr);
+        $obj->name(null, true); // Уникальность имени
         $obj->proto($this);
         $obj->owner($this->owner());
         $obj->lang($this->lang());

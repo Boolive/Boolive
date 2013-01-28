@@ -89,7 +89,6 @@ class Auth
         if (!self::$user){
             self::$user = Data::read(self::USER, null, null, 0, false)->birth(Data::read(self::GROUP_GUEST, null, null, 0, false));
             self::$user->value($hash);
-            self::$user->name(self::$user->name(), true);
             $duration = 0;
         }
         self::remember($duration);

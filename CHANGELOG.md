@@ -9,6 +9,8 @@ Version 2.0 work in progress
 - enh: View more info about objects in the admin explorer (VladimirShestakov)
 - enh: Selecting object in the admin explorer and work with him (VladimirShestakov)
 - enh: Determining the conditions of the object selection in the Auto WidgetList (in code) (VladimirShestakov)
+- new: Added methods next() and prev() in the Entity (VladimirShestakov)
+- enh: Makes name unique after birth() Entity (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
 - new #31: Added access control for read and write. (VladimirShestakov)
 - new #60: Added user authentication and cancellations (VladimirShestakov)
@@ -20,6 +22,7 @@ Version 2.0 work in progress
 - new: New structure of the database. Added MySQLStorte instead MySQLSection and MySQLIndex. Updated Data and Entity classes. (VladimirShestakov)
 - new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
 - new #70: Added Session module (VladimirShestakov)
+- bug: Fixed getting proto and parent if they not exists. (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
 ------------------------------------
