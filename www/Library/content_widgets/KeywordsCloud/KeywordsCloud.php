@@ -19,11 +19,16 @@ class KeywordsCloud extends Widget
             )
         ));
         $v['title'] = $this->title->value();
+        $v['max_font_size'] = $this->max_font_size->value();
+        $v['min_font_size'] = $this->min_font_size->value();
+        $i=0;
         foreach ($list as $name=>$item){
             /** @var $item \Boolive\data\Entity */
             if($item->value()!=0){
-                $v['list'][$name]['href']=$item->uri();
-                $v['list'][$name]['value']=$item->value();
+                $v['list'][$i]['href']=$item->uri();
+                $v['list'][$i]['title']=$name;
+                $v['list'][$i]['value']=$item->value();
+                $i+=1;
             }
         }
         return parent::work($v);
