@@ -12,6 +12,7 @@ class RichText extends AutoWidgetList
 {
     public function work($v = array())
     {
+        $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         return parent::work($v);
     }
 }

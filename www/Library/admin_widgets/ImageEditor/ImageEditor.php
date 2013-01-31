@@ -21,7 +21,7 @@ class ImageEditor extends Widget
                         'object' => Rule::entity()->default($this->object)->required(),
                         'call' => Rule::string(),
                         // Аргументы вызываемых методов (call)
-                        'save_style' => Rule::arrays(Rule::string()),
+                        'saveStyle' => Rule::arrays(Rule::string())
                     )
                 )
             )
@@ -32,10 +32,10 @@ class ImageEditor extends Widget
     {
         if (!empty($this->_input['REQUEST']['call'])){
             // Редактирование стиля
-            if (isset($this->_input['REQUEST']['save_style'])){
+            if (isset($this->_input['REQUEST']['saveStyle'])){
                 return $this->callSaveStyle(
                     $this->_input['REQUEST']['object'],
-                    $this->_input['REQUEST']['save_style']
+                    $this->_input['REQUEST']['saveStyle']
                 );
             }
             return null;
@@ -49,18 +49,25 @@ class ImageEditor extends Widget
     }
 
     /**
-     * Сохранение стиля
-     * @param \Boolive\data\Entity $object Объект изображения
-     * @param array $styles Массив строковых свойств стиля
-     * @return bool
+     * Сохранение стиля объекта (если есть свойство style)
+     * @param \Boolive\data\Entity $object Сохраняемый объект
+     * @param array $styles Свойства стиля
+     * @return mixed
      */
     protected function callSaveStyle($object, $styles)
     {
         $style = $object->style;
-        foreach ($styles as $name => $value){
-            $style->{$name}->value($value);
+        if ($style->isExist()){
+            foreach ($styles as $name => $value){
+                $s = $style->{$name};
+                if ($s->isExist()){
+                    $s->value($value);
+                }else{
+                    unset($style->{$name});
+                }
+            }
+            $style->save();
         }
-        $style->save();
         return true;
     }
 }

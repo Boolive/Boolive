@@ -16,7 +16,7 @@
 			$.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
-            self._object = this.element.attr('data-object');
+            self._object = this.element.attr('data-o');
 
 
 
@@ -108,8 +108,8 @@
                 self.element.width(resize_rect.width());
                 self.element.height(resize_rect.height());
 
-                self._call('save_style', {
-                    save_style:{
+                self._call('saveStyle', {
+                    saveStyle:{
                         width: resize_rect.width()+'px',
                         height: resize_rect.height()+'px'
                     },
@@ -131,14 +131,14 @@
          * @param e Событие
          * @param sel Выделение
          */
-        after_keydown: function(e, sel){
+        call_keydown: function(caller, e, sel){ //afetr
 //            if (this._isInSelection(sel)){
 //                e.preventDefault();
 //                e.stopPropagation();
 //            }
         },
 
-        after_keyup: function(e, selection){
+        call_keyup: function(caller, e, selection){ //after
             if (this._isInSelection(selection)){
                 this._select();
             }
@@ -151,9 +151,8 @@
         _select: function(){
             this.element.attr('contentEditable', "true");
             if (!this.element.hasClass('selected')){
-                this.before('setState', [{select:  this._object}]);
                 this.element.addClass('selected');
-
+                this.callParents('setState', [{select:  this._object}]);
                 var sel = window.getSelection();
                 var range = document.createRange();
                 range.setStart(this.element.parent()[0], this.element.index());
@@ -168,10 +167,29 @@
          * @param state
          * @param changes
          */
-        after_setState: function(state, changes){
-            if ('select' in changes && state.select!=this._object){
+        call_setState: function(caller, state, changes){ //after
+            if ($.isPlainObject(changes) && 'select' in changes && state.select!=this._object){
                 this.element.removeClass('selected');
                 this.element.removeClass('resizing');
+            }
+        },
+
+        call_getStyle: function(){
+            if (this.element.hasClass('selected')){
+                return this.element.css(["margin-left", "margin-right", "text-indent"]);
+            }
+        },
+
+        call_setStyle: function(caller, style){
+            if (this.element.hasClass('selected')){
+                if (!$.isEmptyObject(style)){
+                    this.element.css(style);
+                    this._call('saveStyle', {
+                            saveStyle:style,
+                            object:this._object
+                        }
+                    );
+                }
             }
         },
 

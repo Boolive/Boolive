@@ -18,10 +18,10 @@
 
         _create: function() {
 			$.boolive.AjaxWidget.prototype._create.call(this);
-            this.after_program_show();
+            this.call_program_show();
             var self = this;
             // uri объекта
-            this._object = this.element.attr('data-object');
+            this._object = this.element.attr('data-o');
             this._buttons['save'] = this.element.find('.save');
             this._content = this.element.children('.content').first();
 
@@ -66,7 +66,7 @@
 
             this.element.on('keydown'+this.eventNamespace, function(e){
                 var sel = window.getSelection();
-                self.after('keydown', [e, sel]);
+                self.callChildren('keydown', [e, sel]);
                 if (e.keyCode == 13){
                     var d = 5;
                 }
@@ -92,23 +92,23 @@
                 }
             }).on('blur'+this.eventNamespace+' keyup'+this.eventNamespace+' paste'+this.eventNamespace, function(e){
                 var sel = window.getSelection();
-                self.after(e.type, [e, sel]);
+                self.callChildren(e.type, [e, sel]);
             });
         },
 
         _destroy: function(){
-            this.after_program_hide();
+            this.call_program_hide();
             $.boolive.AjaxWidget.prototype._destroy.call(this);
         },
 
         _save: function(){
             if (!$(this).hasClass('btn-frozen') && !$(this).hasClass('btn-disable') && this._changes_cnt){
                 $(this).addClass('btn-frozen');
-                this.after('save');
+                this.callChildren('save');
             }
         },
 
-        after_program_show: function(){
+        call_program_show: function(){
             var self = this;
             if (this._hide){
                 this._hide = false;
@@ -117,7 +117,7 @@
             }
         },
 
-        after_program_hide: function(){
+        call_program_hide: function(){
             if (!this._hide){
                 this._hide = true;
                 //clearInterval(this._save_inteval);
@@ -156,7 +156,7 @@
             sel.addRange( range );
         },
 
-        before_change: function(object){
+        call_change: function(caller, object){ //before
             if (!this._changes[object]){
                 this._buttons['save'].removeClass('btn-disable');
                 this._changes[object] = true;
@@ -164,7 +164,7 @@
             }
         },
 
-        before_nochange: function(object){
+        call_nochange: function(caller, object){ //before
             if (this._changes[object]){
                 delete this._changes[object];
                 this._changes_cnt--;
@@ -174,12 +174,44 @@
             }
         },
 
-        before_replace: function(element){
+        call_replace: function(caller, element){ //before
 
 
             return true;
+        },
+
+        call_getStyle: function(){
+            var styles = this.callChildren('getStyle');
+            if (styles === undefined){
+                return [this._content.css(["padding-left", "padding-right"])];
+            }else{
+                return styles;
+            }
+        },
+
+        call_setStyle: function(caller, style){
+            if (!$.isEmptyObject(style)){
+                // Для страницы отбираем paddings
+                var pstyle = {'padding-left':0, 'padding-right':0};
+                var n;
+                for (n in pstyle){
+                    if (n in style){
+                        pstyle[n] = style[n];
+                        delete style[n];
+                    }else{
+                        delete pstyle[n];
+                    }
+                }
+                // Установка и сохранение стиля страницы
+                this._content.css(pstyle);
+                this._call('saveStyle', {
+                        saveStyle:pstyle,
+                        object:this._object
+                    }
+                );
+                // Установка стилей подчиенных (сами определят кому)
+                this.callChildren('setStyle', [style]);
+            }
         }
-
-
 	})
 })(jQuery);

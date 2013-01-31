@@ -10,4 +10,9 @@ use Library\views\AutoWidgetList\AutoWidgetList;
 
 class Page extends AutoWidgetList
 {
+
+    public function work($v = array()){
+
+        return parent::work($v);
+    }
 }

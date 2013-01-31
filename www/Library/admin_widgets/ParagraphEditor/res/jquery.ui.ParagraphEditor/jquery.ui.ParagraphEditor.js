@@ -13,7 +13,7 @@
 			$.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
-            this._object = this.element.attr('data-object');
+            this._object = this.element.attr('data-o');
             // Коррекция пустого значения
             if (this.element.html()==' '){
                 this.element.context.childNodes[0].textContent = '';
@@ -28,7 +28,7 @@
             });
         },
 
-        after_keydown: function(e, selection){
+        call_keydown: function(caller, e, selection){ //after
             if (!e.isPropagationStopped()){
                 var e1 = selection.anchorNode;
                 while (e1.nodeType!=1) e1 = e1.parentNode;
@@ -41,20 +41,20 @@
              }
         },
 
-        after_keyup: function(e, selection){
+        call_keyup: function(caller, e, selection){ //after
             if (this._isInSelection(selection)){
                 this._select();
                 this._change(e);
             }
         },
 
-//        after_blur: function(e, selection){
+//        call_blur: function(caller, e, selection){
 //            if (this._isInSelection(selection)){
 //                this._change(e);
 //            }
 //        },
 
-        after_paste: function(e, selection){
+        call_paste: function(caller, e, selection){
             if (this._isInSelection(selection)){
                 this._change(e);
             }
@@ -63,7 +63,7 @@
         /**
          * Сохранение значения текстового блока
          */
-        after_save: function(){
+        call_save: function(caller){
             var self = this;
             self._call('save', {
                     save:{
@@ -73,7 +73,7 @@
                 }, {
                 success: function(result, textStatus, jqXHR){
                     self._value = self.element.html();
-                    self.before('nochange', [self._object]);
+                    self.callParents('nochange', [self._object]);
                 }
             });
         },
@@ -83,8 +83,8 @@
          * @param state
          * @param changes
          */
-        after_setState: function(state, changes){
-            if ('select' in changes && state.select!=this._object){
+        call_setState: function(caller, state, changes){ //after
+            if ($.isPlainObject(changes) && 'select' in changes && state.select!=this._object){
                 this.element.removeClass('selected');
             }
         },
@@ -125,7 +125,7 @@
                 // Если первый, то отмена BACKSPACE. Действие соединения с предыдущим элементом
                 if (!node.previousSibling && this.element.is(node.parentNode)){
                     e.preventDefault();
-                    this._megre(this.element.prev('[data-object]'), this.element);
+                    this._megre(this.element.prev('[data-o]'), this.element);
                 }
             }else
             // DELETE
@@ -135,7 +135,7 @@
                 // Если последний, то отмена DELETE. Действие соединения со следующим элементом
                 if (!node.nextSibling && this.element.is(node.parentNode)){
                     e.preventDefault();
-                    this._megre(this.element, this.element.next('[data-object]'));
+                    this._megre(this.element, this.element.next('[data-o]'));
                 }
             }else
             // ENTER
@@ -156,9 +156,9 @@
          */
         _change: function(e){
             if (this._value != this.element.html()){
-                this.before('change', [this._object]);
+                this.callParents('change', [this._object]);
             }else{
-                this.before('nochange', [this._object]);
+                this.callParents('nochange', [this._object]);
             }
         },
 
@@ -168,8 +168,8 @@
          */
         _select: function(){
             if (!this.element.hasClass('selected')){
-                this.before('setState', [{select:  this._object}]);
                 this.element.addClass('selected');
+                this.callParents('setState', [{select:  this._object}]);
             }
         },
 
@@ -209,6 +209,25 @@
                         }
                     }
                 });
+            }
+        },
+
+        call_getStyle: function(){
+            if (this.element.hasClass('selected')){
+                return this.element.css(["margin-left", "margin-right", "text-indent"]);
+            }
+        },
+
+        call_setStyle: function(caller, style){
+            if (this.element.hasClass('selected')){
+                if (!$.isEmptyObject(style)){
+                    this.element.css(style);
+                    this._call('saveStyle', {
+                            saveStyle:style,
+                            object:this._object
+                        }
+                    );
+                }
             }
         },
 
@@ -266,7 +285,7 @@
 
                             var sel = window.getSelection();
                             var range = document.createRange();
-                            var next = p.find('[data-object="'+result.out[1]['uri']+'"]').first()[0].firstChild;
+                            var next = p.find('[data-o="'+result.out[1]['uri']+'"]').first()[0].firstChild;
                             range.setStart(next, 0);
                             range.collapse(true);
                             sel.removeAllRanges();

@@ -32,6 +32,7 @@ class ParagraphEditor extends Widget
                         'save' => Rule::arrays(array(
                             'value' => Rule::string()->default('')->required()
                         )),
+                        'saveStyle' => Rule::arrays(Rule::string())
                     )
                 )
             )
@@ -65,6 +66,13 @@ class ParagraphEditor extends Widget
                 return $this->callSave(
                     $this->_input['REQUEST']['object'],
                     $this->_input['REQUEST']['save']['value']
+                );
+            }else
+            // Сохранение стиля
+            if (isset($this->_input['REQUEST']['saveStyle'])){
+                return $this->callSaveStyle(
+                    $this->_input['REQUEST']['object'],
+                    $this->_input['REQUEST']['saveStyle']
                 );
             }
             return null;
@@ -152,6 +160,29 @@ class ParagraphEditor extends Widget
             $v['attrib'] = $this->callLoad();
         }
         return $v;
+    }
+
+    /**
+     * Сохранение стиля объекта (если есть свойство style)
+     * @param \Boolive\data\Entity $object Сохраняемый объект
+     * @param array $styles Свойства стиля
+     * @return mixed
+     */
+    protected function callSaveStyle($object, $styles)
+    {
+        $style = $object->style;
+        if ($style->isExist()){
+            foreach ($styles as $name => $value){
+                $s = $style->{$name};
+                if ($s->isExist()){
+                    $s->value($value);
+                }else{
+                    unset($style->{$name});
+                }
+            }
+            $style->save();
+        }
+        return true;
     }
 
     /**
