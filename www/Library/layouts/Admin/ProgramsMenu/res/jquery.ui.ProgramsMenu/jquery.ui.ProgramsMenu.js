@@ -13,13 +13,13 @@
             var self = this;
             self.element.on('click', 'li a', function(e){
                 e.preventDefault();
-                var s = self.before('getState');
-                self.before('setState', [{
+                var s = self.callParents('getState');
+                self.callParents('setState', [{
                     object: s.select,
                     view_name: $(this).attr('href')
                 }]);
             });
-            this.after_setState(this.before('getState'));
+            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'));
         },
 
         /**
@@ -27,7 +27,7 @@
          * загрузка пунктов меню программ и выделение текущего пункта
          * @param state
          */
-        after_setState: function(state){
+        call_setState: function(caller, state){ //after
             var self = this;
             if (self._state.select != state.select){
                 self._state = $.extend({}, state);

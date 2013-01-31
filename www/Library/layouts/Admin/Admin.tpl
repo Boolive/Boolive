@@ -1,4 +1,4 @@
-<div class="Admin" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="Admin">
+<div class="Admin" data-v="<?php echo $v['view_uri'];?>" data-p="Admin">
     <div class="center">
         <div class="window"><?php echo $v->Programs->string();?></div>
     </div>

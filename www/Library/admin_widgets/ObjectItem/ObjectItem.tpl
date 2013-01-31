@@ -1,4 +1,4 @@
-<div class="ObjectItem" data-view_uri="<?=$v['view_uri']?>" data-object="<?=$v['uri']?>" data-plugin="ObjectItem">
+<div class="ObjectItem" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-p="ObjectItem">
 	<div class="view <?php echo $v['is_virtual']->bool()?'virtual':'';?>">
 		<span class="colright">
             <a title="Выделить" href="<?php echo $v['uri'];?>" class="enter"></a>

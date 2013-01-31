@@ -12,16 +12,16 @@
          * @param state
          * @param changes
          */
-        after_setState: function(state, changes){
+        call_setState: function(caller, state, changes){ //after
 
             var self = this;
-            if ('object' in changes || 'view_name' in changes){
+            if ($.isPlainObject(changes) && ('object' in changes || 'view_name' in changes)){
                 this.reload('/', state, {
                     empty: function(){
-                        self.after('program_hide');
+                        self.callChildren('program_hide');
                     },
                     success: function(){
-                        self.after('program_show');
+                        self.callChildren('program_show');
                     }
                 });
             }

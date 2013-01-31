@@ -341,7 +341,7 @@
                                 }
                             }else{
                                 if (self.model.is_change_attrib('name') || self.model.is_change_attrib('parent')){
-                                    self.before('setState', [{object: responseText.out.attrib.uri}, true]);
+                                    self.callParents('setState', [{object: responseText.out.attrib.uri}, true]);
                                 }
                                 self.model.set_process('start', false);
                                 self.model.init(responseText.out.attrib);
@@ -354,7 +354,7 @@
             on('click', '.item-proto [data-name="proto-uri"]', function(e){
                 e.preventDefault();
                 e.stopPropagation();
-                self.before('openWindow', [null,
+                self.callParents('openWindow', [null,
                     {
                         url: "/",
                         data: {
@@ -378,7 +378,7 @@
             on('click', '.item-parent [data-name="parent-uri"]', function(e){
                 e.preventDefault();
                 e.stopPropagation();
-                self.before('openWindow', [null,
+                self.callParents('openWindow', [null,
                     {
                         url: "/",
                         data: {

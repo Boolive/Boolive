@@ -13,17 +13,17 @@
 			$.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // Текущий выделенный объект узнаётся у родительского виджета (у админки)
-            this._select = this.before('getState').select;
+            this._select = this.callParents('getState').select;
             // Подтверждение выбора
             self.element.on('click', '.submit', function(e){
                 e.preventDefault();
                 // Вызов команды закрытия текущего окна (себя) с возвратом результата
-                self.before('closeWindow', ['submit', {select: self._select}]);
+                self.callParents('closeWindow', ['submit', {select: self._select}]);
             });
             // Отмена выбора
             self.element.on('click', '.cancel', function(e){
                 e.preventDefault();
-                self.before('closeWindow', ['cancel']);
+                self.callParents('closeWindow', ['cancel']);
             });
         },
         /**
@@ -31,7 +31,7 @@
          * @param state
          * @param changes
          */
-        after_setState: function(state, changes){
+        call_setState: function(caller, state, changes){ //after
             this._select = state.select;
         }
 	})

@@ -32,7 +32,7 @@
             this._children = {};
             // URI виджета
             if (!this.options.view_uri){
-                this.options.view_uri = this.element.attr('data-view_uri');
+                this.options.view_uri = this.element.attr('data-v');
             }
             // URL для ajax запросов
             if (!this.options.default_url){
@@ -43,11 +43,12 @@
                 alert('AJAX error: '+ jqxhr.responseText);
             });
             // Добавление нового подчиненного в свой список
-            this.element.on('_create', function(e, widget){
+            this.element.on('_create'+this.eventNamespace, function(e, widget){
                 return !self._addChild(widget);
+
             });
             // Удаление подчиенного из списка
-            this.element.on('_destroy', function(e, widget){
+            this.element.on('_destroy'+this.eventNamespace, function(e, widget){
                 return !self._deleteChild(widget);
             });
             // Сообщаем родителю о своём создании
@@ -96,46 +97,56 @@
         },
 
         /**
-         * Вызов дейсвтия у родителя
-         * @param action Название действия
+         * Вызов дейсвтия у подчиненных
+         * @param action Название действия (функции)
          * @param args Аргументы
-         * @param target Объект, иницировавший вызов действия
+         * @param target Объект, иницировавший вызов действия. По умолчанию this
          */
-        before: function(action, args, target){
+        callChildren: function(action, args, target){
+            var stop = undefined;
+            if (target && target!=this){
+                if ($.isFunction(this['call_'+action])){
+                    if (!$.isArray(args)) args = [args];
+                    var a = [{target: target, direct: 'children'}].concat(args);
+                    stop = this['call_'+action].apply(this, a);
+                }
+            }
+            if (stop !== undefined){
+                return stop;
+            }
+            var result = [];
+            for (var child in this._children){
+                stop = this._children[child].callChildren(action, args, target || this);
+                if (stop !== undefined){
+                    result.push(stop);
+                }
+            }
+            return result.length? result : undefined;
+        },
+
+        /**
+         * Вызов дейсвтия у родителей
+         * @param action Название действия (функции)
+         * @param args Аргументы
+         * @param target Объект, иницировавший вызов действия. По умолчанию this.
+         */
+        callParents: function(action, args, target){
             if (!target) target = null;
             var stop = undefined;
             if (target && target!=this){
-                if ($.isFunction(this['before_'+action])){
-                    stop = this['before_'+action].apply(this, args);
+                if ($.isFunction(this['call_'+action])){
+                    if (!$.isArray(args)) args = [args];
+                    var a = [{target: target, direct: 'parents'}].concat(args);
+                    stop = this['call_'+action].apply(this, a);
                 }
             }
             if (stop !== undefined){
                 return stop;
             }else
             if (this._parent){
-                return this._parent.before(action, args, target || this);
+                return this._parent.callParents(action, args, target || this);
             }
             return undefined;
-        },
-
-        /**
-         * Вызов действия завершения у всех подчиненных
-         * @param action Название действия
-         * @param args Аргументы
-         * @param target Объект, иницировавший вызов действия
-         */
-        after: function(action, args, target){
-            var stop = false;
-            if (target && target!=this){
-                if ($.isFunction(this['after_'+action])){
-                    stop = this['after_'+action].apply(this, args);
-                }
-            }
-            if (!stop){
-                for (var child in this._children){
-                    this._children[child].after(action, args, target || this);
-                }
-            }
         },
 
         /**
@@ -159,7 +170,7 @@
                     $.include(result.links, function(){
                         // Html
 						// Название корневого тега
-						var expr = new RegExp('<[a-z]+.*data-view_uri=[\'"]'+self.options.view_uri+'[\'"].*>');
+						var expr = new RegExp('<[a-z]+.*data-v=[\'"]'+self.options.view_uri+'[\'"].*>');
 
                         var tag = expr.exec(result.out);
 						if (tag && tag.length==1){

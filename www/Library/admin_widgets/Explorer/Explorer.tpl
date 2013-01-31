@@ -1,4 +1,4 @@
-<div class="Explorer" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="Explorer">
+<div class="Explorer" data-v="<?php echo $v['view_uri'];?>" data-p="Explorer">
 	<div class="content">
 <!--        <h1>--><?php //echo $v['head'];?><!--</h1>-->
         <br>

@@ -1,4 +1,4 @@
-<div class="ProgramsMenu" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="ProgramsMenu">
+<div class="ProgramsMenu" data-v="<?php echo $v['view_uri'];?>" data-p="ProgramsMenu">
 	<ul>
 		<?php foreach ($v['items']->arrays(\Boolive\values\Rule::any()) as $item):?>
 			<li>

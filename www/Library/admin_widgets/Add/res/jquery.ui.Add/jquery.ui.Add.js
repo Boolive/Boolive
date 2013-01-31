@@ -15,7 +15,7 @@
 			$.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
-            self.object = this.element.attr('data-object');
+            self.object = this.element.attr('data-o');
             // Отмена выделения при клике на свободную центральную область
             self.element.click(function(e){
                 e.stopPropagation();
@@ -38,7 +38,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 if (!$(this).hasClass('btn-disable')){
-                    self.before('openWindow', [null,
+                    self.callParents('openWindow', [null,
                         {
                             url: "/",
                             data: {
@@ -59,10 +59,12 @@
 
         /**
          * При выделении в списке часто используемых
-         * @param state
+         * @param caller Информация, кто вызывал {target, direct}
+         * @param state Объект текущего состояния.
+         * @param changes Что изменилось в объекте состояния
          * @return {Boolean}
          */
-        before_setState: function(state){
+        call_setState: function(caller, state, changes){  //before
             if (state.object || state.select){
                 this._select(state.object || state.select);
             }
@@ -91,7 +93,7 @@
             if (object != this.object_select){
                 this.element.find('.selected').removeClass('selected');
                 if (object !=null){
-                    this.element.find('[data-object="'+self.escape(object)+'"]').addClass('selected');
+                    this.element.find('[data-o="'+self.escape(object)+'"]').addClass('selected');
                     this.element.find('.submit').removeClass('btn-disable');
                 }else{
                     this.element.find('.submit').addClass('btn-disable');

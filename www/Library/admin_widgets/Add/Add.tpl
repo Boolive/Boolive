@@ -1,4 +1,4 @@
-<div class="Add" data-view_uri="<?php echo $v['view_uri'];?>" data-object="<?php echo $v['object']['uri'];?>" data-plugin="Add">
+<div class="Add" data-v="<?php echo $v['view_uri'];?>" data-o="<?php echo $v['object']['uri'];?>" data-p="Add">
     <div class="main">
         <div class="content">
             <h2><?php echo $v['title'];?></h2>

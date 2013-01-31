@@ -1,4 +1,4 @@
-<div class="SelectObject" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="SelectObject">
+<div class="SelectObject" data-v="<?php echo $v['view_uri'];?>" data-p="SelectObject">
     <div class="main">
         <div class="content">
             <h2><?php echo $v['title'];?></h2>

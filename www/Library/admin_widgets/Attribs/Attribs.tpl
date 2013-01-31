@@ -1,4 +1,4 @@
-<div class="Attribs" data-view_uri="<?php echo $v['view_uri'];?>" data-plugin="Attribs">
+<div class="Attribs" data-v="<?php echo $v['view_uri'];?>" data-p="Attribs">
     <div class="content">
         <h2><?php echo $v['head'];?></h2>
         <form action="" enctype="multipart/form-data" type="POST">

@@ -14,13 +14,13 @@
 			$.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
-            self.object = this.element.attr('data-object');
+            self.object = this.element.attr('data-o');
 
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 self._call('delete', {object: self.object}, function(result, textStatus, jqXHR){
                     // Вход в родительский объект
-                    self.before('setState', [{object: self.getParentOfUri(self.object), view_name: null}]);
+                    self.callParents('setState', [{object: self.getParentOfUri(self.object), view_name: null}]);
                 });
             });
             self.element.find('.cancel').click(function(e){

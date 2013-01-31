@@ -13,8 +13,8 @@
 			this.element.on('click', 'li a', function(e){
                 e.preventDefault();
                 // Вход в объект
-                self.before('setState', [{
-                    object: $(this).attr('data-object')
+                self.callParents('setState', [{
+                    object: $(this).attr('data-o')
                 }]);
 			});
             this.element.on('click', function(e){
@@ -25,13 +25,14 @@
 
         /**
          * При входе в объект - обновление элементов пути
-         * @param state
-         * @param changes
+         * @param caller Информация, кто вызывал {target, direct}
+         * @param state Объект текущего состояния.
+         * @param changes Что изменилось в объекте состояния
          */
-        after_setState: function(state, changes){
-            if ('object' in changes){
+        call_setState: function(caller, state, changes){ //after
+            if ($.isPlainObject(changes) && ('object' in changes)){
                 var uri = state.object;
-                var item = this.element.find('li a[data-object="'+uri+'"]');
+                var item = this.element.find('li a[data-o="'+uri+'"]');
                 if (item.size()==0){
 //                    var path = '/';
 //                    var names = uri.split('/');
@@ -42,12 +43,12 @@
 //                    ul.append(tab.css('z-index', cnt+1).clone());
 //                    for (var i = 1; i < cnt; i++){
 //                        path += names[i];
-//                        tab.css('z-index', cnt-i).children('a').attr('data-object', path).attr('href', '/admin'+path).text(names[i]);
+//                        tab.css('z-index', cnt-i).children('a').attr('data-o', path).attr('href', '/admin'+path).text(names[i]);
 //                        if (i+1 == cnt) tab.addClass('preactive');
 //                        ul.append(tab.clone());
 //                        path += '/';
 //                    }
-//                    item = this.element.find('li a[data-object="'+uri+'"]');
+//                    item = this.element.find('li a[data-o="'+uri+'"]');
 //                    item.parent().addClass('active');
                     this.reload('/', {direct: this.options.view_uri, object: uri});
                 }else{

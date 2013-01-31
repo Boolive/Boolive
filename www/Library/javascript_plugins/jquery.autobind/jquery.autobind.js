@@ -1,14 +1,14 @@
 /**
  * Auto bind jquery plugins
- * Plugin name set to attribute "data-plugin"
+ * Plugin name set to attribute "data-p"
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 (function($) {
     var autobind = function(context){
-        context.find('[data-plugin][data-pluginHas!="1"]').each(function(){
-            var plugin = $(this).attr('data-plugin');
+        context.find('[data-p][data-p-has!="1"]').each(function(){
+            var plugin = $(this).attr('data-p');
             if (typeof $(this)[plugin] == 'function'){
-                $(this)[plugin]().attr('data-pluginHas', 1);
+                $(this)[plugin]().attr('data-p-has', 1);
             }
         });
     };

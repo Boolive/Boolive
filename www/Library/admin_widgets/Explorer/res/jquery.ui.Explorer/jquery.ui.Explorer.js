@@ -9,18 +9,18 @@
 
         _create: function(){
             $.boolive.AjaxWidget.prototype._create.call(this);
-            this.after_setState(this.before('getState'), {select: true});
+            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {select: true});
         },
         /**
          * Выделение объекта
          * @param state
          * @param changes
          */
-        after_setState: function(state, changes){
-            if ('select' in changes){
+        call_setState: function(caller, state, changes){ //after
+            if ($.isPlainObject(changes) && ('select' in changes)){
                 this.element.find('.selected').removeClass('selected');
                 if (state.select){
-                    this.element.find('[data-object="'+this.escape(state.select)+'"]').addClass('selected');
+                    this.element.find('[data-o="'+this.escape(state.select)+'"]').addClass('selected');
                 }
             }
         }

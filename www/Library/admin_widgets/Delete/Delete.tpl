@@ -1,4 +1,4 @@
-<div class="Delete" data-view_uri="<?php echo $v['view_uri'];?>" data-object="<?php echo $v['object']['uri'];?>" data-plugin="Delete">
+<div class="Delete" data-v="<?php echo $v['view_uri'];?>" data-o="<?php echo $v['object']['uri'];?>" data-p="Delete">
     <div class="main">
         <div class="content">
             <h2><?php echo $v['title'];?></h2>

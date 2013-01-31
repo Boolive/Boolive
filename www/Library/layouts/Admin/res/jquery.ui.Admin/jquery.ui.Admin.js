@@ -43,10 +43,10 @@
 
             // Отмена выделения при клике на свободную центральную область
             self.element.click(function(e){
-                self.before_setState({select: self._state.object});
+                self.call_setState({target: self, direct: 'parents'}, {select: self._state.object}); //before
             });
 
-            self.element.click()
+            self.element.click();
 
             // Назад/Вперед
             $(window).on("popstate", function(e){
@@ -60,7 +60,7 @@
                     self._state.history_o = history.state.history_o;
                     self._state.history_i = history.state.history_i;
                     self._state.window = history.state.window;
-                    self.before_setState(history.state, true);
+                    self.call_setState({target: self, direct: 'parents'}, history.state, true);  //before
                 }
             });
             // Загрузка меню
@@ -97,7 +97,7 @@
          * @param state Новое состояние
          * @param without_history Признак, не создавать историю (true)
          */
-        before_setState: function(state, without_history){
+        call_setState: function(caller, state, without_history){
             var change = {};
             // Вход в объект
             if ('object' in state && state.object != this._state.object){
@@ -131,7 +131,8 @@
                 }else{
                     history.replaceState(this._state, null, this.getURIFromState(this._state));
                 }
-                this.after('setState', [this._state, change]);
+                this.callChildren('setState', [this._state, change]);
+                this.callChildren('setStateAfter', [this._state, change]);
             }
         },
 
@@ -139,7 +140,7 @@
          * Получение текущего состояния
          * @return {*}
          */
-        before_getState: function(){
+        call_getState: function(){
             return this._state;
         },
 
@@ -150,14 +151,14 @@
          * @param id
          * @return Идентификатор окна
          */
-        before_openWindow: function(id, request, close_callback){
+        call_openWindow: function(caller, id, request, close_callback){ //before
             if (!id) id = ++this._windows_cnt;
             var self = this;
             // Есть ли требуемое окно?
             var window = this._windows.find('> #'+id+':last');
             if (window.length){
                 // Скрыть текущее окно
-                self.after('window_hide');
+                self.callChildren('window_hide');
                 self._window_current.hide();
                 // Показываем. Тег перенести в начало списка.
                 self._windows.append(window);
@@ -165,7 +166,7 @@
                 self._window_current = self._windows.find('> #'+id+':last');
                 self._state = self._window_current.data('state');
                 self.refresh_state();
-                self.after('window_show');
+                self.callChildren('window_show');
                 window.show();
             }else{
                 if (!(typeof request.data == 'object')) request.data = {};
@@ -212,7 +213,7 @@
          * @param result
          * @param params
          */
-        before_closeWindow: function(result, params){
+        call_closeWindow: function(caller, result, params){ //before
             // Удаление тега окна
             var window = this._windows.find('> :last');
             var dh = 0;
@@ -287,13 +288,47 @@
         },
 
         /**
-         * Вызов дейсвтия у родителя
-         * Если инициатором является виджет неактивного окна, то вызов игнорируется
-         * @param action Название действия
+         * Вызов дейсвтия у подчиненных
+         * @param action Название действия (функции)
          * @param args Аргументы
-         * @param target Объект, иницировавший вызов действия
+         * @param target Объект, иницировавший вызов действия. По умолчанию this
+         * @param all Вызыв всех подчиенных или только внеокнных
+         * @extends $.boolive.AjaxWidget.callChildren
          */
-        before: function(action, args, target){
+        callChildren: function(action, args, target, all){
+            var stop = undefined;
+            if (target && target!=this){
+                // По target опредлить окно и для него вызывать обработчик
+                // Если target вне окон, то используется текущее окно
+                if ($.isFunction(this['call_'+action])){
+                    var a = [{target: target, direct: 'children'}].concat(args);
+                    stop = this['call_'+action].apply(this, a);
+                }
+            }
+            var result = [];
+            // Отправлять виджетам текущего окна и виджетам вне окна
+            if (all!==false){
+                var children = this._window_current.data('children');
+                for (var child in children){
+                    stop = children[child].callChildren(action, args, target || this);
+                    if (stop !== undefined) result.push(stop);
+                }
+            }
+            for (var child in this._children){
+                stop = this._children[child].callChildren(action, args, target || this);
+                if (stop !== undefined) result.push(stop);
+            }
+            return result.length? result : undefined;
+        },
+
+        /**
+         * Вызов дейсвтия у родителей
+         * @param action Название действия (функции)
+         * @param args Аргументы
+         * @param target Объект, иницировавший вызов действия. По умолчанию this.
+         * @extends $.boolive.AjaxWidget.callParents
+         */
+        callParents: function(action, args, target){
             if (!target) target = null;
             var window = null;
             if (!target){
@@ -303,48 +338,19 @@
             if (!window || !window.length || window == this._window_current){
                 var stop = undefined;
                 if (target && target!=this){
-                    if ($.isFunction(this['before_'+action])){
-                        stop = this['before_'+action].apply(this, args);
+                    if ($.isFunction(this['call_'+action])){
+                        var a = [{target: target, direct: 'parents'}].concat(args);
+                        stop = this['call_'+action].apply(this, a);
                     }
                 }
                 if (stop !== undefined){
                     return stop;
                 }else
                 if (this._parent){
-                    return this._parent.before(action, args, target || this);
+                    return this._parent.callParents(action, args, target || this);
                 }
             }
             return undefined;
-        },
-
-        /**
-         * Вызов действия завершения у всех подчиненных
-         * Вызываются общие подчиенные и подчиенные активного окна.
-         * @param action Название действия
-         * @param args Аргументы
-         * @param target Объект, иницировавший вызов действия
-         */
-        after: function(action, args, target, all){
-            var stop = false;
-            if (target && target!=this){
-                // По target опредлить окно и для него вызывать обработчик
-                // Если target вне окон, то используется текущее окно
-                if ($.isFunction(this['after_'+action])){
-                    stop = this['after_'+action].apply(this, args);
-                }
-            }
-            if (!stop){
-                // Отправлять виджетам текущего окна и виджетам вне окна
-                if (all!==false){
-                    var children = this._window_current.data('children');
-                    for (var child in children){
-                        children[child].after(action, args, target || this);
-                    }
-                }
-                for (var child in this._children){
-                    this._children[child].after(action, args, target || this);
-                }
-            }
         },
 
         /**
@@ -353,7 +359,7 @@
          * @private
          */
         refresh_state: function(all){
-            this.after('setState', [this._state, {object: true, select: true, view_name: true}], undefined, all);
+            this.callChildren('setState', [this._state, {object: true, select: true, view_name: true}], undefined, all);
         },
 
         /**
