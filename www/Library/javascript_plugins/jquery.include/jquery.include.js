@@ -166,8 +166,9 @@
 					el[i] = $.createElement(fileArray[i], elementTag);
 					if (el[i]) {
 						headerTag.appendChild(el[i]);
-						if ($.browser.msie) {
-							el[i].onreadystatechange = function(){
+						//if ($.browser.msie) { //msie
+						if (/(msie) ([\w.]+)/i.test(navigator.userAgent)) {
+								el[i].onreadystatechange = function(){
 								if (this.readyState === 'loaded' || this.readyState === 'complete') {
 									$.__loadedSuccessfully(taskId);
 								}
