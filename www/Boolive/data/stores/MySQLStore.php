@@ -743,6 +743,7 @@ class MySQLStore extends Entity
             }
             $this->db->commit();
         }catch (\Exception $e){
+            trace($protos);
             $this->db->rollBack();
             throw $e;
         }
@@ -756,13 +757,14 @@ class MySQLStore extends Entity
     {
         $q = $this->db->prepare('
             DELETE ids, objects, trees FROM ids, objects, trees
-            WHERE parent_id IN (SELECT * FROM (SELECT object_id FROM trees WHERE parent_id = ? AND `type`=1)t)
-            AND `type` = 0
+            WHERE parent_id = ?
             AND object_id != parent_id
             AND ids.id = object_id
             AND objects.id = object_id
             AND objects.is_virtual
         ');
+        ///*IN (SELECT * FROM (SELECT object_id FROM trees WHERE parent_id = ? AND `type`=1)t)*/
+            /*AND `type` = 0*/
         $q->execute(array($object_id));
     }
 
