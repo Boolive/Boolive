@@ -26,6 +26,7 @@ class Table extends Widget
             //строки заголовка
             $header['rows'] = $header[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
             $v['header']['rows'] = $this->getRowCells($header['rows']);
+
         }
         //Подвал
         if(sizeof($footer)>0){
@@ -58,18 +59,20 @@ class Table extends Widget
 
     private function getRowCells($rows){
         $i=0;
+        $rows_new = array();
         foreach($rows as $row){
             if($row->is('/Library/content_samples/tables/Row')){
-                $rows[$i]['cells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
-                foreach($rows[$i]['cells'] as $cell){
+                $rows_new[$i]['cells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
+                foreach($rows_new[$i]['cells'] as $cell){
                     $this->_input_child['REQUEST']['object'] = $cell;
                     //Запускаем подчиненный виджет - виджет ячейки.
-                    $rows[$i]['cells'][] = $this->startChild('Cell');
+                    $rows_new[$i]['cells'][] = $this->startChild('Cell');
                 }
             }
             $i++;
         }
-        return $rows;
+
+        return $rows_new;
     }
 
 

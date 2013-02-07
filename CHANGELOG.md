@@ -29,6 +29,7 @@ Version 2.0 work in progress
 - new #64: Added RichText editor. You can enter text, select, merge and split paragraphs (VladimirShestakov)
 - new #64: Added Image editor in the RichText editor. You can view, select and resize image (VladimirShestakov)
 - new #64: Added the top ruler in the RichText editor (VladimirShestakov)
+- new #29 Added table widget(polina Putrolaynen)
 - bug: Fixed getting proto and parent if they not exists. (VladimirShestakov)
 
 Version 2.0 preview October, 8 2012
