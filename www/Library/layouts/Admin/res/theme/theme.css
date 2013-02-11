@@ -157,9 +157,9 @@ h2 + p{
         }
 /* Неактивная кнопка*/
 .btn-disable, .btn-disable:hover, .btn-disable:active {
-    background-color: #f5f5f5;
-    border: 1px solid #ebebeb;
-    color: #CCC;
+    background-color: rgba(200,200,200,0.1);
+    border: 1px solid rgba(200,200,200,0.15);
+    color: rgba(150,150,150,0.3);
     cursor: default;
     padding: 6px 14px 2px 14px;
     }

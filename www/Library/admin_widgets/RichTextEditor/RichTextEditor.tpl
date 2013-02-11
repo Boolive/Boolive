@@ -1,5 +1,5 @@
 <div class="RichTextEditor" data-p="RichTextEditor" data-o="<?=$v['object']?>"  data-v="<?php echo $v['view_uri'];?>">
-    <div class="tools"><div class="body">
+    <div class="tools" ><div class="body RichTextBG">
         <div class="toolbar">
             <a class="btn btn-success btn-disable save" href="">Сохранить</a>
         </div>

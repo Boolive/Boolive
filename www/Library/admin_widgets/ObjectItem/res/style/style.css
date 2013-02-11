@@ -27,50 +27,60 @@
 
 		.ObjectItem .view .colright {
 			color: #999;
-			margin: 0;
+			margin: 0 0 0 200px;
 			padding: 0 0 0 5px;
 			position: absolute;
 			right: 0;
 			text-align: right;
 			font-size: 10pt;
 			height: 38px;
-			width: 185px;
+			/*width: 285px;*/
 			}
 			.ObjectItem .view .colright > *{
-				/*margin: 0 10px;
-				height: 24px;
+				margin: 0px 5px;
+				/*height: 24px;
 				padding: 10px 0 0px 0;*/
 				display: block;
                 float: right;
                 height: 38px;
-				}
-			.ObjectItem .view .colright .value{
-				max-width: 150px;
+                line-height: 38px;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                color: #666;
-                margin: 9px 0 2px 0;
-                padding: 2px 0px;
-                height: auto;
+                cursor: default;
 				}
-            .ObjectItem .view .colright .default{
-                color: #8040A0;
+        .ObjectItem .view .colright .name{
+            color: #AAA;
+            font-size: 8pt;
+            /*font-style: italic;*/
+            font-family: Verdana;
+            padding: 0px 0px;
+
             }
-        .ObjectItem .file{
-            width: 20px;
+        .ObjectItem .view .colright  .value{
+            /*max-width: 200px;*/
+            color: #666;
+            height: auto;
+            word-wrap:break-word;
+            }
+        .ObjectItem .view .colright .default{
+            color: #8040A0;
+            }
+        .ObjectItem .view .colright .file{
+            width: 14px;
+            margin: 0;
             background: url(img/file.png) no-repeat center center;
             opacity: 0.6;
             }
-
-		.ObjectItem .enter{
+		.ObjectItem .view .colright .select{
 			margin: 0;
 			width: 32px;
 			text-align: center;
 			background: url(img/select.png) no-repeat center center;
 			opacity: 0.1;
 			padding: 0;
+            cursor: pointer;
 			}
-			.ObjectItem .enter:hover{
+			.ObjectItem .view .colright .select:hover{
 				opacity: 1;
 				}
 
@@ -106,13 +116,14 @@
 				font-size: 9pt;
 				}
 				.ObjectItem .view .colmain .col2 .title{
-					/*min-width: 200px;
-					max-width: 300px;
+
+					/*max-width: 300px;
 					text-overflow: ellipsis;*/
 					padding: 9px 0 2px 10px;
-					font-size: 13pt;
+					font-size: 12pt;
                     color: #000;
                     cursor: pointer;
+                    text-decoration: none;
 					}
                 .ObjectItem .virtual .colmain .col2 .title{
                     color: #8040A0;
@@ -156,14 +167,14 @@
     .ObjectItem[class~="selected"] .view .colright .default{
         color: #FFF;
         }
-    .ObjectItem[class~="selected"] .enter{
+    .ObjectItem[class~="selected"] .view .colright .select{
         background: url(img/select-invert.png) no-repeat center center;
         opacity: 0.9;
         }
-        .ObjectItem[class~="selected"] .enter:hover{
+        .ObjectItem[class~="selected"] .view .colright .select:hover{
             opacity: 1;
             }
-    .ObjectItem[class~="selected"] .file{
+    .ObjectItem[class~="selected"] .view .colright .file{
         background: url(img/file-invert.png) no-repeat center center;
         opacity: 0.9;
         }

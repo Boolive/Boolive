@@ -1,17 +1,17 @@
 <div class="ObjectItem" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-p="ObjectItem">
-	<div class="view <?php echo $v['is_virtual']->bool()?'virtual':'';?>">
+	<div class="view <?php echo $v['is_virtual']->bool()?'virtual':'';?>" title="<?php echo $v['uri']->escape();?>">
 		<span class="colright">
-            <a title="Выделить" href="<?php echo $v['uri'];?>" class="enter"></a>
-            <span class="value <?php echo $v['is_default_value']->bool()?'default':'';?>" title="<?php echo $v['value']->escape();?>"><?php echo $v['value']->escape();?></span>
+            <a class="select" title="Выделить" href="<?php echo $v['uri'];?>"></a>
+            <!--<span class="name"><?php //echo $v['name']->escape();?></span>-->
+            <span class="value <?php echo $v['is_default_value']->bool()?'default':'';?>" title="<?php echo $v['value_full']->escape();?>"><?php echo $v['value']->escape();?></span>
             <?php if ($v['is_file']->bool()):?>
-            <span class="file"></span>
+                <span class="file"></span>
             <?php endif;?>
-		</span>
-		<span class="colmain" title="<?php echo $v['name']->escape();?>">
+        </span>
+		<span class="colmain">
 			<!--<span class="col1"></span>-->
 			<span class="col2">
-                <span class="title"><?php echo $v['title']->escape();?></span>
-				<span class="name"><?php echo $v['name']->escape();?></span>
+                <a class="title" href="/admin<?php echo $v['uri'];?>"><?php echo $v['title']->escape();?></a>
 			</span>
 		</span>
 	</div>

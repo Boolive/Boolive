@@ -1,5 +1,5 @@
 .RichTextBG{
-    background-color: #F6F6F6;
+    background-color: #F1F1F1;
 }
 .RichTextEditor{
     position: relative;
@@ -19,7 +19,7 @@
             padding: 0 5px;
             margin: 0 auto;
             max-width: 910px;
-            background-color: #F6F6F6;
+            /*background-color: #F6F6F6;*/
         }
         .RichTextEditor .tools .toolbar{
             height: 32px;
@@ -36,7 +36,7 @@
         min-height: 800px;
         background-color: #FFF;
         outline: none;
-        border: 1px solid #e8e8e8;
+        border: 1px solid #CCCCCC;
         box-shadow: /*0px 0px 1px 1px #e8e8e8, */1px 2px 3px 0 #e0e0e0/* , 0px 0px 300px 300px #F6F6F6*/;
         }
     .RichTextEditor > .content > *{
@@ -101,8 +101,8 @@
         margin: 0 -19px;
         }
         .RichTextEditor .hrule .bg{
-            background-color: #ebebeb;
-            border: 1px solid #e5e1e5;
+            background-color: #E4E4E4;
+            border: 1px solid #CECECE;
             height: 15px;
             margin: 0 19px;
             }
