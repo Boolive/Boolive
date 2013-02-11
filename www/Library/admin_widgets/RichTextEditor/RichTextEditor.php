@@ -16,7 +16,7 @@ class RichTextEditor extends AutoWidgetList
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required(),
+                        'object' => Rule::entity()->required(),
                         'call' => Rule::string()->default('')->required(),
                         'saveStyle' => Rule::arrays(Rule::string())
                     )

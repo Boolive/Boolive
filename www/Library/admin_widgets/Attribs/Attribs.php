@@ -18,7 +18,7 @@ class Attribs extends Widget
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required(),
+                        'object' => Rule::entity()->required(),
                         'call' => Rule::string()->default('')->required(),
                         'attrib' => Rule::arrays(Rule::string())
                     )

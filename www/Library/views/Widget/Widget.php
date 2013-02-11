@@ -21,6 +21,14 @@ class Widget extends View
         if (!$this->isLink()) $this->find();
     }
 
+    protected function initInput($input)
+    {
+        if ($this->object->isExist() && !$this->object->isDelete() && !$this->object->isHistory()){
+            $input['REQUEST']['object'] = $this->object;
+        }
+        parent::initInput($input);
+    }
+
     /**
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
@@ -29,7 +37,7 @@ class Widget extends View
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required()
+                        'object' => Rule::entity()->required()
                     )
                 )
             )

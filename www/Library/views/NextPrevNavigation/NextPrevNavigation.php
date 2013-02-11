@@ -44,7 +44,7 @@ class NextPrevNavigation extends Widget
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity(array('is', $this->getTypes()))->default($this->object)->required()
+                        'object' => Rule::entity(array('is', $this->getTypes()))->required()
                     )
                 )
             )

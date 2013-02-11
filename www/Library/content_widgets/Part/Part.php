@@ -15,7 +15,7 @@ class Part extends AutoWidgetList
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required(),
+                        'object' => Rule::entity()->required(),
                         'page'=> Rule::int()->default(1)->required() // номер страницы
                     )
                 )

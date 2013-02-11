@@ -8,7 +8,8 @@ namespace Library\layouts\Admin;
 
 use Library\views\Focuser\Focuser,
     Boolive\values\Rule,
-    Boolive\data\Data;
+    Boolive\data\Data,
+    Boolive\input\Input;
 
 class Admin extends Focuser
 {

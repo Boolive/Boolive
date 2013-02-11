@@ -18,7 +18,7 @@ class FormAuth extends AutoWidgetList
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         // Модель формы
-                        'object' => Rule::entity()->default($this->object)->required(),
+                        'object' => Rule::entity()->required(),
                         // Признак, submit запрос данной формы?
                         $this->uri() => Rule::arrays(array(
                                 'submit' => Rule::string()

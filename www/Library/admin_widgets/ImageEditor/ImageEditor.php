@@ -18,7 +18,7 @@ class ImageEditor extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         // Отображаемый объект или над которым выполняется действие
-                        'object' => Rule::entity()->default($this->object)->required(),
+                        'object' => Rule::entity()->required(),
                         'call' => Rule::string(),
                         // Аргументы вызываемых методов (call)
                         'saveStyle' => Rule::arrays(Rule::string())

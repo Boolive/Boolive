@@ -18,7 +18,7 @@ class ParagraphEditor extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         // Отображаемый объект или над которым выполняется действие
-                        'object' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->default($this->object)->required(),
+                        'object' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required(),
                         'call' => Rule::string(),
                         // Аргументы вызываемых методов (call)
                         'devide' => Rule::arrays(array(
