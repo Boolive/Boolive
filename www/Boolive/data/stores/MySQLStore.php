@@ -278,7 +278,7 @@ class MySQLStore extends Entity
 
                 // Уникальность order, если задано значение и записываемый объект не в истории
                 // Если запись в историю, то вычисляем только если не указан order
-                if (!$attr['is_history'] && $attr['order']!=self::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
+                if (!$attr['is_history'] && $attr['order']!= Entity::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
                     // Сдвиг order существующих записей, чтоб освободить значение для новой
                     $q = $this->db->prepare('
                         UPDATE {objects} SET `order` = `order`+1
