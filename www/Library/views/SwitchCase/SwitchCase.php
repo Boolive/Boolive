@@ -14,7 +14,8 @@
 namespace Library\views\SwitchCase;
 
 use Boolive\values\Rule,
-    Library\views\View\View;
+    Library\views\View\View,
+    Boolive\commands\Commands;
 
 class SwitchCase extends View
 {
@@ -24,7 +25,6 @@ class SwitchCase extends View
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default(null)->required(),
                         'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
                     )
                 )
@@ -37,9 +37,9 @@ class SwitchCase extends View
         parent::initInputChild(array_replace_recursive($input, $this->_input));
     }
 
-    public function canWork()
+    public function canWork(Commands $commands, $input)
     {
-        if ($result = parent::canWork()){
+        if ($result = parent::canWork($commands, $input)){
             if (!empty($this->_input['REQUEST']['view_name'])){
                 // Если указано, каким отображать, то только его пробуем запустить
                 $result = $this->{$this->_input['REQUEST']['view_name']}->isExist();

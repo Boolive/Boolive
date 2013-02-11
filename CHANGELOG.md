@@ -14,6 +14,7 @@ Version 2.0 work in progress
 - enh: Change selecting objects in the admin explorer (VladimirShestakov)
 - enh: Show titles of the object and his parents in the Breadcrumbs (VladimirShestakov)
 - enh: Update jQuery to 1.9 version and fix problems in jquery.include.js (VladimirShestakov)
+- enh: View::canWork() - you can check if View can work without starting it. (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
 - new #31: Added access control for read and write. (VladimirShestakov)
 - new #60: Added user authentication and cancellations (VladimirShestakov)

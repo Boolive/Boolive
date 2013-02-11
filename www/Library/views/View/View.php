@@ -86,15 +86,8 @@ class View extends Entity
      */
     public function start(Commands $commands, $input)
     {
-        if (!$this->_is_init){
-            $this->init();
-            $this->_is_init = true;
-        }
-        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
-        $this->_commands = $commands;
-        $this->initInput($input);
         //Проверка возможности работы
-        if ($this->canWork()){
+        if ($this->canWork($commands, $input)){
             $this->initInputChild($input);
             //Выполнение подчиненных
             ob_start();
@@ -114,10 +107,21 @@ class View extends Entity
     /**
      * Проверка возможности работы.
      * По умолчанию проверяются отсутствие ошибок во входящих данных по правилу на входящие данные
-     * @return bool Признак, может ли работать объект или нет
+     * @param \Boolive\commands\Commands $commands Входящие и исходящие команды
+     * @param \Boolive\input\Input $input Входящие данные
+     * @return bool Признак, может ли работать вид или нет
      */
-    public function canWork()
+    public function canWork(Commands $commands, $input)
     {
+        // Инициализация
+        if (!$this->_is_init){
+            $this->init();
+            $this->_is_init = true;
+        }
+        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
+        $this->_commands = $commands;
+        $this->initInput($input);
+        // Может работать, если нет ошибок во входящих данных
         return !isset($this->_input_error);
     }
 
