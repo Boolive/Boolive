@@ -6,37 +6,34 @@
  */
 namespace Library\layouts\Admin\ProgramsMenu;
 
-use Library\views\Widget\Widget;
+use Library\views\Widget\Widget,
+    Boolive\values\Rule;
 
 class ProgramsMenu extends Widget
 {
+
+    public function getInputRule()
+    {
+        return Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity()),
+                            Rule::entity()
+                        )->required()
+                    )
+                )
+            )
+        );
+    }
+
     public function work($v = array())
     {
-        $cases = $this->programs->switch_views->find();
-        $programs = array();
-        foreach ($cases as $case){
-            if ($case instanceof \Library\views\SwitchCase\SwitchCase){
-                $uri = $case->value();
-                if ($uri=='all'){
-                    $programs = array_merge($programs, $case->find());
-                }else{
-                    /** @var $obj \Boolive\data\Entity */
-                    $obj = $this->_input['REQUEST']['object'];
-                    while ($obj){
-                        if ($obj->id() == $uri || $obj->uri() == $uri){
-                            $programs = array_merge($programs, $case->find(array(), null));
-                            $obj = null;
-                        }else{
-                            $obj = $obj->proto();
-                        }
-                    }
-                }
-            }
-        }
-
+        $case = $this->programs->linked()->switch_views->getCaseFor($this->_input['REQUEST']['object']);
+        $programs = $case->find();
+        $c = new \Boolive\commands\Commands();
         $v['items'] = array();
         foreach ($programs as $p){
-            if ($p instanceof Widget){
+            if ($p instanceof Widget && $p->canWork($c, $this->_input_child)){
                 $item = array(
                     'title' => $p->title->value(),
                     'view_name' => $p->name(),

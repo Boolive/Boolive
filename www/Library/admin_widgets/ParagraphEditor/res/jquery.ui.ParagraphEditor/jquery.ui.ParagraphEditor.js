@@ -84,7 +84,7 @@
          * @param changes
          */
         call_setState: function(caller, state, changes){ //after
-            if ($.isPlainObject(changes) && 'select' in changes && state.select!=this._object){
+            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this._object)==-1){
                 this.element.removeClass('selected');
             }
         },
@@ -169,7 +169,7 @@
         _select: function(){
             if (!this.element.hasClass('selected')){
                 this.element.addClass('selected');
-                this.callParents('setState', [{select:  this._object}]);
+                this.callParents('setState', [{selected:  this._object}]);
             }
         },
 

@@ -14,13 +14,19 @@ class Widget extends View
 {
 
     /**
-     * Инициализация
+     * Инициализация Виджета
      */
     protected function init()
     {
         if (!$this->isLink()) $this->find();
     }
 
+    /**
+     * Инициализация входящих данных
+     * Если нету своего объекта (модели), то берется объект из входящих данных
+     * @param $input
+     * @return mixed|void
+     */
     protected function initInput($input)
     {
         if ($this->object->isExist() && !$this->object->isDelete() && !$this->object->isHistory()){
@@ -46,7 +52,6 @@ class Widget extends View
 
     public function work($v = array())
     {
-
         $this->startChild('res');
         $v['view_uri'] = $this->uri();
         return Template::render($this, $v);

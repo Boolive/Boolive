@@ -8,7 +8,7 @@
  * JQuery UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($, root, undefined) {
+(function($, root, _, undefined) {
 	$.widget("boolive.Admin", $.boolive.AjaxWidget, {
         options: {
             basepath: '/admin'
@@ -22,7 +22,7 @@
         // в каком окне подчиенный виджет по его uuid
         _where_children: null,
         // Текущее состояние
-        _state: null,
+        _state: null, // {object: '', selected: [], view_name: '', window: '#id', }
 
         _create: function() {
 			$.boolive.AjaxWidget.prototype._create.call(this);
@@ -43,7 +43,7 @@
 
             // Отмена выделения при клике на свободную центральную область
             self.element.click(function(e){
-                self.call_setState({target: self, direct: 'parents'}, {select: self._state.object}); //before
+                self.call_setState({target: self, direct: 'parents'}, {selected: self._state.object}); //before
             });
 
             self.element.click();
@@ -60,6 +60,7 @@
                     self._state.history_o = history.state.history_o;
                     self._state.history_i = history.state.history_i;
                     self._state.window = history.state.window;
+                    console.log(history.state);
                     self.call_setState({target: self, direct: 'parents'}, history.state, true);  //before
                 }
             });
@@ -79,7 +80,8 @@
             if (typeof uri_args.object == 'string'){
                 if (uri_args.object) uri_args.object = '/'+uri_args.object;
                 this._state.object = uri_args.object;
-                this._state.select = uri_args.object;
+                //this._state.select = uri_args.object;
+                this._state.selected = [uri_args.object];
             }
             if (typeof uri_args.view_name == 'string'){
                 this._state.view_name = uri_args.view_name;
@@ -87,7 +89,7 @@
                 this._state.view_name = null;
             }
             this._state.window = this._window_current.attr('id');
-            this._state.history_o = 0; // начальный индекс истории текущего окна
+            this._state.history_o = 0; // начальный индекс истории текущего окна (необходимо для сброса истории браузера при закрытии окна)
             this._state.history_i = 0; // текущий индекс истории окна
             history.replaceState(this._state, null, null);
         },
@@ -101,17 +103,56 @@
             var change = {};
             // Вход в объект
             if ('object' in state && state.object != this._state.object){
+                this._state.prev = this._state.object;
                 this._state.object = state.object;
                 change['object'] = true;
                 // По умолчанию выделенный объект - в который вошли
-                if (!('select' in state)){
-                    state.select = state.object;
+                if (!('selected' in state)){
+                    state.selected = state.object;
+                    state.select_type = null; // Переопределение выделения
                 }
             }
             // Выделение объекта
-            if ('select' in state && state.select != this._state.select){
-                this._state.select = state.select;
-                change['select'] = true;
+            if ('selected' in state/* && state.selected != this._state.selected*/){
+                if (state.selected == null) state.selected = this._state.object;
+
+                var current = this._state.selected.slice(0);
+                if (!_.isArray(state.selected)) state.selected = [state.selected];
+
+                if (state.select_type == 'toggle'){
+                    var sel = this._state.selected;
+                    var index;
+                    _.each(state.selected, function(s){
+                        if ((index = _.indexOf(sel, s))!=-1){
+                            sel.splice(index, 1);
+                        }else{
+                            sel.push(s);
+                        }
+                    });
+                }else
+                if (state.select_type == 'remove'){
+                    this._state.selected = _.without.apply(_, [this._state.selected].concat(state.selected));
+                }else{
+                    // Если не добавление к выделению, то удаление текущего выделения
+                    if (state.select_type != 'add') this._state.selected = [];
+                    // Добавление к выделению
+                    this._state.selected = _.union(this._state.selected, state.selected);
+                }
+                // Если множественное выделение, то из выделения убирается родительский объект
+                if (this._state.selected.length > 1 && _.indexOf(this._state.selected, this._state.object)!=-1){
+                    if (_.isArray(this._state.object)){
+                        this._state.selected = _.without.apply(_, [this._state.selected].concat(this._state.object));
+                    }else{
+                        this._state.selected = _.without(this._state.selected, this._state.object);
+                    }
+                }else
+                if (this._state.selected.length==0){
+                    this._state.selected = _.isArray(this._state.object)? this._state.object : [this._state.object];
+                }
+                // Выделение изменилось?
+                if (_.difference(current, this._state.selected).length > 0 || _.difference(this._state.selected, current).length > 0){
+                    change['selected'] = true;
+                }
             }
             // Выбор вида
             if ('view_name' in state && state.view_name != this._state.view_name){
@@ -193,7 +234,8 @@
                                     history_i: self._state.history_i+1
                                 }).data('children', {})
                                 .data('close_callback', close_callback);
-                            self._window_current.data('state').select = request.data.select ? request.data.select : self._window_current.data('state').object;
+                            //self._window_current.data('state').select = request.data.select ? request.data.select : self._window_current.data('state').object;
+                            self._window_current.data('state').selected = request.data.selected ? request.data.selected : [self._window_current.data('state').object];
                             self._state = self._window_current.data('state');
                             // Открытие окна фиксируем в истории браузера
                             history.pushState(self._state, null, self.getURIFromState(self._state));
@@ -359,7 +401,7 @@
          * @private
          */
         refresh_state: function(all){
-            this.callChildren('setState', [this._state, {object: true, select: true, view_name: true}], undefined, all);
+            this.callChildren('setState', [this._state, {object: true, selected: true, view_name: true}], undefined, all);
         },
 
         /**
@@ -386,12 +428,13 @@
          * @return {String}
          */
         getURIFromState: function(state){
-            var uri = this.options.basepath + state.object;
-            if (!state.object) uri = uri + '/';
+            var obj = _.isArray(state.object)? _.first(state.object) : state.object;
+            var uri = this.options.basepath + obj;
+            if (!obj) uri = uri + '/';
             if (state.view_name){
                 uri = uri + '&view_name=' + state.view_name;
             }
             return uri;
         }
 	})
-})(jQuery, window);
+})(jQuery, window, _);

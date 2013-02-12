@@ -4,7 +4,7 @@
  * Query UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($) {
+(function($, _) {
 	$.widget("boolive.Add", $.boolive.AjaxWidget, {
         // Объект, в который добавлять (родитель)
         object: null,
@@ -47,8 +47,8 @@
                             }
                         },
                         function(result, params){
-                            if (result == 'submit' && 'select' in params){
-                                self.object_select = params.select;
+                            if (result == 'submit' && 'selected' in params){
+                                self.object_select = params.selected;
                                 self._add();
                             }
                         }
@@ -65,8 +65,8 @@
          * @return {Boolean}
          */
         call_setState: function(caller, state, changes){  //before
-            if (state.object || state.select){
-                this._select(state.object || state.select);
+            if (state.object || state.selected){
+                this._select(state.object || state.selected);
             }
             return true;
         },
@@ -102,4 +102,4 @@
             }
         }
 	})
-})(jQuery);
+})(jQuery, _);

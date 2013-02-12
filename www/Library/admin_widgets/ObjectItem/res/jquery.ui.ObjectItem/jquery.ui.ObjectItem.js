@@ -19,20 +19,27 @@
                 e.stopPropagation();
                 e.preventDefault();
                 // Сначала выделяем себя
-                self.callParents('setState', [{select:  self._object}]);
+                self.callParents('setState', [{selected:  self._object}]);
                 // Теперь входим
                 self.callParents('setState', [{object:  self._object}]);
 			});
-            // Вход в объекта
+            // Множественное выделение объекта
+            self.element.find('.select').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                self.callParents('setState', [{selected: self._object, select_type: 'toggle'}]);
+            });
+            // Выделение объекта
 			self.element.click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
-                // Сначала выделяем себя
+
                 var s = self.callParents('getState');
-                if (s.select == self._object){
-                    self.callParents('setState', [{select: s.object}]);
+                if (_.indexOf(s.selected, self._object)!=-1){
+                    // Отмена выделения при повторном клике
+                    self.callParents('setState', [{selected: s.object}]);
                 }else{
-                    self.callParents('setState', [{select: self._object}]);
+                    self.callParents('setState', [{selected: self._object}]);
                 }
 			});
         }

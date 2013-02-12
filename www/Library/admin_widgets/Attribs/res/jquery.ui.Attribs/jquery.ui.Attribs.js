@@ -3,7 +3,7 @@
  * Query UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($) {
+(function($, _) {
 	$.widget("boolive.Attribs", $.boolive.AjaxWidget, {
         /**
          * Данные и методы их обновления.
@@ -363,8 +363,8 @@
                         }
                     },
                     function(result, params){
-                        if (result == 'submit' && 'select' in params){
-                            self.model.set_attrib('proto', params.select);
+                        if (result == 'submit' && 'selected' in params){
+                            self.model.set_attrib('proto', _.first(params.selected));
                         }
                     }
                 ]);
@@ -387,8 +387,9 @@
                         }
                     },
                     function(result, params){
-                        if (result == 'submit' && 'select' in params){
-                            self.model.set_attrib('parent', params.select);
+                        if (result == 'submit' && 'selected' in params){
+                            console.log(params.selected);
+                            self.model.set_attrib('parent', _.first(params.selected));
                         }
                     }
                 ]);
@@ -405,9 +406,9 @@
 //                        }
 //                    },
 //                    function(result, params){
-//                        if (result == 'submit' && 'select' in params){
+//                        if (result == 'submit' && 'selected' in params){
 //                            alert('Выбор языка ещё нереализован');
-//                            //self.object_select = params.select;
+//                            //self.object_select = params.selected;
 //                            //self._add();
 //                        }
 //                    }
@@ -426,9 +427,9 @@
 //                        }
 //                    },
 //                    function(result, params){
-//                        if (result == 'submit' && 'select' in params){
+//                        if (result == 'submit' && 'selected' in params){
 //                            alert('Выбор владельца нереализован');
-//                            //self.object_select = params.select;
+//                            //self.object_select = params.selected;
 //                            //self._add();
 //                        }
 //                    }
@@ -454,7 +455,7 @@
          * @return {*}
          */
         getLastParam: function(uri){
-            var m = uri.match(/([^\\\/]*)$/)
+            var m = uri.match(/([^\\\/]*)$/);
             if (m){
                 return m[1];
             }else{
@@ -476,4 +477,4 @@
             }
         }
 	})
-})(jQuery);
+})(jQuery, _);

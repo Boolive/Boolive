@@ -5,42 +5,47 @@
  * Query UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($) {
+(function($, _) {
 	$.widget("boolive.Delete", $.boolive.AjaxWidget, {
         // Удаляемый объект
-        object: null,
+        objects: null,
+        prev_o: '',
+        prev_v: '',
 
         _create: function() {
 			$.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
-            self.object = this.element.attr('data-o');
+            self.objects = $.parseJSON(this.element.attr('data-o'));
+            self.prev_o = this.element.attr('data-prev-o');
+            self.prev_v = this.element.attr('data-prev-v');
 
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
-                self._call('delete', {object: self.object}, function(result, textStatus, jqXHR){
+                self._call('delete', {object: self.objects}, function(result, textStatus, jqXHR){
                     // Вход в родительский объект
-                    self.callParents('setState', [{object: self.getParentOfUri(self.object), view_name: null}]);
+                    //history.back();
+                    self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
                 });
             });
             self.element.find('.cancel').click(function(e){
                 e.preventDefault();
                 history.back();
             });
-        },
+        }
 
         /**
          * Возвращает URI родительского объекта
          * @param uri
          * @return {*}
          */
-        getParentOfUri: function(uri){
-            var m = uri.match(/^(.*)\/[^\\\/]*$/);
-            if (m){
-                return m[1];
-            }else{
-                return '';
-            }
-        }
+//        getParentOfUri: function(uri){
+//            var m = uri.match(/^(.*)\/[^\\\/]*$/);
+//            if (m){
+//                return m[1];
+//            }else{
+//                return '';
+//            }
+//        }
 	})
-})(jQuery);
+})(jQuery, _);

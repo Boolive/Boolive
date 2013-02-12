@@ -3,7 +3,7 @@
  * Query UI widget
  * Copyright 2013 (C) Boolive
  */
-(function($, document) {
+(function($, _, document) {
 	$.widget("boolive.ImageEditor", $.boolive.AjaxWidget, {
         // uri отображаемого объекта
         _object: '',
@@ -152,7 +152,7 @@
             this.element.attr('contentEditable', "true");
             if (!this.element.hasClass('selected')){
                 this.element.addClass('selected');
-                this.callParents('setState', [{select:  this._object}]);
+                this.callParents('setState', [{selected:  this._object}]);
                 var sel = window.getSelection();
                 var range = document.createRange();
                 range.setStart(this.element.parent()[0], this.element.index());
@@ -168,7 +168,8 @@
          * @param changes
          */
         call_setState: function(caller, state, changes){ //after
-            if ($.isPlainObject(changes) && 'select' in changes && state.select!=this._object){
+            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this._object)==-1){
+                //state.selected!=this._object){
                 this.element.removeClass('selected');
                 this.element.removeClass('resizing');
             }
@@ -185,8 +186,8 @@
                 if (!$.isEmptyObject(style)){
                     this.element.css(style);
                     this._call('saveStyle', {
-                            saveStyle:style,
-                            object:this._object
+                            saveStyle: style,
+                            object: this._object
                         }
                     );
                 }
@@ -206,4 +207,4 @@
             return false;
         }
 	})
-})(jQuery, document);
+})(jQuery, _, document);

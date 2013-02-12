@@ -32,10 +32,10 @@ class SwitchCase extends View
         );
     }
 
-    protected function initInputChild($input)
-    {
-        parent::initInputChild(array_replace_recursive($input, $this->_input));
-    }
+//    protected function initInputChild($input)
+//    {
+//        parent::initInputChild(array_replace_recursive($input, $this->_input));
+//    }
 
     public function canWork(Commands $commands, $input)
     {

@@ -423,6 +423,7 @@ class MySQLStore extends Entity
                     // если что-то из этого изменилось у объекта
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if ($current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
+                        $current['is_link']!=$attr['is_link'] ||
                         $current['is_delete']!=$attr['is_delete'] || $current['is_hidden']!=$attr['is_hidden'] ||
                         $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto'] && $dp) || $dp!=0){
 //                        $q = $this->db->prepare('
@@ -442,6 +443,7 @@ class MySQLStore extends Entity
                                     UPDATE {objects}, {trees} SET
                                     `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
                                     `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
+                                    `is_link` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0 AND is_virtual), :is_link, is_link),
                                     `is_delete` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0 AND is_virtual), :is_delete, is_delete),
                                     `is_hidden` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0 AND is_virtual), :is_hidden, is_hidden),
                                     `is_default_value` = IF(is_default_value=:vproto, :proto, is_default_value),
@@ -461,6 +463,7 @@ class MySQLStore extends Entity
                                     ':lang' => $attr['lang'],
                                     ':is_delete' => $attr['is_delete'],
                                     ':is_hidden' => $attr['is_hidden'],
+                                    ':is_link' => $attr['is_link'],
                                     ':obj' => $attr['id']
                                 ));
 //                            }

@@ -4,25 +4,29 @@
  * Query UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($) {
+(function($, _) {
 	$.widget("boolive.Explorer", $.boolive.AjaxWidget, {
 
         _create: function(){
             $.boolive.AjaxWidget.prototype._create.call(this);
-            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {select: true});
+            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {selected: true});
         },
         /**
          * Выделение объекта
-         * @param state
-         * @param changes
          */
-        call_setState: function(caller, state, changes){ //after
-            if ($.isPlainObject(changes) && ('select' in changes)){
-                this.element.find('.selected').removeClass('selected');
-                if (state.select){
-                    this.element.find('[data-o="'+this.escape(state.select)+'"]').addClass('selected');
+        call_setState: function(caller, state, changes){
+
+            if (caller.direct == 'children'){
+                if ($.isPlainObject(changes) && ('selected' in changes)){
+                    this.element.find('.selected').removeClass('selected');
+                    if (state.selected){
+                        var element = this.element;
+                        _.each(state.selected, function(s){
+                            element.find('[data-o="'+s+'"]').addClass('selected');
+                        });
+                    }
                 }
             }
         }
 	})
-})(jQuery);
+})(jQuery, _);

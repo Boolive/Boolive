@@ -6,17 +6,22 @@
  */
 namespace Library\admin_widgets\Programs;
 
-use Library\views\AutoWidget\AutoWidget;
+use Library\views\AutoWidget\AutoWidget,
+    Boolive\values\Rule;
 
 class Programs extends AutoWidget
 {
-    protected function initInput($input)
+    public function getInputRule()
     {
-        return parent::initInput($input);
-    }
-
-    public function work($v = array())
-    {
-        return parent::work($v);
+        return Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity()),
+                            Rule::entity()
+                        )->required()
+                    )
+                )
+            )
+        );
     }
 }
