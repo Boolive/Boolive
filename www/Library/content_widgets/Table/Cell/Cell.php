@@ -22,8 +22,6 @@ class Cell extends AutoWidgetList
         if($object->rowspan->isExist()){
             $v['rowspan'] = $object->rowspan->value();
         }
-        trace($v['colspan']);
-
         return parent::work($v);
     }
 }
