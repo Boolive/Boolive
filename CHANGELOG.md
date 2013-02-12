@@ -15,6 +15,7 @@ Version 2.0 work in progress
 - enh: Update jQuery to 1.9 version and fix problems in jquery.include.js (VladimirShestakov)
 - enh: View::canWork() - you can check if View can work without starting it. (VladimirShestakov)
 - enh: The priority between input object and self object is changed in widgets. If there is self object then input object is ignored. (VladimirShestakov)
+- new #29: Added table widget (polina Putrolaynen)
 - new #31: Added access control for read and write. (VladimirShestakov)
 - new #60: Added user authentication and cancellations (VladimirShestakov)
 - new #62: Added multiwindow admin interface with the common navigation widgets (VladimirShestakov)

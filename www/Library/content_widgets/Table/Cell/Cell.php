@@ -14,7 +14,16 @@ class Cell extends AutoWidgetList
     public function work($v = array())
     {
         $object = $this->_input['REQUEST']['object'];
+
         $v['style'] = $object->style->getStyle();
+        if($object->colspan->isExist()){
+            $v['colspan'] = $object->colspan->value();
+        }
+        if($object->rowspan->isExist()){
+            $v['rowspan'] = $object->rowspan->value();
+        }
+        trace($v['colspan']);
+
         return parent::work($v);
     }
 }
