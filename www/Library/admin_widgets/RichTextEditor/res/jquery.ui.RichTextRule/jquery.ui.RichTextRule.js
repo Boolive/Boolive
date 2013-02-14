@@ -39,7 +39,10 @@
             this._make_nums();
             //this._show();
             this.gettingStyle();
-
+            this.element.click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            });
             this._controls.mleft.on('mousedown', function(e){
                 var start = self._model['margin-left'];
                 self._make_resizer(e, $(this).offset().left - 1, $(this).css('border-bottom-color'), function(dx){
@@ -48,6 +51,7 @@
                     return self._model['margin-left'] - start;
                 });
                 e.preventDefault();
+                e.stopPropagation();
             });
 
             this._controls.mright.on('mousedown', function(e){
@@ -58,6 +62,7 @@
                     return -self._model['margin-right'] + start;
                 });
                 e.preventDefault();
+                e.stopPropagation();
             });
 
             this._controls.tindent.on('mousedown', function(e){
@@ -68,6 +73,7 @@
                     return self._model['text-indent'] - start;
                 });
                 e.preventDefault();
+                e.stopPropagation();
             });
 
             this._controls.pleft.on('mousedown', function(e){
@@ -78,6 +84,7 @@
                     return self._model['padding-left'] - start;
                 });
                 e.preventDefault();
+                e.stopPropagation();
             });
 
             this._controls.pright.on('mousedown', function(e){
@@ -88,6 +95,7 @@
                     return -self._model['padding-right'] + start;
                 });
                 e.preventDefault();
+                e.stopPropagation();
             });
         },
 
