@@ -1,0 +1,110 @@
+div#resizetop{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: 50%;
+    right: 50%;
+    top: -10px;
+    cursor: s-resize;
+    position: absolute;
+    z-index: 1500;
+    margin-left: -5px;
+
+}
+div#resizebottom{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: 50%;
+    right: 50%;
+    top: 100%;
+    bottom: 0px;
+    cursor: s-resize;
+    position: absolute;
+    z-index: 1500;
+    margin-left: -5px;
+}
+div#resizeleft{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: -10px;
+    top: 50%;
+    bottom: 50%;
+    cursor: e-resize;
+    position: absolute;
+    z-index: 1500;
+    margin-top: -5px;
+}
+div#resizeright{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: 100%;
+    right: 0px;
+    top: 50%;
+    bottom: 50%;
+    cursor: e-resize;
+    position: absolute;
+    z-index: 1500;
+    margin-top: -5px;
+}
+div#resizetopleft{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: -10px;
+    top: -10px;
+    cursor: se-resize;
+    position: absolute;
+    z-index: 1500;
+}
+div#resizetopright{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: 100%;
+    right: 0px;
+    top: -10px;
+    bottom: 0px;
+    cursor: sw-resize;
+    position: absolute;
+    z-index: 1500;
+}
+div#resizebottomright{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: 100%;
+    right: 0px;
+    top: 100%;
+    bottom: 0px;
+    cursor: se-resize;
+    position: absolute;
+    z-index: 1500;
+}
+div#resizebottomleft{
+    width: 10px;
+    height: 10px;
+    background-color: #006ad6;
+    left: -10px;
+    right: 100%;
+    top: 100%;
+    bottom: 0px;
+    cursor: sw-resize;
+    position: absolute;
+    z-index: 1500;
+}
+span.defaultlink{
+    font-size: 12px;
+    position: absolute;
+    z-index: 1501;
+    top: 10px;
+    left: 10px;
+    max-width: 100%;
+    text-shadow: 0px 0px  2px #000, 0px 0px  3px #000, 0px 0px  4px #000;
+    text-decoration: none;
+    color: #FFF;
+    cursor: pointer;
+    word-break: break-all;
+}
