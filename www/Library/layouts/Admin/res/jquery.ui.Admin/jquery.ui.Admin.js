@@ -13,6 +13,7 @@
         options: {
             basepath: '/admin'
         },
+
         // контейнер для окон. В нём первое окно. (объект jquery)
         _windows: null,
         // счётчик окон для идентификации
@@ -46,7 +47,7 @@
                 self.call_setState({target: self, direct: 'parents'}, {selected: self._state.object}); //before
             });
 
-            self.element.click();
+            //self.element.click();
 
             // Назад/Вперед
             $(window).on("popstate", function(e){
@@ -95,6 +96,9 @@
             }else{
                 this._state.view_name = null;
             }
+            this._state.remember_view = {};
+            this._state.remember_view[this._state.object] = this._state.view_name;
+
             this._state.window = this._window_current.attr('id');
             this._state.history_o = 0; // начальный индекс истории текущего окна (необходимо для сброса истории браузера при закрытии окна)
             this._state.history_i = 0; // текущий индекс истории окна
@@ -223,6 +227,7 @@
             if ('object' in state && state.object != this._state.object){
                 this._state.prev = this._state.object;
                 this._state.object = state.object;
+
                 change['object'] = true;
                 // По умолчанию выделенный объект - в который вошли
                 if (!('selected' in state)){
@@ -273,10 +278,21 @@
                 }
             }
             // Выбор вида
+            var rem_key = _.isArray(this._state.object)? this._state.object.join(';') : this._state.object;
+
+            if ('object' in change && !('view_name' in state) && !(rem_key in this._state.remember_view)){
+                state.view_name = null;
+            }
+            if (!('view_name' in state) && rem_key in this._state.remember_view){
+                state.view_name = this._state.remember_view[rem_key];
+            }
             if ('view_name' in state && state.view_name != this._state.view_name){
                 this._state.view_name = state.view_name;
                 change['view_name'] = true;
             }
+            if (!('view_name' in this._state)) this._state.view_name = null;
+            this._state.remember_view[rem_key] = this._state.view_name;
+
             if (!$.isEmptyObject(change)){
                 // Запись истории
                 if (without_history!==true){
@@ -349,11 +365,14 @@
                                 window: id,
                                 history_o: self._state.history_i,
                                 history_i: self._state.history_i+1
+
                             }).data('children', {})
                             .data('close_callback', close_callback);
                         //self._window_current.data('state').select = request.data.select ? request.data.select : self._window_current.data('state').object;
                         self._window_current.data('state').selected = settings.data.selected ? settings.data.selected : [self._window_current.data('state').object];
                         self._state = self._window_current.data('state');
+                        self._state.remember_view = {};
+                        self._state.remember_view[self._state.object] = self._state.view_name;
                         // Открытие окна фиксируем в истории браузера
                         history.pushState(self._state, null, self.getURIFromState(self._state));
                         // Сообщаем всем о новосм состоянии
