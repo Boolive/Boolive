@@ -1,51 +1,51 @@
 /**
  * Базовый виджет для админки Boolive.
- * С функциями обновления по Ajax и связывния со своими подчиненными и родителем для передачи им команд
+ * С функциями обновления по ajax и взаимодействия с подчиненными и родительсктими виджетами
  * Query UI widget
- * Copyright 2012 (C) Boolive
+ * @copyright Copyright 2012 (C) Boolive
+ * @used jQuery (http://jquery.com)
+ * @used jQueryUI (http://jqueryui.com/)
+ * @used Underscore.js (http://underscorejs.org)
  */
-(function($, undefined){
+(function($, _, undefined){
     /**
      * Виджет на основе JQuery UI Widget
      */
     $.widget("boolive.AjaxWidget", {
 
         options: {
-			default_url: '',
-            view_uri: '',
-			wait_window: null // Окно ожидания. jQuery объект
+            view: undefined, // Идентификатор вида (виджета).
+            object: undefined // Идентификатор отображаемого объекта
         },
-        _parent: null, // Родитель
-        _children: null, // Подчиненные виджеты
-        _children_length: 0, // Кол-во подчиенных
-
-		_is_wait: false, // признак, находится ли виджет в режиме загрузки окна
+        /**
+         * @var AjaxWidget | undefined Родительский виджет
+         */
+        _parent: undefined, // Родитель
+        /**
+         * @var Array | undefined Массив подчиенных виджетов
+         */
+        _children: undefined, // Подчиненные виджеты
 
         /**
          * Конструктор объекта
          * @private
          */
-        _create: function() {
+        _create: function(){
             // ссылка на себя
             var self = this;
 
             this._children = {};
-            // URI виджета
-            if (!this.options.view_uri){
-                this.options.view_uri = this.element.attr('data-v');
+            // Идентификатор вида.
+            if (!this.options.view){
+                this.options.view = this.element.attr('data-v');
             }
-            // URL для ajax запросов
-            if (!this.options.default_url){
-                this.options.default_url = location.pathname;
+            // Идентификатор отображаемого объекта (обычно его URI)
+            if (!this.options.object){
+                this.options.object = this.element.attr('data-o');
             }
-            // Обработка Ajax ошибок
-            this.element.ajaxError(function(e, jqxhr, settings, exception) {
-                alert('AJAX error: '+ jqxhr.responseText);
-            });
             // Добавление нового подчиненного в свой список
             this.element.on('_create'+this.eventNamespace, function(e, widget){
                 return !self._addChild(widget);
-
             });
             // Удаление подчиенного из списка
             this.element.on('_destroy'+this.eventNamespace, function(e, widget){
@@ -59,11 +59,11 @@
          * Деструктор объекта
          * @private
          */
-        _destroy: function() {
+        _destroy: function(){
             // Сообщаем родителю о своём удалении
             this.element.trigger('_destroy', [this]);
-            this._parent = null;
-		},
+            this._parent = undefined;
+        },
 
         /**
          * Добавление подчиненного виджета
@@ -74,7 +74,6 @@
         _addChild: function(widget){
             if (widget != this){
                 this._children[widget.uuid] = widget;
-                this._children_length++;
                 widget._parent = this;
                 return true;
             }
@@ -90,7 +89,6 @@
         _deleteChild: function(widget){
             if (widget != this){
                 delete this._children[widget.uuid];
-                this._children_length--;
                 return true;
             }
             return false;
@@ -98,17 +96,17 @@
 
         /**
          * Вызов дейсвтия у подчиненных
-         * @param action Название действия (функции)
-         * @param args Аргументы
+         * @param call Название действия (функции)
+         * @param args Массив аргументов
          * @param target Объект, иницировавший вызов действия. По умолчанию this
          */
-        callChildren: function(action, args, target){
+        callChildren: function(call, args, target){
             var stop = undefined;
             if (target && target!=this){
-                if ($.isFunction(this['call_'+action])){
+                if ($.isFunction(this['call_'+call])){
                     if (!$.isArray(args)) args = [args];
                     var a = [{target: target, direct: 'children'}].concat(args);
-                    stop = this['call_'+action].apply(this, a);
+                    stop = this['call_'+call].apply(this, a);
                 }
             }
             if (stop !== undefined){
@@ -116,7 +114,7 @@
             }
             var result = [];
             for (var child in this._children){
-                stop = this._children[child].callChildren(action, args, target || this);
+                stop = this._children[child].callChildren(call, args, target || this);
                 if (stop !== undefined){
                     result.push(stop);
                 }
@@ -126,186 +124,149 @@
 
         /**
          * Вызов дейсвтия у родителей
-         * @param action Название действия (функции)
-         * @param args Аргументы
+         * @param call Название действия (функции)
+         * @param args Массив аргументов
          * @param target Объект, иницировавший вызов действия. По умолчанию this.
          */
-        callParents: function(action, args, target){
+        callParents: function(call, args, target){
             if (!target) target = null;
             var stop = undefined;
             if (target && target!=this){
-                if ($.isFunction(this['call_'+action])){
+                if ($.isFunction(this['call_'+call])){
                     if (!$.isArray(args)) args = [args];
                     var a = [{target: target, direct: 'parents'}].concat(args);
-                    stop = this['call_'+action].apply(this, a);
+                    stop = this['call_'+call].apply(this, a);
                 }
             }
             if (stop !== undefined){
                 return stop;
             }else
             if (this._parent){
-                return this._parent.callParents(action, args, target || this);
+                return this._parent.callParents(call, args, target || this);
             }
             return undefined;
         },
 
         /**
-         * Перегрзука html виджета
+         * Вызов метода виджета на сервере по AJAX
+         * @param call Название действия (функции) для вызова на сервере.
+         * @param data POST данные
+         * @param settings Дополнительные парметры ajax запроса и функции обратного вызова как в $.ajax()
          */
-        reload: function(url, data, callbacks){
-
-            var self = this;
-            //self.element.empty();
-            data = $.extend({}, data);
-            data.direct = self.options.view_uri;
-            $.ajax({
-                owner: "boolive.AjaxWidget",
-                type: 'POST',
-                url: (typeof url == 'string')?url:self.options.default_url,
-                data: data,
-                dataType: 'json',
-                success: function(result, textStatus, jqXHR){
-                    // Css, js
-					if (!result.links) result.links = [];
-                    $.include(result.links, function(){
-                        // Html
-						// Название корневого тега
-						var expr = new RegExp('<[a-z]+.*data-v=[\'"]'+self.options.view_uri+'[\'"].*>');
-
-                        var tag = expr.exec(result.out);
-						if (tag && tag.length==1){
-							tag = tag[0];
-							// оставляем только вложенные теги
-							expr = new RegExp(tag+'([\\s\\S]*)<\/div>[\\s\\S]*');
-							var html = result.out.replace(expr, '$1');
-							//var x = $(container).html(html);
-
-							if (callbacks && typeof callbacks == 'object' && typeof callbacks.empty == 'function'){
-								callbacks.empty();
-							}
-
-                            self.element.html(html);//x.children().children());
-
-							// Атрибуты корневого тега виджета
-//							if (container.children.length > 0){
-//								var attribs = container.children[0].attributes;
-//								for(var i=0; i<attribs.length; i++){
-//									self.element.attr(attribs[i].name, attribs[i].value);
-//								}
-//							}
-                            $(document).trigger('load-html', [self.element]);
-							if (typeof callbacks == 'function'){
-								callbacks(result, textStatus, jqXHR);
-							}else
-							if (callbacks && typeof callbacks == 'object' && typeof callbacks.success == 'function'){
-								callbacks.success(result, textStatus, jqXHR);
-							}
-						}
-					});
-                }
-            });
+        callServer: function(call, data, settings){
+            if (_.isFunction(settings)){
+                settings = {success:settings};
+            }else
+            if (!_.isObject(settings)){
+                settings = {};
+            }
+            var success = _.isFunction(settings.success)? settings.success : null;
+            settings.owner = this.widgetName;
+            settings.context = this.element;
+            settings.type = 'POST';
+            settings.dataType = 'json';
+            settings.data = settings.data? _.extend(settings.data, data) : data;
+            settings.data.direct = this.options.view;
+            settings.data.call = call;
+            $.ajax(settings);
         },
 
         /**
-         *
-         * @param method
-         * @param data
-         * @param callbacks
-         * @private
+         * Обновление html виджета с сервера
+         * @param data POST данные запроса
+         * @param settings Дополнительные парметры ajax запроса и функции обратного вызова как в $.ajax()
          */
-        _call: function(method, data, callbacks){
+        reload: function(data, settings){
             var self = this;
-            data = $.extend({}, data);
-            data.direct = self.options.view_uri;
-            data.call = method;
-            $.ajax({
-                owner: "boolive.AjaxWidget",
-                type: 'POST',
-                url: self.options.default_url,
-                data: data,
-                dataType: 'json',
-                context: self.element,
-                success: function(result, textStatus, jqXHR){
-                    if (typeof callbacks == 'function'){
-						callbacks(result, textStatus, jqXHR);
-					}else
-					if (callbacks && typeof callbacks == 'object' && typeof callbacks.success == 'function'){
-						callbacks.success(result, textStatus, jqXHR);
-					}
-                }
-                //beforeSend(jqXHR, settings)
-                //complete(jqXHR, textStatus)
-                //error(jqXHR, textStatus, errorThrown)
-            });
-        },
-
-		/**
-		 * Режим ожидания загрузки
-		 * @param state
-		 */
-		_wait: function(state){
-			if (this.options.wait_window){
-				if (state){
-					this._is_wait = true;
-					this.options.wait_window.show();
-				}else{
-					this._is_wait = false;
-					this.options.wait_window.hide();
-				}
-			}
-		},
-
-		isWait: function(){
-			return this._is_wait;
-		},
-
-		/**
-		 * Загрузка подчиенного виджета
-		 * @param container jQuery объект, куда вставить html полученного объекта
-		 * @param url Адрес запроса
-		 * @param args Данные запроса
-		 * @param sub_name Имя подчиненного виджета. Может быть путем на подчиненных любого уровня
-		 * @param callbacks
-		 */
-		loadsub: function(container, url, data, sub_name, append, callbacks){
-			var self = this;
-            data = $.extend({}, data);
-            data.direct = self.options.view_uri+'/'+sub_name;
-			$.ajax({
-				type: 'POST',
-                url: (typeof url == 'string')?url:self.options.default_url,
-                data: data,
-                dataType: 'json',
-				success: function(result, textStatus, jqXHR){
-
-                    if (!result.links) result.links = [];
-					$.include(result.links, function(){
-						if (typeof append == 'boolean' && append){
-                            container.append(result.out);
-                        }else{
-                            container.empty();
-						    container.html(result.out);
+            if (_.isFunction(settings)){
+                settings = {success:settings};
+            }else
+            if (!_.isObject(settings)){
+                settings = {};
+            }
+            var success = _.isFunction(settings.success)? settings.success : null;
+            settings.owner = self.widgetName;
+            settings.context = self.element;
+            settings.type = 'POST';
+            settings.data = settings.data? _.extend(settings.data, data) : data;
+            settings.data.direct = self.options.view;
+            settings.dataType = 'json';
+            settings.success = function(result, textStatus, jqXHR){
+                // Подключение файлов css и js. После их подключения обновляется HTML виджета
+                if (!result.links) result.links = [];
+                $.include(result.links, function(){
+                    // Название корневого тега
+                    var expr = new RegExp('<[a-z]+.*data-v=[\'"]'+self.options.view+'[\'"].*>');
+                    var tag = expr.exec(result.out);
+                    if (tag && tag.length==1){
+                        tag = tag[0];
+                        // Оставляем только вложенные теги
+                        expr = new RegExp(tag+'([\\s\\S]*)<\/div>[\\s\\S]*');
+                        var html = result.out.replace(expr, '$1');
+                        // Обратный вызов перед очисткой элемента
+                        if ('empty' in settings && _.isFunction(settings.empty)){
+                            settings.empty();
                         }
-                        $(document).trigger('load-html', [container]);
-
-						if (typeof callbacks == 'function'){
-							callbacks(result, textStatus, jqXHR);
-						}else
-						if (callbacks && typeof callbacks == 'object' && typeof callbacks.success == 'function'){
-							callbacks.success(result, textStatus, jqXHR);
-						}
-					});
-				}
-			});
+                        self.element.html(html);
+                        // Вызов события изменения HTML. Будут подключаться jquery плагины к загруженному html
+                        $(document).trigger('load-html', [self.element]);
+                        // Обратный вызов при удачном обновлении виджета
+                        if (success) success(result, textStatus, jqXHR);
+                    }
+                });
+            };
+            $.ajax(settings);
         },
 
+        /**
+         * Загрузка виджета по его URI
+         * @param container jQuery объект, куда вставить html полученного объекта
+         * @param append Признак, добавлять в конец (true) или в начало (false) контейнера
+         * @param uri URI загружаемого с сервера виджета. Может быть сокращенным.
+         * @param data POST данные запроса
+         * @param settings Дополнительные парметры ajax запроса и функции обратного вызова
+         */
+        load: function(container, append, uri, data, settings){
+            var self = this;
+            if (_.isFunction(settings)){
+                settings = {success:settings};
+            }else
+            if (!_.isObject(settings)){
+                settings = {};
+            }
+            var success = _.isFunction(settings.success)? settings.success : null;
+            settings.owner = this.widgetName;
+            settings.context = this.element;
+            settings.type = 'POST';
+            settings.data = settings.data? _.extend(settings.data, data) : data;
+            settings.data.direct = uri;
+            settings.dataType = 'json';
+            settings.success = function(result, textStatus, jqXHR){
+                if (!result.links) result.links = [];
+                $.include(result.links, function(){
+                    if (typeof append == 'boolean' && append){
+                        container.append(result.out);
+                    }else{
+                        container.prepend(result.out);
+                    }
+                    $(document).trigger('load-html', [container]);
+                    // Обратный вызов при удачном обновлении виджета
+                    if (success) success(result, textStatus, jqXHR);
+                });
+            };
+            $.ajax(settings);
+        },
 
-
-		escape: function (str){
-			if( str)
-				return str.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
-			else
-				return str;
-		}
+        /**
+         * Экранирование спецсимволов строки обратным слэшем для использования в jQuery селекторах
+         * @param str
+         * @return {*}
+         */
+        escape_selector: function (str){
+            if( str)
+                return str.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+            else
+                return str;
+        }
     });
-})(jQuery);
+})(jQuery, _);

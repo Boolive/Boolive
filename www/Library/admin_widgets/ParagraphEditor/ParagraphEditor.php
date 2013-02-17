@@ -29,9 +29,7 @@ class ParagraphEditor extends Widget
                             'primary' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required(),
                             'secondary' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required()
                         )),
-                        'save' => Rule::arrays(array(
-                            'value' => Rule::string()->default('')->required()
-                        )),
+                        'save' => Rule::string()->default('')->required(),
                         'saveStyle' => Rule::arrays(Rule::string())
                     )
                 )
@@ -65,7 +63,7 @@ class ParagraphEditor extends Widget
             if (isset($this->_input['REQUEST']['save'])){
                 return $this->callSave(
                     $this->_input['REQUEST']['object'],
-                    $this->_input['REQUEST']['save']['value']
+                    $this->_input['REQUEST']['save']
                 );
             }else
             // Сохранение стиля

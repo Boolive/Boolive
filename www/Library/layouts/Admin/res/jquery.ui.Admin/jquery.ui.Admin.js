@@ -60,13 +60,20 @@
                     self._state.history_o = history.state.history_o;
                     self._state.history_i = history.state.history_i;
                     self._state.window = history.state.window;
-                    console.log(history.state);
+
                     self.call_setState({target: self, direct: 'parents'}, history.state, true);  //before
                 }
             });
             // Загрузка меню
-            this.loadsub(this.element.find('.top'), '/', this._state, 'BreadcrumbsMenu', true);
-            this.loadsub(this.element.find('.right'), '/', this._state, 'ProgramsMenu', true);
+//            this.load(this.element.find('.top'), true, this.options.view + '/BreadcrumbsMenu', this._state);
+//            this.load(this.element.find('.right'), true, this.options.view + '/ProgramsMenu', this._state);
+            // Обработка Ajax ошибок
+            this.element.on('ajaxError' + this.eventNamespace, function(e, jqxhr, settings, exception) {
+                if(!settings.isErrorCaught) {
+                    alert(settings.owner+"\n\n" + exception.message + "\n\n" + jqxhr.responseText);
+                    e.stopPropagation();
+                }
+            });
         },
 
         /**
@@ -92,6 +99,117 @@
             this._state.history_o = 0; // начальный индекс истории текущего окна (необходимо для сброса истории браузера при закрытии окна)
             this._state.history_i = 0; // текущий индекс истории окна
             history.replaceState(this._state, null, null);
+        },
+
+        /**
+         * Добавление подчиненного виджета
+         * Если виджет подчиенный окна, то он добавляется в список подчиенных окна,
+         * иначе в общий список. В общий список, обычно, попадают меню админки.
+         * @param widget Объект виджета
+         * @return {Boolean}
+         * @private
+         */
+        _addChild: function(widget){
+            if (widget != this){
+                var window = widget.element.closest(this._windows.children());
+                if (window.length){
+                    if (typeof window.data('children') != 'object') window.data('children', {});
+                    window.data('children')[widget.uuid] = widget;
+                    this._where_children[widget.uuid] = window.data('children');
+                }else{
+                    this._children[widget.uuid] = widget;
+                }
+                widget._parent = this;
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Удаление подчиненного виджета
+         * @param widget Объект виджета
+         * @return {Boolean}
+         * @private
+         */
+        _deleteChild: function(widget){
+            if (widget != this){
+                delete this._children[widget.uuid];
+                if (this._where_children[widget.uuid]){
+                    // удаление из списка подчиенных соответсвующего окна. Окно определяется по widget.uuid
+                    delete this._children[widget.uuid][widget.uuid];
+                    delete this._where_children[widget.uuid];
+                }
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Вызов дейсвтия у подчиненных.
+         * Подчиенные неактивные окна игнорируются
+         * @param action Название действия (функции)
+         * @param args Аргументы
+         * @param target Объект, иницировавший вызов действия. По умолчанию this
+         * @param all Вызыв всех подчиенных или только внеокнных
+         * @extends $.boolive.AjaxWidget.callChildren
+         */
+        callChildren: function(action, args, target, all){
+            var stop = undefined;
+            if (target && target!=this){
+                // По target опредлить окно и для него вызывать обработчик
+                // Если target вне окон, то используется текущее окно
+                if ($.isFunction(this['call_'+action])){
+                    var a = [{target: target, direct: 'children'}].concat(args);
+                    stop = this['call_'+action].apply(this, a);
+                }
+            }
+            var result = [];
+            // Отправлять виджетам текущего окна и виджетам вне окна
+            if (all!==false){
+                var children = this._window_current.data('children');
+                for (var child in children){
+                    stop = children[child].callChildren(action, args, target || this);
+                    if (stop !== undefined) result.push(stop);
+                }
+            }
+            for (var child in this._children){
+                stop = this._children[child].callChildren(action, args, target || this);
+                if (stop !== undefined) result.push(stop);
+            }
+            return result.length? result : undefined;
+        },
+
+        /**
+         * Вызов дейсвтия у родителей
+         * Вызовы от неактивных окон игнорируются
+         * @param call Название действия (функции)
+         * @param args Аргументы
+         * @param target Объект, иницировавший вызов действия. По умолчанию this.
+         * @extends $.boolive.AjaxWidget.callParents
+         */
+        callParents: function(call, args, target){
+            if (!target) target = null;
+            var window = null;
+            if (!target){
+                window = target.element.closest(this._windows.children());
+            }
+            // Обработка если target из текущего окна или вне окна
+            if (!window || !window.length || window == this._window_current){
+                var stop = undefined;
+                if (target && target!=this){
+                    if ($.isFunction(this['call_'+call])){
+                        var a = [{target: target, direct: 'parents'}].concat(args);
+                        stop = this['call_'+call].apply(this, a);
+                    }
+                }
+                if (stop !== undefined){
+                    return stop;
+                }else
+                if (this._parent){
+                    return this._parent.callParents(call, args, target || this);
+                }
+            }
+            return undefined;
         },
 
         /**
@@ -187,12 +305,12 @@
 
         /**
          * Открытие окна
-         * @param request
+         * @param settings
          * @param close_callback Функция обратного вызова при закрытии окна
          * @param id
          * @return Идентификатор окна
          */
-        call_openWindow: function(caller, id, request, close_callback){ //before
+        call_openWindow: function(caller, id, settings, close_callback){ //before
             if (!id) id = ++this._windows_cnt;
             var self = this;
             // Есть ли требуемое окно?
@@ -210,42 +328,41 @@
                 self.callChildren('window_show');
                 window.show();
             }else{
-                if (!(typeof request.data == 'object')) request.data = {};
+                if (!(typeof settings.data == 'object')) settings.data = {};
                 // Создание тега окна с ключём, загрузка содержимого по Ajax
-                $.ajax({
-                    type: 'POST',
-                    url: (typeof request.url == 'string') ? request.url : self.options.default_url,
-                    data: request.data,
-                    dataType: 'json',
-                    success: function(result, textStatus, jqXHR){
-                        if (!result.links) result.links = [];
-                        $.include(result.links, function(){
-                            // Скрыть текущее окно
-                            self._window_current.hide();
-                            self._windows.append('<div class="window" id="' + id + '">' + result.out + '</div>');
-                            self.review_windows();
-                            self._window_current = self._windows.find('> #'+id+':last');
-                            self._window_current
-                                .data('state', {
-                                    object: request.data.object ? request.data.object : '',
-                                    view_name: request.data.view_name ? request.data.view_name : null,
-                                    window: id,
-                                    history_o: self._state.history_i,
-                                    history_i: self._state.history_i+1
-                                }).data('children', {})
-                                .data('close_callback', close_callback);
-                            //self._window_current.data('state').select = request.data.select ? request.data.select : self._window_current.data('state').object;
-                            self._window_current.data('state').selected = request.data.selected ? request.data.selected : [self._window_current.data('state').object];
-                            self._state = self._window_current.data('state');
-                            // Открытие окна фиксируем в истории браузера
-                            history.pushState(self._state, null, self.getURIFromState(self._state));
-                            // Сообщаем всем о новосм состоянии
-                            self.refresh_state();
-                            // Событие для автоматического подключение плагинов в загруженном html
-                            $(document).trigger('load-html', [self._window_current]);
-                        });
-                    }
-                });
+                settings.owner = this.widgetName;
+                settings.context = this.element;
+                settings.type = 'POST';
+                settings.dataType = 'json';
+                settings.success = function(result, textStatus, jqXHR){
+                    if (!result.links) result.links = [];
+                    $.include(result.links, function(){
+                        // Скрыть текущее окно
+                        self._window_current.hide();
+                        self._windows.append('<div class="window" id="' + id + '">' + result.out + '</div>');
+                        self.review_windows();
+                        self._window_current = self._windows.find('> #'+id+':last');
+                        self._window_current
+                            .data('state', {
+                                object: settings.data.object ? settings.data.object : '',
+                                view_name: settings.data.view_name ? settings.data.view_name : null,
+                                window: id,
+                                history_o: self._state.history_i,
+                                history_i: self._state.history_i+1
+                            }).data('children', {})
+                            .data('close_callback', close_callback);
+                        //self._window_current.data('state').select = request.data.select ? request.data.select : self._window_current.data('state').object;
+                        self._window_current.data('state').selected = settings.data.selected ? settings.data.selected : [self._window_current.data('state').object];
+                        self._state = self._window_current.data('state');
+                        // Открытие окна фиксируем в истории браузера
+                        history.pushState(self._state, null, self.getURIFromState(self._state));
+                        // Сообщаем всем о новосм состоянии
+                        self.refresh_state();
+                        // Событие для автоматического подключение плагинов в загруженном html
+                        $(document).trigger('load-html', [self._window_current]);
+                    });
+                };
+                $.ajax(settings);
             }
             return id;
         },
@@ -286,114 +403,9 @@
             });
         },
 
-        /**
-         * Добавление подчиненного виджета
-         * Если виджет подчиенный окна, то он добавляется в список подчиенных окна,
-         * иначе в общий список. В общий список, обычно, попадают меню админки.
-         * @param widget Объект виджета
-         * @return {Boolean}
-         * @private
-         */
-        _addChild: function(widget){
-            if (widget != this){
-                var window = widget.element.closest(this._windows.children());
-                if (window.length){
-                    if (typeof window.data('children') != 'object') window.data('children', {});
-                    window.data('children')[widget.uuid] = widget;
-                    this._where_children[widget.uuid] = window.data('children');
-                }else{
-                    this._children[widget.uuid] = widget;
-                }
-                widget._parent = this;
-                return true;
-            }
-            return false;
-        },
 
-        /**
-         * Удаление подчиненного виджета
-         * @param widget Объект виджета
-         * @return {Boolean}
-         * @private
-         */
-        _deleteChild: function(widget){
-            if (widget != this){
-                delete this._children[widget.uuid];
-                if (this._where_children[widget.uuid]){
-                    // удаление из списка подчиенных соответсвующего окна. Окно определяется по widget.uuid
-                    delete this._children[widget.uuid][widget.uuid];
-                    delete this._where_children[widget.uuid];
-                }
-                return true;
-            }
-            return false;
-        },
 
-        /**
-         * Вызов дейсвтия у подчиненных
-         * @param action Название действия (функции)
-         * @param args Аргументы
-         * @param target Объект, иницировавший вызов действия. По умолчанию this
-         * @param all Вызыв всех подчиенных или только внеокнных
-         * @extends $.boolive.AjaxWidget.callChildren
-         */
-        callChildren: function(action, args, target, all){
-            var stop = undefined;
-            if (target && target!=this){
-                // По target опредлить окно и для него вызывать обработчик
-                // Если target вне окон, то используется текущее окно
-                if ($.isFunction(this['call_'+action])){
-                    var a = [{target: target, direct: 'children'}].concat(args);
-                    stop = this['call_'+action].apply(this, a);
-                }
-            }
-            var result = [];
-            // Отправлять виджетам текущего окна и виджетам вне окна
-            if (all!==false){
-                var children = this._window_current.data('children');
-                for (var child in children){
-                    stop = children[child].callChildren(action, args, target || this);
-                    if (stop !== undefined) result.push(stop);
-                }
-            }
-            for (var child in this._children){
-                stop = this._children[child].callChildren(action, args, target || this);
-                if (stop !== undefined) result.push(stop);
-            }
-            return result.length? result : undefined;
-        },
 
-        /**
-         * Вызов дейсвтия у родителей
-         * @param action Название действия (функции)
-         * @param args Аргументы
-         * @param target Объект, иницировавший вызов действия. По умолчанию this.
-         * @extends $.boolive.AjaxWidget.callParents
-         */
-        callParents: function(action, args, target){
-            if (!target) target = null;
-            var window = null;
-            if (!target){
-                window = target.element.closest(this._windows.children());
-            }
-            // Обработка если target из текущего окна или вне окна
-            if (!window || !window.length || window == this._window_current){
-                var stop = undefined;
-                if (target && target!=this){
-                    if ($.isFunction(this['call_'+action])){
-                        var a = [{target: target, direct: 'parents'}].concat(args);
-                        stop = this['call_'+action].apply(this, a);
-                    }
-                }
-                if (stop !== undefined){
-                    return stop;
-                }else
-                if (this._parent){
-                    return this._parent.callParents(action, args, target || this);
-                }
-            }
-            return undefined;
-        },
 
         /**
          * Сообщимть всем о состоянии

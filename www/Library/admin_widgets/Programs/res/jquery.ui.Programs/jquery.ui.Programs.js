@@ -6,7 +6,7 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-	$.widget("boolive.Programs", $.boolive.AjaxWidget, {
+    $.widget("boolive.Programs", $.boolive.AjaxWidget, {
         /**
          * Вход в объект или смена программы - перегрузка программы (возможна смена)
          * @param state
@@ -16,7 +16,7 @@
 
             var self = this;
             if ($.isPlainObject(changes) && ('object' in changes || 'view_name' in changes)){
-                this.reload('/', state, {
+                this.reload(state, {
                     empty: function(){
                         self.callChildren('program_hide');
                     },
@@ -26,5 +26,5 @@
                 });
             }
         }
-	})
+    })
 })(jQuery);

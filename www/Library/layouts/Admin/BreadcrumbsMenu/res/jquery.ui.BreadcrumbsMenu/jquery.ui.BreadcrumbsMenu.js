@@ -50,7 +50,7 @@
 //                    }
 //                    item = this.element.find('li a[data-o="'+uri+'"]');
 //                    item.parent().addClass('active');
-                    this.reload('/', {direct: this.options.view_uri, object: uri});
+                    this.reload({direct: this.options.view, object: uri});
                 }else{
                     this.element.find('li').removeClass('active').removeClass('preactive');
                     item.parent().addClass('active');

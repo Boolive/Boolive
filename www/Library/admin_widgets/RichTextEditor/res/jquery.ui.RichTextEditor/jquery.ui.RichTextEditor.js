@@ -3,10 +3,8 @@
  * Query UI widget
  * Copyright 2013 (C) Boolive
  */
-(function($, undefined) {
-	$.widget("boolive.RichTextEditor", $.boolive.AjaxWidget, {
-        // Объект, в который добавлять (родитель)
-        object: null,
+(function($, _, undefined) {
+    $.widget("boolive.RichTextEditor", $.boolive.AjaxWidget, {
         // объекты кнопок
         _buttons: {},
         _content: null,
@@ -17,11 +15,10 @@
         _hide: true,
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             this.call_program_show();
             var self = this;
-            // uri объекта
-            this._object = this.element.attr('data-o');
+
             this._buttons['save'] = this.element.find('.save');
             this._content = this.element.children('.content').first();
 
@@ -38,7 +35,7 @@
             this.element.on('click', function(e){
                 if ($(e.target).is(self._content)){
 
-                    if (!self._children_length){
+                    if (!_.size(self._children)){
 //                        var sel = window.getSelection();
 //                        var range = document.createRange();
 //                        var p = self._content[0];
@@ -81,7 +78,7 @@
                     if (e.keyCode == 67 && e.ctrlKey){
 
                     }else
-                    if (!self._children_length){
+                    if (!_.size(self._children)){
                         // Текст пустой. Добавим абзац
                         if (!self.new_p) self.insert_new_p();
                     }else
@@ -129,19 +126,18 @@
         insert_new_p: function(){
             var self = this;
             self.new_p = true;
-            this._call('new_p', {object: this._object}, {
+            this.callServer('new_p', {object: self.options.object}, {
                 success: function(result, textStatus, jqXHR){
-                    console.log(result);
                     if (!result.links) result.links = [];
-					$.include(result.links, function(){
+                    $.include(result.links, function(){
                         var t = self._content.text();
                         self._content.empty();
-						self._content.append(result.out);
+                        self._content.append(result.out);
                         $(document).trigger('load-html', [self._content]);
                         var p = self._content.children()[0];
                         p.firstChild.textContent+=t; // Текст введенный до появления абзаца
                         self.cursor_to(p.firstChild, p.firstChild.textContent.length);
-					});
+                    });
                 }
             });
 
@@ -204,14 +200,13 @@
                 }
                 // Установка и сохранение стиля страницы
                 this._content.css(pstyle);
-                this._call('saveStyle', {
-                        saveStyle:pstyle,
-                        object:this._object
-                    }
-                );
+                this.callServer('saveStyle', {
+                    object: this.options.object,
+                    saveStyle: pstyle
+                });
                 // Установка стилей подчиенных (сами определят кому)
                 this.callChildren('setStyle', [style]);
             }
         }
-	})
-})(jQuery);
+    })
+})(jQuery, _);

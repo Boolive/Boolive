@@ -4,16 +4,13 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, document) {
-	$.widget("boolive.ParagraphEditor", $.boolive.AjaxWidget, {
-        // uri отображаемого объекта
-        _object: '',
+    $.widget("boolive.ParagraphEditor", $.boolive.AjaxWidget, {
+
         _value: '',
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
-            // uri объекта
-            this._object = this.element.attr('data-o');
             // Коррекция пустого значения
             if (this.element.html()==' '){
                 this.element.context.childNodes[0].textContent = '';
@@ -65,15 +62,13 @@
          */
         call_save: function(caller){
             var self = this;
-            self._call('save', {
-                    save:{
-                        value: self.element.html()
-                    },
-                    object:self._object
-                }, {
+            self.callServer('save', {
+                    object: self.options.object,
+                    save: self.element.html()
+            }, {
                 success: function(result, textStatus, jqXHR){
                     self._value = self.element.html();
-                    self.callParents('nochange', [self._object]);
+                    self.callParents('nochange', [self.options.object]);
                 }
             });
         },
@@ -84,7 +79,7 @@
          * @param changes
          */
         call_setState: function(caller, state, changes){ //after
-            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this._object)==-1){
+            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this.options.object)==-1){
                 this.element.removeClass('selected');
             }
         },
@@ -156,9 +151,9 @@
          */
         _change: function(e){
             if (this._value != this.element.html()){
-                this.callParents('change', [this._object]);
+                this.callParents('change', [this.options.object]);
             }else{
-                this.callParents('nochange', [this._object]);
+                this.callParents('nochange', [this.options.object]);
             }
         },
 
@@ -169,7 +164,7 @@
         _select: function(){
             if (!this.element.hasClass('selected')){
                 this.element.addClass('selected');
-                this.callParents('setState', [{selected:  this._object}]);
+                this.callParents('setState', [{selected:  this.options.object}]);
             }
         },
 
@@ -182,7 +177,8 @@
          */
         _megre: function(primary, secondary){
             if (primary.length && secondary.length){
-                this._call('merge', {
+                this.callServer('merge', {
+                        object: this.options.object,
                         merge: {
                             primary: primary.data('object'),
                             secondary: secondary.data('object')
@@ -222,11 +218,10 @@
             if (this.element.hasClass('selected')){
                 if (!$.isEmptyObject(style)){
                     this.element.css(style);
-                    this._call('saveStyle', {
-                            saveStyle:style,
-                            object:this._object
-                        }
-                    );
+                    this.callServer('saveStyle', {
+                        object: this.options.object,
+                        saveStyle: style
+                    });
                 }
             }
         },
@@ -266,12 +261,12 @@
                 }
 
                 var self = this;
-                self._call('devide', {
+                self.callServer('devide', {
+                        object: self.options.object,
                         devide: {
                             value1: m[0],
                             value2: m[1]
-                        },
-                        object: self._object
+                        }
                     }, {
                     success: function(result, textStatus, jqXHR){
                         console.log(result);
@@ -295,5 +290,5 @@
                 });
             }
         }
-	})
+    })
 })(jQuery, document);

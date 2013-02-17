@@ -6,14 +6,14 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-	$.widget("boolive.Delete", $.boolive.AjaxWidget, {
+    $.widget("boolive.Delete", $.boolive.AjaxWidget, {
         // Удаляемый объект
         objects: null,
         prev_o: '',
         prev_v: '',
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
             self.objects = $.parseJSON(this.element.attr('data-o'));
@@ -22,7 +22,7 @@
 
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
-                self._call('delete', {object: self.objects}, function(result, textStatus, jqXHR){
+                self.callServer('delete', {object: self.options.object}, function(result, textStatus, jqXHR){
                     // Вход в родительский объект
                     //history.back();
                     self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
@@ -47,5 +47,5 @@
 //                return '';
 //            }
 //        }
-	})
+    })
 })(jQuery, _);

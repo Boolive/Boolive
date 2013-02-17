@@ -38,6 +38,7 @@ class Admin extends Focuser
         }else{
             $this->_input_child['REQUEST']['page'] = 1;
         }
+        //удаление "/admin"
         $uri = mb_substr($uri, 6);
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = Data::read($uri);

@@ -34,7 +34,7 @@
             var self = this;
             if ('selected' in change){
                 var obj = (state.selected.length == 1)? _.first(state.selected) : state.selected;
-                self.reload('/', {object:obj}, function(){
+                self.reload({object:obj}, function(){
                     self._select(state);
                 });
             }else

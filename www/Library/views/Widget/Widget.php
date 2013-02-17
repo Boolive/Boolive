@@ -53,7 +53,7 @@ class Widget extends View
     public function work($v = array())
     {
         $this->startChild('res');
-        $v['view_uri'] = $this->uri();
+        $v['view_uri'] = $this->id();
         return Template::render($this, $v);
     }
 }

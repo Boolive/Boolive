@@ -4,7 +4,7 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, undefined) {
-	$.widget("boolive.RichTextRule", $.boolive.AjaxWidget, {
+    $.widget("boolive.RichTextRule", $.boolive.AjaxWidget, {
 
         _model: {
             'width': 0,
@@ -26,7 +26,7 @@
         _round: 1,
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             this._controls.nums = this.element.find('.nums:first');
             this._controls.pleft = this.element.find('.pleft:first');

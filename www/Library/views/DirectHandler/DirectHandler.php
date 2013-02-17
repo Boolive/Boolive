@@ -18,7 +18,7 @@ class DirectHandler extends View
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'method' => Rule::eq('POST'),
-                'direct' => Rule::entity()->required(),
+                'direct' => Rule::entity()->required()
                 )
             ))
         );

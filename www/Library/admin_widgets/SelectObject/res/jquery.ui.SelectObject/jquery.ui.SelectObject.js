@@ -5,12 +5,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-	$.widget("boolive.SelectObject", $.boolive.AjaxWidget, {
+    $.widget("boolive.SelectObject", $.boolive.AjaxWidget, {
         // Выделенный объект
         _select: null,
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // Текущий выделенный объект узнаётся у родительского виджета (у админки)
             this._select = this.callParents('getState').selected;
@@ -36,5 +36,5 @@
                 this._select = state.selected.slice(0);
             }
         }
-	})
+    })
 })(jQuery);

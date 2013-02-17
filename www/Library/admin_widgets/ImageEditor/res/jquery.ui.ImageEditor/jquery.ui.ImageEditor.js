@@ -4,21 +4,15 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, _, document) {
-	$.widget("boolive.ImageEditor", $.boolive.AjaxWidget, {
-        // uri отображаемого объекта
-        _object: '',
+    $.widget("boolive.ImageEditor", $.boolive.AjaxWidget, {
         _value: '',
         _mouse_action: null, // Ожидаемое действие мышки
         _curent_action: null, // Текущее действие
         _resize_rect: null,
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
-            // uri объекта
-            self._object = this.element.attr('data-o');
-
-
 
             self.element.on('mousedown'+this.eventNamespace, function(e){
                 if (self._mouse_action == 'resize'){
@@ -108,13 +102,14 @@
                 self.element.width(resize_rect.width());
                 self.element.height(resize_rect.height());
 
-                self._call('saveStyle', {
-                    saveStyle:{
-                        width: resize_rect.width()+'px',
-                        height: resize_rect.height()+'px'
-                    },
-                    object: self._object
-                });
+                self.callServer('saveStyle', {
+                        object: self.options.object,
+                        saveStyle: {
+                            width: resize_rect.width()+'px',
+                            height: resize_rect.height()+'px'
+                        }
+                    }
+                );
 
                 self._curent_action = false;
                 self._select();
@@ -152,7 +147,7 @@
             this.element.attr('contentEditable', "true");
             if (!this.element.hasClass('selected')){
                 this.element.addClass('selected');
-                this.callParents('setState', [{selected:  this._object}]);
+                this.callParents('setState', [{selected:  this.options.object}]);
                 var sel = window.getSelection();
                 var range = document.createRange();
                 range.setStart(this.element.parent()[0], this.element.index());
@@ -168,8 +163,8 @@
          * @param changes
          */
         call_setState: function(caller, state, changes){ //after
-            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this._object)==-1){
-                //state.selected!=this._object){
+            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this.options.object)==-1){
+                //state.selected!=this.options.object){
                 this.element.removeClass('selected');
                 this.element.removeClass('resizing');
             }
@@ -185,11 +180,10 @@
             if (this.element.hasClass('selected')){
                 if (!$.isEmptyObject(style)){
                     this.element.css(style);
-                    this._call('saveStyle', {
-                            saveStyle: style,
-                            object: this._object
-                        }
-                    );
+                    this.callServer('saveStyle', {
+                        object: this.options.object,
+                        saveStyle: style
+                    });
                 }
             }
         },
@@ -206,5 +200,5 @@
             }
             return false;
         }
-	})
+    })
 })(jQuery, _, document);

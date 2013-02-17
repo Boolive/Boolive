@@ -38,7 +38,7 @@ class Attribs extends Widget
     {
         // Отправка атрибутов
         if ($this->_input['REQUEST']['call'] == 'load'){
-             return array('attrib'=>$this->callLoad());
+            return array('attrib'=>$this->callLoad());
         }
         // Сохранение атрибутов
         if ($this->_input['REQUEST']['call'] == 'save'){

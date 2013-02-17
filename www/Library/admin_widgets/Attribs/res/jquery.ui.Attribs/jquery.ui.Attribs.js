@@ -4,7 +4,7 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-	$.widget("boolive.Attribs", $.boolive.AjaxWidget, {
+    $.widget("boolive.Attribs", $.boolive.AjaxWidget, {
         /**
          * Данные и методы их обновления.
          * При установки атрибутов генерируются события. Обработчиками обновляется форма
@@ -110,14 +110,14 @@
          * @private
          */
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
 
             var self = this;
             // Элемент формы
             var form = self.element.find('form');
 
             // URI редактируемого объекта
-            this.model.object = form.find('[name=object]').val();
+            this.model.object = this.options.object = form.find('[name=object]').val();
             // Кнопка сохранения
             this.submit_btn = this.element.find('.submit');
             //
@@ -135,7 +135,6 @@
                     item.find('[data-name="proto-delete"]').hide();
                 }
             })
-
             .on('change-attrib:name', function(value){
                 form.find('input[name="attrib[name]"]:first').val(value);
             })
@@ -264,28 +263,28 @@
             //
             // Обновление атриубтов (при изменении формы)
             //
-			form
+            form
             .on('change', '.attrib[type=checkbox]', function(e) {
                 self.model.set_attrib($(this).attr('data-name'), $(this).prop("checked"));
-			})
+            })
             .on('keyup', '.attrib[type=text]', function(e) {
                 self.model.set_attrib($(this).attr('data-name'), $(this).val());
-			})
+            })
             .on('change', '[type=file]', function(e) {
                 self.model.set_attrib('value', self.getLastParam($(this).val()));
                 self.model.set_attrib('is_file', true);
                 self.model.set_attrib('is_null', false);
-			})
+            })
             .on('keyup', 'textarea.attrib', function(e) {
-				self.model.set_attrib('value', $(this).val());
+                self.model.set_attrib('value', $(this).val());
                 self.model.set_attrib('is_null', false);
                 self.model.set_attrib('is_file', false);
-			})
+            })
             .on('input', 'textarea.attrib', function(e) {
-				self.model.set_attrib('value', $(this).val());
+                self.model.set_attrib('value', $(this).val());
                 self.model.set_attrib('is_null', false);
                 self.model.set_attrib('is_file', false);
-			})
+            })
             .on('click', '.default', function(e){
                 e.preventDefault();
                 if (!self.model.attrib['is_null']){
@@ -311,14 +310,14 @@
                 if (!$(this).hasClass('btn-disable')){
                     // Ошибка при обработки запроса
                     form.ajaxError(function(e, jqxhr, settings, exception) {
-                        if (settings.owner == "boolive.Attribs"){
+                        if (settings.owner == self.eventNamespace){
                             self.model.set_process('start', false);
                             self.model.set_error('fatal', 'Не удалось сохранить');
                         }
                     });
                     form.ajaxSubmit({
-                        url: "&direct="+self.options.view_uri+'&call=save',
-                        owner: "boolive.Attribs",
+                        url: "&direct="+self.options.view+'&call=save',
+                        owner: self.eventNamespace,
                         type: 'post',
                         dataType: 'json',
                         beforeSubmit: function(arr, form, options){
@@ -358,7 +357,7 @@
                     {
                         url: "/",
                         data: {
-                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                            direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
                             object: self.model.attrib['proto']!='null'?self.model.attrib['proto']:'' //какой объект показать
                         }
                     },
@@ -382,13 +381,12 @@
                     {
                         url: "/",
                         data: {
-                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                            direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
                             object: self.model.attrib['parent']!='null'?self.model.attrib['parent']:'' //какой объект показать
                         }
                     },
                     function(result, params){
                         if (result == 'submit' && 'selected' in params){
-                            console.log(params.selected);
                             self.model.set_attrib('parent', _.first(params.selected));
                         }
                     }
@@ -401,7 +399,7 @@
 //                    {
 //                        url: "/",
 //                        data: {
-//                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+//                            direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
 //                            object: '/Languages' //какой объект показать
 //                        }
 //                    },
@@ -422,7 +420,7 @@
 //                    {
 //                        url: "/",
 //                        data: {
-//                            direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+//                            direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
 //                            object: '/Members' //какой объект показать
 //                        }
 //                    },
@@ -440,7 +438,7 @@
             //
             // Загрзка начальны данных
             //
-            this._call('load', {object: this.model.object}, function(result, textStatus, jqXHR){
+            this.callServer('load', {object: self.model.object}, function(result, textStatus, jqXHR){
                 self.model.init(result.out.attrib);
             });
 
@@ -476,5 +474,5 @@
                 return '';
             }
         }
-	})
+    })
 })(jQuery, _);

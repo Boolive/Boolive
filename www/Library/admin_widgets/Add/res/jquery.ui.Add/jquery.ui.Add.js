@@ -5,17 +5,13 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-	$.widget("boolive.Add", $.boolive.AjaxWidget, {
-        // Объект, в который добавлять (родитель)
-        object: null,
-        // Выделенный объект (прототип для новового)
+    $.widget("boolive.Add", $.boolive.AjaxWidget, {
+        // Выбранный объект (прототип для новового)
         object_select: null,
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
-            // uri объекта
-            self.object = this.element.attr('data-o');
             // Отмена выделения при клике на свободную центральную область
             self.element.click(function(e){
                 e.stopPropagation();
@@ -42,7 +38,7 @@
                         {
                             url: "/",
                             data: {
-                                direct: self.options.view_uri+'/SelectObject', // uri выиджета выбора объекта
+                                direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
                                 object: '' //какой объект показать
                             }
                         },
@@ -77,12 +73,13 @@
          */
         _add: function(){
             var self = this;
-            self._call('add', {
-                object: self.object,
-                proto: self.object_select
-            }, function(result, textStatus, jqXHR){
-                history.back();
-            });
+            self.callServer('add', {
+                    object: self.options.object,
+                    add:{proto: self.object_select}
+                }, function(result, textStatus, jqXHR){
+                    history.back();
+                }
+            );
         },
         /**
          * Выделение объекта в списке часто используемых
@@ -93,7 +90,7 @@
             if (object != this.object_select){
                 this.element.find('.selected').removeClass('selected');
                 if (object !=null){
-                    this.element.find('[data-o="'+self.escape(object)+'"]').addClass('selected');
+                    this.element.find('[data-o="' + this.escape_selector(object) + '"]').addClass('selected');
                     this.element.find('.submit').removeClass('btn-disable');
                 }else{
                     this.element.find('.submit').addClass('btn-disable');
@@ -101,5 +98,5 @@
                 this.object_select = object;
             }
         }
-	})
+    })
 })(jQuery, _);

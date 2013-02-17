@@ -5,7 +5,7 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-	$.widget("boolive.Explorer", $.boolive.AjaxWidget, {
+    $.widget("boolive.Explorer", $.boolive.AjaxWidget, {
 
         _create: function(){
             $.boolive.AjaxWidget.prototype._create.call(this);
@@ -28,5 +28,5 @@
                 }
             }
         }
-	})
+    })
 })(jQuery, _);
