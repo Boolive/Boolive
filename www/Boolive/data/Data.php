@@ -39,6 +39,7 @@ class Data
      */
     static function read($key = '', $owner = null, $lang = null, $date = 0, $access = true)
     {
+        $key = self::encodeKey($key);
         // Если $key массив, то $key[0] - родитель, $key[1] - имя подчиненного
         $skey = is_array($key)? ($key[0] instanceof Entity ? $key[0]->key() : $key[0]) : $key;
         // Опредление хранилища по URI
@@ -133,7 +134,7 @@ class Data
 
     /**
      * Проверка, является ли URI сокращенным
-     * Если да, до возвращается массив из двух элементов, иначе false
+     * Если да, то возвращается массив из двух элементов, иначе false
      * Сокращенные URI используются в хранилищах для более оптимального хранения и поиска объектов
      * @param $uri Проверяемый URI
      * @return array|bool
@@ -142,6 +143,24 @@ class Data
     {
         $info = F::splitRight('//', $uri);
         return isset($info[0])? $info : false;
+    }
+
+    /**
+     * Если URI состоит из короткой части и дополнительных параметров, например "//2345/title",
+     * тогда возвращается массив из экземпляра сущности с id = 2345 и пути на подчиненного title
+     * @param $key
+     * @return array[0=>Entity, 1=>string]|string
+     */
+    static function encodeKey($key)
+    {
+        if (is_string($key) && ($info1 = self::isShortUri($key))){
+            $info2 = explode('/',$info1[1], 2);
+            if (sizeof($info2) == 2){
+                $info2[0] = Data::read($info1[0].'//'.$info2[0]);
+                return $info2;
+            }
+        }
+        return $key;
     }
 
     /**
