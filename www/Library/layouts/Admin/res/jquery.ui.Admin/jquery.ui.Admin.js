@@ -278,33 +278,33 @@
                 }
             }
             // Выбор вида
-            var rem_key = _.isArray(this._state.object)? this._state.object.join(';') : this._state.object;
+            var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object);
 
-            if ('object' in change && !('view_name' in state) && !(rem_key in this._state.remember_view)){
+            if ('object' in change && !('view_name' in state) && !(object_str in this._state.remember_view)){
                 state.view_name = null;
             }
-            if (!('view_name' in state) && rem_key in this._state.remember_view){
-                state.view_name = this._state.remember_view[rem_key];
+            if (!('view_name' in state) && object_str in this._state.remember_view){
+                state.view_name = this._state.remember_view[object_str];
             }
             if ('view_name' in state && state.view_name != this._state.view_name){
                 this._state.view_name = state.view_name;
                 change['view_name'] = true;
             }
             if (!('view_name' in this._state)) this._state.view_name = null;
-            this._state.remember_view[rem_key] = this._state.view_name;
+            this._state.remember_view[object_str] = this._state.view_name;
 
             if (!$.isEmptyObject(change)){
                 // Запись истории
                 if (without_history!==true){
                     if (without_history!==true && ('object' in change || 'view_name' in change)){
                         this._state.history_i++;
-                        history.pushState(this._state, null, this.getURIFromState(this._state));
+                        history.pushState(this._state, '', this.getURIFromState(this._state));
 
                     }else{
-                        history.replaceState(this._state, null, this.getURIFromState(this._state));
+                        history.replaceState(this._state, '', this.getURIFromState(this._state));
                     }
                 }else{
-                    history.replaceState(this._state, null, this.getURIFromState(this._state));
+                    history.replaceState(this._state, '', this.getURIFromState(this._state));
                 }
                 this.callChildren('setState', [this._state, change]);
                 this.callChildren('setStateAfter', [this._state, change]);
