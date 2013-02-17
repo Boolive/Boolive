@@ -75,7 +75,7 @@
             var self = this;
             self.callServer('add', {
                     object: self.options.object,
-                    add:{proto: self.object_select}
+                    proto: self.object_select
                 }, function(result, textStatus, jqXHR){
                     history.back();
                 }

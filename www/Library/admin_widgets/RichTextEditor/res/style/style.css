@@ -58,7 +58,7 @@
         /*animation: selection 10s 1;*/
         /*-webkit-animation: selection 5s 1;*/
 
-        box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);
+       /* box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);*/
         }
 
     .RichTextEditor > .content .resizing{
