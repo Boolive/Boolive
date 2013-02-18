@@ -259,6 +259,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
         // Установка значения
         if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!=$new_value)){
             $this->_attribs['value'] = $new_value;
+            $this->_attribs['is_file'] = false;
             $this->_attribs['is_default_value'] = 0;
             $this->_changed = true;
             $this->_checked = false;

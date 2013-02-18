@@ -100,6 +100,19 @@ class File
     }
 
     /**
+     * Удаление файла
+     * @param string $from Путь к удаляемому файлу
+     */
+    static function delete($from)
+    {
+        if (is_file($from)){
+            @unlink($from);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Удаление всех файлов и поддиректорий в указанной директории
      * @param string $dir Путь на очищаемому директорию
      * @param bool $delete_me Удалить указанную директорию (true) или только её содержимое (false)?
