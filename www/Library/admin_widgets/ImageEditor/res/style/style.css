@@ -1,7 +1,12 @@
 .ImageEditor{
 
     }
-    .ImageEditor .resizetop{
+.resize{
+    position:absolute;
+    z-index: 1000;
+    border: 1px solid #006ad6;
+    }
+    .resize .top{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -13,7 +18,7 @@
         z-index: 1500;
         margin-left: -5px;
         }
-    .ImageEditor .resizebottom{
+     .resize .bottom{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -26,7 +31,7 @@
         z-index: 1500;
         margin-left: -5px;
         }
-    .ImageEditor .resizeleft{
+     .resize .left{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -38,7 +43,7 @@
         z-index: 1500;
         margin-top: -5px;
         }
-    .ImageEditor .resizeright{
+     .resize .right{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -51,7 +56,7 @@
         z-index: 1500;
         margin-top: -5px;
         }
-    .ImageEditor .resizetopleft{
+     .resize .topleft{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -61,7 +66,7 @@
         position: absolute;
         z-index: 1500;
         }
-    .ImageEditor .resizetopright{
+     .resize .topright{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -73,7 +78,7 @@
         position: absolute;
         z-index: 1500;
         }
-    .ImageEditor .resizebottomright{
+     .resize .bottomright{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -85,7 +90,7 @@
         position: absolute;
         z-index: 1500;
         }
-    .ImageEditor .resizebottomleft{
+     .resize .bottomleft{
         width: 10px;
         height: 10px;
         background-color: #006ad6;
@@ -97,7 +102,7 @@
         position: absolute;
         z-index: 1500;
         }
-    .ImageEditor .defaultlink{
+     .resize .defaultlink{
         position: absolute;
         z-index: 1501;
         bottom: 20px;
@@ -109,7 +114,7 @@
         background-image: url("img/arrow-out-gray.png");
         cursor: pointer;
         }
-    .ImageEditor span.submit-message{
+     .resize span.submit-message{
         font-size: 12px;
         position: absolute;
         z-index: 1501;
@@ -129,7 +134,7 @@
         padding-left: 10px;
         display: none;
         }
-    .ImageEditor div.upload{
+     .resize div.upload{
         position: absolute;
         z-index: 1501;
         bottom: 0;
@@ -142,12 +147,12 @@
         overflow: hidden;
         cursor: pointer;
         }
-        .ImageEditor div.upload form{
+         .resize div.upload form{
             width: 16px;
             height: 16px;
             position: absolute;
             }
-            .ImageEditor div.upload form input[type=file]{
+             .resize div.upload form input[type=file]{
                 cursor: pointer;
                 left: -140px;
                 width: auto;

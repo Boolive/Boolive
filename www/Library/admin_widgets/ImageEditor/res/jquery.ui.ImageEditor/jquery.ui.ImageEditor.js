@@ -73,24 +73,21 @@
             var namespace = '.resizer'+Math.random();
             var dw, dh, w, h;
             if(self.resize_rect==null){
-                self.resize_rect = $('<div class="ImageEditor"> </div>').css({
-                    position: 'absolute',
-                   'z-index': 1000,
+                self.resize_rect = $('<div class="resize"> </div>').css({
                    //'background-color': 'rgba(187, 219, 250, 0.5)',
                     top: img_rect.top,
-                    border: '1px solid #006ad6',
                     width: width,
                     height: height,
                     left: img_rect.left
                 });
-               var resizetop =  $('<div class="resizetop"> </div>').appendTo(self.resize_rect);
-               var resizebottom = $('<div class="resizebottom"> </div>').appendTo(self.resize_rect);
-               var resizeleft =$('<div class="resizeleft"> </div>').appendTo(self.resize_rect);
-               var resizeright = $('<div class="resizeright"> </div>').appendTo(self.resize_rect);
-               var resizetopleft = $('<div class="resizetopleft"> </div>').appendTo(self.resize_rect);
-               var resizetopright = $('<div class="resizetopright"> </div>').appendTo(self.resize_rect);
-               var resizebottomleft = $('<div class="resizebottomleft"> </div>').appendTo(self.resize_rect);
-               var resizebottomright = $('<div class="resizebottomright"> </div>').appendTo(self.resize_rect);
+               var resizetop =  $('<div class="top"> </div>').appendTo(self.resize_rect);
+               var resizebottom = $('<div class="bottom"> </div>').appendTo(self.resize_rect);
+               var resizeleft =$('<div class="left"> </div>').appendTo(self.resize_rect);
+               var resizeright = $('<div class="right"> </div>').appendTo(self.resize_rect);
+               var resizetopleft = $('<div class="topleft"> </div>').appendTo(self.resize_rect);
+               var resizetopright = $('<div class="topright"> </div>').appendTo(self.resize_rect);
+               var resizebottomleft = $('<div class="bottomleft"> </div>').appendTo(self.resize_rect);
+               var resizebottomright = $('<div class="bottomright"> </div>').appendTo(self.resize_rect);
                var defaultlink = $('<div class="defaultlink"></div>').appendTo(self.resize_rect);
                var upload = $('<div class="upload"></div>').appendTo(self.resize_rect);
                var form = $('<form enctype="multipart/form-data" method="post"><input type="file" name="attrib[file]"></form>').appendTo(upload);
@@ -338,8 +335,8 @@
                     url: '/',
                     type: 'post',
                     data: {
-                        object: self._object,
-                        direct: self.options.view_uri,
+                        object: self.options.object,
+                        direct: self.options.view,
                         call: 'save',
                         attrib: {file: this.value}
                     },
@@ -355,7 +352,10 @@
                                 }, 5000);
                             }
                         }else{
-                           self.element.attr('src', responseText.out.attrib.file);
+                            //self.reload({object: self.options.object});
+                            self.element.attr('src', responseText.out.attrib.file);
+                            self.element.css('opacity', 0.9);
+                            self.element.css('opacity', 1);
                         }
                     }
                 });

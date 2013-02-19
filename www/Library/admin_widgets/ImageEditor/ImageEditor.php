@@ -59,6 +59,7 @@ class ImageEditor extends Widget
         }
 
     }
+
     /**
      * Сохранение атрибутов объекта
      * @return mixed
@@ -66,27 +67,30 @@ class ImageEditor extends Widget
     protected function callSave()
     {
         $v = array();
-       if (empty($this->_input['REQUEST']['attrib'])){
-           // Если запрос действителен, то его пустота из-за лимита post_max_size
-           $v['error']['value'] = 'Превышен допустимый размер отправляемых данных';
-       }else{
-           /** @var $obj \Boolive\data\Entity */
-           $obj  = $this->_input['REQUEST']['object'];
-           if (isset($this->_input['FILES']['attrib']['file'])){
+        if (empty($this->_input['REQUEST']['attrib'])) {
+            // Если запрос действителен, то его пустота из-за лимита post_max_size
+            $v['error']['value'] = 'Превышен допустимый размер отправляемых данных';
+        } else {
+            /** @var $obj \Boolive\data\Entity */
+            $obj = $this->_input['REQUEST']['object'];
+            if (isset($this->_input['FILES']['attrib']['file'])) {
                 $obj->file($this->_input['FILES']['attrib']['file']);
-                 // Проверка и сохранение
+                // Проверка и сохранение
                 /** @var $error \Boolive\errors\Error */
                 $error = null;
                 $obj->save(false, false, $error);
-                if (isset($error) && $error->isExist()){
+                if (isset($error) && $error->isExist()) {
                     $v['error']['value'] = $error->getUserMessage(true);
-                }else{
+                } else {
                     $v['attrib'] = $this->callLoad();
+                    $v['attrib']['file'].='?'.rand();
                 }
-               return $v;
-           }
-       }
+                return $v;
+            }
+        }
+        return null;
     }
+
     /**
      * Сохранение стиля объекта (если есть свойство style)
      * @param \Boolive\data\Entity $object Сохраняемый объект
@@ -109,18 +113,17 @@ class ImageEditor extends Widget
         }
         return true;
     }
-     /**
-      * Отправка атрибутов объекта
-      * @return mixed
-      */
-     protected function callLoad()
-       {
-           /** @var $obj \Boolive\data\Entity */
-           $obj  = $this->_input['REQUEST']['object'];
-           $v = array(
-               'file' => $obj->file(),
-           );
-           return $v;
-       }
-
+    /**
+    * Отправка атрибутов объекта
+    * @return mixed
+    */
+    protected function callLoad()
+    {
+        /** @var $obj \Boolive\data\Entity */
+        $obj = $this->_input['REQUEST']['object'];
+        $v = array(
+            'file' => $obj->file(),
+        );
+        return $v;
+    }
 }
