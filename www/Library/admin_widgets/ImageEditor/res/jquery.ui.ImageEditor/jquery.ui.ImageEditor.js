@@ -76,7 +76,7 @@
             var namespace = '.resizer'+Math.random();
             var dw, dh, w, h;
             if(self.resize_rect==null){
-                self.resize_rect = $('<div> </div>').css({
+                self.resize_rect = $('<div class="ImageEditor"> </div>').css({
                     position: 'absolute',
                    'z-index': 1000,
                    //'background-color': 'rgba(187, 219, 250, 0.5)',
@@ -86,14 +86,14 @@
                     height: height,
                     left: img_rect.left
                 });
-               var resizetop =  $('<div id="resizetop"> </div>').appendTo(self.resize_rect);
-               var resizebottom = $('<div id="resizebottom"> </div>').appendTo(self.resize_rect);
-               var resizeleft =$('<div id="resizeleft"> </div>').appendTo(self.resize_rect);
-               var resizeright = $('<div id="resizeright"> </div>').appendTo(self.resize_rect);
-               var resizetopleft = $('<div id="resizetopleft"> </div>').appendTo(self.resize_rect);
-               var resizetopright = $('<div id="resizetopright"> </div>').appendTo(self.resize_rect);
-               var resizebottomleft = $('<div id="resizebottomleft"> </div>').appendTo(self.resize_rect);
-               var resizebottomright = $('<div id="resizebottomright"> </div>').appendTo(self.resize_rect);
+               var resizetop =  $('<div class="resizetop"> </div>').appendTo(self.resize_rect);
+               var resizebottom = $('<div class="resizebottom"> </div>').appendTo(self.resize_rect);
+               var resizeleft =$('<div class="resizeleft"> </div>').appendTo(self.resize_rect);
+               var resizeright = $('<div class="resizeright"> </div>').appendTo(self.resize_rect);
+               var resizetopleft = $('<div class="resizetopleft"> </div>').appendTo(self.resize_rect);
+               var resizetopright = $('<div class="resizetopright"> </div>').appendTo(self.resize_rect);
+               var resizebottomleft = $('<div class="resizebottomleft"> </div>').appendTo(self.resize_rect);
+               var resizebottomright = $('<div class="resizebottomright"> </div>').appendTo(self.resize_rect);
                var defaultlink = $('<div class="defaultlink"></div>').appendTo(self.resize_rect);
                var upload = $('<div class="upload"></div>').appendTo(self.resize_rect);
                var form = $('<form enctype="multipart/form-data" method="post"><input type="file" name="attrib[file]"></form>').appendTo(upload);
