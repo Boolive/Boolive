@@ -20,10 +20,18 @@ class ImageEditor extends Widget
                         // Отображаемый объект или над которым выполняется действие
                         'object' => Rule::entity()->required(),
                         'call' => Rule::string(),
+                        'attrib' => Rule::arrays(Rule::string()),
                         // Аргументы вызываемых методов (call)
                         'saveStyle' => Rule::arrays(Rule::string())
                     )
-                )
+                ),
+                'FILES' => Rule::arrays(array(
+                         'attrib' => Rule::arrays(array(
+                                 'file' => Rule::arrays(Rule::string())
+                             )
+                         )
+                     )
+                 )
             )
         );
     }
@@ -38,6 +46,10 @@ class ImageEditor extends Widget
                     $this->_input['REQUEST']['saveStyle']
                 );
             }
+            // Сохранение новой картинки
+            if ($this->_input['REQUEST']['call'] == 'save'){
+                return $this->callSave();
+            }
             return null;
         }else{
             $v['file'] = $this->_input['REQUEST']['object']->file();
@@ -47,7 +59,34 @@ class ImageEditor extends Widget
         }
 
     }
-
+    /**
+     * Сохранение атрибутов объекта
+     * @return mixed
+     */
+    protected function callSave()
+    {
+        $v = array();
+       if (empty($this->_input['REQUEST']['attrib'])){
+           // Если запрос действителен, то его пустота из-за лимита post_max_size
+           $v['error']['value'] = 'Превышен допустимый размер отправляемых данных';
+       }else{
+           /** @var $obj \Boolive\data\Entity */
+           $obj  = $this->_input['REQUEST']['object'];
+           if (isset($this->_input['FILES']['attrib']['file'])){
+                $obj->file($this->_input['FILES']['attrib']['file']);
+                 // Проверка и сохранение
+                /** @var $error \Boolive\errors\Error */
+                $error = null;
+                $obj->save(false, false, $error);
+                if (isset($error) && $error->isExist()){
+                    $v['error']['value'] = $error->getUserMessage(true);
+                }else{
+                    $v['attrib'] = $this->callLoad();
+                }
+               return $v;
+           }
+       }
+    }
     /**
      * Сохранение стиля объекта (если есть свойство style)
      * @param \Boolive\data\Entity $object Сохраняемый объект
@@ -70,4 +109,18 @@ class ImageEditor extends Widget
         }
         return true;
     }
+     /**
+      * Отправка атрибутов объекта
+      * @return mixed
+      */
+     protected function callLoad()
+       {
+           /** @var $obj \Boolive\data\Entity */
+           $obj  = $this->_input['REQUEST']['object'];
+           $v = array(
+               'file' => $obj->file(),
+           );
+           return $v;
+       }
+
 }

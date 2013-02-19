@@ -91,8 +91,12 @@
                var resizetopright = $('<div id="resizetopright"> </div>').appendTo(self.resize_rect);
                var resizebottomleft = $('<div id="resizebottomleft"> </div>').appendTo(self.resize_rect);
                var resizebottomright = $('<div id="resizebottomright"> </div>').appendTo(self.resize_rect);
-               var defaultlink = $('<span class="defaultlink">Сбросить размеры</span>').appendTo(self.resize_rect);
+               var defaultlink = $('<div class="defaultlink"></div>').appendTo(self.resize_rect);
+               var upload = $('<div class="upload"></div>').appendTo(self.resize_rect);
+               var form = $('<form enctype="multipart/form-data" method="post"><input type="file" name="attrib[file]"></form>').appendTo(upload);
+               var submit_message = $('<span class="submit-message"></span>').appendTo(self.resize_rect);
                 $('body').append(self.resize_rect);
+
             }
             var DocumentMouseUp = function(e){
                 $(this).off(namespace);
@@ -328,6 +332,35 @@
                      DocumentMouseUp.apply(this);
                 });
             });
+            //Загрузка другого изображения
+            form.on('change','[type=file]', function() {
+                form.ajaxSubmit({
+                    url: '/',
+                    type: 'post',
+                    data: {
+                        object: self._object,
+                        direct: self.options.view_uri,
+                        call: 'save',
+                        attrib: {file: this.value}
+                    },
+                    dataType: 'json',
+                    success: function(responseText, statusText, xhr, $form){
+                        if (responseText.out.error){
+                            for(var e in responseText.out.error){
+                                submit_message.css('opacity', 1);
+                                submit_message.css('display', 'block');
+                                submit_message.text(responseText.out.error.value);
+                                submit_message.animate({
+                                   opacity: 0
+                                }, 5000);
+                            }
+                        }else{
+                           self.element.attr('src', responseText.out.attrib.file);
+                        }
+                    }
+                });
+
+            })
         },
 
         _isItersection: function(rect, point){
