@@ -77,6 +77,23 @@
         line-height: normal;
         /*background-color: #e6e6e6;*/
     }
+    .RichTextEditor pre{
+        background-color: #787878;
+        color: #FFF;
+        max-width: 100%;
+    }
+    .RichTextEditor .selected{
+        /*border-right: 4px solid #125bfc;*/
+        /*background-color: #e6ecf2;*/
+        /*border: 1px dashed #0079f2;*/
+        /*background-color: #fafdff;*/
+        box-shadow: 0 0 0px 5px #bbdbfa;
+        /*outline: 1px dashed #333;*/
+        /*animation: selection 10s 1;*/
+        /*-webkit-animation: selection 5s 1;*/
+
+       /* box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);*/
+        }
 
     @keyframes selection{
         from {

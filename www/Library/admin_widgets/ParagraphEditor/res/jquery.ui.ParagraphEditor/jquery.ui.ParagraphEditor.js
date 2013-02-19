@@ -12,9 +12,9 @@
             $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // Коррекция пустого значения
-            if (this.element.html()==' '){
-                this.element.context.childNodes[0].textContent = '';
-            }
+//            if (this.element.text()=='1'){
+//                this.element.context.childNodes[0].textContent = '1';
+//            }
             // начальное значение
             this._value = self.element.html();
 
@@ -23,6 +23,14 @@
             }).on('click', function(e){
                 e.stopPropagation();
             });
+        },
+
+        call_textSelect: function(caller, e, selection){
+            console.log(selection);
+            if (this._isInSelection(selection)){
+
+                this._select(true);
+            }
         },
 
         call_keydown: function(caller, e, selection){ //after
@@ -90,6 +98,7 @@
          * @return boolean
          */
         _isInSelection: function(selection){
+
             return this.element.is(selection.anchorNode.parentNode) || this.element.is(selection.focusNode.parentNode) ||
                    this.element.has(selection.anchorNode.parentNode).length || this.element.has(selection.focusNode.parentNode).length;
         },
@@ -104,33 +113,41 @@
             var node = sel.anchorNode;
             var offset = sel.anchorOffset;
             var have_selection = sel.toString()!='';
+            var text = {
+                left: node.textContent.substring(0, offset),
+                right: node.textContent.substring(offset)
+            };
+
             e.can_print = false;
             if (node === this){
                 e.preventDefault();
             }else
-            if ((offset == 1 && node.textContent.length == 1 && e.keyCode == 8) ||
-                (offset == 0 && node.textContent.length == 1 && e.keyCode == 46)){
-                node.textContent = '';
-                e.preventDefault();
-            }else
+//            if ((offset == 1 && node.textContent.length == 1 && e.keyCode == 8) ||
+//                (offset == 0 && node.textContent.length == 1 && e.keyCode == 46)){
+//                node.textContent = '';
+//                e.preventDefault();
+//            }else
             // BACKSPACE
-            if (offset == 0 && e.keyCode == 8 && !have_selection){
+            if ((offset == 0 || (text.left.charCodeAt(0) == 8203 && text.left.length == 1)) && e.keyCode == 8 && !have_selection){
+                console.log(text.left.charCodeAt(0));
+                console.log(text.left.length);
+                console.log(have_selection);
                 // Поиск родительского элемента узла в this
                 while (!node.previousSibling && !this.element.is(node.parentNode)) node = node.parentNode;
                 // Если первый, то отмена BACKSPACE. Действие соединения с предыдущим элементом
                 if (!node.previousSibling && this.element.is(node.parentNode)){
                     e.preventDefault();
-                    this._megre(this.element.prev('[data-o]'), this.element);
+                    this._merge(this.element.prev('[data-o]'), this.element);
                 }
             }else
             // DELETE
-            if (offset == node.textContent.length && e.keyCode == 46 && !have_selection){
+            if ((offset == node.textContent.length || (text.right.charCodeAt(0) == 8203 && text.right.length == 1)) && e.keyCode == 46 && !have_selection){
                 // Поиск родительского элемента узла в this
                 while (!node.nextSibling && !this.element.is(node.parentNode)) node = node.parentNode;
                 // Если последний, то отмена DELETE. Действие соединения со следующим элементом
                 if (!node.nextSibling && this.element.is(node.parentNode)){
                     e.preventDefault();
-                    this._megre(this.element, this.element.next('[data-o]'));
+                    this._merge(this.element, this.element.next('[data-o]'));
                 }
             }else
             // ENTER
@@ -161,10 +178,10 @@
          * Выделение (фокус) текстового блока
          * @private
          */
-        _select: function(){
+        _select: function(add){
             if (!this.element.hasClass('selected')){
                 this.element.addClass('selected');
-                this.callParents('setState', [{selected:  this.options.object}]);
+                this.callParents('setState', [{selected:  this.options.object, select_type: 'add'}]);
             }
         },
 
@@ -175,13 +192,15 @@
          * @param secondary Блок, который добавляется к первому блоку и после удаляется
          * @private
          */
-        _megre: function(primary, secondary){
+        _merge: function(primary, secondary){
             if (primary.length && secondary.length){
+                var p = primary.data('o');
+                var s = secondary.data('o');
                 this.callServer('merge', {
                         object: this.options.object,
                         merge: {
-                            primary: primary.data('object'),
-                            secondary: secondary.data('object')
+                            primary: primary.data('o'),
+                            secondary: secondary.data('o')
                         }
                     }, {
                     success: function(result, textStatus, jqXHR){

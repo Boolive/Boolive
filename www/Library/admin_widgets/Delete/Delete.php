@@ -62,7 +62,7 @@ class Delete extends Widget
             }else{
                 $v['message'] = 'Объект будет перемещён в корзину, его можно будет восстановить.';
             }
-            $v['prev'] = $this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';
+            //$v['prev'] = $this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';
             return parent::work($v);
         }
     }

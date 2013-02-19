@@ -29,32 +29,6 @@
                 e.preventDefault();
                 e.stopPropagation();
             });
-            //.on('mousemove', function(e){
-
-//                if (self.element.hasClass('selected')){
-//                    if (!self._curent_action){
-//                        // Проверка попадания курсора в область ресайза
-//                        var img_rect = self.element.offset();
-//                        var rect = {
-//                            top: img_rect.top + self.element.height() - 20,
-//                            right: img_rect.left + self.element.width(),
-//                            bottom: img_rect.top + self.element.height(),
-//                            left: img_rect.left + self.element.width() - 20
-//                        };
-//                        if (self._isItersection(rect, {x: e.pageX, y: e.pageY})){
-//                            // Доступен ресайз
-//                            self.element.addClass('resizing');
-//                            self._mouse_action = 'resize';
-//                        }else{
-//                            self.element.removeClass('resizing');
-//                            self._mouse_action = false;
-//                        }
-//                    }
-//                }else{
-//                    self.element.removeClass('resizing');
-//                    self._mouse_action = false;
-//                }
-           // });
         },
 
         _destroy: function(){

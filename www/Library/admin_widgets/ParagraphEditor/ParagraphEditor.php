@@ -89,7 +89,7 @@ class ParagraphEditor extends Widget
      */
     protected function callMerge($primary, $secondary)
     {
-        $primary->value($primary->value().$secondary->value());
+        $primary->value(preg_replace('/(\x8203|&#8203;)/', '', $primary->value().$secondary->value()));
         $primary->save();
         $secondary->isDelete(true);
         $secondary->save();
@@ -108,12 +108,12 @@ class ParagraphEditor extends Widget
         $obj = array();
         $obj[0] = $object;
         // Обновить (обрезать) значение объекта
-        $obj[0]->value($value1);
+        $obj[0]->value(preg_replace('/(\x8203|&#8203;)/', '', $value1));
         // Создать новый объект с прототипом как у $obj со вторым значением
         // Отправить uri объектов или сгенерировать их html???
         $obj[1] = $object->proto()->birth($object->parent());
         $obj[1]->order($object->order()+1);
-        $obj[1]->value($value2);
+        $obj[1]->value(preg_replace('/(\x8203|&#8203;)/', '', $value2));
 
         $result = array();
         foreach ($obj as $o){
@@ -139,6 +139,7 @@ class ParagraphEditor extends Widget
     protected function callSave($object, $value)
     {
         $v = array();
+        $value = preg_replace('/(\x8203|&#8203;)/', '', $value);
         $object->value($value);
         // Проверка и сохранение
         /** @var $error \Boolive\errors\Error */
@@ -222,7 +223,7 @@ class ParagraphEditor extends Widget
         $v['style'] = $obj->style->getStyle();
         $v['value'] = $obj->value();
         if (!trim($v['value'])){
-            $v['value'] = ' ';
+            $v['value'] = '&#8203;';
         }
         $v['uri'] = $obj->uri();
         return $v;

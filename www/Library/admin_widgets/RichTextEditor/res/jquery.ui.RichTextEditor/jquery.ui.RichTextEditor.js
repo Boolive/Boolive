@@ -90,11 +90,15 @@
             }).on('blur'+this.eventNamespace+' keyup'+this.eventNamespace+' paste'+this.eventNamespace, function(e){
                 var sel = window.getSelection();
                 self.callChildren(e.type, [e, sel]);
+
+            }).on('mouseup'+this.eventNamespace, function(e){
+                self._onselect();
             });
         },
 
         _destroy: function(){
             this.call_program_hide();
+            //self.callChildren('save');
             $.boolive.AjaxWidget.prototype._destroy.call(this);
         },
 
@@ -103,6 +107,42 @@
                 $(this).addClass('btn-frozen');
                 this.callChildren('save');
             }
+        },
+
+        _onselect: function(){
+           var sel = window.getSelection();
+            // 1) Поиск общего родителя начала и конца области выделения
+            // 2) Индексы начала и конца в родителе
+            // 3) Получение списка объектов от начала до конца выделения
+            // Выбор всех родителей от начальной позиции курсора
+            var common_index = -1;
+            var node0 = sel.anchorNode;
+            var nodes0 = [];
+            while (node0 && node0.nodeType==3) node0 = node0.parentNode;
+            while (node0 && !this.element.is(node0)){
+                nodes0.unshift(node0);
+                node0 = node0.parentNode;
+            }
+            // Выбор родителей от конечной позиции курсора пока не будет найден общий родитель с node0
+            var node1 = sel.focusNode;
+            var nodes1 = [];
+            while (node1 && node1.nodeType==3) node1 = node1.parentNode;
+            while (node1 && !this.element.is(node1) && common_index==-1){
+                nodes1.unshift(node1);
+                common_index = _.indexOf(nodes0, node1);
+                node1 = node1.parentNode;
+            }
+            // Получение элементов начала и конца выделения в общем родителе
+            if (common_index!=-1){
+                node0 = (nodes0.length>common_index+1)? nodes0[common_index+1] : nodes0[common_index];
+                node1 = (nodes1.length>1)? nodes1[1] : nodes1[0];
+//                console.log(node0);
+//                console.log(node1);
+            }
+            console.log(sel);
+//            console.log(nodes0);
+//            console.log(nodes1);
+            //this.callChildren('textSelect', [e, sel]);
         },
 
         call_program_show: function(){

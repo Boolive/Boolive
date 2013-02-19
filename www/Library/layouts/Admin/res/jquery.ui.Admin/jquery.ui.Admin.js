@@ -47,6 +47,7 @@
                 self.call_setState({target: self, direct: 'parents'}, {selected: self._state.object}); //before
             });
 
+
             //self.element.click();
 
             // Назад/Вперед

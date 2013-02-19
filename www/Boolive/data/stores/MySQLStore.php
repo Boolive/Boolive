@@ -176,7 +176,7 @@ class MySQLStore extends Entity
                 // Подбор уникального имени, если указана необходимость в этом
                 if ($entity->_rename){
                     //Выбор записи по шаблону имени с самым большим префиксом
-                    $q = $this->db->prepare('SELECT `name` FROM {objects} WHERE parent=? AND `name` REGEXP ? ORDER BY CAST(SUBSTRING(`name`,LOCATE("_",`name`)+1) AS SIGNED) DESC LIMIT 0,1');
+                    $q = $this->db->prepare('SELECT `name` FROM {objects} WHERE parent=? AND `name` REGEXP ? ORDER BY CAST((SUBSTRING_INDEX(`name`, "_", -1)+1) AS SIGNED) DESC LIMIT 0,1');
                     $q->execute(array($attr['parent'], '^'.$entity->_rename.'(_[0-9]+)?$'));
                     if ($row = $q->fetch(DB::FETCH_ASSOC)){
                         preg_match('|^'.preg_quote($entity->_rename).'(?:_([0-9]+))?$|u', $row['name'], $match);
