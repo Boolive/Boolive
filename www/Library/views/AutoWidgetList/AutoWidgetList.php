@@ -43,12 +43,12 @@ class AutoWidgetList extends Widget
             $cond['where'] = array('is', $protos);
         }else
         if (is_array($cond['where'][0])){
-            $cond['where'][0][] = array('is', $protos);
+            $cond['where'][] = array('is', $protos);
         }else
         if ($cond['where'][0] == 'all'){
-            $cond['where'][0][] = array('is', $protos);
+            $cond['where'][] = array('is', $protos);
         }else{
-            $cond['where'] = array(
+            $cond['where'][] = array(
                 $cond['where'],
                 array('is', $protos)
             );
