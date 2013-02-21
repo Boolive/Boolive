@@ -19,7 +19,7 @@ class Delete extends Widget
                             Rule::arrays(Rule::entity()),
                             Rule::entity()
                         )->required(),
-                        'prev' => Rule::entity(),
+//                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),
                     )
                 )
@@ -35,8 +35,8 @@ class Delete extends Widget
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
             foreach ($objects as $o){
                 /** @var \Boolive\data\Entity $o */
-//                $o->isDelete(true);
-//                $o->save();
+                $o->isDelete(true);
+                $o->save();
             }
             $v['result'] = true;
             return $v;
@@ -62,7 +62,7 @@ class Delete extends Widget
             }else{
                 $v['message'] = 'Объект будет перемещён в корзину, его можно будет восстановить.';
             }
-            $v['prev'] = $this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';
+            $v['prev'] = '';//$this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';
             return parent::work($v);
         }
     }
