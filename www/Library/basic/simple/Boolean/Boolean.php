@@ -18,6 +18,11 @@ class Boolean extends Entity
     protected function defineRule()
     {
         parent::defineRule();
-        $this->_rule->arrays['value'] = Rule::bool();
+        $this->_rule->arrays[0]['value'] = Rule::bool();
+    }
+
+    public function value($new_value = null)
+    {
+        return intval(parent::value($new_value));
     }
 }

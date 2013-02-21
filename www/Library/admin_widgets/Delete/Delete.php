@@ -19,7 +19,7 @@ class Delete extends Widget
                             Rule::arrays(Rule::entity()),
                             Rule::entity()
                         )->required(),
-                        //'prev' => Rule::entity(),
+//                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),
                     )
                 )
@@ -35,8 +35,8 @@ class Delete extends Widget
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
             foreach ($objects as $o){
                 /** @var \Boolive\data\Entity $o */
-//                $o->isDelete(true);
-//                $o->save();
+                $o->isDelete(true);
+                $o->save();
             }
             $v['result'] = true;
             return $v;
