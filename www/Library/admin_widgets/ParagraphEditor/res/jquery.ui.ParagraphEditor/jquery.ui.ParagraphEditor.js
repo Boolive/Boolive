@@ -3,10 +3,11 @@
  * Query UI widget
  * Copyright 2013 (C) Boolive
  */
-(function($, document) {
+(function($, _, document) {
     $.widget("boolive.ParagraphEditor", $.boolive.AjaxWidget, {
 
         _value: '',
+        _is_change: false,
 
         _create: function() {
             $.boolive.AjaxWidget.prototype._create.call(this);
@@ -15,25 +16,17 @@
 //            if (this.element.text()=='1'){
 //                this.element.context.childNodes[0].textContent = '1';
 //            }
-            // начальное значение
+            // начальное значение для сверки изменений
             this._value = self.element.html();
 
-            this.element.on('mousedown'+this.eventNamespace, function(e){
-                self._select();
-            }).on('click', function(e){
+            this.element.on('click', function(e){
+                // Отмена клика в редакторе, иначе сбросится выделение
+                e.preventDefault();
                 e.stopPropagation();
             });
         },
 
-        call_textSelect: function(caller, e, selection){
-            console.log(selection);
-            if (this._isInSelection(selection)){
-
-                this._select(true);
-            }
-        },
-
-        call_keydown: function(caller, e, selection){ //after
+        call_keydown: function(caller, e, selection){
             if (!e.isPropagationStopped()){
                 var e1 = selection.anchorNode;
                 while (e1.nodeType!=1) e1 = e1.parentNode;
@@ -43,24 +36,24 @@
                     this.element.has(e1).length || this.element.has(e2).length){
                     this._keydown(e, selection);
                 }
-             }
+            }
         },
 
-        call_keyup: function(caller, e, selection){ //after
-            if (this._isInSelection(selection)){
-                this._select();
+        call_keyup: function(caller, e, selection){
+            if (this.element.hasClass('selected')){
+                // Проверка изменений в тексте
                 this._change(e);
             }
         },
 
-//        call_blur: function(caller, e, selection){
-//            if (this._isInSelection(selection)){
-//                this._change(e);
-//            }
-//        },
+        call_blur: function(caller, e, selection){
+            if (this.element.hasClass('selected')){
+                this._change(e);
+            }
+        },
 
         call_paste: function(caller, e, selection){
-            if (this._isInSelection(selection)){
+            if (this.element.hasClass('selected')){
                 this._change(e);
             }
         },
@@ -69,26 +62,61 @@
          * Сохранение значения текстового блока
          */
         call_save: function(caller){
-            var self = this;
-            self.callServer('save', {
-                    object: self.options.object,
-                    save: self.element.html()
-            }, {
-                success: function(result, textStatus, jqXHR){
-                    self._value = self.element.html();
-                    self.callParents('nochange', [self.options.object]);
-                }
-            });
+            if (this._is_change){
+                var self = this;
+                self.callServer('save', {
+                        object: self.options.object,
+                        save: _.unescape(self.element.html().replace(/[\u200B-\u200D\uFEFF]/g, ''))
+                }, {
+                    success: function(result, textStatus, jqXHR){
+                        self._value = self.element.html();
+                        self._is_change = false;
+                        self.callParents('nochange', [self.options.object]);
+                    }
+                });
+            }
         },
 
         /**
-         * Отмена выделения (фокуса) текстового блока
-         * @param state
-         * @param changes
+         * Выделение и отмена выделения
          */
-        call_setState: function(caller, state, changes){ //after
-            if ($.isPlainObject(changes) && 'selected' in changes && _.indexOf(state.selected, this.options.object)==-1){
-                this.element.removeClass('selected');
+        call_setState: function(caller, state, changes){
+            if ($.isPlainObject(changes) && 'selected' in changes){
+                var select = _.indexOf(state.selected, this.options.object)!=-1;
+                var is_selected = this.element.hasClass('selected');
+                if (is_selected && !select){
+                    this.element.removeClass('selected');
+                }else
+                if (!is_selected && select){
+                    this.element.addClass('selected');
+                }
+            }
+        },
+
+        /**
+         * Возвращение стиля
+         * @return {*}
+         */
+        call_getStyle: function(){
+            if (this.element.hasClass('selected')){
+                return this.element.css(["margin-left", "margin-right", "text-indent"]);
+            }
+        },
+
+        /**
+         * Установка стиля
+         * @param caller
+         * @param style
+         */
+        call_setStyle: function(caller, style){
+            if (this.element.hasClass('selected')){
+                if (!$.isEmptyObject(style)){
+                    this.element.css(style);
+                    this.callServer('saveStyle', {
+                        object: this.options.object,
+                        saveStyle: style
+                    });
+                }
             }
         },
 
@@ -168,20 +196,11 @@
          */
         _change: function(e){
             if (this._value != this.element.html()){
+                this._is_change = true;
                 this.callParents('change', [this.options.object]);
             }else{
+                this._is_change = false;
                 this.callParents('nochange', [this.options.object]);
-            }
-        },
-
-        /**
-         * Выделение (фокус) текстового блока
-         * @private
-         */
-        _select: function(add){
-            if (!this.element.hasClass('selected')){
-                this.element.addClass('selected');
-                this.callParents('setState', [{selected:  this.options.object, select_type: 'add'}]);
             }
         },
 
@@ -224,24 +243,6 @@
                         }
                     }
                 });
-            }
-        },
-
-        call_getStyle: function(){
-            if (this.element.hasClass('selected')){
-                return this.element.css(["margin-left", "margin-right", "text-indent"]);
-            }
-        },
-
-        call_setStyle: function(caller, style){
-            if (this.element.hasClass('selected')){
-                if (!$.isEmptyObject(style)){
-                    this.element.css(style);
-                    this.callServer('saveStyle', {
-                        object: this.options.object,
-                        saveStyle: style
-                    });
-                }
             }
         },
 
@@ -310,4 +311,4 @@
             }
         }
     })
-})(jQuery, document);
+})(jQuery, _, document);
