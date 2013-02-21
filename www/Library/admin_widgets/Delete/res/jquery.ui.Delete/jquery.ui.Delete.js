@@ -9,23 +9,23 @@
     $.widget("boolive.Delete", $.boolive.AjaxWidget, {
         // Удаляемый объект
         objects: null,
-        prev_o: '',
-        prev_v: '',
+//        prev_o: '',
+//        prev_v: '',
 
         _create: function() {
             $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
             // uri объекта
             self.objects = $.parseJSON(this.element.attr('data-o'));
-            self.prev_o = this.element.attr('data-prev-o');
-            self.prev_v = this.element.attr('data-prev-v');
+            //self.prev_o = this.element.attr('data-prev-o');
+            //self.prev_v = this.element.attr('data-prev-v');
 
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 self.callServer('delete', {object: self.options.object}, function(result, textStatus, jqXHR){
                     // Вход в родительский объект
-                    //history.back();
-                    self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
+                    history.back();
+                    //self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
                 });
             });
             self.element.find('.cancel').click(function(e){

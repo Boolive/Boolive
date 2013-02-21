@@ -20,6 +20,7 @@
                     view_name: $(this).attr('href')
                 }]);
             });
+            self.reload = _.throttle(self.reload, 500);
             this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {view_name: true});
         },
 

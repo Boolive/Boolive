@@ -29,7 +29,7 @@ class ParagraphEditor extends Widget
                             'primary' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required(),
                             'secondary' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required()
                         )),
-                        'save' => Rule::string()->default('')->required(),
+                        'save' => Rule::string(),
                         'saveStyle' => Rule::arrays(Rule::string())
                     )
                 )
@@ -139,6 +139,7 @@ class ParagraphEditor extends Widget
     protected function callSave($object, $value)
     {
         $v = array();
+        //$value = htmlentities($value, null, 'UTF-8');
         $object->value($value);
         // Проверка и сохранение
         /** @var $error \Boolive\errors\Error */
@@ -221,9 +222,6 @@ class ParagraphEditor extends Widget
         }
         $v['style'] = $obj->style->getStyle();
         $v['value'] = $obj->value();
-        if (!trim($v['value'])){
-            $v['value'] = ' ';
-        }
         $v['uri'] = $obj->uri();
         return $v;
     }

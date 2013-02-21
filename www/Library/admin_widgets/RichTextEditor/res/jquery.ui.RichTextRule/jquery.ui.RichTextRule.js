@@ -39,7 +39,7 @@
             this._make_nums();
             //this._show();
             this.gettingStyle();
-            this.element.click(function(e){
+            this.element.on('click', function(e){
                 e.preventDefault();
                 e.stopPropagation();
             });
@@ -132,6 +132,8 @@
                 $(this).off(namespace);
                 resize_rect.hide();
                 self.sendingStyle();
+                e.preventDefault();
+                e.stopPropagation();
             });
         },
 
