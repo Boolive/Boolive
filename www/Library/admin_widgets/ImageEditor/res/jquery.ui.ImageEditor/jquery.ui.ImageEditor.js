@@ -53,8 +53,8 @@
                 var prop = width / height;
                 var is_prop = true;
                 var namespace = '.resizer' + Math.random();
-                var dw, dh, w, h;
-                var pos;
+                var dw, dh, w, h, left, top, pos;
+
                 self._resize_rect = $('<div class="resize"> </div>').css({
                     position:'absolute',
                     'z-index':1000,
@@ -104,9 +104,9 @@
                 };
                 self._resize_rect.on('click mousedown moseup', function(e){
                     e.stopPropagation();
-                    //e.preventDefault();
+                    e.preventDefault();
                 });
-                $(resizebottomright).on('mousedown' + this.eventNamespace, function (e) {
+                resizebottomright.on('mousedown' + this.eventNamespace, function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     pos = {x:e.pageX, y:e.pageY};
@@ -133,7 +133,7 @@
                             DocumentMouseUp.apply(this, [e]);
                         });
                 });
-                $(resizebottomleft).on('mousedown' + this.eventNamespace, function (e) {
+                resizebottomleft.on('mousedown' + this.eventNamespace, function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     pos = {x:e.pageX, y:e.pageY};
@@ -145,9 +145,9 @@
                         dw = pos.x - e.pageX;
                         dh = e.pageY - pos.y;
                         if (width + dw > 10) {
-                            var left = img_rect.left - dw;
+                            left = img_rect.left - dw;
                         } else {
-                            var left = img_rect.left + width - 10;
+                            left = img_rect.left + width - 10;
                         }
                         if (is_prop) {
                             w = Math.max(10, width + dw);
@@ -166,7 +166,7 @@
                             DocumentMouseUp.apply(this, [e]);
                         });
                 });
-                $(resizetopleft).on('mousedown' + this.eventNamespace, function (e) {
+                resizetopleft.on('mousedown' + this.eventNamespace, function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     pos = {x:e.pageX, y:e.pageY};
@@ -178,9 +178,9 @@
                         dw = pos.x - e.pageX;
                         dh = pos.y - e.pageY;
                         if (width + dw > 10) {
-                            var left = img_rect.left - dw;
+                            left = img_rect.left - dw;
                         } else {
-                            var left = img_rect.left + width - 10;
+                            left = img_rect.left + width - 10;
                         }
                         if (is_prop) {
                             w = Math.max(10, width + dw);
@@ -190,9 +190,9 @@
                             h = Math.max(10, height + dh);
                         }
                         if (h > 10) {
-                            var top = img_rect.top + height - h;
+                            top = img_rect.top + height - h;
                         } else {
-                            var top = img_rect.top + height - 10;
+                            top = img_rect.top + height - 10;
                         }
                         self._resize_rect.css({
                             width:w + 'px',
@@ -204,7 +204,7 @@
                             DocumentMouseUp.apply(this, [e]);
                         });
                 });
-                $(resizetopright).on('mousedown' + this.eventNamespace, function (e) {
+                resizetopright.on('mousedown' + this.eventNamespace, function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     pos = {x:e.pageX, y:e.pageY};
@@ -223,9 +223,9 @@
                             h = Math.max(10, height + dh);
                         }
                         if (h > 10) {
-                            var top = img_rect.top + height - h;
+                            top = img_rect.top + height - h;
                         } else {
-                            var top = img_rect.top + height - 10;
+                            top = img_rect.top + height - 10;
                         }
 
                         self._resize_rect.css({
@@ -237,7 +237,7 @@
                             DocumentMouseUp.apply(this, [e]);
                         });
                 });
-                $(resizetop).on('mousedown' + this.eventNamespace, function (e) {
+                resizetop.on('mousedown' + this.eventNamespace, function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     pos = {x:e.pageX, y:e.pageY};
@@ -245,9 +245,9 @@
                         dh = pos.y - e.pageY;
                         h = Math.max(10, height + dh);
                         if (h > 10) {
-                            var top = img_rect.top - dh;
+                            top = img_rect.top - dh;
                         } else {
-                            var top = img_rect.top + height - 10;
+                            top = img_rect.top + height - 10;
                         }
                         self._resize_rect.css({
                             height:h + 'px',
@@ -257,11 +257,11 @@
                         DocumentMouseUp.apply(this, [e]);
                     });
                 });
-                $(resizebottom).on('mousedown' + this.eventNamespace, function (e) {
+                resizebottom.on('mousedown' + this.eventNamespace, function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     pos = {x:e.pageX, y:e.pageY};
-                    $(document).on('mousemove' + namespace,function (e) {
+                    $(document).on('mousemove' + namespace, function(e) {
                         dh = e.pageY - pos.y;
                         h = Math.max(10, height + dh);
                         self._resize_rect.css({
@@ -271,79 +271,84 @@
                         DocumentMouseUp.apply(this, [e]);
                     });
                 });
-            $(resizeright).on('mousedown'+this.eventNamespace, function(e){
-               e.preventDefault();
-               e.stopPropagation();
-               pos = {x:e.pageX, y:e.pageY};
-                $(document).on('mousemove'+namespace, function(e){
-                      dw =  e.pageX - pos.x;
-                      w = Math.max(10, width+dw);
-                      self._resize_rect.css({
-                          width: w+'px'
-                      });
-                  }).on('mouseup'+namespace, function(e){
-                    DocumentMouseUp.apply(this, [e]);
-                  });
-            });
-            $(resizeleft).on('mousedown'+this.eventNamespace, function(e){
-                   e.preventDefault();
-                   e.stopPropagation();
-                   pos = {x:e.pageX, y:e.pageY};
-                  $(document).on('mousemove'+namespace, function(e){
-                      dw = pos.x - e.pageX;
-                      w = Math.max(10, width+dw);
-                      if(w>10){
-                         var left = img_rect.left-dw;
-                        }else{
-                         var left = img_rect.left+width-10;
+                resizeright.on('mousedown' + this.eventNamespace, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    pos = {x:e.pageX, y:e.pageY};
+                    $(document).on('mousemove' + namespace, function(e) {
+                        dw = e.pageX - pos.x;
+                        w = Math.max(10, width + dw);
+                        self._resize_rect.css({
+                            width:w + 'px'
+                        });
+                    }).on('mouseup' + namespace, function (e) {
+                            DocumentMouseUp.apply(this, [e]);
+                        });
+                });
+                resizeleft.on('mousedown' + this.eventNamespace, function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    pos = {x:e.pageX, y:e.pageY};
+                    $(document).on('mousemove' + namespace,function(e) {
+                        dw = pos.x - e.pageX;
+                        w = Math.max(10, width + dw);
+                        if (w > 10) {
+                            left = img_rect.left - dw;
+                        } else {
+                            left = img_rect.left + width - 10;
                         }
-                      self._resize_rect.css({
-                          width: w+'px',
-                          left: left
-                      });
-                  }).on('mouseup'+namespace, function(e){
-                    DocumentMouseUp.apply(this, [e]);
-                  });
-            });
-            //Сброс размеров
-            $(defaultlink).on('mousedown'+this.eventNamespace, function(e){
-                self._resize_rect.css({
-                  width: self.element.get(0).naturalWidth,
-                  height: self.element.get(0).naturalHeight
+                        self._resize_rect.css({
+                            width:w + 'px',
+                            left:left
+                        });
+                    }).on('mouseup' + namespace, function(e) {
+                            DocumentMouseUp.apply(this, [e]);
+                        });
                 });
-                $(document).on('mouseup'+namespace, function(e){
-                     DocumentMouseUp.apply(this);
+                //Сброс размеров
+                defaultlink.on('mousedown' + this.eventNamespace, function() {
+                    self._resize_rect.css({
+                        width:self.element.get(0).naturalWidth,
+                        height:self.element.get(0).naturalHeight
+                    });
+                    $(document).on('mouseup' + namespace, function(e) {
+                        DocumentMouseUp.apply(this, [e]);
+                    });
                 });
-            });
-            //Загрузка другого изображения
-            form.on('change','[type=file]', function() {
-                form.ajaxSubmit({
-                    url: '/',
-                    type: 'post',
-                    data: {
-                        object: self.options.object,
-                        direct: self.options.view,
-                        call: 'save',
-                        attrib: {file: this.value}
-                    },
-                    dataType: 'json',
-                    success: function(responseText, statusText, xhr, $form){
-                        if (responseText.out.error){
-                            for(var e in responseText.out.error){
-                                submit_message.css('opacity', 1);
-                                submit_message.css('display', 'block');
-                                submit_message.text(responseText.out.error.value);
-                                submit_message.animate({
-                                   opacity: 0
-                                }, 5000);
+                upload.on('click', function(e){
+                    // Только действие по-умолчанию - открытие диалога выбора файла для загрузки
+                    // Событие не передаётся родительским элементам
+                    e.stopPropagation();
+                });
+                //Загрузка другого изображения
+                form.on('change', '[type=file]', function () {
+                    form.ajaxSubmit({
+                        url:'/',
+                        type:'post',
+                        data:{
+                            object:self.options.object,
+                            direct:self.options.view,
+                            call:'save',
+                            attrib:{file:this.value}
+                        },
+                        dataType:'json',
+                        success:function (responseText, statusText, xhr, $form) {
+                            if (responseText.out.error) {
+                                for (var e in responseText.out.error) {
+                                    submit_message.css('opacity', 1);
+                                    submit_message.css('display', 'block');
+                                    submit_message.text(responseText.out.error.value);
+                                    submit_message.animate({
+                                        opacity:0
+                                    }, 5000);
+                                }
+                            } else {
+                                self.element.attr('src', responseText.out.attrib.file);
                             }
-                        }else{
-                            self.element.attr('src', responseText.out.attrib.file);
                         }
-                    }
-                });
+                    });
 
-            })
+                })
             }
         },
 

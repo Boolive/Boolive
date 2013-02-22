@@ -307,6 +307,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 }
                 $this->_attribs['file'] = $new_file;
             }
+            $this->_attribs['is_default_value'] = 0;
             $this->_changed = true;
             $this->_checked = false;
         }
