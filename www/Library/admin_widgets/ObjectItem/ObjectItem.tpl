@@ -1,5 +1,17 @@
 <div class="ObjectItem" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-p="ObjectItem">
-	<div class="view <?php echo $v['is_virtual']->bool()?'virtual':'';?>" title="<?php echo $v['uri']->escape();?>">
+	<?php
+        $class = '';
+        if($v['is_virtual']->bool()){
+            $class .= ' virtual';
+        }
+        if($v['is_hidden']->bool()){
+            $class .= ' hidden';
+        }
+        if($v['is_delete']->bool()){
+            $class .= ' deleted';
+        }
+    ?>
+    <div class="view<?php echo $class;?>" title="<?php echo $v['uri']->escape();?>">
 		<span class="colright">
             <a class="select" title="Выделить" href="<?php echo $v['uri'];?>"></a>
             <!--<span class="name"><?php //echo $v['name']->escape();?></span>-->

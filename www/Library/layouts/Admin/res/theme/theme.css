@@ -1,22 +1,22 @@
 html, body {
-	margin: 0;
+ margin: 0;
     height: 100%;
-	background-repeat: repeat;
-	background-color: #f5f5f5;
-	}
+ background-repeat: repeat;
+ background-color: #f5f5f5;
+ }
 body,td,th,input {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12pt;
-	color: #000;
-	}
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 12pt;
+ color: #000;
+ }
 /* Ссылки */
 a, a:active{
-	color: #006ad6;
-	outline: none;
-	}
-	a:hover {
-		color: #0063bf;
-		}
+ color: #006ad6;
+ outline: none;
+ }
+ a:hover {
+  color: #0063bf;
+  }
 a.internal{
     cursor: pointer;
     text-decoration: none;
@@ -59,10 +59,6 @@ h2 {
     margin-bottom: 15px;
     color: #444;
     }
-h2 + p{
-    color: #444;
-    font-size: 10pt;
-}
 
         .Delete .info > .name{
             font-size: 17pt;
@@ -176,6 +172,95 @@ h2 + p{
     }
 .btn-icon-delete{
     background: url(img/delete.png) no-repeat center;
+}
+
+.btn-tool{
+    display: inline-block;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 4px;
+    margin: 4px 0 0 0;
+    border-radius: 1px;
+    }
+    .btn-tool:focus, .btn-group:hover > .btn-tool{
+        box-shadow: 0 0 1px 1px #CCC;
+        }
+    .btn-tool[class~="selected"]{
+        box-shadow: 0 0 1px 1px #999, inset 1px 2px 2px #DDD, inset -1px -2px 2px #FFF;
+    }
+.btn-tool-square{
+    width: 16px;
+    }
+
+.btn-group{
+    display: inline-block;
+    position: relative;
+    }
+
+.dropdown-menu{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 70px;
+    padding: 5px 0 0;
+    margin: 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-bottom: 2px solid #999;
+    font-size: 10pt;
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+:hover > .dropdown-menu{
+    display: block;
+}
+.dropdown-menu > li > a {
+    display: block;
+    padding: 3px 5px 3px 28px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333333;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.dropdown-menu > .selected > a,
+.dropdown-menu > .selected > a:hover,
+.dropdown-menu > .selected > a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #499df2;
+    outline: none;
+    background-image: url(img/select-invert.png);
+    background-repeat: no-repeat;
+    background-position: 8px center;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #418dd9;
+}
+
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+    color: #999999;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+    text-decoration: none;
+    cursor: default;
+    background-color: transparent;
 }
 /* Элементы формы */
 .inpt{

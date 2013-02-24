@@ -88,6 +88,7 @@ Version 2.0 preview October, 8 2012
 - new #57 Added widget Delete in admin (VladimirShestakov)
 - new #58 Added widget Add in admin (VladimirShestakov)
 - new #59 Added widget Attributes in admin (VladimirShestakov)
+- new #89: Added objects filter to the Admin Explorer widget (polina Putrolaynen)
 - new: Added package "admin_widgets" for admins widgets (VladimirShestakov)
 - new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)
 - new: Added method Input::url() for create or get current URL (VladimirShestakov)
