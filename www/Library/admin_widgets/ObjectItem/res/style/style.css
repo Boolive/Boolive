@@ -129,6 +129,13 @@
                     color: #8040A0;
 
                     }
+                .ObjectItem .deleted .colmain .col2 .title, .ObjectItem .deleted .colmain .col2 .title:hover {
+                    text-decoration: line-through;
+                    }
+                .ObjectItem .hidden .colmain .col2 .title{
+                    opacity: 0.5;
+                    }
+
                     .ObjectItem .colmain .col2 .title:hover{
                         text-decoration: underline;
                     }

@@ -21,10 +21,11 @@ class ObjectItem extends Widget
         $v['uri'] = $obj->uri();
         $v['is_virtual'] = $obj->isVirtual();
         $v['is_hidden'] = $obj->isHidden();
+        $v['is_delete'] = $obj->isDelete();
         $v['is_file'] = $obj->isFile();
         $v['value_full'] = $obj->value();
         $v['value'] = mb_substr($v['value_full'], 0, 50);
-        if ($v['value']!==$v['value_full']) $v['value'].='...';
+        if ($v['value']!=$v['value_full']) $v['value'].='...';
 
         $v['is_default_value'] = $obj->isDefaultValue();
         return parent::work($v);

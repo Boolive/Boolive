@@ -1,0 +1,10 @@
+.Explorer{
+
+    }
+    .Explorer .view-filter-group{
+        float: right;
+        margin-right: 30px;
+        }
+        .Explorer .view-filter{
+              background-image: url('img/funnel.png');
+        }

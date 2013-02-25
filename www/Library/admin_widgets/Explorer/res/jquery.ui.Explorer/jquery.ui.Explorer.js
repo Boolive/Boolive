@@ -18,15 +18,20 @@
 
             if (caller.direct == 'children'){
                 if ($.isPlainObject(changes) && ('selected' in changes)){
-                    this.element.find('.selected').removeClass('selected');
+                    this.element.find('.content .selected').removeClass('selected');
                     if (state.selected){
                         var element = this.element;
                         _.each(state.selected, function(s){
-                            element.find('[data-o="'+s+'"]').addClass('selected');
+                            element.find('.content [data-o="'+s+'"]').addClass('selected');
                         });
                     }
                 }
             }
+        },
+
+        call_changeFilter: function(caller, filter){
+            console.log(this.options.object);
+            this.reload({object: this.options.object, filter: filter});
         }
     })
 })(jQuery, _);

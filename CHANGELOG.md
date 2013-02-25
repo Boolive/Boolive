@@ -27,6 +27,7 @@ Version 2.0 work in progress
 - new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
 - new #70: Added Session module (VladimirShestakov)
 - new #72: Multiple selection of objects in the admin explorer. Multiple deleting and selecting for adding. (VladimirShestakov)
+- new #89: Added objects filter to the Admin Explorer widget (polina Putrolaynen)
 - new #91: Multiple selection of text objects in the Richtext editor. (VladimirShestakov)
 - new: Added methods next() and prev() in the Entity (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
