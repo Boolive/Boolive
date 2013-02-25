@@ -9,7 +9,8 @@
 namespace Library\admin_widgets\ParagraphEditor;
 
 use Library\views\Widget\Widget,
-    Boolive\values\Rule;
+    Boolive\values\Rule,
+    Boolive\data\Data;
 
 class ParagraphEditor extends Widget
 {
@@ -172,6 +173,13 @@ class ParagraphEditor extends Widget
         $style = $object->style;
         if ($style->isExist()){
             foreach ($styles as $name => $value){
+                if ($name == 'paragraph-proto'){
+                    $proto = Data::read($value);
+                    if ($proto->isExist() && $proto->is('/Library/content_samples/paragraphs/TextBlock')){
+                        $object->proto($proto);
+                        $object->save();
+                    }
+                }
                 $s = $style->{$name};
                 if ($s->isExist()){
                     $s->value($value);
@@ -223,6 +231,7 @@ class ParagraphEditor extends Widget
         $v['style'] = $obj->style->getStyle();
         $v['value'] = $obj->value();
         $v['uri'] = $obj->uri();
+        $v['proto'] = $obj->proto()? $obj->proto()->id() : null;
         return $v;
     }
 }
