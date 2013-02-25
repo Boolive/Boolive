@@ -99,7 +99,13 @@
          */
         call_getStyle: function(){
             if (this.element.hasClass('selected')){
-                return this.element.css(["margin-left", "margin-right", "text-indent"]);
+                var css = this.element.css(["margin-left", "margin-right", "text-indent", "text-align", "line-height", "font-size"]);
+                if (css['line-height']!='normal'){
+                    css['line-height'] = (parseFloat(css['line-height']) / parseFloat(css['font-size']));
+                }
+                //console.log('LINE HEIGHT: ' + css['line-height']+' FONT SIZE: ' + css['font-size']);
+                //console.log(css['line-height']);
+                return css;
             }
         },
 
