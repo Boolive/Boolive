@@ -41,6 +41,21 @@ class RichTextEditor extends AutoWidgetList
             }
             return null;
         }else{
+            // Типы абзацев
+            $plist = Data::select(array(
+                'from' => array('/Library/content_samples/paragraphs', 1),
+                'where' => array(
+                    array('is', '/Library/content_samples/paragraphs/TextBlock'),
+                    array('attr', 'is_hidden', '=', false)
+                )
+            ));
+            $v['plist'] = array();
+            foreach ($plist as $p){
+                $v['plist'][] = array(
+                    'id' => $p->id(),
+                    'title' => $p->title->isExist()? $p->title->value() : $p->name()
+                );
+            }
             $v['object'] = $this->_input['REQUEST']['object']->uri();
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
             return parent::work($v);

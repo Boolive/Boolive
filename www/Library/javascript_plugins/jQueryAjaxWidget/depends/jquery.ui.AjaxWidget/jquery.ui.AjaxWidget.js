@@ -226,7 +226,7 @@
          * @param data POST данные запроса
          * @param settings Дополнительные парметры ajax запроса и функции обратного вызова
          */
-        load: function(container, append, uri, data, settings){
+        load: function(container, setkind, uri, data, settings){
             var self = this;
             if (_.isFunction(settings)){
                 settings = {success:settings};
@@ -244,12 +244,17 @@
             settings.success = function(result, textStatus, jqXHR){
                 if (!result.links) result.links = [];
                 $.include(result.links, function(){
-                    if (typeof append == 'boolean' && append){
-                        container.append(result.out);
-                    }else{
+                    var reload = container;
+                    if (setkind == 'replace'){
+                        reload = container.parent();
+                        container.replaceWith(result.out);
+                    }else
+                    if (setkind == 'prepend'){
                         container.prepend(result.out);
+                    }else{ //'append'
+                        container.append(result.out);
                     }
-                    $(document).trigger('load-html', [container]);
+                    $(document).trigger('load-html', [reload]);
                     // Обратный вызов при удачном обновлении виджета
                     if (success) success(result, textStatus, jqXHR);
                 });

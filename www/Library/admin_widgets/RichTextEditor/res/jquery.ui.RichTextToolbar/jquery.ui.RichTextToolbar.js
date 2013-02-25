@@ -8,14 +8,16 @@
 
         _model: {
             'text-align': 'inherit',
-            'line-height': 1
+            'line-height': 1,
+            'paragraph-proto': null
         },
         _controls: {
             text_align_left: null,
             text_align_center: null,
             text_align_right: null,
             text_align_justify: null,
-            line_height: null
+            line_height: null,
+            paragraph_proto: null
         },
 
         _changes: null,
@@ -50,6 +52,10 @@
             this._controls.line_height = this.element.find('.line-height-group');
             this._controls.line_height.find('li > a').on('click', function(e){
                 self.set_line_height($(this).data('value'));
+            });
+            this._controls.paragraph_proto = this.element.find('.paragraph-proto-group');
+            this._controls.paragraph_proto.find('li > a').on('click', function(e){
+                self.set_paragraph_proto($(this).data('value'));
             });
 
             this.gettingStyle();
@@ -97,6 +103,17 @@
             }
         },
 
+        /**
+         * Установка прототипа абзацу
+         * @param value
+         */
+        set_paragraph_proto: function(value){
+            if (value != this._model['paragraph-proto']){
+                this._model['paragraph-proto'] = value;
+                this._changes['paragraph-proto'] = true;
+            }
+        },
+
         show_textalign: function(){
             if ('text-align' in this._changes){
                 if (this._model['text-align'] == 'left'){
@@ -127,9 +144,21 @@
             this._controls.line_height.find('a[data-value="'+this._model['line-height']+'"]').parent().addClass('selected');
         },
 
+        show_paragraph_proto: function(){
+            this._controls.paragraph_proto.find('.selected').removeClass('selected');
+            var sel = this._controls.paragraph_proto.find('a[data-value="'+this._model['paragraph-proto']+'"]:first');
+            if (sel.size()){
+                sel.parent().addClass('selected');
+                this._controls.paragraph_proto.find('.paragraph-proto').text(sel.text());
+            }else{
+                this._controls.paragraph_proto.find('.paragraph-proto').text('Элемент');
+            }
+        },
+
         show: function(){
             this.show_textalign();
             this.show_line_height();
+            this.show_paragraph_proto();
         },
 
         call_setStateAfter: function(caller, state, changes){ //after
@@ -144,6 +173,7 @@
                     style = styles[s];
                     this.set_text_align(('text-align' in style)? style['text-align']:null);
                     this.set_line_height(('line-height' in style)? style['line-height']:1);
+                    this.set_paragraph_proto(('paragraph-proto' in style)? style['paragraph-proto']:null);
                 }
                 this.show();
                 this._changes = {};

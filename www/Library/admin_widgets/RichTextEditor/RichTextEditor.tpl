@@ -1,18 +1,12 @@
 <div class="RichTextEditor" data-p="RichTextEditor" data-o="<?=$v['object']?>"  data-v="<?php echo $v['view_uri'];?>">
     <div class="tools" ><div class="body RichTextBG">
         <div class="toolbar" data-p="RichTextToolbar">
-            <div class="btn-group paragraph-type-group">
-                <a class="btn-tool paragraph-type" href="">Обычный</a>
-                <ul class="dropdown-menu paragraph-type-list">
-                    <li class="selected"><a href="" data-value="">Обычный</a></li>
-                    <li><a href="" data-value="">Циата</a></li>
-                    <li><a href="" data-value="">Код</a></li>
-                    <li><a href="" data-value="">Заголовок 1</a></li>
-                    <li><a href="" data-value="">Заголовок 2</a></li>
-                    <li><a href="" data-value="">Заголовок 3</a></li>
-                    <li><a href="" data-value="">Заголовок 4</a></li>
-                    <li><a href="" data-value="">Заголовок 5</a></li>
-                    <li><a href="" data-value="">Заголовок 6</a></li>
+            <div class="btn-group paragraph-proto-group">
+                <a class="btn-tool paragraph-proto" href="">Обычный</a>
+                <ul class="dropdown-menu paragraph-proto-list">
+                    <?php foreach ($v['plist'] as $p):?>
+                    <li><a href="" data-value="<?php echo $p['id'];?>"><?php echo $p['title'];?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <a class="btn-tool btn-tool-square align-left" href=""></a>
