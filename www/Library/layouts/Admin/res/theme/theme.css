@@ -266,7 +266,7 @@ h2 {
 }
 
 .dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus,
+/*.dropdown-menu > li > a:focus,*/
 .dropdown-submenu:hover > a,
 .dropdown-submenu:focus > a {
     color: #ffffff;
@@ -275,7 +275,7 @@ h2 {
 }
 
 .dropdown-menu > .disabled > a,
-.dropdown-menu > .disabled > a:hover,
+/*.dropdown-menu > .disabled > a:hover,*/
 .dropdown-menu > .disabled > a:focus {
     color: #999999;
 }
@@ -285,6 +285,10 @@ h2 {
     text-decoration: none;
     cursor: default;
     background-color: transparent;
+}
+.dropdown-menu.pull-right {
+  right: 0;
+  left: auto;
 }
 /* Элементы формы */
 .inpt{
