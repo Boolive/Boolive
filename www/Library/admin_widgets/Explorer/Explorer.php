@@ -55,17 +55,17 @@ class Explorer extends AutoWidgetList
                 ));
             }
             if ($obj->hidden->value()) {
-                $any[] = array('attr', 'is_hidden', '=', 1);
+                $any[] = array('attr', 'is_hidden', '!=', 0);
             }else{
                 $cond['where'][] = array('attr', 'is_hidden', '=', 0);
             }
             if ($obj->deleted->value()) {
-                $any[] = array('attr', 'is_delete', '=', 1 );
+                $any[] = array('attr', 'is_delete', '!=', 0 );
             }else{
                 $cond['where'][] = array('attr', 'is_delete', '=', 0);
             }
             if ($obj->virtual->value()) {
-                $any[] = array('attr', 'is_virtual', '=', 1);
+                $any[] = array('attr', 'is_virtual', '!=', 0);
             }else{
                 $cond['where'][] = array('attr', 'is_virtual', '=', 0);
             }
