@@ -322,6 +322,10 @@
                 // Установка стилей подчиенных (сами определят кому)
                 this.callChildren('setStyle', [style]);
             }
+        },
+
+        call_reloadChild: function(caller, data, child){
+            this.load(child.element, 'replace', this.options.view+'/switch_views', data);
         }
     })
 })(jQuery, _);

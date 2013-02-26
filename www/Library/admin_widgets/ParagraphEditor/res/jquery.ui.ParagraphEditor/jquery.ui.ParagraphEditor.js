@@ -3,9 +3,12 @@
  * Query UI widget
  * Copyright 2013 (C) Boolive
  */
-(function($, _, document) {
+(function($, _, document, undefined) {
     $.widget("boolive.ParagraphEditor", $.boolive.AjaxWidget, {
 
+        options: {
+            oject_proto: undefined // Идентификатор отображаемого объекта
+        },
         _value: '',
         _is_change: false,
 
@@ -16,7 +19,10 @@
 //            if (this.element.text()=='1'){
 //                this.element.context.childNodes[0].textContent = '1';
 //            }
-            // начальное значение для сверки изменений
+            // Прототип отображаемого объекта
+            if (!this.options.oject_proto){
+                this.options.oject_proto = this.element.attr('data-o-proto');
+            }
             this._value = self.element.html();
 
             this.element.on('click', function(e){
@@ -99,7 +105,14 @@
          */
         call_getStyle: function(){
             if (this.element.hasClass('selected')){
-                return this.element.css(["margin-left", "margin-right", "text-indent"]);
+                var css = this.element.css(["margin-left", "margin-right", "text-indent", "text-align", "line-height", "font-size"]);
+                if (css['line-height']!='normal'){
+                    css['line-height'] = (parseFloat(css['line-height']) / parseFloat(css['font-size']));
+                }
+                css['paragraph-proto'] = this.options.oject_proto;
+                //console.log('LINE HEIGHT: ' + css['line-height']+' FONT SIZE: ' + css['font-size']);
+                //console.log(css['line-height']);
+                return css;
             }
         },
 
@@ -110,11 +123,14 @@
          */
         call_setStyle: function(caller, style){
             if (this.element.hasClass('selected')){
+                var self = this;
                 if (!$.isEmptyObject(style)){
                     this.element.css(style);
                     this.callServer('saveStyle', {
                         object: this.options.object,
                         saveStyle: style
+                    }, function(){
+                        self.callParents('reloadChild', [{object:self.options.object}, self]);
                     });
                 }
             }

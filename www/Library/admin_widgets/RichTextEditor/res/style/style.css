@@ -36,8 +36,9 @@
         min-height: 800px;
         background-color: #FFF;
         outline: none;
-        border: 1px solid #CCCCCC;
-        box-shadow: /*0px 0px 1px 1px #e8e8e8, */1px 2px 3px 0 #e0e0e0/* , 0px 0px 300px 300px #F6F6F6*/;
+        /*border: 1px solid #CCCCCC;*/
+        overflow: hidden;
+        box-shadow: /*0px 0px 1px 1px #e8e8e8, */inset 0 0 0px 1px #CCC, 1px 2px 3px 0 #e0e0e0/* , 0px 0px 300px 300px #F6F6F6*/;
         }
     .RichTextEditor > .content > *{
         border: 1px dotted transparent;
@@ -224,3 +225,20 @@
                 padding-left: 10px;
                 cursor: e-resize;
                 }
+
+
+    .align-left{
+        background-image: url(img/text-align-left.png);
+        }
+    .align-center{
+        background-image: url(img/text-align-center.png);
+        }
+    .align-right{
+        background-image: url(img/text-align-right.png);
+        }
+    .align-justify{
+        background-image: url(img/text-align-justify.png);
+        }
+    .line-height{
+        background-image: url(img/line-height.png);
+        }
