@@ -37,7 +37,7 @@ class SwitchViews extends Widget
     public function work($v = array())
     {
         $case = $this->getCase($this->_commands, $this->_input_child);
-        if ($v['object'] = $case->start($this->_commands, $this->_input_child)){
+        if ($case && ($v['object'] = $case->start($this->_commands, $this->_input_child))){
             $this->_input_child['previous'] = true;
             return parent::work($v);
         }
