@@ -1225,7 +1225,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 return !$this->verify($cond[1]);
             // Сравнение атрибута
             case 'attr':
-                $value = $this{$cond[1]}();
+                $value = $this->{$cond[1]}();
                 switch ($cond[2]){
                     case '=': return $value == $cond[3];
                     case '<': return $value < $cond[3];
