@@ -25,6 +25,10 @@ class SwitchCase extends View
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity(array('is', $this->value()))),
+                            Rule::entity(array('is', $this->value()))
+                        )->required(),
                         'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
                     )
                 )

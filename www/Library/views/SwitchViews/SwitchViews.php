@@ -36,7 +36,7 @@ class SwitchViews extends Widget
 
     public function work($v = array())
     {
-        $case = $this->getCaseFor($this->_input['REQUEST']['object']);
+        $case = $this->getCase($this->_commands, $this->_input_child);
         if ($v['object'] = $case->start($this->_commands, $this->_input_child)){
             $this->_input_child['previous'] = true;
             return parent::work($v);
@@ -59,52 +59,17 @@ class SwitchViews extends Widget
     }
 
     /**
-     * Возвращает вариант отображения для указанных объектов (объекта)
-     * Если передан массив объектов, то выбирается вариант, подходящий для всех объектов
-     * @param array | \Boolive\data\Entity $objects Объекты для которых выбрать вариант отображения
-     * @return \Boolive\data\Entity | null Вариант отображения (обычно виджет) или null
+     * Возвращает вариант отображения в соответсвии с указанными входящими данными
+     * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих им видах
+     * @param mixed $input Входящие данные
+     * @return \Library\views\SwitchCase\SwitchCase|null Вариант отображения (обычно виджет) или null
      */
-    public function getCaseFor($objects)
+    public function getCase($commands, $input)
     {
-        if (!is_array($objects)) $objects = array($objects);
-        $cnt_obj = count($objects);
         $cases = $this->getCases();
-        for ($i_obj = 0; $i_obj < $cnt_obj; $i_obj++){
-            $case = null;
-            $i_case = 0;
-            $cases = array_values($cases);
-            $cnt_case = count($cases);
-            // Перебор всех вариантов если объектов более одного.
-            // Если объект один, то поиск до первого подходящего варианта
-            while ($i_case < $cnt_case && (!$case || $cnt_obj != 1)){
-                // Проверка варианта
-                if ($cases[$i_case] instanceof \Library\views\SwitchCase\SwitchCase){
-                    $uri = $cases[$i_case]->value();
-                    if ($uri == 'all'){
-                        $case = $cases[$i_case];
-                    }else
-                    {
-                        $obj = $objects[$i_obj];
-                        while ($obj && !$case){
-                            if ($obj->id() == $uri || $obj->uri() == $uri){
-                                $case = $cases[$i_case];
-                            }else{
-                                $obj = $obj->proto();
-                            }
-                        }
-                    }
-//                    if ($objects[$i_obj]->is($uri)){
-//                        $case = $cases[$i_case];
-//                    }
-                }
-                if (!$case){
-                    unset($cases[$i_case]);
-                    $i_case++;
-                }else{
-                    $i_case++;
-                }
-            }
+        foreach ($cases as $case){
+            if ($case instanceof \Library\views\SwitchCase\SwitchCase && $case->canWork($commands, $input)) return $case;
         }
-        return array_shift($cases);
+        return null;
     }
 }

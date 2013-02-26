@@ -28,7 +28,7 @@ class ProgramsMenu extends Widget
 
     public function work($v = array())
     {
-        $case = $this->programs->linked()->switch_views->getCaseFor($this->_input['REQUEST']['object']);
+        $case = $this->programs->linked()->switch_views->getCase($this->_commands, $this->_input);
         $programs = $case->find();
         $c = new \Boolive\commands\Commands();
         $v['items'] = array();

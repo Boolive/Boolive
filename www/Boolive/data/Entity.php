@@ -1293,6 +1293,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function is($proto)
     {
+        if ($proto == 'all') return true;
         if (!$proto instanceof Entity){
             if ($proto == $this->uri() || $proto == $this->id()) return true;
             $proto = Data::read($proto);
@@ -1321,6 +1322,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function of($object)
     {
+        if ($object == 'all') return true;
         if (!$object instanceof Entity){
             if ($object == $this->uri() || $object == $this->id()) return true;
             $$object = Data::read($object);
