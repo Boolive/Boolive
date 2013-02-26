@@ -1,0 +1,17 @@
+.Restore{
+    /*position: absolute;*/
+    width: 100%;
+    height: 100%;
+	}
+    .Restore .main{
+        width: 100%;
+        }
+    .Restore .bottom{
+        height: 100px;
+        width: 100%;
+
+        }
+	.Restore .btn {
+        float: left;
+        margin-right: 0;
+		}
