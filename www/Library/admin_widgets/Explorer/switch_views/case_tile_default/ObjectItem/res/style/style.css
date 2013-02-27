@@ -96,6 +96,7 @@
             }
             .ObjectItem.tile .view .info > *{
                 display: inline-block;
+                vertical-align: top;
                 float: none;
                 margin: 0;
                 padding: 0;
