@@ -1,5 +1,9 @@
 {
     "proto": "/Library/views/SwitchCase",
     "value": null,
-    "order": 10
+    "order": 10,
+    "children":{
+        "title": "Списковый вариант отображения"
+    }
+
 }

@@ -1,10 +1,27 @@
 .Explorer{
 
     }
-    .Explorer .view-filter-group{
-        float: right;
+    .Explorer .content{
+        padding-top: 0;
+    }
+    .Explorer .toolbar{
+        margin-left: 30px;
         margin-right: 30px;
         }
-        .Explorer .view-filter{
+        .Explorer .toolbar .view-filter{
               background-image: url('img/funnel.png');
         }
+        .Explorer .toolbar .view-kind-group [data-view-kind="tile"]{
+                  background-image: url('img/tile.png');
+            }
+        .Explorer .toolbar .view-kind-group li [data-view-kind="tile"]:hover ,
+        .Explorer .toolbar .view-kind-group .selected [data-view-kind="tile"]{
+                  background-image: url('img/tile-white.png');
+            }
+        .Explorer .toolbar .view-kind-group [data-view-kind="list"]{
+                  background-image: url('img/list.png');
+            }
+        .Explorer .toolbar .view-kind-group li [data-view-kind="list"]:hover ,
+        .Explorer .toolbar .view-kind-group .selected [data-view-kind="list"]{
+                  background-image: url('img/list-white.png');
+            }

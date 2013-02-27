@@ -130,7 +130,9 @@
                         object: this.options.object,
                         saveStyle: style
                     }, function(){
-                        self.callParents('reloadChild', [{object:self.options.object}, self]);
+                        if ('paragraph-proto' in style){
+                            self.callParents('reloadChild', [{object:self.options.object}, self]);
+                        }
                     });
                 }
             }
