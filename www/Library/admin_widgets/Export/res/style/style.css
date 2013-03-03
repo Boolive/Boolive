@@ -1,0 +1,17 @@
+.Export{
+    /*position: absolute;*/
+    width: 100%;
+    height: 100%;
+	}
+    .Export .main{
+        width: 100%;
+        }
+    .Export .bottom{
+        height: 100px;
+        width: 100%;
+
+        }
+	.Export .btn {
+        float: left;
+        margin-right: 0;
+		}
