@@ -9,7 +9,6 @@
         </ul>
     </div>
 	<div class="content">
-<!--        <h1>--><?php //echo $v['head'];?><!--</h1>-->
         <br>
         <?php
             $list = $v['view']->arrays(\Boolive\values\Rule::string());
