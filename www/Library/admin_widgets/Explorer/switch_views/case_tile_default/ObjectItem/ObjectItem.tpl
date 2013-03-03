@@ -20,7 +20,7 @@
                 $s = mb_substr($s, 0, $pos);
 
             }
-            $width = round((mb_strlen($s)*18)/50)*50;
+            $width = round((mb_strlen($s)*18)/50)*50+13;
             echo '<span style="min-width:'.$width.'px;">'.$s.'</span>';
             if (!empty($s2)) echo '<span class="mini">'.$s2.'</span>';
             ?>
