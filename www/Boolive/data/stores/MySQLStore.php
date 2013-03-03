@@ -408,6 +408,15 @@ class MySQLStore extends Entity
                     $q->execute();
                 }
 
+                // Если был виртуальным, то отмена виртуальности у родителей и прототипов
+                if ((!$entity->isExist() && !$attr['is_virtual']) || (!empty($current['is_virtual']) && !$attr['is_virtual'])){
+                    $q = $this->db->prepare('
+                        UPDATE objects, trees SET is_virtual = 0
+                        WHERE objects.id = trees.parent_id AND trees.object_id = ? AND trees.type IN (0,1,3) AND is_virtual
+                    ');
+                    $q->execute(array($attr['id']));
+                }
+
                 // Обновления наследников
                 if (!empty($current)){
                     // Если изменился is_default_children на false, то удалить виртуальных у себя и наследников
@@ -478,15 +487,6 @@ class MySQLStore extends Entity
                 }else
                 if (!empty($current) && ($attr['parent']!=$current['parent'] || $attr['proto']!=$current['proto'])){
                     $this->makeTree($attr['id'], $attr['parent'], $attr['proto'], true);
-                }
-
-                // Если был виртуальным, то отмена виртуальности у родителей и прототипов
-                if ((!$entity->isExist() && !$attr['is_virtual']) || (!empty($current['is_virtual']) && !$attr['is_virtual'])){
-                    $q = $this->db->prepare('
-                        UPDATE objects, trees SET is_virtual = 0
-                        WHERE objects.id = trees.parent_id AND trees.object_id = ? AND trees.type IN (0,1) AND is_virtual
-                    ');
-                    $q->execute(array($attr['id']));
                 }
 
                 //trace(array($current['order'], $attr['order']));

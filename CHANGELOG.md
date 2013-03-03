@@ -26,6 +26,7 @@ Version 2.0 work in progress
 - new #64: Added the top ruler in the RichText editor (VladimirShestakov)
 - new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
 - new #70: Added Session module (VladimirShestakov)
+- new #76: Drag-and-drop ordering of objects  (polina Putrolaynen)
 - new #72: Multiple selection of objects in the admin explorer. Multiple deleting and selecting for adding. (VladimirShestakov)
 - new #79: Added view "tile" for the browser admin (VladimirShestakov)
 - new #89: Added objects filter to the Admin Explorer widget (polina Putrolaynen)
