@@ -22,9 +22,7 @@
             /*background-color: #F6F6F6;*/
         }
         .RichTextEditor .tools .toolbar{
-            height: 32px;
-            padding: 5px 0;
-            clear: both;
+
         }
         .RichTextEditor .save{
             float: right;

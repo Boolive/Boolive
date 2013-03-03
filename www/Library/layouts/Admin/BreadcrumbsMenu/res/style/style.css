@@ -90,13 +90,13 @@
 			z-index: 101;
 			}
 		.BreadcrumbsMenu ul li:hover a{
-			background-color: #FFF;
+			background-color: #e6f4ff;
 			/*color: #0065c9;*/
 			color: #000;
 
 			}
 			.BreadcrumbsMenu ul li:hover a:after{
-				border-left: 15px solid #FFF;
+				border-left: 15px solid #e6f4ff;
 				}
         .BreadcrumbsMenu ul li:hover a > span{
             max-width: none;

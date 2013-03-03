@@ -1,0 +1,126 @@
+.ObjectItem.tile{
+	display: inline-block;
+    /*border: solid 1px #efefef;*/
+    margin: 5px;
+    padding: 0;
+	position: relative;
+    vertical-align: top;
+    border-radius: 3px;
+    /*width: 24%;*/
+    min-width: 100px;
+    max-width: 800px;
+    overflow: hidden;
+	}
+    .ObjectItem.tile .view,
+    .ObjectItem.tile .view:hover{
+        padding: 15px 20px 15px 15px;
+        margin: 0;
+        display: block;
+        background-color: #EEEEEE;
+        border: 1px solid #EAEAEA;
+        text-overflow: ellipsis;
+        height: 75px;
+        border-radius: 3px;
+        line-height: normal;
+        }
+        .ObjectItem.tile .view.hidden{
+            opacity: 0.4;
+            }
+        .ObjectItem.tile .view.deleted{
+            text-decoration: line-through;
+            /*background-color: #ffdbd9;*/
+            color: #FF4A52
+            }
+            .ObjectItem.tile .view.deleted .title{
+                color: #ff4a52;
+            }
+        .ObjectItem.tile .view.virtual{
+            background-color: #ecccff;
+        }
+        .ObjectItem.tile .view:hover{
+            background-color: rgba(128, 200, 255, 0.3);
+            border-color: rgba(128, 200, 255, 0.31);
+            /*border: solid 1px #E3F1FF;*/
+        }
+        .ObjectItem.tile .view .title{
+            font-size: 22pt;
+            padding: 0;
+            text-decoration: none;
+            }
+            .ObjectItem.tile .view .title:hover > :first-child{
+                text-decoration: underline;
+
+                }
+                .ObjectItem.tile .view .title span{
+                    display: block;
+                    color: #333;
+                    }
+                .ObjectItem.tile .view .title .mini{
+                    font-size: 12pt;
+                    display: block;
+                    color: #666;
+                    }
+                .ObjectItem.tile:hover .view .title > *{
+                    color: #000;
+                    }
+
+		.ObjectItem.tile .view .select{
+			display: block;
+		    position: absolute;
+		    width: 32px;
+		    height: 32px;
+		    right: 0;
+		    bottom: 0;
+			background: url(img/select.png) no-repeat center center;
+			opacity: 0.2;
+			padding: 0;
+            cursor: pointer;
+			}
+			.ObjectItem.tile .view .select:hover{
+				opacity: 1;
+				}
+        .ObjectItem.tile .view .info{
+            display: block;
+		    position: absolute;
+            right: 32px;
+            left: 15px;
+            bottom: 10px;
+            overflow: hidden;
+            font-size: 8pt;
+
+            margin: 0;
+            padding: 0;
+            height: 25px;
+            text-align: left;
+            white-space: nowrap;
+            }
+            .ObjectItem.tile .view .info > *{
+                display: inline-block;
+                vertical-align: top;
+                float: none;
+                margin: 0;
+                padding: 0;
+                color: #999;
+            }
+            .ObjectItem .view .info .default{
+                color: #a481b8;
+                }
+
+.ObjectItem.selected.tile .view{
+    background-color: rgba(97, 176, 255, 0.9);
+    border-color: rgba(97, 176, 255, 0.91);
+    }
+
+    .ObjectItem.selected.tile .view .title *{
+        color: #FFF;
+        }
+    .ObjectItem.selected.tile .view .select{
+        background: url(img/select-invert.png) no-repeat center center;
+        opacity: 0.9;
+        }
+        .ObjectItem.selected.tile .view .select:hover{
+            opacity: 1;
+            }
+    .ObjectItem.selected.tile .view .info{
+        color: #FFF;
+    }

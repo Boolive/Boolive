@@ -1225,7 +1225,27 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 return !$this->verify($cond[1]);
             // Сравнение атрибута
             case 'attr':
-                $value = $this->{$cond[1]}();
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value'))){
+                    $value = $this->{$cond[1]}();
+                }else
+                if ($cond[1] == 'is_hidden'){
+                    $value = $this->isHidden();
+                }else
+                if ($cond[1] == 'is_delete'){
+                    $value = $this->isDelete();
+                }else
+                if ($cond[1] == 'is_file'){
+                    $value = $this->isFile();
+                }else
+                if ($cond[1] == 'is_link'){
+                    $value = $this->isLink();
+                }else
+                if ($cond[1] == 'is_history'){
+                    $value = $this->isHistory();
+                }else
+                if ($cond[1] == 'is_virtual'){
+                    $value = $this->isVirtual();
+                }
                 switch ($cond[2]){
                     case '=': return $value == $cond[3];
                     case '<': return $value < $cond[3];
@@ -1293,6 +1313,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function is($proto)
     {
+        if ($proto == 'all') return true;
         if (!$proto instanceof Entity){
             if ($proto == $this->uri() || $proto == $this->id()) return true;
             $proto = Data::read($proto);
@@ -1321,6 +1342,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function of($object)
     {
+        if ($object == 'all') return true;
         if (!$object instanceof Entity){
             if ($object == $this->uri() || $object == $this->id()) return true;
             $$object = Data::read($object);

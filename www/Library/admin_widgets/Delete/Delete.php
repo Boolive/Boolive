@@ -16,8 +16,8 @@ class Delete extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('attr','isDelete','=',0))),
-                            Rule::entity(array('attr','isDelete','=',0))
+                            Rule::arrays(Rule::entity(array('attr','is_delete','=',0))),
+                            Rule::entity(array('attr','is_delete','=',0))
                         )->required(),
 //                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),

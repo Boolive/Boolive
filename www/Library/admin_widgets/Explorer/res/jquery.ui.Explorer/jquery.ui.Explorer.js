@@ -52,6 +52,10 @@
 
         call_changeFilter: function(caller, filter){
             this.reload({object: this.options.object, filter: filter});
+        },
+
+        call_changeViewKind: function(caller, kind_name){
+            this.reload({object: this.options.object, view_kind: kind_name});
         }
     })
 })(jQuery, _);

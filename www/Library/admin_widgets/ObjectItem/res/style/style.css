@@ -25,7 +25,7 @@
 			    border-bottom: 1px solid #d2e8fa;
                 }
 
-		.ObjectItem .view .colright {
+		.ObjectItem .view .info {
 			color: #999;
 			margin: 0 0 0 200px;
 			padding: 0 0 0 5px;
@@ -36,7 +36,7 @@
 			height: 38px;
 			/*width: 285px;*/
 			}
-			.ObjectItem .view .colright > *{
+			.ObjectItem .view .info > *{
 				margin: 0px 5px;
 				/*height: 24px;
 				padding: 10px 0 0px 0;*/
@@ -48,7 +48,7 @@
                 overflow: hidden;
                 cursor: default;
 				}
-        .ObjectItem .view .colright .name{
+        .ObjectItem .view .info .name{
             color: #AAA;
             font-size: 8pt;
             /*font-style: italic;*/
@@ -56,31 +56,31 @@
             padding: 0px 0px;
 
             }
-        .ObjectItem .view .colright  .value{
+        .ObjectItem .view .info  .value{
             /*max-width: 200px;*/
             color: #666;
             height: auto;
             word-wrap:break-word;
             }
-        .ObjectItem .view .colright .default{
+        .ObjectItem .view .info .default{
             color: #8040A0;
             }
-        .ObjectItem .view .colright .file{
+        .ObjectItem .view .info .file{
             width: 14px;
             margin: 0;
             background: url(img/file.png) no-repeat center center;
             opacity: 0.6;
             }
-		.ObjectItem .view .colright .select{
+		.ObjectItem .view .info .select{
 			margin: 0;
-			width: 32px;
+			width: 28px;
 			text-align: center;
 			background: url(img/select.png) no-repeat center center;
 			opacity: 0.1;
 			padding: 0;
             cursor: pointer;
 			}
-			.ObjectItem .view .colright .select:hover{
+			.ObjectItem .view .info .select:hover{
 				opacity: 1;
 				}
 
@@ -170,18 +170,18 @@
     .ObjectItem[class~="selected"] .view .colmain .col2 *,
     .ObjectItem[class~="selected"] .view .colmain .col2 .title,
     .ObjectItem[class~="selected"] .view .colmain .col2 .name,
-    .ObjectItem[class~="selected"] .view .colright .value,
-    .ObjectItem[class~="selected"] .view .colright .default{
+    .ObjectItem[class~="selected"] .view .info .value,
+    .ObjectItem[class~="selected"] .view .info .default{
         color: #FFF;
         }
-    .ObjectItem[class~="selected"] .view .colright .select{
+    .ObjectItem[class~="selected"] .view .info .select{
         background: url(img/select-invert.png) no-repeat center center;
         opacity: 0.9;
         }
-        .ObjectItem[class~="selected"] .view .colright .select:hover{
+        .ObjectItem[class~="selected"] .view .info .select:hover{
             opacity: 1;
             }
-    .ObjectItem[class~="selected"] .view .colright .file{
+    .ObjectItem[class~="selected"] .view .info .file{
         background: url(img/file-invert.png) no-repeat center center;
         opacity: 0.9;
         }

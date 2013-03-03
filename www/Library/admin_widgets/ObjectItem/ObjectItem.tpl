@@ -12,7 +12,7 @@
         }
     ?>
     <div class="view<?php echo $class;?>" title="<?php echo $v['uri']->escape();?>">
-		<span class="colright">
+		<span class="info">
             <a class="select" title="Выделить" href="<?php echo $v['uri'];?>"></a>
             <!--<span class="name"><?php //echo $v['name']->escape();?></span>-->
             <span class="value <?php echo $v['is_default_value']->bool()?'default':'';?>" title="<?php echo $v['value_full']->escape();?>"><?php echo $v['value']->escape();?></span>
