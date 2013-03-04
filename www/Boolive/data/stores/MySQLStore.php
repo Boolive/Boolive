@@ -202,7 +202,7 @@ class MySQLStore extends Entity
                         $attr['value'] = $attr['file']['name'];
                     }else{
                         $f = File::fileInfo($attr['file']['tmp_name']);
-                        $attr['value'] = ($f['back']?'../':'').$entity->name();
+                        $attr['value'] = ($f['back']?'../':'').$attr['name'];
                         // расширение
                         if (empty($attr['file']['name'])){
                             if ($f['ext']) $attr['value'].='.'.$f['ext'];
@@ -307,9 +307,9 @@ class MySQLStore extends Entity
                     $fname_pf = '';
                 }
 
-                // Если редактирование записи, при этом старая запись имеет файл, а новая нет, то удаляем файл
+                // Если редактирование записи, при этом старая запись имеет файл, а новая нет или загружаетс новый файл, то удаляем файл
                 if (!$add && $attr['is_history'] == $current['is_history']){
-                    if (isset($attr['is_file']) && $attr['is_file']==0 && $current['is_file']==1){
+                    if (isset($attr['is_file']) && ($attr['is_file']==0 && $current['is_file']==1 || isset($attr['file']))){
                         // Удаление файла
                         if ($current['is_history']){
                             $path = $entity->dir(true).'_history_/'.$fname_pf.$current['date'].'_'.$current['value'];
