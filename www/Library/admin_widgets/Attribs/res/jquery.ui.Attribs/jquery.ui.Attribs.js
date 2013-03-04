@@ -104,6 +104,7 @@
 
         submit_btn: null,
         submit_msg: null,
+        form: null,
 
         /**
          * Конструктор виджета
@@ -114,7 +115,7 @@
 
             var self = this;
             // Элемент формы
-            var form = self.element.find('form');
+            var form = this.form = self.element.find('form');
 
             // URI редактируемого объекта
             this.model.object = this.options.object = form.find('[name=object]').val();
@@ -173,6 +174,7 @@
                 }else{
                     form.find('[data-name="is_file"]:first').parent().removeClass('active');
                     form.find('input[name="attrib[is_file]"]:first').val(0);
+                    self.clearFileInputField();
                 }
             })
             .on('change-attrib:order', function(value){
@@ -445,6 +447,11 @@
             // Кнопка сохранения
             this.submit_btn = this.element.find('.submit');
             this.submit_msg = this.element.find('.submit-message');
+        },
+
+        clearFileInputField: function(){
+            var file_input = this.form.find('input[type="file"]:first');
+            file_input.replaceWith(file_input.val('').clone(true));
         },
 
         /**
