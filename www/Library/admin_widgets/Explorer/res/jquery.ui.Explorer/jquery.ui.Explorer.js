@@ -17,6 +17,7 @@
         init_sortable: function(){
             var self = this;
             this.element.find('.content:first').sortable({
+                distance: 15,
                 update: function(event, ui) {
                     var object_uri = {};
                     var next_uri = {}
