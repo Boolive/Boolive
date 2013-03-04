@@ -79,9 +79,8 @@ class Attribs extends Widget
             // Файл
             if (isset($this->_input['FILES']['attrib']['file'])){
                 $obj->file($this->_input['FILES']['attrib']['file']);
-            }else
-            if (empty($attribs['is_file'])){
-                $obj->file(false);
+            }else{
+                $obj->isFile(!empty($attribs['is_file']));
             }
 
             // Прототип

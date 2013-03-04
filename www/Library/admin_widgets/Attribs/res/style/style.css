@@ -93,21 +93,28 @@
                     }
                 .Attribs .item .value .tag:hover{
                     color: #FFF;
-                    background-color: #499df2;
+                    background-color: #4fa7ff;
                     }
-
+                /* Выбранный тег*/
+                .Attribs .item .value .tag.selected{
+                    color: #FFF;
+                    background-color: #418dd9;
+                    }
                 /** Тег значение по умолчанию */
-                .Attribs .item .value .default:hover,
-                .Attribs .item .value .active .default{
+                .Attribs .item .value .default:hover{
+                    background-color: #9f52cc;
+                    color: #FFF;
+                }
+                .Attribs .item .value .default.selected{
                     background-color: #8040A0;
                     color: #FFF;
                     }
                 /* Тег-поле выбора файла*/
-                .Attribs .item .value .file{
+                .Attribs .item .value .fileupload{
                     position: relative;
                     overflow: hidden;
                     }
-                    .Attribs .item .value .file input{
+                    .Attribs .item .value .fileupload input{
                         font-size: 15pt;
                         cursor:pointer;
                         padding: 0;
@@ -119,11 +126,8 @@
                         right:0;
                         filter: alpha(opacity:0);
                         }
-                /* Активный тег*/
-                .Attribs .item .value .active .file{
-                    color: #FFF;
-                    background-color: #418dd9;
-                    }
+
+
         /* Кнопки */
         .Attribs .submits{
             margin: 15px 0 0 0;

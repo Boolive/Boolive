@@ -40,11 +40,12 @@
                     <div class="inpt value">
                         <textarea class="attrib" id="value" name="attrib[value]" rows="5" cols="0" data-name="value"></textarea>
                         <div class="tags">
-                            <div class=""><div title="Загрузить файл" class="tag file" data-name="is_file">Файл
+                            <div title="Загрузить файл" class="tag fileupload">Загрузить
                                 <input type="file" size="1" name="attrib[file]"/>
-                                <input type="hidden" name="attrib[is_file]" value="">
-                            </div></div>
-                            <div class=""><div class="tag default" data-name="is_null">По умолчанию</div></div>
+                            </div>
+                            <div class="tag is_file" data-name="is_file">Файл</div>
+                            <input type="hidden" name="attrib[is_file]" value="">
+                            <div class="tag default" data-name="is_null">По умолчанию</div>
                             <input type="hidden" name="attrib[is_null]" value="">
                         </div>
                     </div>

@@ -4,6 +4,7 @@ Boolive Change Log
 Version 2.0 work in progress
 ----------------------------
 - enh #58: Added selecting other objects for add new (VladimirShestakov)
+- enh #75: Changing the file attribute (is_file) in the Attribute editor (VladimirShestakov)
 - enh #78: Remembering view_name for objects in the admin (VladimirShestakov)
 - enh: Improved Rule::entity() to check object by search condition (VladimirShestakov)
 - enh, new #31: Improved access control. Added role. Accounting access condition in inheritance objects. Updates after changes in Data module  (VladimirShestakov)

@@ -340,10 +340,16 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
 
     /**
      * Признак, является занчение файлом или нет?
+     * @param null|bool $is_file Новое значение, если не null
      * @return bool
      */
-    public function isFile()
+    public function isFile($is_file = null)
     {
+        if (isset($is_file) && (empty($this->_attribs['is_file']) == $is_file)){
+            $this->_attribs['is_file'] = $is_file;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
         return !empty($this->_attribs['is_file']);
     }
 

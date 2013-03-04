@@ -160,19 +160,19 @@
             })
             .on('change-attrib:is_null', function(value){
                 if (value){
-                    form.find('[data-name="is_null"]:first').parent().addClass('active');
+                    form.find('[data-name="is_null"]:first').addClass('selected');
                     form.find('input[name="attrib[is_null]"]:first').val(1);
                 }else{
-                    form.find('[data-name="is_null"]:first').parent().removeClass('active');
+                    form.find('[data-name="is_null"]:first').removeClass('selected');
                     form.find('input[name="attrib[is_null]"]:first').val(0);
                 }
             })
             .on('change-attrib:is_file', function(value){
                 if (value){
-                    form.find('[data-name="is_file"]:first').parent().addClass('active');
+                    form.find('[data-name="is_file"]:first').addClass('selected');
                     form.find('input[name="attrib[is_file]"]:first').val(1);
                 }else{
-                    form.find('[data-name="is_file"]:first').parent().removeClass('active');
+                    form.find('[data-name="is_file"]:first').removeClass('selected');
                     form.find('input[name="attrib[is_file]"]:first').val(0);
                     self.clearFileInputField();
                 }
@@ -273,6 +273,7 @@
                 self.model.set_attrib($(this).attr('data-name'), $(this).val());
             })
             .on('change', '[type=file]', function(e) {
+                form.find('.fileupload:first').addClass('selected');
                 self.model.set_attrib('value', self.getLastParam($(this).val()));
                 self.model.set_attrib('is_file', true);
                 self.model.set_attrib('is_null', false);
@@ -293,10 +294,14 @@
                     self.model.set_attrib('value', self.model.attrib_start.value_null);
                     self.model.set_attrib('is_file', self.model.attrib_start.is_file_null);
                     self.model.set_attrib('is_null', true);
-                    // Обнуление поля выбора файла
-                    var file_input = form.find('input[name="attrib[file]"]');
-                    file_input.replaceWith(file_input.clone(true));
+                }else{
+                    self.model.set_attrib('is_null', false);
                 }
+            })
+            .on('click', '.is_file', function(e){
+                e.preventDefault();
+                self.model.set_attrib('is_null', false);
+                self.model.set_attrib('is_file', !self.model.attrib['is_file']);
             })
             .on('click', '.cancel', function(e){
                 e.preventDefault();
@@ -452,6 +457,7 @@
         clearFileInputField: function(){
             var file_input = this.form.find('input[type="file"]:first');
             file_input.replaceWith(file_input.val('').clone(true));
+            this.form.find('.fileupload:first').removeClass('selected');
         },
 
         /**
