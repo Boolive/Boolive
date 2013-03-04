@@ -10,6 +10,12 @@
         _create: function(){
             var self = this;
             $.boolive.AjaxWidget.prototype._create.call(this);
+            this.init_sortable();
+            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {selected: true});
+        },
+
+        init_sortable: function(){
+            var self = this;
             this.element.find('.content:first').sortable({
                 update: function(event, ui) {
                     var object_uri = {};
@@ -30,7 +36,6 @@
                     });
                 }
             });
-            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {selected: true});
         },
         /**
          * Выделение объекта
@@ -51,11 +56,17 @@
         },
 
         call_changeFilter: function(caller, filter){
-            this.reload({object: this.options.object, filter: filter});
+            var self = this;
+            this.reload({object: this.options.object, filter: filter}, function(){
+                self.init_sortable();
+            });
         },
 
         call_changeViewKind: function(caller, kind_name){
-            this.reload({object: this.options.object, view_kind: kind_name});
+            var self = this;
+            this.reload({object: this.options.object, view_kind: kind_name}, function(){
+                self.init_sortable();
+            });
         }
     })
 })(jQuery, _);
