@@ -10,8 +10,22 @@
         _create: function() {
             $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
+
+            // Идентификатор объекта к которому будет переход (обычно его URI)
+            if (!this.options.link){
+                this.options.link = this.element.attr('data-l');
+            }
             // Вход в объекта
             self.element.find('.title').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                // Сначала выделяем себя
+                self.callParents('setState', [{selected:  self.options.object}]);
+                // Теперь входим
+                self.callParents('setState', [{object:  self.options.link}]);
+            });
+            // Вход в объект-ссылку
+            self.element.find('.prop').click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
                 // Сначала выделяем себя

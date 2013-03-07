@@ -467,10 +467,12 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                     $this->_attribs['is_default_value'] = $proto->id();
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['is_file'] = $proto->isFile();
-                    $this->_changed = true;
-                    $this->_checked = false;
                 }
+            }else{
+                $this->_attribs['is_default_value'] = 0;
             }
+            $this->_changed = true;
+            $this->_checked = false;
         }
         if (!empty($this->_attribs['is_default_value']) && $return_proto){
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его

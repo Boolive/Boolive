@@ -23,6 +23,13 @@ class ObjectItem extends Widget
         $v['is_hidden'] = $obj->isHidden();
         $v['is_delete'] = $obj->isDelete();
         $v['is_file'] = $obj->isFile();
+        $v['link'] = $obj->linked()->uri();
+        if ($v['is_link'] = $obj->isLink()){
+            $v['alt'] = 'Ссылка: '.$v['link'];
+        }else{
+            $v['alt'] = 'Объект: '.$v['link'];
+        }
+
         $v['value_full'] = $obj->value();
         $v['value'] = mb_substr($v['value_full'], 0, 50);
         if ($v['value']!=$v['value_full']) $v['value'].='...';

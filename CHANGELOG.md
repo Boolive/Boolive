@@ -32,6 +32,7 @@ Version 2.0 work in progress
 - new #79: Added view "tile" for the browser admin (VladimirShestakov)
 - new #89: Added objects filter to the Admin Explorer widget (polina Putrolaynen)
 - new #91: Multiple selection of text objects in the Richtext editor (VladimirShestakov)
+- new #95: View linked object in the Explorer (VladimirShestakov)
 - new: Added methods next() and prev() in the Entity (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
 - new: New model of interaction jQuery UI widgets based on AjaxWidget (VladimirShestakov)

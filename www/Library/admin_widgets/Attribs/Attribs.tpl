@@ -118,7 +118,7 @@
                 </div>
                 <div class="col2 item-is_link">
                     <input class="attrib" type="checkbox" id="is_link" name="attrib[is_link]" data-name="is_link" value="1"/>
-                    <label for="is_link">Использовать как ссылку</label>
+                    <label for="is_link">Ссылка</label>
                     <span class="error-message"></span>
                     <span class="description"></span>
                 </div>
@@ -129,7 +129,7 @@
                 </div>
                 <div class="col2 item-overide">
                     <input class="attrib" type="checkbox" id="override" name="attrib[override]" data-name="override" value="1"/>
-                    <label for="override">Наследовать свойства прототипа</label>
+                    <label for="override">Наследует свойства прототипа</label>
                     <span class="error-message"></span>
                 </div>
             </div>
@@ -139,7 +139,7 @@
                 </div>
                 <div class="col2 item-is_logic">
                     <input class="attrib" type="checkbox" id="is_logic" name="attrib[is_logic]" data-name="is_logic" value="1"/>
-                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой классс</label>
+                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Своя логика (php классс)</label>
                     <span class="error-message"></span>
                     <span class="description"></span>
                 </div>

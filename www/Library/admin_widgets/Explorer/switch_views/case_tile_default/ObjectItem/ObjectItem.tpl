@@ -1,4 +1,4 @@
-<div class="ObjectItem tile" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-p="ObjectItem">
+<div class="ObjectItem tile" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-p="ObjectItem">
 	<?php
         $class = '';
         if($v['is_virtual']->bool()){
@@ -10,9 +10,12 @@
         if($v['is_delete']->bool()){
             $class .= ' deleted';
         }
+        if($v['is_link']->bool()){
+            $class .= ' link';
+        }
     ?>
-    <div class="view<?php echo $class;?>" title="<?php echo $v['uri']->escape();?>">
-		<a class="title" href="/admin<?php echo $v['uri'];?>">
+    <div class="view<?php echo $class;?>" title="<?php echo $v['alt']->escape();?>">
+		<div class="title-group">
             <?php
             $s = $v['title']->escape();
             if ($pos = mb_strpos($s, ' ')){
@@ -20,12 +23,13 @@
                 $s = mb_substr($s, 0, $pos);
 
             }
-            $width = round((mb_strlen($s)*18)/50)*50+13;
-            echo '<span style="min-width:'.$width.'px;">'.$s.'</span>';
+            $width = max(118, round((mb_strlen($s)*18+18)/50)*50+18);
+            echo '<a class="title" href="/admin'.$v['link'].'" style="min-width:'.$width.'px;"><span>'.$s.'</span></a>';
             if (!empty($s2)) echo '<span class="mini">'.$s2.'</span>';
             ?>
-        </a>
+        </div>
         <div class="info">
+            <a class="prop" title="Свойства ссылки" href="/admin<?php echo $v['uri'];?>"></a>
             <?php if ($v['is_file']->bool()):?>
                 <span class="file"></span>
             <?php endif;?>

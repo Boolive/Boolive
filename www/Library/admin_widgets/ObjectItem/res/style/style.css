@@ -24,8 +24,57 @@
 			    border-top: 1px solid #d2e8fa;
 			    border-bottom: 1px solid #d2e8fa;
                 }
+        /* Главный блок*/
+        .ObjectItem .main {
+			display: block;
+			overflow: hidden;
+			width: 100%;
+			padding: 0 0;
+			color: #111;
+            height: 38px;
+			}
+			.ObjectItem .main > *{
+				display: inline-block;
+                vertical-align: middle;
+				font-size: 9pt;
+				}
+                .ObjectItem .virtual .main .title{
+                    color: #8040A0;
+                    }
 
-		.ObjectItem .view .info {
+                .ObjectItem .hidden .main .title{
+                    opacity: 0.5;
+                    }
+                .ObjectItem .deleted .main .title{
+                    color: #ff4a52;
+                    text-decoration: line-through;
+                    }
+				.ObjectItem .main .title{
+					padding: 9px 0 9px 10px;
+					font-size: 12pt;
+                    cursor: pointer;
+                    text-decoration: none;
+					}
+                    .ObjectItem .link .main .title:after{
+                        content: '↝';
+                        font-family: "Times New Roman";
+                        line-height: 16px;
+                        color: #0073bf;
+                        margin-left: 3px;
+                        text-decoration: none;
+                        }
+                        .ObjectItem .link .main .title > *{
+                            color: #0073bf;
+                        }
+                    .ObjectItem .main .title > *{
+                        color: #000;
+                        }
+                    .ObjectItem .main .title:hover > *{
+                        text-decoration: underline;
+                        }
+
+        /* Блок информации об объекте */
+		.ObjectItem .info {
 			color: #999;
 			margin: 0 0 0 200px;
 			padding: 0 0 0 5px;
@@ -34,12 +83,9 @@
 			text-align: right;
 			font-size: 10pt;
 			height: 38px;
-			/*width: 285px;*/
 			}
-			.ObjectItem .view .info > *{
+			.ObjectItem .info > *{
 				margin: 0px 5px;
-				/*height: 24px;
-				padding: 10px 0 0px 0;*/
 				display: block;
                 float: right;
                 height: 38px;
@@ -47,141 +93,82 @@
                 text-overflow: ellipsis;
                 overflow: hidden;
                 cursor: default;
+                vertical-align: top;
 				}
-        .ObjectItem .view .info .name{
+        .ObjectItem .info .name{
             color: #AAA;
             font-size: 8pt;
-            /*font-style: italic;*/
             font-family: Verdana;
             padding: 0px 0px;
-
             }
-        .ObjectItem .view .info  .value{
-            /*max-width: 200px;*/
+        .ObjectItem .info  .value{
             color: #666;
             height: auto;
             word-wrap:break-word;
             }
-        .ObjectItem .view .info .default{
+        .ObjectItem .info .default{
             color: #8040A0;
             }
-        .ObjectItem .view .info .file{
+        .ObjectItem .info .file{
             width: 14px;
             margin: 0;
-            background: url(img/file.png) no-repeat center center;
+            background: url(img/file.png) no-repeat center;
             opacity: 0.6;
             }
-		.ObjectItem .view .info .select{
+		.ObjectItem .info .select{
 			margin: 0;
-			width: 28px;
+			width: 24px;
 			text-align: center;
-			background: url(img/select.png) no-repeat center center;
-			opacity: 0.1;
+			background: url(img/select.png) no-repeat center;
+			opacity: 0.2;
 			padding: 0;
             cursor: pointer;
 			}
-			.ObjectItem .view .info .select:hover{
+			.ObjectItem .info .select:hover{
 				opacity: 1;
 				}
-
-		.ObjectItem .view .colmain {
-			display: block;
-			overflow: hidden;
-			width: 100%;
-			padding: 0 0;
-			text-decoration: none;
-			color: #111;
-			}
-			.ObjectItem .view .colmain .col1 {
-				left: 0;
-				overflow: hidden;
-				padding: 0 8px;
-				position: absolute;
-				width: 32px;
-				height: 38px;
-			}
-			.ObjectItem .view .colmain .col2 {
-				overflow: hidden;
-				height: 38px;
-				display: block;
-				/*padding: 0 8px 0 8px;*/
-			}
-			.ObjectItem .view .colmain .col2 > *{
-				display: inline-block;
-				/*float: left;
-				overflow: hidden;
-				margin-right: 10px;
-				height: 24px;
-				padding: 9px 0 1px 0;*/
-				font-size: 9pt;
-				}
-				.ObjectItem .view .colmain .col2 .title{
-
-					/*max-width: 300px;
-					text-overflow: ellipsis;*/
-					padding: 9px 0 2px 10px;
-					font-size: 12pt;
-                    color: #000;
-                    cursor: pointer;
-                    text-decoration: none;
-					}
-                .ObjectItem .virtual .colmain .col2 .title{
-                    color: #8040A0;
-
-                    }
-                .ObjectItem .deleted .colmain .col2 .title, .ObjectItem .deleted .colmain .col2 .title:hover {
-                    text-decoration: line-through;
-                    }
-                .ObjectItem .hidden .colmain .col2 .title{
-                    opacity: 0.5;
-                    }
-
-                    .ObjectItem .colmain .col2 .title:hover{
-                        text-decoration: underline;
-                    }
-                .ObjectItem .view .colmain .col2 .name{
-					color: #AAA;
-                    font-size: 8pt;
-                    /*font-style: italic;*/
-                    font-family: Verdana;
-					}
-				.ObjectItem .view .colmain .col2 .value{
-
-					}
-				.ObjectItem .view .colmain .col2 .state{
-					font-size: 9pt;
-					/*color: #CCC;*/
-					}
-				.ObjectItem .view .colmain .col2 .lang{
-					font-size: 9pt;
-					/*color: #CCC;*/
-					}
-
-.ObjectItem[class~="selected"]{
+        /* Свойства */
+        .ObjectItem .view .info .prop{
+            display: none;
+            width: 24px;
+            margin: 0;
+            background: url(img/prop.png) no-repeat center;
+            opacity: 0.3;
+            padding: 0;
+            cursor: pointer;
+            }
+            .ObjectItem .view .info .prop:hover{
+                opacity: 1;
+                }
+            .ObjectItem .view.link .info .prop{
+                display: block;
+            }
+/*Если выделен */
+.ObjectItem.selected{
 	color: #FFF;
-    margin: -1px 0 0 0px;
+    margin: -1px 0 0 0;
     }
-    .ObjectItem[class~="selected"] .view, .ObjectItem[class~="selected"] .view:hover{
+    .ObjectItem.selected .view, .ObjectItem.selected .view:hover{
         background-color: #61B0FF;
         border-top: 1px solid #FFF;
         border-bottom: 1px solid #FFF;
+        }
+    .ObjectItem.selected .main .title *,
+    .ObjectItem.selected .info .value,
+    .ObjectItem.selected .info .default{
         color: #FFF;
         }
-    .ObjectItem[class~="selected"] .view .colmain .col2 *,
-    .ObjectItem[class~="selected"] .view .colmain .col2 .title,
-    .ObjectItem[class~="selected"] .view .colmain .col2 .name,
-    .ObjectItem[class~="selected"] .view .info .value,
-    .ObjectItem[class~="selected"] .view .info .default{
-        color: #FFF;
+        .ObjectItem.selected .main .title:after{
+            color: #FFF;
         }
-    .ObjectItem[class~="selected"] .view .info .select{
-        background: url(img/select-invert.png) no-repeat center center;
+    .ObjectItem.selected .info .select{
+        background: url(img/select-invert.png) no-repeat center;
         opacity: 0.9;
         }
-        .ObjectItem[class~="selected"] .view .info .select:hover{
+        .ObjectItem.selected .info .select:hover{
             opacity: 1;
             }
-    .ObjectItem[class~="selected"] .view .info .file{
-        background: url(img/file-invert.png) no-repeat center center;
+    .ObjectItem.selected .info .file{
+        background: url(img/file-invert.png) no-repeat center;
         opacity: 0.9;
         }
