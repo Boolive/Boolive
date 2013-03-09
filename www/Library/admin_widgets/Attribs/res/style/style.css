@@ -5,6 +5,7 @@
     .Attribs .item{
         margin: 1px 0;
         min-height: 29px;
+        line-height: 1.15;
         }
         /*Колонки*/
         .Attribs .item > .col1{
@@ -26,7 +27,7 @@
         .Attribs .item .description{
             font-size: 10pt;
             color: #999;
-            display: inline-block;
+            /*display: inline-block;*/
             }
 
         .Attribs .item > .item-date{
@@ -126,7 +127,12 @@
                         right:0;
                         filter: alpha(opacity:0);
                         }
-
+                .Attribs .item .class_name,
+                .Attribs .item .class_name_self{
+                    /*color: #555;*/
+                    /*font-size: 10pt;*/
+                    /*font-family: courier;*/
+                }
 
         /* Кнопки */
         .Attribs .submits{

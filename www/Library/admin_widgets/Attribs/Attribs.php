@@ -97,6 +97,8 @@ class Attribs extends Widget
             if (isset($attribs['order'])) $obj->order($attribs['order']);
 
             // Признаки
+            $c = $obj->isDefaultClass();
+            $class_changed = (bool)$obj->isDefaultClass() != empty($attribs['is_logic']);
             $obj->isDefaultClass(empty($attribs['is_logic']));
             $obj->isHidden(!empty($attribs['is_hidden']));
             $obj->isLink(!empty($attribs['is_link']));
@@ -117,6 +119,9 @@ class Attribs extends Widget
                 }
                 $v['error']['_other_'] = $error->getUserMessage(true);
             }else{
+                if ($class_changed){
+                    $this->_input['REQUEST']['object'] = Data::read($obj->id(), $obj->owner(), $obj->lang(), 0, true, false);
+                }
                 $v['attrib'] = $this->callLoad();
             }
         }
@@ -151,6 +156,8 @@ class Attribs extends Widget
             'is_hidden' => (bool)$obj->isHidden(),
             'is_link' => (bool)$obj->isLink(),
             'override' => (bool)$obj->isDefaultChildren(),
+            'class' => get_class($obj),
+            'class_self' => trim(str_replace('/', '\\', $obj->dir().$obj->name()), '\\')
         );
         return $v;
     }

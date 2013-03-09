@@ -310,6 +310,10 @@ h2 {
     border-radius: 3px;
     display: inline-block;
     position: relative;
+    outline: none;
+    }
+    .inpt *{
+        outline: none;
     }
 
 label{
@@ -331,11 +335,11 @@ label{
     font-size: 9pt;
     /*margin: 0 5px;*/
     display: inline-block;
-    background-color: #F7F7F7;
-    color: #999;
-    padding: 2px 5px;
+    text-shadow: 1px 1px 0px #999;
+    background-color: #AAA;
+    color: #FFF;
+    padding: 1px 5px 2px 5px;
     border-radius: 3px;
-    border: 1px solid #EEEEEE;
 }
 .input-pfx{
     font-size: 9pt;

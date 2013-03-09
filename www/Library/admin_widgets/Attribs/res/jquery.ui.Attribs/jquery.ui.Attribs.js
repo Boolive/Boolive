@@ -24,7 +24,7 @@
              * @param attribs
              */
             init: function(attribs){
-                this.attrib = $.extend({}, attribs);
+                this.attrib = _.clone(attribs);
                 this.attrib_start = attribs;
                 for (var name in this.attrib){
                     this.trigger('change-attrib:'+name, this.attrib[name]);
@@ -216,6 +216,12 @@
             .on('change-attrib:is_logic', function(value){
                 form.find('input[name="attrib[is_logic]"]:first').prop("checked", value);
             })
+            .on('change-attrib:class', function(value){
+                form.find('.class_name').text(value);
+            })
+            .on('change-attrib:class_self', function(value){
+                form.find('.class_name_self').text(value);
+            })
             .on('change-attrib:is_hidden', function(value){
                 form.find('input[name="attrib[is_hidden]"]:first').prop("checked", value);
             })
@@ -351,6 +357,7 @@
                                 }
                                 self.model.set_process('start', false);
                                 self.model.init(responseText.out.attrib);
+
                             }
                         }
                     });
