@@ -3,7 +3,9 @@
         <div class="window"><?php echo $v->Programs->string();?></div>
     </div>
     <div class="top">
+        <?php echo $v->MenuAuth->string();?>
         <?php echo $v->BreadcrumbsMenu->string();?>
+
     </div>
     <div class="left">
         <!--<div class="shadow"></div>-->

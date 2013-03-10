@@ -1,0 +1,79 @@
+.MenuAuth{
+    float: right;
+    position: relative;
+    display: block;
+    height: 100%;
+    padding-right: 5px;
+    box-shadow: inset 0 -1px 0 0 #E5E5E5, inset 0 -3px 3px -2px #E5E5E5;
+    -webkit-box-shadow: inset 0 -1px 0 0 #E5E5E5, inset 0 -3px 3px -2px #E5E5E5;
+    background-color: #F5F5F5;
+    z-index: 1000;
+    }
+    .MenuAuth ul.buttons {
+        margin: 0;
+        width: 100%;
+        }
+        .MenuAuth ul.buttons li{
+            display: list-item;
+            float: left;
+            list-style: none;
+            margin: 0 0;
+            vertical-align: middle;
+            padding-left: 10px;
+            padding-right: 10px;
+            height: 32px;
+            background-color: #f9f9f9;
+            background-repeat: no-repeat;
+            background-position: 9px 9px;
+            box-shadow: inset 1px -1px 0px 0px #DCDCDC, inset 0px -5px 6px -5px #DDDDDD;
+            -webkit-box-shadow: inset 1px -1px 0px 0px #DCDCDC, inset 0px -5px 6px -5px #DDDDDD;
+            }
+        .MenuAuth ul.buttons li:hover{
+            background-color: #fcfcfc;
+            }
+        .MenuAuth ul.buttons li.active{
+            background-color: #ffffff;
+            box-shadow: inset 1px 0px 0px 0px #DCDCDC, inset 0px 0px 6px -5px #DDDDDD;
+            -webkit-box-shadow: inset 1px 0px 0px 0px #DCDCDC, inset 0px 0px 6px -5px #DDDDDD;
+            }
+            .MenuAuth ul.buttons li a{
+                    margin: 0;
+                    vertical-align: middle;
+                    font-size: 10pt;
+                    text-decoration: none;
+                    color: #555;
+                    display: block;
+                    padding: 8px 4px 4px 4px;
+                    }
+                .MenuAuth ul.buttons li a.userlink{
+                    background-image: url('img/user.png');
+                    background-repeat: no-repeat;
+                    background-position: 0px 10px;
+                    padding-left: 15px;
+                    }
+                .MenuAuth ul.buttons li a.exit{
+                    background-image: url('img/exit.png');
+                    background-repeat: no-repeat;
+                    background-position: 0px 10px;
+                    padding-left: 15px;
+                    }
+                .MenuAuth ul.buttons li a.exit:hover{
+                    background-image: url('img/exit-active.png');
+                    background-repeat: no-repeat;
+                    background-position: 0px 10px;
+                    padding-left: 15px;
+                    color: #FF5752;
+                    }
+                .MenuAuth ul.buttons li a.site{
+                    background-image: url('img/arrow.png');
+                    background-repeat: no-repeat;
+                    background-position: 0px 10px;
+                    padding-left: 15px;
+                    }
+                .MenuAuth ul.buttons li a.site:hover{
+                    background-image: url('img/arrow-active.png');
+                    background-repeat: no-repeat;
+                    background-position: 0px 10px;
+                    padding-left: 15px;
+                    color: #1e7fff;
+                    }
