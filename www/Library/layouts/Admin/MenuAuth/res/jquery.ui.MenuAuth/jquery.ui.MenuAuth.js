@@ -8,10 +8,10 @@
         _create: function() {
             $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
-            this.element.find('.userlink').click(function(e){
+            this.element.find('.userlink a').click(function(e){
                 e.preventDefault();
                 self.callParents('setState', [{
-                    object: self.element.find('.userlink').attr('data-o')
+                    object: $(this).attr('data-o')
                 }]);
             });
             this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {object: true});
@@ -25,7 +25,7 @@
         call_setState: function(caller, state, changes){
             if ($.isPlainObject(changes) && ('object' in changes)){
                 var uri = state.object;
-                var link = this.element.find('.userlink');
+                var link = this.element.find('.userlink a');
                 if(uri == link.attr('data-o')) {
                     link.parent().addClass('active');
                 }else{
