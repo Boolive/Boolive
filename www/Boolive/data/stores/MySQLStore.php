@@ -1200,7 +1200,6 @@ class MySQLStore extends Entity
      */
     public function localId($uri)
     {
-        $a = $uri;
         if ($uri instanceof Entity){
             $uri = $uri->key();
         }else
@@ -1262,6 +1261,7 @@ class MySQLStore extends Entity
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->remoteId($attribs['proto']);
         $attribs['is_default_value'] = $attribs['is_default_value'] == 0 ? 0 : $this->remoteId($attribs['is_default_value']);
         $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_default_class']) : $attribs['is_default_class'];
+        $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_link']) : $attribs['is_link'];
         $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
         $attribs['is_exist'] = 1;
         unset($attribs['valuef']);

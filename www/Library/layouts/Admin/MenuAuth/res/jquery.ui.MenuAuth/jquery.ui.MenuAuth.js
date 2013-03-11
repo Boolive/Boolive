@@ -8,12 +8,13 @@
         _create: function() {
             $.boolive.AjaxWidget.prototype._create.call(this);
             var self = this;
-            self.element.find('.userlink').click(function(e){
+            this.element.find('.userlink').click(function(e){
                 e.preventDefault();
                 self.callParents('setState', [{
                     object: self.element.find('.userlink').attr('data-o')
                 }]);
             });
+            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {object: true});
         },
         /**
         * При входе в пользователя - обновление стиля для его кнопки

@@ -2,14 +2,14 @@
     <ul class="buttons">
         <?php if (isset($v['name'])): ?>
         <li>
-            <a class="userlink" data-o="<?=$v['userlink']?>" href="/admin<?php echo $v['userlink'];?>"><?php echo $v['name'];?></a>
+            <a title="Профиль пользователя" class="userlink" data-o="<?=$v['userlink']?>" href="/admin<?php echo $v['userlink'];?>"><?php echo $v['name'];?></a>
         </li>
         <li>
-            <a class="exit" href="<?php echo $v['logout'];?>">Выйти</a>
+            <a title="Отмена авторизации" class="exit" href="<?php echo $v['logout'];?>">Выйти</a>
         </li>
         <?php endif;?>
         <li>
-            <a class="site" href="/">На сайт</a>
+            <a title="Главная страница сайта" class="site" href="/">На сайт</a>
         </li>
 
     </ul>

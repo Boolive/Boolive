@@ -140,7 +140,7 @@ class View extends Entity
      */
     public function startChild($name)
     {
-        if ($result = $this->linked(true)->{$name}->start($this->_commands, $this->_input_child)){
+        if ($result = $this->linked(true)->{$name}->linked(true)->start($this->_commands, $this->_input_child)){
             $this->_input_child['previous'] = true;
         }
         return $result;
