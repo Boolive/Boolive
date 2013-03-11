@@ -20,8 +20,13 @@
 	<div class="content">
         <?php
             $list = $v['view']->arrays(\Boolive\values\Rule::string());
-            foreach ($list as $item){
-                echo $item;
+            if(!empty($list)){
+                foreach ($list as $item){
+                    echo $item;
+                }
+            }else{
+                echo '<div class="empty">Пусто
+                        <div class="explain">У объекта нет подчиненных или они не соответсятвуют фильтру </div></div>';
             }
         ?>
     </div>

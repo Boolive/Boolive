@@ -20,16 +20,16 @@ class FormAuth extends AutoWidgetList
                         // Модель формы
                         'object' => Rule::entity()->required(),
                         // Признак, submit запрос данной формы?
-                        $this->uri() => Rule::arrays(array(
+                        $this->id() => Rule::arrays(array(
                                 'submit' => Rule::string()
                             )
                         ),
                         // Признак успешности обработки формы
-                        'ok' => Rule::eq(md5($this->uri()))->default(false)->required()
+                        'ok' => Rule::eq(md5($this->id()))->default(false)->required()
                     )
                 ),
                 'PATH' => Rule::arrays(array(
-                    0 => Rule::eq('admin')->required()
+                    0 => Rule::any(Rule::eq('admin'), Rule::eq('login'))->required()
                     )
                 )
             )
@@ -51,10 +51,10 @@ class FormAuth extends AutoWidgetList
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
 
         // Если у формы нажата кнопка SUBMIT
-        if (isset($this->_input['REQUEST'][$this->uri()]['submit'])){
+        if (isset($this->_input['REQUEST'][$this->id()]['submit'])){
             //Выполнение действия (отправка)
             if ($this->_input['REQUEST']['object']->auth()){
-                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri())), true, true));
+                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->id())), true, true));
             }else{
                 $v['error'] = $this->_input_child['REQUEST']['object']->error_message->value();
             }
@@ -64,7 +64,7 @@ class FormAuth extends AutoWidgetList
             $v['ok'] =  $this->_input['REQUEST']['object']->ok_message->value();
         }
         // Отображение формы
-        $v['uri'] = $this->_input['REQUEST']['object']->uri();
+        $v['uri'] = $this->_input['REQUEST']['object']->id();
         return Widget::work($v);
     }
 }

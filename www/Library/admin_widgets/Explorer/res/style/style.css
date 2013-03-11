@@ -3,7 +3,19 @@
     }
     .Explorer .content{
         padding-top: 0;
-    }
+        }
+        .Explorer .content .empty{
+            text-align: center;
+            font-size: 24px;
+            font-weight: bolder;
+            color: #cccccc;
+            }
+            .Explorer .content .empty .explain{
+            text-align: center;
+            font-size: 12px;
+            font-weight: normal;
+            color: #cccccc;
+            }
     .Explorer .toolbar{
         margin-left: 30px;
         margin-right: 30px;
