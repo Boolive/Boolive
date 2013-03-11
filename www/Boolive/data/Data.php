@@ -35,17 +35,21 @@ class Data
      * @param null|Entity $lang Язык (локаль) объекта
      * @param int $date Дата создани объекта. Используется в качестве версии
      * @param bool $access Признак, проверять или нет наличие доступа к объекту?
+     * @param bool $use_cache Признак, использовать кэш?
      * @return Entity|null Найденный объект
      */
-    static function read($key = '', $owner = null, $lang = null, $date = 0, $access = true)
+    static function read($key = '', $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true)
     {
+        if ($key == Entity::ENTITY_ID){
+            return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
+        }
         $key = self::encodeKey($key);
         // Если $key массив, то $key[0] - родитель, $key[1] - имя подчиненного
         $skey = is_array($key)? ($key[0] instanceof Entity ? $key[0]->key() : $key[0]) : $key;
         // Опредление хранилища по URI
         if ($store = self::getStore($skey)){
             // Выбор объекта
-            return $store->read($key, $owner, $lang, $date, $access);
+            return $store->read($key, $owner, $lang, $date, $access, $use_cache);
         }
         return null;
     }
@@ -60,14 +64,16 @@ class Data
      */
     static function write($object, &$error, $access = true)
     {
-        if (!$access || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
-            if ($store = self::getStore($object->key())){
-                return $store->write($object);
+        if ($object->id() != Entity::ENTITY_ID){
+            if (!$access || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
+                if ($store = self::getStore($object->key())){
+                    return $store->write($object);
+                }else{
+                    $error->section = new Error('Не определена секция объекта', 'not-exist');
+                }
             }else{
-                $error->section = new Error('Не определена секция объекта', 'not-exist');
+                $error->access = new Error('Нет доступа на запись', 'write');
             }
-        }else{
-            $error->access = new Error('Нет доступа на запись', 'write');
         }
         return false;
     }
