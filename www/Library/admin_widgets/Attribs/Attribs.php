@@ -47,6 +47,7 @@ class Attribs extends Widget
         // Передача шаблона, скриптов, стилей
         $v['object_uri'] = $this->_input['REQUEST']['object']->uri();
         $v['head'] = $this->title->value();
+        $v['object_id'] = $this->_input['REQUEST']['object']->id();
         return parent::work($v);
     }
 
@@ -99,9 +100,10 @@ class Attribs extends Widget
             // Признаки
             $c = $obj->isDefaultClass();
             $class_changed = (bool)$obj->isDefaultClass() != empty($attribs['is_logic']);
-            $obj->isDefaultClass(empty($attribs['is_logic']));
+
             $obj->isHidden(!empty($attribs['is_hidden']));
             $obj->isLink(!empty($attribs['is_link']));
+            $obj->isDefaultClass(empty($attribs['is_logic']));
             $obj->isDefaultChildren(!empty($attribs['override']));
 
             // Проверка и сохранение
@@ -137,6 +139,7 @@ class Attribs extends Widget
         /** @var $obj \Boolive\data\Entity */
         $obj  = $this->_input['REQUEST']['object'];
         $v = array(
+            'id' => $obj->id(),
             'uri' => $obj->uri(),
             'name' => $obj->name(),
             'proto' => ($p = $obj->proto()) ? $p->uri() : 'null',
@@ -152,13 +155,14 @@ class Attribs extends Widget
 //            'owner' => $obj->_attribs['owner'],
             'date' => date('j.m.Y, G:s', $obj->date()),
             'order' => $obj->order(),
-            'is_logic' => (bool)$obj->isDefaultClass()!=\Boolive\data\stores\MySQLStore::MAX_ID,//['is_logic'],
+            'is_logic' => (bool)$obj->isDefaultClass() != self::ENTITY_ID,//['is_logic'],
             'is_hidden' => (bool)$obj->isHidden(),
             'is_link' => (bool)$obj->isLink(),
             'override' => (bool)$obj->isDefaultChildren(),
             'class' => get_class($obj),
             'class_self' => trim(str_replace('/', '\\', $obj->dir().$obj->name()), '\\')
         );
+        if (empty($v['class_self'])) $v['class_self'] = 'Site';
         return $v;
     }
 }

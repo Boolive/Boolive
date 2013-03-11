@@ -122,7 +122,7 @@
                     <label for="is_link">Ссылка</label>
                     <span class="error-message"></span><br>
                     <span class="description">Объект-ссылка не наследует прототип (его класс и свойства), а только ссылается на него.
-                        Но если прототип тоже является ссылкой, то он наследуется, а объект-ссылка ссылается на прототип прототипа.</span>
+                        Но если прототип тоже является ссылкой, то он наследуется, а объект-ссылка ссылается на прототип прототипа. Пример: пункт меню - ссылка на статью, автор у статьи - ссылка на пользователя</span>
                 </div>
             </div>
 <!--            <div class="item">-->
@@ -145,17 +145,27 @@
                     <span class="error-message"></span><br>
                     <span class="description">Классом определяется логика объекта - проверка атрибутов и различные функции.<br>
                         Свой класс с названием <span class="txt-tag class_name_self"></span> должен быть в директории объекта.<br>
-                    Класс по умолчанию: <span class="txt-tag class_name"></span><br>
+                    Текущий класс: <span class="txt-tag class_name"></span><br>
                     </span>
                 </div>
             </div>
 
             <div class="item">
                 <div class="col1">
+                    <label>Сокращённый URI</label>
+                </div>
+                <div class="col2 item-date">
+                    <span class=""><?php echo $v['object_id'];?></span>
+                    <span class="error-message"></span>
+                    <span class="description">Состоит из имени хранилища и идентификатора объекта в этом хранилище</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
                     <label>Дата обновления</label>
                 </div>
                 <div class="col2 item-date">
-                    <span data-name="date" class="txt-tag"></span>
+                    <span data-name="date" class=""></span>
                     <span class="error-message"></span>
                     <span class="description">Также применяется в качестве версии объекта.</span>
                 </div>

@@ -17,7 +17,6 @@ use Boolive\database\DB,
 
 class MySQLStore extends Entity
 {
-    const MAX_ID = 4294967295;
     /** @var \Boolive\database\DB */
     public $db;
     /** @var string Ключ хранилища, по которому хранилище выбирается для объектов и создаются короткие URI */
@@ -41,25 +40,25 @@ class MySQLStore extends Entity
      * @param null|\Boolive\data\Entity $lang Язык (локаль) объекта
      * @param int $date Дата создани объекта. Используется в качестве версии
      * @param bool $access Признак, проверять или нет наличие доступа к объекту?
-     * @throws \Exception
+     * @param bool $use_cache Признак, использовать кэш?
      * @return \Boolive\data\Entity|null Найденный объект
      */
-    public function read($key, $owner = null, $lang = null, $date = 0, $access = true)
+    public function read($key, $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true)
     {
         $binds = array();
         // Владелец
-        $binds[0] = !empty($owner) ? $this->localId($owner) : self::MAX_ID;
-        if ($binds[0] == self::MAX_ID){
+        $binds[0] = !empty($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
+        if ($binds[0] == Entity::ENTITY_ID){
             $sql = 'obj.`owner` = ?';
         }else{
-            $sql = 'obj.`owner` IN ('.self::MAX_ID.',?)';
+            $sql = 'obj.`owner` IN ('.Entity::ENTITY_ID.',?)';
         }
         // Язык
-        $binds[1] = !empty($lang)? $this->localId($lang) : self::MAX_ID;
-        if ($binds[1] == self::MAX_ID){
+        $binds[1] = !empty($lang)? $this->localId($lang) : Entity::ENTITY_ID;
+        if ($binds[1] == Entity::ENTITY_ID){
             $sql.= ' AND obj.`lang` = ?';
         }else{
-            $sql.= ' AND obj.`lang` IN ('.self::MAX_ID.',?)';
+            $sql.= ' AND obj.`lang` IN ('.Entity::ENTITY_ID.',?)';
         }
         $buffer_key_pf = '@'.$binds[0].'@'.$binds[1].'@'.$date;
 
@@ -68,7 +67,7 @@ class MySQLStore extends Entity
             $key = $key[0]->uri().'/'.$key[1];
         }
 
-        if (Buffer::isExist($key.$buffer_key_pf)){
+        if ($use_cache && Buffer::isExist($key.$buffer_key_pf)){
             return Buffer::get($key.$buffer_key_pf);
         }
         // Соединение с ids
@@ -162,15 +161,17 @@ class MySQLStore extends Entity
                 $attr['proto'] = isset($attr['proto']) ? $this->localId($attr['proto']) : 0;
                 $attr['proto_cnt'] = $entity->protoCount();
                 // Владелец
-                $attr['owner'] = isset($attr['owner']) ? $this->localId($attr['owner']) : self::MAX_ID;
+                $attr['owner'] = isset($attr['owner']) ? $this->localId($attr['owner']) : Entity::ENTITY_ID;
                 // Язык
-                $attr['lang'] = isset($attr['lang']) ? $this->localId($attr['lang']) : self::MAX_ID;
+                $attr['lang'] = isset($attr['lang']) ? $this->localId($attr['lang']) : Entity::ENTITY_ID;
                 // Числовое значение
                 $attr['valuef'] = floatval($attr['value']);
                 // Переопределено ли значение и кем
                 $attr['is_default_value'] = strval($attr['is_default_value']) !== '0' ? $this->localId($attr['is_default_value']) : 0;
                 // Чей класс
-                $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != self::MAX_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
+                $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
+                // Ссылка
+                $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
 
                 // Подбор уникального имени, если указана необходимость в этом
                 if ($entity->_rename){
@@ -211,7 +212,7 @@ class MySQLStore extends Entity
                         }
                         unset($attr['file']['data']);
                     }
-                    if ($attr['lang'] != self::MAX_ID || $attr['owner'] != self::MAX_ID){
+                    if ($attr['lang'] != Entity::ENTITY_ID || $attr['owner'] != Entity::ENTITY_ID){
                         $attr['value'] = $attr['owner'].'@'.$attr['lang'].'@'.$attr['value'];
                     }
                 }
@@ -300,7 +301,7 @@ class MySQLStore extends Entity
                 }
 
                 // Префикс к имени файла для учёта владельца и языка
-                if ($attr['lang'] != self::MAX_ID || $attr['owner'] != self::MAX_ID){
+                if ($attr['lang'] != Entity::ENTITY_ID || $attr['owner'] != Entity::ENTITY_ID){
                     $fname_pf = $attr['owner'].'@'.$attr['lang'].'@';
                 }else{
                     $fname_pf = '';
@@ -410,13 +411,13 @@ class MySQLStore extends Entity
                 $this->db->beginTransaction();
 
                 // Если был виртуальным, то отмена виртуальности у родителей и прототипов
-                if ((!$entity->isExist() && !$attr['is_virtual']) || (!empty($current['is_virtual']) && !$attr['is_virtual'])){
-                    $q = $this->db->prepare('
-                        UPDATE objects, trees SET is_virtual = 0
-                        WHERE objects.id = trees.parent_id AND trees.object_id = ? AND trees.type IN (0,1,3) AND is_virtual
-                    ');
-                    $q->execute(array($attr['id']));
-                }
+//                if ((!$entity->isExist() && !$attr['is_virtual']) || (!empty($current['is_virtual']) && !$attr['is_virtual'])){
+//                    $q = $this->db->prepare('
+//                        UPDATE {objects}, {trees} SET is_virtual = 0
+//                        WHERE {objects}.id = {trees}.parent_id AND {trees}.object_id = ? AND {trees}.type IN (0,1,3) AND is_virtual
+//                    ');
+//                    $q->execute(array($attr['id']));
+//                }
 
                 // Обновления наследников
                 if (!empty($current)){
@@ -429,12 +430,12 @@ class MySQLStore extends Entity
                         $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
                         $u = $this->db->prepare('
                             UPDATE {objects}, {trees} SET
-                            `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
-                            `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
-                            `is_default_value` = IF(is_default_value=:vproto, :proto, is_default_value),
-                            `is_default_class` = IF(is_default_class=:cclass, :cproto, is_default_class),
-                            `proto_cnt` = `proto_cnt`+:dp
-                            WHERE trees.parent_id = :obj AND objects.id = trees.object_id AND `type`=1 AND trees.object_id!=trees.parent_id
+                                `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
+                                `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
+                                `is_default_value` = IF(is_default_value=:vproto, :proto, is_default_value),
+                                `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
+                                `proto_cnt` = `proto_cnt`+:dp
+                            WHERE {trees}.parent_id = :obj AND {objects}.id = {trees}.object_id AND {trees}.type=1 AND {trees}.object_id!={trees}.parent_id
                         ');
                         $u->execute(array(
                             ':value' => $attr['value'],
@@ -443,11 +444,38 @@ class MySQLStore extends Entity
                             ':cclass' => $current['is_default_class'] ? $current['is_default_class'] : $current['id'],
                             ':cproto' => $attr['is_default_class'] ? $attr['is_default_class'] : $attr['id'],
                             ':proto' => $p,
+                            ':is_link' => $attr['is_link'] > 0 ? 1: 0,
                             ':dp' => $dp,
                             ':owner' => $attr['owner'],
                             ':lang' => $attr['lang'],
                             ':obj' => $attr['id']
                         ));
+                    }
+
+                    // Изменился признак ссылки
+                    if ($current['is_link']!=$attr['is_link']){
+                        // Смена класса по-умолчанию у всех наследников
+                        // Если у наследников признак is_link такой же как у изменённого объекта и класс был Entity, то они получают класс изменного объекта
+                        // Если у наследников признак is_link не такой же и класс был как у изменноо объекта, то они получают класс Entity
+                        $u = $this->db->prepare('
+                            UPDATE {objects}, {trees} SET
+                                `is_default_class` = IF(({objects}.is_link > 0) = :is_link,
+                                    IF(is_default_class=:max_id, :cproto, is_default_class),
+                                    IF(is_default_class=:cproto, :max_id, is_default_class)
+                                ),
+                                `is_link` = IF((is_link=:clink), :nlink, is_link)
+                            WHERE {trees}.parent_id = :obj AND {objects}.id = {trees}.object_id AND {trees}.type=1
+                              AND {trees}.object_id!={trees}.parent_id
+                        ');
+                        $params = array(
+                            ':obj' => $attr['id'],
+                            ':is_link' => $attr['is_link'] > 0 ? 1: 0,
+                            ':cproto' => $attr['is_default_class'] ? $attr['is_default_class'] : $attr['id'],
+                            ':clink' => $current['is_link'] ? $current['is_link'] : $current['id'],
+                            ':nlink' => $attr['is_link'] ? $attr['is_link'] : $attr['id'],
+                            ':max_id' => Entity::ENTITY_ID
+                        );
+                        $u->execute($params);
                     }
                 }
 
@@ -496,8 +524,8 @@ class MySQLStore extends Entity
         // Глубина условия
         $depth = $this->getCondDepth($cond);
         // Владелец и язык
-        $_owner = isset($owner) ? $this->localId($owner) : self::MAX_ID;
-        $_lang = isset($lang) ? $this->localId($lang) : self::MAX_ID;
+        $_owner = isset($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
+        $_lang = isset($lang) ? $this->localId($lang) : Entity::ENTITY_ID;
 
         if (isset($cond['from'][0]) && ($cond['from'][0]->_attribs['index_depth']<$depth || $cond['from'][0]->_attribs['index_step']!=0)){
             // Индексирование
@@ -566,7 +594,7 @@ class MySQLStore extends Entity
             $q = $this->db->prepare('
                 SELECT i.uri, o.* FROM {ids} i
                 JOIN {trees} t ON (t.parent_id = i.id AND t.object_id = ? AND t.type = 1)
-                JOIN objects o ON (o.id = i.id
+                JOIN {objects} o ON (o.id = i.id
                     AND (o.id, o.owner, o.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=o.id AND `owner` IN (?, 4294967295) AND `lang` IN (?, 4294967295) GROUP BY id)
                     AND is_history=0
                 )
@@ -581,7 +609,7 @@ class MySQLStore extends Entity
             // Очередь индексация прототипов
             $stack = array();
             $i = sizeof($protos)-1;
-            while ($i>0 && $protos[$i]['is_default_children'] && ($protos[$i]['index_depth'] < $depth || $protos[$i]['index_step']!=0)){
+            while ($i>0 && ($protos[$i]['is_link'] == $protos[$i-1]['is_link']) && $protos[$i]['is_default_children'] && ($protos[$i]['index_depth'] < $depth || $protos[$i]['index_step']!=0)){
                 $stack[] = array($protos[$i], $protos[$i-1]);
                 $i--;
             }
@@ -717,14 +745,14 @@ class MySQLStore extends Entity
     private function removeVirtualChildren($object_id)
     {
         $q = $this->db->prepare('
-            DELETE ids, objects, trees FROM ids, objects, trees
+            DELETE {ids}, {objects}, {trees} FROM {ids}, {objects}, {trees}
             WHERE parent_id = ?
             AND object_id != parent_id
-            AND ids.id = object_id
-            AND objects.id = object_id
-            AND objects.is_virtual
+            AND {ids}.id = object_id
+            AND {objects}.id = object_id
+            AND {objects}.is_virtual
         ');
-        ///*IN (SELECT * FROM (SELECT object_id FROM trees WHERE parent_id = ? AND `type`=1)t)*/
+        ///*IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = ? AND `type`=1)t)*/
             /*AND `type` = 0*/
         $q->execute(array($object_id));
     }
@@ -738,20 +766,20 @@ class MySQLStore extends Entity
      */
     private function clearIndex($parent_id, $object_id = 0)
     {
-        $q = $this->db->exec('UPDATE objects SET index_depth = 0, index_step = 0');
+        $q = $this->db->exec('UPDATE {objects} SET index_depth = 0, index_step = 0');
         return;
         // Обнуление своего индекса и наследников
         if ($object_id){
             $q = $this->db->prepare('
-                UPDATE objects, trees SET objects.index_depth = 0, objects.index_step = 0
-                WHERE trees.parent_id = ? AND `type`=1 AND objects.id = trees.object_id
+                UPDATE {objects}, {trees} SET {objects}.index_depth = 0, {objects}.index_step = 0
+                WHERE {trees}.parent_id = ? AND `type`=1 AND {objects}.id = {trees}.object_id
             ');
             $q->execute(array($object_id));
         }
         // Обнуление индекса родителей, родителей наследников
         if ($parent_id){
             $q = $this->db->prepare('
-                UPDATE objects p, trees t, (SELECT id, parent_cnt FROM objects, trees WHERE object_id=objects.id AND parent_id=? AND `type`=1) o
+                UPDATE {objects} p, {trees} t, (SELECT id, parent_cnt FROM {objects}, {trees} WHERE object_id={objects}.id AND parent_id=? AND `type`=1) o
                 SET p.index_depth = 0 AND p.index_step = 0
                 WHERE p.id = t.parent_id AND t.object_id = o.id AND t.type=0 AND p.index_depth>0
                 AND (CAST(o.parent_cnt - p.parent_cnt AS SIGNED) - p.index_depth - 1) < 0
@@ -826,8 +854,8 @@ class MySQLStore extends Entity
         // количество услой IS
         $t_cnt = 1;
         // Условия для локализации и персонализации
-        $owner_lang = ($owner == self::MAX_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
-        $owner_lang.= ($lang == self::MAX_ID)? ' AND `lang` = ?' : ' AND `lang` IN (?, 4294967295)';
+        $owner_lang = ($owner == Entity::ENTITY_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
+        $owner_lang.= ($lang == Entity::ENTITY_ID)? ' AND `lang` = ?' : ' AND `lang` IN (?, 4294967295)';
 
         if (!$only_where){
             // Что?
@@ -1092,12 +1120,19 @@ class MySQLStore extends Entity
                 GROUP BY {trees}.object_id
                 ORDER BY l ASC
             ');
+//            $q = $this->db->prepare('
+//                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
+//                JOIN {objects} ON ({objects}.id = {trees}.object_id)
+//                WHERE {trees}.parent_id = :obj
+//                GROUP BY {trees}.object_id
+//                ORDER BY l ASC
+//            ');
             $q->execute(array(':obj' => $object));
             $children = $q->fetchAll(DB::FETCH_ASSOC);
 
             // Удаление отношений у $object и всех его подчиненных
             $q = $this->db->prepare('
-                DELETE trees FROM trees, (SELECT object_id FROM trees WHERE parent_id = :obj)t WHERE trees.object_id = t.object_id
+                DELETE {trees} FROM {trees}, (SELECT object_id FROM {trees} WHERE parent_id = :obj)t WHERE {trees}.object_id = t.object_id
             ');
 //            $q = $this->db->prepare('
 //               DELETE FROM {trees} WHERE object_id IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = :obj)t)
@@ -1169,7 +1204,7 @@ class MySQLStore extends Entity
         if ($uri instanceof Entity){
             $uri = $uri->key();
         }else
-        if ($obj = Buffer::get($uri.'@'.self::MAX_ID.'@'.self::MAX_ID.'@0')){
+        if ($obj = Buffer::get($uri.'@'.Entity::ENTITY_ID.'@'.Entity::ENTITY_ID.'@0')){
             $uri = $obj->key();
         }
         if ($info = Data::isShortUri($uri)){
@@ -1221,12 +1256,12 @@ class MySQLStore extends Entity
     public function makeObject($attribs)
     {
         $attribs['id'] = $this->remoteId($attribs['id']);
-        $attribs['owner'] = $attribs['owner'] == self::MAX_ID ? null : $this->remoteId($attribs['owner']);
-        $attribs['lang'] = $attribs['lang'] == self::MAX_ID ? null : $this->remoteId($attribs['lang']);
+        $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['owner']);
+        $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['lang']);
         $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->remoteId($attribs['parent']);
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->remoteId($attribs['proto']);
         $attribs['is_default_value'] = $attribs['is_default_value'] == 0 ? 0 : $this->remoteId($attribs['is_default_value']);
-        $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != self::MAX_ID)? $this->remoteId($attribs['is_default_class']) : $attribs['is_default_class'];
+        $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_default_class']) : $attribs['is_default_class'];
         $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
         $attribs['is_exist'] = 1;
         unset($attribs['valuef']);
@@ -1255,7 +1290,7 @@ class MySQLStore extends Entity
                     }
                 }
             }else
-            if ($attribs['is_default_class'] != self::MAX_ID){
+            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
                 $proto = Data::read($attribs['is_default_class'], null, null, 0, false);
                 $class = get_class($proto);
                 return new $class($attribs);

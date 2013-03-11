@@ -8,7 +8,7 @@
  */
 namespace Boolive\data;
 
-use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
+use Exception,
     Boolive\values\Values,
     Boolive\values\Check,
     Boolive\errors\Error,
@@ -21,10 +21,12 @@ use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
     Boolive\functions\F,
     Boolive\auth\Auth;
 
-class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
+class Entity implements ITrace
 {
     /** @const int Максимальное порядковое значение */
     const MAX_ORDER = 4294967296;
+    /** @const int Идентификатор сущности - эталона всех объектов */
+    const ENTITY_ID = 4294967295;
     /** @var array Атрибуты */
     protected $_attribs = array(
         'uri'          => null,
@@ -109,7 +111,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет
                 'is_delete'	   => Rule::bool()->int(), // Удаленный или нет
                 'is_hidden'	   => Rule::bool()->int(), // Скрытый или нет
-                'is_link'      => Rule::bool()->int(), // Ссылка или нет
+                'is_link'      => Rule::uri(), // Ссылка или нет
                 'is_virtual'   => Rule::bool()->int(), // Виртуальный или нет
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
@@ -400,17 +402,46 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
 
     /**
      * Признак, объект является ссылкой или нет?
-     * @param null|bool $linked Новое значение, если не null
-     * @return bool
+     * @param null|bool $is_link Новое значение, если не null
+     * @param bool $return_link Признак, возвращать или нет объект, на которого ссылается данный
+     * @return bool|Entity
      */
-    public function isLink($linked = null)
+    public function isLink($is_link = null, $return_link = false)
     {
-        if (isset($linked) && (empty($this->_attribs['is_link']) == $linked)){
-            $this->_attribs['is_link'] = $linked;
-            $this->_changed = true;
-            $this->_checked = false;
+        if (isset($is_link)){
+            $curr = $this->_attribs['is_link'];
+            if ($is_link){
+                // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
+                if ($proto = $this->proto()){
+                    if ($p = $proto->isLink(null, true)) $proto = $p;
+                }
+                if (isset($proto) && $proto->isExist()){
+                    $this->_attribs['is_link'] = $proto->id();
+                }else{
+                    $this->_attribs['is_link'] = self::ENTITY_ID;
+                }
+            }else{
+                $this->_attribs['is_link'] = 0;
+            }
+            if ($curr !== $this->_attribs['is_link']){
+                $this->_changed = true;
+                $this->_checked = false;
+            }
+            if ($this->isDefaultClass()) $this->isDefaultClass(true);
         }
-        return !empty($this->_attribs['is_link']);
+        // Возвращение признака или объекта, на которого ссылается данный объект
+        if (!empty($this->_attribs['is_link']) && $return_link){
+            if ($this->_attribs['is_link']==1){
+                if ($proto = $this->proto()){
+                    return $proto->isLink(null, true);
+                }else{
+                    return null;
+                }
+            }
+            return Data::read($this->_attribs['is_link'], $this->owner(), $this->lang());
+        }else{
+            return !empty($this->_attribs['is_link']);
+        }
     }
 
     /**
@@ -457,22 +488,27 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function isDefaultValue($is_default = null, $return_proto = false)
     {
-        if (isset($is_default) && (empty($this->_attribs['is_default_value']) == $is_default)){
+        if (isset($is_default)){
+            $curr = $this->_attribs['is_default_value'];
             if ($is_default){
                 // Поиск прототипа, от котоого наследуется значение, чтобы взять его значение
-                if ($proto = $this->proto()){
+                if (($proto = $this->proto())/* && $proto->isLink() == $this->isLink()*/){
                     if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
                     $this->_attribs['is_default_value'] = $proto->id();
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['is_file'] = $proto->isFile();
+                }else{
+                    $this->_attribs['is_default_value'] = 0;
                 }
             }else{
                 $this->_attribs['is_default_value'] = 0;
             }
-            $this->_changed = true;
-            $this->_checked = false;
+            if ($curr !== $this->_attribs['is_default_value']){
+                $this->_changed = true;
+                $this->_checked = false;
+            }
         }
         if (!empty($this->_attribs['is_default_value']) && $return_proto){
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
@@ -490,27 +526,29 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
      */
     public function isDefaultClass($is_default = null, $return_proto = false)
     {
-        if (isset($is_default) && (empty($this->_attribs['is_default_class']) == $is_default)){
+        if (isset($is_default)){
+            $curr = $this->_attribs['is_default_class'];
             if ($is_default){
-                // Поиск прототипа, от котоого наследуется значение, чтобы взять его значение
-                if ($proto = $this->proto()){
+                // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
+                if (($proto = $this->proto()) && $proto->isLink() == $this->isLink()){
                     if ($p = $proto->isDefaultClass(null, true)) $proto = $p;
+                }else{
+                    $proto = null;
                 }
                 if (isset($proto) && $proto->isExist()){
                     $this->_attribs['is_default_class'] = $proto->id();
                 }else{
-                    $this->_attribs['is_default_class'] = 4294967295;
+                    $this->_attribs['is_default_class'] = self::ENTITY_ID;
                 }
             }else{
                 $this->_attribs['is_default_class'] = 0;
             }
-            $this->_changed = true;
-            $this->_checked = false;
+            if ($curr !== $this->_attribs['is_default_class']){
+                $this->_changed = true;
+                $this->_checked = false;
+            }
         }
         if (!empty($this->_attribs['is_default_class']) && $return_proto){
-            if ($this->_attribs['is_default_class']==4294967295){
-                return new Entity(array('id'=>4294967295));
-            }
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
             return Data::read($this->_attribs['is_default_class'], $this->owner(), $this->lang());
         }else{
@@ -570,7 +608,7 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
                 $this->_parent = $new_parent;
                 // Установка атрибутов, зависимых от прототипа
-                if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
+                //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
                 // Обновление доступа
                 if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
                 $this->updateURI($new_parent->uri().'/'.$this->name());
@@ -656,7 +694,10 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 $this->_attribs['proto_cnt'] = 0;
                 $this->_attribs['is_default_value'] = 0;
                 if ($this->_attribs['is_default_class'] != 0){
-                    $this->_attribs['is_default_class'] = 4294967295;
+                    $this->_attribs['is_default_class'] = self::ENTITY_ID;
+                }
+                if ($this->_attribs['is_link'] != 0){
+                    $this->_attribs['is_link'] = self::ENTITY_ID;
                 }
                 $this->_proto = null;
             }else{
@@ -675,14 +716,14 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
                 $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
                 $this->_proto = $new_proto;
 
-                // Наследование класса
+                // Если объект ссылка или новый прототип ссылка, то обновление ссылки
+                if ($this->isLink() || $new_proto->isLink()){
+                    $this->isLink(true); //также обновляется класс
+                }else
+                // Обновление наследуемого класса
                 if ($this->isDefaultClass()){
-                    $this->_attribs['is_default_class'] = 0; // Чтобы переустановка сработала
                     $this->isDefaultClass(true);
                 }
-
-                // Установка атрибутов, зависимых от прототипа
-                if ($new_proto->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
                 // Обновление доступа
                 if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
             }
@@ -793,10 +834,9 @@ class Entity implements ITrace/*, IteratorAggregate, ArrayAccess, Countable*/
     public function linked($clone = false)
     {
         if (empty($this->_attribs['is_link'])) return $this;
-        if ($proto = $this->proto()){
-            $proto = $proto->linked();
-            if ($clone) $proto = clone $proto;
-            return $proto;
+        if ($link = $this->isLink(null, true)){
+            if ($clone) $link = clone $link;
+            return $link;
         }
         return $this;
     }
