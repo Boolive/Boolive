@@ -3,6 +3,7 @@
         <div class="content">
             <h2><?php echo $v['title'];?></h2>
             <p><?php echo $v['message'];?></p>
+            <p class="mini"><?php echo $v['message2'];?></p>
             <div class="view">
                 <?php echo $v->programs->string();?>
             </div>

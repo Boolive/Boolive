@@ -14,13 +14,19 @@
             // uri объекта
             self.options.object = $.parseJSON(this.element.attr('data-o'));
 
-            self.element.find('.submit').click(function(e){
+            self.element.find('.confirm .submit').click(function(e){
                 e.preventDefault();
+                self.element.find('.confirm').hide();
+                self.element.find('.progress').show();
 //                self.callServer('start', {object: self.options.object}, function(result, textStatus, jqXHR){
 //                    history.back();
 //                });
             });
-            self.element.find('.cancel').click(function(e){
+            self.element.find('.confirm .cancel').click(function(e){
+                e.preventDefault();
+                history.back();
+            });
+            self.element.find('.progress .cancel').click(function(e){
                 e.preventDefault();
                 history.back();
             });

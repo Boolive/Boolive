@@ -1,4 +1,4 @@
-<div class="ObjectItem" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-p="ObjectItem">
+<div class="ObjectItem list" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-p="ObjectItem">
 	<?php
         $class = '';
         if($v['is_virtual']->bool()){
@@ -25,6 +25,7 @@
         </span>
 		<span class="main">
             <a class="title" href="/admin<?php echo $v['link'];?>"><span><?php echo $v['title']->escape();?></span></a>
+            <span class="description"><?php echo $v['description'];?></span>
         </span>
 	</div>
 </div>

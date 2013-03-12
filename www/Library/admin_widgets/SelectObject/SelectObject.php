@@ -19,7 +19,8 @@ class SelectObject extends Widget
     public function work($v = array())
     {
         $v['title'] = $this->title->value();
-        $v['message'] = 'Выделите объект или откройте его';
+        $v['message'] = 'Выделите объект или откройте его и нажмите "Выбрать" для подтверждения выбора';
+        $v['message2'] = 'Для закрытия диалога выбора нажмите "Отмена"';
         $v['submit_title'] = 'Выбрать';
         $v['cancel_title'] = 'Отмена';
         return parent::work($v);

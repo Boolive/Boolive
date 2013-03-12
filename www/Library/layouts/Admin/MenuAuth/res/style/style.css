@@ -15,7 +15,7 @@
         }
         .MenuAuth ul.buttons li{
             display: list-item;
-            float: left;
+            float: right;
             list-style: none;
             margin: 0 0;
             vertical-align: middle;

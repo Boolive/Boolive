@@ -16,8 +16,8 @@ class Export extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('attr','is_delete','=',0))),
-                            Rule::entity(array('attr','is_delete','=',0))
+                            Rule::arrays(Rule::entity()),
+                            Rule::entity()
                         )->required(),
                         'call' => Rule::string()->default('')->required(),
                     )
@@ -53,9 +53,11 @@ class Export extends Widget
             $v['data-o'] = json_encode($v['data-o']);
             $v['title'] = $this->title->value();
             if (count($objects)>1){
-                $v['message'] = 'Объекты и его подчинённые будут сохранены в файлы .info в своих папках';
+                $v['question'] = 'Вы действительно желаете экспортировать эти объекты?';
+                $v['message'] = 'Объекты и его подчинённые будут сохранены в файлы .info';
             }else{
-                $v['message'] = 'Объект и его подчинённые (свойства) будут сохранены в файлы .info в своих папках';
+                $v['question'] = 'Вы действительно желаете экспортировать этот объект?';
+                $v['message'] = 'Объект и его подчинённые (свойства) будут сохранены в формате JSON в файлах с расширением .info';
             }
             return parent::work($v);
         }

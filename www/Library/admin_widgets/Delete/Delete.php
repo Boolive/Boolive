@@ -58,8 +58,10 @@ class Delete extends Widget
             $v['data-o'] = json_encode($v['data-o']);
             $v['title'] = $this->title->value();
             if (count($objects)>1){
+                $v['question'] = 'Вы действительно желаете удалить эти объекты?';
                 $v['message'] = 'Объекты будут перемещены в корзину, их можно будет восстановить.';
             }else{
+                $v['question'] = 'Вы действительно желаете удалить этот объект?';
                 $v['message'] = 'Объект будет перемещён в корзину, его можно будет восстановить.';
             }
             $v['prev'] = '';//$this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';

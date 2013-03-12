@@ -268,8 +268,8 @@
          * @return {*}
          */
         escape_selector: function (str){
-            if( str)
-                return str.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+            if (str)
+                return str.toString().replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
             else
                 return str;
         }
