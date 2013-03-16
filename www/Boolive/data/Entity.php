@@ -995,12 +995,7 @@ class Entity implements ITrace
 
     /**
      * Поиск подчиненных объектов
-     * @param array $cond Условие поиска
-     * @param null|string $keys Имя атрибута, значения которого использовать в качестве ключей массива результата
-     * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
-     * @param int $depth Глубина поиска
-     * @see https://github.com/Boolive/Boolive/issues/7
-     * @example
+     * <code>
      * $cond = array(
      *     'where' => array(                            // услвоия поиска объединенные логическим AND
      *         array('attr', 'uri', '=', '?'),          // сравнение атрибута
@@ -1021,6 +1016,13 @@ class Entity implements ITrace
      *     ),
      *     'limit' => array(10, 15)                    // ограничение - выбирать с 10-го не более 15 объектов
      * );
+     * </code>
+     * @param array $cond Условие поиска
+     * @param null|string $keys Имя атрибута, значения которого использовать в качестве ключей массива результата
+     * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
+     * @param int $depth Глубина поиска
+     * @see https://github.com/Boolive/Boolive/issues/7
+
      * @return array
      */
     public function find($cond = array(), $keys = 'name', $load = true, $depth = 1)
@@ -1248,6 +1250,20 @@ class Entity implements ITrace
 
     /**
      * Проверка объекта соответствию указанному условию
+     * <code>
+     * array(                                      // услвоия поиска объединенные логическим AND
+     *    array('attr', 'uri', '=', '?'),          // сравнение атрибута
+     *    array('not', array(                      // отрицание всех условий
+     *         array('attr', 'value', '=', '%?%')
+     *    )),
+     *    array('any', array(                      // услвоия объединенные логическим OR
+     *         array('child', array(               // проверка свойства искомого объекта
+     *             array('attr', 'value', '>', 10),
+     *             array('attr', 'value', '<', 100),
+     *         ))
+     *     )),
+     *     array('is', '/Library/object')          // кем объект является? проверка наследования
+     * )
      * @param array $cond Условие как для поиска
      * @return bool
      */

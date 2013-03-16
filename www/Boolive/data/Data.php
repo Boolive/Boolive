@@ -79,14 +79,9 @@ class Data
     }
 
     /**
-     * Поиск объектов
-     * @param array $cond Условие поиска в виде многомерного массива.     *
-     * @param string $keys Название атрибута, который использовать для ключей массива результата
-     * @param null|Entity $owner Владелец искомых объектов
-     * @param null|Entity $lang Язык (локаль) искомых объектов
-     * @param bool $access Признак, проверять или нет наличие доступа к объекту?
-     * @see https://github.com/Boolive/Boolive/issues/7
-     * @example
+     * Поиск объектов.
+     * Пример условия:
+     * <code>
      * $cond = array(
      *     'from' => array('/Interfaces', 3),           // выбор объектов из /Interfaces в глубину до 3 уровней
      *     'where' => array(                            // услвоия выборки объединенные логическим AND
@@ -108,6 +103,13 @@ class Data
      *     ),
      *     'limit' => array(10, 15)                    // ограничение - выбирать с 10-го не более 15 объектов
      * );
+     * </code>
+     * @param array $cond Условие поиска в виде многомерного массива.     *
+     * @param string $keys Название атрибута, который использовать для ключей массива результата
+     * @param null|Entity $owner Владелец искомых объектов
+     * @param null|Entity $lang Язык (локаль) искомых объектов
+     * @param bool $access Признак, проверять или нет наличие доступа к объекту?
+     * @see https://github.com/Boolive/Boolive/issues/7
      * @return mixed|array Массив объектов или результат расчета, например, количество объектов
      */
     static function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true)
@@ -115,7 +117,7 @@ class Data
         // Где искать?
         if (!isset($cond['from'][0])) $cond['from'][0] = '';
         if ($access){
-            $acond = Auth::getUser()->getAccessCond('read', $cond['from'][0], $cond['from'][1]);
+            $acond = Auth::getUser()->getAccessCond('read', $cond['from'][0], isset($cond['from'][1])?$cond['from'][1]: null);
             if (empty($cond['where'])){
                 $cond['where'] = array($acond);
             }else{

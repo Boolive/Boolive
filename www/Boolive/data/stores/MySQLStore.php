@@ -862,14 +862,16 @@ class MySQLStore extends Entity
             if (isset($cond['select'])){
                 // Подсчёт количества объектов
                 if ($cond['select'] == 'count'){
-                    $result['select'] = 'SELECT count(*) fun FROM {objects} obj';
+                    $result['select'] = 'SELECT count(*) fun';// FROM {objects} obj';
                 }else{
-                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun FROM {objects} obj';
+                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun';//.' fun FROM {objects} obj';
                 }
                 $calc = true;
             }else{
+                $result['select'] = 'SELECT u.uri, obj.*';
+
                 // Выбор объектов
-                $result['select'] = 'SELECT u.uri, obj.* FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
+//                $result['select'] = 'SELECT u.uri, obj.* FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
                 $calc = false;
             }
 
@@ -878,17 +880,19 @@ class MySQLStore extends Entity
                 $id = $this->localId($cond['from'][0]);
 
                 if (!isset($cond['from'][1])){
-                    $result['select'] = 'SELECT u.uri, obj.* FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                    $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
                     $result['select'].= "\n  JOIN {trees} t ON (t.object_id = obj.id AND t.parent_id = ? AND t.`type`=0)";
                     $binds2[] = array($id, DB::PARAM_INT);
                     $result['where'].= "u.uri LIKE ? AND ";
                     $result['binds'][] = $cond['from'][0]->uri().'/%';
                 }else
                 if ($cond['from'][1] == 0){
+                    $result['select'].= ' FROM {objects} obj';
                     $result['where'].= "obj.id = ? AND ";
                     $result['binds'][] = array($id, DB::PARAM_INT);
                 }else
                 if ($cond['from'][1] == 1){
+                    $result['select'].= ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
                     // Сверка parent
                     $result['where'].= "obj.parent = ? AND ";
                     $result['binds'][] = array($id, DB::PARAM_INT);
@@ -896,7 +900,7 @@ class MySQLStore extends Entity
                         unset($cond['order']);
                     }
                 }else{
-                    $result['select'] = 'SELECT u.uri, obj.* FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                    $result['select'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
                     $result['select'].= "\n  JOIN {trees} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.`type`=0 AND f.level<=?)";
                     $binds2[] = array($id, DB::PARAM_INT);
                     $binds2[] = array($cond['from'][0]->parentCount() + $cond['from'][1], DB::PARAM_INT);
@@ -997,6 +1001,22 @@ class MySQLStore extends Entity
                                 $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1]).')';
                             }
                         }else
+                        // Условие на наличие родителя
+                        if ($c[0]=='in'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = 'is'.$t_cnt;
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {trees} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND `type`= 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
                         // Условие на наличие прототипа.
                         if ($c[0]=='is'){
                             if (is_array($c[1])){
@@ -1055,7 +1075,7 @@ class MySQLStore extends Entity
 
             };
             $attr_exists = $only_where ? array('is_history' => true, 'is_delete' => true) : array();
-            // Еслия услвоия есть, то добавляем их в SQL
+            // Если услвоия есть, то добавляем их в SQL
             if ($w = $convert($cond['where'], ' AND ', 'obj', $attr_exists)){
                 if (empty($result['where'])){
                     $result['where'] = $w;
@@ -1254,6 +1274,9 @@ class MySQLStore extends Entity
      */
     public function makeObject($attribs)
     {
+        if (!isset($attribs['id'])){
+            $x = 0;
+        }
         $attribs['id'] = $this->remoteId($attribs['id']);
         $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['owner']);
         $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['lang']);
