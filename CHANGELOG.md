@@ -26,6 +26,7 @@ Version 2.0 work in progress
 - new #64: Added RichText editor. You can enter text, select, merge and split paragraphs (VladimirShestakov)
 - new #64: Added Image editor in the RichText editor. You can view, select and resize image (VladimirShestakov)
 - new #64: Added the top ruler in the RichText editor (VladimirShestakov)
+- new #68: Added exporting objects to info files from the admin panel (VladimirShestakov)
 - new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
 - new #70: Added Session module (VladimirShestakov)
 - new #76: Drag-and-drop ordering of objects  (polina Putrolaynen)
