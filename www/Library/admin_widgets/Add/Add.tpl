@@ -5,7 +5,7 @@
             <span class="txt-primary"><?php echo $v['object']['title'];?></span>
             <?php if ($v['object']['uri']->string()):?>
             <span class="txt-tag"><?php echo $v['object']['uri'];?></span>
-            <?php endif;?> и нажмите кнопку "Добавить"
+            <?php endif;?>, и нажмите кнопку "Добавить"
         </p>
         <p class="mini">Для просмотра всех объектов нажмите "Все..."</p>
         <div class="list">

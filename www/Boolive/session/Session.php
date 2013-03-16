@@ -29,10 +29,9 @@ class Session
 	static function init()
     {
 		session_write_close();
-		session_id(Auth::getUser()->value());
+		session_id(Auth::getUser()->value(null, true));
 		session_start();
 	}
-
     /**
 	 * Идентификатор сессии
 	 * @return string

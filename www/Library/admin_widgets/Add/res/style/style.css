@@ -9,7 +9,7 @@
             float: left;
             margin-right: 0;
             }
-    .Add .list{
+    .Add > .content > .list{
         margin: 20px 0;
         }
     .Add .other {
