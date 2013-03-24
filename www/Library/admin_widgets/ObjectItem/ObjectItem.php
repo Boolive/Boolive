@@ -18,7 +18,7 @@ class ObjectItem extends Widget
         $v['title'] = $obj->title->value();
         if (empty($v['title'])) $v['title'] = $obj->name();
         $v['description'] = $obj->description->value();
-        //$v['value'] = (string)$obj->value();
+        $v['value'] = (string)$obj->value();
         $v['uri'] = $obj->uri();
         $v['is_virtual'] = $obj->isVirtual();
         $v['is_hidden'] = $obj->isHidden();

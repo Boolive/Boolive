@@ -152,6 +152,9 @@ class View extends Entity
      */
     public function startChildren()
     {
+        if ($this->uri() == '/Library/layouts/boolive/center'){
+            $a = 10;
+        }
         $result = array();
         $list = $this->linked(true)->find();
         foreach ($list as $key => $child){

@@ -33,6 +33,7 @@ class ProgramsMenu extends Widget
         $c = new \Boolive\commands\Commands();
         $v['items'] = array();
         foreach ($programs as $p){
+            $p = $p->linked();
             if ($p instanceof Widget && $p->canWork($c, $this->_input_child)){
                 $item = array(
                     'title' => $p->title->value(),

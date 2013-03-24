@@ -68,6 +68,7 @@ class SwitchViews extends Widget
     {
         $cases = $this->getCases();
         foreach ($cases as $case){
+            $case = $case->linked();
             if ($case instanceof \Library\views\SwitchCase\SwitchCase && $case->canWork($commands, $input)) return $case;
         }
         return null;
