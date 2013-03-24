@@ -4,7 +4,7 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, _, undefined) {
-    $.widget("boolive.RichTextEditor", $.boolive.AjaxWidget, {
+    $.widget("boolive.RichTextEditor", $.boolive.Widget, {
         // объекты кнопок
         _buttons: {},
         _content: null,
@@ -17,7 +17,7 @@
 
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             this.call_program_show();
             var self = this;
 
@@ -129,7 +129,7 @@
         _destroy: function(){
             this.call_program_hide();
             this.callChildren('save');
-            $.boolive.AjaxWidget.prototype._destroy.call(this);
+            $.boolive.Widget.prototype._destroy.call(this);
         },
 
         _save: function(){

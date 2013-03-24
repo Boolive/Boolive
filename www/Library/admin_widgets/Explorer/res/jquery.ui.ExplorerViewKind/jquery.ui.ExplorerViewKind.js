@@ -4,12 +4,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-    $.widget("boolive.ExplorerViewKind", $.boolive.AjaxWidget, {
+    $.widget("boolive.ExplorerViewKind", $.boolive.Widget, {
 
         _selected: null,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
 
             this._selected = self.element.find('.selected:first');

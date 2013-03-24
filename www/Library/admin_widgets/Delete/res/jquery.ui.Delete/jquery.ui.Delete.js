@@ -6,14 +6,14 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-    $.widget("boolive.Delete", $.boolive.AjaxWidget, {
+    $.widget("boolive.Delete", $.boolive.Widget, {
         // Удаляемый объект
         objects: null,
 //        prev_o: '',
 //        prev_v: '',
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             // uri объекта
             self.options.object = $.parseJSON(this.element.attr('data-o'));

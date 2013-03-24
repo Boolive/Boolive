@@ -5,12 +5,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-	$.widget("boolive.ProgramsMenu", $.boolive.AjaxWidget, {
+	$.widget("boolive.ProgramsMenu", $.boolive.Widget, {
         // _state: {object: null, selected: [], view_name: null},
         _active_items: null,
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+			$.boolive.Widget.prototype._create.call(this);
             var self = this;
             self.element.on('click', 'li a', function(e){
                 e.preventDefault();

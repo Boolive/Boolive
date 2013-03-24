@@ -4,7 +4,7 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, _, undefined) {
-    $.widget("boolive.RichTextToolbar", $.boolive.AjaxWidget, {
+    $.widget("boolive.RichTextToolbar", $.boolive.Widget, {
 
         _model: {
             'text-align': 'inherit',
@@ -23,7 +23,7 @@
         _changes: null,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             this._changes = {};
 

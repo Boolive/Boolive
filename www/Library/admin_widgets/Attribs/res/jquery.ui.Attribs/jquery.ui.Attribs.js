@@ -4,7 +4,7 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-    $.widget("boolive.Attribs", $.boolive.AjaxWidget, {
+    $.widget("boolive.Attribs", $.boolive.Widget, {
         /**
          * Данные и методы их обновления.
          * При установки атрибутов генерируются события. Обработчиками обновляется форма
@@ -111,7 +111,7 @@
          * @private
          */
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
 
             var self = this;
             // Элемент формы

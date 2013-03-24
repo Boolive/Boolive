@@ -5,10 +5,10 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-    $.widget("boolive.ObjectItem", $.boolive.AjaxWidget, {
+    $.widget("boolive.ObjectItem", $.boolive.Widget, {
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
 
             // Идентификатор объекта к которому будет переход (обычно его URI)

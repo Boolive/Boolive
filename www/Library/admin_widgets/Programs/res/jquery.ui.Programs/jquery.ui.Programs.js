@@ -7,13 +7,13 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _, undefined) {
-    $.widget("boolive.Programs", $.boolive.AjaxWidget, {
+    $.widget("boolive.Programs", $.boolive.Widget, {
 
 //        _history: undefined,
 //        _key: undefined,
 
         _create: function(){
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
 //            this._key = this._makeKey(this.callParents('getState'));
 //            this._history = {};
         },

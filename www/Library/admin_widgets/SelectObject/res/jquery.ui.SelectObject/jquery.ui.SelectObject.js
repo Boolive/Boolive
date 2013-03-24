@@ -5,12 +5,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-    $.widget("boolive.SelectObject", $.boolive.AjaxWidget, {
+    $.widget("boolive.SelectObject", $.boolive.Widget, {
         // Выделенный объект
         _select: null,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             // Текущий выделенный объект узнаётся у родительского виджета (у админки)
             this._select = this.callParents('getState').selected;

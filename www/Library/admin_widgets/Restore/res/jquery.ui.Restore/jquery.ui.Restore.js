@@ -6,12 +6,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-    $.widget("boolive.Restore", $.boolive.AjaxWidget, {
+    $.widget("boolive.Restore", $.boolive.Widget, {
         // Восстанавливаемый объект
         objects: null,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             // uri объекта
             self.options.object = $.parseJSON(this.element.attr('data-o'));

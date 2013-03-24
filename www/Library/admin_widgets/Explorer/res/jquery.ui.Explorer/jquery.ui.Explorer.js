@@ -5,11 +5,11 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-    $.widget("boolive.Explorer", $.boolive.AjaxWidget, {
+    $.widget("boolive.Explorer", $.boolive.Widget, {
 
         _create: function(){
             var self = this;
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             this.init_sortable();
             this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {selected: true});
         },

@@ -4,12 +4,12 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, _, document) {
-    $.widget("boolive.ImageEditor", $.boolive.AjaxWidget, {
+    $.widget("boolive.ImageEditor", $.boolive.Widget, {
         _value: '',
         _resize_rect: null,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
 
             self.element.on('click', function(e){
@@ -36,7 +36,7 @@
 
         _destroy: function(){
             this.call_setState({target: this, direct: 'children'}, {select:null}, {selected: true});
-            $.boolive.AjaxWidget.prototype._destroy.call(this);
+            $.boolive.Widget.prototype._destroy.call(this);
         },
 
         /**

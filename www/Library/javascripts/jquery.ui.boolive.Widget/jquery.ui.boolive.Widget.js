@@ -11,7 +11,7 @@
     /**
      * Виджет на основе JQuery UI Widget
      */
-    $.widget("boolive.AjaxWidget", {
+    $.widget("boolive.Widget", {
 
         options: {
             view: undefined, // Идентификатор вида (виджета).

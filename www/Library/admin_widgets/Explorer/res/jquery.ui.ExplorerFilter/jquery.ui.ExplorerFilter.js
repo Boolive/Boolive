@@ -4,12 +4,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-    $.widget("boolive.ExplorerFilter", $.boolive.AjaxWidget, {
+    $.widget("boolive.ExplorerFilter", $.boolive.Widget, {
         filter: null,
         filter_changed: false,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             self.filter = {};
             var options = self.element.find('.dropdown-menu > li > a');

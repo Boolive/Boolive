@@ -3,10 +3,10 @@
  * User: pauline
  */
 (function($) {
-    $.widget("boolive.MenuAuth", $.boolive.AjaxWidget, {
+    $.widget("boolive.MenuAuth", $.boolive.Widget, {
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             this.element.find('.userlink a').click(function(e){
                 e.preventDefault();

@@ -9,7 +9,7 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, root, _, undefined) {
-	$.widget("boolive.Admin", $.boolive.AjaxWidget, {
+	$.widget("boolive.Admin", $.boolive.Widget, {
         options: {
             basepath: '/admin'
         },
@@ -26,7 +26,7 @@
         _state: null, // {object: '', selected: [], view_name: '', window: '#id', }
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+			$.boolive.Widget.prototype._create.call(this);
 
             // Расширение jquery объектов Admin
             var self = this;
@@ -156,7 +156,7 @@
          * @param args Аргументы
          * @param target Объект, иницировавший вызов действия. По умолчанию this
          * @param all Вызыв всех подчиенных или только внеокнных
-         * @extends $.boolive.AjaxWidget.callChildren
+         * @extends $.boolive.Widget.callChildren
          */
         callChildren: function(action, args, target, all){
             var stop = undefined;
@@ -190,7 +190,7 @@
          * @param call Название действия (функции)
          * @param args Аргументы
          * @param target Объект, иницировавший вызов действия. По умолчанию this.
-         * @extends $.boolive.AjaxWidget.callParents
+         * @extends $.boolive.Widget.callParents
          */
         callParents: function(call, args, target){
             if (!target) target = null;

@@ -4,7 +4,7 @@
  * Copyright 2013 (C) Boolive
  */
 (function($, _, document, undefined) {
-    $.widget("boolive.ParagraphEditor", $.boolive.AjaxWidget, {
+    $.widget("boolive.ParagraphEditor", $.boolive.Widget, {
 
         options: {
             oject_proto: undefined // Идентификатор отображаемого объекта
@@ -13,7 +13,7 @@
         _is_change: false,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             // Коррекция пустого значения
 //            if (this.element.text()=='1'){

@@ -5,12 +5,12 @@
  * Copyright 2012 (C) Boolive
  */
 (function($, _) {
-    $.widget("boolive.Add", $.boolive.AjaxWidget, {
+    $.widget("boolive.Add", $.boolive.Widget, {
         // Выбранный объект (прототип для новового)
         object_select: null,
 
         _create: function() {
-            $.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
             // Отмена выделения при клике на свободную центральную область
             self.element.click(function(e){

@@ -4,11 +4,11 @@
  * Copyright 2012 (C) Boolive
  */
 (function($) {
-	$.widget("boolive.BreadcrumbsMenu", $.boolive.AjaxWidget, {
+	$.widget("boolive.BreadcrumbsMenu", $.boolive.Widget, {
 
         _create: function() {
 			var self = this;
-			$.boolive.AjaxWidget.prototype._create.call(this);
+			$.boolive.Widget.prototype._create.call(this);
             // Нажатие по пункту
 			this.element.on('click', 'li a', function(e){
                 e.preventDefault();
