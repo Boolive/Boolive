@@ -33,7 +33,8 @@ DirectoryIndex Off
     RewriteBase /
 
     # Не изменять ссылки на файлы
-    RewriteCond %{REQUEST_URI} !\.[a-z]{1,4}[\?0-9]*/?$ [NC]
+    #RewriteCond %{REQUEST_URI} !\.[a-z]{1,4}[\?0-9]*/?$ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-f
 
     # Все запросы переадресовываются в index.php без параметров. GET парметры вычисляются в движке из REQUEST_URI
     RewriteRule ^.*$ index.php [E=REMOTE_USER:%{HTTP:Authorization},QSA]
