@@ -17,6 +17,8 @@ class Menu extends Widget
         $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['object']->linked();
         // Отображется всегда свой объект
         $this->_input_child['REQUEST']['object'] = $this->object->linked();
+        // Не показыват корневой пункт меню
+        $this->_input_child['REQUEST']['show'] = false;
     }
 
     public function work($v = array()){
