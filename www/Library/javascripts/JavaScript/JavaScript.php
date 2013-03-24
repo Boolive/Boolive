@@ -20,7 +20,7 @@ class JavaScript extends View
     public function work()
     {
         // Исполнение зависимых объектов
-        $this->depends->start($this->_commands, $this->_input);
+        $this->depends->linked()->start($this->_commands, $this->_input);
         // Подключение скрипта прототипа - наследование скриптов
 //        if (($proto = $this->proto()) && ($proto instanceof self)){
 //            $proto->start($this->_commands, $this->_input);
