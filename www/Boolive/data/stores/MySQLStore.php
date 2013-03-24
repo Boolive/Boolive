@@ -294,9 +294,9 @@ class MySQLStore extends Entity
                     // Сдвиг order существующих записей, чтоб освободить значение для новой
                     $q = $this->db->prepare('
                         UPDATE {objects} SET `order` = `order`+1
-                        WHERE `id`=? AND owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`>=?'
+                        WHERE owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`>=?'
                     );
-                    $q->execute(array($attr['owner'], $attr['lang'], $attr['id'], $attr['parent'], $attr['order']));
+                    $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
                     unset($q);
                 }else
                 // Новое максимальное значение для order, если объект новый или явно указано order=null

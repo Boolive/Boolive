@@ -1442,10 +1442,15 @@ class Entity implements ITrace
 
     /**
      * Признак, изменены атрибуты объекта или нет
+     * @param null|bool $is_change Установка признака, если не null
      * @return bool
      */
-    public function isChenged()
+    public function isChenged($is_change = null)
     {
+        if (isset($is_change)){
+            $this->_changed = $is_change;
+            $this->_checked = false;
+        }
         return $this->_changed;
     }
 
