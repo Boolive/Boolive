@@ -1,0 +1,5 @@
+{
+	"title": "Отправка форм",
+	"description": "Плагин для для отправки пользовательских форм по AJAX без перегрузки страницы",
+	"proto": "/Library/JavaScripts/JavaScript"
+}

@@ -1,5 +1,0 @@
-{
-    "title": "Виджет с обновлением по Ajax",
-	"description": "jQueryUI виджет с функцией обновления без полной перегрузки страницы",
-    "proto": "/Library/views/jQueryUIScript"
-}

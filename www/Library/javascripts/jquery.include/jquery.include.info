@@ -1,0 +1,5 @@
+{
+	"title": "Загрузчик JS/CSS файлов",
+	"description": "Плагин для динамической загрузки JavaScript и CSS файлов со стороны клиента (браузера)",
+	"proto": "/Library/JavaScripts/JavaScript"
+}
