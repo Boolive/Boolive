@@ -134,6 +134,15 @@
                     /*font-family: courier;*/
                 }
 
+                .Attribs .item-is_link label::after {
+                    color: #0073BF;
+                    content: "↝";
+                    font-family: "Times New Roman";
+                    line-height: 16px;
+                    margin-left: 2px;
+                    text-decoration: none;
+                    }
+
         /* Кнопки */
         .Attribs .submits{
             margin: 15px 0 0 0;
