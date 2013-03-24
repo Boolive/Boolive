@@ -48,6 +48,8 @@ namespace Boolive
                     set_exception_handler(array('\Boolive\Boolive', 'exception'));
                     // Регистрация обработчика ошибок
                     set_error_handler(array('\Boolive\Boolive', 'error'));
+                    // Временая зона
+                    date_default_timezone_set('UTC');
                     // Настройка кодировки
                     mb_internal_encoding('UTF-8');
                     mb_regex_encoding('UTF-8');
