@@ -1,5 +1,5 @@
 {
 	"title": "jQuery скрипт",
 	"description": "JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery",
-	"proto": "/Library/JavaScripts/JavaScript"
+	"proto": "/Library/javascripts/JavaScript"
 }

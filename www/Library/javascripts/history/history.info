@@ -1,5 +1,5 @@
 {
 	"title": "HTML5-History-API",
 	"description": "Библиотека эмулирует HTML5 History API в старых браузерах.",
-	"proto": "/Library/JavaScripts/JavaScript"
+	"proto": "/Library/javascripts/JavaScript"
 }

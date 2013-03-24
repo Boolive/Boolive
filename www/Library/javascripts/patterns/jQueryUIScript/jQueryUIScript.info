@@ -1,5 +1,5 @@
 {
 	"title": "jQuery UI скрипт",
 	"description": "JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI",
-	"proto": "/Library/JavaScripts/patterns/jQueryScript"
+	"proto": "/Library/javascripts/patterns/jQueryScript"
 }

@@ -5,7 +5,7 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\JavaScripts\JavaScript;
+namespace Library\javascripts\JavaScript;
 
 use Library\views\View\View;
 
