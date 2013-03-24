@@ -114,24 +114,24 @@ class MySQLStore extends Entity
         }else{
             if (empty($info)) $attrs['uri'] = $key;
             // Поиск виртуального
-            if (isset($attrs['uri'])){
-                $names = F::splitRight('/', $attrs['uri']);
-                if ($parent = Data::read($names[0], $owner, $lang, 0, $access)){
-                    if (($proto = $parent->proto()) && $proto->{$names[1]}->isExist()){
-                        $obj = $proto->{$names[1]}->birth($parent);
-                        if (isset($attrs['id2'])) $obj->_attribs['id'] = $this->remoteId($attrs['id2']);
-                        $obj->_attribs['is_exist'] = 0; // Ещё не существует
-                        $obj->_attribs['is_virtual'] = 1;
-                        // Сохранение виртуального
-                        if ($parent->isExist() && !$parent->_rename) $this->write($obj);
-                        return $obj;
-                    }
-                }
-            }
-            if (!isset($obj)){
+//            if (isset($attrs['uri'])){
+//                $names = F::splitRight('/', $attrs['uri']);
+//                if ($parent = Data::read($names[0], $owner, $lang, 0, $access)){
+//                    if (($proto = $parent->proto()) && $proto->{$names[1]}->isExist()){
+//                        $obj = $proto->{$names[1]}->birth($parent);
+//                        if (isset($attrs['id2'])) $obj->_attribs['id'] = $this->remoteId($attrs['id2']);
+//                        $obj->_attribs['is_exist'] = 0; // Ещё не существует
+//                        $obj->_attribs['is_virtual'] = 1;
+//                        // Сохранение виртуального
+//                        if ($parent->isExist() && !$parent->_rename) $this->write($obj);
+//                        return $obj;
+//                    }
+//                }
+//            }
+//            if (!isset($obj)){
                 // Несущесвтующий объект
                 $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
-            }
+//            }
         }
         if ($obj->isExist()){
             Buffer::set($obj->id().$buffer_key_pf, $obj);
@@ -153,7 +153,6 @@ class MySQLStore extends Entity
                 // Атрибуты отфильтрованы, так как нет ошибок
                 $attr = $entity->_attribs;
                 // Идентифкатор объекта
-                $attr['id'] = $this->localId($entity->key());
                 // Родитель и урвень вложенности
                 $attr['parent'] = isset($attr['parent']) ? $this->localId($attr['parent']) : 0;
                 $attr['parent_cnt'] = $entity->parentCount();
@@ -175,15 +174,26 @@ class MySQLStore extends Entity
 
                 // Подбор уникального имени, если указана необходимость в этом
                 if ($entity->_rename){
-                    //Выбор записи по шаблону имени с самым большим префиксом
-                    $q = $this->db->prepare('SELECT `name` FROM {objects} WHERE parent=? AND `name` REGEXP ? ORDER BY CAST((SUBSTRING_INDEX(`name`, "_", -1)+1) AS SIGNED) DESC LIMIT 0,1');
-                    $q->execute(array($attr['parent'], '^'.$entity->_rename.'(_[0-9]+)?$'));
-                    if ($row = $q->fetch(DB::FETCH_ASSOC)){
-                        preg_match('|^'.preg_quote($entity->_rename).'(?:_([0-9]+))?$|u', $row['name'], $match);
-                        $entity->_rename.= '_'.(isset($match[1]) ? ($match[1]+1) : 1);
+                    $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE parent=? AND `name`=? LIMIT 0,1');
+                    $q->execute(array($attr['parent'], $entity->_rename));
+                    if ($q->fetch()){
+                        //Выбор записи по шаблону имени с самым большим префиксом
+                        $q = $this->db->prepare('SELECT `name` FROM {objects} WHERE parent=? AND `name` REGEXP ? ORDER BY CAST((SUBSTRING_INDEX(`name`, "_", -1)+1) AS SIGNED) DESC LIMIT 0,1');
+                        $q->execute(array($attr['parent'], '^'.$entity->_rename.'(_[0-9]+)?$'));
+                        if ($row = $q->fetch(DB::FETCH_ASSOC)){
+                            preg_match('|^'.preg_quote($entity->_rename).'(?:_([0-9]+))?$|u', $row['name'], $match);
+                            $entity->_rename.= '_'.(isset($match[1]) ? ($match[1]+1) : 1);
+                        }
                     }
                     $temp_name = $attr['name'];
                     $attr['name'] = $entity->_rename;
+                    $attr['uri'] = $entity->uri(true);
+                }
+                // Локальный идентификатор объекта
+                if (empty($attr['id'])){
+                    $attr['id'] = $this->localId($attr['uri']);
+                }else{
+                    $attr['id'] = $this->localId($attr['id']);
                 }
 
                 // Значения превращаем в файл, если больше 255
@@ -260,14 +270,16 @@ class MySQLStore extends Entity
                     $uri_new = (isset($names[0])?$names[0].'/':'').$attr['name'];
                     $entity->_attribs['uri'] = $uri_new;
                     //
-                    $q = $this->db->prepare('UPDATE {ids} SET {uri}=CONCAT(?, SUBSTRING(uri, ?)) WHERE uri LIKE ? OR id = ?');
-                    $v = array($uri_new, mb_strlen($uri)+1, $uri.'/%', $attr['id']);
+                    $q = $this->db->prepare('UPDATE {ids}, {parents} SET {ids}.uri = CONCAT(?, SUBSTRING(uri, ?)) WHERE {parents}.parent_id = ? AND {parents}.object_id = {ids}.id AND {parents}.is_delete=0');
+                    $v = array($uri_new, mb_strlen($uri)+1, $attr['id']);
                     $q->execute($v);
                     // Обновление уровней вложенностей в objects
                     if (!empty($current) && $current['parent']!=$attr['parent']){
                         $dl = $attr['parent_cnt'] - $current['parent_cnt'];
-                        $q = $this->db->prepare('UPDATE {objects} SET parent_cnt = parent_cnt + ? WHERE id IN (SELECT id FROM {ids} WHERE uri LIKE ? OR id = ?)');
-                        $q->execute(array($dl, $uri_new.'/%', $attr['id']));
+                        $q = $this->db->prepare('UPDATE {objects}, {parents} SET parent_cnt = parent_cnt + ? WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0');
+                        $q->execute(array($dl, $attr['id']));
+                        // Обновление отношений
+                        $this->makeParents($attr['id'], $attr['parent'], $dl, true);
                     }
                     // Переименование/перемещение папки объекта
                     if (!empty($uri) && is_dir(DIR_SERVER_PROJECT.ltrim($uri, '/'))){
@@ -282,7 +294,7 @@ class MySQLStore extends Entity
                     // Сдвиг order существующих записей, чтоб освободить значение для новой
                     $q = $this->db->prepare('
                         UPDATE {objects} SET `order` = `order`+1
-                        WHERE owner=? AND lang=? AND `id`!=? AND `parent`=? AND is_history=0 AND `order`>=?'
+                        WHERE `id`=? AND owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`>=?'
                     );
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['id'], $attr['parent'], $attr['order']));
                     unset($q);
@@ -363,10 +375,7 @@ class MySQLStore extends Entity
                 // Если добавление новой актуальной записи или востановление из истории
                 if ((($add && $entity->isExist()) || (!$add && $current['is_history'])) && (isset($attr['is_history']) && $attr['is_history']==0)){
                     // Смена истории, если есть уже записи.
-                    $q = $this->db->prepare('
-                        UPDATE {objects} SET `is_history` = 1
-                        WHERE owner=? AND lang=? AND `id`=? AND is_history=0'
-                    );
+                    $q = $this->db->prepare('UPDATE {objects} SET `is_history`=1 WHERE `id`=? AND owner=? AND lang=? AND is_history=0');
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['id']));
                     unset($q);
                 }
@@ -419,23 +428,27 @@ class MySQLStore extends Entity
 //                    $q->execute(array($attr['id']));
 //                }
 
-                // Обновления наследников
                 if (!empty($current)){
+                    // Обновления наследников
+                    $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
+                    if ($current['proto']!=$attr['proto']){
+                        $this->makeProtos($attr['id'], $attr['proto'], $dp, true);
+                    }
                     // Обновление значения, признака файла, признака наследования значения, класса и кол-во прототипов у наследников
                     // если что-то из этого изменилось у объекта
-                    $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if ($current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
                         $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto'] && $dp) || $dp!=0){
                         // id прототипа, значание которого берется по умолчанию для объекта
                         $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
                         $u = $this->db->prepare('
-                            UPDATE {objects}, {trees} SET
+                            UPDATE {objects}, {protos} SET
                                 `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
                                 `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
                                 `is_default_value` = IF(is_default_value=:vproto, :proto, is_default_value),
                                 `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
                                 `proto_cnt` = `proto_cnt`+:dp
-                            WHERE {trees}.parent_id = :obj AND {objects}.id = {trees}.object_id AND {trees}.type=1 AND {trees}.object_id!={trees}.parent_id
+                            WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id AND {protos}.is_delete=0
+                              AND {protos}.proto_id != {protos}.object_id
                         ');
                         $u->execute(array(
                             ':value' => $attr['value'],
@@ -451,21 +464,20 @@ class MySQLStore extends Entity
                             ':obj' => $attr['id']
                         ));
                     }
-
                     // Изменился признак ссылки
                     if ($current['is_link']!=$attr['is_link']){
                         // Смена класса по-умолчанию у всех наследников
                         // Если у наследников признак is_link такой же как у изменённого объекта и класс был Entity, то они получают класс изменного объекта
                         // Если у наследников признак is_link не такой же и класс был как у изменноо объекта, то они получают класс Entity
                         $u = $this->db->prepare('
-                            UPDATE {objects}, {trees} SET
+                            UPDATE {objects}, {protos} SET
                                 `is_default_class` = IF(({objects}.is_link > 0) = :is_link,
                                     IF(is_default_class=:max_id, :cproto, is_default_class),
                                     IF(is_default_class=:cproto, :max_id, is_default_class)
                                 ),
                                 `is_link` = IF((is_link=:clink), :nlink, is_link)
-                            WHERE {trees}.parent_id = :obj AND {objects}.id = {trees}.object_id AND {trees}.type=1
-                              AND {trees}.object_id!={trees}.parent_id
+                            WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id AND {protos}.is_delete=0
+                              AND {protos}.proto_id != {protos}.object_id
                         ');
                         $params = array(
                             ':obj' => $attr['id'],
@@ -479,13 +491,12 @@ class MySQLStore extends Entity
                     }
                 }
 
-                // Создание или обновление отношений
+                // Создание отношений если объект новый
                 if (!$entity->isExist()){
-                    $this->makeTree($attr['id'], $attr['parent'], $attr['proto'], false);
-                }else
-                if (!empty($current) && ($attr['parent']!=$current['parent'] || $attr['proto']!=$current['proto'])){
-                    $this->makeTree($attr['id'], $attr['parent'], $attr['proto'], true);
+                    $this->makeParents($attr['id'], $attr['parent'], 0, false);
+                    $this->makeProtos($attr['id'], $attr['proto'], 0, false);
                 }
+
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->remoteId($attr['id']);
                 $entity->_attribs['name'] = $attr['name'];
@@ -589,11 +600,10 @@ class MySQLStore extends Entity
         if (!isset($start_depth)) $start_depth = $depth;
         try{
             $this->db->beginTransaction();
-
-            // Выбор всех прототипов
+            // Выбор всех прототипов с учётом владельца и языка
             $q = $this->db->prepare('
                 SELECT i.uri, o.* FROM {ids} i
-                JOIN {trees} t ON (t.parent_id = i.id AND t.object_id = ? AND t.type = 1)
+                JOIN {protos} t ON (t.proto_id = i.id AND t.object_id = ? AND t.is_delete = 0)
                 JOIN {objects} o ON (o.id = i.id
                     AND (o.id, o.owner, o.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=o.id AND `owner` IN (?, 4294967295) AND `lang` IN (?, 4294967295) GROUP BY id)
                     AND is_history=0
@@ -609,12 +619,17 @@ class MySQLStore extends Entity
             // Очередь индексация прототипов
             $stack = array();
             $i = sizeof($protos)-1;
+            try{
             while ($i>0 && ($protos[$i]['is_link'] == $protos[$i-1]['is_link']) && $protos[$i]['is_default_children'] && ($protos[$i]['index_depth'] < $depth || $protos[$i]['index_step']!=0)){
                 $stack[] = array($protos[$i], $protos[$i-1]);
                 $i--;
             }
+            }catch (\Exception $e){
+                throw $e;
+            }
             // Обновление index_depth
             $update = $this->db->prepare('UPDATE {objects} SET index_depth = ?, index_step =? WHERE id = ?');
+            $update->execute(array($depth, 0, $obj));
 
             if (sizeof($stack)){
                 $size = 10;
@@ -663,7 +678,11 @@ class MySQLStore extends Entity
                 //$select->bindParam(':size', $size, DB::PARAM_INT);
                 $max_steps = ceil(50 / $depth);
                 // Индексирование прототипов
+                // У каждого прототипа выбираются подчиненные, чтобы их сохранить наследнику из $stack
                 for ($i = sizeof($stack)-1; $i>=0; $i--){
+                    // Фиксируем, что индексация выполнена, чтобы на асинхронные запросы она не повторилась
+                    $update->execute(array($depth, 0, $from_id));
+
                     //$max_step = ceil(50/$steps); $steps*=$steps+1;
                     $from = $stack[$i][0];
                     $proto = $stack[$i][1];
@@ -676,22 +695,24 @@ class MySQLStore extends Entity
                     $size = (int)$size;
                     $steps = 1;
                     $select_cnt = 0;
-                    // Поиск виртуальных подчиенных, если подчиенные наследуются от прототипа
+                    // Поиск виртуальных подчиненных, если подчиненные наследуются от прототипа
                     if ($from['is_default_children']){
                         do{
                             $select->bindParam(':start', $start, DB::PARAM_INT);
                             $select->execute();
                             $select_cnt = 0;
                             while ($row = $select->fetch(DB::FETCH_ASSOC)){
+                                // URI уже для свойсвта наследника, получаем id для свойства наследника
                                 $row['id'] = $this->localId($row['uri']);
                                 if ($from['is_link']) $row['is_link'] = 1;
                                 unset($row['uri']);
-                                // Запись объекта
+                                // Запись унаследованного свойсвта
                                 $insert->execute($row);
                                 $select_cnt++;
                                 // Создание отношений в таблице дерева
                                 if ($insert->rowCount()){
-                                    $this->makeTree($row['id'], $row['parent'], $row['proto'], false);
+                                    $this->makeParents($row['id'], $row['parent'], 0, false);
+                                    $this->makeProtos($row['id'], $row['proto'], 0, false);
                                 }
                                 // Вложенная индексация виртуальных
                                 if ($depth > 1){
@@ -725,8 +746,8 @@ class MySQLStore extends Entity
 
                         $index_step = ($index_step ==0 && $select_cnt == $size ? $start : $index_step);
                     }
-                    // Обновление сведений об индексации
-                    $update->execute(array($depth, $index_step, $from_id));
+                    // Если индексация не закончена, то запоминаем позицию индексирования
+                    if ($index_step > 0) $update->execute(array($depth, $index_step, $from_id));
                 }
             }else{
                 $update->execute(array($depth, 0, $obj));
@@ -738,24 +759,24 @@ class MySQLStore extends Entity
         }
     }
 
-    /**
-     * Удаление виртуальных подчиненых у объекта и у его наследников
-     * @param $object_id
-     */
-    private function removeVirtualChildren($object_id)
-    {
-        $q = $this->db->prepare('
-            DELETE {ids}, {objects}, {trees} FROM {ids}, {objects}, {trees}
-            WHERE parent_id = ?
-            AND object_id != parent_id
-            AND {ids}.id = object_id
-            AND {objects}.id = object_id
-            AND {objects}.is_virtual
-        ');
-        ///*IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = ? AND `type`=1)t)*/
-            /*AND `type` = 0*/
-        $q->execute(array($object_id));
-    }
+//    /**
+//     * Удаление виртуальных подчиненых у объекта и у его наследников
+//     * @param $object_id
+//     */
+//    private function removeVirtualChildren($object_id)
+//    {
+//        $q = $this->db->prepare('
+//            DELETE {ids}, {objects}, {trees} FROM {ids}, {objects}, {trees}
+//            WHERE parent_id = ?
+//            AND object_id != parent_id
+//            AND {ids}.id = object_id
+//            AND {objects}.id = object_id
+//            AND {objects}.is_virtual
+//        ');
+//        ///*IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = ? AND `type`=1)t)*/
+//            /*AND `type` = 0*/
+//        $q->execute(array($object_id));
+//    }
 
     /**
      * Очистка индекса объекта и его родителей
@@ -767,25 +788,6 @@ class MySQLStore extends Entity
     private function clearIndex($parent_id, $object_id = 0)
     {
         $q = $this->db->exec('UPDATE {objects} SET index_depth = 0, index_step = 0');
-        return;
-        // Обнуление своего индекса и наследников
-        if ($object_id){
-            $q = $this->db->prepare('
-                UPDATE {objects}, {trees} SET {objects}.index_depth = 0, {objects}.index_step = 0
-                WHERE {trees}.parent_id = ? AND `type`=1 AND {objects}.id = {trees}.object_id
-            ');
-            $q->execute(array($object_id));
-        }
-        // Обнуление индекса родителей, родителей наследников
-        if ($parent_id){
-            $q = $this->db->prepare('
-                UPDATE {objects} p, {trees} t, (SELECT id, parent_cnt FROM {objects}, {trees} WHERE object_id={objects}.id AND parent_id=? AND `type`=1) o
-                SET p.index_depth = 0 AND p.index_step = 0
-                WHERE p.id = t.parent_id AND t.object_id = o.id AND t.type=0 AND p.index_depth>0
-                AND (CAST(o.parent_cnt - p.parent_cnt AS SIGNED) - p.index_depth - 1) < 0
-            ');
-            $q->execute(array($parent_id));
-        }
     }
 
     /**
@@ -881,7 +883,7 @@ class MySQLStore extends Entity
 
                 if (!isset($cond['from'][1])){
                     $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                    $result['select'].= "\n  JOIN {trees} t ON (t.object_id = obj.id AND t.parent_id = ? AND t.`type`=0)";
+                    $result['select'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ? AND t.is_delete=0)";
                     $binds2[] = array($id, DB::PARAM_INT);
                     $result['where'].= "u.uri LIKE ? AND ";
                     $result['binds'][] = $cond['from'][0]->uri().'/%';
@@ -901,7 +903,7 @@ class MySQLStore extends Entity
                     }
                 }else{
                     $result['select'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                    $result['select'].= "\n  JOIN {trees} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.`type`=0 AND f.level<=?)";
+                    $result['select'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level<=? AND f.is_delete=0)";
                     $binds2[] = array($id, DB::PARAM_INT);
                     $binds2[] = array($cond['from'][0]->parentCount() + $cond['from'][1], DB::PARAM_INT);
                     $result['where'].= "u.uri LIKE ? AND ";
@@ -1010,7 +1012,7 @@ class MySQLStore extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = 'is'.$t_cnt;
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {trees} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND `type`= 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1026,7 +1028,7 @@ class MySQLStore extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = 'is'.$t_cnt;
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {trees} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND `type`=1)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1043,10 +1045,10 @@ class MySQLStore extends Entity
                                 unset($c[0]);
                             }
                             if (sizeof($c)>0){
-                                $alias = 't'.$t_cnt++;
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {trees} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+                                $of = rtrim(str_repeat('?,', sizeof($c)), ',');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id`=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
-                                $result['binds'] = array_merge($result['binds'], $c);
+                                $result['binds'] = array_merge($result['binds'], $c, $c);
                             }else{
                                 $cond[$i] = '1';
                             }
@@ -1110,100 +1112,276 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Создание или обновление отношений между объектами в таблице дерева
-     * @param int $object Идентификатор объекта, для которого обновляются отношения. Отношения обновляются и у его подчиненных
-     * @param int $parent Идентификатор родителя объекта
-     * @param int $proto Идентифкатор прототипа объекта
-     * @param bool $remake Признак, обновлять (true) или добавлять отношения (false). Добавление применяется только при
-     * создании объекта. При смене родителя или прототипа необходимо обновлять отношеня. Используется и при удалении объекта.
+     * Создание или обновление отношений между родителями объекта
+     * @param $object
+     * @param $parent
+     * @param $dl Разница между новым и старым уровнем вложенности
+     * @param bool $remake
      */
-    public function makeTree($object, $parent, $proto, $remake = false)
+    public function makeParents($object, $parent, $dl, $remake = false)
     {
-        $make_ref = $this->db->prepare('
-            INSERT IGNORE {trees} (object_id, parent_id, `type`, `level`)
-            SELECT :obj, parent_id, IF(object_id=:parent AND `type`=0, 0, IF(object_id=:proto AND `type`=1, 1, 3)), `level`+ 1
-            FROM {trees} WHERE object_id IN (:parent, :proto)
-                AND NOT(object_id =:parent AND object_id=parent_id AND `type`=1)
-                AND NOT(object_id =:proto AND object_id=parent_id AND `type`=0)
-            UNION SELECT :obj,:obj,0,0 UNION SELECT :obj,:obj,1,0
-        ');
-        $make_ref->bindParam(':obj', $object, DB::PARAM_INT);
-        $make_ref->bindParam(':parent', $parent, DB::PARAM_INT);
-        $make_ref->bindParam(':proto', $proto, DB::PARAM_INT);
-
         if ($remake){
-            // Выбор подчиненных $object сортируя по parent_cnt*proto_cnt. Выбор с proto и parent
+            // У подчинённых удалить отношения с родителями, которые есть у $object
             $q = $this->db->prepare('
-                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
-                JOIN {trees} t ON (t.object_id = {trees}.object_id AND t.parent_id = :obj)
-                JOIN {objects} ON ({objects}.id = {trees}.object_id)
-                GROUP BY {trees}.object_id
-                ORDER BY l ASC
+                UPDATE {parents} p, (
+                    SELECT c.object_id, c.parent_id FROM {parents} p
+                    JOIN {parents} c ON c.object_id = p.object_id AND c.object_id!=c.parent_id AND c.parent_id IN (SELECT parent_id FROM {parents} WHERE object_id = :obj)
+                    WHERE p.parent_id = :obj)p2
+                SET p.is_delete = 1
+                WHERE p.object_id = p2.object_id AND p.parent_id = p2.parent_id
             ');
-//            $q = $this->db->prepare('
-//                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
-//                JOIN {objects} ON ({objects}.id = {trees}.object_id)
-//                WHERE {trees}.parent_id = :obj
-//                GROUP BY {trees}.object_id
-//                ORDER BY l ASC
-//            ');
-            $q->execute(array(':obj' => $object));
-            $children = $q->fetchAll(DB::FETCH_ASSOC);
-
-            // Удаление отношений у $object и всех его подчиненных
-            $q = $this->db->prepare('
-                DELETE {trees} FROM {trees}, (SELECT object_id FROM {trees} WHERE parent_id = :obj)t WHERE {trees}.object_id = t.object_id
-            ');
-//            $q = $this->db->prepare('
-//               DELETE FROM {trees} WHERE object_id IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = :obj)t)
-//            ');
-            $q->execute(array(':obj' => $object));
-            unset($q);
-            // Создание новых отношений
-            $cnt = sizeof($children);
-            for ($i=0; $i<$cnt; $i++){
-                $object = $children[$i]['id'];
-                $parent = $children[$i]['parent'];
-                $proto = $children[$i]['proto'];
-                $make_ref->execute();
+            $q->execute(array(':obj'=>$object));
+            // Обновить level оставшихся отношений в соответсвии с изменением level с новым родителем
+            if ($dl != 0){
+                $q = $this->db->prepare('
+                    UPDATE {parents} c, (SELECT object_id FROM {parents} WHERE parent_id = :obj)p
+                    SET c.level = c.level+:dl
+                    WHERE c.object_id!=c.parent_id AND c.is_delete=0 AND p.object_id = c.object_id
+                ');
+                $q->execute(array(':obj'=>$object, ':dl'=>$dl));
             }
-        }else{
-            // Добавление отношений для $object копированием их от родителя и прототипа
-            $make_ref->execute();
+            if ($parent > 0){
+                // Для объекта и всех его подчиненных создать отношения с новыми родителями
+                $q = $this->db->prepare('SELECT object_id, `level` FROM {parents} WHERE parent_id = :obj ORDER BY level');
+                $make = $this->db->prepare('
+                    INSERT {parents} (object_id, parent_id, `level`)
+                    SELECT :obj, parent_id, `level`+1+:l FROM {parents}
+                    WHERE object_id = :parent
+                    UNION SELECT :obj,:obj,0
+                    ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                ');
+                $q->execute(array(':obj'=>$object));
+                while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                    $make->execute(array(':obj'=>$row['object_id'], ':parent'=>$parent, ':l'=>$row['level']));
+                }
+            }
+        }else
+        if ($parent > 0){
+            $make = $this->db->prepare('
+                INSERT {parents} (object_id, parent_id, `level`)
+                SELECT :obj, parent_id, `level`+1 FROM {parents}
+                WHERE object_id = :parent
+                UNION SELECT :obj,:obj,0
+                ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+            ');
+            $make->execute(array(':obj' => $object, ':parent'=>$parent));
         }
-        unset($make_ref);
     }
 
     /**
-     * Полная перестройка таблицы дерева
-     * @warning Требуется до 5 и более минут работы скрипта.
+     * Создание или обновление отношений с прототипами объекта
+     * @param $object
+     * @param $proto
+     * @param int $dl Разница между новым и старым уровнем вложенности
+     * @param bool $remake Признак, отношения обновлять (при смене прототипа) или создаются новые (новый объект)
      */
-    public function rebuildTree()
+    public function makeProtos($object, $proto, $dl, $remake = false)
+    {
+        if ($remake){
+            // У наследников удалить отношения с прототипами, которые есть у $object
+            $q = $this->db->prepare('
+                UPDATE {protos} p, (
+                    SELECT c.object_id, c.proto_id FROM {protos} p
+                    JOIN {protos} c ON c.object_id = p.object_id AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj)
+                    WHERE p.proto_id = :obj)p2
+                SET p.is_delete = 1
+                WHERE p.object_id = p2.object_id AND p.proto_id = p2.proto_id
+            ');
+            $q->execute(array(':obj'=>$object));
+            // Обновить level оставшихся отношений в соответсвии с изменением level с новым прототипом
+            if ($dl != 0){
+                $q = $this->db->prepare('
+                    UPDATE {protos} c, (SELECT object_id FROM {protos} WHERE proto_id = :obj)p
+                    SET c.level = c.level+:dl
+                    WHERE c.object_id!=c.proto_id AND c.is_delete=0 AND p.object_id = c.object_id
+                ');
+                $q->execute(array(':obj'=>$object, ':dl'=>$dl));
+            }
+            // Для объекта и всех его наследников создать отношения с новыми прототипом
+            if ($proto > 0){
+                $q = $this->db->prepare('SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj ORDER BY `level`');
+                $make = $this->db->prepare('
+                    INSERT {protos} (object_id, proto_id, `level`)
+                    SELECT :obj, proto_id, `level`+1+:l FROM {protos}
+                    WHERE object_id = :parent
+                    UNION SELECT :obj,:obj,0
+                    ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                ');
+                $q->execute(array(':obj'=>$object));
+                while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                    $make->execute(array(':obj'=>$row['object_id'], ':parent'=>$proto, ':l'=>$row['level']));
+                }
+            }
+        }else
+        if ($proto > 0){
+            $make = $this->db->prepare('
+                INSERT {protos} (object_id, proto_id, `level`)
+                SELECT :obj, proto_id, `level`+1 FROM {protos}
+                WHERE object_id = :parent
+                UNION SELECT :obj,:obj,0
+                ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+            ');
+            $make->execute(array(':obj' => $object, ':parent'=>$proto));
+        }
+    }
+//    /**
+//     * Создание или обновление отношений между объектами в таблице дерева
+//     * @param int $object Идентификатор объекта, для которого обновляются отношения. Отношения обновляются и у его подчиненных
+//     * @param int $parent Идентификатор родителя объекта
+//     * @param int $proto Идентифкатор прототипа объекта
+//     * @param bool $remake Признак, обновлять (true) или добавлять отношения (false). Добавление применяется только при
+//     * создании объекта. При смене родителя или прототипа необходимо обновлять отношеня. Используется и при удалении объекта.
+//     */
+//    public function makeTree($object, $parent, $proto, $remake = false)
+//    {
+//        $make_ref = $this->db->prepare('
+//            INSERT IGNORE {trees} (object_id, parent_id, `type`, `level`)
+//            SELECT :obj, parent_id, IF(object_id=:parent AND `type`=0, 0, IF(object_id=:proto AND `type`=1, 1, 3)), `level`+ 1
+//            FROM {trees} WHERE object_id IN (:parent, :proto)
+//                AND NOT(object_id =:parent AND object_id=parent_id AND `type`=1)
+//                AND NOT(object_id =:proto AND object_id=parent_id AND `type`=0)
+//                AND `type` IN (0,1,3)
+//            UNION SELECT :obj,:obj,0,0 UNION SELECT :obj,:obj,1,0
+//        ');
+//        $make_ref->bindParam(':obj', $object, DB::PARAM_INT);
+//        $make_ref->bindParam(':parent', $parent, DB::PARAM_INT);
+//        $make_ref->bindParam(':proto', $proto, DB::PARAM_INT);
+//
+//        if ($remake){
+//            // Выбор подчиненных $object сортируя по parent_cnt*proto_cnt. Выбор с proto и parent
+//            $q = $this->db->prepare('
+//                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
+//                JOIN {trees} t ON (t.object_id = {trees}.object_id AND t.parent_id = :obj AND {trees}.type IN (0,1,3))
+//                JOIN {objects} ON ({objects}.id = {trees}.object_id)
+//                GROUP BY {trees}.object_id
+//                ORDER BY l ASC
+//            ');
+////            $q = $this->db->prepare('
+////                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
+////                JOIN {objects} ON ({objects}.id = {trees}.object_id)
+////                WHERE {trees}.parent_id = :obj
+////                GROUP BY {trees}.object_id
+////                ORDER BY l ASC
+////            ');
+//            //$children = $q->fetchAll(DB::FETCH_ASSOC);
+//
+//            // Удаление отношений у $object и всех его подчиненных
+//            $d = $this->db->prepare('
+//                UPDATE {trees}, (SELECT object_id FROM {trees} WHERE parent_id = :obj)t
+//                SET `type`=:type WHERE {trees}.object_id = t.object_id
+//            ');
+//            //DELETE {trees} FROM {trees}, (SELECT object_id FROM {trees} WHERE parent_id = :obj)t WHERE {trees}.object_id = t.object_id
+////            $q = $this->db->prepare('
+////               DELETE FROM {trees} WHERE object_id IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = :obj)t)
+////            ');
+//            $d->execute(array(':type'=>5, ':obj' => $object));
+//            unset($d);
+//
+//            $q->execute(array(':obj' => $object));
+//            // Создание новых отношений
+//            //$cnt = sizeof($children);
+//            while ($child = $q->fetch(DB::FETCH_ASSOC)){
+//            //for ($i=0; $i<$cnt; $i++){
+//                $object = $child['id'];
+//                $parent = $child['parent'];
+//                $proto = $child['proto'];
+//                $make_ref->execute();
+//            }
+//
+//            $this->db->query('DELETE {trees} WHERE {trees}.type = 5');
+//        }else{
+//            // Добавление отношений для $object копированием их от родителя и прототипа
+//            $make_ref->execute();
+//        }
+//        unset($make_ref);
+//    }
+
+//    /**
+//     * Полная перестройка таблицы дерева
+//     * @warning Требуется до 5 и более минут работы скрипта.
+//     */
+//    public function rebuildTree()
+//    {
+//        try{
+//            $this->db->beginTransaction();
+//            // Очитска таблицы
+//            $this->db->query('TRUNCATE {trees}');
+//            // Отношения родитель - подчиненный
+//            $q = $this->db->prepare('
+//                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.proto, {objects}.parent_cnt, {objects}.proto_cnt
+//                FROM {objects}, {ids}
+//                WHERE {ids}.id = {objects}.id
+//                ORDER BY {ids}.uri
+//            ');
+//            $q->execute();
+//            while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
+//                $this->makeTree($row['id'], $row['parent'], $row['proto'], false);
+//            }
+//            // Отношения прототип - наследники
+//            $q = $this->db->prepare('
+//                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.proto, {objects}.parent_cnt, {objects}.proto_cnt
+//                FROM {objects}, {ids}
+//                WHERE {ids}.id = {objects}.id
+//                ORDER BY {objects}.proto_cnt');
+//            $q->execute();
+//            while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
+//                $this->makeTree($row['id'], $row['parent'], $row['proto'], true);
+//            }
+//            $this->db->commit();
+//        }catch (\Exception $e){
+//            $this->db->rollBack();
+//            throw $e;
+//        }
+//    }
+
+    public function rebuildParant()
     {
         try{
             $this->db->beginTransaction();
             // Очитска таблицы
-            $this->db->query('TRUNCATE {trees}');
+            $this->db->query('TRUNCATE {parents}');
             // Отношения родитель - подчиненный
             $q = $this->db->prepare('
-                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.proto, {objects}.parent_cnt, {objects}.proto_cnt
+                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.parent_cnt
                 FROM {objects}, {ids}
                 WHERE {ids}.id = {objects}.id
                 ORDER BY {ids}.uri
             ');
             $q->execute();
+
+            $make_ref = $this->db->prepare('
+                INSERT IGNORE {parents} (object_id, parent_id, `level`)
+                SELECT :obj, parent_id, `level`+1 FROM {parents}
+                WHERE object_id = :parent
+                UNION SELECT :obj,:obj,0
+            ');
             while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
-                $this->makeTree($row['id'], $row['parent'], $row['proto'], false);
+                $make_ref->execute(array(':obj'=>$row['id'], ':parent'=>$row['parent']));
             }
-            // Отношения прототип - наследники
-            $q = $this->db->prepare('
-                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.proto, {objects}.parent_cnt, {objects}.proto_cnt
-                FROM {objects}, {ids}
-                WHERE {ids}.id = {objects}.id
-                ORDER BY {objects}.proto_cnt');
+            $this->db->commit();
+        }catch (\Exception $e){
+            $this->db->rollBack();
+            throw $e;
+        }
+    }
+
+    public function rebuildProtos()
+    {
+        try{
+            $this->db->beginTransaction();
+            // Очитска таблицы
+            $this->db->query('TRUNCATE {protos}');
+            // Отношения родитель - подчиненный
+            $q = $this->db->prepare('SELECT {objects}.id, {objects}.proto FROM {objects} ORDER BY {objects}.proto_cnt');
             $q->execute();
+            $make_ref = $this->db->prepare('
+                INSERT IGNORE {protos} (object_id, proto_id, `level`)
+                SELECT :obj, proto_id, `level`+1 FROM {protos}
+                WHERE object_id = :proto
+                UNION SELECT :obj,:obj,0
+            ');
             while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
-                $this->makeTree($row['id'], $row['parent'], $row['proto'], true);
+                $make_ref->execute(array(':obj'=>$row['id'], ':proto'=>$row['proto']));
             }
             $this->db->commit();
         }catch (\Exception $e){
