@@ -10,6 +10,13 @@ use Boolive\functions\F;
 
 class File
 {
+    const VIRT_DISK = 'B';
+    static private $IS_WIN = false;
+
+    static function activate()
+    {
+        self::$IS_WIN = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    }
     /**
      * Создание файла
      * @param string $content Содержимое файла
@@ -18,19 +25,22 @@ class File
      */
     static function create($content, $to)
     {
+        $to = self::makeVirtualDir($to);
         // Если папки нет, то создаем её
         $dir = dirname($to);
         if(!is_dir($dir)){
-            mkdir($dir, 0777, true);
+            mkdir($dir, 0775, true);
         }
+        $result = false;
         // Создание файла
         if (($f = fopen($to, "w"))) {
             stream_set_write_buffer($f, 20);
             fwrite($f, $content);
             fclose($f);
-            return true;
+            $result = true;
         }
-        return false;
+        self::deleteVirtualDir($to);
+        return $result;
     }
 
     /**
@@ -41,19 +51,22 @@ class File
      */
     static function upload($from, $to)
     {
+        $result = false;
         if(is_uploaded_file($from)){
+            $to = self::makeVirtualDir($to);
             // Если папки нет, то создаем её
             $dir = dirname($to);
             if(!is_dir($dir)){
-                mkdir($dir, 0777, true);
+                mkdir($dir, 0775, true);
             }
             if (is_file($to)){
                 unlink($to);
             }
             //Перемещаем файл если он загружен через POST
-            return move_uploaded_file($from, $to);
+            $result = move_uploaded_file($from, $to);
+            self::deleteVirtualDir($to);
         }
-        return false;
+        return $result;
     }
 
     /**
@@ -64,18 +77,21 @@ class File
      */
     static function copy($from, $to)
     {
+        $result = false;
         if (file_exists($from)){
+            $to = self::makeVirtualDir($to);
             // Если папки нет, то создаем её
             $dir = dirname($to);
             if(!is_dir($dir)){
-                mkdir($dir, 0777, true);
+                mkdir($dir, 0775, true);
             }
             if (is_file($to)){
                 unlink($to);
             }
-            return copy($from, $to);
+            $result = copy($from, $to);
+            self::deleteVirtualDir($to);
         }
-        return false;
+        return $result;
     }
 
     /**
@@ -86,30 +102,40 @@ class File
      */
     static function rename($from, $to)
     {
+        $result = false;
         if (file_exists($from)){
+            $to = self::makeVirtualDir($to);
             $dir = dirname($to);
-            if(!is_dir($dir)){
-                mkdir($dir, 0777, true);
+            if (!is_dir($dir)) mkdir($dir, true);
+            if (mb_strtoupper($from)!=mb_strtoupper($to)){
+                if(is_dir($to)){
+                    self::clearDir($to, true);
+                }else
+                if (is_file($to)){
+                    unlink($to);
+                }
             }
-            if (is_file($to)){
-                unlink($to);
-            }
-            return rename($from, $to);
-            }
-        return false;
+            $result = rename($from, $to);
+            self::deleteVirtualDir($to);
+        }
+        return $result;
     }
 
     /**
      * Удаление файла
      * @param string $from Путь к удаляемому файлу
+     * @return bool
      */
     static function delete($from)
     {
+        $from = self::makeVirtualDir($from, false);
+        $result = false;
         if (is_file($from)){
             @unlink($from);
-            return false;
+            $result = true;
         }
-        return true;
+        self::deleteVirtualDir($from);
+        return $result;
     }
 
     /**
@@ -120,17 +146,20 @@ class File
      */
     static function clearDir($dir, $delete_me = false)
     {
+        $dir = self::makeVirtualDir($dir, false);
+        $result = false;
         if (is_file($dir)){
-            return @unlink($dir);
+            $result = @unlink($dir);
         }else
         if (is_dir($dir)){
             $scan = glob(rtrim($dir, '/').'/*');
             foreach ($scan as $path){
                 self::clearDir($path, true);
             }
-            return $delete_me?@rmdir($dir):true;
+            $result = $delete_me?@rmdir($dir):true;
         }
-        return false;
+        self::deleteVirtualDir($dir);
+        return $result;
     }
 
     /**
@@ -213,12 +242,15 @@ class File
      */
     static function makeUniqueName($dir, $name, $ext, $start = 1)
     {
+        self::makeVirtualDir($dir);
         $i = 0;
         $to = $dir.$name.$ext;
         while (file_exists($to) && $i<100){
             $to = $dir.$name.(++$i+$start).$ext;
         }
-        return ($i < 100+$start)? false : $to;
+        $result = ($i < 100+$start)? false : $to;
+        self::deleteVirtualDir($dir);
+        return $result;
     }
 
     /**
@@ -306,5 +338,44 @@ class File
     static function realPath($path)
     {
         return preg_replace('/[^\/]+\/\.\.\//', '', $path);
+    }
+
+    /**
+     * Создание виртуального диска в Windows, для увеличения лимита на длину пути к файлам
+     * @param $dir
+     * @param bool $mkdir
+     * @return mixed|string
+     */
+    static function makeVirtualDir($dir, $mkdir = true)
+    {
+        if (self::$IS_WIN && mb_strlen($dir) > 248){
+            $dir = preg_replace('/\\\\/u','/', $dir);
+            $vdir = mb_substr($dir, 0, 248);
+            $vdir = F::splitRight('/', $vdir);
+            if ($vdir[0]){
+                $vdir = $vdir[0];
+                if (!is_dir($vdir)){
+                    if ($mkdir){
+                        mkdir($vdir, 0775, true);
+                    }else{
+                        return $dir;
+                    }
+                }
+                $dir = self::VIRT_DISK.':/'.mb_substr($dir, mb_strlen($vdir)+1);
+                system('subst '.self::VIRT_DISK.': '.$vdir);
+            }
+        }
+        return $dir;
+    }
+
+    /**
+     * Удаление виртуального диска в Windows
+     * @param string $vdir Директория с виртуальным диском
+     */
+    static function deleteVirtualDir($vdir)
+    {
+        if (self::$IS_WIN && mb_substr($vdir,0,1) == self::VIRT_DISK){
+            system('subst '.self::VIRT_DISK.': /d');
+        }
     }
 }
