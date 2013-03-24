@@ -186,13 +186,13 @@ class Entity implements ITrace
      * URI объекта
      * @return mixed
      */
-    public function uri()
+    public function uri($remake = false)
     {
-        if (!isset($this->_attribs['uri'])){
+        if (!isset($this->_attribs['uri']) || $remake){
             if ($parent = $this->parent()){
-               $this->_attribs['uri'] = $parent->uri().'/'.$this->_attribs['name'];
+               $this->_attribs['uri'] = $parent->uri().'/'.($this->_rename ? $this->_rename : $this->_attribs['name']);
             }else{
-                $this->_attribs['uri'] = $this->_attribs['name'];
+                $this->_attribs['uri'] = $this->_rename ? $this->_rename : $this->_attribs['name'];
             }
         }
         return $this->_attribs['uri'];
