@@ -141,7 +141,7 @@
                 </div>
                 <div class="col2 item-is_logic">
                     <input class="attrib" type="checkbox" id="is_logic" name="attrib[is_logic]" data-name="is_logic" value="1"/>
-                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой классс</label>
+                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой класс</label>
                     <span class="error-message"></span><br>
                     <span class="description">Классом определяется логика объекта - проверка атрибутов и различные функции.<br>
                         Свой класс с названием <span class="txt-tag class_name_self"></span> должен быть в директории объекта.<br>
