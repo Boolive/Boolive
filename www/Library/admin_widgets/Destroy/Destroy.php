@@ -38,8 +38,8 @@ class Destroy extends Widget
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
             foreach ($objects as $o){
                 /** @var \Boolive\data\Entity $o */
-//                $o->isDelete(true);
-                $o->destroy();
+                // Уничтожение с проверкой доступа и целостностью данных
+                $o->destroy($error, true, true);
             }
             $v['result'] = true;
             return $v;
@@ -58,7 +58,7 @@ class Destroy extends Widget
                 $item['uri'] = $o->uri();
                 $v['objects'][] = $item;
                 $v['data-o'][]=$item['uri'];
-                $conflits = Data::deleteConflicts($o, true);
+                $conflits = Data::deleteConflicts($o, true, true);
                 $v['conflicts'] = array_merge_recursive($v['conflicts'], $conflits);
             }
             $v['data-o'] = json_encode($v['data-o']);

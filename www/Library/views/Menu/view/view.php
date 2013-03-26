@@ -31,7 +31,7 @@ class view extends AutoWidgetList
 
     public function work($v = array()){
         if ($this->_input['REQUEST']['show']){
-            $obj = $this->_input['REQUEST']['object'];
+            $obj = $this->_input['REQUEST']['object']->linked();
             // Название пункта
             $v['item_text'] = $obj->title->value();
             $v['item_title'] = $v['item_text'];
