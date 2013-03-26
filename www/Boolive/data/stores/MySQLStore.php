@@ -532,6 +532,7 @@ class MySQLStore extends Entity
             AND p.object_id = objects.id
             AND p.object_id = protos.object_id
             AND p.object_id = parents.object_id
+            AND p.is_delete = 0
         ');
         $q->execute(array($id));
         // Удалении директории со всеми файлами
@@ -550,7 +551,7 @@ class MySQLStore extends Entity
         // Проверить всех подчиненных, кто их наследует
         $q = $this->db->prepare('
           SELECT ids.uri FROM ids, objects, parents, protos
-          WHERE ids.id = objects.id AND ids.id = protos.object_id AND parents.parent_id = ? AND protos.proto_id = parents.object_id AND protos.level > 0
+          WHERE ids.id = objects.id AND ids.id = protos.object_id AND parents.parent_id = ? AND protos.proto_id = parents.object_id AND protos.level > 0 AND parents.is_delete = 0 AND protos.is_delete = 0
           LIMIT 0,50
         ');
         $q->execute(array($id));
@@ -642,6 +643,7 @@ class MySQLStore extends Entity
      */
     public function makeIndex($obj, $owner, $lang, $depth, $start_depth = null)
     {
+        return;
         if (!isset($start_depth)) $start_depth = $depth;
         try{
             $this->db->beginTransaction();

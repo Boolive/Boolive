@@ -1144,12 +1144,16 @@ class Entity implements ITrace
 
     /**
      * Уничтожение объекта
-     * Полностью удаляется объект и его подчиенные.
+     * Полностью удаляется объект и его подчиненных.
+     * @param null|Error $error Ошибки при уничтожении объекта
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
+     * @return bool Были ли объекты уничтожены?
      */
-    public function destroy(&$error = null, $access = true)
+    public function destroy(&$error = null, $access = true, $integrity = true)
     {
         if ($this->isExist()){
-            return Data::delete($this, $error, $access);
+            return Data::delete($this, $error, $access, $integrity);
         }else{
             return false;
         }

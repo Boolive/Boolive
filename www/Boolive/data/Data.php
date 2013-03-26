@@ -83,14 +83,15 @@ class Data
      * @param Entity $object Уничтожаемый объект
      * @param \Boolive\errors\Error $error Контейнер для ошибок при уничтожении
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
      * @return bool Признак, был уничтожен объект или нет?
      */
-    static function delete($object, &$error, $access = true)
+    static function delete($object, &$error, $access = true, $integrity = true)
     {
         if ($object->id() != Entity::ENTITY_ID){
             $store = self::getStore($object->key());
             // Проверка доступа на уничтожение объекта и его подчиненных
-            if (!self::deleteConflicts($object, $access)){
+            if (!self::deleteConflicts($object, $access, $integrity)){
                 return $store->delete($object);
             }else{
                 $error->destroy = new Error('Имеются конфлиткты при уничтожении объектов', 'destroy');
@@ -102,16 +103,17 @@ class Data
     /**
      * Поиск объектов, из-за которых невозможно уничтожение объекта
      * @param Entity $object Проверяемый объект
-     * @param bool $access Признак, учитывать права доступа?
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
      * @return array Массив URI объектов, из-за которых невозможно уничтожение объекта
      */
-    static function deleteConflicts($object, $access = true)
+    static function deleteConflicts($object, $access = true, $integrity = true)
     {
         $conflicts = array();
         if ($object->id() != Entity::ENTITY_ID){
             $store = self::getStore($object->key());
             // Проверка доступа на уничтожение объекта и его подчиненных
-            if ($access && $acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null)){
+            if ($access && ($acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null))){
                 $objects = $store->select(array(
                         'from' => array($object->id()),
                         'where' => array('not', $acond),
@@ -122,7 +124,7 @@ class Data
                 $conflicts['access'] = $objects;
             }
             // Проверка использования в качестве прототипа
-            if ($objects = $store->deleteConflicts($object)){
+            if ($integrity && ($objects = $store->deleteConflicts($object))){
                 $conflicts['heirs'] = $objects;
             }
         }
