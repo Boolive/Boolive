@@ -19,10 +19,10 @@ class SelectObject extends Widget
     public function work($v = array())
     {
         $v['title'] = $this->title->value();
-        $v['message'] = 'Выделите объект или откройте его и нажмите "Выбрать" для подтверждения выбора';
-        $v['message2'] = 'Для закрытия диалога выбора нажмите "Отмена"';
-        $v['submit_title'] = 'Выбрать';
-        $v['cancel_title'] = 'Отмена';
+        $v['submit_title'] = $this->submit_title->value();
+        $v['cancel_title'] = $this->cancel_title->value();
+        $v['message'] = 'Выделите объект или откройте его и нажмите "'.$v['submit_title'].'" для подтверждения выбора';
+        $v['message2'] = 'Для закрытия диалога выбора нажмите "'.$v['cancel_title'].'"';
         return parent::work($v);
     }
 }

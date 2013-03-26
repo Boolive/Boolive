@@ -7,6 +7,8 @@
  */
 namespace Library\admin_widgets\Destroy;
 
+use Boolive\data\Data;
+use Boolive\file\File;
 use Library\views\Widget\Widget,
     Boolive\values\Rule;
 
@@ -17,8 +19,8 @@ class Destroy extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('attr','is_delete','=',1))),
-                            Rule::entity(array('attr','is_delete','=',1))
+                            Rule::arrays(Rule::entity(/*array('attr','is_delete','=',1)*/)),
+                            Rule::entity(/*array('attr','is_delete','=',1)*/)
                         )->required(),
 //                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),
@@ -37,7 +39,7 @@ class Destroy extends Widget
             foreach ($objects as $o){
                 /** @var \Boolive\data\Entity $o */
 //                $o->isDelete(true);
-//                $o->save();
+                $o->destroy();
             }
             $v['result'] = true;
             return $v;
@@ -47,6 +49,7 @@ class Destroy extends Widget
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
             $v['data-o'] = array();
             $v['objects'] = array();
+            $v['conflicts'] = array();
             foreach ($objects as $o){
                 $item = array();
                 if (!($item['title'] = $o->title->value())){
@@ -55,17 +58,23 @@ class Destroy extends Widget
                 $item['uri'] = $o->uri();
                 $v['objects'][] = $item;
                 $v['data-o'][]=$item['uri'];
+                $conflits = Data::deleteConflicts($o, true);
+                $v['conflicts'] = array_merge_recursive($v['conflicts'], $conflits);
             }
             $v['data-o'] = json_encode($v['data-o']);
             $v['title'] = $this->title->value();
             if (count($objects)>1){
-                $v['question'] = 'Вы действительно желаете удалить навсегда эти объекты?';
-                $v['message'] = 'Объекты и их подчинённые будут уничтожены, их нельзя будет восстановить.';
+                $v['question'] = 'Вы действительно желаете уничтожить эти объекты?';
+                $v['message'] = 'Объекты и их подчинённые будут удалены навсегда, их нельзя будет восстановить.';
             }else{
-                $v['question'] = 'Вы действительно желаете удалить навсегда этот объект?';
-                $v['message'] = 'Объект и его подчинённые будет уничтожены, его нельзя будет восстановить.';
+                $v['question'] = 'Вы действительно желаете уничтожить этот объект?';
+                $v['message'] = 'Объект и его подчинённые будут удалены навсегда, их нельзя будет восстановить.';
             }
             $v['prev'] = '';//$this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';
+
+            // Конфликты для уничтожения
+
+
             return parent::work($v);
         }
     }

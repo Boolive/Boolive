@@ -59,6 +59,16 @@ h2 {
     margin-bottom: 15px;
     color: #444;
     }
+h3 {
+    font-size: 17pt;
+    font-weight: normal;
+    /*margin-top: 0;*/
+    /*margin-bottom: 15px;*/
+    color: #444;
+    }
+h4{
+    font-size: 14pt;
+}
 
         .Delete .info > .name{
             font-size: 17pt;
@@ -342,7 +352,13 @@ label{
     padding: 1px 5px 2px 5px;
     border-radius: 3px;
     vertical-align: text-top;
-}
+    text-decoration: none;
+    }
+    a.txt-tag:hover{
+        color: #FFF;
+        text-shadow: 1px 1px 0px #707070;
+        background-color: #808080;
+    }
 .input-pfx{
     font-size: 9pt;
     /*display: inline-block;*/
@@ -408,7 +424,13 @@ label{
 	}
 
 .entity-list{
-    list-style-type: none;
+    list-style-type: decimal;
+    font-size: 10pt;
+    color: #999;
     margin: 15px 0;
     padding: 0;
-}
+    }
+    .entity-list li{
+        margin: 1px 0;
+        vertical-align: top;
+    }

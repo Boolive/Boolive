@@ -1143,13 +1143,16 @@ class Entity implements ITrace
     }
 
     /**
-     * @todo
      * Уничтожение объекта
      * Полностью удаляется объект и его подчиенные.
      */
-    public function destroy()
+    public function destroy(&$error = null, $access = true)
     {
-
+        if ($this->isExist()){
+            return Data::delete($this, $error, $access);
+        }else{
+            return false;
+        }
     }
 
     /**

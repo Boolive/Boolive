@@ -79,6 +79,57 @@ class Data
     }
 
     /**
+     * Уничтожение объекта и его подчиенных
+     * @param Entity $object Уничтожаемый объект
+     * @param \Boolive\errors\Error $error Контейнер для ошибок при уничтожении
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @return bool Признак, был уничтожен объект или нет?
+     */
+    static function delete($object, &$error, $access = true)
+    {
+        if ($object->id() != Entity::ENTITY_ID){
+            $store = self::getStore($object->key());
+            // Проверка доступа на уничтожение объекта и его подчиненных
+            if (!self::deleteConflicts($object, $access)){
+                return $store->delete($object);
+            }else{
+                $error->destroy = new Error('Имеются конфлиткты при уничтожении объектов', 'destroy');
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Поиск объектов, из-за которых невозможно уничтожение объекта
+     * @param Entity $object Проверяемый объект
+     * @param bool $access Признак, учитывать права доступа?
+     * @return array Массив URI объектов, из-за которых невозможно уничтожение объекта
+     */
+    static function deleteConflicts($object, $access = true)
+    {
+        $conflicts = array();
+        if ($object->id() != Entity::ENTITY_ID){
+            $store = self::getStore($object->key());
+            // Проверка доступа на уничтожение объекта и его подчиненных
+            if ($access && $acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null)){
+                $objects = $store->select(array(
+                        'from' => array($object->id()),
+                        'where' => array('not', $acond),
+                        'limit' => array(0,50)
+                    ),
+                    'name', null, null, false, 'uri'
+                );
+                $conflicts['access'] = $objects;
+            }
+            // Проверка использования в качестве прототипа
+            if ($objects = $store->deleteConflicts($object)){
+                $conflicts['heirs'] = $objects;
+            }
+        }
+        return $conflicts;
+    }
+
+    /**
      * Поиск объектов.
      * Пример условия:
      * <code>

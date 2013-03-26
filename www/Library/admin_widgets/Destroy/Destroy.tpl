@@ -16,10 +16,39 @@
         </ul>
         <p><?php echo $v['question'];?></p>
         <p class="mini"><?php echo $v['message'];?></p>
-
+        <?php
+            $conflicts = $v['conflicts']->any();
+            if (!empty($conflicts['access'])):
+        ?>
+            <h3>Нет прав</h3>
+            <p>Уничтожение невозможно из-за отсутстсвия прав на уничтожение следующих объектов</p>
+            <ul class="entity-list">
+            <?php foreach ($conflicts['access'] as $i => $uri):?>
+                <li><a href="/admin<?php echo $uri;?>" class="txt-tag" target="_blank"><?php echo $uri;?></a></li>
+            <?php
+                endforeach;
+                if (sizeof($conflicts['access'])>=50) echo '<li>Список неполный</li>';
+            ?>
+            </ul>
+        <?php endif; ?>
+        <?php if (!empty($conflicts['heirs'])): ?>
+            <h3>Конфликты</h3>
+            <p>Уничтожение невозможно, так как выбранные объекты используются перечисленными ниже объектами.</p>
+            <p class="mini">Сперва удалите их или поменяйте у них прототипы</p>
+            <ul class="entity-list">
+            <?php foreach ($conflicts['heirs'] as $uri):?>
+                <li><a href="/admin<?php echo $uri;?>" class="txt-tag" target="_blank"><?php echo $uri;?></a></li>
+            <?php
+                endforeach;
+                if (sizeof($conflicts['heirs'])>=50) echo '<li>Список неполный</li>';
+            ?>
+            </ul>
+        <?php endif; ?>
         <div class="buttons">
+            <?php if (empty($conflicts)): ?>
                 <a class="btn btn-danger submit" href="#">Да</a>
-                <a class="btn cancel" href="#">Отмена</a>
+            <?php endif; ?>
+            <a class="btn cancel" href="#">Отмена</a>
         </div>
      </div>
 </div>

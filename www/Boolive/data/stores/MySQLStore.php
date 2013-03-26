@@ -518,16 +518,57 @@ class MySQLStore extends Entity
     }
 
     /**
+     * Удаление объекта и его подчиненных, если они никем не используются
+     * @param Entity $entity
+     * @return bool
+     */
+    public function delete($entity)
+    {
+        $id = $this->localId($entity->key(), false);
+        $q = $this->db->prepare('
+            DELETE ids, objects, parents, protos FROM parents p, ids, objects, parents, protos
+            WHERE p.parent_id = ?
+            AND p.object_id = ids.id
+            AND p.object_id = objects.id
+            AND p.object_id = protos.object_id
+            AND p.object_id = parents.object_id
+        ');
+        $q->execute(array($id));
+        // Удалении директории со всеми файлами
+        File::clearDir($entity->dir(true), true);
+        return $q->rowCount() > 0;
+    }
+
+    /**
+     * Удаление объекта и его подчиненных, если они никем не используются
+     * @param Entity $entity
+     * @return array URI объектов, которые наследуют удаляемый объект или подчиенных удяляемого объект
+     */
+    public function deleteConflicts($entity)
+    {
+        $id = $this->localId($entity->key(), false);
+        // Проверить всех подчиненных, кто их наследует
+        $q = $this->db->prepare('
+          SELECT ids.uri FROM ids, objects, parents, protos
+          WHERE ids.id = objects.id AND ids.id = protos.object_id AND parents.parent_id = ? AND protos.proto_id = parents.object_id AND protos.level > 0
+          LIMIT 0,50
+        ');
+        $q->execute(array($id));
+        return $q->fetchAll(DB::FETCH_COLUMN, 0);
+    }
+
+    /**
      * Поиск объектов
      * @param array $cond Условие поиска в виде многомерного массива.
      * @param string $keys Название атрибута, который использовать для ключей массива результата
      * @param null|\Boolive\data\Entity $owner Владелец искомых объектов
      * @param null|\Boolive\data\Entity $lang Язык (локаль) искомых объектов
      * @param bool $access Признак, проверять или нет наличие доступа к объекту?
+     * @param bool $attrib_name Какой атрибут у объектов возвращать. Если null, то возвращается объект целиком
      * @throws \Exception
      * @return mixed|array Массив объектов или результат расчета, например, количество объектов
      */
-    public function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true)
+    public function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true, $attrib_name = null)
     {
         if (isset($cond['from'][0]) && !($cond['from'][0] instanceof Entity)){
             $cond['from'][0] = Data::read($cond['from'][0], $owner, $lang, 0, false);
@@ -571,7 +612,11 @@ class MySQLStore extends Entity
 //            if (Buffer::isExist($row['uri'].$key_pfx)){
 //                $obj = Buffer::get($row['uri'].$key_pfx);
 //            }else{
-                  $obj = $this->makeObject($row);
+                if (!$attrib_name){
+                    $obj = $this->makeObject($row);
+                }else{
+                    $obj = $row[$attrib_name];
+                }
 //                Buffer::set($row['uri'].$key_pfx, $obj);
 //                Buffer::set($obj->id().$key_pfx, $obj);
 //            }
@@ -1394,9 +1439,10 @@ class MySQLStore extends Entity
      * Cоздание идентификатора для указанного URI.
      * Если объект с указанным URI существует, то будет возвращен его идентификатор
      * @param string $uri URI для которого нужно получить идентификатор
-     * @return int
+     * @param bool $create Создать идентификатор, если отсутствует?
+     * @return int|null
      */
-    public function localId($uri)
+    public function localId($uri, $create = true)
     {
         if ($uri instanceof Entity){
             $uri = $uri->key();
@@ -1423,11 +1469,14 @@ class MySQLStore extends Entity
         $q->execute(array($uri));
         if ($row = $q->fetch(DB::FETCH_ASSOC)){
             $id = $row['id'];
-        }else{
+        }else
+        if ($create){
             // Создание идентифbкатора для URI
             $q = $this->db->prepare('INSERT INTO {ids} (`id`, `uri`) VALUES (null, ?)');
             $q->execute(array($uri));
             $id = $this->db->lastInsertId('id');
+        }else{
+            return null;
         }
         unset($q);
         return intval($id);
