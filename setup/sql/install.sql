@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 26 2013 г., 14:34
+-- Время создания: Мар 27 2013 г., 11:36
 -- Версия сервера: 5.5.28
 -- Версия PHP: 5.4.13
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `ids` (
   `uri` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uri` (`uri`(255))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Идентификация путей (URI)' AUTO_INCREMENT=52289 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Идентификация путей (URI)' AUTO_INCREMENT=52296 ;
 
 --
 -- Дамп данных таблицы `ids`
@@ -635,8 +635,6 @@ INSERT INTO `ids` (`id`, `uri`) VALUES
 (2166, '/Contents/main/text/table/row1/header'),
 (3263, '/Languages/Russian/title'),
 (3625, '/Library/content_widgets/RichText/title'),
-(6396, '/Languages/English/Object'),
-(6397, '/Languages/English/Object_1'),
 (6454, '/Contents/news/Page'),
 (6455, '/Contents/news/Page/title'),
 (6456, '/Contents/news/Page/text'),
@@ -1031,9 +1029,9 @@ INSERT INTO `ids` (`id`, `uri`) VALUES
 (34728, '/Library/content_widgets/Table/Cell/description'),
 (34729, '/Library/content_widgets/Table/Cell/res'),
 (34731, '/Library/content_widgets/Table/Cell/switch_views/title'),
-(34732, '/Library/content_widgets/Table/Cell/switch_views/description');
+(34732, '/Library/content_widgets/Table/Cell/switch_views/description'),
+(34733, '/Library/content_widgets/Table/Cell/switch_views/res');
 INSERT INTO `ids` (`id`, `uri`) VALUES
-(34733, '/Library/content_widgets/Table/Cell/switch_views/res'),
 (34734, '/Library/content_widgets/Table/Cell/switch_views/case_richtext/title'),
 (34735, '/Library/content_widgets/Table/Cell/switch_views/case_richtext/description'),
 (34736, '/Library/content_widgets/Table/Cell/switch_views/case_richtext/res'),
@@ -1859,10 +1857,10 @@ INSERT INTO `ids` (`id`, `uri`) VALUES
 (43291, '/Contents/main/sub_page/text/Image/style/text-indent'),
 (43292, '/Contents/main/sub_page/text/P'),
 (43293, '/Contents/main/sub_page/text/P/title'),
-(43294, '/Contents/main/sub_page/text/P/style');
-INSERT INTO `ids` (`id`, `uri`) VALUES
+(43294, '/Contents/main/sub_page/text/P/style'),
 (43295, '/Contents/main/sub_page/text/P/style/title'),
-(43296, '/Contents/main/sub_page/text/P/style/width'),
+(43296, '/Contents/main/sub_page/text/P/style/width');
+INSERT INTO `ids` (`id`, `uri`) VALUES
 (43297, '/Contents/main/sub_page/text/P/style/height'),
 (43298, '/Contents/main/sub_page/text/P/style/margin-top'),
 (43299, '/Contents/main/sub_page/text/P/style/margin-bottom'),
@@ -2605,10 +2603,10 @@ INSERT INTO `ids` (`id`, `uri`) VALUES
 (50074, '/Contents/main/text/P_23/title'),
 (50075, '/Contents/main/text/P_23/style'),
 (50076, '/Contents/main/text/P_23/style/title'),
-(50077, '/Contents/main/text/P_23/style/width');
-INSERT INTO `ids` (`id`, `uri`) VALUES
+(50077, '/Contents/main/text/P_23/style/width'),
 (50078, '/Contents/main/text/P_23/style/height'),
-(50079, '/Contents/main/text/P_23/style/margin-top'),
+(50079, '/Contents/main/text/P_23/style/margin-top');
+INSERT INTO `ids` (`id`, `uri`) VALUES
 (50080, '/Contents/main/text/P_23/style/margin-bottom'),
 (50081, '/Contents/main/text/P_23/style/text-align'),
 (50082, '/Contents/main/text/P_23/style/padding-left'),
@@ -2911,7 +2909,8 @@ INSERT INTO `ids` (`id`, `uri`) VALUES
 (52213, '/Library/admin_widgets/Add/icon/style'),
 (52254, '/Library/admin_widgets/RichTextEditor/res/jquery.ui.RichTextRule/depends'),
 (52271, '/Library/admin_widgets/RichTextEditor/res/jquery.ui.RichTextRule/title'),
-(52288, '/Library/javascripts/jquery.include/depends/jquery');
+(52288, '/Library/javascripts/jquery.include/depends/jquery'),
+(52289, '/Contents/main/author/title');
 
 -- --------------------------------------------------------
 
@@ -2934,8 +2933,8 @@ CREATE TABLE IF NOT EXISTS `objects` (
   `valuef` double NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
   `is_file` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Значение - файл или нет?',
   `is_history` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'В истории или нет?',
-  `is_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Удален или нет?',
-  `is_hidden` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет?',
+  `is_delete` int(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
+  `is_hidden` int(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
   `is_link` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
   `is_virtual` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Виртуальный или нет? Виртуальные сохраняются для оптимизации',
   `is_default_value` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
@@ -3513,8 +3512,8 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (679, 4294967295, 4294967295, 0, 'Language', 6, 159, 3, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 0, 1, 0),
 (680, 4294967295, 4294967295, 0, 'title', 1, 679, 4, 0, 0, 'Язык', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (681, 4294967295, 4294967295, 0, 'Languages', 7, 1, 1, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 0, 1, 0),
-(682, 4294967295, 4294967295, 0, 'English', 5, 681, 2, 679, 1, '', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
-(683, 4294967295, 4294967295, 0, 'title', 2, 682, 3, 680, 1, 'Английский', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
+(682, 4294967295, 4294967295, 0, 'English', 5, 681, 2, 679, 1, '', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 0, 1, 0),
+(683, 4294967295, 4294967295, 0, 'title', 2, 682, 3, 680, 1, 'Английский', 0, 0, 0, 0, 1, 0, 0, 0, 4294967295, 0, 1, 0),
 (684, 4294967295, 4294967295, 0, 'Russian', 4, 681, 2, 679, 1, '', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
 (686, 4294967295, 4294967295, 0, 'title', 1, 681, 2, 0, 0, 'Языки', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
 (687, 4294967295, 4294967295, 0, 'description', 2, 681, 2, 0, 0, 'Список языков', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
@@ -3551,8 +3550,6 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (2166, 4294967295, 4294967295, 0, 'header', 3, 1413, 6, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (3263, 4294967295, 4294967295, 0, 'title', 2, 684, 3, 680, 1, 'Русский', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (3625, 4294967295, 4294967295, 0, 'title', 6, 295, 4, 387, 3, 'Виджет форматированного текста', 0, 0, 0, 0, 1, 0, 0, 0, 4294967295, 0, 1, 0),
-(6396, 4294967295, 4294967295, 0, 'Object', 3, 682, 3, 0, 0, '', 0, 0, 0, 1, 0, 0, 0, 0, 4294967295, 1, 1, 0),
-(6397, 4294967295, 4294967295, 0, 'Object_1', 4, 682, 3, 0, 0, '', 0, 0, 0, 1, 0, 0, 0, 0, 4294967295, 1, 1, 0),
 (6454, 4294967295, 4294967295, 0, 'Page', 6, 63, 3, 212, 1, '', 0, 0, 0, 1, 0, 0, 0, 212, 212, 1, 0, 0),
 (6455, 4294967295, 4294967295, 0, 'title', 1, 6454, 4, 217, 1, 'Новость!!', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (6456, 4294967295, 4294967295, 0, 'text', 1, 6454, 4, 216, 2, '', 0, 0, 0, 0, 0, 0, 0, 216, 4294967295, 1, 0, 0),
@@ -3719,10 +3716,10 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (18538, 4294967295, 4294967295, 0, 'cell2', 2, 18536, 7, 227, 1, '', 0, 0, 0, 0, 0, 0, 0, 227, 4294967295, 1, 1, 0),
 (18539, 4294967295, 4294967295, 0, 'cell3', 3, 18536, 7, 227, 1, '', 0, 0, 0, 0, 0, 0, 0, 227, 4294967295, 1, 1, 0),
 (18540, 4294967295, 4294967295, 0, 'richtext', 1, 18539, 8, 2164, 2, '', 0, 0, 0, 0, 0, 0, 0, 2164, 4294967295, 1, 1, 0),
-(18543, 4294967295, 4294967295, 0, 'p1', 2, 18540, 9, 218, 2, 'Этот параграф в теле таблицы', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0);
-INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
+(18543, 4294967295, 4294967295, 0, 'p1', 2, 18540, 9, 218, 2, 'Этот параграф в теле таблицы', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
 (18544, 4294967295, 4294967295, 0, 'richtext', 1, 18538, 8, 2164, 2, '', 0, 0, 0, 0, 0, 0, 0, 2164, 4294967295, 1, 1, 0),
-(18545, 4294967295, 4294967295, 0, 'style', 2, 18538, 8, 2165, 2, '', 0, 0, 0, 0, 0, 0, 0, 2165, 16261, 1, 0, 0),
+(18545, 4294967295, 4294967295, 0, 'style', 2, 18538, 8, 2165, 2, '', 0, 0, 0, 0, 0, 0, 0, 2165, 16261, 1, 0, 0);
+INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
 (18547, 4294967295, 4294967295, 0, 'width', 1, 18545, 9, 188, 1, '123', 123, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (18549, 4294967295, 4294967295, 0, 'height', 2, 18545, 9, 188, 1, '100', 100, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (18551, 4294967295, 4294967295, 0, 'p1', 2, 18544, 9, 218, 2, 'ntrcn', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 1, 0),
@@ -4012,10 +4009,10 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (35009, 4294967295, 4294967295, 0, 'res', 3, 271, 6, 34541, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 1, 0),
 (35014, 4294967295, 4294967295, 0, 'title', 1, 254, 5, 465, 3, 'Переключатель вариантов отображения (исполнения)', 0, 0, 0, 0, 1, 0, 2, 465, 4294967295, 1, 0, 0),
 (35015, 4294967295, 4294967295, 0, 'description', 2, 254, 5, 464, 3, 'Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ', 0, 0, 0, 0, 1, 0, 0, 464, 4294967295, 0, 1, 0),
-(35016, 4294967295, 4294967295, 0, 'res', 3, 254, 5, 34522, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 1, 0);
-INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
+(35016, 4294967295, 4294967295, 0, 'res', 3, 254, 5, 34522, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 1, 0),
 (35017, 4294967295, 4294967295, 0, 'title', 1, 26, 4, 6621, 1, 'Ключевые слова', 0, 0, 0, 0, 0, 0, 2, 6621, 4294967295, 1, 0, 0),
-(35018, 4294967295, 4294967295, 0, 'title', 1, 255, 6, 462, 3, 'Вариант переключателя', 0, 0, 0, 0, 1, 0, 2, 462, 4294967295, 1, 0, 0),
+(35018, 4294967295, 4294967295, 0, 'title', 1, 255, 6, 462, 3, 'Вариант переключателя', 0, 0, 0, 0, 1, 0, 2, 462, 4294967295, 1, 0, 0);
+INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
 (35019, 4294967295, 4294967295, 0, 'description', 2, 255, 6, 461, 3, 'Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.', 0, 0, 0, 0, 1, 0, 0, 461, 4294967295, 0, 1, 0),
 (35020, 4294967295, 4294967295, 0, 'res', 3, 255, 6, 34541, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 1, 0),
 (35021, 4294967295, 4294967295, 0, 'description', 2, 250, 4, 473, 2, 'Отображает одно ключевое слово', 0, 0, 0, 0, 1, 0, 0, 0, 4294967295, 0, 1, 0),
@@ -4301,9 +4298,9 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (40099, 4294967295, 4294967295, 0, 'res', 3, 535, 5, 34524, 5, '', 0, 0, 0, 0, 0, 0, 0, 477, 469, 1, 1, 0),
 (40100, 4294967295, 4294967295, 0, 'title', 1, 281, 6, 462, 3, 'Вариант переключателя', 0, 0, 0, 0, 1, 0, 2, 462, 4294967295, 1, 0, 0),
 (40101, 4294967295, 4294967295, 0, 'description', 2, 281, 6, 461, 3, 'Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.', 0, 0, 0, 0, 0, 0, 2, 461, 4294967295, 1, 0, 0),
-(40102, 4294967295, 4294967295, 0, 'res', 3, 281, 6, 34541, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 0, 0);
+(40102, 4294967295, 4294967295, 0, 'res', 3, 281, 6, 34541, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 0, 0),
+(40103, 4294967295, 4294967295, 0, 'title', 1, 282, 7, 10358, 3, 'Виджет названия', 0, 0, 0, 0, 1, 0, 2, 10358, 4294967295, 1, 0, 0);
 INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
-(40103, 4294967295, 4294967295, 0, 'title', 1, 282, 7, 10358, 3, 'Виджет названия', 0, 0, 0, 0, 1, 0, 2, 10358, 4294967295, 1, 0, 0),
 (40104, 4294967295, 4294967295, 0, 'description', 2, 282, 7, 34643, 3, 'Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета', 0, 0, 0, 0, 1, 0, 2, 473, 4294967295, 1, 0, 0),
 (40105, 4294967295, 4294967295, 0, 'res', 3, 282, 7, 34644, 4, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 1, 0),
 (40106, 4294967295, 4294967295, 0, 'title', 1, 40105, 8, 34651, 4, 'Ресурсы', 0, 0, 0, 0, 1, 0, 2, 479, 4294967295, 1, 0, 0),
@@ -4666,9 +4663,9 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (43127, 4294967295, 4294967295, 0, 'padding-left', 9, 16272, 6, 34708, 2, '', 0, 0, 0, 0, 0, 0, 2, 19435, 4294967295, 1, 0, 0),
 (43128, 4294967295, 4294967295, 0, 'padding-right', 10, 16272, 6, 34709, 2, '', 0, 0, 0, 0, 0, 0, 2, 19436, 4294967295, 1, 0, 0),
 (43129, 4294967295, 4294967295, 0, 'title', 3, 42, 5, 15593, 1, 'Изображение', 0, 0, 0, 0, 0, 0, 1, 15593, 4294967295, 1, 0, 0),
-(43130, 4294967295, 4294967295, 0, 'text-indent', 11, 42380, 6, 19795, 2, '', 0, 0, 0, 0, 0, 0, 2, 19792, 4294967295, 1, 0, 0);
+(43130, 4294967295, 4294967295, 0, 'text-indent', 11, 42380, 6, 19795, 2, '', 0, 0, 0, 0, 0, 0, 2, 19792, 4294967295, 1, 0, 0),
+(43131, 4294967295, 4294967295, 0, 'text-indent', 11, 43093, 6, 43130, 3, '', 0, 0, 0, 0, 0, 0, 2, 19792, 4294967295, 1, 0, 0);
 INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
-(43131, 4294967295, 4294967295, 0, 'text-indent', 11, 43093, 6, 43130, 3, '', 0, 0, 0, 0, 0, 0, 2, 19792, 4294967295, 1, 0, 0),
 (43132, 4294967295, 4294967295, 0, 'title', 1, 61, 5, 15725, 2, 'Обычный абзац', 0, 0, 0, 0, 0, 0, 2, 15725, 4294967295, 1, 0, 0),
 (43133, 4294967295, 4294967295, 0, 'style', 2, 61, 5, 34739, 3, '', 0, 0, 0, 0, 0, 0, 2, 16260, 16260, 1, 1, 0),
 (43134, 4294967295, 4294967295, 0, 'title', 1, 14615, 5, 43132, 3, 'Обычный абзац', 0, 0, 0, 0, 0, 0, 2, 15725, 4294967295, 1, 0, 0),
@@ -5063,9 +5060,9 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (43584, 4294967295, 4294967295, 0, 'padding-left', 9, 43575, 9, 41512, 2, '', 0, 0, 0, 0, 0, 0, 2, 19435, 4294967295, 1, 0, 0),
 (43585, 4294967295, 4294967295, 0, 'padding-right', 10, 43575, 9, 41513, 2, '', 0, 0, 0, 0, 0, 0, 2, 19436, 4294967295, 1, 0, 0),
 (43586, 4294967295, 4294967295, 0, 'colspan', 3, 18558, 8, 41444, 1, '1', 1, 0, 0, 0, 0, 0, 1, 41444, 4294967295, 1, 0, 0),
-(43587, 4294967295, 4294967295, 0, 'rowspan', 4, 18558, 8, 41443, 1, '1', 1, 0, 0, 0, 0, 0, 1, 41443, 4294967295, 1, 0, 0);
+(43587, 4294967295, 4294967295, 0, 'rowspan', 4, 18558, 8, 41443, 1, '1', 1, 0, 0, 0, 0, 0, 1, 41443, 4294967295, 1, 0, 0),
+(43588, 4294967295, 4294967295, 0, 'title', 1, 18560, 9, 34737, 2, 'Форматированный текст', 0, 0, 0, 0, 0, 0, 2, 222, 4294967295, 1, 0, 0);
 INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
-(43588, 4294967295, 4294967295, 0, 'title', 1, 18560, 9, 34737, 2, 'Форматированный текст', 0, 0, 0, 0, 0, 0, 2, 222, 4294967295, 1, 0, 0),
 (43589, 4294967295, 4294967295, 0, 'style', 1, 18566, 10, 34739, 3, '', 0, 0, 0, 0, 0, 0, 1, 16260, 16260, 1, 1, 0),
 (43590, 4294967295, 4294967295, 0, 'title', 1, 43589, 11, 34749, 3, 'Стиль ', 0, 0, 0, 0, 0, 0, 2, 16261, 4294967295, 1, 0, 0),
 (43591, 4294967295, 4294967295, 0, 'width', 2, 43589, 11, 34750, 3, '', 0, 0, 0, 0, 0, 0, 2, 16262, 4294967295, 1, 0, 0),
@@ -5436,9 +5433,9 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (47732, 4294967295, 4294967295, 0, 'description', 2, 47730, 4, 473, 2, 'Сохраняет выбранные объекты в файловую систему', 0, 0, 0, 0, 1, 0, 0, 0, 4294967295, 1, 1, 0),
 (47733, 4294967295, 4294967295, 0, 'res', 3, 47730, 4, 477, 3, '', 0, 0, 0, 0, 0, 0, 2, 477, 469, 1, 1, 0),
 (47734, 4294967295, 4294967295, 0, 'title', 1, 47733, 5, 479, 3, 'Ресурсы', 0, 0, 0, 0, 0, 0, 1, 479, 4294967295, 1, 0, 0),
-(47735, 4294967295, 4294967295, 0, 'description', 2, 47733, 5, 478, 3, 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 2, 478, 4294967295, 1, 0, 0);
+(47735, 4294967295, 4294967295, 0, 'description', 2, 47733, 5, 478, 3, 'Автоматически подключаемые ресурсы, например CSS, JavaScript', 0, 0, 0, 0, 0, 0, 2, 478, 4294967295, 1, 0, 0),
+(47736, 4294967295, 4294967295, 0, 'icon', 4, 47730, 4, 210, 1, 'icon.png', 0, 1, 0, 0, 0, 0, 0, 0, 210, 0, 1, 0);
 INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`, `parent_cnt`, `proto`, `proto_cnt`, `value`, `valuef`, `is_file`, `is_history`, `is_delete`, `is_hidden`, `is_link`, `is_virtual`, `is_default_value`, `is_default_class`, `is_default_children`, `index_depth`, `index_step`) VALUES
-(47736, 4294967295, 4294967295, 0, 'icon', 4, 47730, 4, 210, 1, 'icon.png', 0, 1, 0, 0, 0, 0, 0, 0, 210, 0, 1, 0),
 (47737, 4294967295, 4294967295, 0, 'title', 1, 47736, 5, 15593, 1, 'Иконка', 0, 0, 0, 0, 0, 0, 0, 0, 4294967295, 1, 0, 0),
 (47738, 4294967295, 4294967295, 0, 'style', 2, 47736, 5, 16264, 2, '', 0, 0, 0, 0, 0, 0, 2, 16260, 16260, 1, 0, 0),
 (47739, 4294967295, 4294967295, 0, 'title', 1, 47738, 6, 34704, 2, 'Стиль ', 0, 0, 0, 0, 0, 0, 1, 16261, 4294967295, 1, 0, 0),
@@ -5824,7 +5821,8 @@ INSERT INTO `objects` (`id`, `owner`, `lang`, `date`, `name`, `order`, `parent`,
 (52213, 4294967295, 4294967295, 0, 'style', 2, 104, 5, 16264, 2, '', 0, 0, 0, 0, 0, 0, 2, 16260, 16260, 1, 0, 0),
 (52254, 4294967295, 4294967295, 0, 'depends', 4, 18881, 6, 562, 6, '', 0, 0, 0, 0, 0, 562, 0, 424, 4294967295, 0, 1, 0),
 (52271, 4294967295, 4294967295, 0, 'title', 2, 18881, 6, 0, 0, 'Boolive.RichTextRule', 0, 0, 0, 0, 1, 0, 0, 0, 4294967295, 0, 1, 0),
-(52288, 4294967295, 4294967295, 0, 'jquery', 3, 35512, 5, 51942, 3, 'jquery.js', 0, 1, 0, 0, 0, 51942, 0, 51942, 4294967295, 0, 0, 0);
+(52288, 4294967295, 4294967295, 0, 'jquery', 3, 35512, 5, 51942, 3, 'jquery.js', 0, 1, 0, 0, 0, 51942, 0, 51942, 4294967295, 0, 0, 0),
+(52289, 4294967295, 4294967295, 0, 'title', 1, 14, 4, 0, 0, 'Автор', 0, 0, 0, 0, 1, 0, 0, 0, 4294967295, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -9050,14 +9048,6 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (3625, 230, 2, 0),
 (3625, 295, 1, 0),
 (3625, 3625, 0, 0),
-(6396, 1, 3, 0),
-(6396, 681, 2, 0),
-(6396, 682, 1, 0),
-(6396, 6396, 0, 0),
-(6397, 1, 3, 0),
-(6397, 681, 2, 0),
-(6397, 682, 1, 0),
-(6397, 6397, 0, 0),
 (6454, 1, 3, 0),
 (6454, 2, 2, 0),
 (6454, 63, 1, 0),
@@ -9115,8 +9105,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (6511, 6510, 1, 0),
 (6511, 6511, 0, 0),
 (6518, 1, 4, 0),
-(6518, 2, 3, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(6518, 2, 3, 0),
 (6518, 63, 2, 0),
 (6518, 6510, 1, 0),
 (6518, 6518, 0, 0),
@@ -9124,7 +9113,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (6534, 2, 4, 0),
 (6534, 63, 3, 0),
 (6534, 6510, 2, 0),
-(6534, 6518, 1, 0),
+(6534, 6518, 1, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (6534, 6534, 0, 0),
 (6538, 1, 3, 0),
 (6538, 2, 2, 0),
@@ -11895,8 +11885,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (34820, 257, 6, 0),
 (34820, 258, 5, 0),
 (34820, 259, 4, 0),
-(34820, 260, 3, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(34820, 260, 3, 0),
 (34820, 261, 2, 0),
 (34820, 34797, 1, 0),
 (34820, 34820, 0, 0),
@@ -11904,7 +11893,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (34821, 98, 8, 0),
 (34821, 230, 7, 0),
 (34821, 257, 6, 0),
-(34821, 258, 5, 0),
+(34821, 258, 5, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (34821, 259, 4, 0),
 (34821, 260, 3, 0),
 (34821, 261, 2, 0),
@@ -14694,8 +14684,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (41411, 41399, 1, 0),
 (41411, 41411, 0, 0),
 (41412, 1, 6, 0),
-(41412, 98, 5, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(41412, 98, 5, 0),
 (41412, 197, 4, 0),
 (41412, 14660, 3, 0),
 (41412, 15729, 2, 0),
@@ -14703,7 +14692,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (41412, 41412, 0, 0),
 (41413, 1, 6, 0),
 (41413, 98, 5, 0),
-(41413, 197, 4, 0),
+(41413, 197, 4, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (41413, 14660, 3, 0),
 (41413, 15729, 2, 0),
 (41413, 41399, 1, 0),
@@ -17489,8 +17479,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (43328, 18603, 4, 0),
 (43328, 18604, 3, 0),
 (43328, 18608, 2, 0),
-(43328, 43327, 1, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(43328, 43327, 1, 0),
 (43328, 43328, 0, 0),
 (43329, 1, 10, 0),
 (43329, 2, 9, 0),
@@ -17498,7 +17487,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (43329, 39, 7, 0),
 (43329, 18597, 6, 0),
 (43329, 18602, 5, 0),
-(43329, 18603, 4, 0),
+(43329, 18603, 4, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (43329, 18604, 3, 0),
 (43329, 18608, 2, 0),
 (43329, 43327, 1, 0),
@@ -20234,8 +20224,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (43598, 1412, 4, 0),
 (43598, 16649, 3, 0),
 (43598, 18556, 2, 0),
-(43598, 18559, 1, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(43598, 18559, 1, 0),
 (43598, 43598, 0, 0),
 (43599, 1, 9, 0),
 (43599, 2, 8, 0),
@@ -20243,7 +20232,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (43599, 39, 6, 0),
 (43599, 1412, 5, 0),
 (43599, 16649, 4, 0),
-(43599, 18556, 3, 0),
+(43599, 18556, 3, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (43599, 18559, 2, 0),
 (43599, 43598, 1, 0),
 (43599, 43599, 0, 0),
@@ -22974,8 +22964,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (46476, 99, 6, 0),
 (46476, 124, 5, 0),
 (46476, 129, 4, 0),
-(46476, 46455, 3, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(46476, 46455, 3, 0),
 (46476, 46468, 2, 0),
 (46476, 46471, 1, 0),
 (46476, 46476, 0, 0),
@@ -22983,7 +22972,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (46479, 98, 5, 0),
 (46479, 99, 4, 0),
 (46479, 133, 3, 0),
-(46479, 136, 1, 0),
+(46479, 136, 1, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (46479, 559, 2, 0),
 (46479, 46479, 0, 0),
 (46480, 1, 9, 0),
@@ -25748,8 +25738,7 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (52118, 362, 6, 0),
 (52118, 363, 5, 0),
 (52118, 35125, 4, 0),
-(52118, 35133, 3, 0);
-INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
+(52118, 35133, 3, 0),
 (52118, 35138, 2, 0),
 (52118, 35160, 1, 0),
 (52118, 52118, 0, 0),
@@ -25757,7 +25746,8 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (52119, 98, 7, 0),
 (52119, 377, 6, 0),
 (52119, 436, 5, 0),
-(52119, 440, 4, 0),
+(52119, 440, 4, 0);
+INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (52119, 441, 3, 0),
 (52119, 445, 2, 0),
 (52119, 34571, 1, 0),
@@ -26007,7 +25997,12 @@ INSERT INTO `parents` (`object_id`, `parent_id`, `level`, `is_delete`) VALUES
 (52288, 327, 2, 0),
 (52288, 35512, 1, 0),
 (52288, 51885, 3, 0),
-(52288, 52288, 0, 0);
+(52288, 52288, 0, 0),
+(52289, 1, 4, 0),
+(52289, 2, 3, 0),
+(52289, 13, 2, 0),
+(52289, 14, 1, 0),
+(52289, 52289, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -27779,8 +27774,6 @@ INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (3625, 468, 3, 0),
 (3625, 480, 2, 0),
 (3625, 3625, 0, 0),
-(6396, 6396, 0, 0),
-(6397, 6397, 0, 0),
 (6454, 212, 1, 0),
 (6454, 6454, 0, 0),
 (6455, 217, 1, 0),
@@ -28949,10 +28942,10 @@ INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (34700, 470, 4, 0),
 (34700, 478, 3, 0),
 (34700, 34560, 2, 0),
-(34700, 34562, 1, 0);
-INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
+(34700, 34562, 1, 0),
 (34700, 34700, 0, 0),
-(34701, 462, 1, 0),
+(34701, 462, 1, 0);
+INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (34701, 468, 3, 0),
 (34701, 480, 2, 0),
 (34701, 34701, 0, 0),
@@ -31571,10 +31564,10 @@ INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (43024, 15593, 1, 0),
 (43024, 43024, 0, 0),
 (43027, 468, 5, 0),
-(43027, 471, 4, 0);
-INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
+(43027, 471, 4, 0),
 (43027, 479, 3, 0),
-(43027, 34555, 2, 0),
+(43027, 34555, 2, 0);
+INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (43027, 36971, 1, 0),
 (43027, 43027, 0, 0),
 (43029, 468, 6, 0),
@@ -34084,10 +34077,10 @@ INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (46072, 46072, 0, 0),
 (46073, 43874, 2, 0),
 (46073, 43878, 1, 0),
-(46073, 46073, 0, 0);
-INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
+(46073, 46073, 0, 0),
 (46074, 43874, 3, 0),
-(46074, 43878, 2, 0),
+(46074, 43878, 2, 0);
+INSERT INTO `protos` (`object_id`, `proto_id`, `level`, `is_delete`) VALUES
 (46074, 46073, 1, 0),
 (46074, 46074, 0, 0),
 (46392, 16261, 3, 0),

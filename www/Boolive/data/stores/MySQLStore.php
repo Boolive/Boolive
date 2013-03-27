@@ -429,6 +429,24 @@ class MySQLStore extends Entity
 //                }
 
                 if (!empty($current)){
+                    // Обновление признаков у подчиенных
+                    $u = array(
+                        'sql' => '',
+                        'binds' => array(':obj'=>$attr['id'])
+                    );
+                    foreach (array('is_delete', 'is_hidden') as $key){
+                        $d = $attr[$key] - $current[$key];
+                        if ($d != 0){
+                            $u['sql'].=' {objects}.'.$key.' = {objects}.'.$key.' + :d'.$key.',';
+                            $u['binds'][':d'.$key] = $d;
+                        }
+                    }
+                    if (!empty($u['sql'])){
+                        $q = $this->db->prepare('UPDATE {objects}, {parents} SET '.trim($u['sql'],',').' WHERE {parents}.parent_id = :obj AND {parents}.object_id = {objects}.id AND {parents}.level > 0 AND {parents}.is_delete = 0');
+                        $q->execute($u['binds']);
+                    }
+                    unset($u);
+
                     // Обновления наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if ($current['proto']!=$attr['proto']){
@@ -519,7 +537,7 @@ class MySQLStore extends Entity
 
     /**
      * Удаление объекта и его подчиненных, если они никем не используются
-     * @param Entity $entity
+     * @param Entity $entity Уничтожаемый объект
      * @return bool
      */
     public function delete($entity)
@@ -541,8 +559,8 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Удаление объекта и его подчиненных, если они никем не используются
-     * @param Entity $entity
+     * Поиск конфликтов при уничтожении объекта
+     * @param Entity $entity Уничтожаемый объект
      * @return array URI объектов, которые наследуют удаляемый объект или подчиенных удяляемого объект
      */
     public function deleteConflicts($entity)
@@ -643,7 +661,7 @@ class MySQLStore extends Entity
      */
     public function makeIndex($obj, $owner, $lang, $depth, $start_depth = null)
     {
-        return;
+//        return;
         if (!isset($start_depth)) $start_depth = $depth;
         try{
             $this->db->beginTransaction();
@@ -1467,7 +1485,7 @@ class MySQLStore extends Entity
             }
         }
         // Поиск идентифкатора URI
-        $q = $this->db->prepare('SELECT id FROM {ids} WHERE `uri`=? LIMIT 0,1');
+        $q = $this->db->prepare('SELECT id FROM {ids} WHERE `uri`=? LIMIT 0,1 FOR UPDATE');
         $q->execute(array($uri));
         if ($row = $q->fetch(DB::FETCH_ASSOC)){
             $id = $row['id'];

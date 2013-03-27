@@ -16,8 +16,8 @@ class Restore extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('attr','is_delete','=',1))),
-                            Rule::entity(array('attr','is_delete','=',1))
+                            Rule::arrays(Rule::entity(array('attr', 'is_delete', '=', 1, true))),
+                            Rule::entity(array('attr', 'is_delete', '=', 1, true))
                         )->required(),
                         'call' => Rule::string()->default('')->required(),
                     )

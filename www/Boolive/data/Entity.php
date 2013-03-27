@@ -109,8 +109,8 @@ class Entity implements ITrace
                 'value'	 	   => Rule::string(), // Значение любой длины
                 'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
                 'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет
-                'is_delete'	   => Rule::bool()->int(), // Удаленный или нет
-                'is_hidden'	   => Rule::bool()->int(), // Скрытый или нет
+                'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя
+                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя
                 'is_link'      => Rule::uri(), // Ссылка или нет
                 'is_virtual'   => Rule::bool()->int(), // Виртуальный или нет
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
@@ -373,31 +373,47 @@ class Entity implements ITrace
     /**
      * Признак, объект удален или нет?
      * @param null|bool $delete Новое значение, если не null
+     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то удаление родителя не влияет на данный объект
      * @return bool
      */
-    public function isDelete($delete = null)
+    public function isDelete($delete = null, $inherit_parent = true)
     {
-        if (isset($delete) && (empty($this->_attribs['is_delete']) == $delete)){
-            $this->_attribs['is_delete'] = $delete;
+        // Какой признак у родителя (чтобы его вычесть из своего)
+        if ((!$inherit_parent || isset($delete)) && ($parent = $this->parent())){
+            $p = $parent->_attribs['is_delete'];
+        }else{
+            $p = 0;
+        }
+        // Смена своего признака
+        if (isset($delete) && ($this->_attribs['is_delete']-$p != ($delete = intval((bool)$delete)))){
+            $this->_attribs['is_delete'] = $delete + $p;
             $this->_changed = true;
             $this->_checked = false;
         }
-        return !empty($this->_attribs['is_delete']);
+        return $inherit_parent ? !empty($this->_attribs['is_delete']) : ($this->_attribs['is_delete']-$p != 0);
     }
 
     /**
      * Признак, скрытый объект или нет?
      * @param null|bool $hide Новое значение, если не null
+     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то скрытие родителя не влияет на данный объект
      * @return bool
      */
-    public function isHidden($hide = null)
+    public function isHidden($hide = null, $inherit_parent = true)
     {
-        if (isset($hide) && (empty($this->_attribs['is_hidden']) == $hide)){
-            $this->_attribs['is_hidden'] = $hide;
+        // Какой признак у родителя (чтобы его вычесть из своего)
+        if ((!$inherit_parent || isset($hide)) && ($parent = $this->parent())){
+            $p = $parent->_attribs['is_hidden'];
+        }else{
+            $p = 0;
+        }
+        // Смена своего признака
+        if (isset($hide) && ($this->_attribs['is_hidden']-$p != ($hide = intval((bool)$hide)))){
+            $this->_attribs['is_hidden'] = $hide + $p;
             $this->_changed = true;
             $this->_checked = false;
         }
-        return !empty($this->_attribs['is_hidden']);
+        return $inherit_parent ? !empty($this->_attribs['is_hidden']) : ($this->_attribs['is_hidden']-$p != 0);
     }
 
     /**
@@ -595,15 +611,16 @@ class Entity implements ITrace
     {
         // Смена родителя
         if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->isEqual($this->parent()))){
+            $is_delete = $this->isDelete(null, false);
+            $is_hidden = $this->isHidden(null, false);
             if (empty($new_parent)){
-                // Удаление прототипа
+                // Удаление родителя
                 $this->_attribs['parent'] = null;
                 $this->_attribs['parent_cnt'] = 0;
                 $this->_parent = null;
                 $this->updateURI($this->name());
             }else{
-                // Смена прототипа
-
+                // Смена родителя
                 $this->_attribs['parent'] = $new_parent->id();
                 $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
                 $this->_parent = $new_parent;
@@ -613,6 +630,9 @@ class Entity implements ITrace
                 if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
                 $this->updateURI($new_parent->uri().'/'.$this->name());
             }
+            // Обновление зависимых от родителя признаков
+            $this->isDelete($is_delete);
+            $this->isHidden($is_hidden);
             $this->_changed = true;
             $this->_checked = false;
         }
@@ -1300,10 +1320,10 @@ class Entity implements ITrace
                     $value = $this->{$cond[1]}();
                 }else
                 if ($cond[1] == 'is_hidden'){
-                    $value = $this->isHidden();
+                    $value = $this->isHidden(null, empty($cond[4]));
                 }else
                 if ($cond[1] == 'is_delete'){
-                    $value = $this->isDelete();
+                    $value = $this->isDelete(null, empty($cond[4]));
                 }else
                 if ($cond[1] == 'is_file'){
                     $value = $this->isFile();

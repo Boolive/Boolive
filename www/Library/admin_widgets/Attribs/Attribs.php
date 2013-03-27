@@ -156,7 +156,7 @@ class Attribs extends Widget
             'date' => date('j.m.Y, G:s', $obj->date()),
             'order' => $obj->order(),
             'is_logic' => (bool)$obj->isDefaultClass() != self::ENTITY_ID,//['is_logic'],
-            'is_hidden' => (bool)$obj->isHidden(),
+            'is_hidden' => (bool)$obj->isHidden(null, false),
             'is_link' => (bool)$obj->isLink(),
             'override' => (bool)$obj->isDefaultChildren(),
             'class' => get_class($obj),
