@@ -162,10 +162,11 @@ class Data
      * @param null|Entity $owner Владелец искомых объектов
      * @param null|Entity $lang Язык (локаль) искомых объектов
      * @param bool $access Признак, проверять или нет наличие доступа к объекту?
+     * @param bool $index Признак, индексировать или нет данные?
      * @see https://github.com/Boolive/Boolive/issues/7
      * @return mixed|array Массив объектов или результат расчета, например, количество объектов
      */
-    static function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true)
+    static function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true, $index = true)
     {
         // Где искать?
         if (!isset($cond['from'][0])) $cond['from'][0] = '';
@@ -187,7 +188,7 @@ class Data
         }
         // Определяем индекс и ищем в нём
         if (isset($cond['from'][0]) && ($store = self::getStore($cond['from'][0]))){
-            return $store->select($cond, $keys, $owner, $lang, $access);
+            return $store->select($cond, $keys, $owner, $lang, $access, null, $index);
         }else{
             return null;
         }

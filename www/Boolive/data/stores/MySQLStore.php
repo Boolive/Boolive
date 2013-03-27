@@ -584,10 +584,11 @@ class MySQLStore extends Entity
      * @param null|\Boolive\data\Entity $lang Язык (локаль) искомых объектов
      * @param bool $access Признак, проверять или нет наличие доступа к объекту?
      * @param bool $attrib_name Какой атрибут у объектов возвращать. Если null, то возвращается объект целиком
+     * @param bool $index Признак, индексировать или нет данные?
      * @throws \Exception
      * @return mixed|array Массив объектов или результат расчета, например, количество объектов
      */
-    public function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true, $attrib_name = null)
+    public function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true, $attrib_name = null, $index = true)
     {
         if (isset($cond['from'][0]) && !($cond['from'][0] instanceof Entity)){
             $cond['from'][0] = Data::read($cond['from'][0], $owner, $lang, 0, false);
@@ -598,7 +599,7 @@ class MySQLStore extends Entity
         $_owner = isset($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
         $_lang = isset($lang) ? $this->localId($lang) : Entity::ENTITY_ID;
 
-        if (isset($cond['from'][0]) && ($cond['from'][0]->_attribs['index_depth']<$depth || $cond['from'][0]->_attribs['index_step']!=0)){
+        if ($index && isset($cond['from'][0]) && ($cond['from'][0]->_attribs['index_depth']<$depth || $cond['from'][0]->_attribs['index_step']!=0)){
             // Индексирование
             $this->makeIndex($this->localId($cond['from'][0]->id()), $_owner, $_lang, $depth);
         }

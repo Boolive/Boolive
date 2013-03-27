@@ -1041,11 +1041,11 @@ class Entity implements ITrace
      * @param null|string $keys Имя атрибута, значения которого использовать в качестве ключей массива результата
      * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
      * @param int $depth Глубина поиска
+     * @param bool $index Признак, индексировать или нет данные?
      * @see https://github.com/Boolive/Boolive/issues/7
-
      * @return array
      */
-    public function find($cond = array(), $keys = 'name', $load = true, $depth = 1)
+    public function find($cond = array(), $keys = 'name', $load = true, $depth = 1, $index = true)
     {
         $all = (empty($cond) && $depth == 1);
 
@@ -1059,11 +1059,11 @@ class Entity implements ITrace
         }
         if ($this->isExist()){
             $cond['from'] = array($this, $depth);
-            $result = Data::select($cond, $keys);
+            $result = Data::select($cond, $keys, null, null, true, $index);
         }else
         if ($p = $this->proto()){
             $cond['from'] = array($p, $depth);
-            $result = Data::select($cond, $keys);
+            $result = Data::select($cond, $keys, null, null, true, $index);
             foreach ($result as $key => $obj){
                 /** @var $obj Entity */
                 $result[$key] = $obj->birth($this);
@@ -1488,6 +1488,78 @@ class Entity implements ITrace
     public function isSaved()
     {
         return $this->_is_saved;
+    }
+
+    /**
+     * @param bool $save_to_file
+     * @return array
+     */
+    public function export($save_to_file = true)
+    {
+        $export = array();
+        if ($this->owner()) $export['owner'] = $this->owner()->uri();
+        if ($this->lang()) $export['lang'] = $this->lang()->uri();
+        if ($this->proto()) $export['proto'] = $this->proto()->uri();
+        if (!$this->isDefaultValue()){
+            $export['value'] = $this->value();
+        }else{
+            $export['is_default_value'] = 1;
+        }
+        if (!$this->isDefaultChildren()) $export['is_default_children'] = 0;
+        if (!$this->isDefaultClass()) $export['is_default_class'] = 0;
+        if ($this->isFile()) $export['is_file'] = 1;
+        if ($this->isHidden(null, false)) $export['is_hidden'] = 1;
+        if ($this->isLink()) $export['is_link'] = 1;
+        if ($this->isDelete(null, false)) $export['is_delete'] = 1;
+        $export['order'] = $this->order();
+        // Свойства
+        $export['children'] = array();
+        // Названия подчиненных, которые экспортировать вместе с объектом
+        $children = $this->exportedProperties();
+        // Выбор подчиненных
+        if ($children === true){
+            $children = $this->find(array(
+                'where' => array(
+                    array('is_delete', '>=', 0)
+                )
+            ),'name', false, 1, false);
+        }else
+        if (!empty($children) && is_array($children)){
+            $children = $this->find(array(
+                'where' => array(
+                    array('attr', 'name', 'in',  $children),
+                    array('is_delete', '>=', 0)
+                )
+            ),'name', false, 1, false);
+        }else{
+            $children = array();
+        }
+        foreach ($children as $child){
+            if ($child->isExist()){
+                $export['children'][$child->name()] = $child->export(false);
+            }
+        }
+        if (empty($export['children'])) unset($export['children']);
+        // Сохранение в info файл
+        if ($save_to_file){
+            if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+                $content = json_encode($export, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+            }else{
+                $content = F::special_unicode_to_utf8(json_encode($export));
+            }
+            $file = $this->dir(true).$this->name().'.info';
+            File::create($content, $file);
+        }
+        return $export;
+    }
+
+    /**
+     * Названия свойств, которые экспортировать вместе с объектом
+     * @return array
+     */
+    public function exportedProperties()
+    {
+        return array('title', 'description');
     }
 
     /**
