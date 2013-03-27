@@ -30,4 +30,11 @@ class JavaScript extends View
             $this->_commands->addHtml('script', array('type'=>'text/javascript', 'src'=>$file));
         }
     }
+
+    public function exportedProperties()
+    {
+        $names = parent::exportedProperties();
+        $names[] = 'depends';
+        return $names;
+    }
 }

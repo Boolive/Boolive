@@ -56,4 +56,12 @@ class Widget extends View
         $v['view_uri'] = $this->id();
         return Template::render($this, $v);
     }
+
+    public function exportedProperties()
+    {
+        $names = parent::exportedProperties();
+        $names[] = 'res';
+        $names[] = 'object';
+        return $names;
+    }
 }

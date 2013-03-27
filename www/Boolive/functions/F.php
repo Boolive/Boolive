@@ -222,6 +222,22 @@ class F
     }
 
     /**
+     * Декодирование unicode-заменители в символы
+     * @param $str
+     * @return mixed
+     */
+    static function special_unicode_to_utf8($str)
+    {
+        $str = preg_replace('#\\\/#', '/', $str);
+        return preg_replace_callback("/\\\u([[:xdigit:]]{4})/i", function($matches){
+            $ewchar = $matches[1];
+            $binwchar = hexdec($ewchar);
+            $wchar = chr(($binwchar >> 8) & 0xFF) . chr(($binwchar) & 0xFF);
+            return iconv("unicodebig", "utf-8", $wchar);
+        }, $str);
+    }
+
+    /**
      * Загрзка файла конфигурации
      * @param $file
      * @return array

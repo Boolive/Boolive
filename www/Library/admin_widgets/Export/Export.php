@@ -124,32 +124,17 @@ class Export extends Widget
                 if ($info['jobs'][$j]['step'] == 0){
                     $list[] = Data::read($info['jobs'][$j]['obj']);
                 }
-                foreach ($list as $obj){
-                    /** @var Entity $obj  */
-                    $obj_info = array();
-                    $message = $obj->uri();
-                    if ($obj->owner()) $obj_info['owner'] = $obj->owner()->uri();
-                    if ($obj->lang()) $obj_info['lang'] = $obj->lang()->uri();
-                    if ($obj->proto()) $obj_info['proto'] = $obj->proto()->uri();
-                    if (!$obj->isDefaultValue()){
-                        $obj_info['value'] = $obj->value();
-                    }else{
-                        $obj_info['is_default_value'] = 1;
-                    }
-                    if (!$obj->isDefaultChildren()) $obj_info['is_default_children'] = 0;
-                    if (!$obj->isDefaultClass()) $obj_info['is_default_class'] = 0;
-                    if ($obj->isFile()) $obj_info['is_file'] = 1;
-                    if ($obj->isHidden()) $obj_info['is_hidden'] = 1;
-                    if ($obj->isLink()) $obj_info['is_link'] = 1;
-                    if ($obj->isDelete()) $obj_info['is_delete'] = 1;
 
-                    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-                        $content = json_encode($obj_info, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
-                    }else{
-                        $content = $this->special_unicode_to_utf8(json_encode($obj_info));
+                foreach ($list as $obj){
+                    if ($parent = $obj->parent()){
+                        $childrens = $parent->exportedProperties();
                     }
-                    $file = $obj->dir(true).$obj->name().'.info';
-                    File::create($content, $file);
+                    // Если нет родителя, не указаны названия подчиненных или название объекта не в списке подчиненных
+                    if (!$parent || empty($childrens) || (!empty($childrens) && is_array($childrens) && !in_array($obj->name(), $childrens))){
+                        /** @var Entity $obj  */
+                        $obj->export(true);
+                        $message = $obj->uri();
+                    }
                 }
                 // Экспортирование
                 // Увеличение step
@@ -208,18 +193,5 @@ class Export extends Widget
 //                \Boolive\file\File::create($content, $file);
 //            }
 //        }
-    }
-
-
-
-    function special_unicode_to_utf8($str)
-    {
-        $str = preg_replace('#\\\/#', '/', $str);
-        return preg_replace_callback("/\\\u([[:xdigit:]]{4})/i", function($matches){
-            $ewchar = $matches[1];
-            $binwchar = hexdec($ewchar);
-            $wchar = chr(($binwchar >> 8) & 0xFF) . chr(($binwchar) & 0xFF);
-            return iconv("unicodebig", "utf-8", $wchar);
-        }, $str);
     }
 }
