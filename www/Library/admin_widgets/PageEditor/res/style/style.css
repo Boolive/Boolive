@@ -1,0 +1,11 @@
+.PageEditor{
+        margin-top: 32px;
+    }
+    .PageEditor .item{
+        display: block;
+        overflow: hidden;
+        width: 100%;
+        padding: 0 0;
+        color: #111;
+         height: 38px;
+    }
