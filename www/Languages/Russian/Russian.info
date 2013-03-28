@@ -1,4 +1,12 @@
 {
+    "value": "",
     "proto": "/Library/basic/Language",
-    "title": "Русский"
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Русский",
+            "proto": "/Library/basic/Language/title",
+            "order": 2
+        }
+    }
 }

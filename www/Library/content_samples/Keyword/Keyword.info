@@ -1,0 +1,11 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Ключевое слово",
+            "order": 1
+        }
+    }
+}

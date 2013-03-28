@@ -1,0 +1,15 @@
+{
+    "value": 0,
+    "is_default_class": false,
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Булево",
+            "order": 1
+        },
+        "description": {
+            "value": "Логическое значение ДА/НЕТ",
+            "order": 2
+        }
+    }
+}

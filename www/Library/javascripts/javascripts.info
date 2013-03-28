@@ -1,0 +1,19 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "JavaScripts",
+            "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Пакет с JavaScript-библиотеками, плагинами и заготовками для написания собственных скриптов",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

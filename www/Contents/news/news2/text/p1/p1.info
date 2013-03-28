@@ -1,5 +1,13 @@
 {
-    "proto": "/Library/content_samples/Paragraph",
     "value": "Ноовсть создаётся как страница, то есть новость и есть страницой, просто она помещена в раздел Ленты новостей",
-    "order": 3
+    "proto": "/Library/content_samples/paragraphs/P",
+    "order": 1,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "order": 1
+        }
+    }
 }

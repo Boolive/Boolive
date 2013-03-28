@@ -1,0 +1,41 @@
+{
+    "value": "Keywords.tpl",
+    "is_file": true,
+    "proto": "/Library/views/AutoWidgetList",
+    "is_default_class": false,
+    "order": 24,
+    "children": {
+        "title": {
+            "value": "Виджет списка ключевых слов",
+            "proto": "/Library/views/AutoWidgetList/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает ключевые слова страницы или другого содержимого",
+            "proto": "/Library/views/AutoWidgetList/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Widget/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Widget/res/description",
+                    "order": 2
+                }
+            }
+        }
+    }
+}

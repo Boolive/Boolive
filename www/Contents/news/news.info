@@ -1,4 +1,12 @@
 {
+    "value": "",
     "proto": "/Library/content_samples/Part",
-    "order": 3
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Лента новостей",
+            "proto": "/Library/content_samples/Part/title",
+            "order": 1
+        }
+    }
 }

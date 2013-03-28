@@ -1,3 +1,21 @@
 {
-    "proto": "/Library/javascripts/patterns/Boolive.Widget"
+    "value": "jquery.ui.Explorer.js",
+    "is_file": true,
+    "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Boolive.Explorer",
+            "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
+            "is_hidden": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
+            "is_link": true,
+            "order": 3
+        }
+    }
 }

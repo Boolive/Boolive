@@ -1,0 +1,11 @@
+{
+    "value": "",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Вид (способ отображения)",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

@@ -1,3 +1,33 @@
 {
-    "proto": "/Library/content_samples/Page"
+    "value": "",
+    "proto": "/Library/content_samples/Page",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Подстраница",
+            "proto": "/Library/content_samples/Page/title",
+            "order": 0,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Название",
+                    "proto": "/Library/content_samples/Page/title/title",
+                    "order": 1
+                }
+            }
+        },
+        "description": {
+            "value": "Подчиненная страница. Это её короткое описание для SEO",
+            "proto": "/Library/content_samples/Page/description",
+            "order": 2,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Описание ",
+                    "proto": "/Library/content_samples/Page/description/title",
+                    "order": 1
+                }
+            }
+        }
+    }
 }

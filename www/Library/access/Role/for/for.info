@@ -1,4 +1,12 @@
 {
-    "proto": "/",
-    "title": "Область действия роли"
+    "value": "",
+    "proto": "",
+    "is_link": true,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Область действия роли",
+            "order": 1
+        }
+    }
 }

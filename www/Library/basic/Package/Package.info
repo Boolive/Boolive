@@ -1,4 +1,10 @@
 {
-    "title": "Пакет",
-    "description": "Для группировки объектов библиотеки"
+    "value": "",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Пакет",
+            "order": 1
+        }
+    }
 }

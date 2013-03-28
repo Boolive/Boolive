@@ -1,4 +1,13 @@
 {
-    "value": 0,
-    "proto": "/Library/content_samples/Keyword"
+    "value": "0",
+    "proto": "/Library/content_samples/Keyword",
+    "order": 1,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Ключевое слово",
+            "proto": "/Library/content_samples/Keyword/title",
+            "order": 1
+        }
+    }
 }

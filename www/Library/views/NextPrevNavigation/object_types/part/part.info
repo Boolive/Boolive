@@ -1,6 +1,6 @@
 {
-    "title": "Разделы",
+    "value": "",
     "proto": "/Library/content_samples/Part",
-    "order": 4,
-    "is_link": true
+    "is_link": true,
+    "order": 4
 }

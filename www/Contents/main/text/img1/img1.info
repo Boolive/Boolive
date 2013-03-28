@@ -1,5 +1,14 @@
 {
+    "value": "img1.jpg",
+    "is_file": true,
     "proto": "/Library/content_samples/Image",
-    "order": 2,
-    "is_file": true
+    "order": 44,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Изображение",
+            "proto": "/Library/content_samples/Image/title",
+            "order": 3
+        }
+    }
 }

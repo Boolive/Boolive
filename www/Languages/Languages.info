@@ -1,4 +1,14 @@
 {
-    "title": "Языки",
-    "description": "Список языков"
+    "value": "",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Языки",
+            "order": 1
+        },
+        "description": {
+            "value": "Список языков",
+            "order": 2
+        }
+    }
 }

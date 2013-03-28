@@ -1,0 +1,27 @@
+{
+    "value": "",
+    "proto": "/Library/access/User",
+    "order": 4,
+    "children": {
+        "name": {
+            "value": "Azat Galiev",
+            "proto": "/Library/access/User/name",
+            "order": 1
+        },
+        "email": {
+            "value": "AzatXaker@gmail.com",
+            "proto": "/Library/access/User/email",
+            "order": 2
+        },
+        "passw": {
+            "value": "1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23",
+            "order": 3
+        },
+        "title": {
+            "is_default_value": true,
+            "value": "Пользователь",
+            "proto": "/Library/access/User/title",
+            "order": 4
+        }
+    }
+}

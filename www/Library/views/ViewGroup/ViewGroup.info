@@ -1,0 +1,20 @@
+{
+    "value": "",
+    "proto": "/Library/views/View",
+    "is_default_class": false,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Группа видов",
+            "proto": "/Library/views/View/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

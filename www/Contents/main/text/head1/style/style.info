@@ -1,0 +1,74 @@
+{
+    "value": "",
+    "proto": "/Library/content_samples/paragraphs/TextBlock/style",
+    "order": 2,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Стиль ",
+            "proto": "/Library/views/Style/title",
+            "order": 1
+        },
+        "width": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Style/width",
+            "order": 2
+        },
+        "height": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Style/height",
+            "order": 3
+        },
+        "margin-top": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Style/margin-top",
+            "order": 4
+        },
+        "margin-right": {
+            "value": "0px",
+            "proto": "/Library/content_samples/paragraphs/Head/style/margin-right",
+            "order": 5
+        },
+        "margin-bottom": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Style/margin-bottom",
+            "order": 6
+        },
+        "margin-left": {
+            "value": "0px",
+            "proto": "/Library/content_samples/paragraphs/Head/style/margin-left",
+            "order": 7
+        },
+        "text-align": {
+            "value": "left",
+            "proto": "/Library/views/Style/text-align",
+            "order": 8
+        },
+        "padding-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Style/padding-left",
+            "order": 9
+        },
+        "padding-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Style/padding-right",
+            "order": 10
+        },
+        "text-indent": {
+            "value": "60px",
+            "proto": "/Library/content_samples/paragraphs/Head/style/text-indent",
+            "order": 11
+        },
+        "line-height": {
+            "value": "normal",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
+            "order": 12
+        }
+    }
+}

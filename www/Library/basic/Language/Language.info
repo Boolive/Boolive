@@ -1,3 +1,10 @@
 {
-    "title": "Язык"
+    "value": "",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Язык",
+            "order": 1
+        }
+    }
 }

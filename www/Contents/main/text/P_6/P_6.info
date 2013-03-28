@@ -1,0 +1,13 @@
+{
+    "value": "Boolive",
+    "proto": "/Library/content_samples/paragraphs/H2",
+    "order": 14,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "order": 1
+        }
+    }
+}

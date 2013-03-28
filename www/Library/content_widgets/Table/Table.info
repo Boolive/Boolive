@@ -1,0 +1,40 @@
+{
+    "value": "Table.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Widget",
+    "is_default_class": false,
+    "order": 16,
+    "children": {
+        "title": {
+            "value": "Виджет таблицы",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает таблицы в форматированном тексте. ",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Widget/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Widget/res/description",
+                    "order": 2
+                }
+            }
+        }
+    }
+}

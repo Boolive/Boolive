@@ -1,3 +1,10 @@
 {
-    "title": "Права на запись"
+    "value": "",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Права на запись",
+            "order": 1
+        }
+    }
 }

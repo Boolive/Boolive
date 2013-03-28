@@ -1,0 +1,19 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Шаблоны скриптов",
+            "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Заготовки для написания собственных скриптов с использованием различных библиотек. ",
+            "is_hidden": true,
+            "order": 5
+        }
+    }
+}

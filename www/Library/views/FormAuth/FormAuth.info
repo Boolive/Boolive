@@ -1,0 +1,53 @@
+{
+    "value": "FormAuth.tpl",
+    "is_file": true,
+    "proto": "/Library/views/AutoWidgetList",
+    "is_default_class": false,
+    "order": 17,
+    "children": {
+        "title": {
+            "value": "Вход",
+            "proto": "/Library/views/AutoWidgetList/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Форма аутентификации пользователя",
+            "proto": "/Library/views/AutoWidgetList/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/AutoWidgetList/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/AutoWidgetList/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/AutoWidgetList/res/description",
+                    "order": 2
+                }
+            }
+        },
+        "object": {
+            "value": "",
+            "is_default_class": false,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Модель авторизации",
+                    "order": 1
+                }
+            }
+        }
+    }
+}

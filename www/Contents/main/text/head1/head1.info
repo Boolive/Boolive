@@ -1,5 +1,13 @@
 {
-    "proto": "/Library/content_samples/Head",
-    "value": "Заголовок главной страницы",
-    "order": 0
+    "value": "Формирование страницы",
+    "proto": "/Library/content_samples/paragraphs/H1",
+    "order": 2,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Заголовок 1",
+            "proto": "/Library/content_samples/paragraphs/H1/title",
+            "order": 1
+        }
+    }
 }

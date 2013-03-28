@@ -1,5 +1,18 @@
 {
-    "title": "Список разрешенных объектов",
-    "description": "Список объектов, по которым разрешена навигация",
-    "order": 2
+    "value": "",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Список разрешенных объектов",
+            "proto": "/Library/views/Widget/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Список объектов, по которым разрешена навигация",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

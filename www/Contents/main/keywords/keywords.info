@@ -1,3 +1,13 @@
 {
-    "proto": "/Library/content_samples/Page/keywords"
+    "value": "",
+    "proto": "/Library/content_samples/Page/keywords",
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Ключевые слова",
+            "proto": "/Library/content_samples/Page/keywords/title",
+            "order": 1
+        }
+    }
 }

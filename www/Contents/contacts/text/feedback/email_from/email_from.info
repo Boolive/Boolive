@@ -1,5 +1,19 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Feedback/email_from",
-    "order": 1
+    "order": 1,
+    "children": {
+        "description": {
+            "is_default_value": true,
+            "value": "Адрес электронной почты",
+            "proto": "/Library/content_samples/Feedback/email_from/description",
+            "order": 1
+        },
+        "title": {
+            "is_default_value": true,
+            "value": "Email адрес",
+            "proto": "/Library/content_samples/Feedback/email_from/title",
+            "order": 1
+        }
+    }
 }

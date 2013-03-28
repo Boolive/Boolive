@@ -1,0 +1,14 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Абзацы",
+            "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

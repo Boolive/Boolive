@@ -1,4 +1,6 @@
 {
-    "proto":"/Library/views/DirectHandler",
+    "value": "",
+    "proto": "/Library/views/DirectHandler",
+    "is_link": true,
     "order": 4
 }

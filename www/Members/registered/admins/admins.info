@@ -1,4 +1,19 @@
 {
-    "title": "Администраторы",
-    "proto": "/Library/basic/members/UserGroup"
+    "value": "",
+    "proto": "/Library/access/Group",
+    "order": 2,
+    "children": {
+        "description": {
+            "is_default_value": true,
+            "value": "Базовый объект для пользователей и групп",
+            "proto": "/Library/access/Group/description",
+            "order": 2
+        },
+        "title": {
+            "value": "Администраторы",
+            "proto": "/Library/access/Group/title",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

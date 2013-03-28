@@ -1,3 +1,11 @@
 {
-    "title": "Обратная связь"
+    "value": "",
+    "is_default_class": false,
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Обратная связь",
+            "order": 1
+        }
+    }
 }

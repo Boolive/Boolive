@@ -1,4 +1,33 @@
 {
+    "value": "",
     "proto": "/Library/content_samples/Page",
-    "order": 1
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Главная",
+            "proto": "/Library/content_samples/Page/title",
+            "order": 1,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Название",
+                    "proto": "/Library/content_samples/Page/title/title",
+                    "order": 1
+                }
+            }
+        },
+        "description": {
+            "value": "Главная страница первого простейшего сайта",
+            "proto": "/Library/content_samples/Page/description",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Описание ",
+                    "proto": "/Library/content_samples/Page/description/title",
+                    "order": 1
+                }
+            }
+        }
+    }
 }

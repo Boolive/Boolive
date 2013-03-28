@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Запрет",
+            "order": 1
+        },
+        "description": {
+            "value": "Запрет доступа к объектам",
+            "order": 2
+        }
+    }
+}

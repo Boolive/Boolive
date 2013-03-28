@@ -1,3 +1,8 @@
 {
-    "proto": "/Library/views/Menu/view"
+    "is_default_value": true,
+    "value": "view.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Menu/view",
+    "is_link": true,
+    "order": 4
 }

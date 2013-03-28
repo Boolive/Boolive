@@ -1,9 +1,20 @@
 {
-    "title": "Интерфейс",
-    "description": [
-        "Раздел, определяющий пользовательский (UI) и программный (API) интерфейс.",
-        "Пользовательский интерфейс (UI) - это HTML страницы, сформированные из виджетов и других объектов-контроллеров",
-        "Программный интерфейс - это сервисы для автоматизированного взаимодействия с сайтом, например AJAX, RSS, REST"
-        ],
-    "proto": "/Library/views/ViewGroup"
+    "value": "",
+    "proto": "/Library/views/ViewGroup",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Интерфейс",
+            "proto": "/Library/views/ViewGroup/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
+            "proto": "/Library/views/ViewGroup/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

@@ -1,5 +1,13 @@
 {
-    "proto": "/Library/content_samples/Paragraph",
+    "value": "А я - второй параграф =)",
+    "proto": "/Library/content_samples/paragraphs/P",
     "order": 2,
-    "value": "А я - второй параграф =)"
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "order": 1
+        }
+    }
 }

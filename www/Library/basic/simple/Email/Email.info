@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 3,
+    "children": {
+        "description": {
+            "value": "Адрес электронной почты",
+            "order": 1
+        },
+        "title": {
+            "value": "Email",
+            "order": 1
+        }
+    }
+}

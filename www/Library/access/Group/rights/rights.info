@@ -1,0 +1,13 @@
+{
+    "value": "",
+    "proto": "/Library/access/Member/rights",
+    "order": 62,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Права доступа",
+            "proto": "/Library/access/Member/rights/title",
+            "order": 1
+        }
+    }
+}

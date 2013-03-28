@@ -1,4 +1,17 @@
 {
-    "title": "Пароль",
-    "proto": "/Library/basic/simple/Text"
+    "value": "",
+    "proto": "/Library/basic/simple/Text",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Пароль",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
+            "proto": "/Library/basic/simple/Text/description",
+            "order": 2
+        }
+    }
 }

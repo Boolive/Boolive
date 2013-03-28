@@ -1,5 +1,13 @@
 {
-    "proto": "/Library/content_samples/Paragraph",
-    "value": "Второй абзац подчиенной страницы... текст... текст...",
-    "order": 3
+    "value": "Второй абзац подчиненной страницы... текст... текст...",
+    "proto": "/Library/content_samples/paragraphs/P",
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "order": 1
+        }
+    }
 }

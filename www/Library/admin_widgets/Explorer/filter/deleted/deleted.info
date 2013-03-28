@@ -1,0 +1,18 @@
+{
+    "value": 1,
+    "proto": "/Library/basic/simple/Boolean",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Удаленные",
+            "proto": "/Library/basic/simple/Boolean/title",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Логическое значение ДА/НЕТ",
+            "proto": "/Library/basic/simple/Boolean/description",
+            "order": 2
+        }
+    }
+}

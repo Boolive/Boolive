@@ -1,5 +1,11 @@
 {
-    "title": "Пользователи",
-    "description": "Пользователи и группы пользователей сайта",
-    "proto": "/Library/basic/members/Group"
+    "value": "",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Пользователи и группы",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

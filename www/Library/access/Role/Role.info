@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Роль",
+            "order": 1
+        },
+        "description": {
+            "value": "Сгруппированные права доустапа",
+            "order": 2
+        }
+    }
+}

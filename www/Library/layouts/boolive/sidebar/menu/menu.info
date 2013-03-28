@@ -1,3 +1,47 @@
 {
-    "proto": "/Library/views/Menu"
+    "is_default_value": true,
+    "value": "Menu.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Menu",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Содержимое",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
+            "proto": "/Library/views/Menu/description",
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Menu/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Menu/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Menu/res/description",
+                    "order": 2
+                }
+            }
+        },
+        "object": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Menu/object",
+            "is_link": true,
+            "order": 4
+        }
+    }
 }

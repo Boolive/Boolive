@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Член",
+            "order": 1
+        },
+        "description": {
+            "value": "Базовый объект для пользователей и групп",
+            "order": 2
+        }
+    }
+}

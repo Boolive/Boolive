@@ -1,4 +1,8 @@
 {
+    "is_default_value": true,
+    "value": "Explorer.tpl",
+    "is_file": true,
     "proto": "/Library/admin_widgets/Explorer",
-    "order": 3
+    "is_link": true,
+    "order": 4
 }

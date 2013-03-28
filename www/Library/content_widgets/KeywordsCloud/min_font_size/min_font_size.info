@@ -1,0 +1,12 @@
+{
+    "value": "9",
+    "proto": "/Library/basic/simple/Number",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Минимальный размер шрифта",
+            "proto": "/Library/basic/simple/Number/title",
+            "order": 1
+        }
+    }
+}

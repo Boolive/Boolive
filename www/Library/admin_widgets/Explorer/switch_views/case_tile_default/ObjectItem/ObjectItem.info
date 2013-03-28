@@ -1,3 +1,40 @@
 {
-    "proto": "/Library/admin_widgets/ObjectItem"
+    "value": "ObjectItem.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/ObjectItem",
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Виджет объекта",
+            "proto": "/Library/admin_widgets/ObjectItem/title",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Отображение объекта в виде пункта списка",
+            "proto": "/Library/admin_widgets/ObjectItem/description",
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/ObjectItem/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/admin_widgets/ObjectItem/res/title",
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/admin_widgets/ObjectItem/res/description",
+                    "order": 2
+                }
+            }
+        }
+    }
 }

@@ -1,0 +1,20 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/Widget/res",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Ресурсы",
+            "proto": "/Library/views/Widget/res/title",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+            "proto": "/Library/views/Widget/res/description",
+            "order": 2
+        }
+    }
+}

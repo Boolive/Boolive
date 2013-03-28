@@ -1,4 +1,20 @@
 {
-    "title": "Низ страницы",
-    "proto": "/Library/views/ViewGroup"
+    "value": "",
+    "proto": "/Library/views/ViewGroup",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Низ",
+            "proto": "/Library/views/ViewGroup/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
+            "proto": "/Library/views/ViewGroup/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

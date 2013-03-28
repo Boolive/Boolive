@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "Export.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Export",
+    "is_link": true,
+    "order": 10
+}

@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 1,
+    "children": {
+        "title": {
+            "value": "Допуск",
+            "order": 1
+        },
+        "description": {
+            "value": "Право доступа к объектам",
+            "order": 2
+        }
+    }
+}

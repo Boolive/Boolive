@@ -1,4 +1,17 @@
 {
-    "title": "Запомнить меня",
-    "proto": "/Library/basic/simple/Boolean"
+    "value": 0,
+    "proto": "/Library/basic/simple/Boolean",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Запомнить",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Логическое значение ДА/НЕТ",
+            "proto": "/Library/basic/simple/Boolean/description",
+            "order": 2
+        }
+    }
 }

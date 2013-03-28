@@ -1,8 +1,19 @@
 {
+    "value": "all",
     "proto": "/Library/views/SwitchCase",
-    "value": null,
-    "order": 10,
-    "children":{
-        "title": "Плиточный вариант отображения"
+    "is_default_class": false,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Вариант плитки по умолчанию",
+            "proto": "/Library/views/SwitchCase/title",
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
+            "proto": "/Library/views/SwitchCase/description",
+            "order": 2
+        }
     }
 }

@@ -1,5 +1,42 @@
 {
-    "title": "Программы для работы с объектами",
-    "description": "Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты",
-    "proto": "/Library/views/AutoWidget"
+    "value": "Programs.tpl",
+    "is_file": true,
+    "proto": "/Library/views/AutoWidget",
+    "is_default_class": false,
+    "order": 8,
+    "children": {
+        "title": {
+            "value": "Программы для работы с объектами",
+            "proto": "/Library/views/AutoWidget/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты",
+            "proto": "/Library/views/AutoWidget/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/AutoWidget/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/AutoWidget/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/AutoWidget/res/description",
+                    "order": 2
+                }
+            }
+        }
+    }
 }

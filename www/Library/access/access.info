@@ -1,5 +1,16 @@
 {
-    "title": "Пользователи и контроль доступа",
-    "description": "Для создания пользователей, групп пользователей, назначениям им прав и группировки прав в роли",
-    "proto": "/Library/basic/Package"
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 10,
+    "children": {
+        "title": {
+            "value": "Пользователи и доступ",
+            "proto": "/Library/basic/Package/title",
+            "order": 1
+        },
+        "description": {
+            "value": "",
+            "order": 2
+        }
+    }
 }

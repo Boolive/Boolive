@@ -1,5 +1,40 @@
 {
-	"title": "Автоподключение jquery плагинов",
-	"description": "Автоматически подключает плагины jquery к тегам с атрибутом data-p. Имя плагина берется из атрибута data-p",
-	"proto": "/Library/javascripts/JavaScript"
+    "value": "jquery.autobind.js",
+    "is_file": true,
+    "proto": "/Library/javascripts/patterns/jQueryScript",
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Автоподключение jquery плагинов",
+            "proto": "/Library/javascripts/patterns/jQueryScript/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Автоматически подключает плагины jquery к тегам с атрибутом data-plugin. Имя плагина берется из атрибута data-plugin",
+            "proto": "/Library/javascripts/patterns/jQueryScript/description",
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/patterns/jQueryScript/depends",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Используемые скрипты",
+                    "proto": "/Library/javascripts/patterns/jQueryScript/depends/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
+                    "order": 2
+                }
+            }
+        }
+    }
 }

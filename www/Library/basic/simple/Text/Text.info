@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Текст",
+            "order": 1
+        },
+        "description": {
+            "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
+            "order": 2
+        }
+    }
+}

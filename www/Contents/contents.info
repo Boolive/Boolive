@@ -1,4 +1,11 @@
 {
-    "title": "Содержимое",
-    "description": "Раздел содержимого сайта"
+    "value": "",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Содержимое",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

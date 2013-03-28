@@ -1,3 +1,8 @@
 {
-    "proto": "/Library/views/PageNavigation"
+    "is_default_value": true,
+    "value": "PageNavigation.tpl",
+    "is_file": true,
+    "proto": "/Library/views/PageNavigation",
+    "is_link": true,
+    "order": 11
 }

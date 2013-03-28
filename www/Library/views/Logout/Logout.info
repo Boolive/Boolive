@@ -1,0 +1,20 @@
+{
+    "value": "",
+    "proto": "/Library/views/View",
+    "is_default_class": false,
+    "order": 17,
+    "children": {
+        "title": {
+            "value": "Выход",
+            "proto": "/Library/views/View/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отмена авторизации",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

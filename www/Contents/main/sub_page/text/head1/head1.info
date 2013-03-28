@@ -1,5 +1,13 @@
 {
-    "proto": "/Library/content_samples/Head",
     "value": "Заголовок подчиненной страницы",
-    "order": 0
+    "proto": "/Library/content_samples/paragraphs/Head",
+    "order": 0,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Заголовок",
+            "proto": "/Library/content_samples/paragraphs/Head/title",
+            "order": 1
+        }
+    }
 }

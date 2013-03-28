@@ -1,6 +1,12 @@
 {
-    "title": "Страницы",
+    "value": "",
     "proto": "/Library/content_samples/Page",
+    "is_link": true,
     "order": 3,
-    "is_link": true
+    "children": {
+        "title": {
+            "value": "Страницы",
+            "order": 1
+        }
+    }
 }

@@ -1,4 +1,5 @@
 {
+    "value": "Текст первого коммента",
     "proto": "/Library/content_samples/Comment/text",
-    "value": "Текст первого коммента"
+    "order": 2
 }

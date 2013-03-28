@@ -1,0 +1,62 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/paragraphs/Head/style",
+    "order": 1,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Стиль ",
+            "proto": "/Library/content_samples/paragraphs/Head/style/title",
+            "order": 1
+        },
+        "width": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/width",
+            "order": 2
+        },
+        "height": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/height",
+            "order": 3
+        },
+        "margin-top": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/margin-top",
+            "order": 4
+        },
+        "margin-bottom": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/margin-bottom",
+            "order": 6
+        },
+        "text-align": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/text-align",
+            "order": 8
+        },
+        "padding-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/padding-left",
+            "order": 9
+        },
+        "padding-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/Head/style/padding-right",
+            "order": 10
+        },
+        "line-height": {
+            "is_default_value": true,
+            "value": "normal",
+            "proto": "/Library/content_samples/paragraphs/Head/style/line-height",
+            "order": 12
+        }
+    }
+}

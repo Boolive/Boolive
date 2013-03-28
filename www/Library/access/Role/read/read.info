@@ -1,3 +1,10 @@
 {
-    "title": "Права на чтение"
+    "value": "",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Права на чтение",
+            "order": 1
+        }
+    }
 }

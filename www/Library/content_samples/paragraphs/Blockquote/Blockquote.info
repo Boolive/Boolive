@@ -1,4 +1,13 @@
 {
-    "title": "Цитата",
-    "proto": "/Library/content_samples/paragraphs/P"
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/paragraphs/TextBlock",
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Цитата",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/title",
+            "order": 1
+        }
+    }
 }

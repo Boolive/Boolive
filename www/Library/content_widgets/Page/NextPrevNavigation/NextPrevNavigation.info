@@ -1,3 +1,8 @@
 {
-    "proto": "/Library/views/NextPrevNavigation"
+    "is_default_value": true,
+    "value": "NextPrevNavigation.tpl",
+    "is_file": true,
+    "proto": "/Library/views/NextPrevNavigation",
+    "is_link": true,
+    "order": 6
 }

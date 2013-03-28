@@ -1,4 +1,12 @@
 {
-    "title": "Таблицы",
-    "proto": "/Library/basic/Package"
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Таблицы",
+            "proto": "/Library/basic/Package/title",
+            "order": 1
+        }
+    }
 }

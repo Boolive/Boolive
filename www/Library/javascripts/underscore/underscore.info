@@ -1,5 +1,39 @@
 {
-	"title": "Underscore",
-	"description": "Библиотека функций JavaScript для работы с объектами, массивами, функциями и коллекциями",
-	"proto": "/Library/views/JavaScript"
+    "value": "underscore.js",
+    "is_file": true,
+    "proto": "/Library/javascripts/JavaScript",
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Underscore",
+            "proto": "/Library/javascripts/JavaScript/title",
+            "order": 1
+        },
+        "description": {
+            "value": "Библиотека функций JavaScript для работы с объектами, массивами, функциями и коллекциями",
+            "proto": "/Library/javascripts/JavaScript/description",
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/JavaScript/depends",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Используемые скрипты",
+                    "proto": "/Library/javascripts/JavaScript/depends/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "proto": "/Library/javascripts/JavaScript/depends/description",
+                    "order": 2
+                }
+            }
+        }
+    }
 }

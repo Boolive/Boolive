@@ -1,4 +1,13 @@
 {
-    "title": "Заголовок 6",
-    "proto": "/Library/content_samples/paragraphs/Head"
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/paragraphs/Head",
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Заголовок 6",
+            "proto": "/Library/content_samples/paragraphs/Head/title",
+            "order": 1
+        }
+    }
 }

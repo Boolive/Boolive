@@ -1,0 +1,14 @@
+{
+    "value": "0",
+    "order": 4,
+    "children": {
+        "description": {
+            "value": "Числовое значение любой величены",
+            "order": 1
+        },
+        "title": {
+            "value": "Число",
+            "order": 1
+        }
+    }
+}

@@ -1,4 +1,13 @@
 {
-    "proto": "/Library/content_samples/Paragraph",
-    "value": "Текст новости в виде одного абзаца"
+    "value": "Текст новости в виде одного абзаца",
+    "proto": "/Library/content_samples/paragraphs/P",
+    "order": 1,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "order": 2
+        }
+    }
 }

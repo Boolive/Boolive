@@ -1,0 +1,13 @@
+{
+    "value": "Виджеты",
+    "proto": "/Library/content_samples/paragraphs/H2",
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "order": 1
+        }
+    }
+}
