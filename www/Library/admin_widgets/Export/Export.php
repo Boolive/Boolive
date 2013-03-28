@@ -32,7 +32,6 @@ class Export extends Widget
         );
     }
 
-
     public function work($v = array())
     {
         // Экспорт
@@ -90,7 +89,7 @@ class Export extends Widget
                     'select' => 'count',
                     'from' => array($obj),
                     'where'=> array('attr', 'is_delete', '>=', 0)
-                )),
+                ))+1,
                 'step' => 0,
                 'obj' => $obj->id()
             );
@@ -113,12 +112,13 @@ class Export extends Widget
         if (($info = Session::get($id)) && !empty($info['jobs']) && $info['jobs_step'] < $info['jobs_count']){
             $j = $info['jobs_step'];
             $message = '';
-            if ($info['jobs'][$j]['step'] < $info['jobs'][$j]['count']){
+            if ($info['jobs'][$j]['step'] <= $info['jobs'][$j]['count']){
                 $cnt = 50;
                 // Выбор объектов начиная со step
                 $list = Data::select(array(
                     'from' => array($info['jobs'][$j]['obj']),
                     'where'=> array('attr', 'is_delete', '>=', 0),
+                    'order'=> array(array('id', 'asc')),
                     'limit' => array($info['jobs'][$j]['step'], $cnt)
                 ), null);
                 if ($info['jobs'][$j]['step'] == 0){
@@ -156,7 +156,7 @@ class Export extends Widget
                 'id' => $id,
                 'complete' => $completed,
                 'progress' => round($progress * 100),
-                'message' => $completed ? 'Завершено' : $message
+                'message' => $completed ? ' Завершено' : $message
             );
         }else{
             return array(
@@ -165,33 +165,5 @@ class Export extends Widget
                 'message' => 'Нечего экспортировать'
             );
         }
-
-//        if ($step == 0){
-            // Подготовка процесса
-
-
-
-            /** @var \Boolive\data\Entity $obj  */
-//            foreach ($objects as $obj){
-//                $info = array();
-//                if ($obj->owner()) $info['owner'] = $obj->owner()->uri();
-//                if ($obj->lang()) $info['lang'] = $obj->lang()->uri();
-//                if ($obj->proto()) $info['proto'] = $obj->proto()->uri();
-//                if (!$obj->isDefaultValue()){
-//                    $info['value'] = $obj->value();
-//                }else{
-//                    $info['is_default_value'] = 1;
-//                }
-//                if ($obj->isDefaultChildren()) $info['is_default_children'] = 1;
-//                if (!$obj->isDefaultClass()) $info['is_default_class'] = 0;
-//                if ($obj->isFile()) $info['is_file'] = 1;
-//                if ($obj->isHidden()) $info['is_hidden'] = 1;
-//                if ($obj->isLink()) $info['is_link'] = 1;
-//
-//                $content = json_encode($info);
-//                $file = $obj->dir(true).$obj->name().'.info';
-//                \Boolive\file\File::create($content, $file);
-//            }
-//        }
     }
 }

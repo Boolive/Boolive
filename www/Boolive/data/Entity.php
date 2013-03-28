@@ -233,7 +233,7 @@ class Entity implements ITrace
         if (isset($this->_attribs['date'])){
             $this->_attribs['date'] = time();
         }
-        return $this->_attribs['date'];
+        return (int)$this->_attribs['date'];
     }
 
     /**
@@ -248,7 +248,7 @@ class Entity implements ITrace
             $this->_changed = true;
             $this->_checked = false;
         }
-        return isset($this->_attribs['order'])? $this->_attribs['order'] : null;
+        return isset($this->_attribs['order'])? (int)$this->_attribs['order'] : null;
     }
 
     /**
@@ -1491,26 +1491,25 @@ class Entity implements ITrace
     }
 
     /**
-     * @param bool $save_to_file
+     * Экпорт объекта в массив и сохранение в файл info в формате JSON
+     * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
+     * @param bool $save_to_file Признак, сохранять в файл?
      * @return array
      */
     public function export($save_to_file = true)
     {
         $export = array();
+        if ($this->isDefaultValue()) $export['is_default_value'] = true;
+        $export['value'] = $this->value();
+        if ($this->isFile()) $export['is_file'] = true;
         if ($this->owner()) $export['owner'] = $this->owner()->uri();
         if ($this->lang()) $export['lang'] = $this->lang()->uri();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
-        if (!$this->isDefaultValue()){
-            $export['value'] = $this->value();
-        }else{
-            $export['is_default_value'] = 1;
-        }
-        if (!$this->isDefaultChildren()) $export['is_default_children'] = 0;
-        if (!$this->isDefaultClass()) $export['is_default_class'] = 0;
-        if ($this->isFile()) $export['is_file'] = 1;
-        if ($this->isHidden(null, false)) $export['is_hidden'] = 1;
-        if ($this->isLink()) $export['is_link'] = 1;
-        if ($this->isDelete(null, false)) $export['is_delete'] = 1;
+        if ($this->isLink()) $export['is_link'] = true;
+        if (!$this->isDefaultClass()) $export['is_default_class'] = false;
+        //if (!$this->isDefaultChildren()) $export['is_default_children'] = false;
+        if ($this->isHidden(null, false)) $export['is_hidden'] = true;
+        if ($this->isDelete(null, false)) $export['is_delete'] = true;
         $export['order'] = $this->order();
         // Свойства
         $export['children'] = array();
@@ -1547,7 +1546,9 @@ class Entity implements ITrace
             }else{
                 $content = F::special_unicode_to_utf8(json_encode($export));
             }
-            $file = $this->dir(true).$this->name().'.info';
+            $name = $this->name();
+            if ($this->uri()=='') $name = 'Site';
+            $file = $this->dir(true).$name.'.info';
             File::create($content, $file);
         }
         return $export;

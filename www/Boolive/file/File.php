@@ -378,4 +378,13 @@ class File
             system('subst '.self::VIRT_DISK.': /d');
         }
     }
+
+    static function deleteEmptyDirs($path)
+    {
+        $empty = true;
+        foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file){
+            $empty &= is_dir($file) && self::deleteEmptyDirs($file);
+        }
+        return $empty && rmdir($path);
+    }
 }
