@@ -45,6 +45,7 @@ class MySQLStore extends Entity
      */
     public function read($key, $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true, $index = false)
     {
+        if ($key == 'null' || is_null($key)) return null;
         $binds = array();
         // Владелец
         $binds[0] = !empty($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
@@ -1440,6 +1441,9 @@ class MySQLStore extends Entity
         if (!is_string($uri)){
             return null;
         }
+        if ($uri == 'null'){
+            $a = 10;
+        }
         if ($info = Data::isShortUri($uri)){
             if ($info[0] == $this->key){
                 // Сокращенный URI приндалежит данной секции, поэтому возвращаем вторую часть
@@ -1602,13 +1606,9 @@ class MySQLStore extends Entity
             $q = $db->query('SHOW TABLES');
             while ($row = $q->fetch(DB::FETCH_NUM)/* && empty($config['prefix'])*/){
                 if (in_array($row[0], $tables)){
-                    if ($delete_table){
-                        $db->exec('DROP TABLE '.$row[0].'');
-                    }else{
-                        // Иначе ошибка
-                        $errors->dbname = 'db_not_empty';
-                        throw $errors;
-                    }
+                    // Иначе ошибка
+                    $errors->dbname = 'db_not_empty';
+                    throw $errors;
                 }
             }
             // Создание таблиц
