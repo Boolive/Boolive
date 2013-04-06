@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/javascripts/JavaScript",
     "is_default_class": false,
-    "order": 8,
+    "order": 10,
     "children": {
         "title": {
             "value": "HTML5 History API",
@@ -14,6 +14,7 @@
         "description": {
             "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
             "proto": "/Library/javascripts/JavaScript/description",
+            "is_hidden": true,
             "order": 2
         },
         "depends": {
@@ -33,6 +34,7 @@
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

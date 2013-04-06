@@ -2,24 +2,25 @@
     "value": "jquery.form.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/jQueryScript",
-    "order": 10,
+    "order": 12,
     "children": {
-        "description": {
-            "value": "Отправка форм",
-            "proto": "/Library/javascripts/patterns/jQueryScript/description",
-            "order": 1
-        },
         "title": {
             "value": "Отправка форм по AJAX",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_hidden": true,
             "order": 1
         },
+        "description": {
+            "value": "Отправка форм",
+            "proto": "/Library/javascripts/patterns/jQueryScript/description",
+            "is_hidden": true,
+            "order": 2
+        },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
-            "order": 2,
+            "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -32,6 +33,7 @@
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

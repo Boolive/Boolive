@@ -3,22 +3,24 @@
     "is_default_class": false,
     "order": 7,
     "children": {
-        "title": {
-            "value": "Страница",
-            "order": 0,
+        "description": {
+            "value": "",
+            "order": 1,
             "children": {
                 "title": {
-                    "value": "Название",
+                    "value": "Описание ",
+                    "is_hidden": true,
                     "order": 1
                 }
             }
         },
-        "description": {
-            "value": "",
+        "title": {
+            "value": "Страница",
             "order": 2,
             "children": {
                 "title": {
-                    "value": "Описание ",
+                    "value": "Название",
+                    "is_hidden": true,
                     "order": 1
                 }
             }

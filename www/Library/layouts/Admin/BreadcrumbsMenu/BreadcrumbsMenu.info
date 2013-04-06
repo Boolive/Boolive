@@ -14,6 +14,7 @@
         "description": {
             "value": "Отображает путь на текущий объект с возможностью перехода к его родителям",
             "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
             "order": 2
         },
         "res": {
@@ -33,7 +34,8 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "order": 2
+                    "is_hidden": true,
+                    "order": 4
                 }
             }
         }

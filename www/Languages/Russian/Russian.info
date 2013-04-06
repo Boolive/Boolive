@@ -6,6 +6,7 @@
         "title": {
             "value": "Русский",
             "proto": "/Library/basic/Language/title",
+            "is_hidden": true,
             "order": 2
         }
     }

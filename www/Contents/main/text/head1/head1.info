@@ -1,12 +1,13 @@
 {
     "value": "Формирование страницы",
     "proto": "/Library/content_samples/paragraphs/H1",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Заголовок 1",
             "proto": "/Library/content_samples/paragraphs/H1/title",
+            "is_hidden": true,
             "order": 1
         }
     }

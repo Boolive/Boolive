@@ -2,7 +2,7 @@
     "value": "",
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 8,
+    "order": 10,
     "children": {
         "title": {
             "value": "Фокусировщик",
@@ -33,6 +33,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

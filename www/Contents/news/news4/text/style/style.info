@@ -8,6 +8,7 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/content_samples/Page/text/style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
@@ -63,6 +64,19 @@
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/padding-right",
             "order": 10
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Page/text/style/text-indent",
+            "order": 11
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/Page/text/style/description",
+            "is_hidden": true,
+            "order": 12
         }
     }
 }

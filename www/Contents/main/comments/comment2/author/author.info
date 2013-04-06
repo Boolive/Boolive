@@ -2,8 +2,8 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Members/registered/admins/vova",
-    "order": 1,
     "is_link": true,
+    "order": 1,
     "children": {
         "title": {
             "value": "Автор",

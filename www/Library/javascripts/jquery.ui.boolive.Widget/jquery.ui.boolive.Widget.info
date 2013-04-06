@@ -2,7 +2,7 @@
     "value": "jquery.ui.boolive.Widget.js",
     "is_file": true,
     "proto": "/Library/javascripts/JavaScript",
-    "order": 7,
+    "order": 9,
     "children": {
         "title": {
             "value": "jQueryUI Boolive.Widget",
@@ -34,6 +34,7 @@
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

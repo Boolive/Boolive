@@ -8,7 +8,8 @@
             "is_default_value": true,
             "value": "Изображение",
             "proto": "/Library/content_samples/Image/title",
-            "order": 1
+            "is_hidden": true,
+            "order": 2
         }
     }
 }

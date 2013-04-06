@@ -9,55 +9,73 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/content_samples/paragraphs/P/style/title",
+            "is_hidden": true,
+            "is_delete": true,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/width",
+            "is_delete": true,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/height",
+            "is_delete": true,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-top",
+            "is_delete": true,
             "order": 4
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/paragraphs/P/style/description",
+            "is_hidden": true,
+            "is_delete": true,
+            "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-bottom",
+            "is_delete": true,
             "order": 6
         },
         "text-align": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/text-align",
+            "is_delete": true,
             "order": 8
         },
         "padding-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-left",
+            "is_delete": true,
             "order": 9
         },
         "padding-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-right",
+            "is_delete": true,
             "order": 10
         },
         "line-height": {
             "is_default_value": true,
             "value": "normal",
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
-            "order": 12
+            "is_delete": true,
+            "order": 11
         }
     }
 }

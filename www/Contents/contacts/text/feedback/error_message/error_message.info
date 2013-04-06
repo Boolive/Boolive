@@ -2,18 +2,20 @@
     "is_default_value": true,
     "value": "Имеются ошибки",
     "proto": "/Library/content_samples/Feedback/error_message",
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Текст",
             "proto": "/Library/content_samples/Feedback/error_message/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/content_samples/Feedback/error_message/description",
+            "is_hidden": true,
             "order": 2
         }
     }

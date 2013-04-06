@@ -6,12 +6,14 @@
         "title": {
             "value": "Виртуальные",
             "proto": "/Library/basic/simple/Boolean/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Логическое значение ДА/НЕТ",
             "proto": "/Library/basic/simple/Boolean/description",
+            "is_hidden": true,
             "order": 2
         }
     }

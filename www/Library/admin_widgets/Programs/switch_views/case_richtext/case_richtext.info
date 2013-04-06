@@ -1,5 +1,5 @@
 {
-    "value": "//221",
+    "value": "/Library/content_samples/RichText",
     "proto": "/Library/admin_widgets/Programs/switch_views/case_default",
     "order": 4,
     "children": {
@@ -11,8 +11,9 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
+            "value": "",
             "proto": "/Library/admin_widgets/Programs/switch_views/case_default/description",
+            "is_hidden": true,
             "order": 2
         }
     }

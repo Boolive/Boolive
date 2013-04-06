@@ -29,14 +29,16 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Menu/view/switch_views/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }
         },
         "description": {
             "is_default_value": true,
-            "value": "Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ",
+            "value": "",
             "proto": "/Library/views/Menu/view/switch_views/description",
+            "is_hidden": true,
             "order": 3
         }
     }

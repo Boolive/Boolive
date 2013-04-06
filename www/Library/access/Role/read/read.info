@@ -4,6 +4,7 @@
     "children": {
         "title": {
             "value": "Права на чтение",
+            "is_hidden": true,
             "order": 1
         }
     }

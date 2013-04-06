@@ -2,7 +2,7 @@
     "value": "jquery.js",
     "is_file": true,
     "proto": "/Library/javascripts/JavaScript",
-    "order": 5,
+    "order": 7,
     "children": {
         "title": {
             "value": "jQuery",
@@ -13,6 +13,7 @@
         "description": {
             "value": "JavaScript-библиотека для взаимодействия с HTML",
             "proto": "/Library/javascripts/JavaScript/description",
+            "is_hidden": true,
             "order": 2
         },
         "depends": {
@@ -32,6 +33,7 @@
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

@@ -5,8 +5,8 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Обычный абзац",
-            "proto": "/Contents/main/text/p2/title",
+            "value": "",
+            "is_hidden": true,
             "order": 1
         }
     }

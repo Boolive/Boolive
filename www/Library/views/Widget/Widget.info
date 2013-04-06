@@ -2,8 +2,27 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
-    "order": 3,
+    "order": 4,
     "children": {
+        "res": {
+            "value": "",
+            "proto": "/Library/views/ViewGroup",
+            "order": 0,
+            "children": {
+                "title": {
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/ViewGroup/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/ViewGroup/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
         "title": {
             "value": "Виджет",
             "proto": "/Library/views/View/title",
@@ -15,24 +34,6 @@
             "proto": "/Library/views/View/description",
             "is_hidden": true,
             "order": 2
-        },
-        "res": {
-            "value": "",
-            "proto": "/Library/views/ViewGroup",
-            "order": 3,
-            "children": {
-                "title": {
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/ViewGroup/title",
-                    "is_hidden": true,
-                    "order": 1
-                },
-                "description": {
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/ViewGroup/description",
-                    "order": 2
-                }
-            }
         }
     }
 }

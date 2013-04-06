@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 13,
+    "order": 15,
     "children": {
         "title": {
             "value": "Меню следующей/предыдущей страницы",
@@ -14,13 +14,13 @@
             "value": "Отображает ссылки на предыдущую и следующую страницу (или другого объект содержимого) с учётом иерархии.",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "order": 2
+            "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 3,
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -33,6 +33,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

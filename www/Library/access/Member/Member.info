@@ -1,14 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 4,
+    "order": 3,
     "children": {
         "title": {
             "value": "Член",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "value": "Базовый объект для пользователей и групп",
+            "is_hidden": true,
             "order": 2
         }
     }

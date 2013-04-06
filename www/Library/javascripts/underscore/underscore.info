@@ -2,16 +2,18 @@
     "value": "underscore.js",
     "is_file": true,
     "proto": "/Library/javascripts/JavaScript",
-    "order": 12,
+    "order": 13,
     "children": {
         "title": {
             "value": "Underscore",
             "proto": "/Library/javascripts/JavaScript/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "value": "Библиотека функций JavaScript для работы с объектами, массивами, функциями и коллекциями",
             "proto": "/Library/javascripts/JavaScript/description",
+            "is_hidden": true,
             "order": 2
         },
         "depends": {
@@ -31,6 +33,7 @@
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

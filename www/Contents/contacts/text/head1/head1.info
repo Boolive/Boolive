@@ -1,13 +1,14 @@
 {
     "value": "Наш адрес!",
     "proto": "/Library/content_samples/paragraphs/Head",
-    "order": 0,
+    "order": 9,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Заголовок",
             "proto": "/Library/content_samples/paragraphs/Head/title",
-            "order": 1
+            "is_hidden": true,
+            "order": 2
         }
     }
 }

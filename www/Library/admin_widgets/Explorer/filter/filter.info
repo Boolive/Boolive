@@ -1,9 +1,10 @@
 {
     "value": "",
-    "order": 4,
+    "order": 6,
     "children": {
         "title": {
             "value": "Фильтр",
+            "is_hidden": true,
             "order": 5
         }
     }

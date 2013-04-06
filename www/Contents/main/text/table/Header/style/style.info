@@ -3,30 +3,33 @@
     "proto": "/Library/content_samples/tables/Table/Header/style",
     "order": 3,
     "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Стиль ",
-            "proto": "/Library/content_samples/tables/Table/Header/style/title",
-            "order": 1
-        },
         "width": {
             "value": "234",
             "proto": "/Library/basic/simple/Number",
             "order": 1,
             "children": {
-                "description": {
-                    "is_default_value": true,
-                    "value": "Числовое значение любой величены",
-                    "proto": "/Library/basic/simple/Number/description",
-                    "order": 1
-                },
                 "title": {
                     "is_default_value": true,
                     "value": "Число",
                     "proto": "/Library/basic/simple/Number/title",
+                    "is_hidden": true,
                     "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Числовое значение любой величены",
+                    "proto": "/Library/basic/simple/Number/description",
+                    "is_hidden": true,
+                    "order": 2
                 }
             }
+        },
+        "title": {
+            "is_default_value": true,
+            "value": "Стиль ",
+            "proto": "/Library/content_samples/tables/Table/Header/style/title",
+            "is_hidden": true,
+            "order": 2
         },
         "height": {
             "is_default_value": true,
@@ -81,6 +84,13 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/text-indent",
             "order": 11
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/tables/Table/Header/style/description",
+            "is_hidden": true,
+            "order": 12
         }
     }
 }

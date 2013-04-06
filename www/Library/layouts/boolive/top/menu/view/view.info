@@ -16,25 +16,27 @@
             "is_default_value": true,
             "value": "Отображает пункт меню и подчиненные пункты рекурсивно подходящими виджетами из вариантов отображения.",
             "proto": "/Library/views/Menu/view/description",
+            "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Menu/view/res",
-            "order": 3,
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Ресурсы",
+                    "value": "",
                     "proto": "/Library/views/Menu/view/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value": "",
                     "proto": "/Library/views/Menu/view/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

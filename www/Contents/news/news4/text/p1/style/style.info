@@ -8,6 +8,7 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/content_samples/paragraphs/P/style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
@@ -27,6 +28,13 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-top",
             "order": 4
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/paragraphs/P/style/description",
+            "is_hidden": true,
+            "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
@@ -63,6 +71,18 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
             "order": 13
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
+            "order": 14
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/text-indent",
+            "order": 16
         }
     }
 }

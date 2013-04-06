@@ -7,7 +7,8 @@
             "is_default_value": true,
             "value": "Комментарий",
             "proto": "/Library/content_samples/Comment/title",
-            "order": 2
+            "is_hidden": true,
+            "order": 3
         }
     }
 }

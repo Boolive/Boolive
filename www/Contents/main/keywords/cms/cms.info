@@ -2,6 +2,6 @@
     "is_default_value": true,
     "value": "2",
     "proto": "/Keywords/cms",
-    "order": 1,
-    "is_link": true
+    "is_link": true,
+    "order": 1
 }

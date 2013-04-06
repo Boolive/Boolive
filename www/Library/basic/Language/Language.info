@@ -1,9 +1,10 @@
 {
     "value": "",
-    "order": 6,
+    "order": 7,
     "children": {
         "title": {
             "value": "Язык",
+            "is_hidden": true,
             "order": 1
         }
     }

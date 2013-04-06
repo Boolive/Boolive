@@ -34,6 +34,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

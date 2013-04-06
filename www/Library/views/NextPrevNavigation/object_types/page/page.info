@@ -6,6 +6,8 @@
     "children": {
         "title": {
             "value": "Страницы",
+            "proto": "/Library/content_samples/Page/title",
+            "is_hidden": true,
             "order": 1
         }
     }

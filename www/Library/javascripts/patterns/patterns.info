@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Package",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
             "value": "Шаблоны скриптов",
@@ -13,7 +13,7 @@
         "description": {
             "value": "Заготовки для написания собственных скриптов с использованием различных библиотек. ",
             "is_hidden": true,
-            "order": 5
+            "order": 2
         }
     }
 }

@@ -1,14 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 1,
+    "order": 7,
     "children": {
         "title": {
             "value": "Допуск",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "value": "Право доступа к объектам",
+            "is_hidden": true,
             "order": 2
         }
     }

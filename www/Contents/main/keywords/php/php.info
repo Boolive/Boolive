@@ -2,6 +2,6 @@
     "is_default_value": true,
     "value": "1",
     "proto": "/Keywords/php",
-    "order": 2,
-    "is_link": true
+    "is_link": true,
+    "order": 2
 }

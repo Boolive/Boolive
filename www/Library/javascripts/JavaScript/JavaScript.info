@@ -2,7 +2,7 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
-    "order": 4,
+    "order": 6,
     "children": {
         "title": {
             "value": "JavaScript",
@@ -13,6 +13,7 @@
         "description": {
             "value": "Эталон для всех скриптов на языке JavaScript",
             "proto": "/Library/views/View/description",
+            "is_hidden": true,
             "order": 2
         },
         "depends": {
@@ -29,6 +30,7 @@
                 "description": {
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/views/ViewGroup/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

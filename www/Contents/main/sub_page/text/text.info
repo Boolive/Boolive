@@ -1,13 +1,14 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Page/text",
-    "order": 1,
+    "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Текст",
             "proto": "/Library/content_samples/Page/text/title",
-            "order": 1
+            "is_hidden": true,
+            "order": 2
         }
     }
 }

@@ -1,13 +1,14 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Feedback",
-    "order": 3,
+    "order": 8,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Обратная связь",
             "proto": "/Library/content_samples/Feedback/title",
-            "order": 1
+            "is_hidden": true,
+            "order": 4
         }
     }
 }

@@ -3,15 +3,18 @@
     "proto": "/Library/basic/simple/Email",
     "order": 1,
     "children": {
+        "title": {
+            "value": "Email адрес",
+            "proto": "/Library/basic/simple/Email/title",
+            "is_hidden": true,
+            "order": 1
+        },
         "description": {
             "is_default_value": true,
             "value": "Адрес электронной почты",
             "proto": "/Library/basic/simple/Email/description",
-            "order": 1
-        },
-        "title": {
-            "value": "Email адрес",
-            "order": 1
+            "is_hidden": true,
+            "order": 2
         }
     }
 }

@@ -6,6 +6,8 @@
     "children": {
         "title": {
             "value": "Область действия роли",
+            "proto": "/title",
+            "is_hidden": true,
             "order": 1
         }
     }

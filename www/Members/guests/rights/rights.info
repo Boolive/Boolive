@@ -8,6 +8,7 @@
             "is_default_value": true,
             "value": "Права доступа",
             "proto": "/Library/access/Group/rights/title",
+            "is_hidden": true,
             "order": 1
         }
     }

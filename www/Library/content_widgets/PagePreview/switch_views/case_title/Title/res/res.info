@@ -1,0 +1,19 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

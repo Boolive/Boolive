@@ -8,6 +8,7 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/content_samples/tables/Table/style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
@@ -69,6 +70,13 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Table/style/text-indent",
             "order": 11
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/tables/Table/style/description",
+            "is_hidden": true,
+            "order": 12
         }
     }
 }

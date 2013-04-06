@@ -8,12 +8,14 @@
         "title": {
             "value": "Редактор заголовка",
             "proto": "/Library/views/Widget/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
             "order": 2
         },
         "res": {
