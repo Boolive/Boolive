@@ -2,7 +2,7 @@
     "value": "style.css",
     "is_file": true,
     "proto": "/Library/views/Css",
-    "order": 6,
+    "order": 7,
     "children": {
         "title": {
             "is_default_value": true,

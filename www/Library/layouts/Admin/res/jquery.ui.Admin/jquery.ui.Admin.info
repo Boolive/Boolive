@@ -2,7 +2,7 @@
     "value": "jquery.ui.Admin.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
