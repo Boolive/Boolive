@@ -1505,6 +1505,12 @@ class Entity implements ITrace
      */
     public function export($save_to_file = true)
     {
+        if ($this->_attribs['uri'] == '/Contents/main/text/p2'){
+            $a = 10;
+        }
+        if ($this->_attribs['uri'] == '/Contents/main/text/p2/style'){
+            $a = 10;
+        }
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
         $export['value'] = $this->value();
@@ -1526,17 +1532,17 @@ class Entity implements ITrace
         if ($children === true){
             $children = $this->find(array(
                 'where' => array(
-                    array('is_delete', '>=', 0)
+                    array('attr', 'is_delete', '>=', 0)
                 )
-            ),'name', false, 1, false);
+            ),'name', false, 1, false, false);
         }else
         if (!empty($children) && is_array($children)){
             $children = $this->find(array(
                 'where' => array(
                     array('attr', 'name', 'in',  $children),
-                    array('is_delete', '>=', 0)
+                    array('attr', 'is_delete', '>=', 0)
                 )
-            ),'name', false, 1, false);
+            ),'name', false, 1, false, false);
         }else{
             $children = array();
         }
