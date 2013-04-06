@@ -11,8 +11,7 @@
  */
 namespace Boolive
 {
-    use Boolive\events\Events,
-        Exception,
+    use Exception,
         ErrorException;
 
     class Boolive
@@ -28,6 +27,8 @@ namespace Boolive
          * Активация ядра, если вызван без параметров
          * Активация указанного в аргументах класса (модуля).
          * @param string $class_name Имя подключаемого класса
+         * @throws \ErrorException
+         * @return bool
          */
         static function activate($class_name = ''){
             $class_name = ltrim($class_name, '\\');
@@ -40,23 +41,14 @@ namespace Boolive
                     self::$activated = array();
                     self::$included = array();
                     self::$error_reporting = error_reporting();
-                    // Регистрация метода-обработчика автозагрузки классов
-                    spl_autoload_register(array('\Boolive\Boolive', 'activate'));
-                    // Регистрация метода-обработчка завершения выполнения системы
-                    register_shutdown_function(array('\Boolive\Boolive', 'deactivate'));
-                    // Регистрация обработчика исключений
-                    set_exception_handler(array('\Boolive\Boolive', 'exception'));
-                    // Регистрация обработчика ошибок
-                    set_error_handler(array('\Boolive\Boolive', 'error'));
-                    // Временая зона
-                    date_default_timezone_set('UTC');
-                    // Настройка кодировки
-                    mb_internal_encoding('UTF-8');
-                    mb_regex_encoding('UTF-8');
-                    mb_http_output('UTF-8');
-                    // При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
-                    Events::trigger('Boolive::activate');
-
+                    if (IS_INSTALL){
+                        self::init();
+                        // При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
+                        \Boolive\events\Events::trigger('Boolive::activate');
+                    }else{
+                        // Ядро не инициализировано
+                        return false;
+                    }
                 }else{
                     // Подключение и активация запрашиваемого модуля
                     // Путь по имени класса
@@ -81,6 +73,7 @@ namespace Boolive
 
                 }
             }
+            return true;
         }
 
         /**
@@ -90,7 +83,28 @@ namespace Boolive
          */
         static function deactivate()
         {
-            Events::trigger('Boolive::deactivate');
+            \Boolive\events\Events::trigger('Boolive::deactivate');
+        }
+
+        /**
+         * Инициализация ядра
+         */
+        static function init()
+        {
+            // Регистрация метода-обработчика автозагрузки классов
+            spl_autoload_register(array('\Boolive\Boolive', 'activate'));
+            // Регистрация метода-обработчка завершения выполнения системы
+            register_shutdown_function(array('\Boolive\Boolive', 'deactivate'));
+            // Регистрация обработчика исключений
+            set_exception_handler(array('\Boolive\Boolive', 'exception'));
+            // Регистрация обработчика ошибок
+            set_error_handler(array('\Boolive\Boolive', 'error'));
+            // Временая зона
+            date_default_timezone_set('UTC');
+            // Настройка кодировки
+            mb_internal_encoding('UTF-8');
+            mb_regex_encoding('UTF-8');
+            mb_http_output('UTF-8');
         }
 
         /**
@@ -103,7 +117,7 @@ namespace Boolive
         {
             // Если обработчики событий не вернут положительный результат, то
             // обрабатываем исключение по умолчанию
-            if (!Events::trigger('Boolive::error', $e)->result){
+            if (!\Boolive\events\Events::trigger('Boolive::error', $e)->result){
                 error_log(get_class($e).' ['.$e->getCode().']: '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
                 if (isset($e->xdebug_message)){
                     echo '<table cellspacing="0" cellpadding="1" border="1" dir="ltr">'.$e->xdebug_message.'</table>';
@@ -212,36 +226,36 @@ namespace Boolive
                 $requirements[] = 'Несовместимая версия PHP. Установлена '.PHP_VERSION.' Требуется 5.3.3 или выше';
             }
             if (!ini_get('short_open_tag')){
-                //$requirements[] = 'В настройках PHP включите параметр "короткие теги" (short_open_tag On)';
+                //$requirements[] = 'В настройках PHP включите параметр "короткие теги" <code>short_open_tag On</code>';
             }
             if (ini_get('register_globals')){
-                $requirements[] = 'В настройках PHP отключите "регистрацию глобальных переменных" (register_globals Off)';
+                $requirements[] = 'В настройках PHP отключите "регистрацию глобальных переменных" <code>register_globals Off</code>';
             }
             if (ini_get('magic_quotes_runtime')){
-                $requirements[] = 'В настройках PHP отключите "магические кавычки для функций" (magic_quotes_runtime Off)';
+                $requirements[] = 'В настройках PHP отключите "магические кавычки для функций" <code>magic_quotes_runtime Off</code>';
             }
             if (ini_get('magic_quotes_gpc')){
-                $requirements[] = 'В настройках PHP отключите "магические кавычки для входящих данных" (magic_quotes_gpc Off)';
+                $requirements[] = 'В настройках PHP отключите "магические кавычки для входящих данных" <code>magic_quotes_gpc Off</code>';
             }
 
             // Проверка наличия модуля mod_rewrite
             if (function_exists('apache_get_modules') && !in_array('mod_rewrite', apache_get_modules())){
-                $requirements[] = 'Требуется включить модуль "mod_rewrite" для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
-                Включение выполняется в файле конфигурации "...\Apache\conf\httpd.conf" опцией LoadModule';
+                $requirements[] = 'Требуется включить модуль <code>mod_rewrite</code> для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
+                Включение выполняется в файле конфигурации <code>.../Apache/conf/httpd.conf</code> опцией <code>LoadModule rewrite_module modules/mod_rewrite.so</code>';
             }
             $file = DIR_SERVER.'config.php';
             if (!is_writable($file)){
-                $requirements[] = 'Установите права на запись для файла "'.$file.'". Необходимо для автоматической записи настроек системы';
+                $requirements[] = 'Установите права на запись для файла <code>'.$file.'</code>. Необходимо для автоматической записи настроек системы';
             }
             $file = DIR_SERVER.'.htaccess';
             if (!is_writable($file)){
-                $requirements[] = 'Установите права на запись для файла "'.$file.'". Необходимо для автоматической записи настроек системы';
+                $requirements[] = 'Установите права на запись для файла <code>'.$file.'</code>. Необходимо для автоматической записи настроек системы';
             }
             if (!is_writable(DIR_SERVER)){
-                $requirements[] = 'Установите права на запись для директории "'.DIR_SERVER_PROJECT.'" и всех её вложенных директорий и файлов';
+                $requirements[] = 'Установите права на запись для директории <code>'.DIR_SERVER_PROJECT.'</code> и всех её вложенных директорий и файлов';
             }
             if (!extension_loaded('mbstring')){
-                $requirements[] = 'Требуется расширение "mbstring" для PHP';
+                $requirements[] = 'Требуется расширение <code>mbstring</code> для PHP';
             }
             return $requirements;
         }
@@ -256,7 +270,7 @@ namespace Boolive
             if (is_writable($file)){
                 $content = file_get_contents($file);
                 // Прописывание базовой директории для mod_rewrite
-                $content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n\tRewriteBase ".DIR_WEB, $content);
+                $content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n    RewriteBase ".DIR_WEB, $content);
                 $fp = fopen($file, 'w');
                 fwrite($fp, $content);
                 fclose($fp);

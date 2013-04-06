@@ -29,7 +29,11 @@ class Session
 	static function init()
     {
 		session_write_close();
-		session_id(Auth::getUser()->value(null, true));
+        if (IS_INSTALL){
+            session_id(Auth::getUser()->value(null, true));
+        }else{
+            session_id('install');
+        }
 		session_start();
 	}
     /**
