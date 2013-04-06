@@ -1436,9 +1436,9 @@ class MySQLStore extends Entity
         $is_new = false;
         if ($uri instanceof Entity){
             $uri = $uri->key();
-        }else
-        if ($obj = Buffer::get($uri.'@'.Entity::ENTITY_ID.'@'.Entity::ENTITY_ID.'@0')){
-            $uri = $obj->key();
+        }
+        if (!is_string($uri)){
+            return null;
         }
         if ($info = Data::isShortUri($uri)){
             if ($info[0] == $this->key){
