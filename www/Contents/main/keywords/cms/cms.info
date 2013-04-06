@@ -3,12 +3,5 @@
     "value": "2",
     "proto": "/Keywords/cms",
     "order": 1,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Ключевое слово",
-            "proto": "/Keywords/cms/title",
-            "order": 1
-        }
-    }
+    "is_link": true
 }

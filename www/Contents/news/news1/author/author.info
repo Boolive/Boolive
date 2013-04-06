@@ -3,50 +3,5 @@
     "value": "",
     "proto": "/Members/registered/admins/vova",
     "order": 3,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Пользователь",
-            "proto": "/Members/registered/admins/vova/title",
-            "order": 1
-        },
-        "description": {
-            "is_default_value": true,
-            "value": "Базовый объект для пользователей и групп",
-            "proto": "/Members/registered/admins/vova/description",
-            "order": 2
-        },
-        "name": {
-            "is_default_value": true,
-            "value": "Владимир ",
-            "proto": "/Members/registered/admins/vova/name",
-            "order": 3
-        },
-        "email": {
-            "is_default_value": true,
-            "value": "boolive@yandex.ru",
-            "proto": "/Members/registered/admins/vova/email",
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Email",
-                    "proto": "/Members/registered/admins/vova/email/title",
-                    "order": 1
-                }
-            }
-        },
-        "visit_time": {
-            "is_default_value": true,
-            "value": "1363158274",
-            "proto": "/Members/registered/admins/vova/visit_time",
-            "order": 5
-        },
-        "passw": {
-            "is_default_value": true,
-            "value": "1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23",
-            "proto": "/Members/registered/admins/vova/passw",
-            "order": 6
-        }
-    }
+    "is_link": true
 }
