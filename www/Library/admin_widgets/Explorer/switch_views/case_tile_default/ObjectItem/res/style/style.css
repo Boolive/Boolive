@@ -16,7 +16,7 @@
         padding: 15px 15px 15px 15px;
         margin: 0;
         display: block;
-        background-color: #EEEEEE;
+        background-color: #f2f2f2;
         border: 1px solid #EAEAEA;
         text-overflow: ellipsis;
         height: 75px;
@@ -75,7 +75,7 @@
                     text-decoration: underline;
                     }
                     .ObjectItem.tile .view .title-group .title > *{
-                        color: #333;
+                        color: #000;
                     }
                     .ObjectItem.tile .view.link .title-group .title > *{
                         color: #0073bf;
@@ -83,7 +83,7 @@
             .ObjectItem.tile .view .title-group .mini{
                 font-size: 12pt;
                 display: block;
-                color: #666;
+                color: #333;
                 }
         /* Выделение */
 		.ObjectItem.tile .view .select{
@@ -158,6 +158,7 @@
     .ObjectItem.selected.tile .view .title-group *,
     .ObjectItem.selected.tile .view.link .title-group .title > *{
         color: #FFF;
+        text-shadow: 0px 0 10px rgb(51, 160, 255);
         }
         .ObjectItem.selected.tile .view.link .title-group .title:after{
             color: #FFF;

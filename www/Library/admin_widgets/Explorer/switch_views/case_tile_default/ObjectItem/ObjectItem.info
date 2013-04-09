@@ -2,6 +2,7 @@
     "value": "ObjectItem.tpl",
     "is_file": true,
     "proto": "/Library/admin_widgets/ObjectItem",
+    "is_default_class": false,
     "order": 4,
     "children": {
         "title": {

@@ -68,6 +68,13 @@
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/text-indent",
             "order": 11
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/Page/text/style/description",
+            "is_hidden": true,
+            "order": 12
         }
     }
 }
