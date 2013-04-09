@@ -21,7 +21,8 @@ if (Boolive::activate()){
     // Исполнение корневого объекта. Передаётся экземпляр команд и все входящие данные.
     // Вывод результата клиенту
     echo Data::read()->start(new Commands(), Input::getSource());
-}else{
+}
+else{
     // Запуск установщика
     include DIR_SERVER_ENGINE.'installer/Installer.php';
     Installer::start();
