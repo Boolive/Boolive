@@ -24,7 +24,7 @@ class history extends JavaScript
                 $config[] = 'redirect=true';
             }
             if ($basepath = $this->basepath->value()){
-                $config[] = 'basepath='.$basepath;
+                $config[] = 'basepath='.DIR_WEB.trim($basepath,'/').'/';
             }
             if ($config) $file.='?'.implode('&',$config);
 

@@ -43,4 +43,10 @@ class Admin extends Focuser
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = Data::read($uri);
     }
+
+    public function work($v = array())
+    {
+        $v['basepath'] = DIR_WEB.'admin';
+        return parent::work($v);
+    }
 }

@@ -237,10 +237,9 @@ namespace Boolive
             if (ini_get('magic_quotes_gpc')){
                 $requirements[] = 'В настройках PHP отключите "магические кавычки для входящих данных" <code>magic_quotes_gpc Off</code>';
             }
-
             // Проверка наличия модуля mod_rewrite
             if (function_exists('apache_get_modules') && !in_array('mod_rewrite', apache_get_modules())){
-                $requirements[] = 'Требуется включить модуль <code>mod_rewrite</code> для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
+                $requirements[] = 'Требуется модуль <code>mod_rewrite</code> для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
                 Включение выполняется в файле конфигурации <code>.../Apache/conf/httpd.conf</code> опцией <code>LoadModule rewrite_module modules/mod_rewrite.so</code>';
             }
             $file = DIR_SERVER.'config.php';
@@ -262,7 +261,6 @@ namespace Boolive
 
         /**
          * Установка ядра
-         *
          */
         static function install()
         {
@@ -270,6 +268,7 @@ namespace Boolive
             if (is_writable($file)){
                 $content = file_get_contents($file);
                 // Прописывание базовой директории для mod_rewrite
+                $content = preg_replace('/\n[ \t]*RewriteEngine[ \t\S]*/u', "\n    RewriteEngine On".DIR_WEB, $content);
                 $content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n    RewriteBase ".DIR_WEB, $content);
                 $fp = fopen($file, 'w');
                 fwrite($fp, $content);
