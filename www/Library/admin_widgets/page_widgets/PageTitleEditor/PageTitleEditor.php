@@ -4,7 +4,7 @@
  * @author: polinа Putrolaynen
  * @version 1.0
  */
-namespace Library\admin_widgets\PageTitleEditor;
+namespace Library\admin_widgets\page_widgets\PageTitleEditor;
 
 use Library\views\Widget\Widget,
     Boolive\values\Rule;
