@@ -7,6 +7,7 @@
  */
 namespace Library\views\AutoWidgetList;
 
+use Library\views\SwitchCase\SwitchCase;
 use Library\views\Widget\Widget;
 
 class AutoWidgetList extends Widget
@@ -32,11 +33,13 @@ class AutoWidgetList extends Widget
         $protos = array();
         while ($cnt > 0){
             $cnt--;
-            if ($cases[$cnt]->value() == 'all'){
-                $protos = array();
-                $cnt = 0;
-            }else{
-                $protos[] = $cases[$cnt]->value();
+            if ($cases[$cnt] instanceof SwitchCase){
+                if ($cases[$cnt]->value() == 'all'){
+                    $protos = array();
+                    $cnt = 0;
+                }else{
+                    $protos[] = $cases[$cnt]->value();
+                }
             }
         }
         if (empty($cond['where'])){

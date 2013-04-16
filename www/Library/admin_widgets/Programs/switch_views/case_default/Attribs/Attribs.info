@@ -1,8 +1,1 @@
-{
-    "is_default_value": true,
-    "value": "Attribs.tpl",
-    "is_file": true,
-    "proto": "/Library/admin_widgets/Attribs",
-    "is_link": true,
-    "order": 5
-}
+{"is_default_value":true,"value":"Attribs.tpl","is_file":true,"proto":"/Library/admin_widgets/Attribs","is_link":true,"order":5}

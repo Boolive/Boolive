@@ -1,0 +1,15 @@
+.PageKeyword{
+    background-color: #CCE6FF;
+    border-radius: 5px;
+    width: auto;
+    height: 16px;
+    float: left;
+    margin: 2px;
+    vertical-align: middle;
+    padding: 5px;
+    cursor: default;
+    font-size: 12px;
+    }
+    .PageKeyword a{
+        text-decoration: none;
+      }
