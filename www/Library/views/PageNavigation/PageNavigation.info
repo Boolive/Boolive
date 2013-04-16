@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 12,
+    "order": 14,
     "children": {
         "title": {
             "value": "Меню постраничной навигации",
@@ -28,13 +28,14 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "order": 1
+                    "order": 2
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "order": 2
+                    "is_hidden": true,
+                    "order": 3
                 }
             }
         }

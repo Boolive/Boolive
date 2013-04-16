@@ -8,15 +8,18 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/content_samples/Image/style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
-            "value": "370px",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Image/style/width",
             "order": 2
         },
         "height": {
-            "value": "235px",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Image/style/height",
             "order": 3
         },
@@ -26,12 +29,9 @@
             "proto": "/Library/content_samples/Image/style/margin-top",
             "order": 4
         },
-        "text-align": {
-            "value": "right",
-            "order": 4
-        },
         "margin-right": {
-            "value": "0px",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Image/style/margin-right",
             "order": 5
         },
@@ -42,9 +42,16 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0px",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Image/style/margin-left",
             "order": 7
+        },
+        "text-align": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/text-align",
+            "order": 8
         },
         "padding-left": {
             "is_default_value": true,
@@ -57,11 +64,6 @@
             "value": "",
             "proto": "/Library/content_samples/Image/style/padding-right",
             "order": 10
-        },
-        "text-indent": {
-            "value": "60px",
-            "proto": "/Library/content_samples/Image/style/text-indent",
-            "order": 11
         }
     }
 }

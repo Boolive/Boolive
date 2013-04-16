@@ -3,7 +3,7 @@
     "value": "SelectObject.tpl",
     "is_file": true,
     "proto": "/Library/admin_widgets/SelectObject",
-    "order": 4,
+    "order": 6,
     "children": {
         "title": {
             "value": "Добавить",
@@ -23,7 +23,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_link": true,
-            "order": 4
+            "order": 5
         }
     }
 }

@@ -1,7 +1,7 @@
 {
-    "value": "//210",
+    "value": "/Library/content_samples/Image",
     "proto": "/Library/views/SwitchCase",
-    "order": 8,
+    "order": 9,
     "children": {
         "title": {
             "is_default_value": true,
@@ -14,6 +14,7 @@
             "is_default_value": true,
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
+            "is_hidden": true,
             "order": 2
         }
     }

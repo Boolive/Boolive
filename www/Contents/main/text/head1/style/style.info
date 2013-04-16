@@ -7,6 +7,7 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/views/Style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
@@ -29,7 +30,6 @@
         },
         "margin-right": {
             "value": "0px",
-            "proto": "/Library/content_samples/paragraphs/Head/style/margin-right",
             "order": 5
         },
         "margin-bottom": {
@@ -40,7 +40,6 @@
         },
         "margin-left": {
             "value": "0px",
-            "proto": "/Library/content_samples/paragraphs/Head/style/margin-left",
             "order": 7
         },
         "text-align": {
@@ -62,13 +61,19 @@
         },
         "text-indent": {
             "value": "60px",
-            "proto": "/Library/content_samples/paragraphs/Head/style/text-indent",
             "order": 11
         },
         "line-height": {
             "value": "normal",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
             "order": 12
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/style/description",
+            "is_hidden": true,
+            "order": 13
         }
     }
 }

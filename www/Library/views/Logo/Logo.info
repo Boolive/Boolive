@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 14,
+    "order": 16,
     "children": {
         "description": {
             "value": "Отображает изображение с ссылкой на главную страницу сайта",
@@ -15,19 +15,19 @@
             "value": "Логотип",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "order": 2
+            "order": 3
         },
         "object": {
             "value": "object.png",
             "is_file": true,
             "proto": "/Library/content_samples/Image",
-            "order": 3
+            "order": 4
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 4,
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -40,6 +40,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

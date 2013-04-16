@@ -1,9 +1,10 @@
 {
     "value": "",
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "value": "Пакет",
+            "is_hidden": true,
             "order": 1
         }
     }

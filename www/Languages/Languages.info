@@ -1,13 +1,15 @@
 {
     "value": "",
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "value": "Языки",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "value": "Список языков",
+            "is_hidden": true,
             "order": 2
         }
     }

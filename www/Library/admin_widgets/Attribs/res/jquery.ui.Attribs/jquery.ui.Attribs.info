@@ -7,12 +7,14 @@
         "title": {
             "value": "Boolive.Attribs",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
+            "is_hidden": true,
             "order": 2
         },
         "depends": {

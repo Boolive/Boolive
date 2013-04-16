@@ -38,7 +38,7 @@ class Data
      * @param bool $use_cache Признак, использовать кэш?
      * @return Entity|null Найденный объект
      */
-    static function read($key = '', $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true)
+    static function read($key = '', $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true, $index = false)
     {
         if ($key == Entity::ENTITY_ID){
             return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
@@ -49,7 +49,7 @@ class Data
         // Опредление хранилища по URI
         if ($store = self::getStore($skey)){
             // Выбор объекта
-            return $store->read($key, $owner, $lang, $date, $access, $use_cache);
+            return $store->read($key, $owner, $lang, $date, $access, $use_cache, $index);
         }
         return null;
     }
@@ -65,7 +65,7 @@ class Data
     static function write($object, &$error, $access = true)
     {
         if ($object->id() != Entity::ENTITY_ID){
-            if (!$access || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
+            if (!$access || !IS_INSTALL || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
                 if ($store = self::getStore($object->key())){
                     return $store->write($object);
                 }else{
@@ -113,7 +113,7 @@ class Data
         if ($object->id() != Entity::ENTITY_ID){
             $store = self::getStore($object->key());
             // Проверка доступа на уничтожение объекта и его подчиненных
-            if ($access && ($acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null))){
+            if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null))){
                 $objects = $store->select(array(
                         'from' => array($object->id()),
                         'where' => array('not', $acond),
@@ -170,7 +170,7 @@ class Data
     {
         // Где искать?
         if (!isset($cond['from'][0])) $cond['from'][0] = '';
-        if ($access){
+        if ($access && IS_INSTALL){
             $acond = Auth::getUser()->getAccessCond('read', $cond['from'][0], isset($cond['from'][1])?$cond['from'][1]: null);
             if (empty($cond['where'])){
                 $cond['where'] = array($acond);
@@ -242,4 +242,121 @@ class Data
         }
         return null;
     }
+
+    /**
+	 * Проверка системных требований для установки класса
+	 * @return array
+	 */
+	static function systemRequirements(){
+		$requirements = array();
+		if (file_exists(DIR_SERVER.self::CONFIG_FILE_STORES) && !is_writable(DIR_SERVER.self::CONFIG_FILE_STORES)){
+			$requirements[] = 'Удалите файл конфигурации базы данных: <code>'.DIR_SERVER.self::CONFIG_FILE_STORES.'</code>';
+		}
+		if (!file_exists(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES)){
+			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES.'</code>';
+		}
+		return $requirements;
+	}
+
+    /**
+	 * Запрашиваемые данные для установки модуля
+	 * @return array
+	 */
+	static function installPrepare(){
+		$file = DIR_SERVER.self::CONFIG_FILE_STORES;
+		if (file_exists($file)){
+			include $file;
+			if (isset($config) && is_array($config[''])){
+				$config = $config[''];
+			}
+		}
+        if (empty($config)){
+            $config = array(
+                'connect' => array(
+                    'dsn' => array(
+                        'dbname'   => 'boolive',
+                        'host'     => 'localhost',
+                        'port'     => '3306',
+                    ),
+                    'user'     => 'root',
+                    'password' => '',
+                    'prefix'   => '',
+                )
+            );
+        }
+		return array(
+			'title' => 'Настройка базы данных',
+			'descript' => 'Параметры доступа к системе управления базами данных MySQL. База данных используется системой Boolive для хранения информации',
+			'fields' => array(
+				'dbname' => array(
+					'label' => 'Имя базы данных',
+					'descript' => 'Если указанной базы данных нет, то осуществится попытка её автоматического создания',
+					'value' => $config['connect']['dsn']['dbname'],
+					'input' => 'text',
+					'required' => true,
+				),
+				'user' => array(
+					'label' => 'Имя пользователя для доступа к базе данных',
+					'descript' => 'Имя пользователя, имеющего право использовать указанную базу данных. Для автоматического создания базы данных пользователь должен иметь право создавать базы данных',
+					'value' => $config['connect']['user'],
+					'input' => 'text',
+					'required' => true,
+				),
+				'password' => array(
+					'label' => 'Пароль к базе данных',
+					'descript' => 'Пароль вместе с именем пользователя необходим для получения доступа к указанной базе данных',
+					'value' => $config['connect']['password'],
+					'input' => 'text',
+					'required' => false,
+				),
+				'host' => array(
+					'label' => 'Сервер базы данных',
+					'descript' => 'IP адрес или домен сервера, где установлена MySQL',
+					'value' => $config['connect']['dsn']['host'],
+					'input' => 'text',
+					'required' => true,
+				),
+				'port' => array(
+					'label' => 'Порт сервера базы данных',
+					'descript' => 'Номер порта, по которому осуществляется доступ к серверу базы данных',
+					'value' => $config['connect']['dsn']['port'],
+					'input' => 'text',
+					'required' => true,
+				),
+			)
+		);
+	}
+
+    /**
+     * Установка
+     * @param \Boolive\input\Input $input Параметры доступа к БД
+     * @throws \Boolive\errors\Error
+     */
+	static function install($input){
+		// Параметры доступа к БД
+		$errors = new Error('Некоректные параметры доступа к СУБД', 'db');
+		$new_config = $input->REQUEST->get(\Boolive\values\Rule::arrays(array(
+			'dbname'	 => \Boolive\values\Rule::regexp('/^[0-9a-zA-Z_-]+$/u')->more(0)->max(50)->required(),
+			'user' 		 => \Boolive\values\Rule::string()->more(0)->max(50)->required(),
+			'password'	 => \Boolive\values\Rule::string()->max(50)->required(),
+			'host' 		 => \Boolive\values\Rule::string()->more(0)->max(255)->default('localhost')->required(),
+			'port' 		 => \Boolive\values\Rule::int()->min(1)->default(3306)->required(),
+			//'prefix'	 => Rule::regexp('/^[0-9a-zA-Z_-]+$/u')->max(50)->default('')
+		)), $sub_errors);
+		$new_config['prefix'] = '';
+		// Если ошибочные данные от юзера
+		if ($sub_errors){
+            $errors->add($sub_errors->getAll());
+            throw $errors;
+        }
+		// Создание MySQL хранилища
+        \Boolive\data\stores\MySQLStore::createStore($new_config, $errors);
+
+        // Создание файла конфигурации из шаблона
+        $content = file_get_contents(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES);
+        $content = F::Parse($content, $new_config, '{', '}');
+        $fp = fopen(DIR_SERVER.self::CONFIG_FILE_STORES, 'w');
+        fwrite($fp, $content);
+        fclose($fp);
+	}
 }

@@ -8,6 +8,7 @@
             "is_default_value": true,
             "value": "Форматированный текст",
             "proto": "/Library/content_samples/tables/Cell/richtext/title",
+            "is_hidden": true,
             "order": 1
         }
     }

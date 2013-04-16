@@ -10,12 +10,14 @@
             "is_default_value": true,
             "value": "Виджет форматированного текста",
             "proto": "/Library/content_widgets/RichText/title",
+            "is_hidden": true,
             "order": 3
         },
         "description": {
             "is_default_value": true,
             "value": "Отображает элементы форматированного текста подходящими виджетами из вариантов отображения",
             "proto": "/Library/content_widgets/RichText/description",
+            "is_hidden": true,
             "order": 4
         },
         "res": {
@@ -35,6 +37,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/content_widgets/RichText/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

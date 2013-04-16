@@ -2,7 +2,7 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
-    "order": 9,
+    "order": 11,
     "children": {
         "title": {
             "value": "Обработчик направленных запросов",

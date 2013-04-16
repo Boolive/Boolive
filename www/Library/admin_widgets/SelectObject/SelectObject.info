@@ -21,7 +21,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 4,
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -34,7 +34,8 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "order": 4
+                    "is_hidden": true,
+                    "order": 6
                 }
             }
         }

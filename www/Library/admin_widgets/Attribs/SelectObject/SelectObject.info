@@ -3,7 +3,7 @@
     "value": "SelectObject.tpl",
     "is_file": true,
     "proto": "/Library/admin_widgets/SelectObject",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "value": "Выбор",
@@ -15,6 +15,7 @@
             "is_default_value": true,
             "value": "Представляет собой обозреватель объектов с функцией выбора объекта",
             "proto": "/Library/admin_widgets/SelectObject/description",
+            "is_hidden": true,
             "order": 2
         },
         "res": {
@@ -22,7 +23,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_link": true,
-            "order": 4
+            "order": 5
         }
     }
 }

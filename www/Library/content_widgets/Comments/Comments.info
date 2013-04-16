@@ -5,6 +5,27 @@
     "is_default_class": false,
     "order": 31,
     "children": {
+        "res": {
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 0,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/AutoWidgetList/res/title",
+                    "is_hidden": true,
+                    "order": 2
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/AutoWidgetList/res/description",
+                    "is_hidden": true,
+                    "order": 3
+                }
+            }
+        },
         "title": {
             "value": "Виджет списка комментариев",
             "proto": "/Library/views/AutoWidgetList/title",
@@ -16,27 +37,6 @@
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
             "order": 2
-        },
-        "res": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/views/AutoWidgetList/res",
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/AutoWidgetList/res/title",
-                    "is_hidden": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/AutoWidgetList/res/description",
-                    "order": 2
-                }
-            }
         }
     }
 }

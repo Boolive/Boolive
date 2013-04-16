@@ -13,6 +13,7 @@
             "is_default_value": true,
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
+            "is_hidden": true,
             "order": 3
         },
         "depends": {

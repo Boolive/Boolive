@@ -30,6 +30,7 @@
 
             // Расширение jquery объектов Admin
             var self = this;
+            self.options.basepath = self.element.attr('data-base');
             // Контейнер окон
             self._windows = self.element.find('.center');
             // Текущее окно

@@ -12,7 +12,6 @@ use Boolive\database\DB,
     Boolive\data\Data,
     Boolive\functions\F,
     Boolive\file\File,
-    Boolive\events\Events,
     Boolive\data\Buffer;
 
 class MySQLStore extends Entity
@@ -41,10 +40,12 @@ class MySQLStore extends Entity
      * @param int $date Дата создани объекта. Используется в качестве версии
      * @param bool $access Признак, проверять или нет наличие доступа к объекту?
      * @param bool $use_cache Признак, использовать кэш?
+     * @param bool $index Признак, индексировать или нет родителя, если объект не найден?
      * @return \Boolive\data\Entity|null Найденный объект
      */
-    public function read($key, $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true)
+    public function read($key, $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true, $index = false)
     {
+        if ($key == 'null' || is_null($key)) return null;
         $binds = array();
         // Владелец
         $binds[0] = !empty($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
@@ -82,7 +83,7 @@ class MySQLStore extends Entity
         $select = 'SELECT {ids}.uri, {ids}.id `id2`, obj.*';
         $from = " FROM {ids} LEFT JOIN {objects} obj ON ($sql)";
         // Контроль доступа
-        if ($access && ($cond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
+        if ($access && IS_INSTALL && ($cond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
             $cond = $this->getCondSQL(array('where'=>$cond), null, null, true);
             $select.= ', IF('.$cond['where'].',1,0) is_accessible';
             $from.=$cond['joins'];
@@ -114,7 +115,7 @@ class MySQLStore extends Entity
         }else{
             if (empty($info)) $attrs['uri'] = $key;
             // Поиск виртуального
-//            if (isset($attrs['uri'])){
+//            if ($index && isset($attrs['uri'])){
 //                $names = F::splitRight('/', $attrs['uri']);
 //                if ($parent = Data::read($names[0], $owner, $lang, 0, $access)){
 //                    if (($proto = $parent->proto()) && $proto->{$names[1]}->isExist()){
@@ -131,6 +132,11 @@ class MySQLStore extends Entity
 //            if (!isset($obj)){
                 // Несущесвтующий объект
                 $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
+                if (isset($attrs['uri'])){
+                    $names = F::splitRight('/', $attrs['uri']);
+                    $obj->_attribs['name'] = $names[1];
+                    $obj->_attribs['uri'] = $attrs['uri'];
+                }
 //            }
         }
         if ($obj->isExist()){
@@ -166,7 +172,7 @@ class MySQLStore extends Entity
                 // Числовое значение
                 $attr['valuef'] = floatval($attr['value']);
                 // Переопределено ли значение и кем
-                $attr['is_default_value'] = strval($attr['is_default_value']) !== '0' ? $this->localId($attr['is_default_value']) : 0;
+                $attr['is_default_value'] = (strval($attr['is_default_value']) !== '0' && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_value']) : $attr['is_default_value'];
                 // Чей класс
                 $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
                 // Ссылка
@@ -191,10 +197,11 @@ class MySQLStore extends Entity
                 }
                 // Локальный идентификатор объекта
                 if (empty($attr['id'])){
-                    $attr['id'] = $this->localId($attr['uri']);
+                    $attr['id'] = $this->localId($attr['uri'], true, $new_id);
                 }else{
-                    $attr['id'] = $this->localId($attr['id']);
+                    $attr['id'] = $this->localId($attr['id'], true, $new_id);
                 }
+
 
                 // Значения превращаем в файл, если больше 255
                 if (isset($attr['value']) && mb_strlen($attr['value']) > 255){
@@ -291,12 +298,17 @@ class MySQLStore extends Entity
                 // Уникальность order, если задано значение и записываемый объект не в истории
                 // Если запись в историю, то вычисляем только если не указан order
                 if (!$attr['is_history'] && $attr['order']!= Entity::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
-                    // Сдвиг order существующих записей, чтоб освободить значение для новой
-                    $q = $this->db->prepare('
-                        UPDATE {objects} SET `order` = `order`+1
-                        WHERE owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`>=?'
-                    );
+                    // Проверка, занят или нет новый order
+                    $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`=?');
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
+                    if ($q->fetch()){
+                        // Сдвиг order существующих записей, чтоб освободить значение для новой
+                        $q = $this->db->prepare('
+                            UPDATE {objects} SET `order` = `order`+1
+                            WHERE owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`>=?'
+                        );
+                        $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
+                    }
                     unset($q);
                 }else
                 // Новое максимальное значение для order, если объект новый или явно указано order=null
@@ -428,8 +440,35 @@ class MySQLStore extends Entity
 //                    $q->execute(array($attr['id']));
 //                }
 
+                if (!$new_id && empty($current)){
+                    // Если объект еще не был создан, но его уже прототипировали другие
+                    // Для этого был создан только идентификатор объекта, а записи в objects, parents, protos нет
+                    // Тогда имитируем обновление объекта, чтобы обновить его отношения со всеми наследниками
+                    $current = array(
+                        'id'		   => $attr['id'],
+                        'proto'        => 0,
+                        'proto_cnt'    => 0,
+                        'value'	 	   => '',
+                        'is_file'	   => 0,
+                        'is_delete'	   => 0,
+                        'is_hidden'	   => 0,
+                        'is_link'      => 0,
+                        'is_default_value' => 0,
+                        'is_default_class' => Entity::ENTITY_ID,
+                    );
+                    $incomplete = true;
+                }else{
+                    $incomplete = false;
+                }
+
+                // Создание отношений если объект новый
+                if (!$entity->isExist()){
+                    $this->makeParents($attr['id'], $attr['parent'], 0, false);
+                    $this->makeProtos($attr['id'], $attr['proto'], 0, false, $incomplete);
+                }
+
                 if (!empty($current)){
-                    // Обновление признаков у подчиенных
+                    // Обновление признаков у подчиненных
                     $u = array(
                         'sql' => '',
                         'binds' => array(':obj'=>$attr['id'])
@@ -449,20 +488,20 @@ class MySQLStore extends Entity
 
                     // Обновления наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
-                    if ($current['proto']!=$attr['proto']){
-                        $this->makeProtos($attr['id'], $attr['proto'], $dp, true);
+                    if ($current['proto'] != $attr['proto']){
+                        $this->makeProtos($attr['id'], $attr['proto'], $dp, true, $incomplete);
                     }
                     // Обновление значения, признака файла, признака наследования значения, класса и кол-во прототипов у наследников
                     // если что-то из этого изменилось у объекта
-                    if ($current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
-                        $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto'] && $dp) || $dp!=0){
+                    if ($incomplete || $current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
+                        $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto']) || $dp!=0){
                         // id прототипа, значание которого берется по умолчанию для объекта
                         $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
                         $u = $this->db->prepare('
                             UPDATE {objects}, {protos} SET
                                 `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
                                 `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
-                                `is_default_value` = IF(is_default_value=:vproto, :proto, is_default_value),
+                                `is_default_value` = IF((is_default_value=:vproto  || is_default_value=:max_id), :proto, is_default_value),
                                 `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
                                 `proto_cnt` = `proto_cnt`+:dp
                             WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id AND {protos}.is_delete=0
@@ -479,11 +518,12 @@ class MySQLStore extends Entity
                             ':dp' => $dp,
                             ':owner' => $attr['owner'],
                             ':lang' => $attr['lang'],
-                            ':obj' => $attr['id']
+                            ':obj' => $attr['id'],
+                            ':max_id' => Entity::ENTITY_ID
                         ));
                     }
                     // Изменился признак ссылки
-                    if ($current['is_link']!=$attr['is_link']){
+                    if ($incomplete || $current['is_link']!=$attr['is_link']){
                         // Смена класса по-умолчанию у всех наследников
                         // Если у наследников признак is_link такой же как у изменённого объекта и класс был Entity, то они получают класс изменного объекта
                         // Если у наследников признак is_link не такой же и класс был как у изменноо объекта, то они получают класс Entity
@@ -493,7 +533,7 @@ class MySQLStore extends Entity
                                     IF(is_default_class=:max_id, :cproto, is_default_class),
                                     IF(is_default_class=:cproto, :max_id, is_default_class)
                                 ),
-                                `is_link` = IF((is_link=:clink), :nlink, is_link)
+                                `is_link` = IF((is_link=:clink || is_link=:max_id), :nlink, is_link)
                             WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id AND {protos}.is_delete=0
                               AND {protos}.proto_id != {protos}.object_id
                         ');
@@ -507,12 +547,6 @@ class MySQLStore extends Entity
                         );
                         $u->execute($params);
                     }
-                }
-
-                // Создание отношений если объект новый
-                if (!$entity->isExist()){
-                    $this->makeParents($attr['id'], $attr['parent'], 0, false);
-                    $this->makeProtos($attr['id'], $attr['proto'], 0, false);
                 }
 
                 // Обновление экземпляра
@@ -1222,7 +1256,7 @@ class MySQLStore extends Entity
                 }
             }
         }else
-        if ($parent > 0){
+        if ($parent >= 0){
             $make = $this->db->prepare('
                 INSERT {parents} (object_id, parent_id, `level`)
                 SELECT :obj, parent_id, `level`+1 FROM {parents}
@@ -1236,26 +1270,29 @@ class MySQLStore extends Entity
 
     /**
      * Создание или обновление отношений с прототипами объекта
-     * @param $object
-     * @param $proto
-     * @param int $dl Разница между новым и старым уровнем вложенности
-     * @param bool $remake Признак, отношения обновлять (при смене прототипа) или создаются новые (новый объект)
+     * @param $object Объект, для которого обновляются отношения с прототипами
+     * @param $proto Новый прототип объекта
+     * @param int $dl Разница между новым и старым уровнем вложенности объекта среди прототипов
+     * @param bool $remake Признак, отношения обновлять (при смене прототипа) или создавать новые (новый объект)
+     * @param bool $incomplete Признак, объект небыл сохранен, но его уже прототипировали?
      */
-    public function makeProtos($object, $proto, $dl, $remake = false)
+    public function makeProtos($object, $proto, $dl, $remake = false, $incomplete = false)
     {
         if ($remake){
             // У наследников удалить отношения с прототипами, которые есть у $object
             $q = $this->db->prepare('
                 UPDATE {protos} p, (
                     SELECT c.object_id, c.proto_id FROM {protos} p
-                    JOIN {protos} c ON c.object_id = p.object_id AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj)
-                    WHERE p.proto_id = :obj)p2
+                    JOIN {protos} c ON c.object_id = p.object_id AND c.proto_id!=:obj AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj)
+                    LEFT JOIN objects ON (c.proto_id = objects.id)
+                    WHERE p.proto_id = :obj AND objects.id IS NOT NULL)p2
                 SET p.is_delete = 1
                 WHERE p.object_id = p2.object_id AND p.proto_id = p2.proto_id
             ');
             $q->execute(array(':obj'=>$object));
             // Обновить level оставшихся отношений в соответсвии с изменением level с новым прототипом
-            if ($dl != 0){
+            // если объект полностью создан и различаются уровни
+            if (!$incomplete && $dl != 0){
                 $q = $this->db->prepare('
                     UPDATE {protos} c, (SELECT object_id FROM {protos} WHERE proto_id = :obj)p
                     SET c.level = c.level+:dl
@@ -1264,8 +1301,8 @@ class MySQLStore extends Entity
                 $q->execute(array(':obj'=>$object, ':dl'=>$dl));
             }
             // Для объекта и всех его наследников создать отношения с новыми прототипом
-            if ($proto > 0){
-                $q = $this->db->prepare('SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj ORDER BY `level`');
+            if ($proto >= 0){
+                $q = $this->db->prepare('SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj AND is_delete = 0 ORDER BY `level`');
                 $make = $this->db->prepare('
                     INSERT {protos} (object_id, proto_id, `level`)
                     SELECT :obj, proto_id, `level`+1+:l FROM {protos}
@@ -1279,127 +1316,54 @@ class MySQLStore extends Entity
                 }
             }
         }else
-        if ($proto > 0){
-            $make = $this->db->prepare('
-                INSERT {protos} (object_id, proto_id, `level`)
-                SELECT :obj, proto_id, `level`+1 FROM {protos}
-                WHERE object_id = :parent
-                UNION SELECT :obj,:obj,0
-                ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
-            ');
-            $make->execute(array(':obj' => $object, ':parent'=>$proto));
+        if ($proto >= 0){
+            if ($proto == 0){
+                $make = $this->db->prepare('
+                    INSERT {protos} (object_id, proto_id, `level`)
+                    VALUES  (:obj,:obj,0)
+                    ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                ');
+                $make->execute(array(':obj' => $object));
+            }else{
+                $cheack = $this->db->prepare('SELECT 1 FROM {protos} WHERE object_id=? and is_delete=0 LIMIT 0,1');
+                $cheack->execute(array($proto));
+                if ($cheack->fetch()){
+                    // Если прототип в таблице protos
+                    $sql = '
+                        INSERT {protos} (object_id, proto_id, `level`)
+                        SELECT :obj, proto_id, `level`+1 FROM {protos}
+                        WHERE object_id = :parent
+                        UNION SELECT :obj,:obj,0
+                        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                    ';
+                }else{
+                    // Если прототипа нет в таблице protos
+                    $sql = '
+                        INSERT {protos} (object_id, proto_id, `level`)
+                        VALUES (:obj,:parent,1), (:obj,:obj,0)
+                        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                    ';
+                    if ($incomplete){
+                        // Объект уже кем-то прототипирован, поэтому для них тоже добавляется отношения с proto
+                        $q = $this->db->prepare('
+                            INSERT {protos} (object_id, proto_id, `level`)
+                            SELECT protos.object_id, :parent, objects.proto_cnt+1 FROM protos, objects
+                            WHERE proto_id = :obj AND object_id = objects.id
+                            ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                        ');
+                        $q->execute(array(':obj' => $object, ':parent'=>$proto));
+                    }
+                }
+                $make = $this->db->prepare($sql);
+                $make->execute(array(':obj' => $object, ':parent'=>$proto));
+            }
         }
     }
-//    /**
-//     * Создание или обновление отношений между объектами в таблице дерева
-//     * @param int $object Идентификатор объекта, для которого обновляются отношения. Отношения обновляются и у его подчиненных
-//     * @param int $parent Идентификатор родителя объекта
-//     * @param int $proto Идентифкатор прототипа объекта
-//     * @param bool $remake Признак, обновлять (true) или добавлять отношения (false). Добавление применяется только при
-//     * создании объекта. При смене родителя или прототипа необходимо обновлять отношеня. Используется и при удалении объекта.
-//     */
-//    public function makeTree($object, $parent, $proto, $remake = false)
-//    {
-//        $make_ref = $this->db->prepare('
-//            INSERT IGNORE {trees} (object_id, parent_id, `type`, `level`)
-//            SELECT :obj, parent_id, IF(object_id=:parent AND `type`=0, 0, IF(object_id=:proto AND `type`=1, 1, 3)), `level`+ 1
-//            FROM {trees} WHERE object_id IN (:parent, :proto)
-//                AND NOT(object_id =:parent AND object_id=parent_id AND `type`=1)
-//                AND NOT(object_id =:proto AND object_id=parent_id AND `type`=0)
-//                AND `type` IN (0,1,3)
-//            UNION SELECT :obj,:obj,0,0 UNION SELECT :obj,:obj,1,0
-//        ');
-//        $make_ref->bindParam(':obj', $object, DB::PARAM_INT);
-//        $make_ref->bindParam(':parent', $parent, DB::PARAM_INT);
-//        $make_ref->bindParam(':proto', $proto, DB::PARAM_INT);
-//
-//        if ($remake){
-//            // Выбор подчиненных $object сортируя по parent_cnt*proto_cnt. Выбор с proto и parent
-//            $q = $this->db->prepare('
-//                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
-//                JOIN {trees} t ON (t.object_id = {trees}.object_id AND t.parent_id = :obj AND {trees}.type IN (0,1,3))
-//                JOIN {objects} ON ({objects}.id = {trees}.object_id)
-//                GROUP BY {trees}.object_id
-//                ORDER BY l ASC
-//            ');
-////            $q = $this->db->prepare('
-////                SELECT {objects}.id, {objects}.parent, {objects}.proto, MAX({trees}.`level`) l FROM {trees}
-////                JOIN {objects} ON ({objects}.id = {trees}.object_id)
-////                WHERE {trees}.parent_id = :obj
-////                GROUP BY {trees}.object_id
-////                ORDER BY l ASC
-////            ');
-//            //$children = $q->fetchAll(DB::FETCH_ASSOC);
-//
-//            // Удаление отношений у $object и всех его подчиненных
-//            $d = $this->db->prepare('
-//                UPDATE {trees}, (SELECT object_id FROM {trees} WHERE parent_id = :obj)t
-//                SET `type`=:type WHERE {trees}.object_id = t.object_id
-//            ');
-//            //DELETE {trees} FROM {trees}, (SELECT object_id FROM {trees} WHERE parent_id = :obj)t WHERE {trees}.object_id = t.object_id
-////            $q = $this->db->prepare('
-////               DELETE FROM {trees} WHERE object_id IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = :obj)t)
-////            ');
-//            $d->execute(array(':type'=>5, ':obj' => $object));
-//            unset($d);
-//
-//            $q->execute(array(':obj' => $object));
-//            // Создание новых отношений
-//            //$cnt = sizeof($children);
-//            while ($child = $q->fetch(DB::FETCH_ASSOC)){
-//            //for ($i=0; $i<$cnt; $i++){
-//                $object = $child['id'];
-//                $parent = $child['parent'];
-//                $proto = $child['proto'];
-//                $make_ref->execute();
-//            }
-//
-//            $this->db->query('DELETE {trees} WHERE {trees}.type = 5');
-//        }else{
-//            // Добавление отношений для $object копированием их от родителя и прототипа
-//            $make_ref->execute();
-//        }
-//        unset($make_ref);
-//    }
 
-//    /**
-//     * Полная перестройка таблицы дерева
-//     * @warning Требуется до 5 и более минут работы скрипта.
-//     */
-//    public function rebuildTree()
-//    {
-//        try{
-//            $this->db->beginTransaction();
-//            // Очитска таблицы
-//            $this->db->query('TRUNCATE {trees}');
-//            // Отношения родитель - подчиненный
-//            $q = $this->db->prepare('
-//                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.proto, {objects}.parent_cnt, {objects}.proto_cnt
-//                FROM {objects}, {ids}
-//                WHERE {ids}.id = {objects}.id
-//                ORDER BY {ids}.uri
-//            ');
-//            $q->execute();
-//            while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
-//                $this->makeTree($row['id'], $row['parent'], $row['proto'], false);
-//            }
-//            // Отношения прототип - наследники
-//            $q = $this->db->prepare('
-//                SELECT {ids}.uri, {objects}.id, {objects}.parent, {objects}.proto, {objects}.parent_cnt, {objects}.proto_cnt
-//                FROM {objects}, {ids}
-//                WHERE {ids}.id = {objects}.id
-//                ORDER BY {objects}.proto_cnt');
-//            $q->execute();
-//            while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
-//                $this->makeTree($row['id'], $row['parent'], $row['proto'], true);
-//            }
-//            $this->db->commit();
-//        }catch (\Exception $e){
-//            $this->db->rollBack();
-//            throw $e;
-//        }
-//    }
-
+    /**
+     * Полное пересодание дерева родителей
+     * @throws \Exception
+     */
     public function rebuildParant()
     {
         try{
@@ -1431,6 +1395,10 @@ class MySQLStore extends Entity
         }
     }
 
+    /**
+     * Полное пересоздание дерева прототипов
+     * @throws \Exception
+     */
     public function rebuildProtos()
     {
         try{
@@ -1461,15 +1429,20 @@ class MySQLStore extends Entity
      * Если объект с указанным URI существует, то будет возвращен его идентификатор
      * @param string $uri URI для которого нужно получить идентификатор
      * @param bool $create Создать идентификатор, если отсутствует?
+     * @param bool $is_new
      * @return int|null
      */
-    public function localId($uri, $create = true)
+    public function localId($uri, $create = true, &$is_new = false)
     {
+        $is_new = false;
         if ($uri instanceof Entity){
             $uri = $uri->key();
-        }else
-        if ($obj = Buffer::get($uri.'@'.Entity::ENTITY_ID.'@'.Entity::ENTITY_ID.'@0')){
-            $uri = $obj->key();
+        }
+        if (!is_string($uri)){
+            return null;
+        }
+        if ($uri == 'null'){
+            $a = 10;
         }
         if ($info = Data::isShortUri($uri)){
             if ($info[0] == $this->key){
@@ -1490,12 +1463,14 @@ class MySQLStore extends Entity
         $q->execute(array($uri));
         if ($row = $q->fetch(DB::FETCH_ASSOC)){
             $id = $row['id'];
+            $is_new = false;
         }else
         if ($create){
             // Создание идентифbкатора для URI
             $q = $this->db->prepare('INSERT INTO {ids} (`id`, `uri`) VALUES (null, ?)');
             $q->execute(array($uri));
             $id = $this->db->lastInsertId('id');
+            $is_new = true;
         }else{
             return null;
         }
@@ -1517,14 +1492,11 @@ class MySQLStore extends Entity
     /**
      * Создание объекта из атрибутов
      * @param array $attribs Атриубты объекта
-     * @throws \ErrorException
+     * @throws \Exception
      * @return Entity
      */
     public function makeObject($attribs)
     {
-        if (!isset($attribs['id'])){
-            $x = 0;
-        }
         $attribs['id'] = $this->remoteId($attribs['id']);
         $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['owner']);
         $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['lang']);
@@ -1569,5 +1541,150 @@ class MySQLStore extends Entity
         }
         // Базовый класс
         return new Entity($attribs);
+    }
+
+    /**
+	 * Проверка системных требований для установки класса
+	 * @return array
+	 */
+	static function systemRequirements(){
+		$requirements = array();
+		if (!extension_loaded('pdo') || !extension_loaded('pdo_mysql')){
+			$requirements[] = 'Требуется расширение <code>pdo_mysql</code> для PHP';
+		}
+		return $requirements;
+	}
+
+    /**
+     * Создание хранилища
+     * @param $connect
+     * @param null $errors
+     * @throws \Boolive\errors\Error|null
+     */
+    static function createStore($connect, &$errors = null)
+    {
+        try{
+            if (!$errors) $errors = new \Boolive\errors\Error('Некоректные параметры доступа к СУБД', 'db');
+            // Проверка подключения и базы данных
+            $db = new DB('mysql:host='.$connect['host'].';port='.$connect['port'], $connect['user'], $connect['password'], array(DB::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'), $connect['prefix']);
+            $db_auto_create = false;
+            try{
+                $db->exec('USE `'.$connect['dbname'].'`');
+            }catch (\Exception $e){
+                // Проверка исполнения команды USE
+                if ((int)$db->errorCode()){
+                    $info = $db->errorInfo();
+                    // Нет прав на указанную бд (и нет прав для создания бд)?
+                    if ($info[1] == '1044'){
+                        $errors->dbname = 'no_access';
+                        throw $errors;
+                    }else
+                    // Отсутсвует указанная бд?
+                    if ($info[1] == '1049'){
+                        // создаем
+                        $db->exec('CREATE DATABASE `'.$connect['dbname'].'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
+                        $db_auto_create = true;
+                        $db->exec('USE `'.$connect['dbname'].'`');
+                    }
+                }
+            }
+            // Проверка поддержки типов таблиц InnoDB
+            $support = false;
+            $q = $db->query('SHOW ENGINES');
+            while (!$support && ($row = $q->fetch(\PDO::FETCH_ASSOC))){
+                if ($row['Engine'] == 'InnoDB' && in_array($row['Support'], array('YES', 'DEFAULT'))) $support = true;
+            }
+            if (!$support){
+                // Удаляем автоматически созданную БД
+                if ($db_auto_create) $db->exec('DROP DATABASE IF EXISTS `'.$connect['dbname'].'`');
+                $errors->common = 'no_innodb';
+                throw $errors;
+            }
+            // Есть ли таблицы в БД?
+            $pfx = $connect['prefix'];
+            $tables = array($pfx.'ids', $pfx.'objects', $pfx.'protos', $pfx.'parents');
+            $q = $db->query('SHOW TABLES');
+            while ($row = $q->fetch(DB::FETCH_NUM)/* && empty($config['prefix'])*/){
+                if (in_array($row[0], $tables)){
+                    // Иначе ошибка
+                    $errors->dbname = 'db_not_empty';
+                    throw $errors;
+                }
+            }
+            // Создание таблиц
+            $db->exec("
+                CREATE TABLE {ids} (
+                  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                  `uri` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `uri` (`uri`(255))
+                ) ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='Идентификация путей (URI)'
+            ");
+            $db->exec("
+                CREATE TABLE {objects} (
+                  `id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор по таблице ids',
+                  `owner` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Идентификатор объекта-владельца',
+                  `lang` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Идентификатор объекта-языка',
+                  `date` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Дата создания и версия',
+                  `name` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'Имя',
+                  `order` INT(11) NOT NULL DEFAULT '0' COMMENT 'Порядковый номер. Уникален в рамках родителя',
+                  `parent` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор родителя',
+                  `parent_cnt` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Уровень вложенности (кол-во родителей)',
+                  `proto` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор прототипа',
+                  `proto_cnt` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Уровень наследования (кол-во прототипов)',
+                  `value` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Строковое значение',
+                  `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
+                  `is_file` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Значение - файл или нет?',
+                  `is_history` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'В истории или нет?',
+                  `is_delete` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
+                  `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
+                  `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
+                  `is_virtual` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Виртуальный или нет? Виртуальные сохраняются для оптимизации',
+                  `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
+                  `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
+                  `is_default_children` INT(10) NOT NULL DEFAULT '1' COMMENT 'Используются подчинённые прототипа или нет?',
+                  `index_depth` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'Глубина индексации подчинённых',
+                  `index_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг индексирование. Если не 0, то индексирование не закончено',
+                  PRIMARY KEY (`id`,`owner`,`lang`,`date`),
+                  KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
+                  KEY `indexation` (`parent`,`is_history`,`id`)
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'
+            ");
+            $db->exec("
+                CREATE TABLE {parents} (
+                  `object_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор объекта',
+                  `parent_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор родителя',
+                  `level` INT(10) UNSIGNED NOT NULL COMMENT 'Уровень родителя от корня',
+                  `is_delete` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Удалено отношение или нет',
+                  PRIMARY KEY (`object_id`,`parent_id`),
+                  UNIQUE KEY `children` (`parent_id`,`object_id`)
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8
+            ");
+            $db->exec("
+                CREATE TABLE {protos} (
+                  `object_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор объекта',
+                  `proto_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор прототипа',
+                  `level` INT(10) UNSIGNED NOT NULL COMMENT 'Уровень прототипа от базового',
+                  `is_delete` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Признак, удалено отношение или нет',
+                  PRIMARY KEY (`object_id`,`proto_id`),
+                  UNIQUE KEY `heirs` (`proto_id`,`object_id`)
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8
+            ");
+        }catch (\PDOException $e){
+			// Ошибки подключения к СУБД
+			if ($e->getCode() == '1045'){
+				$errors->user = 'no_acces';
+				$errors->password = 'no_access';
+			}else
+			if ($e->getCode() == '2002'){
+				$errors->host = 'not_found';
+                if ($connect['port']!=3306){
+                    $errors->port = 'not_found';
+                }
+			}else{
+				$errors->common = $e->getMessage();
+			}
+			if ($errors->isExist()) throw $errors;
+		}
     }
 }

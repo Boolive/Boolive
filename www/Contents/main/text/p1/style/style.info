@@ -7,6 +7,7 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/views/Style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
@@ -62,14 +63,21 @@
             "value": "60px",
             "order": 11
         },
-        "line-height": {
-            "value": "1.48",
-            "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
-            "order": 12
-        },
         "text-decoration": {
             "value": "",
             "order": 12
+        },
+        "line-height": {
+            "value": "1.48",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
+            "order": 13
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/style/description",
+            "is_hidden": true,
+            "order": 14
         }
     }
 }

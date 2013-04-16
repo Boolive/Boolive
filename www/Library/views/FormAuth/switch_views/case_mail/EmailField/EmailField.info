@@ -36,6 +36,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/FormField/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

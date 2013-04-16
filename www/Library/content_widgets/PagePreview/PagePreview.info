@@ -20,20 +20,21 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
-            "order": 4,
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
-                    "order": 1
+                    "order": 2
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
-                    "order": 2
+                    "is_hidden": true,
+                    "order": 3
                 }
             }
         }

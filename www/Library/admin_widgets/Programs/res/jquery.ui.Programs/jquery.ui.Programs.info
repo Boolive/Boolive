@@ -2,15 +2,8 @@
     "value": "jquery.ui.Programs.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
-    "order": 2,
+    "order": 3,
     "children": {
-        "depends": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
-            "is_link": true,
-            "order": 3
-        },
         "title": {
             "is_default_value": true,
             "value": "Boolive.Widget заготовка",
@@ -22,7 +15,15 @@
             "is_default_value": true,
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
+            "is_hidden": true,
             "order": 4
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
+            "is_link": true,
+            "order": 5
         }
     }
 }

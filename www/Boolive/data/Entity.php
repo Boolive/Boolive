@@ -37,7 +37,9 @@ class Entity implements ITrace
         'order'		   => 0,
         'date'		   => 0,
         'parent'       => null,
+        'parent_cnt'   => 0,
         'proto'        => null,
+        'proto_cnt'    => 0,
         'value'	 	   => '',
         'is_file'	   => 0,
         'is_history'   => 0,
@@ -428,11 +430,11 @@ class Entity implements ITrace
             $curr = $this->_attribs['is_link'];
             if ($is_link){
                 // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
-                if ($proto = $this->proto()){
+                if (($proto = $this->proto())){
                     if ($p = $proto->isLink(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_link'] = $proto->id();
+                    $this->_attribs['is_link'] = $proto->key();
                 }else{
                     $this->_attribs['is_link'] = self::ENTITY_ID;
                 }
@@ -489,7 +491,7 @@ class Entity implements ITrace
     {
         if (!empty($this->_attribs['is_accessible'])){
             if ($action != 'read'){
-                return $this->verify(Auth::getUser()->getAccessCond($action));
+                return !IS_INSTALL || $this->verify(Auth::getUser()->getAccessCond($action));
             }
             return true;
         }
@@ -512,11 +514,13 @@ class Entity implements ITrace
                     if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_default_value'] = $proto->id();
+                    $this->_attribs['is_default_value'] = $proto->key();
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['is_file'] = $proto->isFile();
                 }else{
-                    $this->_attribs['is_default_value'] = 0;
+                    $this->_attribs['is_default_value'] = self::ENTITY_ID;
+                    $this->_attribs['value'] = '';
+                    $this->_attribs['is_file'] = 0;
                 }
             }else{
                 $this->_attribs['is_default_value'] = 0;
@@ -552,7 +556,7 @@ class Entity implements ITrace
                     $proto = null;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_default_class'] = $proto->id();
+                    $this->_attribs['is_default_class'] = $proto->key();
                 }else{
                     $this->_attribs['is_default_class'] = self::ENTITY_ID;
                 }
@@ -609,6 +613,7 @@ class Entity implements ITrace
      */
     public function parent($new_parent = null)
     {
+        if (is_string($new_parent)) $new_parent = Data::read($new_parent, null, null, 0);
         // Смена родителя
         if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->isEqual($this->parent()))){
             $is_delete = $this->isDelete(null, false);
@@ -621,9 +626,9 @@ class Entity implements ITrace
                 $this->updateURI($this->name());
             }else{
                 // Смена родителя
-                $this->_attribs['parent'] = $new_parent->id();
-                $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
                 $this->_parent = $new_parent;
+                $this->_attribs['parent'] = $new_parent->key();
+                $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
                 // Установка атрибутов, зависимых от прототипа
                 //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
                 // Обновление доступа
@@ -705,7 +710,8 @@ class Entity implements ITrace
      */
     public function proto($new_proto = null)
     {
-        if ($new_proto instanceof Entity && !$new_proto->isExist()) $new_proto = null;
+        if (is_string($new_proto)) $new_proto = Data::read($new_proto, null, null, 0);
+//        if ($new_proto instanceof Entity && !$new_proto->isExist()) $new_proto = null;
         // Смена прототипа
         if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->isEqual($this->proto()))){
             if (empty($new_proto)){
@@ -726,13 +732,13 @@ class Entity implements ITrace
                     $this->_attribs['value'] = $new_proto->value();
                     $this->_attribs['is_file'] = $new_proto->isFile();
                     if ($vp = $new_proto->isDefaultValue(null, true)){
-                        $this->_attribs['is_default_value'] = $vp->id();
+                        $this->_attribs['is_default_value'] = $vp->key();
                     }else{
-                        $this->_attribs['is_default_value'] = $new_proto->id();
+                        $this->_attribs['is_default_value'] = $new_proto->key();
                     }
                 }
                 // Смена прототипа
-                $this->_attribs['proto'] = $new_proto->id();
+                $this->_attribs['proto'] = $new_proto->key();
                 $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
                 $this->_proto = $new_proto;
 
@@ -787,6 +793,7 @@ class Entity implements ITrace
      */
     public function owner($new_owner = null)
     {
+        if (is_string($new_owner)) $new_owner = Data::read($new_owner, null, null, 0);
         // Смена владельца
         if (isset($new_owner) && (empty($new_owner)&&!empty($this->_attribs['owner']) || !$new_owner->isEqual($this->owner()))){
             if (empty($new_owner)){
@@ -794,7 +801,7 @@ class Entity implements ITrace
                 $this->_attribs['owner'] = null;
                 $this->_owner = null;
             }else{
-                $this->_attribs['owner'] = $new_owner->id();
+                $this->_attribs['owner'] = $new_owner->key();
                 $this->_owner = $new_owner;
             }
             $this->_changed = true;
@@ -818,6 +825,7 @@ class Entity implements ITrace
      */
     public function lang($new_lang = null)
     {
+        if (is_string($new_lang)) $new_lang = Data::read($new_lang, null, null, 0);
         // Смена языка
         if (isset($new_lang) && (empty($new_lang)&&!empty($this->_attribs['lang']) || !$new_lang->isEqual($this->lang()))){
             if (empty($new_lang)){
@@ -825,7 +833,7 @@ class Entity implements ITrace
                 $this->_attribs['lang'] = null;
                 $this->_owner = null;
             }else{
-                $this->_attribs['lang'] = $new_lang->id();
+                $this->_attribs['lang'] = $new_lang->key();
                 $this->_lang = $new_lang;
             }
             $this->_changed = true;
@@ -1121,20 +1129,20 @@ class Entity implements ITrace
                             throw $parent_error;
                         }
                     }
-                    $this->_attribs['parent'] = $this->_parent->id();
+                    $this->_attribs['parent'] = $this->_parent->key();
                 }
                 if ($this->_proto){
-                    $this->_attribs['proto'] = $this->_proto->id();
+                    $this->_attribs['proto'] = $this->_proto->key();
                 }
                 if ($this->_owner){
-                    $this->_attribs['owner'] = $this->_owner->id();
+                    $this->_attribs['owner'] = $this->_owner->key();
                 }
                 if ($this->_lang){
-                    $this->_attribs['lang'] = $this->_lang->id();
+                    $this->_attribs['lang'] = $this->_lang->key();
                 }
                 $this->_attribs['is_virtual'] = 0;
                 // Если создаётся история, то нужна новая дата
-                if ($history) $this->_attribs['date'] = time();
+                if ($history || (empty($this->_attribs['date']) && !$this->isExist())) $this->_attribs['date'] = time();
                 // Сохранение себя
                 if ($this->_changed && Data::write($this, $error, $access)){
                     if ($this->_rename){
@@ -1143,7 +1151,6 @@ class Entity implements ITrace
                     }
                     $this->_changed = false;
                 }
-                // @todo Если было переименование из-за _rename, то нужно обновить uri подчиненных
                 // Сохранение подчиененных
                 if ($children){
                     $children = $this->children();
@@ -1498,6 +1505,12 @@ class Entity implements ITrace
      */
     public function export($save_to_file = true)
     {
+        if ($this->_attribs['uri'] == '/Contents/main/text/p2'){
+            $a = 10;
+        }
+        if ($this->_attribs['uri'] == '/Contents/main/text/p2/style'){
+            $a = 10;
+        }
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
         $export['value'] = $this->value();
@@ -1519,17 +1532,17 @@ class Entity implements ITrace
         if ($children === true){
             $children = $this->find(array(
                 'where' => array(
-                    array('is_delete', '>=', 0)
+                    array('attr', 'is_delete', '>=', 0)
                 )
-            ),'name', false, 1, false);
+            ),'name', false, 1, false, false);
         }else
         if (!empty($children) && is_array($children)){
             $children = $this->find(array(
                 'where' => array(
                     array('attr', 'name', 'in',  $children),
-                    array('is_delete', '>=', 0)
+                    array('attr', 'is_delete', '>=', 0)
                 )
-            ),'name', false, 1, false);
+            ),'name', false, 1, false, false);
         }else{
             $children = array();
         }
@@ -1561,6 +1574,53 @@ class Entity implements ITrace
     public function exportedProperties()
     {
         return array('title', 'description');
+    }
+
+    /**
+     * Импортирование атрибутов и подчиенных из массива
+     * Формат массива как в info файле.
+     * @param $info
+     */
+    public function import($info)
+    {
+        // Имя и родитель
+        if (isset($info['uri'])){
+            $uri = F::splitRight('/', $info['uri']);
+            $this->name($uri[1]);
+            $this->parent($uri[0]);
+        }
+        // Значение
+        if (!empty($info['is_default_value'])){
+            $this->isDefaultValue(true);
+        }else
+        if (isset($info['value'])){
+            $this->value($info['value']);
+        }
+        if (!empty($info['is_file'])) $this->isFile(true);
+        // Владец, язык, прототип
+        if (isset($info['owner'])) $this->owner($info['owner']);
+        if (isset($info['lang'])) $this->lang($info['lang']);
+        if (isset($info['proto'])) $this->proto($info['proto']);
+        // Признаки
+        if (!empty($info['is_link'])) $this->isLink(true);
+        if (!empty($info['is_hidden'])) $this->isHidden(true);
+        if (!empty($info['is_delete'])) $this->isDelete(true);
+        // Свой класс?
+        if (isset($info['is_default_class']) && empty($info['is_default_class'])){
+            $this->isDefaultClass(false);
+        }else{
+            $this->isDefaultClass(true);
+        }
+        // Порядковое значение
+        if (isset($info['order'])) $this->order($info['order']);
+        $info['index_depth'] = 1;
+        // Подчиненные объекты
+        if (!empty($info['children']) && is_array($info['children'])){
+            foreach ($info['children'] as $name => $child){
+                //$child['uri'] = $this->uri().'/'.$name;
+                $this->{$name}->import($child);
+            }
+        }
     }
 
     /**

@@ -26,13 +26,14 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "order": 1
+                    "order": 2
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "order": 2
+                    "is_hidden": true,
+                    "order": 3
                 }
             }
         }

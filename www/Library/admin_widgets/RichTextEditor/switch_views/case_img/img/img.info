@@ -1,3 +1,5 @@
 {
-    "proto": "/Library/admin_widgets/ImageEditor"
+    "value": "",
+    "proto": "/Library/admin_widgets/ImageEditor",
+    "order": 6
 }

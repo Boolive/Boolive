@@ -1,3 +1,5 @@
 {
-    "proto": "/Library/content_widgets/ListView"
+    "value": "",
+    "proto": "/Library/content_widgets/ListView",
+    "order": 5
 }

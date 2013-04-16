@@ -1,5 +1,5 @@
 {
-    "value": "//225",
+    "value": "/Library/content_samples/lists/List",
     "proto": "/Library/views/SwitchCase",
     "order": 6,
     "children": {
@@ -14,6 +14,7 @@
             "is_default_value": true,
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
+            "is_hidden": true,
             "order": 2
         }
     }

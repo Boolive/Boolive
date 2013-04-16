@@ -1,7 +1,7 @@
 {
     "value": "",
     "proto": "/Library/javascripts/patterns/jQueryUIScript",
-    "order": 17,
+    "order": 5,
     "children": {
         "title": {
             "value": "Boolive.Widget заготовка",
@@ -12,6 +12,7 @@
         "description": {
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "proto": "/Library/javascripts/JavaScript/description",
+            "is_hidden": true,
             "order": 2
         },
         "depends": {

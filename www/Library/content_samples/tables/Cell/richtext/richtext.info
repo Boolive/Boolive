@@ -7,6 +7,7 @@
             "is_default_value": true,
             "value": "Форматированный текст",
             "proto": "/Library/content_samples/RichText/title",
+            "is_hidden": true,
             "order": 1
         }
     }

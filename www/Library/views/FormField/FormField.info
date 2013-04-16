@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 18,
+    "order": 19,
     "children": {
         "title": {
             "value": "Поле формы",
@@ -35,6 +35,7 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

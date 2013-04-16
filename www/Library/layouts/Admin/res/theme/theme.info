@@ -2,7 +2,7 @@
     "value": "theme.css",
     "is_file": true,
     "proto": "/Library/views/Css",
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "value": "CSS Theme",
@@ -14,6 +14,7 @@
             "is_default_value": true,
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "proto": "/Library/views/Css/description",
+            "is_hidden": true,
             "order": 2
         }
     }

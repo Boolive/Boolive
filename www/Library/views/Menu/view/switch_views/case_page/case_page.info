@@ -1,7 +1,7 @@
 {
-    "value": "//212",
+    "value": "/Library/content_samples/Page",
     "proto": "/Library/views/SwitchCase",
-    "order": 6,
+    "order": 4,
     "children": {
         "title": {
             "is_default_value": true,

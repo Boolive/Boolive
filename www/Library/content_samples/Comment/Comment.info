@@ -5,6 +5,7 @@
     "children": {
         "title": {
             "value": "Комментарий",
+            "is_hidden": true,
             "order": 2
         }
     }

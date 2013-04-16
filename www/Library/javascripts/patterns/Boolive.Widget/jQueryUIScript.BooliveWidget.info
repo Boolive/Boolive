@@ -1,5 +1,0 @@
-{
-    "title": "Boolive.Widget заготовка",
-	"description": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
-    "proto": "/Library/javascripts/patterns/jQueryUIScript"
-}

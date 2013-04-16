@@ -6,10 +6,12 @@
         "title": {
             "value": "Пользователи и доступ",
             "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "value": "",
+            "is_hidden": true,
             "order": 2
         }
     }

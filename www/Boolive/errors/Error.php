@@ -19,6 +19,11 @@ use Exception,
 
 class Error extends Exception implements ITrace, IteratorAggregate
 {
+    /** @const string Файл со статическими сообщениями */
+	const FILE_STATIC_MESSAGE = 'config.error_messages.php';
+	/** @var array Массив со статическими сообщениями */
+	private static $user_messages;
+
     /** @var \Boolive\errors\Error Родительское  исключение */
     protected $parent;
     /** @var array Массив исключений */
@@ -111,7 +116,9 @@ class Error extends Exception implements ITrace, IteratorAggregate
             }
         }else
         if ($error instanceof Error){
-            return $this->list[$error->code] = $error;
+            $this->list[$error->code] = $error;
+            $this->list[$error->code]->parent = $this;
+            return $this->list[$error->code];
         }
         return $this;
     }
@@ -213,15 +220,13 @@ class Error extends Exception implements ITrace, IteratorAggregate
             }
             return $message;
         }
-        // @TODO Поиск пользовательского сообщения...
-
         // Сообщение по-умолчанию
-        return vsprintf($this->message.$postfix, $this->args);
+        return vsprintf($this->getMessageText().$postfix, $this->args);
     }
 
     public function getUserMessageList($all_sub = false)
     {
-        // Объединение сообщений подчиенных исключений
+        // Объединение сообщений подчиненных исключений
         if ($all_sub && $this->isExist()){
             $message = array();
             foreach ($this->list as $e){
@@ -230,10 +235,8 @@ class Error extends Exception implements ITrace, IteratorAggregate
             }
             return $message;
         }
-        // @TODO Поиск пользовательского сообщения...
-
         // Сообщение по-умолчанию
-        return array(vsprintf($this->message, $this->args));
+        return array(vsprintf($this->getMessageText(), $this->args));
     }
 
     /**
@@ -286,4 +289,55 @@ class Error extends Exception implements ITrace, IteratorAggregate
         $trace['list'] = $this->list;
         return $trace;
     }
+
+    /**
+     * Текст ошибки из базы или конфига по коду исключения
+     * @return string
+     */
+    private function getMessageText()
+    {
+        self::loadErrorMessages();
+		// Формирование полного ключа
+		$keys = array();
+		$curr = $this;
+		while ($curr){
+			array_unshift($keys, $curr->code);
+			if ($curr instanceof self){
+				$curr = $curr->parent;
+			}else{
+				$curr = null;
+			}
+		}
+		// Поиск сообщения в массиве загруженных
+		$curr = self::$user_messages;
+		$cnt = sizeof($keys);
+		$i = 0;
+		while ($i<$cnt && is_array($curr)){
+			if (isset($curr[$keys[$i]]) ){
+				$curr = $curr[$keys[$i]];
+			}else{
+				$curr = null;
+			}
+			$i++;
+		}
+		// Если найдено
+		if (is_scalar($curr)){
+			return $curr."\n";
+		}else
+		if (is_array($curr) && isset($curr['default'])){
+			return $curr['default']."\n";
+		}
+        return $this->message;
+    }
+
+    /**
+	 * Загрузка пользовательских сообщений из конфига
+	 */
+	private static function loadErrorMessages(){
+		if (!isset(self::$user_messages)){
+			include DIR_SERVER.self::FILE_STATIC_MESSAGE;
+			if (!isset($messages)) $messages = array();
+			self::$user_messages = $messages;
+		}
+	}
 }

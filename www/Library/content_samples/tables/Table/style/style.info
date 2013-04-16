@@ -7,6 +7,7 @@
             "is_default_value": true,
             "value": "Стиль ",
             "proto": "/Library/views/Style/title",
+            "is_hidden": true,
             "order": 1
         },
         "width": {
@@ -68,6 +69,13 @@
             "value": "",
             "proto": "/Library/views/Style/text-indent",
             "order": 11
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/views/Style/description",
+            "is_hidden": true,
+            "order": 12
         }
     }
 }

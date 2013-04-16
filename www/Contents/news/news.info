@@ -6,6 +6,7 @@
         "title": {
             "value": "Лента новостей",
             "proto": "/Library/content_samples/Part/title",
+            "is_hidden": true,
             "order": 1
         }
     }

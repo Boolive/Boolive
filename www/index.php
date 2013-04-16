@@ -10,12 +10,19 @@
 use Boolive\Boolive,
     Boolive\data\Data,
     Boolive\commands\Commands,
-    Boolive\input\Input;
+    Boolive\input\Input,
+    Boolive\installer\Installer;
 // Подключение конфигурации путей
 require 'config.php';
 // Подключение движка Boolive
 require DIR_SERVER_ENGINE.'Boolive.php';
 // Активация Boolive
-Boolive::activate();
-// Исполнение корневого объекта. Вывод результата клиенту
-echo Data::read()->start(new Commands(), Input::getSource());
+if (Boolive::activate()){
+    // Исполнение корневого объекта. Передаётся экземпляр команд и все входящие данные.
+    // Вывод результата клиенту
+    echo Data::read()->start(new Commands(), Input::getSource());
+}else{
+    // Запуск установщика
+    include DIR_SERVER_ENGINE.'installer/Installer.php';
+    Installer::start();
+}

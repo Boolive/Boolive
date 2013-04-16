@@ -1,14 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 2,
+    "order": 8,
     "children": {
         "title": {
             "value": "Запрет",
+            "is_hidden": true,
             "order": 1
         },
         "description": {
             "value": "Запрет доступа к объектам",
+            "is_hidden": true,
             "order": 2
         }
     }

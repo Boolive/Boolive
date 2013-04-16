@@ -6,12 +6,13 @@
         "title": {
             "value": "Первая новость",
             "proto": "/Library/content_samples/Page/title",
-            "order": 1,
+            "order": 0,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
+                    "is_hidden": true,
                     "order": 1
                 }
             }
@@ -20,12 +21,13 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/description",
-            "order": 2,
+            "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Описание ",
                     "proto": "/Library/content_samples/Page/description/title",
+                    "is_hidden": true,
                     "order": 1
                 }
             }

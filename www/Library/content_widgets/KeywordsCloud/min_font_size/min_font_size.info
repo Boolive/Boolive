@@ -6,6 +6,7 @@
         "title": {
             "value": "Минимальный размер шрифта",
             "proto": "/Library/basic/simple/Number/title",
+            "is_hidden": true,
             "order": 1
         }
     }

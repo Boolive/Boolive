@@ -8,6 +8,7 @@
             "is_default_value": true,
             "value": "CSS",
             "proto": "/Library/views/Css/title",
+            "is_hidden": true,
             "order": 1
         }
     }

@@ -25,15 +25,16 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Ресурсы",
+                    "value": "",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value": "",
                     "proto": "/Library/views/AutoWidgetList/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

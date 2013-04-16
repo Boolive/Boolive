@@ -1,5 +1,5 @@
 {
-    "value": "//403",
+    "value": "/Library/views/FormAuth/object/passw",
     "proto": "/Library/views/SwitchCase",
     "order": 4,
     "children": {
@@ -8,13 +8,14 @@
             "value": "Вариант переключателя",
             "proto": "/Library/views/SwitchCase/title",
             "is_hidden": true,
-            "order": 1
+            "order": 2
         },
         "description": {
             "is_default_value": true,
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
-            "order": 2
+            "is_hidden": true,
+            "order": 4
         }
     }
 }

@@ -4,6 +4,7 @@
     "children": {
         "title": {
             "value": "Форматированный текст",
+            "is_hidden": true,
             "order": 1
         }
     }
