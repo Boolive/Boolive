@@ -31,7 +31,14 @@
                     self.element.find('ul.ui-autocomplete').width(input.width());
                 }
             });
-            //console.log(self.element.find('ul.ui-autocomplete').width());
+            //Нужно, для фокусирования на поле в случае, если клик по форме или диву
+            form.on('click',function(e) {
+                input.focus();
+            });
+            
+            self.element.find('.keywords').on('click',function(e) {
+                input.focus();
+            });
             input.on('keypress', function(e) {
                 if (e.keyCode==13 || e.keyCode==44){
                     e.preventDefault();
@@ -49,7 +56,9 @@
                             }else{
                                 form.find('div.error').text('');
                                 input.val('');
-                                self.load(self.element.find('.old'), 'append',  self.options.view+'/switch_views',{object: responseText.out}, {url:'/'});
+                                if(responseText.out!==false){
+                                    self.load(self.element.find('.old'), 'append',  self.options.view+'/switch_views',{object: responseText.out}, {url:'/'});
+                                }
 
                             }
                         }
@@ -82,5 +91,7 @@
             });
 
         }
+
+
     });
 })(jQuery);

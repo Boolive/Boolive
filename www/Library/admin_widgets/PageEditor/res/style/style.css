@@ -1,6 +1,11 @@
 .PageEditor{
         margin-top: 32px;
     }
+    .PageEditor .buttons{
+        margin: 10px;
+        text-align: right;
+        width: 100%;
+    }
     .PageEditor .item{
         display: block;
         overflow: hidden;

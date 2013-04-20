@@ -69,9 +69,13 @@ class PageKeywordsEditor extends AutoWidgetList
                 $obj->save();
                 return $obj->{$key->name()}->uri();
               }else{
-                  $existing[$key->name()]->isDelete(false);
-                  $existing[$key->name()]->save();
-                  return $existing[$key->name()]->uri();
+                  if($existing[$key->name()]->isDelete()){
+                      $existing[$key->name()]->isDelete(false);
+                      $existing[$key->name()]->save();
+                      return $existing[$key->name()]->uri();
+                  }else{
+                      return false;
+                  }
               }
           }else{
              $key = Data::read('/Library/content_samples/Keyword');
