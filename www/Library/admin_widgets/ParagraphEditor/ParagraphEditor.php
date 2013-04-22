@@ -31,7 +31,11 @@ class ParagraphEditor extends Widget
                             'secondary' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required()
                         )),
                         'save' => Rule::string(),
-                        'saveStyle' => Rule::arrays(Rule::string())
+                        'saveProperties' => Rule::arrays(array(
+                            'proto' => Rule::entity(),
+                            'style' => Rule::arrays(Rule::string())
+                            )
+                        )
                     )
                 )
             )
@@ -68,10 +72,10 @@ class ParagraphEditor extends Widget
                 );
             }else
             // Сохранение стиля
-            if (isset($this->_input['REQUEST']['saveStyle'])){
-                return $this->callSaveStyle(
+            if (isset($this->_input['REQUEST']['saveProperties'])){
+                return $this->callSaveProperties(
                     $this->_input['REQUEST']['object'],
-                    $this->_input['REQUEST']['saveStyle']
+                    $this->_input['REQUEST']['saveProperties']
                 );
             }
             return null;
@@ -165,27 +169,25 @@ class ParagraphEditor extends Widget
     /**
      * Сохранение стиля объекта (если есть свойство style)
      * @param \Boolive\data\Entity $object Сохраняемый объект
-     * @param array $styles Свойства стиля
+     * @param array $properties Свойства стиля
      * @return mixed
      */
-    protected function callSaveStyle($object, $styles)
+    protected function callSaveProperties($object, $properties)
     {
+        // Смена прототипа (типа абзаца)
+        if (isset($properties['proto']) && $properties['proto']->isExist() && $properties['proto']->is('/Library/content_samples/paragraphs/TextBlock')){
+            $object->proto($properties['proto']);
+            $object->save();
+        }
         $style = $object->style;
-        if ($style->isExist()){
-            foreach ($styles as $name => $value){
-                if ($name == 'paragraph-proto'){
-                    $proto = Data::read($value);
-                    if ($proto->isExist() && $proto->is('/Library/content_samples/paragraphs/TextBlock')){
-                        $object->proto($proto);
-                        $object->save();
-                    }
-                }
+        if ($style->isExist() && isset($properties['style'])){
+            foreach ($properties['style'] as $name => $value){
                 $s = $style->{$name};
-                if ($s->isExist()){
+//                if ($s->isExist()){
                     $s->value($value);
-                }else{
-                    unset($style->{$name});
-                }
+//                }else{
+//                    unset($style->{$name});
+//                }
             }
             $style->save();
         }

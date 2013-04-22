@@ -30,8 +30,7 @@
             "order": 4
         },
         "margin-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "auto",
             "proto": "/Library/content_samples/Page/text/style/margin-right",
             "order": 5
         },
@@ -42,30 +41,27 @@
             "order": 6
         },
         "margin-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0",
             "proto": "/Library/content_samples/Page/text/style/margin-left",
             "order": 7
         },
         "text-align": {
-            "is_default_value": true,
-            "value": "",
+            "value": "center",
             "proto": "/Library/content_samples/Page/text/style/text-align",
             "order": 8
         },
         "padding-left": {
-            "value": "50px",
+            "value": "60px",
             "proto": "/Library/content_samples/Page/text/style/padding-left",
             "order": 9
         },
         "padding-right": {
-            "value": "40px",
+            "value": "50px",
             "proto": "/Library/content_samples/Page/text/style/padding-right",
             "order": 10
         },
         "text-indent": {
-            "is_default_value": true,
-            "value": "",
+            "value": "40px",
             "proto": "/Library/content_samples/Page/text/style/text-indent",
             "order": 11
         },

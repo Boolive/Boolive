@@ -8,12 +8,13 @@
         // объекты кнопок
         _buttons: {},
         _content: null,
+        // uri выделенных объектов текста
+        _selected: null,
         // uri измененных подчиенных
         _changes: {},
         _changes_cnt: 0,
         _save_inteval: null,
         _hide: true,
-
 
 
         _create: function() {
@@ -23,6 +24,7 @@
 
             this._buttons['save'] = this.element.find('.save');
             this._content = this.element.children('.content').first();
+            this._selected = [];
 //            if (!this._content.children().length){
 //                this._content[0].childNodes[0].textContent = '';
 //            }
@@ -39,6 +41,7 @@
                 selection_start = true;
 //                e.stopPropagation();
             }).on('mouseup'+this.eventNamespace, function(e){
+                // Если выделение не обработано событием selectionchange и было начато выделение
                 if (!selection_change && selection_start){
                     selection_start = false;
                     self._onselect();
@@ -98,7 +101,6 @@
                     var d = 5;
                 }
                 if (e.can_print === undefined){
-                    //console.log(e.keyCode);
                     if (e.keyCode >=37 && e.keyCode <=40){
 
                     }else
@@ -139,12 +141,17 @@
             }
         },
 
+        /**
+         * Определение объектов в области выделения
+         * @returns {Array}
+         * @private
+         */
         _onselect: function(){
+            this._selected = [];
             var sel = window.getSelection();
             if (sel.rangeCount>0){
                 var container = this._content[0];
                 var range = sel.getRangeAt(0);
-                console.log(range);
                 var start = range.startContainer;
                 var end = range.endContainer;
                 if (!range.collapsed){
@@ -203,24 +210,31 @@
                 // Получение списка объектов от начала до конца выделения
                 var start_index = _.indexOf(container.childNodes, start);
                 var end_index = _.indexOf(container.childNodes, end);
-                var selected = [];
                 if (start_index!=-1 && end_index!=-1){
                     var o;
                     var i = start_index;
                     for (i; i<=end_index; i++){
                         if (o = $(container.childNodes[i]).attr('data-o')){
-                            selected.push(o);
+                            this._selected.push(o);
                         }
                     }
                 }
-            }else{
-                selected = [];
             }
-            console.log(selected);
-            this.callParents('setState', {selected: selected});
-            return selected;
+            this.callParents('setState', {selected: this._selected});
+            return this._selected;
         },
 
+        call_setState: function(caller, state, changes){
+            if (caller.direct == 'children'){
+                if (_.indexOf(state.selected, this.option.object)){
+                    this._onselect();
+                }
+            }
+        },
+
+        /**
+         * Обработка открытия редактора
+         */
         call_program_show: function(){
             if (this._hide){
                 this._hide = false;
@@ -229,6 +243,9 @@
             }
         },
 
+        /**
+         * Обработка закрытия редактора
+         */
         call_program_hide: function(){
             if (!this._hide){
                 this._hide = true;
@@ -238,6 +255,9 @@
             }
         },
 
+        /**
+         * Вставка нового абзаца
+         */
         insert_new_p: function(){
             var self = this;
             self.new_p = true;
@@ -258,6 +278,11 @@
 
         },
 
+        /**
+         * Перемещение курсора в указанный элемент и позицию внутри элемента
+         * @param element
+         * @param pos
+         */
         cursor_to: function(element, pos){
             var sel = window.getSelection();
             var range = document.createRange();
@@ -267,6 +292,11 @@
             sel.addRange( range );
         },
 
+        /**
+         * Обработка изменений в редакторе (изменение текста)
+         * @param caller
+         * @param object
+         */
         call_change: function(caller, object){ //before
             if (!this._changes[object]){
                 this._buttons['save'].removeClass('btn-disable');
@@ -275,6 +305,11 @@
             }
         },
 
+        /**
+         * Обработка отсутствия изменений после сохранения
+         * @param caller
+         * @param object
+         */
         call_nochange: function(caller, object){ //before
             if (this._changes[object]){
                 delete this._changes[object];
@@ -291,41 +326,55 @@
             return true;
         },
 
-        call_getStyle: function(){
-            var styles = this.callChildren('getStyle');
-            if (styles === undefined){
-                return [this._content.css(["padding-left", "padding-right"])];
-            }else{
-                return styles;
-            }
-        },
-
-        call_setStyle: function(caller, style){
-            if (!$.isEmptyObject(style)){
-                // Для страницы отбираем paddings
-                var pstyle = {'padding-left':0, 'padding-right':0};
-                var n;
-                for (n in pstyle){
-                    if (n in style){
-                        pstyle[n] = style[n];
-                        delete style[n];
-                    }else{
-                        delete pstyle[n];
-                    }
-                }
-                // Установка и сохранение стиля страницы
-                this._content.css(pstyle);
-                this.callServer('saveStyle', {
-                    object: this.options.object,
-                    saveStyle: pstyle
-                });
-                // Установка стилей подчиенных (сами определят кому)
-                this.callChildren('setStyle', [style]);
-            }
-        },
-
+        /**
+         * Обработка команды обновить с сервера подчиненный элемент
+         * @param caller
+         * @param data
+         * @param child
+         */
         call_reloadChild: function(caller, data, child){
-            this.load(child.element, 'replace', this.options.view+'/switch_views', data);
+            this.load(child.element, 'replace', this.options.view+'/switch_views', data, {url:'/'});
+        },
+
+        /**
+         * Получение свойств текущего выделенного объекта
+         * Если не выделен ни один объект текста, то выделенным считается весь текст (страница)
+         * @returns {*}
+         */
+        call_getProperties: function(){
+            // Если нет выделенных объектов, то возвращаем свойства текста
+            if (!this._selected.length){
+                return [{
+                    element: this._content,
+                    filter: {
+                        is_real: true,
+                        is_hidden: false,
+                        is_deleted: false
+                    }
+                }];
+            }
+            return this.callChildren('getProperties');
+        },
+
+        /**
+         * Установка свойств текущему выделнному элементу
+         * @param caller
+         * @param properties
+         */
+        call_setProperties: function(caller, properties){
+            if (_.isObject(properties)){
+                if (!this._selected.length){
+                    // Установка и сохранение стиля страницы
+                    if (_.isObject(properties.style)) this._content.css(properties.style);
+                    this.callServer('saveProperties', {
+                        object: this.options.object,
+                        saveProperties: properties
+                    });
+                }else{
+                    // Установка стилей подчиенных (сами определят кому)
+                    this.callChildren('setProperties', [properties]);
+                }
+            }
         }
     })
 })(jQuery, _);

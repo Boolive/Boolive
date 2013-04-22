@@ -43,20 +43,17 @@
             "order": 6
         },
         "text-align": {
-            "is_default_value": true,
-            "value": "",
+            "value": "left",
             "proto": "/Library/content_samples/paragraphs/P/style/text-align",
             "order": 8
         },
         "padding-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-left",
             "order": 9
         },
         "padding-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-right",
             "order": 10
         },
@@ -66,20 +63,23 @@
             "order": 13
         },
         "margin-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
             "order": 14
         },
         "text-indent": {
-            "is_default_value": true,
-            "value": "",
+            "value": "50px",
             "order": 15
         },
         "line-height": {
             "value": "1.48",
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
             "order": 16
+        },
+        "font-size": {
+            "value": "",
+            "is_default_class": false,
+            "order": 17
         }
     }
 }

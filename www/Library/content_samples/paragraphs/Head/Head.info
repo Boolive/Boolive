@@ -1,6 +1,7 @@
 {
     "value": "",
     "proto": "/Library/content_samples/paragraphs/TextBlock",
+    "is_hidden": true,
     "order": 4,
     "children": {
         "title": {

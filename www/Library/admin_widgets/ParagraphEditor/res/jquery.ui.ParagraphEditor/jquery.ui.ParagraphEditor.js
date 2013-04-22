@@ -11,6 +11,7 @@
         },
         _value: '',
         _is_change: false,
+        _properties: null,
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
@@ -100,37 +101,40 @@
         },
 
         /**
-         * Возвращение стиля
+         * Возвращение свойств абзаца
+         *
          * @return {*}
          */
-        call_getStyle: function(){
+        call_getProperties: function(){
             if (this.element.hasClass('selected')){
-                var css = this.element.css(["margin-left", "margin-right", "text-indent", "text-align", "line-height", "font-size"]);
-                if (css['line-height']!='normal'){
-                    css['line-height'] = (parseFloat(css['line-height']) / parseFloat(css['font-size']));
+                if (this._properties == null){
+                    this._properties = {
+                        element: this.element,
+                        proto: this.options.oject_proto,
+                        tag: 'p'
+                    };
                 }
-                css['paragraph-proto'] = this.options.oject_proto;
-                //console.log('LINE HEIGHT: ' + css['line-height']+' FONT SIZE: ' + css['font-size']);
-                //console.log(css['line-height']);
-                return css;
+                return this._properties;
             }
         },
 
         /**
-         * Установка стиля
+         * Установка свойств абзаца
          * @param caller
-         * @param style
+         * @param properties
          */
-        call_setStyle: function(caller, style){
+        call_setProperties: function(caller, properties){
             if (this.element.hasClass('selected')){
                 var self = this;
-                if (!$.isEmptyObject(style)){
-                    this.element.css(style);
-                    this.callServer('saveStyle', {
+                if (_.isObject(properties)){
+                    if (_.isObject(properties.style)) this.element.css(properties.style);
+                    this.changes(this._properties, properties, true);
+                    this.callServer('saveProperties', {
                         object: this.options.object,
-                        saveStyle: style
+                        saveProperties: properties
                     }, function(){
-                        if ('paragraph-proto' in style){
+                        // Если сменился прототип, то перегрузить объект
+                        if ('proto' in properties && properties.proto != self.options.oject_proto){
                             self.callParents('reloadChild', [{object:self.options.object}, self]);
                         }
                     });
@@ -175,9 +179,6 @@
 //            }else
             // BACKSPACE
             if ((offset == 0 || (text.left.charCodeAt(0) == 8203 && text.left.length == 1)) && e.keyCode == 8 && !have_selection){
-                console.log(text.left.charCodeAt(0));
-                console.log(text.left.length);
-                console.log(have_selection);
                 // Поиск родительского элемента узла в this
                 while (!node.previousSibling && !this.element.is(node.parentNode)) node = node.parentNode;
                 // Если первый, то отмена BACKSPACE. Действие соединения с предыдущим элементом
@@ -307,7 +308,6 @@
                         }
                     }, {
                     success: function(result, textStatus, jqXHR){
-                        console.log(result);
                         if (!result.links) result.links = [];
                         $.include(result.links, function(){
                             var p = self.element.parent();

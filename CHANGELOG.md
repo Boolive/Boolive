@@ -40,6 +40,7 @@ Version 2.0 work in progress
 - new #92: When object has no properties the word "empty" is shown (polina Putrolaynen)
 - new #95: View linked object in the Explorer (VladimirShestakov)
 - new #96: Added method to destroying objects. And added widget "Destroy" in the admin panel (VladimirShestakov)
+- new #119: Added ToolBar with ToolParagraph, ToolBlockElement and ToolRichText (VladimirShestakov)
 - new: Added methods next() and prev() in the Entity (VladimirShestakov)
 - new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
 - new: New model of interaction jQuery UI widgets based on AjaxWidget (VladimirShestakov)

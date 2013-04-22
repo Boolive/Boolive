@@ -1,7 +1,8 @@
 {
     "value": "Страница сайта – это HTML документ, формируемый системой управления сайтом (CMS) в соответствии с параметрами запроса или другими условиями. пппппп0gagdfgdfg777длд",
     "proto": "/Library/content_samples/paragraphs/P",
-    "order": 16,
+    "is_delete": true,
+    "order": 19,
     "children": {
         "title": {
             "is_default_value": true,

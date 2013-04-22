@@ -18,7 +18,12 @@ class RichTextEditor extends AutoWidgetList
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->required(),
                         'call' => Rule::string()->default('')->required(),
-                        'saveStyle' => Rule::arrays(Rule::string())
+                        'saveProperties' => Rule::arrays(array(
+                            //'proto' => Rule::entity(),
+                            'filter' => Rule::arrays(Rule::bool()),
+                            'style' => Rule::arrays(Rule::string())
+                            )
+                        )
                     )
                 )
             )
@@ -33,29 +38,14 @@ class RichTextEditor extends AutoWidgetList
                 return $this->new_p();
             }else
             // Редактирование стиля
-            if (isset($this->_input['REQUEST']['saveStyle'])){
-                return $this->callSaveStyle(
+            if (isset($this->_input['REQUEST']['saveProperties'])){
+                return $this->callSaveProperties(
                     $this->_input['REQUEST']['object'],
-                    $this->_input['REQUEST']['saveStyle']
+                    $this->_input['REQUEST']['saveProperties']
                 );
             }
             return null;
         }else{
-            // Типы абзацев
-            $plist = Data::select(array(
-                'from' => array('/Library/content_samples/paragraphs', 1),
-                'where' => array(
-                    array('is', '/Library/content_samples/paragraphs/TextBlock'),
-                    array('attr', 'is_hidden', '=', false)
-                )
-            ));
-            $v['plist'] = array();
-            foreach ($plist as $p){
-                $v['plist'][] = array(
-                    'id' => $p->id(),
-                    'title' => $p->title->isExist()? $p->title->value() : $p->name()
-                );
-            }
             $v['object'] = $this->_input['REQUEST']['object']->uri();
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
             return parent::work($v);
@@ -77,14 +67,27 @@ class RichTextEditor extends AutoWidgetList
     /**
      * Сохранение стиля объекта (если есть свойство style)
      * @param \Boolive\data\Entity $object Сохраняемый объект
-     * @param array $styles Свойства стиля
+     * @param array $properties Свойства стиля
      * @return mixed
      */
-    protected function callSaveStyle($object, $styles)
+    protected function callSaveProperties($object, $properties)
     {
+        // Фильтр
+        $filter = $object->filter;
+        if (isset($properties['filter'])){
+            foreach ($properties['filter'] as $name => $value){
+                $s = $filter->{$name};
+                if ($s->isExist()){
+                    $s->value($value);
+                }else{
+                    unset($filter->{$name});
+                }
+            }
+        }
+        // Стиль
         $style = $object->style;
-        if ($style->isExist()){
-            foreach ($styles as $name => $value){
+        if ($style->isExist() && isset($properties['style'])){
+            foreach ($properties['style'] as $name => $value){
                 $s = $style->{$name};
                 if ($s->isExist()){
                     $s->value($value);
@@ -92,8 +95,8 @@ class RichTextEditor extends AutoWidgetList
                     unset($style->{$name});
                 }
             }
-            $style->save();
         }
+        $object->save();
         return true;
     }
 }

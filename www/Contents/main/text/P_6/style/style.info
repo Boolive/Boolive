@@ -43,8 +43,7 @@
             "order": 6
         },
         "text-align": {
-            "is_default_value": true,
-            "value": "",
+            "value": "left",
             "proto": "/Library/content_samples/paragraphs/P/style/text-align",
             "order": 8
         },

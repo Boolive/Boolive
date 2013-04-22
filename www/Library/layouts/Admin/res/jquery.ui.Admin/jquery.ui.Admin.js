@@ -153,20 +153,20 @@
         /**
          * Вызов дейсвтия у подчиненных.
          * Подчиенные неактивные окна игнорируются
-         * @param action Название действия (функции)
+         * @param call Название действия (функции)
          * @param args Аргументы
          * @param target Объект, иницировавший вызов действия. По умолчанию this
          * @param all Вызыв всех подчиенных или только внеокнных
          * @extends $.boolive.Widget.callChildren
          */
-        callChildren: function(action, args, target, all){
+        callChildren: function(call, args, target, all){
             var stop = undefined;
             if (target && target!=this){
                 // По target опредлить окно и для него вызывать обработчик
                 // Если target вне окон, то используется текущее окно
-                if ($.isFunction(this['call_'+action])){
+                if ($.isFunction(this['call_'+call])){
                     var a = [{target: target, direct: 'children'}].concat(args);
-                    stop = this['call_'+action].apply(this, a);
+                    stop = this['call_'+call].apply(this, a);
                 }
             }
             var result = [];
@@ -174,12 +174,12 @@
             if (all!==false){
                 var children = this._window_current.data('children');
                 for (var child in children){
-                    stop = children[child].callChildren(action, args, target || this);
+                    stop = children[child].callChildren(call, args, target || this);
                     if (stop !== undefined) result.push(stop);
                 }
             }
             for (var child in this._children){
-                stop = this._children[child].callChildren(action, args, target || this);
+                stop = this._children[child].callChildren(call, args, target || this);
                 if (stop !== undefined) result.push(stop);
             }
             return result.length? result : undefined;

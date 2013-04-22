@@ -1,0 +1,18 @@
+.ToolBlockElement{
+
+    }
+    .ToolBlockElement .align-left{
+        background-image: url(img/align-left.png);
+        }
+    .ToolBlockElement .align-center{
+        background-image: url(img/align-center.png);
+        }
+    .ToolBlockElement .align-right{
+        background-image: url(img/align-right.png);
+        }
+    .ToolBlockElement .float-left{
+        background-image: url(img/float-left.png);
+        }
+    .ToolBlockElement .float-right{
+        background-image: url(img/float-right.png);
+        }

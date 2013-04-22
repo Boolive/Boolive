@@ -188,6 +188,19 @@ h4{
     padding: 5px 0;
     clear: both;
     }
+.label-tool{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 11pt;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 4px 8px 4px 6px;
+    margin: 4px 0 0 0;
+    position: relative;
+    text-decoration: none;
+    color: #777;
+}
 .btn-tool{
     display: inline-block;
     vertical-align: top;
@@ -198,7 +211,6 @@ h4{
     background-position: center center;
     padding: 4px 8px 4px 6px;
     margin: 4px 0 0 0;
-    border-radius: 2px;
     position: relative;
     text-decoration: none;
     color: #555;
@@ -220,8 +232,16 @@ h4{
     height: 16px;
     }
 .btn-tool-square{
+    padding: 4px 8px 4px 6px;
     width: 12px;
+    border-radius: 2px;
     }
+.btn-tool-circle{
+    padding: 4px 4px 4px 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 0px;
+}
 
 .btn-group{
     display: inline-block;

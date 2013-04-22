@@ -1,18 +1,17 @@
 {
-    "value": "jquery.ui.RichTextToolbar.js",
+    "value": "Boolive.ToolRichText.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
-    "order": 7,
+    "order": 3,
     "children": {
         "title": {
-            "value": "Boolive.RichTextToolbar",
+            "value": "Boolive.ToolRichText",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
+            "value": "Логика панели инструментов на стороне клиента",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_hidden": true,
             "order": 2
