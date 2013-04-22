@@ -1,0 +1,19 @@
+.PageDescriptionEditor{
+    margin-bottom: 10px;
+}
+.PageDescriptionEditor .descriptionlink{
+       color: #111;
+       text-decoration: none;
+       }
+.PageDescriptionEditor .descriptionlink:hover{
+       text-decoration: underline;
+       }
+   .PageDescriptionEditor form textarea {
+       width: 98%;
+
+   }
+   .PageDescriptionEditor form div.error {
+       width: 98%;
+       color: #ff0c08;
+       font-size: 10px;
+   }

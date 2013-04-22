@@ -268,7 +268,7 @@ namespace Boolive
             if (is_writable($file)){
                 $content = file_get_contents($file);
                 // Прописывание базовой директории для mod_rewrite
-                $content = preg_replace('/\n[ \t]*RewriteEngine[ \t\S]*/u', "\n    RewriteEngine On".DIR_WEB, $content);
+                $content = preg_replace('/\n[ \t]*RewriteEngine[ \t\S]*/u', "\n    RewriteEngine On", $content);
                 $content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n    RewriteBase ".DIR_WEB, $content);
                 $fp = fopen($file, 'w');
                 fwrite($fp, $content);

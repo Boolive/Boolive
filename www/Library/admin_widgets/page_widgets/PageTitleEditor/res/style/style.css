@@ -1,0 +1,19 @@
+.PageTitleEditor{
+
+    }
+    .PageTitleEditor .titlelink{
+        color: #111;
+        text-decoration: none;
+        }
+    .PageTitleEditor .titlelink:hover{
+       text-decoration: underline;
+       }
+    .PageTitleEditor form input[type=text] {
+        width: 98%;
+
+    }
+    .PageTitleEditor form div.error {
+        width: 98%;
+        color: #ff0c08;
+        font-size: 10px;
+    }
