@@ -5,16 +5,18 @@
  */
 (function($, undefined) {
     $.widget("boolive.RichTextRule", $.boolive.Widget, {
-
+        // Исходная модель для сравнения изменений
+        _model_first: {},
         _model: {
             'width': 0,
-            'padding-left': 30,
-            'padding-right': 30,
+            'padding-left': 0,
+            'padding-right': 0,
             'margin-left': 0,
             'margin-right': 0,
             'text-indent': 0
         },
         _controls: {
+            rule: null,
             nums: null,
             pleft: null,
             pright: null,
@@ -22,12 +24,16 @@
             mright: null,
             client: null
         },
+        _offset: null,
+        _width: 0,
 
         _round: 1,
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
+            this._offset = this.element.offset();
+            this._width = this.element.outerWidth(true);
             this._controls.nums = this.element.find('.nums:first');
             this._controls.pleft = this.element.find('.pleft:first');
             this._controls.pright = this.element.find('.pright:first');
@@ -38,7 +44,7 @@
             this._model.width = this._controls.client.outerWidth(true);
             this._make_nums();
             //this._show();
-            this.gettingStyle();
+            this.gettingProperties();
             this.element.on('click', function(e){
                 e.preventDefault();
                 e.stopPropagation();
@@ -131,7 +137,7 @@
             }).on('mouseup'+namespace, function(e){
                 $(this).off(namespace);
                 resize_rect.hide();
-                self.sendingStyle();
+                self.sendingProperties();
                 e.preventDefault();
                 e.stopPropagation();
             });
@@ -149,8 +155,8 @@
             this._controls.pleft.css('width', this._model['padding-left']).attr('title', 'Поле слева '+this._model['padding-left']+'px');
             this._controls.pright.css('width', this._model['padding-right']).attr('title', 'Поле справа '+this._model['padding-right']+'px');
             this._controls.nums.css('left', this._model['padding-left']-1000);
-            this._controls.mleft.css('left', this._model['padding-left'] + this._model['margin-left']).attr('title', 'Отступ слева '+this._model['margin-left']+'px');
-            this._controls.mright.css('right', this._model['padding-right'] + this._model['margin-right']).attr('title', 'Отступ справа '+this._model['margin-right']+'px');
+//            this._controls.mleft.css('left', this._model['padding-left'] + this._model['margin-left']).attr('title', 'Отступ слева '+this._model['margin-left']+'px');
+//            this._controls.mright.css('right', this._model['padding-right'] + this._model['margin-right']).attr('title', 'Отступ справа '+this._model['margin-right']+'px');
             this._controls.tindent.css('left', this._model['padding-left'] + this._model['margin-left'] + this._model['text-indent']).attr('title', 'Отступ первой строки '+this._model['text-indent']+'px');
         },
 
@@ -225,41 +231,50 @@
         },
 
         call_setStateAfter: function(caller, state, changes){ //after
-            this.gettingStyle();
+            this.gettingProperties();
         },
 
-        gettingStyle: function(object){
-            var styles = this.callParents('getStyle');
-            if ($.isArray(styles)){
+        gettingProperties: function(object){
+            var info = this.callParents('getProperties');
+            if ($.isArray(info)){
                 var s, style;
-                for (s in styles){
-                    style = styles[s];
+                for (s in info){
+                    style = info[s]['element'].css(['padding-left', 'padding-right', 'margin-left', 'margin-right', 'text-indent']);
                     if ('padding-left' in style){
-                        this.set_pleft(parseInt(style['padding-left']));
+                        this.set_pleft(parseInt(style['padding-left'])||0);
                     }
                     if ('padding-right' in style){
-                        this.set_pright(parseInt(style['padding-right']));
+                        this.set_pright(parseInt(style['padding-right'])||0);
                     }
-                    if ('margin-left' in style){
-                        this.set_mleft(parseInt(style['margin-left']));
-                    }
-                    if ('margin-right' in style){
-                        this.set_mright(parseInt(style['margin-right']));
-                    }
+//                    if ('margin-left' in style){
+//                        this.set_mleft(parseInt(style['margin-left'])||0);
+//                    }
+//                    if ('margin-right' in style){
+//                        this.set_mright(parseInt(style['margin-right'])||0);
+//                    }
                     if ('text-indent' in style){
-                        this.set_tindent(parseInt(style['text-indent']));
+                        this.set_tindent(parseInt(style['text-indent'])||0);
                     }
+                    var offset = info[s]['element'].offset();
+                    var width = info[s]['element'].outerWidth();
+                    var left = offset.left-this._offset.left-19;
+                    var right = this._width-left-width;//-19;
+                    this.element.css({
+                        'margin-left': left-19+'px',
+                        'margin-right': right-19+'px'
+                    })
                 }
+                this.changes(this._model_first, this._model, true);
                 this._show();
             }
         },
 
-        sendingStyle: function(){
-            var style = $.extend({}, this._model);
+        sendingProperties: function(){
+            var style = this.changes(this._model_first, this._model, true);
             delete style['width'];
             var s;
             for (s in style) style[s] = style[s] + 'px';
-            this.callParents('setStyle', [style]);
+            this.callParents('setProperties', [{style:style}]);
         }
     })
 })(jQuery);
