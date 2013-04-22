@@ -30,7 +30,7 @@
             "order": 4
         },
         "margin-right": {
-            "value": "auto",
+            "value": "",
             "proto": "/Library/content_samples/Page/text/style/margin-right",
             "order": 5
         },
@@ -41,12 +41,12 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0",
+            "value": "",
             "proto": "/Library/content_samples/Page/text/style/margin-left",
             "order": 7
         },
         "text-align": {
-            "value": "center",
+            "value": "",
             "proto": "/Library/content_samples/Page/text/style/text-align",
             "order": 8
         },
@@ -61,7 +61,7 @@
             "order": 10
         },
         "text-indent": {
-            "value": "40px",
+            "value": "",
             "proto": "/Library/content_samples/Page/text/style/text-indent",
             "order": 11
         },

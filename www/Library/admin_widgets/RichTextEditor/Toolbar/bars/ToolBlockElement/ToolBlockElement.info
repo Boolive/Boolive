@@ -2,7 +2,7 @@
     "value": "ToolBlockElement.tpl",
     "is_file": true,
     "proto": "/Library/views/Widget",
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "value": "Блочный элемент",

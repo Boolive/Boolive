@@ -20,7 +20,6 @@
             var a = this.element.find('.titlelink');
             self._value = a.text();
             a.click(function(e){
-                console.log(self._form.hasClass('hide'));
                 if(!self._form.hasClass('hide')){
                     e.preventDefault();
                     $(input).val($(this).text());

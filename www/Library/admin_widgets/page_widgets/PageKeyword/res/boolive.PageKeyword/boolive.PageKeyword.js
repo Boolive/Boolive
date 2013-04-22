@@ -12,7 +12,6 @@
                 var result = self.callServer('Delete', {
                     object: self.options.object
                 }, function(result, textStatus, jqXHR){
-                    console.log(result);
                     if(result){
                       self.element.remove();
                     }

@@ -48,6 +48,15 @@ class RichTextEditor extends AutoWidgetList
         }else{
             $v['object'] = $this->_input['REQUEST']['object']->uri();
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
+            // Текущий фильтр для отображения меню фильтра
+            $filters = $this->filter->find(array(), 'name', true);
+            $v['filter'] = array();
+            foreach ($filters as $name => $f) {
+                if ($f instanceof \Library\basic\simple\Boolean\Boolean) {
+                    $v['filter'][$name] = $f->value();
+                }
+            }
+            $v['filter'] = json_encode($v['filter']);
             return parent::work($v);
         }
     }
@@ -73,8 +82,8 @@ class RichTextEditor extends AutoWidgetList
     protected function callSaveProperties($object, $properties)
     {
         // Фильтр
-        $filter = $object->filter;
         if (isset($properties['filter'])){
+            $filter = $this->filter;
             foreach ($properties['filter'] as $name => $value){
                 $s = $filter->{$name};
                 if ($s->isExist()){
@@ -83,7 +92,9 @@ class RichTextEditor extends AutoWidgetList
                     unset($filter->{$name});
                 }
             }
+            $filter->save();
         }
+
         // Стиль
         $style = $object->style;
         if ($style->isExist() && isset($properties['style'])){
@@ -98,5 +109,38 @@ class RichTextEditor extends AutoWidgetList
         }
         $object->save();
         return true;
+    }
+
+    protected function getList($cond = array())
+    {
+        // Выбор свойств отображаемого объекта с учётом текущего фильтра
+        $filters = $this->filter->find();
+        $any = array();
+        // Реальные объекты. У которых все признаки false
+        if ($filters['real']->value()) {
+            $any[] = array('all', array(
+                array('attr', 'is_hidden', '=', 0),
+                array('attr', 'is_delete', '=', 0)
+            ));
+        }
+        // Скрытые объекты
+        if ($filters['hidden']->value()) {
+            $any[] = array('attr', 'is_hidden', '!=', 0);
+        }else{
+            $cond['where'][] = array('attr', 'is_hidden', '=', 0);
+        }
+        // Удаленные объекты
+        if ($filters['deleted']->value()) {
+            $any[] = array('attr', 'is_delete', '!=', 0 );
+        }else{
+            $cond['where'][] = array('attr', 'is_delete', '=', 0);
+        }
+        // Никакие
+        if (empty($any)) {
+            return array();
+        } else {
+            $cond['where'][] = array('any', $any);
+        }
+        return parent::getList($cond);
     }
 }

@@ -86,6 +86,12 @@
         font-size: 11pt;
         padding: 3px;
     }
+    .RichTextEditor .content .hidden{
+        opacity: 0.5;
+        }
+    .RichTextEditor .content .deleted{
+        text-decoration: line-through;
+        }
     .RichTextEditor .content .selected{
         /*border-right: 4px solid #125bfc;*/
         /*background-color: #e6ecf2;*/

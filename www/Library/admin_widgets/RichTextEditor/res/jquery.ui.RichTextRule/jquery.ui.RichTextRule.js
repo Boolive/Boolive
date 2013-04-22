@@ -43,7 +43,6 @@
             this._controls.client = this.element.find('.client:first');
             this._model.width = this._controls.client.outerWidth(true);
             this._make_nums();
-            //this._show();
             this.gettingProperties();
             this.element.on('click', function(e){
                 e.preventDefault();
@@ -234,11 +233,20 @@
             this.gettingProperties();
         },
 
-        gettingProperties: function(object){
+        gettingProperties: function(){
             var info = this.callParents('getProperties');
             if ($.isArray(info)){
                 var s, style;
                 for (s in info){
+                    var offset = info[s]['element'].offset();
+                    var width = info[s]['element'].outerWidth();
+                    var left = offset.left-this._offset.left-19;
+                    var right = this._width-left-width;//-19;
+                    this.element.css({
+                        'margin-left': left-19+'px',
+                        'margin-right': right-19+'px'
+                    });
+
                     style = info[s]['element'].css(['padding-left', 'padding-right', 'margin-left', 'margin-right', 'text-indent']);
                     if ('padding-left' in style){
                         this.set_pleft(parseInt(style['padding-left'])||0);
@@ -255,14 +263,6 @@
                     if ('text-indent' in style){
                         this.set_tindent(parseInt(style['text-indent'])||0);
                     }
-                    var offset = info[s]['element'].offset();
-                    var width = info[s]['element'].outerWidth();
-                    var left = offset.left-this._offset.left-19;
-                    var right = this._width-left-width;//-19;
-                    this.element.css({
-                        'margin-left': left-19+'px',
-                        'margin-right': right-19+'px'
-                    })
                 }
                 this.changes(this._model_first, this._model, true);
                 this._show();

@@ -68,6 +68,19 @@
             "value": "0px",
             "is_default_class": false,
             "order": 11
+        },
+        "line-height": {
+            "is_default_value": true,
+            "value": "normal",
+            "proto": "/Library/content_samples/paragraphs/H2/style/line-height",
+            "order": 12
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/paragraphs/H2/style/description",
+            "is_hidden": true,
+            "order": 13
         }
     }
 }

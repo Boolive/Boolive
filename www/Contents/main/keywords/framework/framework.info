@@ -1,7 +1,7 @@
 {
     "value": "0",
     "proto": "/Library/content_samples/Keyword",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
             "is_default_value": true,

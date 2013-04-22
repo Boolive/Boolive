@@ -1,12 +1,12 @@
 .ToolRichText{
 
     }
-    .ToolRichText .view-real{
+    .ToolRichText .filter-real{
         background-image: url(img/view-real.png);
         }
-    .ToolRichText .view-hidden{
+    .ToolRichText .filter-hidden{
         background-image: url(img/view-hidden.png);
         }
-    .ToolRichText .view-deleted{
+    .ToolRichText .filter-deleted{
         background-image: url(img/view-deleted.png);
         }

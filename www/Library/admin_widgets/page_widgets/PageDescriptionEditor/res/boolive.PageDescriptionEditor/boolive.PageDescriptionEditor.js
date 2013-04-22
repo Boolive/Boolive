@@ -53,7 +53,6 @@
                 this._is_change = false;
                this.callParents('nochange', [this.options.object]);
             }
-            console.log(this._is_change);
         },
         call_save: function(e){
             var self=this;

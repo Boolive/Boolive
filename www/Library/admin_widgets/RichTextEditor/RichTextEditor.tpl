@@ -1,4 +1,4 @@
-<div class="RichTextEditor" data-p="RichTextEditor" data-o="<?=$v['object']?>"  data-v="<?php echo $v['view_uri'];?>">
+<div class="RichTextEditor" data-p="RichTextEditor" data-o="<?=$v['object']?>"  data-v="<?php echo $v['view_uri'];?>" data-filter="<?php echo $v['filter'];?>">
     <div class="tools" ><div class="body RichTextBG">
         <?php echo $v->Toolbar->string(); ?>
         <div class="hrule" data-p="RichTextRule">

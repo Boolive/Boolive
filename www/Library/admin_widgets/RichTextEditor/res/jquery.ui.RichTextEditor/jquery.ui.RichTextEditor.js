@@ -15,13 +15,14 @@
         _changes_cnt: 0,
         _save_inteval: null,
         _hide: true,
+        _filter: null,
 
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             this.call_program_show();
             var self = this;
-
+            this._filter = JSON.parse(this.element.attr('data-filter'));
             this._buttons['save'] = this.element.find('.save');
             this._content = this.element.children('.content').first();
             this._selected = [];
@@ -52,7 +53,7 @@
                 var sel = window.getSelection();
                 self.callChildren('keyup', [e, sel]);
 //                e.stopPropagation();
-            }).on('click', function(e){
+            }).on('click'+this.eventNamespace, function(e){
                 e.preventDefault();
                 e.stopPropagation();
             });
@@ -346,11 +347,7 @@
             if (!this._selected.length){
                 return [{
                     element: this._content,
-                    filter: {
-                        is_real: true,
-                        is_hidden: false,
-                        is_deleted: false
-                    }
+                    filter: this._filter
                 }];
             }
             return this.callChildren('getProperties');
@@ -362,6 +359,7 @@
          * @param properties
          */
         call_setProperties: function(caller, properties){
+            var self = this;
             if (_.isObject(properties)){
                 if (!this._selected.length){
                     // Установка и сохранение стиля страницы
@@ -369,6 +367,10 @@
                     this.callServer('saveProperties', {
                         object: this.options.object,
                         saveProperties: properties
+                    }, function(){
+                        if ('filter' in properties){
+                            self.load(self.element, 'replace', self.options.view, {object: self.options.object}, {url:'/'});
+                        }
                     });
                 }else{
                     // Установка стилей подчиенных (сами определят кому)

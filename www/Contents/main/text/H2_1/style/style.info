@@ -64,6 +64,28 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/H2/style/padding-right",
             "order": 10
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/H2/style/text-indent",
+            "is_delete": true,
+            "order": 11
+        },
+        "line-height": {
+            "is_default_value": true,
+            "value": "normal",
+            "proto": "/Library/content_samples/paragraphs/H2/style/line-height",
+            "is_delete": true,
+            "order": 12
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/paragraphs/H2/style/description",
+            "is_hidden": true,
+            "is_delete": true,
+            "order": 13
         }
     }
 }

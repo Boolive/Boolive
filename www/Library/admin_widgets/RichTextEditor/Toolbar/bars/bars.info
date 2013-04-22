@@ -5,11 +5,23 @@
     "is_default_class": false,
     "order": 5,
     "children": {
+        "title": {
+            "value": "Панели инструментов",
+            "proto": "/Library/views/Widget/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Коллекция панелей инструментов",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 2
+        },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 0,
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -26,18 +38,6 @@
                     "order": 2
                 }
             }
-        },
-        "title": {
-            "value": "Панели инструментов",
-            "proto": "/Library/views/Widget/title",
-            "is_hidden": true,
-            "order": 1
-        },
-        "description": {
-            "value": "Коллекция панелей инструментов",
-            "proto": "/Library/views/Widget/description",
-            "is_hidden": true,
-            "order": 2
         }
     }
 }

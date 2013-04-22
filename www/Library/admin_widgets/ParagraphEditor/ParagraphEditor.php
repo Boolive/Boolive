@@ -19,7 +19,7 @@ class ParagraphEditor extends Widget
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         // Отображаемый объект или над которым выполняется действие
-                        'object' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock'))->required(),
+                        'object' => Rule::entity(array('is', '/Library/content_samples/paragraphs/TextBlock')),
                         'call' => Rule::string(),
                         // Аргументы вызываемых методов (call)
                         'devide' => Rule::arrays(array(
@@ -233,6 +233,8 @@ class ParagraphEditor extends Widget
         $v['style'] = $obj->style->getStyle();
         $v['value'] = $obj->value();
         $v['uri'] = $obj->uri();
+        $v['is_hidden'] = $obj->isHidden(null, false);
+        $v['is_delete'] = $obj->isDelete(null, false);
         $v['proto'] = $obj->proto()? $obj->proto()->id() : null;
         return $v;
     }

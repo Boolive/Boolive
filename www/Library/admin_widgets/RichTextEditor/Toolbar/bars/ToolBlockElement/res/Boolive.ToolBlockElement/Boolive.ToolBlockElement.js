@@ -140,7 +140,6 @@
                             parent_w: element.parent().width(),
                             element_w: element.outerWidth()
                         };
-                        console.log(info);
                         if ((info.parent_w - info.element_w - info.left <= 1) && info.left > 0){
                             style['margin-left'] = 'auto';
                         }else
