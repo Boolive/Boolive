@@ -14,7 +14,7 @@ $config = array(
                 // Тип СУБД
                 'driver' => 'mysql',
                 // Имя базы данных
-                'dbname' => 'boolive2-git',
+                'dbname' => 'boolive2',
                 // Адрес сервера
                 'host' => 'localhost',
                 // Порт

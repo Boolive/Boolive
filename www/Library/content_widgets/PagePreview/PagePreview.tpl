@@ -5,4 +5,5 @@
         echo $item;
     }
 ?>
+    <a href="<?php echo $v['object_uri']?>">Далее</a>
 </div>

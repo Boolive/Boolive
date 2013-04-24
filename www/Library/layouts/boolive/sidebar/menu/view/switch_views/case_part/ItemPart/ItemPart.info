@@ -1,8 +1,1 @@
-{
-    "is_default_value": true,
-    "value": "view.tpl",
-    "is_file": true,
-    "proto": "/Library/views/Menu/view/switch_views/case_part/ItemPart",
-    "is_link": true,
-    "order": 5
-}
+{"is_default_value":true,"value":"view.tpl","is_file":true,"proto":"/Library/views/Menu/view/switch_views/case_part/ItemPart","is_link":true,"order":5}
