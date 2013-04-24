@@ -52,7 +52,7 @@ class SwitchViews extends Widget
     {
         if (!isset($this->_cases)){
             $this->_cases = $this->find(array(
-                //'where' => array('is', '/Library/views/SwitchCase')
+                'where' => array('is', '/Library/views/SwitchCase')
             ), null);
         }
         return $this->_cases;

@@ -65,18 +65,23 @@
             "order": 12
         },
         "margin-left": {
-            "value": "0px",
+            "value": "0",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
             "order": 13
         },
         "margin-right": {
-            "value": "40px",
+            "value": "0px",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
             "order": 14
         },
         "text-indent": {
-            "value": "0px",
+            "value": "50px",
             "order": 15
+        },
+        "font-size": {
+            "value": "",
+            "is_default_class": false,
+            "order": 16
         }
     }
 }

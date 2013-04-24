@@ -22,7 +22,11 @@ class ImageEditor extends Widget
                         'call' => Rule::string(),
                         'attrib' => Rule::arrays(Rule::string()),
                         // Аргументы вызываемых методов (call)
-                        'saveStyle' => Rule::arrays(Rule::string())
+                        'saveProperties' => Rule::arrays(array(
+                            //'proto' => Rule::entity(),
+                            'style' => Rule::arrays(Rule::string())
+                            )
+                        )
                     )
                 ),
                 'FILES' => Rule::arrays(array(
@@ -40,10 +44,10 @@ class ImageEditor extends Widget
     {
         if (!empty($this->_input['REQUEST']['call'])){
             // Редактирование стиля
-            if (isset($this->_input['REQUEST']['saveStyle'])){
-                return $this->callSaveStyle(
+            if (isset($this->_input['REQUEST']['saveProperties'])){
+                return $this->callSaveProperties(
                     $this->_input['REQUEST']['object'],
-                    $this->_input['REQUEST']['saveStyle']
+                    $this->_input['REQUEST']['saveProperties']
                 );
             }
             // Сохранение новой картинки
@@ -94,20 +98,20 @@ class ImageEditor extends Widget
     /**
      * Сохранение стиля объекта (если есть свойство style)
      * @param \Boolive\data\Entity $object Сохраняемый объект
-     * @param array $styles Свойства стиля
+     * @param array $properties Свойства стиля
      * @return mixed
      */
-    protected function callSaveStyle($object, $styles)
+    protected function callSaveProperties($object, $properties)
     {
         $style = $object->style;
-        if ($style->isExist()){
-            foreach ($styles as $name => $value){
+        if ($style->isExist() && isset($properties['style'])){
+            foreach ($properties['style'] as $name => $value){
                 $s = $style->{$name};
-                if ($s->isExist()){
+//                if ($s->isExist()){
                     $s->value($value);
-                }else{
-                    unset($style->{$name});
-                }
+//                }else{
+//                    unset($style->{$name});
+//                }
             }
             $style->save();
         }

@@ -12,14 +12,12 @@
             "order": 1
         },
         "width": {
-            "is_default_value": true,
-            "value": "",
+            "value": "255px",
             "proto": "/Library/content_samples/Image/style/width",
             "order": 2
         },
         "height": {
-            "is_default_value": true,
-            "value": "",
+            "value": "200px",
             "proto": "/Library/content_samples/Image/style/height",
             "order": 3
         },
@@ -30,8 +28,7 @@
             "order": 4
         },
         "margin-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0",
             "proto": "/Library/content_samples/Image/style/margin-right",
             "order": 5
         },
@@ -42,8 +39,7 @@
             "order": 6
         },
         "margin-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/Image/style/margin-left",
             "order": 7
         },
@@ -54,16 +50,37 @@
             "order": 8
         },
         "padding-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "40px",
             "proto": "/Library/content_samples/Image/style/padding-left",
             "order": 9
         },
         "padding-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/Image/style/padding-right",
             "order": 10
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/text-indent",
+            "order": 11
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для оформления одного объекта",
+            "proto": "/Library/content_samples/Image/style/description",
+            "is_hidden": true,
+            "order": 12
+        },
+        "display": {
+            "value": "block",
+            "is_default_class": false,
+            "order": 13
+        },
+        "float": {
+            "value": "right",
+            "is_default_class": false,
+            "order": 14
         }
     }
 }

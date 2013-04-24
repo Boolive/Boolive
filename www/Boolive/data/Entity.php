@@ -1423,7 +1423,7 @@ class Entity implements ITrace
         return (bool)Data::select(array(
             'select' => 1,
             'from' => array($this, 0),
-            'where' => array('is', $proto->key()),
+            'where' => array(array('is', $proto->key()), array('attr', 'is_delete', '>=', 0)),
             'limit' => array(0,1)
         ), null, null, false);
     }

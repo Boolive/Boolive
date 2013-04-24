@@ -7,6 +7,7 @@
     $.widget("boolive.ImageEditor", $.boolive.Widget, {
         _value: '',
         _resize_rect: null,
+        _properties: null,
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
@@ -54,16 +55,20 @@
                 var is_prop = true;
                 var namespace = '.resizer' + Math.random();
                 var dw, dh, w, h, left, top, pos;
+                var offset = {
+                    left: parseInt(self.element.css('padding-left')),
+                    top: parseInt(self.element.css('padding-top'))
+                };
 
                 self._resize_rect = $('<div class="resize"> </div>').css({
                     position:'absolute',
                     'z-index':1000,
                     //'background-color': 'rgba(187, 219, 250, 0.5)',
-                    top:img_rect.top,
+                    top:img_rect.top + offset.top,
                     border:'1px solid #006ad6',
                     width:width,
                     height:height,
-                    left:img_rect.left
+                    left:img_rect.left + offset.left
                 });
                 var resizetop = $('<div class="top"> </div>').appendTo(self._resize_rect);
                 var resizebottom = $('<div class="bottom"> </div>').appendTo(self._resize_rect);
@@ -84,20 +89,17 @@
 
                     self.element.width(self._resize_rect.width());
                     self.element.height(self._resize_rect.height());
-                    self.callServer('saveStyle', {
-                        saveStyle:{
-                            width:self._resize_rect.width() + 'px',
-                            height:self._resize_rect.height() + 'px'
-                        },
-                        object:self.options.object
-                    });
+                    self.call_setProperties({target: self._resize_rect, direct:'none'}, {style:{
+                        width:self._resize_rect.width() + 'px',
+                        height:self._resize_rect.height() + 'px'
+                    }});
                     //Чтоб разместить див на измененное изображение. Т.к. теперь он не удаляется
                     img_rect = self.element.offset();
                     width = self.element.width();
                     height = self.element.height();
                     self._resize_rect.css({
-                        left:img_rect.left,
-                        top:img_rect.top,
+                        left:img_rect.left + offset.left,
+                        top:img_rect.top + offset.top,
                         width:width,
                         height:height
                     });
@@ -128,10 +130,9 @@
                             width:w + 'px',
                             height:h + 'px'
                         });
-
                     }).on('mouseup' + namespace, function (e) {
-                            DocumentMouseUp.apply(this, [e]);
-                        });
+                        DocumentMouseUp.apply(this, [e]);
+                    });
                 });
                 resizebottomleft.on('mousedown' + this.eventNamespace, function (e) {
                     e.preventDefault();
@@ -160,7 +161,7 @@
                         self._resize_rect.css({
                             width:w + 'px',
                             height:h + 'px',
-                            left:left
+                            left:left + offset.left
                         });
                     }).on('mouseup' + namespace, function (e) {
                             DocumentMouseUp.apply(this, [e]);
@@ -197,8 +198,8 @@
                         self._resize_rect.css({
                             width:w + 'px',
                             height:h + 'px',
-                            left:left,
-                            top:top
+                            left:left + offset.left,
+                            top:top + offset.top
                         });
                     }).on('mouseup' + namespace, function (e) {
                             DocumentMouseUp.apply(this, [e]);
@@ -231,7 +232,7 @@
                         self._resize_rect.css({
                             width:w + 'px',
                             height:h + 'px',
-                            top:top
+                            top:top + offset.top
                         });
                     }).on('mouseup' + namespace, function (e) {
                             DocumentMouseUp.apply(this, [e]);
@@ -251,7 +252,7 @@
                         }
                         self._resize_rect.css({
                             height:h + 'px',
-                            top:top
+                            top:top + offset.top
                         });
                     }).on('mouseup' + namespace, function (e) {
                         DocumentMouseUp.apply(this, [e]);
@@ -299,7 +300,7 @@
                         }
                         self._resize_rect.css({
                             width:w + 'px',
-                            left:left
+                            left:left + offset.left
                         });
                     }).on('mouseup' + namespace, function(e) {
                             DocumentMouseUp.apply(this, [e]);
@@ -387,32 +388,58 @@
         },
 
         /**
-         * Возвращение стиля
+         * Возвращение свойств объекта
          * @return {*}
          */
-        call_getStyle: function(){
+        call_getProperties: function(){
             if (this.element.hasClass('selected')){
-                return this.element.css(["margin-left", "margin-right", "text-indent"]);
+                if (this._properties == null){
+//                    var properties = this.element.css(["margin-top", "margin-right", "margin-bottom", "margin-left",
+//                        "padding-top", "padding-right", "padding-bottom", "padding-left",
+//                        "position", "display", "top", "right", "bottom", "left", "width", "height"
+//                    ]);
+//                    if (properties['display'] == 'block' && properties['position']!='absolute'){
+//                        var pr = parseInt(this.element.parent().css('padding-right'));
+//                        if (this.element.parent().innerWidth() - this.element.outerWidth(true) - this.element.position().left - pr <= 2){
+//                            properties['margin-left'] = 'auto';
+//                        }else
+//                        if (this.element.parent().innerWidth() - this.element.outerWidth(true) - this.element.position().left*2 <= 2){
+//                            properties['margin-left'] = 'auto';
+//                            properties['margin-right'] = 'auto';
+//                        }else{
+//                            properties['margin-right'] = 'auto';
+//                        }
+//                    }
+                    this._properties = {
+                        element: this.element,
+                        tag: 'img'
+                    };
+                }
+                return this._properties;
             }
         },
 
+
         /**
-         * Установка стиля
+         * Установка свойств объекту
          * @param caller
-         * @param style
+         * @param properties
          */
-        call_setStyle: function(caller, style){
+        call_setProperties: function(caller, properties){
             if (this.element.hasClass('selected')){
-                if (!$.isEmptyObject(style)){
-                    this.element.css(style);
-                    this.callServer('saveStyle', {
+                if (_.isObject(properties)){
+                    if (_.isObject(properties.style)) this.element.css(properties.style);
+                    this._properties = _.extend(this._properties, properties);
+                    this.callServer('saveProperties', {
                         object: this.options.object,
-                        saveStyle: style
+                        saveProperties: properties
                     });
-                    //Если есть ресайзер его тоже подвинем
-                    $(this._resize_rect).remove();
-                    this._resize_rect=null;
-                    this._make_resizer();
+                    if (caller.target != this._resize_rect){
+                        //Если есть ресайзер его тоже подвинем
+                        $(this._resize_rect).remove();
+                        this._resize_rect=null;
+                        this._make_resizer();
+                    }
                 }
             }
         }

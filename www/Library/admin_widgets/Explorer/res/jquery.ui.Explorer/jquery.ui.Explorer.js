@@ -58,16 +58,24 @@
 
         call_changeFilter: function(caller, filter){
             var self = this;
-            this.reload({object: this.options.object, filter: filter}, function(){
-                self.init_sortable();
-            });
+            this.reload({object: this.options.object, filter: filter}, {
+                    'success': function(){
+                        self.init_sortable();
+                    },
+                    url: '/'
+                }
+            );
         },
 
         call_changeViewKind: function(caller, kind_name){
             var self = this;
-            this.reload({object: this.options.object, view_kind: kind_name}, function(){
-                self.init_sortable();
-            });
+            this.reload({object: this.options.object, view_kind: kind_name}, {
+                    'success': function(){
+                        self.init_sortable();
+                    },
+                    url: '/'
+                }
+            );
         }
     })
 })(jQuery, _);

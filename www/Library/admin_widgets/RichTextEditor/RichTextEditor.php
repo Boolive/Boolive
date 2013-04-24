@@ -18,7 +18,12 @@ class RichTextEditor extends AutoWidgetList
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->required(),
                         'call' => Rule::string()->default('')->required(),
-                        'saveStyle' => Rule::arrays(Rule::string())
+                        'saveProperties' => Rule::arrays(array(
+                            //'proto' => Rule::entity(),
+                            'filter' => Rule::arrays(Rule::bool()),
+                            'style' => Rule::arrays(Rule::string())
+                            )
+                        )
                     )
                 )
             )
@@ -33,31 +38,25 @@ class RichTextEditor extends AutoWidgetList
                 return $this->new_p();
             }else
             // Редактирование стиля
-            if (isset($this->_input['REQUEST']['saveStyle'])){
-                return $this->callSaveStyle(
+            if (isset($this->_input['REQUEST']['saveProperties'])){
+                return $this->callSaveProperties(
                     $this->_input['REQUEST']['object'],
-                    $this->_input['REQUEST']['saveStyle']
+                    $this->_input['REQUEST']['saveProperties']
                 );
             }
             return null;
         }else{
-            // Типы абзацев
-            $plist = Data::select(array(
-                'from' => array('/Library/content_samples/paragraphs', 1),
-                'where' => array(
-                    array('is', '/Library/content_samples/paragraphs/TextBlock'),
-                    array('attr', 'is_hidden', '=', false)
-                )
-            ));
-            $v['plist'] = array();
-            foreach ($plist as $p){
-                $v['plist'][] = array(
-                    'id' => $p->id(),
-                    'title' => $p->title->isExist()? $p->title->value() : $p->name()
-                );
-            }
             $v['object'] = $this->_input['REQUEST']['object']->uri();
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
+            // Текущий фильтр для отображения меню фильтра
+            $filters = $this->filter->find(array(), 'name', true);
+            $v['filter'] = array();
+            foreach ($filters as $name => $f) {
+                if ($f instanceof \Library\basic\simple\Boolean\Boolean) {
+                    $v['filter'][$name] = $f->value();
+                }
+            }
+            $v['filter'] = json_encode($v['filter']);
             return parent::work($v);
         }
     }
@@ -77,14 +76,29 @@ class RichTextEditor extends AutoWidgetList
     /**
      * Сохранение стиля объекта (если есть свойство style)
      * @param \Boolive\data\Entity $object Сохраняемый объект
-     * @param array $styles Свойства стиля
+     * @param array $properties Свойства стиля
      * @return mixed
      */
-    protected function callSaveStyle($object, $styles)
+    protected function callSaveProperties($object, $properties)
     {
+        // Фильтр
+        if (isset($properties['filter'])){
+            $filter = $this->filter;
+            foreach ($properties['filter'] as $name => $value){
+                $s = $filter->{$name};
+                if ($s->isExist()){
+                    $s->value($value);
+                }else{
+                    unset($filter->{$name});
+                }
+            }
+            $filter->save();
+        }
+
+        // Стиль
         $style = $object->style;
-        if ($style->isExist()){
-            foreach ($styles as $name => $value){
+        if ($style->isExist() && isset($properties['style'])){
+            foreach ($properties['style'] as $name => $value){
                 $s = $style->{$name};
                 if ($s->isExist()){
                     $s->value($value);
@@ -92,8 +106,41 @@ class RichTextEditor extends AutoWidgetList
                     unset($style->{$name});
                 }
             }
-            $style->save();
         }
+        $object->save();
         return true;
+    }
+
+    protected function getList($cond = array())
+    {
+        // Выбор свойств отображаемого объекта с учётом текущего фильтра
+        $filters = $this->filter->find();
+        $any = array();
+        // Реальные объекты. У которых все признаки false
+        if ($filters['real']->value()) {
+            $any[] = array('all', array(
+                array('attr', 'is_hidden', '=', 0),
+                array('attr', 'is_delete', '=', 0)
+            ));
+        }
+        // Скрытые объекты
+        if ($filters['hidden']->value()) {
+            $any[] = array('attr', 'is_hidden', '!=', 0);
+        }else{
+            $cond['where'][] = array('attr', 'is_hidden', '=', 0);
+        }
+        // Удаленные объекты
+        if ($filters['deleted']->value()) {
+            $any[] = array('attr', 'is_delete', '!=', 0 );
+        }else{
+            $cond['where'][] = array('attr', 'is_delete', '=', 0);
+        }
+        // Никакие
+        if (empty($any)) {
+            return array();
+        } else {
+            $cond['where'][] = array('any', $any);
+        }
+        return parent::getList($cond);
     }
 }

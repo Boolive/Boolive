@@ -29,7 +29,7 @@
             "order": 4
         },
         "margin-right": {
-            "value": "0px",
+            "value": "auto",
             "order": 5
         },
         "margin-bottom": {
@@ -39,7 +39,7 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0px",
+            "value": "0",
             "order": 7
         },
         "text-align": {
@@ -48,23 +48,21 @@
             "order": 8
         },
         "padding-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/views/Style/padding-left",
             "order": 9
         },
         "padding-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/views/Style/padding-right",
             "order": 10
         },
         "text-indent": {
-            "value": "60px",
+            "value": "50px",
             "order": 11
         },
         "line-height": {
-            "value": "normal",
+            "value": "1",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
             "order": 12
         },
@@ -74,6 +72,16 @@
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/description",
             "is_hidden": true,
             "order": 13
+        },
+        "font-size": {
+            "value": "",
+            "is_default_class": false,
+            "order": 14
+        },
+        "float": {
+            "value": "none",
+            "is_default_class": false,
+            "order": 15
         }
     }
 }

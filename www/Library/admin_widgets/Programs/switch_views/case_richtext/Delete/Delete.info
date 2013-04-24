@@ -1,1 +1,8 @@
-{"is_default_value":true,"value":"Delete.tpl","is_file":true,"proto":"/Library/admin_widgets/Programs/switch_views/case_default/Delete","is_link":true,"order":8}
+{
+    "is_default_value": true,
+    "value": "Delete.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Programs/switch_views/case_default/Delete",
+    "is_link": true,
+    "order": 8
+}

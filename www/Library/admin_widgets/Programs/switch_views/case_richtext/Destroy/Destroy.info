@@ -1,1 +1,8 @@
-{"is_default_value":true,"value":"Destroy.tpl","is_file":true,"proto":"/Library/admin_widgets/Destroy","is_link":true,"order":9}
+{
+    "is_default_value": true,
+    "value": "Destroy.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Destroy",
+    "is_link": true,
+    "order": 9
+}

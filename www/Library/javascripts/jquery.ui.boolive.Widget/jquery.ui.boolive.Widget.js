@@ -272,6 +272,41 @@
                 return str.toString().replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
             else
                 return str;
+        },
+
+        /**
+         * Возвращает объект разницу между объектами
+         * @param prev Первый объект
+         * @param now Второй объект
+         * @param replace_prev Признак, свойства второго объекта присвойить первому
+         * @returns {{}}
+         */
+        changes: function(prev, now, replace_prev){
+            replace_prev = replace_prev == true;
+            var changes = {};
+            for (var prop in now){
+                if (typeof prev[prop] != typeof now[prop]){
+                    changes[prop] = now[prop];
+                    if (replace_prev){
+                        prev[prop] = now[prop];
+                        if ($.isPlainObject(prev[prop])) prev[prop] = _.clone(prev[prop]);
+                    }
+
+                }else
+                if (prev[prop] !== now[prop]){
+                    // Если простой объект или массив, то проверяются различия в их свойствах
+                    if (($.isPlainObject(prev[prop]) && $.isPlainObject(now[prop])) || _.isArray(now[prop])){
+                        var c = this.changes(prev[prop], now[prop], replace_prev);
+                        if (!_.isEmpty(c)){
+                            changes[prop] = c;
+                        }
+                    }else{
+                        changes[prop] = now[prop];
+                        if (replace_prev) prev[prop] = now[prop];
+                    }
+                }
+            }
+            return changes;
         }
     });
 })(jQuery, _);

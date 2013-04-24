@@ -1,5 +1,6 @@
 {
     "value": "",
+    "is_hidden": true,
     "order": 3,
     "children": {
         "title": {

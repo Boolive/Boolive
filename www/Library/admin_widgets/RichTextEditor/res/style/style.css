@@ -86,13 +86,19 @@
         font-size: 11pt;
         padding: 3px;
     }
-    .RichTextEditor .selected{
+    .RichTextEditor .content .hidden{
+        opacity: 0.5;
+        }
+    .RichTextEditor .content .deleted{
+        text-decoration: line-through;
+        }
+    .RichTextEditor .content .selected{
         /*border-right: 4px solid #125bfc;*/
         /*background-color: #e6ecf2;*/
         /*border: 1px dashed #0079f2;*/
         /*background-color: #fafdff;*/
         /*box-shadow: 0 0 0px 5px #bbdbfa;*/
-        /*outline: 1px dashed #333;*/
+        outline: dashed 1px rgba(55, 55, 55, 0.25);
         /*animation: selection 10s 1;*/
         /*-webkit-animation: selection 5s 1;*/
 

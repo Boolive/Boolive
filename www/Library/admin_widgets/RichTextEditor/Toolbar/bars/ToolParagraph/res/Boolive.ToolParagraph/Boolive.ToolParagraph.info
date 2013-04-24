@@ -1,0 +1,27 @@
+{
+    "value": "Boolive.ToolParagraph.js",
+    "is_file": true,
+    "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Boolive.ToolParagraph",
+            "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Логика панели инструментов на стороне клиента",
+            "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
+            "is_link": true,
+            "order": 3
+        }
+    }
+}

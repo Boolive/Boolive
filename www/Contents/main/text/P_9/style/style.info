@@ -65,13 +65,11 @@
             "order": 10
         },
         "text-indent": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/paragraphs/Code/style/text-indent",
             "order": 11
         },
         "line-height": {
-            "is_default_value": true,
             "value": "normal",
             "proto": "/Library/content_samples/paragraphs/Code/style/line-height",
             "order": 12

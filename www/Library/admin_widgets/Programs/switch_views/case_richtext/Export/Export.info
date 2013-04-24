@@ -1,1 +1,8 @@
-{"is_default_value":true,"value":"Export.tpl","is_file":true,"proto":"/Library/admin_widgets/Programs/switch_views/case_default/Export","is_link":true,"order":11}
+{
+    "is_default_value": true,
+    "value": "Export.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Programs/switch_views/case_default/Export",
+    "is_link": true,
+    "order": 11
+}

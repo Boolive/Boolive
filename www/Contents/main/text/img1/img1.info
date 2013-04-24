@@ -2,7 +2,7 @@
     "value": "img1.jpg",
     "is_file": true,
     "proto": "/Library/content_samples/Image",
-    "order": 45,
+    "order": 7,
     "children": {
         "title": {
             "is_default_value": true,

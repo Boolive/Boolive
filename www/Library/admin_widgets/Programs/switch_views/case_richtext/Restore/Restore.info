@@ -1,1 +1,8 @@
-{"is_default_value":true,"value":"Restore.tpl","is_file":true,"proto":"/Library/admin_widgets/Programs/switch_views/case_default/Restore","is_link":true,"order":10}
+{
+    "is_default_value": true,
+    "value": "Restore.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Programs/switch_views/case_default/Restore",
+    "is_link": true,
+    "order": 10
+}

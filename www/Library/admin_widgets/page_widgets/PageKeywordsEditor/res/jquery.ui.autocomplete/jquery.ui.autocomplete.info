@@ -1,1 +1,23 @@
-{"is_default_value":true,"value":"jquery.ui.autocomplete.js","is_file":true,"proto":"/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete","is_link":true,"order":4,"children":{"title":{"is_default_value":true,"value":"jquery.ui.autocomplete","proto":"/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Эталон для всех скриптов на языке JavaScript","proto":"/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete/description","order":2}}}
+{
+    "is_default_value": true,
+    "value": "jquery.ui.autocomplete.js",
+    "is_file": true,
+    "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete",
+    "is_link": true,
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "jquery.ui.autocomplete",
+            "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Эталон для всех скриптов на языке JavaScript",
+            "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete/description",
+            "order": 2
+        }
+    }
+}
