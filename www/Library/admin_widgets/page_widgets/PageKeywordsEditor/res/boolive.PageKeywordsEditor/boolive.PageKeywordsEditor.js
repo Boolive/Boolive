@@ -35,7 +35,7 @@
             form.on('click',function(e) {
                 input.focus();
             });
-            
+
             self.element.find('.keywords').on('click',function(e) {
                 input.focus();
             });

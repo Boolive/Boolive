@@ -1,0 +1,26 @@
+.PageAuthorEditor{
+    margin-top: 5px;
+    margin-bottom: -2px;
+    }
+    .PageAuthorEditor .col1{
+        float: left;
+        width: 150px;
+        display: block;
+        padding: 5px 15px 5px 0;
+        }
+    .PageAuthorEditor .col2{
+        margin: 0 0 0 165px;
+        border-radius: 3px;
+        padding: 5px;
+        }
+    .PageAuthorEditor label{
+        font-size: 11pt;
+        color: #666;
+        }
+    .PageAuthorEditor .authorlink{
+        color: #111;
+        text-decoration: none;
+    }
+    .PageAuthorEditor .authorlink:hover {
+        text-decoration: underline;
+    }

@@ -29,6 +29,23 @@
             });
 
         },
+        /**
+         * Выделение объекта
+         */
+        call_setState: function(caller, state, changes){
+
+            if (caller.direct == 'children'){
+                if ($.isPlainObject(changes) && ('selected' in changes)){
+                    this.element.find('.main .selected').removeClass('selected');
+                    if (state.selected){
+                        var element = this.element;
+                        _.each(state.selected, function(s){
+                            element.find('.main [data-o="'+s+'"]').addClass('selected');
+                        });
+                    }
+                }
+            }
+        },
         call_change: function(caller, object){ //before
             this._buttons['save'].removeClass('btn-disable');
             this._changes[object] = true;
@@ -41,7 +58,5 @@
                 this._buttons['save'].addClass('btn-disable');
             }
         }
-
-
     });
   })(jQuery);

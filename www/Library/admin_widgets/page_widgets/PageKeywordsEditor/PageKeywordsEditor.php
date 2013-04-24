@@ -44,6 +44,7 @@ class PageKeywordsEditor extends AutoWidgetList
            }
            $v['object'] = $this->_input['REQUEST']['object']->uri();
            $v['value'] = $this->_input['REQUEST']['object']->value();
+           $v['title'] = $this->_input['REQUEST']['object']->title->value();
            return parent::work($v);
        }
         /**

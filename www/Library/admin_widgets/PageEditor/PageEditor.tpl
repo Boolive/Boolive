@@ -3,6 +3,7 @@
         <a class="btn btn-success btn-disable save" href="#">Сохранить</a>
         <a class="btn cancel" href="#">Отмена</a>
     </div>
+    <div class="main">
     <?php
 
         $list = $v['view']->arrays(\Boolive\values\Rule::string());
@@ -12,4 +13,5 @@
             }
         }
     ?>
+    </div>
 </div>

@@ -4,12 +4,16 @@
  *
  * @version 1.0
  */
-namespace Library\content_widgets\PagePreview\switch_views\case_text\Text;
+namespace Library\content_widgets\RichTextPreview;
 
 use Library\content_widgets\RichText\RichText;
 
-class Text extends RichText
+class RichTextPreview extends RichText
 {
+    public function work($v = array()){
+        return parent::work($v);
+    }
+
     protected function getList($cond = array())
     {
         return parent::getList(array(
