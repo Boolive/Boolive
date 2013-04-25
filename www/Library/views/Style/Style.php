@@ -19,11 +19,12 @@ class Style  extends Entity
     */
     public function getStyle()
     {
-        $style = $this->find();
+        $style = $this->find(array('where'=>array('attr', 'is_delete', '>=', '0')));
         unset($style['title']);
         $str = '';
         foreach($style as $st){
-            if ($st->value()!==''){
+            /** @var Entity $st */
+            if (!$st->isDelete(null, false) && $st->value()!==''){
                 $str.= $st->name().': '.$st->value().';';
             }
         }
