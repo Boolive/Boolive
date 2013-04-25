@@ -12,14 +12,11 @@
         _value: '',
         _is_change: false,
         _properties: null,
+        _selinfo: null,
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
-            // Коррекция пустого значения
-//            if (this.element.text()=='1'){
-//                this.element.context.childNodes[0].textContent = '1';
-//            }
             // Прототип отображаемого объекта
             if (!this.options.oject_proto){
                 this.options.oject_proto = this.element.attr('data-o-proto');
@@ -33,15 +30,125 @@
             });
         },
 
-        call_keydown: function(caller, e, selection){
-            if (!e.isPropagationStopped()){
-                var e1 = selection.anchorNode;
-                while (e1.nodeType!=1) e1 = e1.parentNode;
-                var e2 = selection.focusNode;
-                while (e2.nodeType!=1) e2 = e2.parentNode;
-                if (this.element.is(e1) || this.element.is(e2) ||
-                    this.element.has(e1).length || this.element.has(e2).length){
-                    this._keydown(e, selection);
+        /**
+         * Опредление попадания в область выделения
+         * @param caller
+         * @param selection Selection
+         * @param selinfo Object
+         * @returns {*}
+         */
+        call_selectionchange: function(caller, selection, selinfo){
+            this._selinfo = null;
+            // Проверка вхождения в область выделения
+            if (selection.isCollapsed){
+                if (selinfo.end == selinfo.start && (this.element[0] == selinfo.start || (this.element[0].compareDocumentPosition(selinfo.start) & Node.DOCUMENT_POSITION_CONTAINED_BY))){
+                    this._selinfo = {type: 'cursor'};
+                }
+            }else{
+                var left = this.element[0].compareDocumentPosition(selinfo.start);
+                var right = this.element[0].compareDocumentPosition(selinfo.end);
+                if ((left & Node.DOCUMENT_POSITION_CONTAINS)){
+                    if (selinfo.start.childNodes[selinfo.start_offset] === this.element[0]) this._selinfo = {type: 'is'};
+                }else
+                if ((right & Node.DOCUMENT_POSITION_CONTAINS)){
+                    if (selinfo.end.childNodes[selinfo.end_offset-1] === this.element[0]) this._selinfo = {type: 'is'};
+                }else
+                if ((left & Node.DOCUMENT_POSITION_CONTAINED_BY) && (right & Node.DOCUMENT_POSITION_CONTAINED_BY)){
+                    this._selinfo = {type: 'contain'};
+                }else
+                if ((left & Node.DOCUMENT_POSITION_PRECEDING) && (right & Node.DOCUMENT_POSITION_CONTAINED_BY) && selinfo.end_offset>0){
+                    this._selinfo = {type: 'left'};
+                }else
+                if ((left & Node.DOCUMENT_POSITION_CONTAINED_BY) && (right & Node.DOCUMENT_POSITION_FOLLOWING)&& selinfo.start_offset < selinfo.start.textContent.length){
+                    this._selinfo = {type: 'right'};
+                }else
+                if ((left & Node.DOCUMENT_POSITION_PRECEDING) && (right & Node.DOCUMENT_POSITION_FOLLOWING) && selinfo.end_offset>0 && selinfo.start_offset < selinfo.start.textContent.length){
+                    this._selinfo = {type: 'in'};
+                }
+            }
+            if (this._selinfo){
+                this.changes(this._selinfo, selinfo, true);
+                return this.options.object;
+            }
+            return false;
+        },
+
+        call_keydown: function(caller, e){
+            if (this._selinfo){
+                var self = this;
+                if (this._selinfo.type == 'in' || this._selinfo.type == 'is'){
+                    // Удаление абзаца
+                    this.callServer('delete', {object: this.options.object}, {
+                        success: function(result, textStatus, jqXHR){
+                            self.element.remove();
+                        }
+                    });
+//                    console.log('DELETE ALL'+this.options.object);
+                }else
+                if (this._selinfo.type == 'left'){
+                    // Удаление текста в конце
+                    var range = document.createRange();
+                    range.setStart(this.element[0].firstChild, 0);
+                    range.setEnd(this._selinfo.end, this._selinfo.end_offset);
+                    range.deleteContents();
+                    this._change(e);
+//                    console.log('DELETE LEFT '+this.options.object);
+                }else
+                if (this._selinfo.type == 'right'){
+                    // Удаление текста в начале
+                    var range = document.createRange();
+                    range.setStart(this._selinfo.start, this._selinfo.start_offset);
+                    var lastChild = this.element[0].lastChild;
+                    var lastChildoffset = lastChild.nodeType == Node.ELEMENT_NODE ? lastChild.childNodes.length : lastChild.textContent.length;
+                    range.setEnd(lastChild, lastChildoffset);
+                    range.deleteContents();
+                    this._change(e);
+//                    console.log('DELETE RIGHT'+this.options.object);
+                }else
+                if (this._selinfo.type == 'contain'){
+                    // Удаление текста в центре
+                    e.can_print = true;
+//                    console.log('DELETE CENTER'+this.options.object);
+                }else
+                if (this._selinfo.type == 'cursor'){
+                    // Курсор в абзаце. Учёт его позици и кода клавиши
+                    var node = this._selinfo.start;
+                    var offset = this._selinfo.start_offset;
+                    var text = {
+                        left: node.textContent.substring(0, offset),
+                        right: node.textContent.substring(offset)
+                    };
+                    // BACKSPACE в начале абзаца - соединение с предыдущим абзацем если есть
+                    if ((offset == 0 || (text.left.charCodeAt(0) == 8203 && text.left.length == 1)) && e.keyCode == 8){
+                        // Поиск родительского элемента узла в this
+                        while (!node.previousSibling && !this.element.is(node.parentNode)) node = node.parentNode;
+                        // Если первый, то отмена BACKSPACE. Действие соединения с предыдущим элементом
+                        if (!node.previousSibling && this.element.is(node.parentNode)){
+                            //e.preventDefault();
+//                            console.log('MERGE PREV '+this.options.object);
+                            this._merge(this.element.prev('[data-o]'), this.element);
+                        }
+                        e.can_print = false;
+                    }else
+                    // DELETE в конце абзаца - присоединение следущего абзаца если есть
+                    if ((offset == node.textContent.length || (text.right.charCodeAt(0) == 8203 && text.right.length == 1)) && e.keyCode == 46){
+                        // Поиск родительского элемента узла в this
+                        while (!node.nextSibling && !this.element.is(node.parentNode)) node = node.parentNode;
+                        // Если последний, то отмена DELETE. Действие соединения со следующим элементом
+                        if (!node.nextSibling && this.element.is(node.parentNode)){
+                            //e.preventDefault();
+//                            console.log('MERGE NEXT '+this.options.object);
+                            this._merge(this.element, this.element.next('[data-o]'));
+                        }
+                        e.can_print = false;
+                    }else
+                    // ENTER - разделение абзаца на два
+                    if (e.keyCode == 13 && !e.shiftKey){
+                        this._devide(window.getSelection());
+//                        console.log('DEVIDE '+this.options.object);
+                    }else{
+                        e.can_print = true;
+                    }
                 }
             }
         },
@@ -135,6 +242,12 @@
                     }, function(){
                         // Если сменился прототип, то перегрузить объект
                         if ('proto' in properties && properties.proto != self.options.oject_proto){
+//                            self.load(self.element, 'replace', self.options.view, {object:self.options.object}, {
+//                                url:'/',
+//                                success: function(){
+//                                    self._parent.callParents('refreshState');
+//                                }
+//                            });
                             self.callParents('reloadChild', [{object:self.options.object}, self]);
                         }
                     });
@@ -148,7 +261,6 @@
          * @return boolean
          */
         _isInSelection: function(selection){
-
             return this.element.is(selection.anchorNode.parentNode) || this.element.is(selection.focusNode.parentNode) ||
                    this.element.has(selection.anchorNode.parentNode).length || this.element.has(selection.focusNode.parentNode).length;
         },
@@ -186,16 +298,18 @@
                     e.preventDefault();
                     this._merge(this.element.prev('[data-o]'), this.element);
                 }
+                e.can_print = false;
             }else
             // DELETE
             if ((offset == node.textContent.length || (text.right.charCodeAt(0) == 8203 && text.right.length == 1)) && e.keyCode == 46 && !have_selection){
                 // Поиск родительского элемента узла в this
                 while (!node.nextSibling && !this.element.is(node.parentNode)) node = node.parentNode;
                 // Если последний, то отмена DELETE. Действие соединения со следующим элементом
-                if (!node.nextSibling && this.element.is(node.parentNode)){
+                if (!node.nextSibling && this.element.is(node.parentNode) && !have_selection){
                     e.preventDefault();
-                    this._merge(this.element, this.element.next('[data-o]'));
+                    //this._merge(this.element, this.element.next('[data-o]'));
                 }
+                e.can_print = false;
             }else
             // ENTER
             if (e.keyCode == 13 && !e.shiftKey){

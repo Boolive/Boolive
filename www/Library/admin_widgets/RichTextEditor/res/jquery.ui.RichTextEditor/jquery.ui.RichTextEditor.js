@@ -26,30 +26,46 @@
             this._buttons['save'] = this.element.find('.save');
             this._content = this.element.children('.content').first();
             this._selected = [];
-//            if (!this._content.children().length){
-//                this._content[0].childNodes[0].textContent = '';
-//            }
             // Отмена встроенного изменения размера
             document.execCommand("enableObjectResizing", false, false);
             // Изменения текстового выделения. Если не поддерживается, то обрабатываются mouseup, keyup
-            var selection_change = false;
+            var selectionchange = false;
             $(document).on('selectionchange'+this.eventNamespace, function(){
-                if (!selection_change) selection_change = true;
-                self._onselect();
+                if (!selectionchange) selectionchange = true;
+                self._selectionchange();
             });
             var selection_start = false;
             this._content.on('mousedown'+this.eventNamespace, function(e){
                 selection_start = true;
 //                e.stopPropagation();
             }).on('mouseup'+this.eventNamespace, function(e){
-                // Если выделение не обработано событием selectionchange и было начато выделение
-                if (!selection_change && selection_start){
+                // Если выделение не обработано событием selectionchange
+                if (!selectionchange && selection_start){
                     selection_start = false;
-                    self._onselect();
+                    self._selectionchange();
                     e.stopPropagation();
                 }
+            }).on('keydown'+this.eventNamespace, function(e){
+                // Arrows, Home, End, PgUp, PgDn, F1-F12
+                if ((e.keyCode >=33 && e.keyCode <=40) || (e.keyCode >=112 && e.keyCode <=123) ||
+                    // NumLk, Esc, CapsLk, Shift, Ctrl, Alt
+                    e.keyCode == 144 || e.keyCode == 27 || e.keyCode == 20 || e.keyCode == 16 || e.keyCode == 17 || e.keyCode == 18 ||
+                    // Del, Ins, Backspace
+                    e.keyCode == 46 || e.keyCode == 45 || e.keyCode == 46 || e.keyCode == 8 ||
+                    // ShortCuts
+                    e.ctrlKey || e.altKey)
+                {
+                    e.key_print = false;
+                }else{
+                    e.key_print = true;
+                }
+                self.callChildren('keydown', [e]);
+                if (!e.can_print){
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
             }).on('keyup'+this.eventNamespace, function(e){
-                if (!selection_change) self._onselect();
+                if (!selectionchange) self._selectionchange();
                 var sel = window.getSelection();
                 self.callChildren('keyup', [e, sel]);
 //                e.stopPropagation();
@@ -58,69 +74,13 @@
                 e.stopPropagation();
             });
 
-
             this._buttons['save'].on('click', function(e){
-                var sel = window.getSelection();
                 e.preventDefault();
                 e.stopPropagation();
                 self._save();
             });
-//            this.element.on('click', function(e){
-//
-//                if ($(e.target).is(self._content)){
-//
-//                    if (!_.size(self._children)){
-////                        var sel = window.getSelection();
-////                        var range = document.createRange();
-////                        var p = self._content[0];
-////                        range.setStart(p, 0);
-////                        range.collapse(true);
-////                        sel.removeAllRanges();
-////                        sel.addRange( range );
-//                        self.cursor_to(self._content.children()[0], 0);
-//                    }else{
-//                        var sel = window.getSelection();
-////                        if (sel.anchorNode.nodeType==1){
-////                            self.cursor_to(sel.anchorNode.lastChild, 0);
-////                        }else{
-////                        var x = self._content.children();
-////                        var a = self._content.children()[0].lastChild;
-//                        //while (a.nodeType!=3) a = a.lastChild;
-//                        //if (!a) a =
-//                        //self.cursor_to(a, 0/*a.textContent.length*/);
-////                        }
-////                        e.preventDefault();
-////                        e.stopPropagation();
-//                    }
-//                }
-//            });
 
-            this.element.on('keydown'+this.eventNamespace, function(e){
-                var sel = window.getSelection();
-                self.callChildren('keydown', [e, sel]);
-                if (e.keyCode == 13){
-                    var d = 5;
-                }
-                if (e.can_print === undefined){
-                    if (e.keyCode >=37 && e.keyCode <=40){
-
-                    }else
-                    if (e.keyCode >=112 && e.keyCode <=123){
-
-                    }else
-                    if (e.keyCode == 67 && e.ctrlKey){
-
-                    }else
-                    if (!_.size(self._children)){
-                        // Текст пустой. Добавим абзац
-                        if (!self.new_p) self.insert_new_p();
-                    }else
-                    /*if (!self._content.is(sel.anchorNode))*/{
-                        e.stopPropagation();
-                        e.preventDefault();
-                    }
-                }
-            }).on('blur'+this.eventNamespace+' paste'+this.eventNamespace, function(e){
+            this.element.on('blur'+this.eventNamespace+' paste'+this.eventNamespace, function(e){
                 var sel = window.getSelection();
                 self.callChildren(e.type, [e, sel]);
 
@@ -147,88 +107,61 @@
          * @returns {Array}
          * @private
          */
-        _onselect: function(){
-            this._selected = [];
-            var sel = window.getSelection();
-            if (sel.rangeCount>0){
-                var container = this._content[0];
-                var range = sel.getRangeAt(0);
-                var start = range.startContainer;
-                var end = range.endContainer;
-                if (!range.collapsed){
-                    // Поиск начального элемента
-                    if (start.nodeType == 3){
-                        // Если позиция в конце строки, то в выделение попадает следующий элемент
-                        if (range.startOffset == start.textContent.length){
-                            while (!start.nextSibling) start = start = start.parentNode;
-                            start = start.nextSibling;
-                        }
-                    }else
-                    if (start.nodeType == 1){
-                        // Если есть следующий элемент, то он начало выделения. Иначе поиск следующего в родителе
-                        if (range.startOffset < start.childNodes.length){
-                            start = start.childNodes[range.startOffset];
-                        }else{
-                            while (!start.nextSibling) start = start.parentNode;
-                            start = start.nextSibling;
-                        }
-                    }
-                    while (start.parentNode != container) start = start.parentNode;
-
-                    // Поиск конечного элемента
-                    end = range.endContainer;
-                    if (end.nodeType == 3){
-                        // Если позиция в конце строки, то в выделение попадает следующий элемент
-                        if (range.endOffset == 0){
-                            while (!end.previousSibling) end = end.parentNode;
-                            end = end.previousSibling;
-                        }
-                    }else
-                    if (end.nodeType == 1){
-                        // Если индекс элемента не нулевой, то он конец выделения. Иначе поиск предыдущего в родителе
-                        if (range.endOffset > 0){
-                            end = end.childNodes[range.endOffset-1];
-                        }else{
-                            while (!end.previousSibling) end = end.parentNode;
-                            end = end.previousSibling;
-                        }
-                    }
-                    while (end.parentNode != container) end = end.parentNode;
-
+        _selectionchange: function(){
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0 && !(this._content[0].compareDocumentPosition(selection.anchorNode) & Node.DOCUMENT_POSITION_CONTAINS)
+                && !(this._content[0].compareDocumentPosition(selection.focusNode) & Node.DOCUMENT_POSITION_CONTAINS)){
+                var info;
+//                console.log(selection);
+                // Определение начала и конца области выделения.
+                var anchor = selection.anchorNode;
+                if (selection.anchorNode.nodeType == Node.ELEMENT_NODE){
+                    anchor = selection.anchorOffset > 0 ? selection.anchorNode.childNodes[selection.anchorOffset-1] : selection.anchorNode.childNodes[0];
+                }
+                var focus = selection.focusNode;
+                if (selection.focusNode.nodeType == Node.ELEMENT_NODE){
+                    focus = selection.focusOffset > 0 ? selection.focusNode.childNodes[selection.focusOffset-1] : selection.focusNode.childNodes[0];
+                }
+                if (anchor.compareDocumentPosition(focus) & Node.DOCUMENT_POSITION_PRECEDING){
+                    info = {
+                        start: selection.focusNode,
+                        start_offset: selection.focusOffset,
+                        end: selection.anchorNode,
+                        end_offset: selection.anchorOffset
+                    };
                 }else{
-                    if (start.nodeType == 1){
-                        // Если есть следующий элемент, то он начало выделения. Иначе поиск следующего в родителе
-                        if (range.startOffset < start.childNodes.length){
-                            start = start.childNodes[range.startOffset];
-                        }else{
-                            while (!start.nextSibling) start = start.parentNode;
-                            start = start.nextSibling;
-                        }
-                    }
-                    while (start && start.parentNode != container) start = start.parentNode;
-                    end = start;
+                    info = {
+                        start: selection.anchorNode,
+                        start_offset: selection.anchorOffset,
+                        end: selection.focusNode,
+                        end_offset: selection.focusOffset
+                    };
                 }
-                // Получение списка объектов от начала до конца выделения
-                var start_index = _.indexOf(container.childNodes, start);
-                var end_index = _.indexOf(container.childNodes, end);
-                if (start_index!=-1 && end_index!=-1){
-                    var o;
-                    var i = start_index;
-                    for (i; i<=end_index; i++){
-                        if (o = $(container.childNodes[i]).attr('data-o')){
-                            this._selected.push(o);
-                        }
-                    }
+                if (/*info.start.nodeType == Node.ELEMENT_NODE && */info.start == this._content[0]){
+                    info.start = info.start.childNodes[info.start_offset];
                 }
+                if (/*info.end.nodeType == Node.ELEMENT_NODE*/info.end == this._content[0]){
+                    info.end = info.end.childNodes[info.end_offset-1];
+                }
+                if (info.start.compareDocumentPosition(info.end) & Node.DOCUMENT_POSITION_PRECEDING){
+                    var tmp = info.start;  info.start = info.end; info.end = tmp;
+                    tmp = info.start_offset; info.start_offset = info.end_offset; info.end_offset = tmp;
+                }
+                // Передача обработки keydown подчиненным
+                this._selected = this.callChildren('selectionchange', [selection, info]);
+                this._selected = _.filter(this._selected, function(uri){ return uri !== false; });
+                this.callParents('setState', {selected: this._selected});
+            }else{
+                this._selected = [];
             }
-            this.callParents('setState', {selected: this._selected});
+//            console.log(this._selected);
             return this._selected;
         },
 
         call_setState: function(caller, state, changes){
             if (caller.direct == 'children'){
                 if (_.indexOf(state.selected, this.option.object)){
-                    this._onselect();
+                    this._selectionchange();
                 }
             }
         },
@@ -334,7 +267,13 @@
          * @param child
          */
         call_reloadChild: function(caller, data, child){
-            this.load(child.element, 'replace', this.options.view+'/switch_views', data, {url:'/'});
+            var self = this;
+            this.load(child.element, 'replace', this.options.view+'/switch_views', data, {
+                url:'/',
+                success: function(){
+                    self.callParents('refreshState');
+                }
+            });
         },
 
         /**

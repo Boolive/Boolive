@@ -141,6 +141,16 @@ class RichTextEditor extends AutoWidgetList
         } else {
             $cond['where'][] = array('any', $any);
         }
-        return parent::getList($cond);
+        $list = parent::getList($cond);
+        if (isset($list['title'])) unset($list['title']);
+        if (isset($list['description'])) unset($list['description']);
+        if (isset($list['style'])) unset($list['style']);
+        if (empty($list)){
+            $p = Data::read('/Library/content_samples/paragraphs/P')->birth($this->_input['REQUEST']['object']);
+            $p->name('p', true);
+            $p->save();
+            $list[] = $p;
+        }
+        return $list;
     }
 }

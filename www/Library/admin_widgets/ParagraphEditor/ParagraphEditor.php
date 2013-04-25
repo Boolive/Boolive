@@ -8,6 +8,7 @@
  */
 namespace Library\admin_widgets\ParagraphEditor;
 
+use Boolive\data\Entity;
 use Library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\data\Data;
@@ -48,6 +49,10 @@ class ParagraphEditor extends Widget
             // Отправка атрибутов
             if ($this->_input['REQUEST']['call'] == 'load'){
                  return array('attrib'=>$this->callLoad());
+            }else
+            // Удаление
+            if ($this->_input['REQUEST']['call'] == 'delete'){
+                return $this->callDelete($this->_input['REQUEST']['object']);
             }else
             // Разделение
             if (isset($this->_input['REQUEST']['devide'])){
@@ -133,6 +138,19 @@ class ParagraphEditor extends Widget
             );
         }
         return $result;
+    }
+
+    /**
+     * Удаление объекта
+     * @param Entity $obj
+     * @return mixed
+     */
+    protected function callDelete($obj)
+    {
+        /** @var $obj \Boolive\data\Entity */
+        $obj->isDelete(true);
+        $obj->save();
+        return true;
     }
 
     /**

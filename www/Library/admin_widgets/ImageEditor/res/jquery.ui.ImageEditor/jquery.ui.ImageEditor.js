@@ -21,6 +21,7 @@
                 range.setStart(self.element[0].parentNode, index);
                 range.setEnd(self.element[0].parentNode, index+1);
                 range.collapse(true);
+                range.deleteContents()
                 sel.removeAllRanges();
                 sel.addRange( range );
                 // Отмена клика в редакторе, иначе сбросится выделение
@@ -354,17 +355,70 @@
         },
 
         /**
-         * В режиме contenteditable своё событие клавитауры не получить,
-         * поэтому реагируем на событие родителя
+         * Опредление попадания в область выделения
+         * @param caller
+         * @param selection
+         * @param selinfo
+         * @returns {*}
          */
-        call_keydown: function(caller, e, sel){
-        },
-
-        call_keyup: function(caller, e, sel){
-
+        call_selectionchange: function(caller, selection, selinfo){
+            this._selinfo = null;
+            // Проверка вхождения в область выделения
+            if (selection.isCollapsed){
+                if (selection.anchorNode.nodeType == Node.ELEMENT_NODE && selection.anchorNode.childNodes[selection.anchorOffset] === this.element[0]){
+                    this._selinfo = {type: 'is'};
+                }
+            }else{
+                var left = this.element[0].compareDocumentPosition(selinfo.start);
+                var right = this.element[0].compareDocumentPosition(selinfo.end);
+                if (selinfo.start === this.element[0]){
+                    this._selinfo = {type: 'is'};
+                }else
+                if (selinfo.end === this.element[0]){
+                    this._selinfo = {type: 'is'};
+                }else
+                if ((left & Node.DOCUMENT_POSITION_CONTAINED_BY) && (right & Node.DOCUMENT_POSITION_CONTAINED_BY)){
+                    this._selinfo = {type: 'contain'};
+                }else
+                if ((left & Node.DOCUMENT_POSITION_PRECEDING) && (right & Node.DOCUMENT_POSITION_FOLLOWING) && selinfo.end_offset>0 && selinfo.start_offset < selinfo.start.textContent.length){
+                    this._selinfo = {type: 'in'};
+                }
+            }
+            if (this._selinfo){
+                this.changes(this._selinfo, selinfo, true);
+                return this.options.object;
+            }
+            return false;
         },
 
         /**
+         * В режиме contenteditable своё событие клавитауры не получить,
+         * поэтому реагируем на событие родителя
+         */
+        call_keydown: function(caller, e){
+            if (this._selinfo){
+                var self = this;
+                // Enter
+                if (e.keyCode == 13){
+                    // @todo Создавать новый абзац после изображения
+                }else
+                // Печатаемые символы или Backspace || Delete
+                if (e.key_print || e.keyCode == 8 || e.keyCode == 46){
+                    // Удалить изображение!
+                    this.callServer('delete', {object: this.options.object}, {
+                        success: function(result, textStatus, jqXHR){
+                            self.element.remove();
+                        }
+                    });
+                }else{
+                    // Остальные клавиши допустимы и обрабатываются по умолчанию
+                    e.can_print = true;
+                }
+            }
+        },
+
+        /**
+         * Обработка установки выделения (фокуса) объекут
          * Выделение и отмена выделения
          */
         call_setState: function(caller, state, changes){ //after
@@ -394,22 +448,6 @@
         call_getProperties: function(){
             if (this.element.hasClass('selected')){
                 if (this._properties == null){
-//                    var properties = this.element.css(["margin-top", "margin-right", "margin-bottom", "margin-left",
-//                        "padding-top", "padding-right", "padding-bottom", "padding-left",
-//                        "position", "display", "top", "right", "bottom", "left", "width", "height"
-//                    ]);
-//                    if (properties['display'] == 'block' && properties['position']!='absolute'){
-//                        var pr = parseInt(this.element.parent().css('padding-right'));
-//                        if (this.element.parent().innerWidth() - this.element.outerWidth(true) - this.element.position().left - pr <= 2){
-//                            properties['margin-left'] = 'auto';
-//                        }else
-//                        if (this.element.parent().innerWidth() - this.element.outerWidth(true) - this.element.position().left*2 <= 2){
-//                            properties['margin-left'] = 'auto';
-//                            properties['margin-right'] = 'auto';
-//                        }else{
-//                            properties['margin-right'] = 'auto';
-//                        }
-//                    }
                     this._properties = {
                         element: this.element,
                         tag: 'img'

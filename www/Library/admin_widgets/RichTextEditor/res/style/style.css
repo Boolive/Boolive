@@ -91,6 +91,10 @@
         }
     .RichTextEditor .content .deleted{
         text-decoration: line-through;
+        color: #FF0000;
+        }
+    .RichTextEditor .content img.deleted{
+        outline: solid 1px #FF0000;
         }
     .RichTextEditor .content .selected{
         /*border-right: 4px solid #125bfc;*/

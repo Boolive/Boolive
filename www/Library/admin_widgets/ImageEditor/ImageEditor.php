@@ -8,6 +8,7 @@
  */
 namespace Library\admin_widgets\ImageEditor;
 
+use Boolive\data\Entity;
 use Library\views\Widget\Widget,
     Boolive\values\Rule;
 
@@ -54,11 +55,17 @@ class ImageEditor extends Widget
             if ($this->_input['REQUEST']['call'] == 'save'){
                 return $this->callSave();
             }
+            // Удаление
+            if ($this->_input['REQUEST']['call'] == 'delete'){
+                return $this->callDelete($this->_input['REQUEST']['object']);
+            }
             return null;
         }else{
             $v['file'] = $this->_input['REQUEST']['object']->file();
             $v['object'] = $this->_input['REQUEST']['object']->uri();
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
+            $v['is_hidden'] = $this->_input['REQUEST']['object']->isHidden(null, false);
+            $v['is_delete'] = $this->_input['REQUEST']['object']->isDelete(null, false);
             return parent::work($v);
         }
 
@@ -129,5 +136,18 @@ class ImageEditor extends Widget
             'file' => $obj->file(),
         );
         return $v;
+    }
+
+    /**
+     * Удаление объекта
+     * @param Entity $obj
+     * @return mixed
+     */
+    protected function callDelete($obj)
+    {
+        /** @var $obj \Boolive\data\Entity */
+        $obj->isDelete(true);
+        $obj->save();
+        return true;
     }
 }
