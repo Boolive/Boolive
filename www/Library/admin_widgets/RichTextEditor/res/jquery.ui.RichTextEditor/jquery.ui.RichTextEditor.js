@@ -83,10 +83,11 @@
             this.element.on('blur'+this.eventNamespace+' paste'+this.eventNamespace, function(e){
                 var sel = window.getSelection();
                 self.callChildren(e.type, [e, sel]);
-
             }).on('cut'+this.eventNamespace, function(e){
                 e.preventDefault();
-            });
+            }).on('paste'+this.eventNamespace, function(e){
+                e.preventDefault();
+            })
         },
 
         _destroy: function(){

@@ -76,39 +76,41 @@
         call_keydown: function(caller, e){
             if (this._selinfo){
                 var self = this;
-                if (this._selinfo.type == 'in' || this._selinfo.type == 'is'){
-                    // Удаление абзаца
-                    this.callServer('delete', {object: this.options.object}, {
-                        success: function(result, textStatus, jqXHR){
-                            self.element.remove();
-                        }
-                    });
-//                    console.log('DELETE ALL'+this.options.object);
-                }else
-                if (this._selinfo.type == 'left'){
-                    // Удаление текста в конце
-                    var range = document.createRange();
-                    range.setStart(this.element[0].firstChild, 0);
-                    range.setEnd(this._selinfo.end, this._selinfo.end_offset);
-                    range.deleteContents();
-                    this._change(e);
-//                    console.log('DELETE LEFT '+this.options.object);
-                }else
-                if (this._selinfo.type == 'right'){
-                    // Удаление текста в начале
-                    var range = document.createRange();
-                    range.setStart(this._selinfo.start, this._selinfo.start_offset);
-                    var lastChild = this.element[0].lastChild;
-                    var lastChildoffset = lastChild.nodeType == Node.ELEMENT_NODE ? lastChild.childNodes.length : lastChild.textContent.length;
-                    range.setEnd(lastChild, lastChildoffset);
-                    range.deleteContents();
-                    this._change(e);
-//                    console.log('DELETE RIGHT'+this.options.object);
-                }else
-                if (this._selinfo.type == 'contain'){
-                    // Удаление текста в центре
-                    e.can_print = true;
-//                    console.log('DELETE CENTER'+this.options.object);
+                if (e.key_print){
+                    if (this._selinfo.type == 'in' || this._selinfo.type == 'is'){
+                        // Удаление абзаца
+                        this.callServer('delete', {object: this.options.object}, {
+                            success: function(result, textStatus, jqXHR){
+                                self.element.remove();
+                            }
+                        });
+    //                    console.log('DELETE ALL'+this.options.object);
+                    }else
+                    if (this._selinfo.type == 'left'){
+                        // Удаление текста в конце
+                        var range = document.createRange();
+                        range.setStart(this.element[0].firstChild, 0);
+                        range.setEnd(this._selinfo.end, this._selinfo.end_offset);
+                        range.deleteContents();
+                        this._change(e);
+    //                    console.log('DELETE LEFT '+this.options.object);
+                    }else
+                    if (this._selinfo.type == 'right'){
+                        // Удаление текста в начале
+                        var range = document.createRange();
+                        range.setStart(this._selinfo.start, this._selinfo.start_offset);
+                        var lastChild = this.element[0].lastChild;
+                        var lastChildoffset = lastChild.nodeType == Node.ELEMENT_NODE ? lastChild.childNodes.length : lastChild.textContent.length;
+                        range.setEnd(lastChild, lastChildoffset);
+                        range.deleteContents();
+                        this._change(e);
+    //                    console.log('DELETE RIGHT'+this.options.object);
+                    }//else
+                    //if (this._selinfo.type == 'contain'){
+                        // Удаление текста в центре
+                        e.can_print = true;
+    //                    console.log('DELETE CENTER'+this.options.object);
+                    //}
                 }else
                 if (this._selinfo.type == 'cursor'){
                     // Курсор в абзаце. Учёт его позици и кода клавиши
@@ -147,8 +149,12 @@
                         this._devide(window.getSelection());
 //                        console.log('DEVIDE '+this.options.object);
                     }else{
+                        // Ввод/удаление символов
                         e.can_print = true;
                     }
+                }else{
+                    // Непечатаемые клавиши для выделенного текста
+                    e.can_print = true;
                 }
             }
         },
