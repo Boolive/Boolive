@@ -1,0 +1,19 @@
+{
+    "value": "",
+    "proto": "/Library/basic/simple/Object",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Логин",
+            "proto": "/Library/basic/simple/Email/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Имя пользователя",
+            "proto": "/Library/basic/simple/Email/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

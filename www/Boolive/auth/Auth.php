@@ -20,7 +20,7 @@ class Auth
     const GROUP_GUEST = '/Members/guests';
     /** Группа зарегистрированных */
     const GROUP_REGISTERED = '/Members/registered';
-    /** @var \Library\access\Member\Member Текущий пользователь */
+    /** @var \Library\access\User\User Текущий пользователь */
     static private $user;
 
     /**
@@ -102,6 +102,11 @@ class Auth
     {
         $duration = max(0, min($duration, 3000000)); // не больше месяца (примерно)
         $hash = self::$user->value(null, true);
+        // Запомнить hash
+        if (!$hash){
+            self::$user->value($hash = self::getUniqHash());
+            self::$user->save(false, false, $error, false);
+        }
         // Запомнить время визита (не чаще раза за 5 минут)
         if (self::$user->isExist() && (self::$user->visit_time->value() < (time()-300))){
             // Обновление времени визита

@@ -19,11 +19,11 @@ class Deny extends Entity
         $ids = array();
         $objects = $this->find(array(
             'where' => array(
-                array('attr', 'is_link', '=', 1)
+                array('attr', 'is_link', '>', 0)
             )
         ));
         foreach ($objects as $o){
-            $ids[] = $o->linked()->id();
+            $ids[] = $o->proto()->id();
         }
         if ($ids){
             return array('not', array('of', $ids));

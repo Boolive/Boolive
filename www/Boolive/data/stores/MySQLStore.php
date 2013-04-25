@@ -1146,7 +1146,7 @@ class MySQLStore extends Entity
                             }
                             if (sizeof($c)>0){
                                 $of = rtrim(str_repeat('?,', sizeof($c)), ',');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id`=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c, $c);
                             }else{

@@ -18,12 +18,13 @@ class object extends Entity
         if ($this->check()){
 
             $user = Data::select(array(
-                'from' => array('/Members', 5),
+                'from' => array('/Members'),
                 'where' => array(
                     array('attr', 'is_link', '=', '0'),
-                    array('child', 'email', array(
-                        array('attr', 'value', '=', $this->email->value())
-                    )),
+                    array('attr', 'name', '=', $this->name->value()),
+//                    array('child', 'email', array(
+//                        array('attr', 'value', '=', $this->email->value())
+//                    )),
                     array('child', 'passw', array(
                         array('attr', 'value', '=', Auth::getHash($this->passw->value()))
                     )),
