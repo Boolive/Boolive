@@ -18,6 +18,7 @@
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 self.callServer('restore', {object: self.options.object}, function(result, textStatus, jqXHR){
+                    self.callParents('refreshState');
                     // Вход в родительский объект
                     history.back();
                 });

@@ -321,6 +321,11 @@
             return this._state;
         },
 
+        call_refreshState: function(){
+            this.callChildren('setState', [this._state, {selected: true}]);
+            this.callChildren('setStateAfter', [this._state, {selected: true}]);
+        },
+
         /**
          * Открытие окна
          * @param settings

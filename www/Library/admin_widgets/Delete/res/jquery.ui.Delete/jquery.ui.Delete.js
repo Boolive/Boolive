@@ -23,6 +23,7 @@
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 self.callServer('delete', {object: self.options.object}, function(result, textStatus, jqXHR){
+                    self.callParents('refreshState');
                     // Вход в родительский объект
                     history.back();
 //                    self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
