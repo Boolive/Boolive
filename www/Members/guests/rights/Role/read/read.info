@@ -1,0 +1,15 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/read",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Права на чтение",
+            "proto": "/Library/access/Role/read/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}
