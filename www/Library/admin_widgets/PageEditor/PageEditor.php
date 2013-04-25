@@ -7,13 +7,18 @@
  */
 namespace Library\admin_widgets\PageEditor;
 
+use Boolive\data\Entity;
 use Library\views\AutoWidgetList\AutoWidgetList;
 
 class PageEditor extends AutoWidgetList
 {
+
+
     public function work($v = array())
     {
         $v['object'] = $this->_input['REQUEST']['object']->uri();
         return parent::work($v);
     }
+
+
 }

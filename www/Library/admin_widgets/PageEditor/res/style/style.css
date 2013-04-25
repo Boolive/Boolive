@@ -1,19 +1,20 @@
 .PageEditor{
-        margin-top: 32px;
     }
     .PageEditor .buttons{
         margin: 10px;
         text-align: right;
-        width: 100%;
+        margin-right: 2px;
     }
     .PageEditor .item{
         display: block;
         overflow: hidden;
         width: 100%;
         padding: 0 0;
+        margin: 5px;
         color: #111;
         min-height: 38px;
         height: auto;
 
 
-    }
+        }
+

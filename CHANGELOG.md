@@ -38,7 +38,7 @@ Version 2.0 work in progress
 - new #89: Added objects filter to the Admin Explorer widget (polina Putrolaynen)
 - new #91: Multiple selection of text objects in the Richtext editor (VladimirShestakov)
 - new #92: When object has no properties the word "empty" is shown (polina Putrolaynen)
-- new #93: Added Page Editor widget with additing of title and keywords (polina Putrolaynen)
+- new #93: Added Page Editor widget (polina Putrolaynen)
 - new #95: View linked object in the Explorer (VladimirShestakov)
 - new #96: Added method to destroying objects. And added widget "Destroy" in the admin panel (VladimirShestakov)
 - new #119: Added ToolBar with ToolParagraph, ToolBlockElement and ToolRichText (VladimirShestakov)

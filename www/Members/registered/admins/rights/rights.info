@@ -1,15 +1,1 @@
-{
-    "is_default_value": true,
-    "value": "",
-    "proto": "/Library/access/Group/rights",
-    "order": 5,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Права доступа",
-            "proto": "/Library/access/Group/rights/title",
-            "is_hidden": true,
-            "order": 1
-        }
-    }
-}
+{"is_default_value":true,"value":"","proto":"/Library/access/Group/rights","order":5,"children":{"title":{"is_default_value":true,"value":"Права доступа","proto":"/Library/access/Group/rights/title","is_hidden":true,"order":1}}}

@@ -5,6 +5,7 @@
 	margin: 10px 0px 15px 0;
 	padding: 15px 0 25px 0;
 	background: #FFF;
+    overflow: hidden;
 	}
     .post h1 {
         line-height: normal;

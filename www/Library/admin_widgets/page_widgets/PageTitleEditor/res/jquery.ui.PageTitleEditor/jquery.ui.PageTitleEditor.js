@@ -11,33 +11,8 @@
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
-            if(self._form==null){
-                self._form = $('<form method="POST" action=""></form>');
-                var input = $('<input type="text" class="title" name="Page[title]" value="">');
-                var obj = $('<input type="hidden" name="object" value="">');
-                var error = $('<div class="error"></div>');
-            }
-            var a = this.element.find('.titlelink');
-            self._value = a.text();
-            a.click(function(e){
-                if(!self._form.hasClass('hide')){
-                    e.preventDefault();
-                    $(input).val($(this).text());
-                    $(obj).val(self.options.object);
-                    $(self._form).append(obj);
-                    $(self._form).append(input);
-                    $(self._form).append(error);
-                    $(this).parent().append(self._form);
-                    $(this).addClass('hide');
-
-                }else{
-                    e.preventDefault();
-                    $(this).addClass('hide');
-                    self._form.removeClass('hide');
-                }
-
-            });
-
+            self._form = self.element.find('.form_title');
+            self._value = self._form.find('.title').val();
             self._form.on('keyup', '.title[type=text]', function(e) {
                 if(self._form.find('.title[type=text]').val()!=''){
                     self._change(e);
@@ -68,18 +43,13 @@
                         }
                     }else{
                         self._form.find('div.error').text('');
-                        self.element.find('a.titlelink').text(responseText.out.title);
-                        self.element.find('a.titlelink').removeClass('hide');
-                        self._form.addClass('hide');
+                        self.element.find('.title').text(responseText.out.title);
                     }
                 }
             });
         },
         call_cancel: function(e){
-            if(!this._form.hasClass('hide') &&  this.element.has('form').get(0)){
-                this._form.addClass('hide');
-            }
-            this.element.find('a.titlelink').removeClass('hide').text(this._value);
+            this.element.find('.title').val(this._value);
         }
     });
 })(jQuery);

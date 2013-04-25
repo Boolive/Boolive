@@ -1,18 +1,33 @@
 .PageKeywordsEditor{
 
     }
+    .PageKeywordsEditor .col1{
+        float: left;
+        width: 150px;
+        display: block;
+        padding: 5px 15px 5px 0;
+        }
+    .PageKeywordsEditor .col2{
+        margin: 0 0 0 165px;
+        border-radius: 3px;
+        padding: 5px;
+        }
     .PageKeywordsEditor .keywords{
         width: 98%;
         height: auto;
         border: 1px solid;
-        border-color: #CCE6FF;
+        border-color: #E0E0E0;
+        border-radius: 3px;
         padding: 5px;
-        padding-bottom: 10px;
         }
+        .PageKeywordsEditor label{
+            font-size: 11pt;
+            color: #666;
+            }
         .PageKeywordsEditor .keywords .old{
             display: inline;
 
-        }
+            }
         .PageKeywordsEditor .keywords .value{
             border: 0px;
             margin-top: 4px;
