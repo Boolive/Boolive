@@ -48,7 +48,7 @@
             "order": 7
         },
         "text-align": {
-            "value": "center",
+            "value": "left",
             "proto": "/Library/content_samples/paragraphs/H2/style/text-align",
             "order": 8
         },

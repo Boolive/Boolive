@@ -30,8 +30,7 @@
             "order": 4
         },
         "margin-right": {
-            "is_default_value": true,
-            "value": "",
+            "value": "auto",
             "proto": "/Library/content_samples/paragraphs/H3/style/margin-right",
             "order": 5
         },
@@ -42,8 +41,7 @@
             "order": 6
         },
         "margin-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0",
             "proto": "/Library/content_samples/paragraphs/H3/style/margin-left",
             "order": 7
         },
@@ -81,6 +79,11 @@
             "proto": "/Library/content_samples/paragraphs/H3/style/description",
             "is_hidden": true,
             "order": 13
+        },
+        "float": {
+            "value": "none",
+            "is_default_class": false,
+            "order": 14
         }
     }
 }

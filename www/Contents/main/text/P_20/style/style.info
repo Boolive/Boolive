@@ -43,7 +43,7 @@
             "order": 6
         },
         "text-align": {
-            "value": "left",
+            "value": "right",
             "proto": "/Library/content_samples/paragraphs/P/style/text-align",
             "order": 8
         },
@@ -58,12 +58,12 @@
             "order": 10
         },
         "margin-left": {
-            "value": "0px",
+            "value": "auto",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
             "order": 13
         },
         "margin-right": {
-            "value": "0px",
+            "value": "auto",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
             "order": 14
         },

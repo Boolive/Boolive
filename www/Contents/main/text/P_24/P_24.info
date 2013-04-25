@@ -1,14 +1,15 @@
 {
-    "value": "г. Екатеринбург, ул Ленина, дом 1, офис 999",
+    "value": "иерархического",
     "proto": "/Library/content_samples/paragraphs/P",
-    "order": 2,
+    "is_delete": true,
+    "order": 11,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
-            "order": 2
+            "order": 1
         }
     }
 }

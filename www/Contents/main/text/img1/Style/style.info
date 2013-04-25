@@ -12,7 +12,7 @@
             "order": 1
         },
         "width": {
-            "value": "255px",
+            "value": "259px",
             "proto": "/Library/content_samples/Image/style/width",
             "order": 2
         },
@@ -39,7 +39,7 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0px",
+            "value": "0",
             "proto": "/Library/content_samples/Image/style/margin-left",
             "order": 7
         },
@@ -50,7 +50,7 @@
             "order": 8
         },
         "padding-left": {
-            "value": "40px",
+            "value": "20px",
             "proto": "/Library/content_samples/Image/style/padding-left",
             "order": 9
         },
@@ -60,8 +60,7 @@
             "order": 10
         },
         "text-indent": {
-            "is_default_value": true,
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/Image/style/text-indent",
             "order": 11
         },

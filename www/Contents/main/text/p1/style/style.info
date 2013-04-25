@@ -39,11 +39,11 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0",
+            "value": "auto",
             "order": 7
         },
         "text-align": {
-            "value": "right",
+            "value": "left",
             "proto": "/Library/views/Style/text-align",
             "order": 8
         },
@@ -78,7 +78,7 @@
             "order": 14
         },
         "font-size": {
-            "value": "9pt",
+            "value": "",
             "is_default_class": false,
             "order": 15
         },

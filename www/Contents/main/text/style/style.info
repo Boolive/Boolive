@@ -61,7 +61,7 @@
             "order": 10
         },
         "text-indent": {
-            "value": "",
+            "value": "0px",
             "proto": "/Library/content_samples/Page/text/style/text-indent",
             "order": 11
         },

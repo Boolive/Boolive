@@ -39,7 +39,7 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0",
+            "value": "auto",
             "order": 7
         },
         "text-align": {
