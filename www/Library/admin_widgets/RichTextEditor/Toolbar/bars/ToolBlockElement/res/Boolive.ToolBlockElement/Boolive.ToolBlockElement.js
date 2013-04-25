@@ -140,10 +140,10 @@
                             parent_w: element.parent().width(),
                             element_w: element.outerWidth()
                         };
-                        if ((info.parent_w - info.element_w - info.left <= 1) && info.left > 0){
+                        if ((info.parent_w - info.element_w - info.left < 1) && info.left > 1){
                             style['margin-left'] = 'auto';
                         }else
-                        if ((info.parent_w - info.element_w - info.left*2 <= 1) && info.left > 0){
+                        if ((info.parent_w - info.element_w - info.left*2 < 1) && info.left > 1){
                             style['margin-left'] = 'auto';
                             style['margin-right'] = 'auto';
                         }else{
