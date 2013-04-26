@@ -61,27 +61,27 @@
             "proto": "/Library/content_samples/Image/style/padding-right",
             "order": 10
         },
-        "display": {
-            "value": "block",
-            "order": 11
-        },
         "text-indent": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/text-indent",
             "order": 11
         },
+        "float": {
+            "value": "left",
+            "is_default_class": false,
+            "order": 12
+        },
         "description": {
             "is_default_value": true,
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/Image/style/description",
             "is_hidden": true,
-            "order": 12
+            "order": 13
         },
-        "float": {
-            "value": "left",
-            "is_default_class": false,
-            "order": 12
+        "display": {
+            "value": "block",
+            "order": 14
         }
     }
 }

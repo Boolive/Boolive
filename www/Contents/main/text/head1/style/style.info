@@ -58,7 +58,7 @@
             "order": 10
         },
         "text-indent": {
-            "value": "50px",
+            "value": "0px",
             "order": 11
         },
         "line-height": {

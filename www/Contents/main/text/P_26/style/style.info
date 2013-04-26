@@ -65,6 +65,27 @@
             "value": "normal",
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
             "order": 12
+        },
+        "margin-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
+            "is_delete": true,
+            "order": 13
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
+            "is_delete": true,
+            "order": 14
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/text-indent",
+            "is_delete": true,
+            "order": 16
         }
     }
 }

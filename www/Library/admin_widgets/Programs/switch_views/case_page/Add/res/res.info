@@ -1,1 +1,6 @@
-{"is_default_value":true,"value":"","proto":"/Library/admin_widgets/Add/res","order":5}
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/admin_widgets/Add/res",
+    "order": 5
+}

@@ -1,1 +1,8 @@
-{"is_default_value":true,"value":"PageTextEditor.tpl","is_file":true,"proto":"/Library/admin_widgets/page_widgets/PageTextEditor","is_link":true,"order":4}
+{
+    "is_default_value": true,
+    "value": "PageTextEditor.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/page_widgets/PageTextEditor",
+    "is_link": true,
+    "order": 4
+}

@@ -1,1 +1,24 @@
-{"is_default_value":true,"value":"ObjectItem.tpl","is_file":true,"proto":"/Library/admin_widgets/ObjectItem","is_link":true,"order":4,"children":{"title":{"is_default_value":true,"value":"Виджет объекта","proto":"/Library/admin_widgets/ObjectItem/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Отображение объекта в виде пункта списка","proto":"/Library/admin_widgets/ObjectItem/description","is_hidden":true,"order":2}}}
+{
+    "is_default_value": true,
+    "value": "ObjectItem.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/ObjectItem",
+    "is_link": true,
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Виджет объекта",
+            "proto": "/Library/admin_widgets/ObjectItem/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Отображение объекта в виде пункта списка",
+            "proto": "/Library/admin_widgets/ObjectItem/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

@@ -65,27 +65,27 @@
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
             "order": 12
         },
-        "font-size": {
-            "value": "",
-            "is_default_class": false,
-            "order": 13
-        },
         "margin-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
             "order": 13
         },
-        "margin-right": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
-            "order": 14
-        },
         "text-indent": {
             "value": "0px",
             "is_default_class": false,
             "order": 14
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
+            "order": 15
+        },
+        "font-size": {
+            "value": "",
+            "is_default_class": false,
+            "order": 16
         }
     }
 }

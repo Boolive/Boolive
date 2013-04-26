@@ -1,1 +1,6 @@
-{"is_default_value":true,"value":"Отмена","proto":"/Library/admin_widgets/SelectObject/cancel_title","order":4}
+{
+    "is_default_value": true,
+    "value": "Отмена",
+    "proto": "/Library/admin_widgets/SelectObject/cancel_title",
+    "order": 4
+}

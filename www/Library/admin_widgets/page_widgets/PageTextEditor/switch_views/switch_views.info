@@ -1,1 +1,45 @@
-{"is_default_value":true,"value":"SwitchViews.tpl","is_file":true,"proto":"/Library/content_widgets/RichTextPreview/switch_views","order":3,"children":{"title":{"is_default_value":true,"value":"Варианты отображения","proto":"/Library/content_widgets/RichTextPreview/switch_views/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ","proto":"/Library/content_widgets/RichTextPreview/switch_views/description","is_hidden":true,"order":2},"res":{"is_default_value":true,"value":"","proto":"/Library/content_widgets/RichTextPreview/switch_views/res","order":3,"children":{"title":{"is_default_value":true,"value":"Ресурсы","proto":"/Library/content_widgets/RichTextPreview/switch_views/res/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Автоматически подключаемые ресурсы, например CSS, JavaScript","proto":"/Library/content_widgets/RichTextPreview/switch_views/res/description","is_hidden":true,"order":2}}}}}
+{
+    "is_default_value": true,
+    "value": "SwitchViews.tpl",
+    "is_file": true,
+    "proto": "/Library/content_widgets/RichTextPreview/switch_views",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_widgets/RichTextPreview/switch_views/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ",
+            "proto": "/Library/content_widgets/RichTextPreview/switch_views/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_widgets/RichTextPreview/switch_views/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/content_widgets/RichTextPreview/switch_views/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/content_widgets/RichTextPreview/switch_views/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

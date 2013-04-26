@@ -9,10 +9,12 @@
         }
     .PageTextEditor .col2{
         margin: 0 0 0 170px;
-        border-radius: 3px;
-        padding: 5px;
-        border: 1px solid;
-        border-color: #E0E0E0;
+        display: block;
+        padding-bottom: 20px;
+        /*border-radius: 3px;*/
+        /*padding: 5px;*/
+        /*border: 1px solid;*/
+        /*border-color: #E0E0E0;*/
         }
     .PageTextEditor label{
         font-size: 11pt;
@@ -20,7 +22,7 @@
         }
     .PageTextEditor .col2 .link{
         font-size: 10pt;
-        margin: 0 0 0 2px;
+        margin: 0 0 0 0px;
         cursor: pointer;
         width: 100%;
         height: auto;
@@ -32,8 +34,7 @@
             background-color: #418dd9;
             padding: 3px 5px;
             display: inline-block;
-
-
+            border-top-right-radius: 3px;
         }
         .PageTextEditor .col2 .link .textlink:hover {
             background-color: #4fa7ff;

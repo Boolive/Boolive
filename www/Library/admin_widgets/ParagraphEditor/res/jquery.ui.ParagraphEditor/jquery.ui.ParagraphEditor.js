@@ -74,9 +74,9 @@
         },
 
         call_keydown: function(caller, e){
-            if (this._selinfo){
+            if (this._selinfo || this.element.hasClass('selected')){
                 var self = this;
-                if (e.key_print){
+                if (e.key_print && this._selinfo.type != 'cursor'){
                     if (this._selinfo.type == 'in' || this._selinfo.type == 'is'){
                         // Удаление абзаца
                         this.callServer('delete', {object: this.options.object}, {

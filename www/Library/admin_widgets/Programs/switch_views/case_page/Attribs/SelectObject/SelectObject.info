@@ -1,1 +1,7 @@
-{"is_default_value":true,"value":"SelectObject.tpl","is_file":true,"proto":"/Library/admin_widgets/Attribs/SelectObject","order":5}
+{
+    "is_default_value": true,
+    "value": "SelectObject.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Attribs/SelectObject",
+    "order": 5
+}

@@ -1,6 +1,6 @@
 {
-    "value": "Ноовсть создаётся как страница, то есть новость и есть страницой, просто она помещена в раздел Ленты новостей",
-    "proto": "/Library/content_samples/paragraphs/P",
+    "value": "Заголовок",
+    "proto": "/Library/content_samples/paragraphs/H1",
     "order": 1,
     "children": {
         "title": {

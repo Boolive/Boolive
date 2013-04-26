@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page/text/style",
-    "order": 2,
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
@@ -54,8 +54,7 @@
             "order": 8
         },
         "padding-left": {
-            "is_default_value": true,
-            "value": "",
+            "value": "30px",
             "proto": "/Library/content_samples/Page/text/style/padding-left",
             "order": 9
         },

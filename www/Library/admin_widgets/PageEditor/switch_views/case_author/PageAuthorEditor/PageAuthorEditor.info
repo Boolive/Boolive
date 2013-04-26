@@ -1,1 +1,24 @@
-{"is_default_value":true,"value":"PageAuthorEditor.tpl","is_file":true,"proto":"/Library/admin_widgets/page_widgets/PageAuthorEditor","is_link":true,"order":4,"children":{"title":{"is_default_value":true,"value":"Редактор автора страницы","proto":"/Library/admin_widgets/page_widgets/PageAuthorEditor/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета","proto":"/Library/admin_widgets/page_widgets/PageAuthorEditor/description","is_hidden":true,"order":2}}}
+{
+    "is_default_value": true,
+    "value": "PageAuthorEditor.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/page_widgets/PageAuthorEditor",
+    "is_link": true,
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Редактор автора страницы",
+            "proto": "/Library/admin_widgets/page_widgets/PageAuthorEditor/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
+            "proto": "/Library/admin_widgets/page_widgets/PageAuthorEditor/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
