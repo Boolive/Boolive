@@ -37,7 +37,7 @@ class PHPTemplateValues extends Values
 
     protected function defineRule()
     {
-        $this->_rule = Rule::arrays(Rule::any(Rule::string()->escape(), Rule::null()), true);
+        $this->_rule = Rule::arrays(Rule::any(Rule::string()->escape()->ignore('escape'), Rule::null()), true);
     }
 
     /**
@@ -47,13 +47,24 @@ class PHPTemplateValues extends Values
      * @param mixed $name Ключ элемента
      * @return \Boolive\template\php\PHPTemplateValues
      */
-    public function offsetGet($name)
+//    public function offsetGet($name)
+//    {
+//        $start = (!$this->offsetExists($name) && isset($this->_entity));
+//        $sub = parent::offsetGet($name);
+//        if ($start){
+//            $sub->_entity = $this->_entity->{$name};
+//            $sub->set($this->_entity->startChild($name));
+//        }
+//        return $sub;
+//    }
+
+    public function __get($name)
     {
         $start = (!$this->offsetExists($name) && isset($this->_entity));
-        $sub = parent::offsetGet($name);
+        $sub = $this->offsetGet($name);
         if ($start){
-            $sub->_entity = $this->_entity->{$name};
-            $sub->set($this->_entity->startChild($name));
+            $sub->_entity = $this->_entity->linked(true)->{$name};
+            $sub->set($this->_entity->linked(true)->startChild($name));
         }
         return $sub;
     }

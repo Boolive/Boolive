@@ -14,6 +14,6 @@ class Text extends Entity
     public function defineRule()
     {
         parent::defineRule();
-        $this->_rule->arrays[0]['value']->any[1]->more(0)->max(1000);
+        $this->_rule->arrays[0]['value']->more(0)->max(1000);
     }
 }

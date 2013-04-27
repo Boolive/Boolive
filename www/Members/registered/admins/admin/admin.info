@@ -1,0 +1,57 @@
+{
+    "value": "",
+    "proto": "/Library/access/User",
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Пользователь",
+            "proto": "/Library/access/User/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Базовый объект для пользователей и групп",
+            "proto": "/Library/access/User/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "name": {
+            "value": "Администратор",
+            "proto": "/Library/access/User/name",
+            "order": 4
+        },
+        "email": {
+            "value": "boolive@yandex.com",
+            "proto": "/Library/access/User/email",
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Email",
+                    "proto": "/Library/access/User/email/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Адрес электронной почты",
+                    "proto": "/Library/access/User/email/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "passw": {
+            "value": "1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23",
+            "proto": "/Library/access/User/passw",
+            "order": 6
+        },
+        "visit_time": {
+            "value": "1367045868",
+            "is_default_class": false,
+            "order": 7
+        }
+    }
+}

@@ -1,0 +1,75 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/tables/Cell/style",
+    "order": 2,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Стиль ",
+            "proto": "/Library/content_samples/tables/Cell/style/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "width": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/width",
+            "order": 2
+        },
+        "height": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/height",
+            "order": 3
+        },
+        "margin-top": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/margin-top",
+            "order": 4
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/margin-right",
+            "order": 5
+        },
+        "margin-bottom": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/margin-bottom",
+            "order": 6
+        },
+        "margin-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/margin-left",
+            "order": 7
+        },
+        "text-align": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/text-align",
+            "order": 8
+        },
+        "padding-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/padding-left",
+            "order": 9
+        },
+        "padding-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/padding-right",
+            "order": 10
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/text-indent",
+            "order": 11
+        }
+    }
+}

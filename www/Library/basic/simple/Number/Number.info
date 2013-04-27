@@ -1,0 +1,16 @@
+{
+    "value": "0",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Число",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Числовое значение любой величены",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

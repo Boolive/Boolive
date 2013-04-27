@@ -14,7 +14,8 @@
 namespace Library\views\SwitchCase;
 
 use Boolive\values\Rule,
-    Library\views\View\View;
+    Library\views\View\View,
+    Boolive\commands\Commands;
 
 class SwitchCase extends View
 {
@@ -24,7 +25,10 @@ class SwitchCase extends View
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default(null)->required(),
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity(array('is', $this->value()))),
+                            Rule::entity(array('is', $this->value()))
+                        )->required(),
                         'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
                     )
                 )
@@ -32,14 +36,14 @@ class SwitchCase extends View
         );
     }
 
-    protected function initInputChild($input)
-    {
-        parent::initInputChild(array_replace_recursive($input, $this->_input));
-    }
+//    protected function initInputChild($input)
+//    {
+//        parent::initInputChild(array_replace_recursive($input, $this->_input));
+//    }
 
-    public function canWork()
+    public function canWork(Commands $commands, $input)
     {
-        if ($result = parent::canWork()){
+        if ($result = parent::canWork($commands, $input)){
             if (!empty($this->_input['REQUEST']['view_name'])){
                 // Если указано, каким отображать, то только его пробуем запустить
                 $result = $this->{$this->_input['REQUEST']['view_name']}->isExist();
@@ -61,7 +65,7 @@ class SwitchCase extends View
         }
         $view = reset($views);
         while ($view){
-            if ($v['view'] = $view->start($this->_commands, $this->_input_child)){
+            if ($v['view'] = $view->linked()->start($this->_commands, $this->_input_child)){
                 $this->_input_child['previous'] = true;
                 return $v['view'];
             }
@@ -70,9 +74,10 @@ class SwitchCase extends View
         return false;
     }
 
-    protected function getViews(){
+    protected function getViews()
+    {
         if (!isset($this->_views)){
-            $this->_views = $this->findAll(array('where' => 'is_history=0 and is_delete=0', 'order'=>'`order` ASC'));
+            $this->_views = $this->find();
             unset($this->_views['title'], $this->_views['description']);
         }
         return $this->_views;

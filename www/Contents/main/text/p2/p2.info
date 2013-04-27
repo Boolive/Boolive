@@ -1,5 +1,15 @@
 {
-    "proto": "/Library/content_samples/Paragraph",
-    "value": "Hello World :)",
-    "order": 3
+    "value": "Вова! Страница сайта. ПППП",
+    "proto": "/Library/content_samples/paragraphs/H2",
+    "order": 36,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "is_hidden": true,
+            "is_delete": true,
+            "order": 1
+        }
+    }
 }

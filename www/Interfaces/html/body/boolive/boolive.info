@@ -1,3 +1,8 @@
 {
-    "proto": "/Library/layouts/boolive"
+    "is_default_value": true,
+    "value": "boolive.tpl",
+    "is_file": true,
+    "proto": "/Library/layouts/boolive",
+    "is_link": true,
+    "order": 4
 }

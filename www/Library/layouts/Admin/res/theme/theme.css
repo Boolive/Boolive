@@ -4,7 +4,7 @@ html, body {
 	background-repeat: repeat;
 	background-color: #f5f5f5;
 	}
-body,td,th {
+body,td,th,input {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12pt;
 	color: #000;
@@ -15,9 +15,10 @@ a, a:active{
 	outline: none;
 	}
 	a:hover {
-		color: #0065c9;
+		color: #0063bf;
 		}
 a.internal{
+    cursor: pointer;
     text-decoration: none;
     border-bottom: 1px dashed #006ad6;
     }
@@ -35,6 +36,11 @@ p{
         font-size: 10pt;
         color: #555;
         }
+img{
+    /*max-width: 150%;*/
+    border: none;
+    outline: none;
+    }
 /* Область содержимого */
 .content{
     padding: 30px;
@@ -46,13 +52,47 @@ h1 {
     margin-top: 0;
     /*padding: 0;*/
     }
+h2 {
+    font-size: 22pt;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #444;
+    }
+h3 {
+    font-size: 17pt;
+    font-weight: normal;
+    /*margin-top: 0;*/
+    /*margin-bottom: 15px;*/
+    color: #444;
+    }
+h4{
+    font-size: 14pt;
+}
 
+        .Delete .info > .name{
+            font-size: 17pt;
+            display: inline-block;
+            color: #1e7fff;
+            padding: 5px 0px;
+            border-radius: 3px;
+            }
+        .Delete .info > .uri{
+            font-size: 9pt;
+            margin: 0 15px;
+            display: inline-block;
+            background-color: #F5F5F5;
+            color: #999;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: verdana;
+        }
 
 /* Кнопки */
 .btn, .btn-min {
     display: inline-block;
     height: 22px;
-    margin: 0 8px;
+    margin: -1px 8px;
     padding: 6px 14px 2px 14px;
     min-width: 51px;
     font-size: 11pt;
@@ -72,6 +112,12 @@ h1 {
     .btn:active, .btn-min:active{
         padding: 7px 14px 1px 14px;
         }
+    .btn:first-child, .btn-min:first-child{
+        margin-left: 0;
+    }
+    .btn:last-child, .btn-min:last-child{
+        margin-right: 0;
+    }
 
 .btn-min{
     font-size: 10pt;
@@ -117,13 +163,171 @@ h1 {
         }
 /* Неактивная кнопка*/
 .btn-disable, .btn-disable:hover, .btn-disable:active {
-    color: #cccccc;
-    background-color: #f5f5f5;
-    border: 1px solid #ebebeb;
+    background-color: rgba(200,200,200,0.1);
+    border: 1px solid rgba(200,200,200,0.15);
+    color: rgba(150,150,150,0.3);
     cursor: default;
     padding: 6px 14px 2px 14px;
     }
+.btn-frozen, .btn-frozen:hover, .btn-frozen:active {
+    cursor: default;
+    padding: 6px 14px 2px 14px;
+}
 
+.btn-icon, .btn-icon-delete {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-bottom: -3px;
+    }
+.btn-icon-delete{
+    background: url(img/delete.png) no-repeat center;
+}
+.toolbar{
+    height: 32px;
+    padding: 5px 0;
+    clear: both;
+    }
+.label-tool{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 11pt;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 4px 8px 4px 6px;
+    margin: 4px 0 0 0;
+    position: relative;
+    text-decoration: none;
+    color: #777;
+}
+.btn-tool{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 11pt;
+    height: 18px;
+    /*background-color: rgba(241, 241, 241, 0.5);*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 4px 8px 4px 6px;
+    margin: 4px 0 0 0;
+    position: relative;
+    text-decoration: none;
+    color: #555;
+    }
+    .btn-tool:hover, .btn-group:hover > .btn-tool{
+        box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: rgba(241, 241, 241, 0.5);
+        color: #000;
+        }
+    .btn-tool.selected{
+        box-shadow: 0 0 1px 1px #999, inset 1px 2px 2px #DDD, inset -1px -2px 2px #FFF;
+    }
+.btn-divider-vertical{
+    border-left: 1px solid #CCC;
+    margin: 4px 5px;
+    width: 1px;
+    display: inline-block;
+    vertical-align: bottom;
+    height: 16px;
+    }
+.btn-tool-square{
+    padding: 4px 8px 4px 6px;
+    width: 12px;
+    border-radius: 2px;
+    }
+.btn-tool-circle{
+    padding: 4px 4px 4px 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 0px;
+}
+
+.btn-group{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    }
+    .btn-group:hover > .btn-tool{
+        background-color: rgba(241, 241, 241, 0.5);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.1);
+        height: 19px;
+        }
+
+.dropdown-menu{
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    z-index: 10000;
+    display: none;
+    float: left;
+    min-width: 70px;
+    padding: 1px;
+    margin: 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-top: 1px solid #CCC;
+    border-bottom: 2px solid #CCC;
+    border-left: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    font-size: 11pt;
+    border-top-right-radius: 2px;
+    -moz-box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.15);
+        box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.15);
+}
+:hover > .dropdown-menu{
+    display: block;
+}
+.dropdown-menu > li > a {
+    display: block;
+    padding: 5px 15px 5px 30px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333333;
+    white-space: nowrap;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    background-position: 8px center;
+}
+
+.dropdown-menu > .selected > a {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #418dd9;
+    outline: none;
+    background-image: url(img/select-invert.png);
+}
+
+.dropdown-menu > li > a:hover,
+/*.dropdown-menu > li > a:focus,*/
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #499df2;
+}
+
+.dropdown-menu > .disabled > a,
+/*.dropdown-menu > .disabled > a:hover,*/
+.dropdown-menu > .disabled > a:focus {
+    color: #999999;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+    text-decoration: none;
+    cursor: default;
+    background-color: transparent;
+}
+.dropdown-menu.pull-right {
+    right: -1px;
+    left: auto;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+}
 /* Элементы формы */
 .inpt{
     border: 1px #E0E0E0 solid;
@@ -132,10 +336,14 @@ h1 {
     font-size: 11pt;
     padding: 3px;
     margin: 0;
-    box-shadow: inset 0 1px 2px 0 #EEE;
+    box-shadow: inset -1px 1px 3px 0 #f5f5f5;
     border-radius: 3px;
     display: inline-block;
     position: relative;
+    outline: none;
+    }
+    .inpt *{
+        outline: none;
     }
 
 label{
@@ -143,18 +351,106 @@ label{
     color: #666;
     }
 
-.inline-hint{
-    background-color: #F5F5F5;
-    border-radius: 3px;
-    color: #999999;
+
+.txt-primary{
+    font-size: 14pt;
     display: inline-block;
+    /*vertical-align: middle;*/
+    color: #1e7fff;
+    /*padding: 5px 0px;*/
+    margin: 0;
+    border-radius: 3px;
+}
+.txt-tag{
+    font-family: Verdana;
     font-size: 9pt;
-    margin: 0 5px;
-    padding: 2px 4px;
+    /*margin: 0 5px;*/
+    display: inline-block;
+    text-shadow: 1px 1px 0px #999;
+    background-color: #AAA;
+    color: #FFF;
+    padding: 1px 5px 2px 5px;
+    border-radius: 3px;
+    vertical-align: text-top;
+    text-decoration: none;
     }
+    a.txt-tag:hover{
+        color: #FFF;
+        text-shadow: 1px 1px 0px #707070;
+        background-color: #808080;
+    }
+.input-pfx{
+    font-size: 9pt;
+    /*display: inline-block;*/
+    background-color: #F5F5F5;
+    color: #999;
+    padding: 5px 5px 4px 5px;
+    border: 1px #E0E0E0 solid;
+    /*border-bottom: 1px #E0E0E0 solid;
+    border-left: 1px #E0E0E0 solid;*/
+    border-radius: 3px;
+   /* border-bottom-left-radius: 3px;*/
+    /*height: 17px;*/
+    line-height: 26px;
+    min-width: 1px;
+    font-family: Verdana;
+}
 
-
+.tag-link{
+    cursor: pointer;
+    }
+    .tag-link:hover{
+        background-color: #f2f9ff;
+        color: #999;
+        border: 1px #E0E0E0 solid;
+        }
 
 .hide{
     display: none;
+    }
+.right{
+    float: right;
+}
+
+.progress{
+	text-align: center;
+	}
+	.progress .prgressbar{
+		/*margin: 0 auto;*/
+		height: 24px;
+		width: 500px;
+		background-color: #FFF;
+		border: 1px solid #5DABEC;
+		padding: 3px;
+		border-radius: 3px;
+		-moz-border-radius: 3px;
+		box-shadow: inset 0px 0px 3px 1px #CCE6FF;
+		}
+		.progress .prgressbar .bar{
+			height: 100%;
+			width: 30%;
+			background-color: #2e97ee;
+			text-align: right;
+			border-radius: 3px;
+			-moz-border-radius: 3px;
+			}
+	.progress .message{
+		/*margin: 0 auto;*/
+		padding: 5px 3px;
+		font-size: 10pt;
+		color: #999;
+		width: 500px;
+		text-align: left
+	}
+
+.entity-list{
+    list-style-type: decimal;
+    font-size: 10pt;
+    color: #999;
+    margin: 15px 0;
+    padding: 0;
+    }
+    .entity-list li{
+        margin: 1px 0;
+        vertical-align: top;
     }

@@ -1,0 +1,19 @@
+{
+    "value": "/Library/content_samples/RichText",
+    "proto": "/Library/admin_widgets/Programs/switch_views/case_default",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Вариант для текста",
+            "proto": "/Library/admin_widgets/Programs/switch_views/case_default/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/Programs/switch_views/case_default/description",
+            "order": 2
+        }
+    }
+}

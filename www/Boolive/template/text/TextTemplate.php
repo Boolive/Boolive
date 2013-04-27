@@ -22,7 +22,7 @@ class TextTemplate
      */
     public function render($entity, $v)
     {
-        $text = file_get_contents($entity->getFile(true));
+        $text = file_get_contents($entity->file(null, true));
         $vars = filter_var_array($v, FILTER_SANITIZE_SPECIAL_CHARS);
         // По циклу проходимся по всем переменным заменяя значения в {} на значения в массиве
         if (is_array($vars)){

@@ -14,7 +14,7 @@ class Keyword extends Widget
 {
     public function work($v = array())
     {
-        $v['keyword'] = $this->_input['REQUEST']['object']->getName();
+        $v['keyword'] = $this->_input['REQUEST']['object']->name();
         return parent::work($v);
     }
 }

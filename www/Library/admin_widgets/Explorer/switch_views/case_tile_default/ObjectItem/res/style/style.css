@@ -1,0 +1,176 @@
+.ObjectItem.tile{
+	display: inline-block;
+    /*border: solid 1px #efefef;*/
+    margin: 5px;
+    padding: 0;
+	position: relative;
+    vertical-align: top;
+    border-radius: 3px;
+    /*width: 24%;*/
+    /*min-width: 150px;*/
+    max-width: 800px;
+    cursor: default;
+	}
+    .ObjectItem.tile .view,
+    .ObjectItem.tile .view:hover{
+        padding: 15px 15px 15px 15px;
+        margin: 0;
+        display: block;
+        background-color: #f2f2f2;
+        border: 1px solid #EAEAEA;
+        text-overflow: ellipsis;
+        height: 75px;
+        border-radius: 3px;
+        line-height: normal;
+        overflow: visible;
+        }
+        .ObjectItem.tile .view.hidden{
+            opacity: 0.4;
+            }
+        .ObjectItem.tile .view.deleted{
+
+            /*background-color: rgba(255, 184, 181, 0.3);*/
+            /*border-color: rgba(255, 184, 181, 0.305);*/
+            /*color: #FF4A52*/
+            }
+
+        .ObjectItem.tile .view.virtual{
+            background-color: #ecccff;
+            border-color: #e7bfff;
+        }
+        .ObjectItem.tile .view:hover{
+            background-color: rgba(128, 200, 255, 0.3);
+            border-color: rgba(128, 200, 255, 0.31);
+            /*border: solid 1px #E3F1FF;*/
+        }
+        /* Название */
+        .ObjectItem.tile .view .title-group{
+            font-size: 22pt;
+            padding: 0;
+            }
+            .ObjectItem.tile .view .title-group .title{
+                /*color: #000;*/
+            }
+            .ObjectItem.tile .view.link .title-group .title{
+                /*color: #0073bf;*/
+            }
+            .ObjectItem.tile .view.link .title-group .title:after{
+                content: '↝';/*url(img/link.png);*/
+                font-family: "Times New Roman";
+                line-height: 16px;
+                color: #0073bf;
+                margin-left: 2px;
+                text-decoration: none;
+                }
+            .ObjectItem.tile .view.deleted .title-group .title{
+                color: #ff4a52;
+                text-decoration: line-through;
+            }
+
+            .ObjectItem.tile .view .title-group > *{
+                display: inline-block;
+                text-decoration: none;
+                }
+                .ObjectItem.tile .view .title-group .title:hover > *{
+                    text-decoration: underline;
+                    }
+                    .ObjectItem.tile .view .title-group .title > *{
+                        color: #000;
+                    }
+                    .ObjectItem.tile .view.link .title-group .title > *{
+                        color: #0073bf;
+                    }
+            .ObjectItem.tile .view .title-group .mini{
+                font-size: 12pt;
+                display: block;
+                color: #333;
+                }
+        /* Выделение */
+		.ObjectItem.tile .view .select{
+			display: block;
+		    position: absolute;
+		    width: 32px;
+		    height: 32px;
+		    right: 0;
+		    bottom: 0;
+			background: url(img/select.png) no-repeat center;
+			opacity: 0.2;
+			padding: 0;
+            cursor: pointer;
+			}
+			.ObjectItem.tile .view .select:hover{
+				opacity: 1;
+				}
+
+        /* Информация */
+        .ObjectItem.tile .view .info{
+            display: block;
+		    position: absolute;
+            right: 32px;
+            left: 0px;
+            bottom: 0px;
+            overflow: hidden;
+            font-size: 8pt;
+
+            margin: 0;
+            padding: 0 0 8px 10px;
+            height: 25px;
+            text-align: left;
+            white-space: nowrap;
+            }
+            .ObjectItem.tile .view .info > *{
+                display: inline-block;
+                vertical-align: top;
+                float: none;
+                margin: 0;
+                padding: 0;
+                color: #999;
+            }
+
+            .ObjectItem .view .info .default{
+                color: #a481b8;
+                }
+            /* Свойства */
+            .ObjectItem.tile .view .info .prop{
+                display: none;
+                position: relative;
+                float: left;
+                width: 24px;
+                height: 24px;
+                margin: 5px 2px 0 -5px;
+                background: url(img/prop.png) no-repeat center;
+                opacity: 0.5;
+                padding: 0;
+                cursor: pointer;
+                }
+                .ObjectItem.tile .view .info .prop:hover{
+                    opacity: 1;
+                    }
+                .ObjectItem.tile .view.link .info .prop{
+                    display: block;
+                }
+
+.ObjectItem.selected.tile .view{
+    background-color: rgba(97, 176, 255, 0.9);
+    border-color: rgba(97, 176, 255, 0.91);
+    }
+
+    .ObjectItem.selected.tile .view .title-group *,
+    .ObjectItem.selected.tile .view.link .title-group .title > *{
+        color: #FFF;
+        text-shadow: 0px 0 10px rgb(51, 160, 255);
+        }
+        .ObjectItem.selected.tile .view.link .title-group .title:after{
+            color: #FFF;
+            }
+    .ObjectItem.selected.tile .view .select{
+        background: url(img/select-invert.png) no-repeat center center;
+        opacity: 0.9;
+        }
+        .ObjectItem.selected.tile .view .select:hover{
+            opacity: 1;
+            }
+
+    .ObjectItem.selected.tile .view .info *{
+        color: #FFF;
+        }

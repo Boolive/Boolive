@@ -8,7 +8,8 @@ namespace Library\layouts\Admin;
 
 use Library\views\Focuser\Focuser,
     Boolive\values\Rule,
-    Boolive\data\Data;
+    Boolive\data\Data,
+    Boolive\input\Input;
 
 class Admin extends Focuser
 {
@@ -37,8 +38,15 @@ class Admin extends Focuser
         }else{
             $this->_input_child['REQUEST']['page'] = 1;
         }
+        //удаление "/admin"
         $uri = mb_substr($uri, 6);
         // Установка во входящие данные
-        $this->_input_child['REQUEST']['object'] = Data::object($uri);
+        $this->_input_child['REQUEST']['object'] = Data::read($uri);
+    }
+
+    public function work($v = array())
+    {
+        $v['basepath'] = DIR_WEB.'admin';
+        return parent::work($v);
     }
 }

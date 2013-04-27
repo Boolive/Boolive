@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "jquery.js",
+    "is_file": true,
+    "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/jquery",
+    "is_link": true,
+    "order": 3
+}

@@ -22,7 +22,7 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule null() Неопределенное значение. При этом проверяемый элемент должен существовать!
  * @method static \Boolive\values\Rule arrays() Массив
  * @method static \Boolive\values\Rule object() Объект указываемого класса
- * @method static \Boolive\values\Rule entity() Объект класса \Boolive\data\Entity или URI объекта, который можно получить из БД
+ * @method static \Boolive\values\Rule entity() Объект класса \Boolive\data\Entity или URI объекта, который можно получить из БД. В аргументе фильтра указывается условие на объект в виде массива.
  * @method static \Boolive\values\Rule values() Объект класса \Boolive\values\Values
  * @method static \Boolive\values\Rule any() Любое правило из перечисленных или любой тип значения, если не перечислены варианты правил
  * @method static \Boolive\values\Rule forbidden() Запрещенный. Требуется отсутствие элемента
@@ -43,10 +43,10 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
  *
  * Методы добавления фильтра к объекту правила.
- * @method \Boolive\values\Rule max($max) Максимальное значение. Правая граница отрезка
- * @method \Boolive\values\Rule min($min) Минимальное значение. Левая граница отрезка
- * @method \Boolive\values\Rule less($less) Меньше указанного значения. Правая граница интервала
- * @method \Boolive\values\Rule more($more) Больше указанного значения. Левая граница интервала
+ * @method \Boolive\values\Rule max($max) Максимальное значение. Правая граница отрезка. Максимальный размер массива
+ * @method \Boolive\values\Rule min($min) Минимальное значение. Левая граница отрезка. Минимальный размер массива
+ * @method \Boolive\values\Rule less($less) Меньше указанного значения. Правая граница интервала. Размер массива меньше указанного
+ * @method \Boolive\values\Rule more($more) Больше указанного значения. Левая граница интервала. Размер массива больше указанного
  * @method \Boolive\values\Rule eq() Равен указанному значению
  * @method \Boolive\values\Rule not() Не равен указанному значению
  * @method \Boolive\values\Rule in() Допустимые значения. Через запятую или массив

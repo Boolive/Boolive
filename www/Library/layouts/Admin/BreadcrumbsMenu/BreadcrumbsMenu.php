@@ -6,7 +6,8 @@
  */
 namespace Library\layouts\Admin\BreadcrumbsMenu;
 
-use Library\views\Widget\Widget;
+use Library\views\Widget\Widget,
+    Boolive\input\Input;
 
 class BreadcrumbsMenu extends Widget{
 
@@ -17,8 +18,9 @@ class BreadcrumbsMenu extends Widget{
 		$v['items'] = array();
 		do{
             $v['items'][] = array(
-                'title' => ($name = $obj->getName()) ? $name : $obj->title->getValue(),
-                'url'	=> $obj['uri'],
+                'title' => ($obj->title->isExist()) ? $obj->title->value() : $obj->name(),
+                'url'	=> '/admin'.$obj->uri(),
+                'uri'   => $obj->uri(),
                 'active' => empty($v['items']) // активный первый элемент
             );
 		}while($obj = $obj->parent());

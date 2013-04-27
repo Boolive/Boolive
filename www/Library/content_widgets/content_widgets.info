@@ -1,0 +1,13 @@
+{
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Виджеты содержимого",
+            "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

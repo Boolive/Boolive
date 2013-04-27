@@ -1,0 +1,29 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 7,
+    "children": {
+        "description": {
+            "value": "",
+            "order": 1,
+            "children": {
+                "title": {
+                    "value": "Описание ",
+                    "is_hidden": true,
+                    "order": 1
+                }
+            }
+        },
+        "title": {
+            "value": "Страница",
+            "order": 2,
+            "children": {
+                "title": {
+                    "value": "Название",
+                    "is_hidden": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

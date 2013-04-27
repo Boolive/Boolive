@@ -87,9 +87,9 @@ class Check
      */
     static function __callStatic($method, $args)
     {
-        $result = Events::send('Check::filter_'.$method, $args);
+        $result = Events::trigger('Check::filter_'.$method, $args);
         if ($result->count > 0){
-            return $result->value;
+            return $result->result;
         }else{
             return $args[0];
         }
@@ -111,7 +111,7 @@ class Check
             return (bool)$value;
         }else{
             $error = new Error('Не логическое (да/нет)', 'bool');
-            return false;
+            return (bool)$value;
         }
     }
 
@@ -308,20 +308,22 @@ class Check
      */
     static function entity($value, &$error, Rule $rule)
     {
-        $class = isset($rule->entity[0])? $rule->entity[0] : '\Boolive\data\Entity';
+        $cond = isset($rule->entity[0])? $rule->entity[0] : false;
         if (is_string($value)){
             // Пробуем получить объект по uri
-            $value = Data::object($value);
+            $value = Data::read($value);
         }else
         if (is_array($value)){
-            $value = Data::makeObject($value);
-
+            //$value = Data::makeObject($value);
+            if (isset($value['id'])){
+                $obj = Data::read($value['id']);
+            }else
             if (isset($value['uri'])){
-                $obj = Data::object($value);
+                $obj = Data::read($value['uri']);
             }else
             if (isset($value['proto'])){
-                $obj = Data::object($value['proto'])->birth();
-                if (isset($value['parent']) && $parent = Data::object($value['parent'])){
+                $obj = Data::read($value['proto'])->birth();
+                if (isset($value['parent']) && $parent = Data::read($value['parent'])){
                     $parent->__set(null, $obj);
                 }
             }
@@ -334,12 +336,21 @@ class Check
             }
 
         }
-        if ($value instanceof Entity && (empty($class) || $value instanceof $class) && $value->isExist()){
-            return $value;
+        if (!$value instanceof Entity){
+            $error = new Error('Не является объектом данных', 'entity');
+        }else
+        if (!empty($cond) && !$value->verify($cond)){
+            $error = new Error('Объект не соответсвует заданному условию', 'entity');
+        }else
+        if (!$value->isExist()){
+            $error = new Error('Объект не существует', 'entity');
+        }else
+        if (!$value->isAccessible()){
+            $error = new Error('Объект недоступен', 'entity');
         }else{
-            $error = new Error(array('Не является объектом класса %s.', $class), 'entity');
-            return null;
+            return $value;
         }
+        return null;
     }
 
     /**
@@ -355,7 +366,7 @@ class Check
     {
         $rules = $rule->any;
         if (empty($rules)) return $value;
-        if (sizeof($rules) == 1 && is_array($rules[0])) $rules = $rules[0];
+        if (sizeof($rules) == 1 && is_array(reset($rules))) $rules = reset($rules);
         $result = null;
         foreach ($rules as $rule){
             $error = null;
@@ -628,12 +639,13 @@ class Check
      */
     static function uri($value, &$error, Rule $rule)
     {
+        if (empty($value)) return $value;
         $check = $value;
         if (!preg_match('#^([^:/]+://).*$#iu', $check)){
             $check = 'http://'.trim($check, '/');
         }
-        if (!is_string($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
-            $error = new Error('Не URI.', 'uri');
+        if (!is_scalar($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
+            $error = new Error(array('%s Не URI.', $value), 'uri');
         }
         return $value;
     }

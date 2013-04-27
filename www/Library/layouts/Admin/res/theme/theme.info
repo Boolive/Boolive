@@ -1,0 +1,21 @@
+{
+    "value": "theme.css",
+    "is_file": true,
+    "proto": "/Library/views/Css",
+    "order": 8,
+    "children": {
+        "title": {
+            "value": "CSS Theme",
+            "proto": "/Library/views/Css/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Каскадная таблица стилей для оформления HTML-документа",
+            "proto": "/Library/views/Css/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

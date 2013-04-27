@@ -1,0 +1,45 @@
+{
+    "is_default_value": true,
+    "value": "SwitchViews.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Menu/view/switch_views",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Варианты отображения",
+            "proto": "/Library/views/Menu/view/switch_views/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Menu/view/switch_views/res",
+            "order": 2,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Menu/view/switch_views/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Menu/view/switch_views/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Menu/view/switch_views/description",
+            "is_hidden": true,
+            "order": 3
+        }
+    }
+}

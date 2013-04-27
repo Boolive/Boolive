@@ -1,0 +1,28 @@
+.PageTitleEditor{
+
+    }
+    .PageTitleEditor .col1{
+        float: left;
+        width: 150px;
+        display: block;
+        padding: 5px 15px 5px 0;
+        }
+    .PageTitleEditor .col2{
+        margin: 0 0 0 165px;
+        border-radius: 3px;
+        padding: 5px;
+        }
+    .PageTitleEditor label{
+        font-size: 11pt;
+        color: #666;
+    }
+    .PageTitleEditor form input[type=text] {
+        width: 98%;
+        padding: 5px;
+        max-width: 98%;
+    }
+    .PageTitleEditor form div.error {
+        width: 98%;
+        color: #ff0c08;
+        font-size: 10px;
+    }

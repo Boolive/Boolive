@@ -1,0 +1,11 @@
+{
+    "value": "",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Пользователи и группы",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

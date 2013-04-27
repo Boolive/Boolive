@@ -1,3 +1,8 @@
 {
-    "proto": "/Library/layouts/admin"
+    "is_default_value": true,
+    "value": "Admin.tpl",
+    "is_file": true,
+    "proto": "/Library/layouts/Admin",
+    "is_link": true,
+    "order": 3
 }

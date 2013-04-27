@@ -1,0 +1,14 @@
+{
+    "value": "kkk",
+    "proto": "/Library/content_samples/paragraphs/P",
+    "order": 7,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/P/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

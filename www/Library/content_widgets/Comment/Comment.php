@@ -17,13 +17,13 @@ class Comment extends Widget
     public function work($v = array())
     {
         $object = $this->_input['REQUEST']['object'];
-        $v['text'] = $object->text->getValue();
+        $children = $object->find();
+        $v['text'] = $object->text->value();
         $v['author'] = $object->author;
         $v['sub_comments'] = null;
-        $object->find(array('where' => 'is_history=0 and is_delete=0', 'order' => '`order` ASC'), true);
         $i = 1;
         $sub_comments_flag = false;
-        foreach ($object->_children as $child) {
+        foreach ($children as $child) {
             if ($child->is('/Library/content_samples/Comment')) {
                 $sub_comments_flag = true;
                 $this->_input_child['REQUEST']['object']->{'comment' . $i} = $child;
@@ -32,7 +32,7 @@ class Comment extends Widget
         }
         if ($sub_comments_flag) {
             $this->_input_child['show_title'] = false;
-            $v['sub_comments'] = Data::object('/Library/content_widgets/Comments')->start($this->_commands, $this->_input_child);
+            $v['sub_comments'] = Data::read('/Library/content_widgets/Comments')->start($this->_commands, $this->_input_child);
         }
         return parent::work($v);
     }

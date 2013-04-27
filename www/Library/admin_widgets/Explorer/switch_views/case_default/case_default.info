@@ -1,5 +1,21 @@
 {
+    "value": "all",
     "proto": "/Library/views/SwitchCase",
-    "value": null,
-    "order": 10
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Вариант списка по умолчанию",
+            "proto": "/Library/views/SwitchCase/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
+            "proto": "/Library/views/SwitchCase/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

@@ -1,0 +1,17 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Вид",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Базовый объект для создания элементов интерфейса",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

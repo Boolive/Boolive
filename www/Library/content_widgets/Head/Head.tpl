@@ -1,1 +1,1 @@
-<h2><?php echo $v['value']?></h2>
+<<?php echo $v['tag']; if ($s = $v['style']->string()) echo ' style="'.$s.'"';?>><?php echo $v['value']?></<?php echo $v['tag'];?>>

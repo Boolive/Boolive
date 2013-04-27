@@ -1,0 +1,15 @@
+{
+    "value": "style.css",
+    "is_file": true,
+    "proto": "/Library/views/Css",
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "CSS",
+            "proto": "/Library/views/Css/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

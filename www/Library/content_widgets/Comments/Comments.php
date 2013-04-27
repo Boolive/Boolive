@@ -16,7 +16,7 @@ class Comments extends AutoWidgetList
         return Rule::arrays(array(
             'show_title' => Rule::bool()->default(true)->required(),
             'REQUEST' => Rule::arrays(array(
-                'object' => Rule::entity()->default($this->object)->required(),
+                'object' => Rule::entity()->required(),
             ))
         ));
     }

@@ -1,0 +1,13 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Виджеты",
+            "proto": "/Library/basic/Package/title",
+            "order": 1
+        }
+    }
+}

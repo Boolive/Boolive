@@ -8,4 +8,4 @@ See more: http://boolive.ru (russian)
     * PDO for mysql
     * mb_string for use UTF-8 strings
 * Apache HTTP server with  extention "mod_rewrite"
-* MySQL 5 or later version
+* MySQL 5.1 or later version

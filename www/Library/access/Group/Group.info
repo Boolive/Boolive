@@ -1,0 +1,21 @@
+{
+    "value": "",
+    "proto": "/Library/access/Member",
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Группа пользователей",
+            "proto": "/Library/access/Member/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Базовый объект для пользователей и групп",
+            "proto": "/Library/access/Member/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

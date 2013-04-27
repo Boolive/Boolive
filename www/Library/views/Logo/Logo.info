@@ -1,0 +1,49 @@
+{
+    "value": "Logo.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Widget",
+    "is_default_class": false,
+    "order": 16,
+    "children": {
+        "description": {
+            "value": "Отображает изображение с ссылкой на главную страницу сайта",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 1
+        },
+        "title": {
+            "value": "Логотип",
+            "proto": "/Library/views/Widget/title",
+            "is_hidden": true,
+            "order": 3
+        },
+        "object": {
+            "value": "object.png",
+            "is_file": true,
+            "proto": "/Library/content_samples/Image",
+            "order": 4
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Widget/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

@@ -15,6 +15,7 @@ use Boolive\data\Entity,
 
 class View extends Entity
 {
+    protected $_is_init = false;
     /**
      * Отфильтрованные входящих данных.
      * Инициализируется в методе start()
@@ -38,6 +39,14 @@ class View extends Entity
      * @var mixed
      */
     protected $_input_child;
+
+    /**
+     * Инициализация
+     */
+    protected function init()
+    {
+
+    }
 
     /**
      * Возвращает правило на входящие данные
@@ -77,19 +86,14 @@ class View extends Entity
      */
     public function start(Commands $commands, $input)
     {
-        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
-        $this->_commands = $commands;
-        $this->initInput($input);
         //Проверка возможности работы
-        if ($this->canWork()){
+        if ($this->canWork($commands, $input)){
             $this->initInputChild($input);
             //Выполнение подчиненных
             ob_start();
                 // Выполнение своей работы
                 $result = $this->work();
-                if ($result === false || is_array($result)){
-                    return $result;
-                }else{
+                if (!($result === false || is_array($result))){
                     $result = ob_get_contents().$result;
                 }
             ob_end_clean();
@@ -97,18 +101,27 @@ class View extends Entity
         }else{
             $result = null;
         }
-        $this->_input = null;
-        $this->_commands = null;
         return $result;
     }
 
     /**
      * Проверка возможности работы.
      * По умолчанию проверяются отсутствие ошибок во входящих данных по правилу на входящие данные
-     * @return bool Признак, может ли работать объект или нет
+     * @param \Boolive\commands\Commands $commands Входящие и исходящие команды
+     * @param \Boolive\input\Input $input Входящие данные
+     * @return bool Признак, может ли работать вид или нет
      */
-    public function canWork()
+    public function canWork(Commands $commands, $input)
     {
+        // Инициализация
+        if (!$this->_is_init){
+            $this->init();
+            $this->_is_init = true;
+        }
+        // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
+        $this->_commands = $commands;
+        $this->initInput($input);
+        // Может работать, если нет ошибок во входящих данных
         return !isset($this->_input_error);
     }
 
@@ -127,7 +140,7 @@ class View extends Entity
      */
     public function startChild($name)
     {
-        if ($result = $this->{$name}->start($this->_commands, $this->_input_child)){
+        if ($result = $this->linked(true)->{$name}->linked(true)->start($this->_commands, $this->_input_child)){
             $this->_input_child['previous'] = true;
         }
         return $result;
@@ -139,11 +152,14 @@ class View extends Entity
      */
     public function startChildren()
     {
+        if ($this->uri() == '/Library/layouts/boolive/center'){
+            $a = 10;
+        }
         $result = array();
-        $list = $this->findAll(array('where'=>'is_history=0 AND is_delete=0 AND is_hidden=0', 'order'=>'`order` ASC'));
+        $list = $this->linked(true)->find();
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
-            $out = $child->start($this->_commands, $this->_input_child);
+            $out = $child->linked(true)->start($this->_commands, $this->_input_child);
             if ($out){
                 $result[$key] = $out;
                 $this->_input_child['previous'] = true;

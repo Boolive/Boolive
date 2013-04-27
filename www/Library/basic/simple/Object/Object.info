@@ -1,0 +1,16 @@
+{
+    "value": "",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Объект",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Базовый объект для создания любых новых объектов",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

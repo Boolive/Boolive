@@ -9,7 +9,8 @@
 namespace Boolive\template;
 
 use Boolive\errors\Error,
-    Boolive\data\Data;
+    Boolive\data\Data,
+    Boolive\functions\F;
 
 class Template
 {
@@ -22,11 +23,7 @@ class Template
      * Загрузка шаблонизаторов
      */
     static function activate(){
-        self::$engines = array();
-        if (is_file(DIR_SERVER.self::CONFIG_FILE)){
-            include DIR_SERVER.self::CONFIG_FILE;
-            if (isset($config)) self::$engines = $config;
-        }
+        self::$engines = F::loadConfig(DIR_SERVER.self::CONFIG_FILE);
     }
 
     /**
@@ -36,7 +33,7 @@ class Template
      */
     static function getEngine($entity)
     {
-        $file = $entity->getFile();
+        $file = $entity->file();
         foreach (self::$engines as $pattern => $engine){
             if (fnmatch($pattern, $file)){
                 if (is_string($engine)){
@@ -62,7 +59,7 @@ class Template
         if ($engine = self::getEngine($entity)){
             return $engine->render($entity, $v);
         }else{
-            throw new Error(array('Template engine for entity "%s" not found ', $entity['uri']));
+            throw new Error(array('Template engine for entity "%s" not found ', $entity->uri()));
         }
     }
 }

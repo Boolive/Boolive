@@ -1,20 +1,70 @@
 Boolive Change Log
 ==================
 
-Version 2.0 work in progress
+Version 2.0.alpha work in progress
 ----------------------------
 
 
-Version 2.0 preview October, 8 2012
+Version 2.0.preview-2 April, 27 2013
+----------------------------
+- enh #58: Added selecting other objects for add new (VladimirShestakov)
+- enh #75: Changing the file attribute (is_file) in the Attribute editor (VladimirShestakov)
+- enh #78: Remembering view_name for objects in the admin (VladimirShestakov)
+- enh #98: Nesting attributes "hidden" and "deleted" (VladimirShestakov)
+- enh #99: Features of link object (VladimirShestakov)
+- enh: Improved Rule::entity() to check object by search condition (VladimirShestakov)
+- enh, new #31: Improved access control. Added role. Accounting access condition in inheritance objects. Updates after changes in Data module  (VladimirShestakov)
+- enh: View more info about objects in the admin explorer (VladimirShestakov)
+- enh: Selecting object in the admin explorer and work with him (VladimirShestakov)
+- enh: Determining the conditions of the object selection in the Auto WidgetList (in code) (VladimirShestakov)
+- enh: Makes name unique after birth() Entity (VladimirShestakov)
+- enh: Change selecting objects in the admin explorer (VladimirShestakov)
+- enh: Show titles of the object and his parents in the Breadcrumbs (VladimirShestakov)
+- enh: Update jQuery to 1.9 version and fix problems in jquery.include.js (VladimirShestakov)
+- enh: View::canWork() - you can check if View can work without starting it. (VladimirShestakov)
+- enh: The priority between input object and self object is changed in widgets. If there is self object then input object is ignored. (VladimirShestakov)
+- new #29: Added table widget (polina Putrolaynen)
+- new #31: Added access control for read and write. (VladimirShestakov)
+- new #60: Added user authentication and cancellations (VladimirShestakov)
+- new #62: Added multiwindow admin interface with the common navigation widgets (VladimirShestakov)
+- new #63: Added SelectObject widget. It use as window (VladimirShestakov)
+- new #64: Added RichText editor. You can enter text, select, merge and split paragraphs (VladimirShestakov)
+- new #64: Added Image editor in the RichText editor. You can view, select and resize image (VladimirShestakov)
+- new #64: Added the top ruler in the RichText editor (VladimirShestakov)
+- new #66: Added the installer of system (VladimirShestakov)
+- new #68: Added exporting objects to info files from the admin panel (VladimirShestakov)
+- new #69: Added /Languages with English and Russian-language object (VladimirShestakov)
+- new #70: Added Session module (VladimirShestakov)
+- new #76: Drag-and-drop ordering of objects  (polina Putrolaynen)
+- new #72: Multiple selection of objects in the admin explorer. Multiple deleting and selecting for adding. (VladimirShestakov)
+- new #79: Added view "tile" for the browser admin (VladimirShestakov)
+- new #82: Added butons "User", "Exit" and "Go to Front page" in admin layout (polina Putrolaynen)
+- new #89: Added objects filter to the Admin Explorer widget (polina Putrolaynen)
+- new #91: Multiple selection of text objects in the Richtext editor (VladimirShestakov)
+- new #92: When object has no properties the word "empty" is shown (polina Putrolaynen)
+- new #93: Added Page Editor widget (polina Putrolaynen)
+- new #95: View linked object in the Explorer (VladimirShestakov)
+- new #96: Added method to destroying objects. And added widget "Destroy" in the admin panel (VladimirShestakov)
+- new #119: Added ToolBar with ToolParagraph, ToolBlockElement and ToolRichText (VladimirShestakov)
+- new: Added methods next() and prev() in the Entity (VladimirShestakov)
+- new: Added auto bind jquery plugins - /Library/javascript_plugins/jquery.autobind (VladimirShestakov)
+- new: New model of interaction jQuery UI widgets based on AjaxWidget (VladimirShestakov)
+- new: Added method for verify object by search condition (VladimirShestakov)
+- new: Added simple object "Boolean" (VladimirShestakov)
+- new: New structure of the database. Added MySQLStorte instead MySQLSection and MySQLIndex. Updated Data and Entity classes. (VladimirShestakov)
+- new: Added samples of paragraphs (P, H1-H2, Code, Blockquote) in /Library/content_samples/paragraphs (VladimirShestakov)
+- bug: Fixed getting proto and parent if they not exists. (VladimirShestakov)
+
+Version 2.0.preview October, 8 2012
 ------------------------------------
 - enh #1: Remove engine\config.classes.php, update classes autoloading (AzatGaliev)
 - enh #3: Changed the style code in all files (VladimirShestakov)
 - enh #39: Moved all the directories in the root of the Site. Created a class Boolive instead Engine and Classes. The core file is index.php  (VladimirShestakov)
 - enh #42: Add child res for base widget /Library/basic/widgets/Widget
+- enh #56: Added element "REQUEST" in input data instead of "GET" and "POST" (VladimirShestakov)
 - enh: Create a package "contents_widgets" and "content_samples". Existing objects are moved into them. (VladimirShestakov)
 - enh: Numbering nesting level starts at zero. A root object level = 0 (VladimirShestakov)
 - enh: Update prototype in all widgets and other view objects. Added package /Library/views (VladimirShestakov)
-- enh #56: Added element "REQUEST" in input data instead of "GET" and "POST" (VladimirShestakov)
 - bug: Updated algorithm of working embedded values ​​in the class \Boolive\values\Values. Removed references to property _value (VladimirShestakov)
 - bug: Fix some paths in code for compatibility with UNIX (AzatGaliev)
 - bug: Fixed order of cases in the SwitchView (VladimirShestakov)
@@ -44,8 +94,6 @@ Version 2.0 preview October, 8 2012
 - new #40: Added widget Feedback (VladimirShestakov)
 - new #43: Added handler forms in the package "basic" and in /Interfaces (VladimirShestakov)
 - new #44: Added indication that the object exists (VladimirShestakov)
-- new: Added object the Option for automatic views (VladimirShestakov)
-- new: Added top menu and sidebar menu in the boolive layout (VladimirShestakov)
 - new #45: Added property "object" for all widget. Widget views self object or object from input (VladimirShestakov)
 - new #48: Overriding prototype properties. Added attribute "override" (VladimirShestakov)
 - new #49: Object as a reference. Added attribute "is_link" (VladimirShestakov)
@@ -57,6 +105,8 @@ Version 2.0 preview October, 8 2012
 - new #57 Added widget Delete in admin (VladimirShestakov)
 - new #58 Added widget Add in admin (VladimirShestakov)
 - new #59 Added widget Attributes in admin (VladimirShestakov)
+- new: Added object the Option for automatic views (VladimirShestakov)
+- new: Added top menu and sidebar menu in the boolive layout (VladimirShestakov)
 - new: Added package "admin_widgets" for admins widgets (VladimirShestakov)
 - new: Added package "javascript_plugins" for common javascripts and particularly JQuery plugins (VladimirShestakov)
 - new: Added method Input::url() for create or get current URL (VladimirShestakov)

@@ -12,7 +12,8 @@ class Paragraph extends Widget
 {
     public function work($v = array())
     {
-        $v['value'] = $this->_input['REQUEST']['object']->getValue();
+        $v['value'] = $this->_input['REQUEST']['object']->value();
+        $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         return parent::work($v);
     }
 }

@@ -1,0 +1,11 @@
+{
+    "value": "",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Содержимое",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

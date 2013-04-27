@@ -1,0 +1,41 @@
+.PageTextEditor{
+    width: 99%;
+    }
+    .PageTextEditor .col1{
+        float: left;
+        width: 150px;
+        display: block;
+        padding: 5px 15px 5px 0;
+        }
+    .PageTextEditor .col2{
+        margin: 0 0 0 170px;
+        display: block;
+        padding-bottom: 20px;
+        /*border-radius: 3px;*/
+        /*padding: 5px;*/
+        /*border: 1px solid;*/
+        /*border-color: #E0E0E0;*/
+        }
+    .PageTextEditor label{
+        font-size: 11pt;
+        color: #666;
+        }
+    .PageTextEditor .col2 .link{
+        font-size: 10pt;
+        margin: 0 0 0 0px;
+        cursor: pointer;
+        width: 100%;
+        height: auto;
+        text-align: right;
+        }
+        .PageTextEditor .col2 .link .textlink{
+            color: #FFF;
+            text-decoration: none;
+            background-color: #418dd9;
+            padding: 3px 5px;
+            display: inline-block;
+            border-top-right-radius: 3px;
+        }
+        .PageTextEditor .col2 .link .textlink:hover {
+            background-color: #4fa7ff;
+            }

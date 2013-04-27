@@ -1,0 +1,14 @@
+{
+    "value": "​Шаблонизация",
+    "proto": "/Library/content_samples/paragraphs/H3",
+    "order": 51,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Заголовок 3",
+            "proto": "/Library/content_samples/paragraphs/H3/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

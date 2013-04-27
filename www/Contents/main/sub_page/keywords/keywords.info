@@ -1,0 +1,15 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/Page/keywords",
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Ключевые слова",
+            "proto": "/Library/content_samples/Page/keywords/title",
+            "is_hidden": true,
+            "order": 3
+        }
+    }
+}

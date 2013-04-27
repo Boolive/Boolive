@@ -1,3 +1,8 @@
 {
-    "proto": "/Library/admin_widgets/ObjectItem"
+    "is_default_value": true,
+    "value": "ObjectItem.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/ObjectItem",
+    "is_link": true,
+    "order": 4
 }

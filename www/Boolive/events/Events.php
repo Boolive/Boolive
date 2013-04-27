@@ -13,7 +13,7 @@ use Boolive\Boolive;
 class Events
 {
     /** @const Названия файла со сведениями о зарегистрированных обработчиков */
-    const CONFIG_FILE = 'config.handlers.json';
+    const CONFIG_FILE = 'config.json';
     /** @var array Реестр обработчиков событий */
     private static $handlers = array();
     /** @var bool Признак, требуется ли выпонить сохранение обработчиков в файл */
@@ -24,16 +24,16 @@ class Events
      */
     static function activate()
     {
-        self::loadHandlers();
-        self::addHandler('STOP', '\\Boolive\\events\\Events', 'stop', false);
+        self::load();
+        self::on('Boolive::deactivate', '\Boolive\events\Events', 'deactivate', false);
     }
 
     /**
-     * Обработчик системного события STOP (завершение работы системы)
+     * Обработчик системного события deactivate (завершение работы системы)
      */
-    static function stop()
+    static function deactivate()
     {
-        if (self::$need_save) self::saveHandlers();
+        if (self::$need_save) self::save();
     }
 
     /**
@@ -43,9 +43,9 @@ class Events
      * @param string $handler_module Имя класса обработчика события
      * @param string $handler_method Имя метода класса обработчика события
      * @param bool $save Признак, сохранять регистрацию на событие?
-     * @param bool $once Признак, одноразовы обработка события
+     * @param bool $once Признак, одноразовая обработка события или нет?
      */
-    static function addHandler($event_name, $handler_module, $handler_method, $save = false, $once = false)
+    static function on($event_name, $handler_module, $handler_method, $save = false, $once = false)
     {
         self::$handlers[$event_name][] = array($handler_module, $handler_method, 'save' => $save, 'once' => $once);
         if ($save) self::$need_save = true;
@@ -58,7 +58,7 @@ class Events
      * @param string $handler_module Имя класса обработчика события
      * @param string $handler_method Имя метода модуля обработчика события
      */
-    static function removeHandler($event_name, $handler_module, $handler_method)
+    static function off($event_name, $handler_module, $handler_method)
     {
         if (isset(self::$handlers[$event_name])){
             $list = self::$handlers[$event_name];
@@ -78,7 +78,7 @@ class Events
      * @param array|mixed $params Параметры события
      * @return EventResult Объект события с результатами его обработки
      */
-    static function send($event_name, $params=array())
+    static function trigger($event_name, $params=array())
     {
         $r = new EventResult();
         if (isset(self::$handlers[$event_name])){
@@ -92,10 +92,10 @@ class Events
                 }
                 if (method_exists(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1])){
                     $value = call_user_func_array(array(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]), $params);
-                    if (isset($value)) $r->value = $value;
+                    if (isset($value)) $r->result = $value;
                     $r->count++;
                     if (!empty(self::$handlers[$event_name]['once'])){
-                        self::removeHandler($event_name, self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]);
+                        self::off($event_name, self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1]);
                     }
                 }
             }
@@ -106,7 +106,7 @@ class Events
     /**
      * Загрузка реестра обработчиков событий
      */
-    private static function loadHandlers()
+    private static function load()
     {
         $content = file_get_contents(DIR_SERVER_ENGINE.'events/'.self::CONFIG_FILE);
         self::$handlers = json_decode($content, true);
@@ -115,7 +115,7 @@ class Events
     /**
      * Сохранение реестра обработчиков событий
      */
-    private static function saveHandlers()
+    private static function save()
     {
         $content = array();
         $list = self::$handlers;

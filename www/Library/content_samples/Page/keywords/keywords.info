@@ -1,3 +1,11 @@
 {
-    "title": "Ключевые слова"
+    "value": "",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Ключевые слова",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

@@ -15,7 +15,8 @@ class view extends AutoWidgetList
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // Объект для пункта меню
-                'active' => Rule::entity()->default(null)->required()// Активный объект (пункт меню)
+                'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
+                'show' => Rule::bool()->default(true)->required() // Показывать пункт или только его подчиенных?
                 )
             ))
         );
@@ -25,21 +26,43 @@ class view extends AutoWidgetList
         parent::initInputChild($input);
         $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['active'];
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
+        $this->_input_child['REQUEST']['show'] = true;
     }
 
     public function work($v = array()){
-        return parent::work($v);
-    }
-
-    protected function getList(){
-        // @todo Сделать настраиваемый фильтр
-        $list = $this->_input['REQUEST']['object']->findAll(array('order' =>'`order` ASC'));
-        foreach ($list as $key => $object){
-            /** @var $object \Boolive\data\Entity */
-            if (!$object->is('/Library/content_samples/Page') && !$object->is('/Library/content_samples/Part')){
-                unset($list[$key]);
+        if ($this->_input['REQUEST']['show']){
+            $obj = $this->_input['REQUEST']['object']->linked();
+            // Название пункта
+            $v['item_text'] = $obj->title->value();
+            $v['item_title'] = $v['item_text'];
+            // Ссылка
+            $real = $obj->linked();
+    //        while ($real && $real['is_link']){
+    //            $real = $real->proto();
+    //        }
+            if ($real){
+                if (substr($real->uri(), 0, 10) == '/Contents/'){
+                    $v['item_href'] = substr($real->uri(), 10);
+                }else{
+                    $v['item_href'] = $real->uri();
+                }
+            }else{
+                $v['item_href'] = '';
             }
+            // Активность пункта
+            $active = $this->_input['REQUEST']['active'];
+            if ($real->isEqual($active)){
+                $v['item_class'] = 'active';
+            }else
+            if ($active && $active->in($real)){
+                $v['item_class'] = 'active-child';
+            }else{
+                $v['item_class'] = '';
+            }
+            $v['show-item'] = true;
+        }else{
+            $v['show-item'] = false;
         }
-        return $list;
+        return parent::work($v);
     }
 }

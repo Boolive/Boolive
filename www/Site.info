@@ -1,0 +1,19 @@
+{
+    "value": "",
+    "proto": "/Library/views/View",
+    "is_default_class": false,
+    "order": 1,
+    "children": {
+        "title": {
+            "value": "Сайт",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Корневой объект сайта",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

@@ -10,7 +10,7 @@
         <?php
         $comments = $v['view']->arrays(\Boolive\values\Rule::string());
         foreach ($comments as $object) {
-        echo $object;
+            echo $object;
         }
         ?>
     </div>

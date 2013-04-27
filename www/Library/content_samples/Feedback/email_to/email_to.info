@@ -1,4 +1,21 @@
 {
-    "title": "Email, куда отправлять сообщения",
-    "proto": "/Library/basic/simple/Email"
+    "value": "",
+    "proto": "/Library/basic/simple/Email",
+    "order": 2,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Email",
+            "proto": "/Library/basic/simple/Email/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Адрес электронной почты",
+            "proto": "/Library/basic/simple/Email/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

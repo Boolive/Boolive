@@ -1,0 +1,13 @@
+{
+    "value": "",
+    "proto": "/Library/content_samples/paragraphs/TextBlock",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Обычный абзац",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

@@ -46,7 +46,8 @@ class Input extends Values
         );
         if (isset($_SERVER['REQUEST_URI'])){
             $_SERVER['REQUEST_URI'] = preg_replace('#\?{1}#u', '&', $_SERVER['REQUEST_URI'], 1);
-            parse_str('path='.urldecode($_SERVER['REQUEST_URI']), $values['REQUEST']);
+            $request_uri = preg_replace('#^'.preg_quote(DIR_WEB).'#u', '/', $_SERVER['REQUEST_URI'], 1);
+            parse_str('path='.urldecode($request_uri), $values['REQUEST']);
             $values['SERVER']['argv'] = $values['REQUEST'];
             $values['SERVER']['argc'] = sizeof($values['REQUEST']);
         }
@@ -222,9 +223,7 @@ class Input extends Values
             }
         }
 
-		if (strlen($url) > 0){
-			$url = trim($url,'//');
-		}
+
 		// Аргументы
 		if (!isset($args)){
             $args = self::SERVER()->argv->getValue();
@@ -238,6 +237,9 @@ class Input extends Values
 			foreach ($args as $name => $value){
 				$url .= '&'.$name.'='.$value;
 			}
+		}else
+        if (strlen($url) > 0){
+			$url = trim($url,'//');
 		}
 		if ($host){
 			return $shema.HTTP_HOST.DIR_WEB.$url;

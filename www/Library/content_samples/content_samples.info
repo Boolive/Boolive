@@ -1,5 +1,13 @@
 {
-    "title": "Содержимое",
-    "description": "Объекты для создания содержимого сайта. Статьи, комментарии, тексты...",
-    "proto": "/Library/basic/Package"
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Образцы содержимого",
+            "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

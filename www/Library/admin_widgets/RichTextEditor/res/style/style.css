@@ -1,0 +1,252 @@
+.RichTextBG{
+    background-color: #F1F1F1;
+}
+.RichTextEditor{
+    position: relative;
+    margin: 0 5px;
+    }
+    .RichTextEditor .tools{
+        margin: 0;
+        height: 70px;
+        left: 0;
+        right: 0;
+        top: 32px;
+        position: fixed;
+        padding: 0 160px;
+        }
+        .RichTextEditor .tools .body{
+            height: 64px;
+            padding: 0 5px;
+            margin: 0 auto;
+            max-width: 910px;
+            /*background-color: #F6F6F6;*/
+        }
+        .RichTextEditor .tools .toolbar{
+
+        }
+        .RichTextEditor .save{
+            float: right;
+        }
+    .RichTextEditor > .content{
+        margin: 64px -1px 32px -1px;
+        padding: 30px;
+        cursor: text;
+        min-height: 800px;
+        background-color: #FFF;
+        outline: none;
+        /*border: 1px solid #CCCCCC;*/
+        overflow: hidden;
+        box-shadow: /*0px 0px 1px 1px #e8e8e8, */inset 0 0 0px 1px #CCC, 1px 2px 3px 0 #e0e0e0/* , 0px 0px 300px 300px #F6F6F6*/;
+        }
+    .RichTextEditor > .content > *{
+        border: 1px dotted transparent;
+        /*position: relative;*/
+        /*padding-left: 5px;*/
+        /*border-left: 4px solid transparent;*/
+        }
+    .RichTextEditor > .content img{
+        cursor: default;
+    }
+    .RichTextEditor > .content img.selected{
+        /*border-right: 4px solid #125bfc;*/
+        /*background-color: #e6ecf2;*/
+        /*border: 1px dashed #0079f2;*/
+        /*background-color: #fafdff;*/
+        /*box-shadow: 0 0 0px 5px #bbdbfa;*/
+        /*outline: 1px dashed #333;*/
+        /*animation: selection 10s 1;*/
+        /*-webkit-animation: selection 5s 1;*/
+
+       /* box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);*/
+        }
+
+    .RichTextEditor > .content .resizing{
+        /*box-shadow: 0 0 0px 5px #fa8c5c;*/
+        cursor: se-resize;
+    }
+    .RichTextEditor ::selection{
+        -webkit-appearance: textarea;
+        background-color: #bbdbfa;
+
+        }
+    .RichTextEditor ::-moz-selection{
+        background-color: #bbdbfa;
+    }
+    .RichTextEditor p{
+        margin: 15px 0;
+        line-height: normal;
+        /*background-color: #e6e6e6;*/
+    }
+    .RichTextEditor pre{
+        background-color: #F4F4F4;
+        border: 1px solid #f4e6f0;
+        max-width: 100%;
+        overflow: auto;
+        line-break: normal;
+        font-size: 11pt;
+        padding: 3px;
+    }
+    .RichTextEditor .content .hidden{
+        opacity: 0.5;
+        }
+    .RichTextEditor .content .deleted{
+        text-decoration: line-through;
+        color: #FF0000;
+        }
+    .RichTextEditor .content img.deleted{
+        outline: solid 1px #FF0000;
+        }
+    .RichTextEditor .content .selected{
+        /*border-right: 4px solid #125bfc;*/
+        /*background-color: #e6ecf2;*/
+        /*border: 1px dashed #0079f2;*/
+        /*background-color: #fafdff;*/
+        /*box-shadow: 0 0 0px 5px #bbdbfa;*/
+        outline: dashed 1px rgba(55, 55, 55, 0.25);
+        /*animation: selection 10s 1;*/
+        /*-webkit-animation: selection 5s 1;*/
+
+       /* box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);*/
+        }
+
+    @keyframes selection{
+        from {
+            box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);
+        }
+        to {
+            box-shadow: 0 0 0px 5px rgba(187, 219, 250, 0.3);
+            }
+        }
+    @-webkit-keyframes selection{
+        from {
+            box-shadow: 0 0 0px 5px rgba(187, 219, 250, 1);
+        }
+        to {
+            box-shadow: 0 0 0px 5px rgba(187, 219, 250, 0.3);
+            }
+        }
+    .RichTextEditor .hrule{
+        height: 17px;
+        position: relative;
+        overflow: hidden;
+        margin: 0 -19px;
+        }
+        .RichTextEditor .hrule .bg{
+            background-color: #E4E4E4;
+            border: 1px solid #CECECE;
+            height: 15px;
+            margin: 0 19px;
+            }
+            .RichTextEditor .hrule .client{
+                background-color: #FFF;
+                height: 15px;
+                margin: 0 31px 0 30px;
+            }
+        .RichTextEditor .hrule .nums{
+            position: absolute;
+            top: 0;
+            height: 15px;
+            left:-970px;
+            width: 3000px;
+            font-size: 7pt;
+            padding: 0 10px;
+            }
+            .RichTextEditor .hrule .nums .sep-small{
+                width: 9px;
+                border-right: 1px solid #cccccc;
+                height: 3px;
+                margin-top: 7px;
+                float: left;
+            }
+            .RichTextEditor .hrule .nums .sep-big{
+                width: 9px;
+                border-right: 1px solid #b3b3b3;
+                height: 9px;
+                margin-top: 4px;
+                float: left;
+            }
+            .RichTextEditor .hrule .nums .sep-num{
+                width: 9px;
+                float: left;
+                border-right: 1px solid #d9d7d9;
+                height: 2px;
+                margin-top: 13px;
+                position: relative;
+
+                }
+                .RichTextEditor .hrule .nums .sep-num > div{
+                    color: #808080;
+                    position: absolute;
+                    width: 18px;
+                    height: 9px;
+                    text-align: center;
+                    padding: 0;
+                    line-height: 10px;
+                    left: 22%;
+                    top: -9px;
+                    }
+            .RichTextEditor .hrule .s-top{
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                margin-left: 1px;
+                left: 40px;
+                width: 0;
+                height: 0;
+                border-left: 9px solid transparent;
+                border-top: 9px solid rgba(204, 33, 47, 0.8);
+                border-right: 9px solid transparent;
+                }
+            .RichTextEditor .hrule .s-bottom{
+                position: absolute;
+                cursor: pointer;
+                top: 7px;
+                width: 0;
+                height: 0;
+                border-left: 9px solid transparent;
+                border-bottom: 9px solid rgba(50,50,50,0.8);
+                border-right: 9px solid transparent;
+                }
+            .RichTextEditor .hrule .mleft,
+            .RichTextEditor .hrule .tindent{
+                margin-left: 11px;
+                }
+            .RichTextEditor .hrule .mright{
+                margin-right: 9px;
+                }
+
+            .RichTextEditor .hrule .pleft{
+                position: absolute;
+                top: 0;
+                width: 100px;
+                height: 15px;
+                left: 10px;
+                padding-right: 10px;
+                cursor: e-resize;
+                }
+            .RichTextEditor .hrule .pright{
+                position: absolute;
+                top: 0;
+                width: 100px;
+                height: 15px;
+                right: 10px;
+                padding-left: 10px;
+                cursor: e-resize;
+                }
+
+
+    .align-left{
+        background-image: url(img/text-align-left.png);
+        }
+    .align-center{
+        background-image: url(img/text-align-center.png);
+        }
+    .align-right{
+        background-image: url(img/text-align-right.png);
+        }
+    .align-justify{
+        background-image: url(img/text-align-justify.png);
+        }
+    .line-height{
+        background-image: url(img/line-height.png);
+        }

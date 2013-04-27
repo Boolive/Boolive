@@ -1,0 +1,12 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 10,
+    "children": {
+        "title": {
+            "value": "Комментарий",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

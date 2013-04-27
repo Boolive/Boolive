@@ -8,43 +8,75 @@
  */
 namespace Boolive\data;
 
-use ArrayAccess, IteratorAggregate, ArrayIterator, Countable, Exception,
+use Exception,
     Boolive\values\Values,
     Boolive\values\Check,
     Boolive\errors\Error,
     Boolive\data\Data,
     Boolive\file\File,
     Boolive\develop\ITrace,
+    Boolive\develop\Trace,
     Boolive\values\Rule,
     Boolive\input\Input,
-    Boolive\functions\F;
+    Boolive\functions\F,
+    Boolive\auth\Auth;
 
-class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
+class Entity implements ITrace
 {
+    /** @const int Максимальное порядковое значение */
+    const MAX_ORDER = 4294967296;
+    /** @const int Идентификатор сущности - эталона всех объектов */
+    const ENTITY_ID = 4294967295;
     /** @var array Атрибуты */
-    protected $_attribs;
+    protected $_attribs = array(
+        'uri'          => null,
+        'id'           => null,
+        'name'         => 'entity',
+        'owner'		   => null,
+        'lang'		   => null,
+        'order'		   => 0,
+        'date'		   => 0,
+        'parent'       => null,
+        'parent_cnt'   => 0,
+        'proto'        => null,
+        'proto_cnt'    => 0,
+        'value'	 	   => '',
+        'is_file'	   => 0,
+        'is_history'   => 0,
+        'is_delete'	   => 0,
+        'is_hidden'	   => 0,
+        'is_link'      => 0,
+        'is_virtual'   => 1,
+        'is_default_value' => 0,
+        'is_default_class' => 0,
+        'is_default_children' => 1,
+        'is_accessible' => 1,
+        'is_exist' => 0,
+        'index_depth' => 0,
+        'index_step' => 0
+    );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, то есть не обязательно все существующие) */
     protected $_children = array();
+    /** @var bool Признак, загружены ли все подчиненные? */
+    private $_all_children = false;
     /** @var \Boolive\values\Rule Правило для проверки атрибутов */
     protected $_rule;
     /** @var \Boolive\data\Entity Экземпляр прототипа */
     protected $_proto = false;
     /** @var \Boolive\data\Entity Экземпляр родителя */
     protected $_parent = false;
+    /** @var \Boolive\data\Entity Экземпляр владельца */
+    protected $_owner = false;
+    /** @var \Boolive\data\Entity Экземпляр языка */
+    protected $_lang = false;
     /** @var bool Принзнак, объект в процессе сохранения? */
     protected $_is_saved = false;
-    /** @var bool Признак, виртуальный объект или нет. Если объект не сохранен в секции, то он виртуальный */
-    protected $_virtual = true;
-    /** @var bool Признак, сущесвтует объект или нет. Объект не существует, если виртуальный и все его прототипы виртуальные */
-    protected $_exist = false;
     /** @var bool Признак, изменены ли атрибуты объекта */
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
     protected $_checked = false;
     /** @var string uri родителя */
-    protected $_parent_uri = null;
-    /** @var string Имя объекта, определенное по uri */
-    protected $_name = null;
+    //protected $_parent_uri = null;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -53,11 +85,13 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     protected $_rename = false;
 
-    public function __construct($attribs = array(), $virtual = true, $exist = false)
+    /**
+     * Конструктор
+     * @param array $attribs
+     */
+    public function __construct($attribs = array())
     {
-        $this->_attribs = $attribs;
-        $this->_virtual = (bool)$virtual;
-        $this->_exist = (bool)$exist;
+        $this->_attribs = array_replace($this->_attribs, $attribs);
     }
 
     /**
@@ -66,28 +100,32 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     protected function defineRule()
     {
         $this->_rule = Rule::arrays(array(
-                'uri'    	 => Rule::uri()->max(255)->required(), // URI - идентификатор объекта. Уникален в рамках проекта
-                'lang'		 => Rule::string()->max(3)->default('')->required(), // Язык (код)
-                'owner'		 => Rule::int()->default(0)->required(), // Владелец (код)
-                'date'		 => Rule::int(), // Дата создания в секундах
-                'order'		 => Rule::any(Rule::null(), Rule::int()), // Порядковый номер. Уникален в рамках родителя
-                'proto'		 => Rule::any(Rule::uri()->max(255), Rule::null()), // URI прототипа
-                'value'	 	 => Rule::any(Rule::null(), Rule::string()), // Значение любой длины
-                'is_logic'	 => Rule::bool()->int(), // Имеется ли у объекта свой класс в его директории. Имя класса по uri
-                'is_file'	 => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
-                'is_history' => Rule::bool()->int()->default(0)->required(), // В истории или нет
-                'is_delete'	 => Rule::bool()->int(), // Удаленный или нет
-                'is_hidden'	 => Rule::bool()->int(), // Скрытый или нет
-                'is_link'	 => Rule::bool()->int(), // Ссылка или нет
-                'override'	 => Rule::bool()->int(), // Переопределять всех подчиенных от прототипа или нет
+                'id'           => Rule::uri(), // Сокращенный или полный URI
+                'name'         => Rule::string()->regexp('|^[^/@]*$|')->max(50)->required(), // Имя объекта
+                'owner'		   => Rule::uri(), // Владелец (идентификатор объекта-пользователя)
+                'lang'		   => Rule::uri(), // Язык (идентификатор объекта-языка)
+                'order'		   => Rule::int(), // Порядковый номер. Уникален в рамках родителя
+                'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
+                'parent'       => Rule::uri(), // URI родителя
+                'proto'        => Rule::uri(), // URI прототипа
+                'value'	 	   => Rule::string(), // Значение любой длины
+                'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
+                'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет
+                'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя
+                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя
+                'is_link'      => Rule::uri(), // Ссылка или нет
+                'is_virtual'   => Rule::bool()->int(), // Виртуальный или нет
+                'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
+                'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
+                'is_default_children' => Rule::bool()->int(), // Используются свойства прототипа или нет?
                 // Сведения о загружаемом файле. Не является атрибутом объекта
-                'file'		 => Rule::arrays(array(
+                'file'	=> Rule::arrays(array(
                         'tmp_name'	=> Rule::string(), // Путь на связываемый файл
                         'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
                         'size'		=> Rule::int(), // Размер в байтах
                         'error'		=> Rule::int()->eq(0, true) // Код ошибки. Если 0, то ошибки нет
                     )
-                )
+                ),
             )
         );
     }
@@ -109,141 +147,776 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     #################################################
 
     /**
-     * Получение атрибута или подчиненного объекта по имени
-     * Если объекта нет, то он НЕ выбирается из секции, а возвращается null
-     * @example $sub = $obj['sub'];
-     * @param string $name Имя атрибута
+     * Идентификатор объекта. Сокращенный URI
+     * @return null
+     */
+    public function id()
+    {
+        return isset($this->_attribs['id'])? $this->_attribs['id'] : null;
+    }
+
+    /**
+     * Имя объекта
+     * @param null $new_name
+     * @param bool $choose_unique
      * @return mixed
      */
-    public function offsetGet($name)
+    public function name($new_name = null, $choose_unique = false)
     {
-        if (isset($this->_attribs[$name]) || array_key_exists($name, $this->_attribs)){
-            if ($name == 'value' && !empty($this->_attribs['is_file'])){
-                if (mb_substr($this->_attribs[$name], mb_strlen($this->_attribs[$name])-6) == '.value'){
-                    try{
-                        $this->_attribs[$name] = file_get_contents(DIR_SERVER_PROJECT.$this['uri'].'/'.$this->_attribs[$name]);
-                    }catch(Exception $e){
-                        $this->_attribs[$name] = '';
-                    }
-                    $this->_attribs['is_file'] = false;
-                }
+        if (!isset($new_name) && $choose_unique) $new_name = $this->_attribs['name'];
+        // Смена имени
+        if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
+            if ($choose_unique){
+                $this->_rename = $new_name;
+                $new_name = uniqid($new_name);
             }
-            return $this->_attribs[$name];
+            $this->_attribs['name'] = $new_name;
+
+            if (isset($this->_attribs['uri'])){
+                $uri = F::splitRight('/',$this->_attribs['uri']);
+                $this->updateURI(is_null($uri[0])? $new_name : $uri[0].'/'.$new_name);
+            }else{
+                $this->updateURI(null);
+            }
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return $this->_attribs['name'];
+    }
+
+    /**
+     * URI объекта
+     * @return mixed
+     */
+    public function uri($remake = false)
+    {
+        if (!isset($this->_attribs['uri']) || $remake){
+            if ($parent = $this->parent()){
+               $this->_attribs['uri'] = $parent->uri().'/'.($this->_rename ? $this->_rename : $this->_attribs['name']);
+            }else{
+                $this->_attribs['uri'] = $this->_rename ? $this->_rename : $this->_attribs['name'];
+            }
+        }
+        return $this->_attribs['uri'];
+    }
+
+
+    /**
+     * Ключ
+     * Полный или сокращенный URI в зависимости от их наличия
+     * @return mixed|string
+     */
+    public function key()
+    {
+        return isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
+    }
+
+        /**
+     * Каскадное обновление URI подчиненных на основании своего uri
+     * Обновляются uri только выгруженных/присоединенных на данный момент подчиенных
+     * @param $uri Свой новый URI
+     */
+    private function updateURI($uri)
+    {
+        $this->_attribs['uri'] = $uri;
+        foreach ($this->_children as $child_name => $child){
+            /* @var \Boolive\data\Entity $child */
+            $child->updateURI(is_null($uri)? null : $uri.'/'.$child_name);
+        }
+    }
+
+    /**
+     * Дата изменения или версия объекта.
+     * Если история изменения объекта не ведется, то является датой создания объекта
+     * @return mixed
+     */
+    public function date()
+    {
+        if (isset($this->_attribs['date'])){
+            $this->_attribs['date'] = time();
+        }
+        return (int)$this->_attribs['date'];
+    }
+
+    /**
+     * Порядковое значение объекта
+     * @param null $new_order Новое значение. Если с указыннм порядковым номером имеется объект, то он будет смещен
+     * @return mixed
+     */
+    public function order($new_order = null)
+    {
+        if (isset($new_order) && (!isset($this->_attribs['order']) || $this->_attribs['order']!=$new_order)){
+            $this->_attribs['order'] = $new_order;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return isset($this->_attribs['order'])? (int)$this->_attribs['order'] : null;
+    }
+
+    /**
+     * Значение
+     * @param null|string $new_value Новое значение. Устнавливается если не null
+     * @return string
+     */
+    public function value($new_value = null)
+    {
+        // Установка значения
+        if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!=$new_value)){
+            $this->_attribs['value'] = $new_value;
+            $this->_attribs['is_file'] = false;
+            $this->_attribs['is_default_value'] = 0;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        // Возврат значения
+        if (!isset($this->_attribs['value'])){
+            return null;
+        }else
+        if ($this->isFile()){
+            // Значение в файле
+            if (mb_substr($this->_attribs['value'], mb_strlen($this->_attribs['value'])-6) == '.value'){
+                try{
+                    $this->_attribs['value'] = file_get_contents($this->file(null, true));
+                }catch(Exception $e){
+                    $this->_attribs['value'] = '';
+                }
+                $this->_attribs['is_file'] = false;
+            }
+        }
+        return $this->_attribs['value'];
+    }
+
+    /**
+     * Файл, ассоциированный с объектом
+     * @param null|array|string $new_file Информация о новом файле. Полный путь к файлу или сведения из $_FILES
+     * @param bool $root Возвращать полный путь или от директории сайта
+     * @return null|string
+     * @todo Учесть в пути владельца и язык объекта
+     */
+    public function file($new_file = null, $root = false)
+    {
+        // Установка нового файла
+        if (isset($new_file)){
+            if (empty($new_file)){
+                unset($this->_attribs['file']);
+                $this->_attribs['is_file'] = 0;
+            }else{
+                if (is_string($new_file)){
+                    $new_file = array(
+                        'tmp_name'	=> $new_file,
+                        'name' => basename($new_file),
+                        'size' => @filesize($new_file),
+                        'error'	=> is_file($new_file)? 0 : true
+                    );
+                }
+                $this->_attribs['file'] = $new_file;
+            }
+            $this->_attribs['is_default_value'] = 0;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        // Возврат пути к текущему файлу, если есть
+        if (!empty($this->_attribs['is_file'])){
+            if ($proto = $this->isDefaultValue(null, true)){
+                return $proto->file(null, $root);
+            }else{
+                $file = $this->dir($root);
+                if (!empty($this->_attribs['is_history'])) $file.='_history_/'.$this['date'].'_';
+                return $file.$this->_attribs['value'];
+            }
         }
         return null;
     }
 
     /**
-     * Установка значений атриубту
-     * @example $object[$name] = $value;
-     * @param string $name Имя атрибута
-     * @param mixed $value Значение
+     * Директория объекта
+     * @param bool $root Признак, возвращать путь от корня сервера или от web директории (www)
+     * @return string
      */
-    public function offsetSet($name, $value)
+    public function dir($root = false)
     {
-        if (!isset($this->_attribs[$name]) || $this->offsetGet($name)!=$value){
-            // Если не виртуальный, то запретить менять uri, lang, owner, date
-            //if (!$this->_virtual && in_array($name, array('uri', 'lang', 'owner', 'date'))) return;
+        if ($root){
+            return DIR_SERVER_PROJECT.ltrim($this->uri().'/','/');
+        }else{
+            return DIR_WEB_PROJECT.ltrim($this->uri().'/','/');
+        }
+    }
 
-            if ($name == 'proto'){
-                $this->_proto = null;
-            }else
-            if ($name == 'uri'){
-                // Обновление uri текущих подчиненных
-                if (isset($this->_attribs['uri'])){
-                    // Удаление себя из текущего родителя, так как родитель поменяется
-                    if (!empty($this->_parent)){
-                        $this->_parent->offsetUnset($this->getName());
-                        $this->_parent = null;
-                    }
-                    $this->updateName($value);
-                }
-                $this->_name = null;
-                $this->_parent_uri = null;
-                $this->_virtual = true; // @todo Возможно, объект с указанным uri существует и он не виртуальный
-            }
-            $this->_attribs[$name] = $value;
+    /**
+     * Признак, является занчение файлом или нет?
+     * @param null|bool $is_file Новое значение, если не null
+     * @return bool
+     */
+    public function isFile($is_file = null)
+    {
+        if (isset($is_file) && (empty($this->_attribs['is_file']) == $is_file)){
+            $this->_attribs['is_file'] = $is_file;
             $this->_changed = true;
             $this->_checked = false;
         }
+        return !empty($this->_attribs['is_file']);
     }
 
     /**
-     * Удаление атрибута
-     * @param string $name Имя атрибута
-     */
-    public function offsetUnset($name)
-    {
-        if (isset($this->_attribs[$name])) unset($this->_attribs[$name]);
-        $this->_changed = true;
-        $this->_checked = false;
-    }
-
-    /**
-     * Проверка существования атрибута
-     * @param string $name Имя атрибута
+     * Признак, объект в истории или нет?
+     * @param null|bool $history Новое значение, если не null
      * @return bool
      */
-    public function offsetExists($name)
+    public function isHistory($history = null)
     {
-        return isset($this->_attribs[$name]) || array_key_exists($name, $this->_attribs);
+        if (isset($delete) && (empty($this->_attribs['is_history']) == $history)){
+            $this->_attribs['is_history'] = $history;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_history']);
     }
 
     /**
-     * Проверка, атрибут отсутсвует или его значение неопредлено?
-     * @param string $name Имя атрибута
+     * Признак, объект удален или нет?
+     * @param null|bool $delete Новое значение, если не null
+     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то удаление родителя не влияет на данный объект
      * @return bool
      */
-    public function offsetEmpty($name)
+    public function isDelete($delete = null, $inherit_parent = true)
     {
-        return empty($this->_attribs[$name]);
+        // Какой признак у родителя (чтобы его вычесть из своего)
+        if ((!$inherit_parent || isset($delete)) && ($parent = $this->parent())){
+            $p = $parent->_attribs['is_delete'];
+        }else{
+            $p = 0;
+        }
+        // Смена своего признака
+        if (isset($delete) && ($this->_attribs['is_delete']-$p != ($delete = intval((bool)$delete)))){
+            $this->_attribs['is_delete'] = $delete + $p;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return $inherit_parent ? !empty($this->_attribs['is_delete']) : ($this->_attribs['is_delete']-$p != 0);
     }
 
     /**
-     * Замена всех атрибутов новыми значениями
-     * @param array $attribs Новые значения атрибутов
+     * Признак, скрытый объект или нет?
+     * @param null|bool $hide Новое значение, если не null
+     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то скрытие родителя не влияет на данный объект
+     * @return bool
      */
-    public function exchangeAttribs($attribs)
+    public function isHidden($hide = null, $inherit_parent = true)
     {
-        $this->_attribs = array();
-        $this->updateAttribs($attribs);
+        // Какой признак у родителя (чтобы его вычесть из своего)
+        if ((!$inherit_parent || isset($hide)) && ($parent = $this->parent())){
+            $p = $parent->_attribs['is_hidden'];
+        }else{
+            $p = 0;
+        }
+        // Смена своего признака
+        if (isset($hide) && ($this->_attribs['is_hidden']-$p != ($hide = intval((bool)$hide)))){
+            $this->_attribs['is_hidden'] = $hide + $p;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return $inherit_parent ? !empty($this->_attribs['is_hidden']) : ($this->_attribs['is_hidden']-$p != 0);
     }
 
     /**
-     * Обновление атриубтов на соответсвующие значения $input
-     * @param array $attribs Новые значения атрибутов
+     * Признак, объект является ссылкой или нет?
+     * @param null|bool $is_link Новое значение, если не null
+     * @param bool $return_link Признак, возвращать или нет объект, на которого ссылается данный
+     * @return bool|Entity
      */
-    public function updateAttribs($attribs)
+    public function isLink($is_link = null, $return_link = false)
     {
-        if (is_array($attribs)){
-            foreach ($attribs as $key => $value){
-                $this->offsetSet($key, $value);
+        if (isset($is_link)){
+            $curr = $this->_attribs['is_link'];
+            if ($is_link){
+                // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
+                if (($proto = $this->proto())){
+                    if ($p = $proto->isLink(null, true)) $proto = $p;
+                }
+                if (isset($proto) && $proto->isExist()){
+                    $this->_attribs['is_link'] = $proto->key();
+                }else{
+                    $this->_attribs['is_link'] = self::ENTITY_ID;
+                }
+            }else{
+                $this->_attribs['is_link'] = 0;
+            }
+            if ($curr !== $this->_attribs['is_link']){
+                $this->_changed = true;
+                $this->_checked = false;
+            }
+            if ($this->isDefaultClass()) $this->isDefaultClass(true);
+        }
+        // Возвращение признака или объекта, на которого ссылается данный объект
+        if (!empty($this->_attribs['is_link']) && $return_link){
+            if ($this->_attribs['is_link']==1){
+                if ($proto = $this->proto()){
+                    return $proto->isLink(null, true);
+                }else{
+                    return null;
+                }
+            }
+            return Data::read($this->_attribs['is_link'], $this->owner(), $this->lang());
+        }else{
+            return !empty($this->_attribs['is_link']);
+        }
+    }
+
+    /**
+     * Признак, виртуальный объект или нет?
+     * Виртуальные объекты образуются автоматически за счет наследования
+     * @return bool
+     */
+    public function isVirtual()
+    {
+        return !empty($this->_attribs['is_virtual']);
+    }
+
+    /**
+     * Признак, сущесвтует объект или нет?
+     * @return bool
+     */
+    public function isExist()
+    {
+        return !empty($this->_attribs['is_exist']);
+    }
+
+    /**
+     * Признак, доступен объект или нет для совершения указываемого действия над ним
+     * Доступность проверяется для текущего пользователя
+     * @param string $action Название действия. По умолчанию дейсвте чтения объекта.
+     * @return bool
+     */
+    public function isAccessible($action = 'read')
+    {
+        if (!empty($this->_attribs['is_accessible'])){
+            if ($action != 'read'){
+                return !IS_INSTALL || $this->verify(Auth::getUser()->getAccessCond($action));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Признак, наследуется ли значение от прототипа и от кого именно
+     * @param null $is_default Новое значение признака. Для отмены значения по умолчанию необходимое изменить само значение.
+     * @param $return_proto Если значение по умолчанию, то возвращать прототип, чьё значение наследуется или true?
+     * @return bool|Entity
+     */
+    public function isDefaultValue($is_default = null, $return_proto = false)
+    {
+        if (isset($is_default)){
+            $curr = $this->_attribs['is_default_value'];
+            if ($is_default){
+                // Поиск прототипа, от котоого наследуется значение, чтобы взять его значение
+                if (($proto = $this->proto())/* && $proto->isLink() == $this->isLink()*/){
+                    if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
+                }
+                if (isset($proto) && $proto->isExist()){
+                    $this->_attribs['is_default_value'] = $proto->key();
+                    $this->_attribs['value'] = $proto->value();
+                    $this->_attribs['is_file'] = $proto->isFile();
+                }else{
+                    $this->_attribs['is_default_value'] = self::ENTITY_ID;
+                    $this->_attribs['value'] = '';
+                    $this->_attribs['is_file'] = 0;
+                }
+            }else{
+                $this->_attribs['is_default_value'] = 0;
+            }
+            if ($curr !== $this->_attribs['is_default_value']){
+                $this->_changed = true;
+                $this->_checked = false;
             }
         }
-    }
-
-    /**
-     * Каскадное обновление URI подчиненных на основании своего uri
-     * Обновляются uri только выгруженных/присоединенных на данный момент подчиенных
-     * @param $uri Свой новый URI
-     */
-    protected function updateName($uri)
-    {
-        $this->_attribs['uri'] = $uri;
-        foreach ($this->_children as $child_name => $child){
-            /* @var \Boolive\data\Entity $child */
-            $child->updateName($uri.'/'.$child_name);
+        if (!empty($this->_attribs['is_default_value']) && $return_proto){
+            // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
+            return Data::read($this->_attribs['is_default_value'], $this->owner(), $this->lang());
+        }else{
+            return !empty($this->_attribs['is_default_value']);
         }
     }
 
+    /**
+     * Признак, используется класс прототипа или свой?
+     * @param null $is_default
+     * @param bool $return_proto
+     * @return bool
+     */
+    public function isDefaultClass($is_default = null, $return_proto = false)
+    {
+        if (isset($is_default)){
+            $curr = $this->_attribs['is_default_class'];
+            if ($is_default){
+                // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
+                if (($proto = $this->proto()) && $proto->isLink() == $this->isLink()){
+                    if ($p = $proto->isDefaultClass(null, true)) $proto = $p;
+                }else{
+                    $proto = null;
+                }
+                if (isset($proto) && $proto->isExist()){
+                    $this->_attribs['is_default_class'] = $proto->key();
+                }else{
+                    $this->_attribs['is_default_class'] = self::ENTITY_ID;
+                }
+            }else{
+                $this->_attribs['is_default_class'] = 0;
+            }
+            if ($curr !== $this->_attribs['is_default_class']){
+                $this->_changed = true;
+                $this->_checked = false;
+            }
+        }
+        if (!empty($this->_attribs['is_default_class']) && $return_proto){
+            // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
+            return Data::read($this->_attribs['is_default_class'], $this->owner(), $this->lang());
+        }else{
+            return !empty($this->_attribs['is_default_class']);
+        }
+    }
+
+    /**
+     * Признак, наследуются ли свойства от прототипов
+     * @param null $is_default
+     * @return bool
+     */
+    public function isDefaultChildren($is_default = null)
+    {
+        if (isset($is_default) && (empty($this->_attribs['is_default_children']) == $is_default)){
+            $this->_attribs['is_default_children'] = $is_default;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_default_children']);
+    }
+
+    /**
+     * Все атрибуты объекта
+     * @return array
+     */
+    public function attributes()
+    {
+        return $this->_attribs;
+    }
+
     #################################################
     #                                               #
-    #     Управление подчиненными объектами         #
+    #        Отношения с другими объектами          #
     #                                               #
     #################################################
 
     /**
-     * Получение подчиненного объекта по имени
+     * Родитель объекта
+     * @param null|Entity $new_parent Новый родитель. Чтобы удалить родителя, указывается false
+     * @return \Boolive\data\Entity|null
+     */
+    public function parent($new_parent = null)
+    {
+        if (is_string($new_parent)) $new_parent = Data::read($new_parent, null, null, 0);
+        // Смена родителя
+        if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->isEqual($this->parent()))){
+            $is_delete = $this->isDelete(null, false);
+            $is_hidden = $this->isHidden(null, false);
+            if (empty($new_parent)){
+                // Удаление родителя
+                $this->_attribs['parent'] = null;
+                $this->_attribs['parent_cnt'] = 0;
+                $this->_parent = null;
+                $this->updateURI($this->name());
+            }else{
+                // Смена родителя
+                $this->_parent = $new_parent;
+                $this->_attribs['parent'] = $new_parent->key();
+                $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
+                // Установка атрибутов, зависимых от прототипа
+                //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
+                // Обновление доступа
+                if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
+                $this->updateURI($new_parent->uri().'/'.$this->name());
+            }
+            // Обновление зависимых от родителя признаков
+            $this->isDelete($is_delete);
+            $this->isHidden($is_hidden);
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        // Возврат объекта-родителя
+        if ($this->_parent === false){
+            if (isset($this->_attribs['parent'])){
+                $this->_parent = Data::read($this->_attribs['parent'], $this->_attribs['owner'], $this->_attribs['lang']);
+                if (!$this->_parent->isExist()){
+                    $this->_parent = null;
+                }
+            }else{
+                $this->_parent = null;
+            }
+        }
+        return $this->_parent;
+    }
+
+    /**
+     * Количество родителей у объекта. Уровень вложенности
+     * @return int
+     */
+    public function parentCount()
+    {
+        if (!isset($this->_attribs['parent_cnt'])){
+            if (isset($this->_attribs['uri'])){
+                $this->_attribs['parent_cnt'] = mb_substr_count($this->_attribs['uri'], '/');
+            }else
+            if ($parent = $this->parent()){
+                $this->_attribs['parent_cnt'] = $parent->parentCount() + 1;
+            }else{
+                $this->_attribs['parent_cnt'] = 0;
+            }
+        }
+        return $this->_attribs['parent_cnt'];
+    }
+
+    /**
+     * URI родителя
+     * Если известен свой URI, то URI родителя определяется без обращения к родителю
+     * @return string|null Если родителя нет, то null. Пустая строка является корректным uri
+     */
+    public function parentUri()
+    {
+        if (!isset($this->_attribs['parent_uri'])){
+            $uri = $this->uri();
+            $names = F::splitRight('/', $uri);
+            $this->_attribs['parent_uri'] = $names[0];
+        }
+        return $this->_attribs['parent_uri'];
+    }
+
+    /**
+     * Имя родителя
+     * Если известен свой URI, то имя родителя определяется без обращения к родителю
+     * @return string
+     */
+    public function parentName()
+    {
+        if ($parent_uri = $this->parentUri()){
+            $names = F::splitRight('/', $parent_uri);
+            return $names[1];
+        }
+        return '';
+    }
+
+    /**
+     * Прототип объекта
+     * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
+     * @return \Boolive\data\Entity|null|false
+     */
+    public function proto($new_proto = null)
+    {
+        if (is_string($new_proto)) $new_proto = Data::read($new_proto, null, null, 0);
+//        if ($new_proto instanceof Entity && !$new_proto->isExist()) $new_proto = null;
+        // Смена прототипа
+        if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->isEqual($this->proto()))){
+            if (empty($new_proto)){
+                // Удаление прототипа
+                $this->_attribs['proto'] = null;
+                $this->_attribs['proto_cnt'] = 0;
+                $this->_attribs['is_default_value'] = 0;
+                if ($this->_attribs['is_default_class'] != 0){
+                    $this->_attribs['is_default_class'] = self::ENTITY_ID;
+                }
+                if ($this->_attribs['is_link'] != 0){
+                    $this->_attribs['is_link'] = self::ENTITY_ID;
+                }
+                $this->_proto = null;
+            }else{
+                // Наследование значения
+                if ($this->isDefaultValue()){
+                    $this->_attribs['value'] = $new_proto->value();
+                    $this->_attribs['is_file'] = $new_proto->isFile();
+                    if ($vp = $new_proto->isDefaultValue(null, true)){
+                        $this->_attribs['is_default_value'] = $vp->key();
+                    }else{
+                        $this->_attribs['is_default_value'] = $new_proto->key();
+                    }
+                }
+                // Смена прототипа
+                $this->_attribs['proto'] = $new_proto->key();
+                $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
+                $this->_proto = $new_proto;
+
+                // Если объект ссылка или новый прототип ссылка, то обновление ссылки
+                if ($this->isLink() || $new_proto->isLink()){
+                    $this->isLink(true); //также обновляется класс
+                }else
+                // Обновление наследуемого класса
+                if ($this->isDefaultClass()){
+                    $this->isDefaultClass(true);
+                }
+                // Обновление доступа
+                if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
+            }
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        // Возврат объекта-прототипа
+        if ($this->_proto === false){
+            if (isset($this->_attribs['proto'])){
+                $this->_proto = Data::read($this->_attribs['proto'], $this->_attribs['owner'], $this->_attribs['lang']);
+                if (!$this->_proto->isExist()){
+                    $this->_proto = null;
+                }
+            }else{
+                $this->_proto = null;
+            }
+        }
+        return $this->_proto;
+    }
+
+    /**
+     * Количество прототипов у объекта. Уровень наследования.
+     * @return int
+     */
+    public function protoCount()
+    {
+        if (!isset($this->_attribs['proto_cnt'])){
+            if ($proto = $this->proto()){
+                $this->_attribs['proto_cnt'] = $proto->protoCount() + 1;
+            }else{
+                $this->_attribs['proto_cnt'] = 0;
+            }
+        }
+        return $this->_attribs['proto_cnt'];
+    }
+
+    /**
+     * Владелец объекта
+     * @param null|Entity $new_owner Новый владелец. Чтобы сделать общим, указывается false
+     * @return \Boolive\data\Entity|null
+     */
+    public function owner($new_owner = null)
+    {
+        if (is_string($new_owner)) $new_owner = Data::read($new_owner, null, null, 0);
+        // Смена владельца
+        if (isset($new_owner) && (empty($new_owner)&&!empty($this->_attribs['owner']) || !$new_owner->isEqual($this->owner()))){
+            if (empty($new_owner)){
+                // Удаление языка
+                $this->_attribs['owner'] = null;
+                $this->_owner = null;
+            }else{
+                $this->_attribs['owner'] = $new_owner->key();
+                $this->_owner = $new_owner;
+            }
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        // Возврат объекта-владельца
+        if ($this->_owner === false){
+            if (isset($this->_attribs['owner'])){
+                $this->_owner = Data::read($this->_attribs['owner'], $this->_attribs['owner'], $this->_attribs['lang']);
+            }else{
+                $this->_owner = null;
+            }
+        }
+        return $this->_owner;
+    }
+
+    /**
+     * Язык объекта
+     * @param null|Entity $new_lang Новый язык. Чтобы сделать общим, указывается false
+     * @return \Boolive\data\Entity|null
+     */
+    public function lang($new_lang = null)
+    {
+        if (is_string($new_lang)) $new_lang = Data::read($new_lang, null, null, 0);
+        // Смена языка
+        if (isset($new_lang) && (empty($new_lang)&&!empty($this->_attribs['lang']) || !$new_lang->isEqual($this->lang()))){
+            if (empty($new_lang)){
+                // Удаление языка
+                $this->_attribs['lang'] = null;
+                $this->_owner = null;
+            }else{
+                $this->_attribs['lang'] = $new_lang->key();
+                $this->_lang = $new_lang;
+            }
+            $this->_changed = true;
+            $this->_checked = false;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        // Возврат объекта-языка
+        if ($this->_lang === false){
+            if (isset($this->_attribs['lang'])){
+                $this->_lang = Data::read($this->_attribs['lang'], $this->_attribs['owner'], $this->_attribs['lang']);
+            }else{
+                $this->_lang = null;
+            }
+        }
+        return $this->_lang;
+    }
+
+    /**
+     * Объект, на которого ссылется данный, если является ссылкой
+     * Если данный объект не является ссылкой, то возарщается $this,
+     * иначе возвращается первый из прототипов, не являющейся ссылкой
+     * @param bool $clone Клонировать, если объект является ссылкой?
+     * @return \Boolive\data\Entity
+     */
+    public function linked($clone = false)
+    {
+        if (empty($this->_attribs['is_link'])) return $this;
+        if ($link = $this->isLink(null, true)){
+            if ($clone) $link = clone $link;
+            return $link;
+        }
+        return $this;
+    }
+
+    /**
+     * Следующий объект
+     */
+    public function next()
+    {
+        if ($next = $this->parent()->find(array(
+                'where' => array(
+                    array('attr', 'order', '>', $this->order()),
+                ),
+                'order' => array(
+                    array('order', 'ASC')
+                ),
+                'limit' => array(0,1)
+            ), null
+        )){
+            return $next[0];
+        }
+        return null;
+    }
+
+    /**
+     * Предыдущий объект
+     */
+    public function prev()
+    {
+        if ($prev = $this->parent()->find(array(
+                'where' => array(
+                    array('attr', 'order', '<', $this->order()),
+                ),
+                'order' => array(
+                    array('order', 'DESC')
+                ),
+                'limit' => array(0,1)
+            ), null
+        )){
+            return $prev[0];
+        }
+        return null;
+    }
+
+    #################################################
+    #                                               #
+    #     Управление подчинёнными (свойствами)      #
+    #                                               #
+    #################################################
+
+    /**
+     * Получение подчиненного объекта по имени с учётом владельца и языка его родителя
      * @example $sub = $obj->sub;
      * @param string $name Имя подчиенного объекта
      * @return \Boolive\data\Entity
@@ -253,7 +926,21 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         if (isset($this->_children[$name])){
             return $this->_children[$name];
         }else{
-            $obj = Data::object($this['uri'].'/'.$name, (string)$this['lang'], (int)$this['owner']);
+            if (!$this->isExist()){
+                if (($p = $this->proto()) && $p->{$name}->isExist()){
+                    $obj = $p->{$name}->birth($this);
+                }else{
+                    $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
+                }
+            }else{
+                $obj = Data::read(array($this, $name), $this->_attribs['owner'], $this->_attribs['lang']);
+            }
+            if (!$obj->isExist()){
+                $obj->_attribs['name'] = $name;
+                $obj->_attribs['uri'] = $this->uri().'/'.$name;
+            }else{
+
+            }
             $this->__set($name, $obj);
             return $obj;
         }
@@ -268,36 +955,59 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      * Если подчиенный с именем $name уже есть, он будет заменен
      * @example $object->sub = $sub;
      * @param $name
-     * @param $value
+     * @param Entity $value
      * @return \Boolive\data\Entity
      */
     public function __set($name, $value)
     {
         if ($value instanceof Entity){
-            /** @var \Boolive\data\Entity $value */
+            // Именование
             // Если имя неопределенно, то потрубуется подобрать уникальное автоматически при сохранении
             // Перед сохранением используется временное имя
             if (is_null($name)){
-                $name = uniqid('rename');
-                $rename = 'entity';
+                $name = uniqid($value->_attribs['name']);
+                $value->name($value->_attribs['name'], true);
+            }else{
+                if ($this->uri().'/'.$name != $value->uri()){
+                    $value->name($name, true);
+                }
+//                if (!$this->isEqual($value->parent())){
+//
+//                }else{
+//                    $value->name($name);
+//                }
             }
-            // Если у объект есть uri и он отличается от необходимого, то прототипируем объект
-            if (isset($value->_attribs['uri']) && isset($this->_attribs['uri']) && $value->_attribs['uri']!= $this->_attribs['uri'].'/'.$name){
-                // В качестве базового имени - имя прототипа.
-                if (isset($rename)) $rename = $value->getName();
-                $value = $value->birth();
-            }
-            // Установка uri для объекта, если есть свой uri
-            if (isset($this->_attribs['uri'])) $value->_attribs['uri'] = $this->_attribs['uri'].'/'.$name;
-            if (isset($rename)) $value->_rename = $rename;
-            $value->_parent = $this;
+            // Установка себя в качетсве родителя
+            $value->parent($this);
+            // В список загруженный подчиенных
             $this->_children[$name] = $value;
             return $value;
         }else{
             // Установка значения для подчиненного
-            $this->__get($name)->offsetSet('value', $value);
+            $this->__get($name)->value($value);
             return $this->__get($name);
         }
+    }
+
+    /**
+     * Проверка, имеется ли подчиненный с именем $name в списке выгруженных?
+     * @example $result = isset($object->sub);
+     * @param $name Имя подчиненного объекта
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->_children[$name]);
+    }
+
+    /**
+     * Удаление подчиненного с именем $name из списка выгруженных
+     * @example unset($object->sub);
+     * @param $name Имя подчиненного объекта
+     */
+    public function __unset($name)
+    {
+        unset($this->_children[$name]);
     }
 
     /**
@@ -312,217 +1022,82 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
-     * Проверка, имеется ли подчиенный с именем $name в списке выгруженных?
-     * @example $result = isset($object->sub);
-     * @param $name Имя подчиненного объекта
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        return isset($this->_children[$name]);
-    }
-
-    /**
-     * Удаление из списка выгруженных подчиенного с именем $name
-     * @example unset($object->sub);
-     * @param $name Имя подчиненного объекта
-     */
-    public function __unset($name)
-    {
-        unset($this->_children[$name]);
-    }
-
-    /**
-     * Поиск подчиенных объектов
-     * @todo По умолчанию указать язык и владельца
-     * @param array $cond Услвоие поиска
+     * Поиск подчиненных объектов
      * <code>
      * $cond = array(
-     *   'where' => '', // Условие на атрибуты объекта. Условие как в SQL на колонки таблицы.
-     *   'values' => array(), // Массив значений для вставки в условие вместо "?"
-     *   'order' => '', // Способ сортировки. Задается как в SQL, например: `order` DESC, `value` ASC
-     *   'count' => 0, // Количество выбираемых объектов
-     *   'start' => 0 // Смещение от первого найденного объекта, с которого начинать выбор
+     *     'where' => array(                            // услвоия поиска объединенные логическим AND
+     *         array('attr', 'uri', '=', '?'),          // сравнение атрибута
+     *         array('not', array(                      // отрицание всех условий
+     *             array('attr', 'value', '=', '%?%')
+     *         )),
+     *         array('any', array(                      // услвоия объединенные логическим OR
+     *             array('child', array(                // проверка свойства искомого объекта
+     *                 array('attr', 'value', '>', 10),
+     *                 array('attr', 'value', '<', 100),
+     *             ))
+     *         )),
+     *         array('is', '/Library/object')          // кем объект является? проверка наследования
+     *     ),
+     *     'order' => array(                           // сортировка
+     *         array('uri', 'DESC'),                   // по атрибуту uri
+     *         array('childname', 'value', 'ASC')      // по атрибуту value подчиненного с имененм childname
+     *     ),
+     *     'limit' => array(10, 15)                    // ограничение - выбирать с 10-го не более 15 объектов
      * );
      * </code>
-     * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
-     * @param null $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
+     * @param array $cond Условие поиска
+     * @param null|string $keys Имя атрибута, значения которого использовать в качестве ключей массива результата
+     * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
+     * @param int $depth Глубина поиска
+     * @param bool $index Признак, индексировать или нет данные?
+     * @see https://github.com/Boolive/Boolive/issues/7
      * @return array
      */
-    public function find($cond = array(), $load = false, $key_by = null)
+    public function find($cond = array(), $keys = 'name', $load = true, $depth = 1, $index = true)
     {
-        if ($s = Data::section($this['uri'], false)){
-            if (!empty($cond['where'])){
-                $cond['where'].=' AND uri like ? AND level=?';
-            }else{
-                $cond['where'] = 'uri like ? AND level=?';
-            }
-            $cond['values'][] = $this->_attribs['uri'].'/%';
-            $cond['values'][] = $this->getLevel()+1;
-            $results = $s->select($cond);
-            if ($load) $this->_children = $results;
-            // Смена ключей масива
-            if ($key_by){
-                $list = array();
-                $cnt = sizeof($results);
-                for ($i=0; $i<$cnt; $i++){
-                    switch ($key_by){
-                        case 'name': $key = $results[$i]->getName();
-                            break;
-                        case 'value': $key = $results[$i]->getValue();
-                            break;
-                        default: $key = $results[$i][$key_by];
-                    }
-                    $list[$key] = $results[$i];
-                }
-                $results = $list;
-            }
+        $all = (empty($cond) && $depth == 1);
 
-            return $results;
-        }
-        return array();
-    }
-
-    /**
-     * Поиск подчиненных объектов с учетом унаследованных
-     * @todo Ограничение количества выборки..
-     * @param array $cond Услвоие поиска
-     * <code>
-     * $cond = array(
-     *   'where' => '', // Условие на атрибуты объекта. Условие как в SQL на колонки таблицы.
-     *   'values' => array(), // Массив значений для вставки в условие вместо "?"
-     *   'order' => '', // Способ сортировки. Задается как в SQL, например: `order` DESC, `value` ASC
-     *   'count' => 0, // Количество выбираемых объектов
-     *   'start' => 0 // Смещение от первого найденного объекта, с которого начинать выбор
-     * );
-     * </code>
-     * @param bool $load Признак, загрузить (true) иле нет (false) найденные объекты в список подчиненных?
-     * @param null|string $key_by Имя атрибута, значение которого использоваться в качестве ключей массива результата
-     * @param bool $req Признак рекурсивного вызова метода (используется самим методом)
-     * @return array
-     */
-    public function findAll($cond = array(), $load = false, $key_by = 'name', $req = false)
-    {
-        $results = $this->find($cond, false, 'name');
-        if (empty($this->_attribs['override']) && $proto = $this->proto()){
-            $proto_sub = $proto->findAll($cond, false, 'name', true);
-            foreach ($proto_sub as $key => $child){
-                if (!isset($results[$key])){
-                    $bkey = $this['uri'].'/'.$key;//.' '.$this['lang'].' '.(int)$this['owner'];
-                    if (Data::bufferExist($bkey)){
-                        $results[$key] = Data::bufferGet($bkey);
-                    }else{
-                        $results[$key] = $child->birth();
-                        $results[$key]['uri'] = $this['uri'].'/'.$key;
-                        $results[$key]['order'] = $child['order'];
-                        $results[$key]['lang'] = $child['lang'];
-                        $results[$key]['owner'] = $child['owner'];
-                        // Объект ссылка?
-                        if (!empty($this->_attribs['is_link']) || !empty($proto->_attribs['is_link'])){
-                            $results[$key]['is_link'] = 1;
-                        }
-                        Data::bufferAdd($bkey, $results[$key]);
-                    }
-                }
-            }
-        }
-        if (!$req){
-            // Смена ключей, если требуется
-            if (empty($key_by)){
-                $results = array_values($results);
+        if ($all && $this->_all_children){
+            if ($keys == 'name'){
+                return $this->_children;
             }else
-            if ($key_by != 'name'){
-                $list = array();
-                foreach ($results as $child){
-                    switch ($key_by){
-                        case null: $list[] = $child;
-                            break;
-                        case 'value': $list[$child->getValue()] = $child;
-                            break;
-                        default: $list[$child[$key_by]] = $child;
-                    }
-                }
-                $results = $list;
+            if (empty($keys)){
+                return array_values($this->_children);
             }
-            // Сортировки
-            if (!empty($cond['order']) && preg_match('/`([a-z_]+)`\s*(DESC)?/iu', $cond['order'], $math)){
-                uasort($results, function($a, $b) use ($math){
-                    if ($a[$math[1]] == $b[$math[1]]){
-                        return 0;
-                    }
-                    $comp = $a[$math[1]] < $b[$math[1]]? -1: 1;
-                    return (!empty($math[2]))? -1*$comp : $comp;
-                });
-            }
-            // Запоминаем результат в экземпляре
-            if ($load) $this->_children = $results;
         }
-        return $results;
-    }
-
-    /**
-     * Количество подчиенных удовлетворяющих условию
-     * @param array $cond Услвоие поиска
-     * @return int
-     */
-    public function findCount($cond = array())
-    {
-        if ($s = Data::section($this['uri'], false)){
-            if (!empty($cond['where'])){
-                $cond['where'].=' AND uri like ? AND level=?';
+        if ($this->isExist()){
+            $cond['from'] = array($this, $depth);
+            $result = Data::select($cond, $keys, null, null, true, $index);
+        }else
+        if ($p = $this->proto()){
+            $cond['from'] = array($p, $depth);
+            $result = Data::select($cond, $keys, null, null, true, $index);
+            foreach ($result as $key => $obj){
+                /** @var $obj Entity */
+                $result[$key] = $obj->birth($this);
+            }
+        }else{
+            return array();
+        }
+        // Если загружены все подчиенные, то запоминаем их для предотвращения повторных выборок
+        if ($all || $load){
+            if ($keys == 'name'){
+                $this->_children = $result;
             }else{
-                $cond['where'] = 'uri like ? AND level=?';
+                foreach ($result as $obj){
+                    $this->_children[$obj->name()] = $obj;
+                }
             }
-            $cond['values'][] = $this->_attribs['uri'].'/%';
-            $cond['values'][] = $this->getLevel()+1;
-            return $s->select_count($cond);
+            $this->_all_children = true;
         }
-        return 0;
-    }
-
-    /**
-     * Количество подчиенных удовлетворяющих условию с учётом прототипирования
-     * @param array $cond Услвоие поиска
-     * @param bool $req
-     * @return int
-     */
-    public function findCountAll($cond = array(), $req = false)
-    {
-        $results = $this->find($cond, false, 'name');
-        if ($proto = $this->proto()){
-            $proto_sub = $proto->findCountAll($cond, true);
-            $results = array_replace($results, $proto_sub);
-        }
-        if ($req) return $results;
-        return count($results);
-    }
-
-    /**
-     * Количество подчиненных в списке выгруженных
-     * @example
-     * $cnt = count($object);
-     * $cnt = $object->count();
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->_children);
-    }
-
-    /**
-     * Итератор по выгруженным подчиненным объектам
-     * @return \ArrayIterator|\Traversable
-     */
-    public function getIterator()
-    {
-        return new ArrayIterator($this->_children);
+        return $result;
     }
 
     /**
      * Список выгруженных подчиненных
      * @return array
      */
-    public function getChildren()
+    public function children()
     {
         return $this->_children;
     }
@@ -534,35 +1109,153 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     #################################################
 
     /**
-     * Проверка объекта
+     * Сохранение объекта в секции
+     * @param bool $history Признак, создавать историю изменения объекта или нет?
+     * @param bool $children Признак, сохранять подчиенных или нет?
+     * @param null|Error $error Ошибки при сохранении объекта
+     * @param bool $access Признак, проверять доступ на запись или нет?
+     * @throws \Exception
+     * @return bool
+     */
+    public function save($history = false, $children = true, &$error = null, $access = true)
+    {
+        if (!$this->_is_saved && $this->check($error, $children)){
+            try{
+                $this->_is_saved = true;
+                // Сохранение родителя, если не сохранен или требует переименования
+                if ($this->_parent){
+                    if (!$this->_parent->isExist() || $this->_parent->_rename){
+                        if (!$this->_parent->save(false, false, $parent_error)){
+                            throw $parent_error;
+                        }
+                    }
+                    $this->_attribs['parent'] = $this->_parent->key();
+                }
+                if ($this->_proto){
+                    $this->_attribs['proto'] = $this->_proto->key();
+                }
+                if ($this->_owner){
+                    $this->_attribs['owner'] = $this->_owner->key();
+                }
+                if ($this->_lang){
+                    $this->_attribs['lang'] = $this->_lang->key();
+                }
+                $this->_attribs['is_virtual'] = 0;
+                // Если создаётся история, то нужна новая дата
+                if ($history || (empty($this->_attribs['date']) && !$this->isExist())) $this->_attribs['date'] = time();
+                // Сохранение себя
+                if ($this->_changed && Data::write($this, $error, $access)){
+                    if ($this->_rename){
+                        $this->updateURI($this->_attribs['uri']);
+                        $this->_rename = false;
+                    }
+                    $this->_changed = false;
+                }
+                // Сохранение подчиененных
+                if ($children){
+                    $children = $this->children();
+                    foreach ($children as $child){
+                        /** @var \Boolive\data\Entity $child */
+                        $child->save($history, true, $error_child, $access);
+                    }
+                }
+                $this->_is_saved = false;
+                return true;
+            }catch (Exception $e){
+                $this->_is_saved = false;
+                throw $e;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Уничтожение объекта
+     * Полностью удаляется объект и его подчиненных.
+     * @param null|Error $error Ошибки при уничтожении объекта
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
+     * @return bool Были ли объекты уничтожены?
+     */
+    public function destroy(&$error = null, $access = true, $integrity = true)
+    {
+        if ($this->isExist()){
+            return Data::delete($this, $error, $access, $integrity);
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Создание нового объекта прототипированием от себя
+     * @param null|\Boolive\data\Entity $for Для кого создаётся новый объект?
+     * @return \Boolive\data\Entity
+     */
+    public function birth($for = null)
+    {
+        $class = get_class($this);
+        $attr = array(
+            'name' => $this->name(),
+            'order' => self::MAX_ORDER,
+        );
+        /** @var $obj Entity */
+        $obj = new $class($attr);
+        $obj->name(null, true); // Уникальность имени
+        $obj->proto($this);
+        $obj->owner($this->owner());
+        $obj->lang($this->lang());
+        $obj->isDefaultValue(true);
+        $obj->isDefaultClass(true);
+        $obj->isDefaultChildren(true);
+        if ($this->isLink()) $this->_attribs['is_link'] = 1;
+        if (isset($for)) $obj->parent($for);
+        return $obj;
+    }
+
+    /**
+     * Хранилище объекта
+     * @return stores\MySQLStore|null
+     */
+    public function store()
+    {
+        $key = isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
+        return Data::getStore($key);
+    }
+
+    /**
+     * Проверка корректности объекта по внутренним правилам объекта
+     * Используется перед сохранением
      * @param null $errors Возвращаемый объект ошибки
+     * @param bool $children Признак, проверять или нет подчиненных
      * @return bool Признак, корректен объект (true) или нет (false)
      */
-    public function check(&$errors = null)
+    public function check(&$errors = null, $children = true)
     {
-        if ($this->_checked) return true;
         // "Контейнер" для ошибок по атрибутам и подчиненным объектам
-        $errors = new Error('Неверный объект', $this['uri']);
+        $errors = new Error('Неверный объект', $this->uri());
+        if ($this->_checked) return true;
+
         // Проверка и фильтр атрибутов
         $attribs = new Values($this->_attribs);
-        $this->_attribs = $attribs->get($this->getRule(), $error);
+        $this->_attribs = array_replace($this->_attribs, $attribs->get($this->getRule(), $error));
         if ($error){
             $errors->_attribs->add($error->getAll());
         }
         // Проверка подчиненных
-        foreach ($this->_children as $child){
-            $error = null;
-            /** @var \Boolive\data\Entity $child */
-            if (!$child->check($error)){
-                $errors->_children->add($error);
+        if ($children){
+            foreach ($this->_children as $child){
+                $error = null;
+                /** @var \Boolive\data\Entity $child */
+                if (!$child->check($error)){
+                    $errors->_children->add($error);
+                }
             }
-
         }
         // Проверка родителем.
         if ($p = $this->parent()) $p->checkChild($this, $errors);
         // Если ошибок нет, то удаляем контейнер для них
         if (!$errors->isExist()){
-            $errors = null;
+            //$errors = null;
             return $this->_checked = true;
         }
         return false;
@@ -579,7 +1272,7 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     protected function checkChild(Entity $child, Error $error)
     {
         /** @example
-         * if ($child->getName() == 'bad_name'){
+         * if ($child->name() == 'bad_name'){
          *     // Так как ошибка из-за атрибута, то добавляем в $error->_attribs
          *     // Если бы проверяли подчиненного у $child, то ошибку записывали бы в $error->_children
          *	   $error->_attribs->name = new Error('Недопустимое имя', 'impossible');
@@ -590,232 +1283,179 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
-     * Сохранение объекта в секции
-     * @throws
-     */
-    public function save($history = true, &$error = null)
-    {
-        if (!$this->_is_saved && $this->check($error)){
-            try{
-                $this->_is_saved = true;
-                // Если создаётся история, то нужна новая дата
-                if ($history) $this->_attribs['date'] = time();
-                // Сохранение себя
-                if ($this->_changed){
-                    if ($s = Data::section($this['uri'], true)){
-                        $s->put($this);
-                        $this->_virtual = false;
-                        $this->_exist = true;
-                        $this->_changed = false;
-                    }
-                }
-                // @todo Если было переименование из-за _rename, то нужно обновить uri подчиненных
-                // Сохранение подчиененных
-                $children = $this->getChildren();
-                foreach ($children as $child){
-                    /** @var \Boolive\data\Entity $child */
-                    $child->save();
-                }
-                $this->_is_saved = false;
-            }catch (Exception $e){
-                $this->_is_saved = false;
-                throw $e;
-            }
-        }
-    }
-
-    /**
-     * Удаление объекта
-     * Объект помечается как удаленный
-     * @todo Установка атрибута is_delete и сохранение в секции без проверок и прочих сохранений
-     */
-    public function delete()
-    {
-        $this->_attribs['is_delete'] = true;
-        return $this;
-    }
-
-    /**
-     * Создание нового объекта прототипированием от себя
-     * @return \Boolive\data\Entity
-     */
-    public function birth()
-    {
-        $class = get_class($this);
-        $object = new $class(array('proto'=>Data::makeURI($this['uri'], $this['lang'], $this['owner'])), true, $this->_exist);
-        if (!empty($this['is_link']))
-            $object['is_link'] = true;
-        return $object;
-    }
-
-    /**
-     * Родитель объекта
-     * @return \Boolive\data\Entity|null
-     */
-    public function parent()
-    {
-        if ($this->_parent === false){
-            $this->_parent = Data::object($this->getParentUri());
-        }
-        return $this->_parent;
-    }
-
-    /**
-     * Прототип объекта
-     * @return \Boolive\data\Entity|null
-     */
-    public function proto()
-    {
-        if ($this->_proto === false){
-            if (isset($this->_attribs['proto'])){
-                $info = Data::getURIInfo($this->_attribs['proto']);
-                $this->_proto = Data::object($info['uri'], $info['lang'], $info['owner']);
-            }else{
-                $this->_proto = null;
-            }
-        }
-        return $this->_proto;
-    }
-
-    /**
-     * Возращает данный объект ($this) или первый из его прототипов не являющимся ссылкой (is_link=0)
-     * Если объект и все его прототипы являются ссылками, то возвращается null
-     * @return \Boolive\data\Entity|null
-     */
-    public function notLink()
-    {
-        if (empty($this->_attribs['is_link'])) return $this;
-        if ($proto = $this->proto()) return $proto->notLink();
-        return null;
-    }
-
-    /**
-     * При обращении к объекту как к скалярному значению (строке), возвращается значение атрибута value
-     * @example
-     * print $object;
-     * $value = (string)$obgect;
-     * @return mixed
-     */
-    public function __toString()
-    {
-        return (string)$this->getValue();
-    }
-
-    /**
-     * Вызов несуществующего метода
-     * Если объект внешний, то вызов произведет модуль секции объекта
-     * @param string $method
-     * @param array $args
-     * @return null|void
-     */
-    public function __call($method, $args)
-    {
-        return null;
-//        if ($s = Data::section($this['uri'], true)){
-//            $s->call($method, $args);
-//        }
-    }
-
-    /**
-     * URI родителя
-     * @return string|null Если родителя нет, то null. Пустая строка является корректным uri
-     */
-    public function getParentUri()
-    {
-        if (!isset($this->_parent_uri)){
-            if (isset($this->_attribs['uri'])){
-                $names = F::splitRight('/',$this->_attribs['uri']);
-                $this->_parent_uri = $names[0];
-                $this->_name = $names[1];
-            }else
-            if (isset($this->_parent)){
-                $this->_parent_uri = $this->_parent['uri'];
-            }else{
-                $this->_parent_uri = null;
-            }
-        }
-        return $this->_parent_uri;
-    }
-
-    /**
-     * Имя объекта
-     * @return string|null
-     */
-    public function getName()
-    {
-        if (!isset($this->_parent_uri)){
-            if (isset($this->_attribs['uri'])){
-                $names = F::splitRight('/',$this->_attribs['uri']);
-                $this->_parent_uri = $names[0];
-                $this->_name = $names[1];
-            }
-        }
-        return $this->_name;
-    }
-
-    /**
-     * Значение объекта с учётом прототипирования
-     * @return string|null
-     */
-    public function getValue()
-    {
-        $value = $this->offsetGet('value');
-        if (!isset($value) && ($proto = $this->proto())){
-            $value = $proto->getValue();
-        }
-        return $value;
-    }
-
-    /**
-     * Уровень вложенности
-     * Вычисляется по uri
-     */
-    public function getLevel()
-    {
-        return mb_substr_count($this['uri'], '/');
-    }
-
-    /**
-     * Дмректория объекта
-     * @param bool $root Признак, возвращать путь от корня сервера или от web директории (www)
-     * @return string
-     */
-    public function getDir($root = false)
-    {
-        if ($root){
-            return DIR_SERVER_PROJECT.ltrim($this['uri'].'/','/');
-        }else{
-            return DIR_WEB_PROJECT.ltrim($this['uri'].'/','/');
-        }
-    }
-
-    /**
-     * Путь на файл, если объект ассоциирован с файлом.
-     * Если значение null, то информация берется от прототипа
-     * @param bool $root
-     * @return null|string
-     */
-    public function getFile($root = false)
-    {
-        if (!empty($this->_attribs['is_file'])){
-            $file = $this->getDir($root);
-            if (!empty($this->_attribs['is_history'])) $file.='_history_/'.$this['date'].'_';
-            return $file.$this->_attribs['value'];
-        }else
-        if (!isset($this->_attribs['value']) && $proto = $this->proto()){
-            return $proto->getFile($root);
-        }
-        return null;
-    }
-
-    /**
-     * Проверка, является ли объект файлом.
-     * Проверяется с учетом прототипа
+     * Проверка объекта соответствию указанному условию
+     * <code>
+     * array(                                      // услвоия поиска объединенные логическим AND
+     *    array('attr', 'uri', '=', '?'),          // сравнение атрибута
+     *    array('not', array(                      // отрицание всех условий
+     *         array('attr', 'value', '=', '%?%')
+     *    )),
+     *    array('any', array(                      // услвоия объединенные логическим OR
+     *         array('child', array(               // проверка свойства искомого объекта
+     *             array('attr', 'value', '>', 10),
+     *             array('attr', 'value', '<', 100),
+     *         ))
+     *     )),
+     *     array('is', '/Library/object')          // кем объект является? проверка наследования
+     * )
+     * @param array $cond Условие как для поиска
      * @return bool
      */
-    public function isFile()
+    public function verify($cond)
     {
-        return !empty($this->_attribs['is_file']) || (!isset($this->_attribs['value']) && ($proto = $this->proto()) && $proto->isFile());
+        if (empty($cond)) return true;
+        if (is_array($cond[0])) $cond = array('all', $cond);
+        switch ($cond[0]){
+            // Все услвоия (AND)
+            case 'all':
+                foreach ($cond[1] as $c){
+                    if (!$this->verify($c)) return false;
+                }
+                return true;
+            // Хотябы одно условие (OR)
+            case 'any':
+                foreach ($cond[1] as $c){
+                    if ($this->verify($c)) return true;
+                }
+                return !sizeof($cond[1]);
+            // Отрицание условия (NOT)
+            case 'not':
+                return !$this->verify($cond[1]);
+            // Сравнение атрибута
+            case 'attr':
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value'))){
+                    $value = $this->{$cond[1]}();
+                }else
+                if ($cond[1] == 'is_hidden'){
+                    $value = $this->isHidden(null, empty($cond[4]));
+                }else
+                if ($cond[1] == 'is_delete'){
+                    $value = $this->isDelete(null, empty($cond[4]));
+                }else
+                if ($cond[1] == 'is_file'){
+                    $value = $this->isFile();
+                }else
+                if ($cond[1] == 'is_link'){
+                    $value = $this->isLink();
+                }else
+                if ($cond[1] == 'is_history'){
+                    $value = $this->isHistory();
+                }else
+                if ($cond[1] == 'is_virtual'){
+                    $value = $this->isVirtual();
+                }
+                switch ($cond[2]){
+                    case '=': return $value == $cond[3];
+                    case '<': return $value < $cond[3];
+                    case '>': return $value > $cond[3];
+                    case '>=': return $value >= $cond[3];
+                    case '<=': return $value <= $cond[3];
+                    case '!=':
+                    case '<>': return $value != $cond[3];
+                    case 'like':
+                        $pattern = strtr($cond[3], array('%' => '*', '_' => '?'));
+                        return fnmatch($pattern, $value);
+                    case 'in':
+                        if (!is_array($cond[3])) $cond[3] = array($cond[3]);
+                        return in_array($value, $cond[3]);
+                }
+                return false;
+            // Услвоия на подчиненного
+            case 'child':
+                $child = $this->{$cond[1]};
+                if ($child->isExist()){
+                    if (isset($cond[2])){
+                        return $child->verify($cond[2]);
+                    }
+                    return true;
+                }
+                return false;
+            // Проверка наследования
+            case 'is':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $proto){
+                    if ($this->is($proto)) return true;
+                }
+                return false;
+            // Является частью чего-то с учётом наследования
+            // Например заголовок статьи story1 является его частью и частью эталона статьи
+            // Пример из жизни: Ветка является частью дерева, но не конкретезируется, какого именно
+            case 'of':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $obj){
+                    if ($this->of($obj)) return true;
+                }
+                return false;
+            // Неподдерживаемые условия
+            default: return false;
+        }
+    }
+
+    /**
+     * Проверка, является ли подчиненным для указанного родителя?
+	 * @param string|\Boolive\data\Entity $parent Экземпляр родителя или его идентификатор
+     * @return bool
+     */
+    public function in($parent)
+    {
+        if (!$parent instanceof Entity){
+            $parent = Data::read($parent);
+        }
+        return $parent->uri().'/' == mb_substr($this->uri(),0,mb_strlen($parent->uri())+1);
+    }
+
+    /**
+     * Проверка, являектся наследником указанного прототипа?
+     * @param string|\Boolive\data\Entity $proto Экземпляр прототипа или его идентификатор
+     * @return bool
+     */
+    public function is($proto)
+    {
+        if ($proto == 'all') return true;
+        if (!$proto instanceof Entity){
+            if ($proto == $this->uri() || $proto == $this->id()) return true;
+            $proto = Data::read($proto);
+        }
+        if ($this->isEqual($proto)) return true;
+        if (!$this->isExist()){
+            return ($p = $this->proto()) ? $p->is($proto) : false;
+        }
+        return (bool)Data::select(array(
+            'select' => 1,
+            'from' => array($this, 0),
+            'where' => array(array('is', $proto->key()), array('attr', 'is_delete', '>=', 0)),
+            'limit' => array(0,1)
+        ), null, null, false);
+    }
+
+    /**
+     * Проверка, является ли частью указанного объекта.
+     * Например, указанный объект $object может быть наследником для любого родителя проверяемого объекта $this
+     * или, наоборот, указанный объект $object может быть родителем для любого прототипа проверяемого объекта $this.
+     * Проверка объединяет в себе is() и in() с учётом рекурсивных отошений, образуемых между
+     * родителями и прототипами всех родителей и прототипов объекта.
+     * Пример из жизни: конкретный листок является частью дерева. Дерево абстрактно.
+     * @param string|\Boolive\data\Entity $object Экземпляр или идентификатор
+     * @return bool
+     */
+    public function of($object)
+    {
+        if ($object == 'all') return true;
+        if (!$object instanceof Entity){
+            if ($object == $this->uri() || $object == $this->id()) return true;
+            $$object = Data::read($object);
+        }
+        if ($this->isEqual($object)) return true;
+        if (!$this->isExist()){
+            if (($p = $this->proto()) && $p->of($object)) return true;
+            return ($p = $this->parent()) ? $p->of($object) : false;
+        }
+        return (bool)Data::select(array(
+            'select' => 1,
+            'from' => array($this, 0),
+            'where' => array('of', $object->key()),
+            'limit' => array(0,1)
+        ), null, null, false);
     }
 
     /**
@@ -825,35 +1465,27 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
      */
     public function isEqual($entity)
     {
-        if (!$entity) return false;
-        return $this['uri'] == $entity['uri'];
+        if (!$entity instanceof Entity){
+            return false;
+        }
+        return $this->key() == $entity->key()/* &&
+               $this->_attribs['owner'] == $entity->_attribs['owner'] &&
+               $this->_attribs['lang'] == $entity->_attribs['lang'] &&
+               $this->date() == $entity->date()*/;
     }
 
     /**
      * Признак, изменены атрибуты объекта или нет
+     * @param null|bool $is_change Установка признака, если не null
      * @return bool
      */
-    public function isChenged()
+    public function isChenged($is_change = null)
     {
+        if (isset($is_change)){
+            $this->_changed = $is_change;
+            $this->_checked = false;
+        }
         return $this->_changed;
-    }
-
-    /**
-     * Признак, виртуальный объект или нет. Если объект не сохранен в секции, то он виртуальный
-     * @return bool
-     */
-    public function isVirtual()
-    {
-        return $this->_virtual;
-    }
-
-    /**
-     * Признак, сущесвтует объект или нет. Объект не существует, если виртуальный и все его прототипы виртуальные.
-     * @return bool
-     */
-    public function isExist()
-    {
-        return $this->_exist;
     }
 
     /**
@@ -866,38 +1498,162 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
     }
 
     /**
-	 * Проверка, является ли объект подчиенным для указанного?
-	 * @param \Boolive\data\Entity $parent
-	 * @return bool
-	 */
-    public function isChildOf($parent)
+     * Экпорт объекта в массив и сохранение в файл info в формате JSON
+     * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
+     * @param bool $save_to_file Признак, сохранять в файл?
+     * @return array
+     */
+    public function export($save_to_file = true)
     {
-        return $parent['uri'].'/' == mb_substr($this['uri'],0,mb_strlen($parent['uri'])+1);
+        if ($this->_attribs['uri'] == '/Contents/main/text/p2'){
+            $a = 10;
+        }
+        if ($this->_attribs['uri'] == '/Contents/main/text/p2/style'){
+            $a = 10;
+        }
+        $export = array();
+        if ($this->isDefaultValue()) $export['is_default_value'] = true;
+        $export['value'] = $this->value();
+        if ($this->isFile()) $export['is_file'] = true;
+        if ($this->owner()) $export['owner'] = $this->owner()->uri();
+        if ($this->lang()) $export['lang'] = $this->lang()->uri();
+        if ($this->proto()) $export['proto'] = $this->proto()->uri();
+        if ($this->isLink()) $export['is_link'] = true;
+        if (!$this->isDefaultClass()) $export['is_default_class'] = false;
+        //if (!$this->isDefaultChildren()) $export['is_default_children'] = false;
+        if ($this->isHidden(null, false)) $export['is_hidden'] = true;
+        if ($this->isDelete(null, false)) $export['is_delete'] = true;
+        $export['order'] = $this->order();
+        // Свойства
+        $export['children'] = array();
+        // Названия подчиненных, которые экспортировать вместе с объектом
+        $children = $this->exportedProperties();
+        // Выбор подчиненных
+        if ($children === true){
+            $children = $this->find(array(
+                'where' => array(
+                    array('attr', 'is_delete', '>=', 0)
+                )
+            ),'name', false, 1, false, false);
+        }else
+        if (!empty($children) && is_array($children)){
+            $children = $this->find(array(
+                'where' => array(
+                    array('attr', 'name', 'in',  $children),
+                    array('attr', 'is_delete', '>=', 0)
+                )
+            ),'name', false, 1, false, false);
+        }else{
+            $children = array();
+        }
+        foreach ($children as $child){
+            if ($child->isExist()){
+                $export['children'][$child->name()] = $child->export(false);
+            }
+        }
+        if (empty($export['children'])) unset($export['children']);
+        // Сохранение в info файл
+        if ($save_to_file){
+            if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+                $content = json_encode($export, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+            }else{
+                $content = F::special_unicode_to_utf8(json_encode($export));
+            }
+            $name = $this->name();
+            if ($this->uri()=='') $name = 'Site';
+            $file = $this->dir(true).$name.'.info';
+            File::create($content, $file);
+        }
+        return $export;
     }
 
     /**
-     * Проверка, имеется ли у объекта указанный прототип
-     * @param $uri
-     * @return bool
+     * Названия свойств, которые экспортировать вместе с объектом
+     * @return array
      */
-    public function is($uri){
-        $obj = $this;
-        // Поиск варианта отображения для объекта
-        do{
-            // Если виджеты не исполнялись, тогда ищем соответсвие по прототипу
-            if ($obj['uri'] == $uri || $obj['proto'] == $uri){
-                return true;
-            }
-        }while($obj = $obj->proto());
-        return false;
+    public function exportedProperties()
+    {
+        return array('title', 'description');
     }
+
+    /**
+     * Импортирование атрибутов и подчиенных из массива
+     * Формат массива как в info файле.
+     * @param $info
+     */
+    public function import($info)
+    {
+        // Имя и родитель
+        if (isset($info['uri'])){
+            $uri = F::splitRight('/', $info['uri']);
+            $this->name($uri[1]);
+            $this->parent($uri[0]);
+        }
+        // Значение
+        if (!empty($info['is_default_value'])){
+            $this->isDefaultValue(true);
+        }else
+        if (isset($info['value'])){
+            $this->value($info['value']);
+        }
+        if (!empty($info['is_file'])) $this->isFile(true);
+        // Владец, язык, прототип
+        if (isset($info['owner'])) $this->owner($info['owner']);
+        if (isset($info['lang'])) $this->lang($info['lang']);
+        if (isset($info['proto'])) $this->proto($info['proto']);
+        // Признаки
+        if (!empty($info['is_link'])) $this->isLink(true);
+        if (!empty($info['is_hidden'])) $this->isHidden(true);
+        if (!empty($info['is_delete'])) $this->isDelete(true);
+        // Свой класс?
+        if (isset($info['is_default_class']) && empty($info['is_default_class'])){
+            $this->isDefaultClass(false);
+        }else{
+            $this->isDefaultClass(true);
+        }
+        // Порядковое значение
+        if (isset($info['order'])) $this->order($info['order']);
+        $info['index_depth'] = 1;
+        // Подчиненные объекты
+        if (!empty($info['children']) && is_array($info['children'])){
+            foreach ($info['children'] as $name => $child){
+                //$child['uri'] = $this->uri().'/'.$name;
+                $this->{$name}->import($child);
+            }
+        }
+    }
+
+    /**
+     * При обращении к объекту как к скалярному значению (строке), возвращается значение атрибута value
+     * @example
+     * print $object;
+     * $value = (string)$obgect;
+     * @return mixed
+     */
+    public function __toString()
+    {
+        return (string)$this->value();
+    }
+
+    /**
+     * Вызов несуществующего метода
+     * Если объект внешний, то вызов произведет модуль секции объекта
+     * @param string $method
+     * @param array $args
+     * @return null|void
+     */
+    public function __call($method, $args)
+    {
+        return null;
+    }
+
     /**
      * Клонирование объекта
      */
     public function __clone()
     {
         foreach ($this->_children as $name => $child){
-            $this->__set($name, clone $child);
+            $this->_children[$name] = clone $child;
         }
     }
 
@@ -910,10 +1666,8 @@ class Entity implements ITrace, IteratorAggregate, ArrayAccess, Countable
         //$trace['hash'] = spl_object_hash($this);
         $trace['_attribs'] = $this->_attribs;
         $trace['_changed'] = $this->_changed;
-        $trace['_virtual'] = $this->_virtual;
-        $trace['_exist'] = $this->_exist;
         $trace['_checked'] = $this->_checked;
-        /*if ($this->_rename) */$trace['_rename'] = $this->_rename;
+        $trace['_rename'] = $this->_rename;
         //$trace['_proto'] = $this->_proto;
         //$trace['_parent'] = $this->_parent;
         $trace['_children'] = $this->_children;

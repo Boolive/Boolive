@@ -1,30 +1,57 @@
+/**
+ * Виджет объекта в виде элемента списка
+ * Инициирует команды входа в отображаемый объект
+ * Query UI widget
+ * Copyright 2012 (C) Boolive
+ */
 (function($) {
-	$.widget("boolive.ObjectItem", $.boolive.AjaxWidget, {
-        // uri отображаемого объекта
-        _object: '',
+    $.widget("boolive.ObjectItem", $.boolive.Widget, {
 
         _create: function() {
-			$.boolive.AjaxWidget.prototype._create.call(this);
+            $.boolive.Widget.prototype._create.call(this);
             var self = this;
-            // uri объекта
-            self._object = this.element.attr('data-object');
-            // Вход в объект
-			self.element.find('.enter').click(function(e){
-				e.stopPropagation();
-                e.preventDefault();
-				self.element.trigger('before-entry-object', [self._object]);
-			});
-            // Выделение объекта
-			self.element.click(function(e){
+
+            // Идентификатор объекта к которому будет переход (обычно его URI)
+            if (!this.options.link){
+                this.options.link = this.element.attr('data-l');
+            }
+            // Вход в объекта
+            self.element.find('.title').click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
-                self.element.trigger('before-entry-object', [self._object]);
-                //self.element.trigger('before-select-object', [self._object]);
-			});
-        },
+                // Сначала выделяем себя
+                self.callParents('setState', [{selected:  self.options.object}]);
+                // Теперь входим
+                self.callParents('setState', [{object:  self.options.link}]);
+            });
+            // Вход в объект-ссылку
+            self.element.find('.prop').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                // Сначала выделяем себя
+                self.callParents('setState', [{selected:  self.options.object}]);
+                // Теперь входим
+                self.callParents('setState', [{object:  self.options.object}]);
+            });
+            // Множественное выделение объекта
+            self.element.find('.select').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                self.callParents('setState', [{selected: self.options.object, select_type: 'toggle'}]);
+            });
+            // Выделение объекта
+            self.element.click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
 
-		destroy: function() {
-			$.boolive.AjaxWidget.prototype.destroy.call(this);
-		}
-	})
+                var s = self.callParents('getState');
+                if (_.indexOf(s.selected, self.options.object)!=-1){
+                    // Отмена выделения при повторном клике
+                    self.callParents('setState', [{selected: s.object}]);
+                }else{
+                    self.callParents('setState', [{selected: self.options.object}]);
+                }
+            });
+        }
+    });
 })(jQuery);

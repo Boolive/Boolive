@@ -15,7 +15,7 @@ class Part extends AutoWidgetList
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required(),
+                        'object' => Rule::entity()->required(),
                         'page'=> Rule::int()->default(1)->required() // номер страницы
                     )
                 )
@@ -23,16 +23,17 @@ class Part extends AutoWidgetList
         );
     }
 
-    protected function getList(){
-        $count_per_page = max(1, $this->count_per_page->getValue());
+    protected function getList($cond = array()){
         $obj = $this->_input['REQUEST']['object'];
-        $list = $obj->findAll(array(
-                'order' =>'`order` ASC',
-                'start' => ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
-                'count' => $count_per_page
+        $count_per_page = max(1, $this->count_per_page->value());
+        $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count'))/$count_per_page);
+        $cond = array(
+            'order' => array(array('order', 'ASC')),
+            'limit' => array(
+                ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
+                $count_per_page
             )
         );
-        $this->_input_child['REQUEST']['page_count'] = ceil($obj->findCountAll()/$count_per_page);
-        return $list;
+        return parent::getList($cond);
     }
 }

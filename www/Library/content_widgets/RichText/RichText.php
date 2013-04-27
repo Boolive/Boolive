@@ -12,7 +12,7 @@ class RichText extends AutoWidgetList
 {
     public function work($v = array())
     {
-        //trace($this->_input['GET']['object']->findAll(array('order' =>'`order` ASC')));
+        $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         return parent::work($v);
     }
 }

@@ -1,3 +1,11 @@
 {
-    "title": "Комментарии"
+    "value": "",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Комментарии",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

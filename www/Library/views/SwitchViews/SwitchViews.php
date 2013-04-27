@@ -21,65 +21,56 @@ class SwitchViews extends Widget
 
     public function getInputRule()
     {
+
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default(null)->required(),
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity()),  // массив объектов
+                            Rule::entity() // или один объект
+                        )->required()
                     )
                 )
             )
         );
     }
 
-    protected function initInputChild($input)
-    {
-        parent::initInputChild(array_replace_recursive($input, $this->_input));
-    }
-
     public function work($v = array())
     {
-        // Все варианты отображений для последующего поиска нужного
-        $cases = $this->getCases();
-        //$obj = $this->_input['REQUEST']['object'];
-        $v['object'] = null;
-        //$uri = $obj['uri'];
-        $cnt = count($cases);
-        $case = null;
-        for ($i = 0; $i < $cnt; ++$i){
-            if ($cases[$i] instanceof \Library\views\SwitchCase\SwitchCase){
-                $uri = $cases[$i]->getValue();
-                if ($uri=='all'){
-                    $case = $cases[$i];
-                }else{
-                    $obj = $this->_input['REQUEST']['object'];
-                    while ($obj && !$case){
-                        if ($obj['uri'] == $uri){
-                            $case = $cases[$i];
-                        }else{
-                            $obj = $obj->proto();
-                        }
-                    }
-                }
-            }
-            if ($case){
-                if ($v['object'] = $case->start($this->_commands, $this->_input_child)){
-                    $this->_input_child['previous'] = true;
-                    $i = $cnt;
-                }else{
-                    $case = null;
-                }
-            }
-        }
-        if (isset($v['object'])){
+        $case = $this->getCase($this->_commands, $this->_input_child);
+        if ($case && ($v['object'] = $case->start($this->_commands, $this->_input_child))){
+            $this->_input_child['previous'] = true;
             return parent::work($v);
-        }else{
-            return false;
         }
+        return false;
     }
 
-    protected function getCases(){
+    /**
+     * Выбор всех вариантов отображения
+     * @return array
+     */
+    public function getCases()
+    {
         if (!isset($this->_cases)){
-            $this->_cases = $this->findAll(array('where'=>'is_history=0 and is_delete=0', 'order'=>'`order` ASC'), false, null);
+            $this->_cases = $this->find(array(
+                'where' => array('is', '/Library/views/SwitchCase')
+            ), null);
         }
         return $this->_cases;
+    }
+
+    /**
+     * Возвращает вариант отображения в соответсвии с указанными входящими данными
+     * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих им видах
+     * @param mixed $input Входящие данные
+     * @return \Library\views\SwitchCase\SwitchCase|null Вариант отображения (обычно виджет) или null
+     */
+    public function getCase($commands, $input)
+    {
+        $cases = $this->getCases();
+        foreach ($cases as $case){
+            $case = $case->linked();
+            if ($case instanceof \Library\views\SwitchCase\SwitchCase && $case->canWork($commands, $input)) return $case;
+        }
+        return null;
     }
 }

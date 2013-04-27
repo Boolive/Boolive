@@ -1,0 +1,48 @@
+{
+    "value": "KeywordsCloud.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Widget",
+    "is_default_class": false,
+    "order": 32,
+    "children": {
+        "title": {
+            "value": "Облако тегов",
+            "proto": "/Library/views/Widget/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает все используемые на сайте ключевые слова",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Widget/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "object": {
+            "value": "",
+            "proto": "/Keywords",
+            "is_link": true,
+            "order": 5
+        }
+    }
+}

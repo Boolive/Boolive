@@ -6,8 +6,7 @@
  */
 namespace Library\views\Menu;
 
-use Boolive\values\Rule,
-    Library\views\Widget\Widget;
+use Library\views\Widget\Widget;
 
 class Menu extends Widget
 {
@@ -15,13 +14,15 @@ class Menu extends Widget
         parent::initInputChild($input);
         // Подчиенным нужно передать активный пункт меню и отображаемый объект меню
         // Входящий объект используется как активный пункт меню
-        $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['object'];
+        $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['object']->linked();
         // Отображется всегда свой объект
-        $this->_input_child['REQUEST']['object'] = $this->object;
+        $this->_input_child['REQUEST']['object'] = $this->object->linked();
+        // Не показыват корневой пункт меню
+        $this->_input_child['REQUEST']['show'] = false;
     }
 
     public function work($v = array()){
-        $v['title'] = $this->title->getValue();
+        $v['title'] = $this->title->value();
         $v['view'] = $this->startChild('view');
         return parent::work($v);
     }

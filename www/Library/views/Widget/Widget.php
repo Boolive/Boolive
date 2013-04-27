@@ -12,6 +12,29 @@ use Boolive\template\Template,
 
 class Widget extends View
 {
+
+    /**
+     * Инициализация Виджета
+     */
+    protected function init()
+    {
+        if (!$this->isLink()) $this->find();
+    }
+
+    /**
+     * Инициализация входящих данных
+     * Если нету своего объекта (модели), то берется объект из входящих данных
+     * @param $input
+     * @return mixed|void
+     */
+    protected function initInput($input)
+    {
+        if ($this->object->isExist() && !$this->object->isDelete() && !$this->object->isHistory()){
+            $input['REQUEST']['object'] = $this->object;
+        }
+        parent::initInput($input);
+    }
+
     /**
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
@@ -20,7 +43,7 @@ class Widget extends View
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required()
+                        'object' => Rule::entity()->required()
                     )
                 )
             )
@@ -30,7 +53,15 @@ class Widget extends View
     public function work($v = array())
     {
         $this->startChild('res');
-        $v['view_uri'] = $this['uri'];
+        $v['view_uri'] = $this->id();
         return Template::render($this, $v);
+    }
+
+    public function exportedProperties()
+    {
+        $names = parent::exportedProperties();
+        $names[] = 'res';
+        $names[] = 'object';
+        return $names;
     }
 }

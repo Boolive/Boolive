@@ -1,0 +1,43 @@
+{
+    "value": "Feedback.tpl",
+    "is_file": true,
+    "proto": "/Library/views/AutoWidgetList",
+    "is_default_class": false,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Форма обратной связи",
+            "proto": "/Library/views/AutoWidgetList/title",
+            "is_hidden": true,
+            "order": 3
+        },
+        "description": {
+            "value": "Для отправки сообщений по почте администратору (менеджеру) сайта",
+            "proto": "/Library/views/AutoWidgetList/description",
+            "is_hidden": true,
+            "order": 4
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/AutoWidgetList/res",
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/AutoWidgetList/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/AutoWidgetList/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

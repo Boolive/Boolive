@@ -1,4 +1,11 @@
 {
-    "title": "Пакет",
-    "description": "Для группировки объектов библиотеки"
+    "value": "",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Пакет",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

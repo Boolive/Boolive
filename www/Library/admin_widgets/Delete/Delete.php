@@ -15,7 +15,11 @@ class Delete extends Widget
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required(),
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity(array('attr','is_delete','=',0,true))),
+                            Rule::entity(array('attr','is_delete','=',0,true))
+                        )->required(),
+//                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),
                     )
                 )
@@ -28,21 +32,39 @@ class Delete extends Widget
     {
         // Удаление
         if ($this->_input['REQUEST']['call'] == 'delete'){
-            $this->_input['REQUEST']['object']['is_delete'] = true;
-            if ($this->_input['REQUEST']['object']->save()){
-                $v['result'] = true;
-            }else{
-                $v['result'] = false;
+            $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
+            foreach ($objects as $o){
+                /** @var \Boolive\data\Entity $o */
+                $o->isDelete(true);
+                $o->save();
             }
+            $v['result'] = true;
             return $v;
         }
         // Отображение
         else{
-            $v['title'] = $this->title->getValue();
-            if (!$v['object']['title'] = $this->_input['REQUEST']['object']->title->getValue()){
-                $v['object']['title'] = $this->_input['REQUEST']['object']->getName();
+            $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
+            $v['data-o'] = array();
+            $v['objects'] = array();
+            foreach ($objects as $o){
+                $item = array();
+                if (!($item['title'] = $o->title->value())){
+                    $item['title'] = $o->name();
+                }
+                $item['uri'] = $o->uri();
+                $v['objects'][] = $item;
+                $v['data-o'][]=$item['uri'];
             }
-            $v['object']['uri'] = $this->_input['REQUEST']['object']['uri'];
+            $v['data-o'] = json_encode($v['data-o']);
+            $v['title'] = $this->title->value();
+            if (count($objects)>1){
+                $v['question'] = 'Вы действительно желаете удалить эти объекты?';
+                $v['message'] = 'Объекты будут перемещены в корзину, их можно будет восстановить.';
+            }else{
+                $v['question'] = 'Вы действительно желаете удалить этот объект?';
+                $v['message'] = 'Объект будет перемещён в корзину, его можно будет восстановить.';
+            }
+            $v['prev'] = '';//$this->_input['REQUEST']['prev']? $this->_input['REQUEST']['prev']->uri() : '';
             return parent::work($v);
         }
     }

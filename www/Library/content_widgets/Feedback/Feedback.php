@@ -17,12 +17,15 @@ class Feedback extends AutoWidgetList
     {
         return Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->default($this->object)->required(),
-                        $this['uri'] => Rule::arrays(array(
+                        // Модель формы
+                        'object' => Rule::entity()->required(),
+                        // Признак, submit запрос данной формы?
+                        $this->uri() => Rule::arrays(array(
                                 'submit' => Rule::string()
                             )
                         ),
-                        'ok' => Rule::eq(md5($this['uri']))->default(false)->required()
+                        // Признак успешности обработки формы
+                        'ok' => Rule::eq(md5($this->uri()))->default(false)->required()
                     )
                 )
             )
@@ -36,27 +39,28 @@ class Feedback extends AutoWidgetList
         foreach ($list as $object){
             $this->_input_child['REQUEST']['object'] = $object;
             if ($result = $this->startChild('switch_views')){
-                $v['view'][$object->getName()] = $result;
+                $v['view'][$object->name()] = $result;
             }
         }
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
 
         // Если у формы нажата кнопка SUBMIT
-        if (isset($this->_input['REQUEST'][$this['uri']]['submit'])){
+        if (isset($this->_input['REQUEST'][$this->uri()]['submit'])){
             //Выполнение действия (отправка)
             if ($this->_input_child['REQUEST']['object']->send()){
-                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this['uri'])), true, true));
+                // Редирект на адрес текущего запроса с параметром ok
+                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri())), true, true));
             }else{
                 $v['error'] = true;
-                $v['error_message'] = $this->_input_child['REQUEST']['object']->error_message->getValue();
+                $v['error_message'] = $this->_input_child['REQUEST']['object']->error_message->value();
             }
             $this->_input['REQUEST']['ok'] = false;
         }
         if ($v['ok'] = (bool)$this->_input['REQUEST']['ok']){
-            $v['result_message'] = $this->_input_child['REQUEST']['object']->result_message->getValue();
+            $v['result_message'] = $this->_input_child['REQUEST']['object']->result_message->value();
         }
         // Отображение формы
-        $v['uri'] = $this->_input['REQUEST']['object']['uri'];
+        $v['uri'] = $this->_input['REQUEST']['object']->uri();
         return Widget::work($v);
     }
 }

@@ -1,0 +1,11 @@
+{
+    "value": "",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Права на запись",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}
