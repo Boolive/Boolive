@@ -1,7 +1,11 @@
 Boolive Change Log
 ==================
 
-Version 2.0 work in progress
+Version 2.0.alpha work in progress
+----------------------------
+
+
+Version 2.0.preview-2 April, 27 2013
 ----------------------------
 - enh #58: Added selecting other objects for add new (VladimirShestakov)
 - enh #75: Changing the file attribute (is_file) in the Attribute editor (VladimirShestakov)
@@ -51,7 +55,7 @@ Version 2.0 work in progress
 - new: Added samples of paragraphs (P, H1-H2, Code, Blockquote) in /Library/content_samples/paragraphs (VladimirShestakov)
 - bug: Fixed getting proto and parent if they not exists. (VladimirShestakov)
 
-Version 2.0 preview October, 8 2012
+Version 2.0.preview October, 8 2012
 ------------------------------------
 - enh #1: Remove engine\config.classes.php, update classes autoloading (AzatGaliev)
 - enh #3: Changed the style code in all files (VladimirShestakov)
