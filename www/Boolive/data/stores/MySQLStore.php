@@ -1176,11 +1176,10 @@ class MySQLStore extends Entity
                     }
                 }
                 return implode($glue, $cond);
-
             };
             $attr_exists = $only_where ? array('is_history' => true, 'is_delete' => true) : array();
             // Если услвоия есть, то добавляем их в SQL
-            if ($w = $convert($cond['where'], ' AND ', 'obj', $attr_exists)){
+            if ($w = $convert($cond['where'], ' AND ', 'obj', 0, $attr_exists)){
                 if (empty($result['where'])){
                     $result['where'] = $w;
                 }else{
