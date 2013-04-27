@@ -18,7 +18,7 @@
             "order": 2
         },
         "name": {
-            "value": "admin",
+            "value": "Администратор",
             "proto": "/Library/access/User/name",
             "order": 4
         },
@@ -45,10 +45,11 @@
         },
         "passw": {
             "value": "1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23",
+            "proto": "/Library/access/User/passw",
             "order": 6
         },
         "visit_time": {
-            "value": "1366885478",
+            "value": "1367045868",
             "is_default_class": false,
             "order": 7
         }

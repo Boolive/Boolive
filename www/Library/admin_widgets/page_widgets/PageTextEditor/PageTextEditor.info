@@ -32,6 +32,13 @@
                     "order": 2
                 }
             }
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Отображает элементы форматированного текста подходящими виджетами из вариантов отображения",
+            "proto": "/Library/content_widgets/RichTextPreview/description",
+            "is_hidden": true,
+            "order": 7
         }
     }
 }

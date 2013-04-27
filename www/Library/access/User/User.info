@@ -41,6 +41,11 @@
                     "order": 2
                 }
             }
+        },
+        "passw": {
+            "value": "aa7351d4e6f08651bcb8f8962c9a0ed0879e5f45f4bc9e2f0433aa8cc5972eb6",
+            "proto": "/Library/basic/simple/Password",
+            "order": 7
         }
     }
 }
