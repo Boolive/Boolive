@@ -1047,8 +1047,8 @@ class MySQLStore extends Entity
              * @param array $attr_exists // Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
              * @return string SQL условия в WHERE
              */
-            $convert = function($cond, $glue = ' AND ', $table = 'obj', &$attr_exists = array()) use (&$convert, &$result, &$joins, &$index_table, $t_cnt, $store){
-
+            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, &$index_table, $t_cnt, $store){
+                $level++;
                 // Нормализация групп условий
                 if ($cond[0] == 'any' || $cond[0] == 'all'){
                     $glue = $cond[0] == 'any'?' OR ':' AND ';
@@ -1062,15 +1062,15 @@ class MySQLStore extends Entity
                     if (is_array($c) && !empty($c)){
                         // AND
                         if ($c[0]=='all'){
-                            $cond[$i] = '('.$convert($c[1], ' AND ', $table, $attr_exists).')';
+                            $cond[$i] = '('.$convert($c[1], ' AND ', $table, $level, $attr_exists).')';
                         }else
                         // OR
                         if ($c[0]=='any'){
-                            $cond[$i] = '('.$convert($c[1], ' OR ', $table, $attr_exists).')';
+                            $cond[$i] = '('.$convert($c[1], ' OR ', $table, $level, $attr_exists).')';
                         }else
                         // NOT - отрицание условий
                         if ($c[0]=='not'){
-                            $cond[$i] = 'NOT('.$convert($c[1], ' AND ', $table, $attr_exists).')';
+                            $cond[$i] = 'NOT('.$convert($c[1], ' AND ', $table, $level, $attr_exists).')';
                         }else
                         // Атрибут
                         if ($c[0]=='attr'){
@@ -1100,7 +1100,7 @@ class MySQLStore extends Entity
                             if (empty($c[2])){
                                 $cond[$i] = '(`'.$table.'.'.$c[1].'`.id IS NOT NULL)';
                             }else{
-                                $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1]).')';
+                                $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1], $level).')';
                             }
                         }else
                         // Условие на наличие родителя
@@ -1162,16 +1162,18 @@ class MySQLStore extends Entity
                     }
                 }
                 // Дополнительные услвоия по умолчанию
-                $more_cond = array();
-                if (empty($attr_exists['is_history'])) $more_cond[] = '`'.$table.'`.is_history = 0';
-                if (empty($attr_exists['is_delete'])) $more_cond[]  = '`'.$table.'`.is_delete = 0';
-                $attr_exists = array('is_history' => true, 'is_delete' => true);
-                if ($glue == ' AND '){
-                    $cond = array_merge($cond, $more_cond);
-                }else
-                if (!empty($more_cond)){
-                    array_unshift($more_cond, '('.implode($glue, $cond).')');
-                    return implode(' AND ', $more_cond);
+                if ($level == 1){
+                    $more_cond = array();
+                    if (empty($attr_exists['is_history'])) $more_cond[] = '`'.$table.'`.is_history = 0';
+                    if (empty($attr_exists['is_delete'])) $more_cond[]  = '`'.$table.'`.is_delete = 0';
+                    $attr_exists = array('is_history' => true, 'is_delete' => true);
+                    if ($glue == ' AND '){
+                        $cond = array_merge($cond, $more_cond);
+                    }else
+                    if (!empty($more_cond)){
+                        array_unshift($more_cond, '('.implode($glue, $cond).')');
+                        return implode(' AND ', $more_cond);
+                    }
                 }
                 return implode($glue, $cond);
 
