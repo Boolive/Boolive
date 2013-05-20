@@ -77,9 +77,23 @@ class F
      * @param $str Строка, которая делится
      * @return array Массив строк. Если разделитель не найден, то первая строка = null, вторая = $str
      */
-    static function splitRight($delim, $str)
+    static function splitRight($delim, $str, $single = false)
     {
-        $pos = mb_strrpos($str, $delim);
+        if ($single){
+            preg_match_all('/'.preg_quote($delim,'/').'+/ui', $str, $m, PREG_OFFSET_CAPTURE);
+            $i=sizeof($m[0])-1;
+            $pos = false;
+            while ($i>=0){
+                if ($m[0][$i][0] === $delim){
+                    $pos = $m[0][$i][1];
+                    $i = -1;
+                }else{
+                    $i--;
+                }
+            }
+        }else{
+            $pos = mb_strrpos($str, $delim);
+        }
         if ($pos === false) return array(null, $str);
         return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+mb_strlen($delim)));
     }
@@ -235,6 +249,22 @@ class F
             $wchar = chr(($binwchar >> 8) & 0xFF) . chr(($binwchar) & 0xFF);
             return iconv("unicodebig", "utf-8", $wchar);
         }, $str);
+    }
+
+    /**
+     * Ковертирование в строку JSON формата
+     * @param mixed $value
+     * @return mixed|string
+     */
+    static function toJSON($value, $format = true)
+    {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            $f = JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE;
+            if ($format) $f = $f|JSON_PRETTY_PRINT;
+            return json_encode($value, $f);
+        }else{
+            return F::special_unicode_to_utf8(json_encode($value));
+        }
     }
 
     /**
