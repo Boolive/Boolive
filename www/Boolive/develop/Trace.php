@@ -146,6 +146,31 @@ class Trace
     }
 
     /**
+     * Оформление значения
+     * @param $var
+     * @return string
+     */
+    static private function style($var, $html = true)
+    {
+        $style='';
+        if (is_string($var)){
+            $style.='color:#008100;';
+            $var = '\''.$var.'\'';
+        }else
+        if (is_numeric($var)||is_nan($var)){
+            $style.='color:#FF0000;';
+        }else
+        if (is_bool($var)||is_null($var)){
+            $style.='color:#252FFF;';
+            if (is_bool($var)) $var = $var ? 'true' : 'false';
+            if (is_null($var)) $var = 'null';
+        }else{
+            return $var;
+        }
+        return '<span style="'.$style.'">'.$var.'</span>';
+    }
+
+    /**
      * Форматирование значения
      *
      * @param mixed $var Значение для форматировния
@@ -153,35 +178,35 @@ class Trace
      * @param string $pfx Префикс для строки вывода. Для имитации иерархии
      * @return string
      */
-    static public function format($var, &$trace_buf = array(), $pfx = '  ')
+    static public function format($var, &$trace_buf = array(), $pfx = '  ', $html = true)
     {
         $sp = '| ';
         $sp2 = '. ';
         $sp3 = '  ';
         $out = '';
         if ($var instanceof Trace){
-            $out.= '# '.$var->key."\n";
+            /*if (is_string($var->key))*/ $out.= '# '.$var->key."\n";
             if (empty($var->list)){
-                $var = $pfx.self::format($var->value, $trace_buf, $pfx.$sp3);
+                $out.= $pfx.self::format($var->value, $trace_buf, $pfx.$sp3, $html);
             }else{
                 if (isset($var->value)){
-                    $out.= $pfx.self::format($var->value, $trace_buf, $pfx)."\n";
+                    $out.= $pfx.self::format($var->value, $trace_buf, $pfx, $html)."\n";
                 }
                 $cnt = sizeof($var->list);
                 foreach ($var->list as $var){
                     $cnt--;
-                    $out.= $pfx.self::format($var, $trace_buf, ($cnt?$pfx.$sp:$pfx.$sp3))."\n";
+                    $out.= $pfx.self::format($var, $trace_buf, ($cnt?$pfx.$sp:$pfx.$sp3), $html)."\n";
                 }
                 return rtrim($out);
             }
-        }
+        }else
         // если не определена или null
         if (!isset($var) || is_null($var)){
-            $out.= 'null';
+            $out.= self::style(null, $html);
         }else
-        // если булево
-        if (is_bool($var)){
-            $out.= $var ? 'true' : 'false';
+        // Строка, число, булево
+        if (is_scalar($var)){
+            $out.= self::style($var, $html);
         }else
         // если ресурс
         if (is_resource($var)){
@@ -201,7 +226,7 @@ class Trace
                     }else{
                         $new_pfx = $pfx.' '.$sp3;
                     }
-                    $out.= "\n".$pfx.'['.$name.'] => '.self::format($value, $trace_buf, $new_pfx);
+                    $out.= "\n".$pfx.'['.self::style($name, $html).'] => '.self::format($value, $trace_buf, $new_pfx, $html);
                 }
             }
         }else
@@ -225,7 +250,7 @@ class Trace
             }
             if (isset($list)){
                 if (!is_array($list)){
-                    $out.= "\n".$pfx.self::format($list, $trace_buf, $pfx);
+                    $out.= "\n".$pfx.self::format($list, $trace_buf, $pfx, $html);
                 }else{
                     $cnt = sizeof($list);
                     if ($cnt > 0){
@@ -236,16 +261,12 @@ class Trace
                             }else{
                                 $new_pfx = $pfx.' '.$sp3;
                             }
-                            $out.= "\n".$pfx.'['.$name.'] => '.self::format($value, $trace_buf, $new_pfx);
+                            $out.= "\n".$pfx.'['.$name.'] => '.self::format($value, $trace_buf, $new_pfx, $html);
                         }
                     }
                 }
             }
-        }/*else
-        // Строка
-        if (is_string($var)){
-            $out.= '"'.$var.'"';
-        }*/
+        }
         // Иначе
         else{
             $out.= $var;
