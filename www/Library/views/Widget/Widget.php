@@ -18,7 +18,7 @@ class Widget extends View
      */
     protected function init()
     {
-        if (!$this->isLink()) $this->find();
+        if (!$this->isLink()) $this->find(array('key'=>'name'));
     }
 
     /**

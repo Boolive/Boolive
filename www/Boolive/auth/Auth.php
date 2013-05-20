@@ -70,14 +70,16 @@ class Auth
         $hash = empty($ID[1]) ? '' : $ID[1];
         // Если есть кука, то ищем пользователя в БД
         if ($hash){
-            $result = Data::select(array(
-                'from' => array('/Members'),
+            $result = Data::read(array(
+                'from' => '/Members',
+                'depth' => 'max',
                 'where' => array(
                     array('attr', 'value', '=', $hash),
                     array('attr', 'is_link', '=', '0')
                 ),
+                'key' => null,
                 'limit' => array(0, 1)
-            ), null, false, null, null, false);
+            ), false);
             // Пользователь найден и не истекло время его запоминания
             if (!empty($result)){
                 self::$user = $result[0];
@@ -87,7 +89,7 @@ class Auth
         }
         // Новый гость
         if (!self::$user){
-            self::$user = Data::read(self::USER, null, null, 0, false)->birth(Data::read(self::GROUP_GUEST, null, null, 0, false));
+            self::$user = Data::read(self::USER, false)->birth(Data::read(self::GROUP_GUEST, false));
             self::$user->value($hash);
             $duration = 0;
         }
@@ -111,7 +113,7 @@ class Auth
         if (self::$user->isExist() && (self::$user->visit_time->value() < (time()-300))){
             // Обновление времени визита
             self::$user->visit_time = time();
-            self::$user->visit_time->save(false, true, $error, false);
+            //self::$user->visit_time->save(false, true, $error, false);
         }
         setcookie('ID', $duration.'|'.$hash, ($duration ? time()+$duration : 0), '/');
     }

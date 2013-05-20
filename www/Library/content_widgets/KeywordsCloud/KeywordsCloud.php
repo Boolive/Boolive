@@ -14,9 +14,10 @@ class KeywordsCloud extends Widget
     public function work($v = array())
     {
         $list = $this->object->linked()->find(array(
-            "where" => array(
+            'where' => array(
                 array('is', '/Library/content_samples/Keyword')
-            )
+            ),
+            'key' => 'name'
         ));
         $v['title'] = $this->title->value();
         $v['max_font_size'] = $this->max_font_size->value();

@@ -33,117 +33,100 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Выбор объекта по ключу.
-     * @param string|array $key Ключ объекта. Ключём может быть URI, сокращенный URI или массив из объекта-родителя и имени выбираемого подчиненного
-     * @param null|\Boolive\data\Entity $owner Владелец объекта
-     * @param null|\Boolive\data\Entity $lang Язык (локаль) объекта
-     * @param int $date Дата создани объекта. Используется в качестве версии
-     * @param bool $access Признак, проверять или нет наличие доступа к объекту?
-     * @param bool $use_cache Признак, использовать кэш?
-     * @param bool $index Признак, индексировать или нет родителя, если объект не найден?
-     * @return \Boolive\data\Entity|null Найденный объект
+     * Чтение объектов
+     * @param $cond Условие на читаемые объекты.
+     * @param bool $index Признак, выполнять индексацию данных перед чтением или нет?
+     * @return array|\Boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
+     * @throws \Exception
      */
-    public function read($key, $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true, $index = false)
+    public function read($cond, $index = false)
     {
-        if ($key == 'null' || is_null($key)) return null;
-        $binds = array();
-        // Владелец
-        $binds[0] = !empty($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
-        if ($binds[0] == Entity::ENTITY_ID){
-            $sql = 'obj.`owner` = ?';
-        }else{
-            $sql = 'obj.`owner` IN ('.Entity::ENTITY_ID.',?)';
+        if ($cond['from'] == '//3564'){
+            $f = 3;
         }
-        // Язык
-        $binds[1] = !empty($lang)? $this->localId($lang) : Entity::ENTITY_ID;
-        if ($binds[1] == Entity::ENTITY_ID){
-            $sql.= ' AND obj.`lang` = ?';
-        }else{
-            $sql.= ' AND obj.`lang` IN ('.Entity::ENTITY_ID.',?)';
+        // SQL условия по выбранному индексу
+        $sql = $this->getCondSQL2($cond);
+        // Индексирование
+        if ($index && $cond['depth']>0){
+            $from = Data::read($cond['from'], !empty($cond['access']));
+            // Глубина условия
+            $depth = $this->getCondDepth($cond);
+            if ($from->_attribs['index_depth']<$depth || $from->_attribs['index_step']!=0){
+                $this->makeIndex($this->localId($from->id()), $this->localId($cond['owner']), $this->localId($cond['lang']), $depth);
+            }
         }
-        $buffer_key_pf = '@'.$binds[0].'@'.$binds[1].'@'.$date;
-
-        if (is_array($key)){
-            $keys = $key;
-            $key = $key[0]->uri().'/'.$key[1];
+        // Выбор из индекса
+        $q = $this->db->prepare($sql['sql']);
+        foreach ($sql['binds'] as $i => $v){
+            if (is_array($v)){
+                $q->bindValue($i+1, $v[0], $v[1]);
+            }else{
+                $q->bindValue($i+1, $v);
+            }
         }
-
-        if ($use_cache && Buffer::isExist($key.$buffer_key_pf)){
-            return Buffer::get($key.$buffer_key_pf);
+        try{
+            $q->execute();
+        }catch (\Exception $e){
+            trace($q);
+            throw $e;
         }
-        // Соединение с ids
-        $sql.= ' AND obj.id = {ids}.id';
-        // Дата (версия)
-        if (!empty($date)){
-            $sql.=' AND obj.date = ?';
-        }else{
-            $sql.=' AND obj.is_history = ?';
-            $date = 0;
+        $row = $q->fetch(DB::FETCH_ASSOC);
+        // Выбор значения функции
+        if (isset($row['fun'])){
+            // Первая строка результата. Возможно, вычисляемое значение
+            return $row['fun'];
         }
-        $select = 'SELECT {ids}.uri, {ids}.id `id2`, obj.*';
-        $from = " FROM {ids} LEFT JOIN {objects} obj ON ($sql)";
-        // Контроль доступа
-        if ($access && IS_INSTALL && ($cond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
-            $cond = $this->getCondSQL(array('where'=>$cond), null, null, true);
-            $select.= ', IF('.$cond['where'].',1,0) is_accessible';
-            $from.=$cond['joins'];
-            $binds = array_merge($cond['binds'], $binds);
-        }
-        $sql = $select.$from;
-        $binds[] = $date;
-        if (isset($keys)){
-            $sql.= ' WHERE {obj}.parent = ? AND {obj}.name = ? LIMIT 0,1';
-            $binds[] = $this->localId($keys[0]);
-            $binds[] = $keys[1];
-        }else
-        // Идентификатор
-        if ($info = Data::isShortUri($key)){
-            $sql.= ' WHERE {ids}.id = ? LIMIT 0,1';
-            $key = $info[1];
-            $binds[] = $key;
-        }else{
-            $sql.= ' WHERE {ids}.uri = ? LIMIT 0,1';
-            $binds[] = $key;
-        }
-
-        $q = $this->db->prepare($sql);
-        $q->execute($binds);
-
-        if (($attrs = $q->fetch(DB::FETCH_ASSOC)) && isset($attrs['id'])){
-            unset($attrs['id2']);
-            $obj = $this->makeObject($attrs);
-        }else{
-            if (empty($info)) $attrs['uri'] = $key;
-            // Поиск виртуального
-//            if ($index && isset($attrs['uri'])){
-//                $names = F::splitRight('/', $attrs['uri']);
-//                if ($parent = Data::read($names[0], $owner, $lang, 0, $access)){
-//                    if (($proto = $parent->proto()) && $proto->{$names[1]}->isExist()){
-//                        $obj = $proto->{$names[1]}->birth($parent);
-//                        if (isset($attrs['id2'])) $obj->_attribs['id'] = $this->remoteId($attrs['id2']);
-//                        $obj->_attribs['is_exist'] = 0; // Ещё не существует
-//                        $obj->_attribs['is_virtual'] = 1;
-//                        // Сохранение виртуального
-//                        if ($parent->isExist() && !$parent->_rename) $this->write($obj);
-//                        return $obj;
-//                    }
-//                }
-//            }
-//            if (!isset($obj)){
-                // Несущесвтующий объект
-                $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
-                if (isset($attrs['uri'])){
-                    $names = F::splitRight('/', $attrs['uri']);
-                    $obj->_attribs['name'] = $names[1];
-                    $obj->_attribs['uri'] = $attrs['uri'];
+        // Выбор одного объекта, если глубина 0 и не указан ключ для списка
+        if ($cond['depth'] == 0 && empty($cond['key'])){
+            // Выбор атрибута
+            if (isset($cond['select'])){
+                if (in_array($cond['select'], array_keys($this->_attribs)) && isset($row)){
+                    $obj = $row[$cond['select']];
+                }else{
+                    $obj = null;
                 }
-//            }
+            }else
+            // Выбор объекта
+            if (isset($row['id'])){
+                unset($row['id2']);
+                $obj = $this->makeObject($row);
+            }else{
+                if (isset($row['id2'])){
+                    $obj = new Entity(array(
+                        'name'=>'ff',
+                        'uri'=>$row['uri'],
+                        'owner'=>$this->_attribs['owner'],
+                        'lang'=>$this->_attribs['lang']
+                    ));
+                }else{
+                    // Несуществующий объект
+                    $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
+                    if (!Data::isShortUri($cond['from'])){
+                        $names = F::splitRight('/', $cond['from'], true);
+                        $obj->_attribs['name'] = $names[1];
+                        $obj->_attribs['uri'] = $cond['from'];
+                    }
+                }
+            }
+            return $obj;
         }
-        if ($obj->isExist()){
-            Buffer::set($obj->id().$buffer_key_pf, $obj);
-            Buffer::set($obj->uri().$buffer_key_pf, $obj);
+        // Выбор списка объектов или значений
+        $result = array();
+        while ($row){
+            // Объект или его атрибут
+            if (isset($cond['select']) && in_array($cond['select'], array_keys($this->_attribs))){
+                $obj = $row[$cond['select']];
+            }else{
+                $obj = $this->makeObject($row);
+            }
+            if (empty($cond['key'])){
+                $result[] = $obj;
+            }else{
+                $result[$row[$cond['key']]] = $obj;
+            }
+            $row = $q->fetch(DB::FETCH_ASSOC);
         }
-        return $obj;
+        return $result;
     }
 
     /**
@@ -201,8 +184,6 @@ class MySQLStore extends Entity
                 }else{
                     $attr['id'] = $this->localId($attr['id'], true, $new_id);
                 }
-
-
                 // Значения превращаем в файл, если больше 255
                 if (isset($attr['value']) && mb_strlen($attr['value']) > 255){
                     $attr['file'] = array(
@@ -210,7 +191,6 @@ class MySQLStore extends Entity
                         'name' => $entity->name().'.value'
                     );
                 }
-
                 // Если значение файл, то подготовливаем для него имя
                 if (isset($attr['file'])){
                     $attr['is_file'] = 1;
@@ -233,7 +213,6 @@ class MySQLStore extends Entity
                         $attr['value'] = $attr['owner'].'@'.$attr['lang'].'@'.$attr['value'];
                     }
                 }
-
                 // По умолчанию считаем, что запись добавляется (учёт истории)
                 $add = true;
                 // Проверяем, может запись с указанной датой существует и её тогда редактировать?
@@ -249,7 +228,6 @@ class MySQLStore extends Entity
                 }else{
                     $attr['date'] = time();
                 }
-
                 // Если новое значение не отличается от старого, то будем редактировать страую запись. Поиск какой именно.
                 if ($add){
                     // Поиск самой свежей записи с учётом is_histrory
@@ -263,17 +241,15 @@ class MySQLStore extends Entity
                     }
                     unset($q);
                 }
-
                 $this->db->beginTransaction();
-
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных
                 if ($entity->_rename || (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent']))){
                     // Обновление URI в ids
                     // Текущий URI
-                    $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri']);
+                    $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
                     $uri = (isset($names[0])?$names[0].'/':'').(empty($current)? $temp_name : $current['name']);
                     // Новый URI
-                    $names = F::splitRight('/', $attr['uri']);
+                    $names = F::splitRight('/', $attr['uri'], true);
                     $uri_new = (isset($names[0])?$names[0].'/':'').$attr['name'];
                     $entity->_attribs['uri'] = $uri_new;
                     //
@@ -294,7 +270,6 @@ class MySQLStore extends Entity
                     }
                     unset($q);
                 }
-
                 // Уникальность order, если задано значение и записываемый объект не в истории
                 // Если запись в историю, то вычисляем только если не указан order
                 if (!$attr['is_history'] && $attr['order']!= Entity::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
@@ -323,14 +298,12 @@ class MySQLStore extends Entity
                 }else{
                     if (isset($current['order'])) $attr['order'] = $current['order'];
                 }
-
                 // Префикс к имени файла для учёта владельца и языка
                 if ($attr['lang'] != Entity::ENTITY_ID || $attr['owner'] != Entity::ENTITY_ID){
                     $fname_pf = $attr['owner'].'@'.$attr['lang'].'@';
                 }else{
                     $fname_pf = '';
                 }
-
                 // Если редактирование записи, при этом старая запись имеет файл, а новая нет или загружаетс новый файл, то удаляем файл
                 if (!$add && $attr['is_history'] == $current['is_history']){
                     if (isset($attr['is_file']) && ($attr['is_file']==0 && $current['is_file']==1 || isset($attr['file']))){
@@ -355,7 +328,6 @@ class MySQLStore extends Entity
                     }
                     File::rename($from, $to);
                 }
-
                 // Связывание с новым файлом
                 if (isset($attr['file'])){
                     if ($attr['is_history']){
@@ -382,7 +354,6 @@ class MySQLStore extends Entity
                     }
                     unset($attr['file']);
                 }
-
                 // Текущую акуальную запись в историю
                 // Если добавление новой актуальной записи или востановление из истории
                 if ((($add && $entity->isExist()) || (!$add && $current['is_history'])) && (isset($attr['is_history']) && $attr['is_history']==0)){
@@ -391,7 +362,6 @@ class MySQLStore extends Entity
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['id']));
                     unset($q);
                 }
-
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
                         'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_virtual', 'is_default_value', 'is_default_class',
                         'is_default_children', 'proto_cnt', 'parent_cnt', 'valuef');
@@ -427,7 +397,6 @@ class MySQLStore extends Entity
                     $q->bindValue($i+1, $attr['id']);
                     $q->execute();
                 }
-
                 $this->db->commit();
                 $this->db->beginTransaction();
 
@@ -460,13 +429,11 @@ class MySQLStore extends Entity
                 }else{
                     $incomplete = false;
                 }
-
                 // Создание отношений если объект новый
                 if (!$entity->isExist()){
                     $this->makeParents($attr['id'], $attr['parent'], 0, false);
                     $this->makeProtos($attr['id'], $attr['proto'], 0, false, $incomplete);
                 }
-
                 if (!empty($current)){
                     // Обновление признаков у подчиненных
                     $u = array(
@@ -485,7 +452,6 @@ class MySQLStore extends Entity
                         $q->execute($u['binds']);
                     }
                     unset($u);
-
                     // Обновления наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if ($current['proto'] != $attr['proto']){
@@ -548,7 +514,6 @@ class MySQLStore extends Entity
                         $u->execute($params);
                     }
                 }
-
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->remoteId($attr['id']);
                 $entity->_attribs['name'] = $attr['name'];
@@ -611,80 +576,6 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Поиск объектов
-     * @param array $cond Условие поиска в виде многомерного массива.
-     * @param string $keys Название атрибута, который использовать для ключей массива результата
-     * @param null|\Boolive\data\Entity $owner Владелец искомых объектов
-     * @param null|\Boolive\data\Entity $lang Язык (локаль) искомых объектов
-     * @param bool $access Признак, проверять или нет наличие доступа к объекту?
-     * @param bool $attrib_name Какой атрибут у объектов возвращать. Если null, то возвращается объект целиком
-     * @param bool $index Признак, индексировать или нет данные?
-     * @throws \Exception
-     * @return mixed|array Массив объектов или результат расчета, например, количество объектов
-     */
-    public function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true, $attrib_name = null, $index = true)
-    {
-        if (isset($cond['from'][0]) && !($cond['from'][0] instanceof Entity)){
-            $cond['from'][0] = Data::read($cond['from'][0], $owner, $lang, 0, false);
-        }
-        // Глубина условия
-        $depth = $this->getCondDepth($cond);
-        // Владелец и язык
-        $_owner = isset($owner) ? $this->localId($owner) : Entity::ENTITY_ID;
-        $_lang = isset($lang) ? $this->localId($lang) : Entity::ENTITY_ID;
-
-        if ($index && isset($cond['from'][0]) && ($cond['from'][0]->_attribs['index_depth']<$depth || $cond['from'][0]->_attribs['index_step']!=0)){
-            // Индексирование
-            $this->makeIndex($this->localId($cond['from'][0]->id()), $_owner, $_lang, $depth);
-        }
-        // SQL условия по выбранному индексу
-        $sql = $this->getCondSQL($cond, $_owner, $_lang);
-        // Выбор из индекса
-        $q = $this->db->prepare($sql['sql']);
-        foreach ($sql['binds'] as $i => $v){
-            if (is_array($v)){
-                $q->bindValue($i+1, $v[0], $v[1]);
-            }else{
-                $q->bindValue($i+1, $v);
-            }
-        }
-        try{
-            $q->execute();
-        }catch (\Exception $e){
-            trace($q);
-            throw $e;
-        }
-        // Если не значение, то список строк
-        $row = $q->fetch(DB::FETCH_ASSOC);
-        if (isset($row['fun'])){
-            // Первая строка результата. Возможно, вычисляемое значение
-            return $row['fun'];
-        }
-        $result = array();
-        while ($row){
-//            $key_pfx = '@'.$row['owner'].'@'.$row['lang'].'@'.$row['date'];
-//            if (Buffer::isExist($row['uri'].$key_pfx)){
-//                $obj = Buffer::get($row['uri'].$key_pfx);
-//            }else{
-                if (!$attrib_name){
-                    $obj = $this->makeObject($row);
-                }else{
-                    $obj = $row[$attrib_name];
-                }
-//                Buffer::set($row['uri'].$key_pfx, $obj);
-//                Buffer::set($obj->id().$key_pfx, $obj);
-//            }
-            if (empty($keys)){
-                $result[] = $obj;
-            }else{
-                $result[$row[$keys]] = $obj;
-            }
-            $row = $q->fetch(DB::FETCH_ASSOC);
-        }
-        return $result;
-    }
-
-    /**
      * Индексирование объекта в соответсвии с условием поиска
      * При индексировании создаются виртуальные объекты, автоматически наследуемые от прототипов
      * @param Entity $obj Индексируемый объект
@@ -696,7 +587,6 @@ class MySQLStore extends Entity
      */
     public function makeIndex($obj, $owner, $lang, $depth, $start_depth = null)
     {
-//        return;
         if (!isset($start_depth)) $start_depth = $depth;
         try{
             $this->db->beginTransaction();
@@ -859,25 +749,6 @@ class MySQLStore extends Entity
         }
     }
 
-//    /**
-//     * Удаление виртуальных подчиненых у объекта и у его наследников
-//     * @param $object_id
-//     */
-//    private function removeVirtualChildren($object_id)
-//    {
-//        $q = $this->db->prepare('
-//            DELETE {ids}, {objects}, {trees} FROM {ids}, {objects}, {trees}
-//            WHERE parent_id = ?
-//            AND object_id != parent_id
-//            AND {ids}.id = object_id
-//            AND {objects}.id = object_id
-//            AND {objects}.is_virtual
-//        ');
-//        ///*IN (SELECT * FROM (SELECT object_id FROM {trees} WHERE parent_id = ? AND `type`=1)t)*/
-//            /*AND `type` = 0*/
-//        $q->execute(array($object_id));
-//    }
-
     /**
      * Очистка индекса объекта и его родителей
      * @param $parent_id
@@ -887,7 +758,7 @@ class MySQLStore extends Entity
      */
     private function clearIndex($parent_id, $object_id = 0)
     {
-        $q = $this->db->exec('UPDATE {objects} SET index_depth = 0, index_step = 0');
+        $this->db->exec('UPDATE {objects} SET index_depth = 0, index_step = 0');
     }
 
     /**
@@ -898,7 +769,7 @@ class MySQLStore extends Entity
      */
     private function getCondDepth($cond)
     {
-        $depth = isset($cond['from'][1])? $cond['from'][1] : 0;
+        $depth = /*isset($cond['depth'])? $cond['depth'] : */0;
         if (isset($cond['where'])){
             $find_depth = function($cond, $depth = 1) use (&$find_depth){
                 $d = $depth;
@@ -920,27 +791,25 @@ class MySQLStore extends Entity
             };
             $depth = $find_depth($cond['where']);
         }
-        if ($depth == 1 && isset($cond['order'])){
-            $cnt = sizeof($cond['order']);
-            while ($depth==1 && --$cnt>=0){
-                if (sizeof($cond['order'][$cnt])==3) $depth = 2;
-            }
-        }
-        if (isset($cond['from'][1]) && $cond['from'][1]>1){
-            $depth+= $cond['from'][1]-1;
-        }
+//        if ($depth == 1 && isset($cond['order'])){
+//            $cnt = sizeof($cond['order']);
+//            while ($depth==1 && --$cnt>=0){
+//                if (sizeof($cond['order'][$cnt])==3) $depth = 2;
+//            }
+//        }
+//        if (isset($cond['depth']) && $cond['depth']!='max' && $cond['depth']>1){
+//            $depth+= $cond['depth']-1;
+//        }
         return $depth;
     }
 
     /**
      * Конвертирование условия поиска в SQL запрос
      * @param array $cond Условие поиска
-     * @param int $owner Идентификатор владельца
-     * @param int $lang Идентификатор языка (локали)
      * @param bool $only_where
      * @return array Ассоциативный массив SQL запроса и значений, вставляемых в него вместо "?"
      */
-    public function getCondSQL($cond, $owner, $lang, $only_where = false)
+    public function getCondSQL2($cond, $only_where = false)
     {
         $result = array(
             'select' => '',
@@ -956,65 +825,103 @@ class MySQLStore extends Entity
         // количество услой IS
         $t_cnt = 1;
         // Условия для локализации и персонализации
-        $owner_lang = ($owner == Entity::ENTITY_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
-        $owner_lang.= ($lang == Entity::ENTITY_ID)? ' AND `lang` = ?' : ' AND `lang` IN (?, 4294967295)';
+        $owner_lang = ($cond['owner'] == Entity::ENTITY_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
+        $owner_lang.= ($cond['lang'] == Entity::ENTITY_ID)? ' AND `lang` = ?' : ' AND `lang` IN (?, 4294967295)';
 
         if (!$only_where){
             // Что?
-            if (isset($cond['select'])){
+            if (isset($cond['select']) && !in_array($cond['select'], array_keys($this->_attribs))){
                 // Подсчёт количества объектов
                 if ($cond['select'] == 'count'){
-                    $result['select'] = 'SELECT count(*) fun';// FROM {objects} obj';
+                    $result['select'] = 'SELECT count(*) fun';
                 }else{
-                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun';//.' fun FROM {objects} obj';
+                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun';
                 }
                 $calc = true;
             }else{
                 $result['select'] = 'SELECT u.uri, obj.*';
-
-                // Выбор объектов
-//                $result['select'] = 'SELECT u.uri, obj.* FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
                 $calc = false;
             }
-
+            $from_info = Data::parseUri($cond['from']);
             // От куда?
-            if (isset($cond['from'][0])){
-                $id = $this->localId($cond['from'][0]);
-
-                if (!isset($cond['from'][1])){
+            if ($cond['depth'] == 0){
+                // Выбор одной записи = from
+                // Контроль доступа
+                if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
+                    $acond = $this->getCondSQL2(array('where'=>$acond, 'owner'=>$cond['owner'], 'lang'=>$cond['lang']), true);
+                    $result['select'].= ', IF('.$acond['where'].',1,0) is_accessible';
+                    $result['joins'].=$acond['joins'];
+                    $result['binds'] = array_merge($acond['binds'], $result['binds']);
+                }
+                $result['select'].= ', u.id `id2` FROM {ids} u LEFT JOIN {objects} obj ON obj.id = u.id AND ';
+                // Условие на владельца и язык
+                $result['select'].= ($cond['owner'] == Entity::ENTITY_ID)? 'obj.`owner` = ?' : 'obj.`owner` IN (?, 4294967295)';
+                $result['select'].= ($cond['lang'] == Entity::ENTITY_ID)? ' AND obj.`lang` = ?' : ' AND obj.`lang` IN (?, 4294967295)';
+                $result['binds'][] = array($cond['owner'], DB::PARAM_INT);
+                $result['binds'][] = array($cond['lang'], DB::PARAM_INT);
+                // Идентификация
+                if (!empty($from_info['id'])){
+                    if (empty($from_info['path'])){
+                        $result['where'].= "u.id = ?";
+                        $result['binds'][] = array($from_info['id'], DB::PARAM_INT);
+                    }else{
+                        $result['where'].= '{obj}.parent = ? AND {obj}.name = ?';
+                        $result['binds'][] = $from_info['id'];
+                        $result['binds'][] = ltrim($from_info['path'],'/');
+                    }
+                }else{
+                    $result['where'].= "u.uri = ?";
+                    $result['binds'][] = array($cond['from'], DB::PARAM_STR);
+                }
+                $cond['limit'] = array(0,1);
+            }else{
+                $from = Data::read($cond['from'], !empty($cond['access']));
+                // Дополняем условие контролем доступа
+                if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read', $cond['from']))){
+                    if (empty($cond['where'])){
+                        $cond['where'] = array($acond);
+                    }else{
+                        if (is_string($cond['where'][0])){
+                            if ($cond['where'][0] == 'all'){
+                               $cond['where'][1][] = $acond;
+                            }else{
+                               $cond['where'] = array($cond['where'], $acond);
+                            }
+                        }else{
+                            $cond['where'][] = $acond;
+                        }
+                    }
+                }
+                // Выбор списка записей из from
+                if ($cond['depth'] == Entity::MAX_DEPTH){
+                    // Поиск по всей ветке
                     $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                    $result['select'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ? AND t.is_delete=0)";
-                    $binds2[] = array($id, DB::PARAM_INT);
-                    $result['where'].= "u.uri LIKE ? AND ";
-                    $result['binds'][] = $cond['from'][0]->uri().'/%';
+                    $result['select'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ? AND t.object_id!=t.parent_id AND t.is_delete=0)";
+                    $binds2[] = array($this->localId($from), DB::PARAM_INT);
                 }else
-                if ($cond['from'][1] == 0){
-                    $result['select'].= ' FROM {objects} obj';
-                    $result['where'].= "obj.id = ? AND ";
-                    $result['binds'][] = array($id, DB::PARAM_INT);
-                }else
-                if ($cond['from'][1] == 1){
+                if ($cond['depth'] == 1){
+                    // Подчиненные объекты
                     $result['select'].= ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
                     // Сверка parent
                     $result['where'].= "obj.parent = ? AND ";
-                    $result['binds'][] = array($id, DB::PARAM_INT);
+                    $result['binds'][] = array($this->localId($from), DB::PARAM_INT);
+                    // Оптимизация сортировки по атрибуту order
                     if (isset($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
                         unset($cond['order']);
                     }
                 }else{
-                    $result['select'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                    $result['select'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level<=? AND f.is_delete=0)";
-                    $binds2[] = array($id, DB::PARAM_INT);
-                    $binds2[] = array($cond['from'][0]->parentCount() + $cond['from'][1], DB::PARAM_INT);
-                    $result['where'].= "u.uri LIKE ? AND ";
-                    $result['binds'][] = $cond['from'][0]->uri().'/%';
-                }
-            }
+                    // Поиск по ветке с ограниченной глубиной
 
-            // Условие на владельца и язык
-            $result['where'].="(obj.id, obj.owner, obj.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=obj.id AND $owner_lang GROUP BY id)\n  ";
-            $result['binds'][] = array($owner, DB::PARAM_INT);
-            $result['binds'][] = array($lang, DB::PARAM_INT);
+                    $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                    $result['select'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level<=? AND f.object_id != f.parent_id AND f.is_delete=0)";
+                    $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                    $binds2[] = array($from->parentCount() + $cond['depth'], DB::PARAM_INT);
+                }
+                // Условие на владельца и язык
+                $result['where'].="(obj.id, obj.owner, obj.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=obj.id AND $owner_lang GROUP BY id)\n  ";
+                $result['binds'][] = array($cond['owner'], DB::PARAM_INT);
+                $result['binds'][] = array($cond['lang'], DB::PARAM_INT);
+            }
 
             // Сортировка
             if (!$calc && isset($cond['order'])){
@@ -1044,7 +951,8 @@ class MySQLStore extends Entity
              * @param array $cond Условие
              * @param string $glue Логическая оперция объединения условий
              * @param string $table Алиас таблицы. Изменяется в соответсвии с вложенностью условий на подчиенных
-             * @param array $attr_exists // Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
+             * @param int $level Уровень вложености вызова функции
+             * @param array $attr_exists Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
              * @return string SQL условия в WHERE
              */
             $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, &$index_table, $t_cnt, $store){
@@ -1194,8 +1102,8 @@ class MySQLStore extends Entity
         foreach ($joins as $alias => $info){
             $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ? AND (`'.$alias.'`.id, `'.$alias.'`.owner, `'.$alias.'`.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=`'.$alias.'`.id AND '.$owner_lang.' GROUP BY id))';
             $binds2[] = $info[1];
-            $binds2[] = $owner;
-            $binds2[] = $lang;
+            $binds2[] = $cond['owner'];
+            $binds2[] = $cond['lang'];
         }
         if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
         // Полноценный SQL
@@ -1365,7 +1273,7 @@ class MySQLStore extends Entity
      * Полное пересодание дерева родителей
      * @throws \Exception
      */
-    public function rebuildParant()
+    public function rebuildParents()
     {
         try{
             $this->db->beginTransaction();
@@ -1442,16 +1350,18 @@ class MySQLStore extends Entity
         if (!is_string($uri)){
             return null;
         }
-        if ($uri == 'null'){
-            $a = 10;
-        }
+        if ($uri == Entity::ENTITY_ID) return $uri;
         if ($info = Data::isShortUri($uri)){
-            if ($info[0] == $this->key){
-                // Сокращенный URI приндалежит данной секции, поэтому возвращаем вторую часть
-                return $info[1];
+            if (mb_substr($uri,0,mb_strlen($this->key)) == $this->key){
+                if (empty($info['path'])){
+                    // Сокращенный URI приндалежит данной секции, поэтому возвращаем вторую часть
+                    return $info['id'];
+                }else{
+                    return $this->localId(Data::read($uri, false));
+                }
             }else{
                 // Получаем полный URI по сокращенному
-                $uri = Data::read($uri, null, null, 0, false);
+                $uri = Data::read($uri, false);
                 if ($uri->isExist()){
                     $uri = $uri->uri();
                 }else{
@@ -1517,14 +1427,14 @@ class MySQLStore extends Entity
                     if ($attribs['uri']===''){
                         $class = 'Site';
                     }else{
-                        $names = F::splitRight('/', $attribs['uri']);
+                        $names = F::splitRight('/', $attribs['uri'], true);
                         $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
                     }
                     return new $class($attribs);
                 }catch(\Exception $e){
                     // Если файл не найден, то будет использоваться класс прототипа или Entity
                     if ($e->getCode() == 2){
-                        if ($attribs['proto'] && ($proto = Data::read($attribs['proto'], null, null, 0, false))){
+                        if ($attribs['proto'] && ($proto = Data::read($attribs['proto'], false))){
                             // Класс прототипа
                             $class = get_class($proto);
                             return new $class($attribs);
@@ -1535,7 +1445,7 @@ class MySQLStore extends Entity
                 }
             }else
             if ($attribs['is_default_class'] != Entity::ENTITY_ID){
-                $proto = Data::read($attribs['is_default_class'], null, null, 0, false);
+                $proto = Data::read($attribs['is_default_class'], false);
                 $class = get_class($proto);
                 return new $class($attribs);
             }

@@ -3,7 +3,10 @@ Boolive Change Log
 
 Version 2.0.alpha work in progress
 ----------------------------
-
+- new: Was added the rule for check a conditions for reading or verifying objects (VladimirShestakov)
+- new: Added support of conditions of string type (VladimirShestakov)
+- enh: Data::select() method  is combined with Data::read() (VladimirShestakov)
+- enh: Added style for output of function trace() (VladimirShestakov)
 
 Version 2.0.preview-2 April, 27 2013
 ----------------------------

@@ -25,7 +25,7 @@ class NextPrevNavigation extends Widget
     public function getTypes()
     {
         if (!isset($this->types)){
-            $types = $this->object_types->find();
+            $types = $this->object_types->find(array('key'=>'name'));
             unset($types['title'], $types['description']);
             foreach ($types as $key => $type) {
                 $type = $type->linked();
@@ -66,8 +66,7 @@ class NextPrevNavigation extends Widget
                     array('order', 'ASC')
                 ),
                 'limit' => array(0,1)
-            ), null
-        );
+        ));
         // Предыдущая страница
         $prev = $object->parent()->find(array(
             'where' => array(
@@ -78,8 +77,7 @@ class NextPrevNavigation extends Widget
                     array('order', 'DESC')
                 ),
                 'limit' => array(0,1)
-            ), null
-        );
+        ));
         // Если есть следующая или предыдущая, то виджет отображается
         if (!empty($next) || !empty($prev)){
              // Инфо следующей страницы

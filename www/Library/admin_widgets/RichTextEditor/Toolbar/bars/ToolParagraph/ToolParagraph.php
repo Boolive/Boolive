@@ -16,8 +16,9 @@ class ToolParagraph extends Widget
     public function work($v = array())
     {
         // Типы абзацев
-        $plist = Data::select(array(
-            'from' => array('/Library/content_samples/paragraphs', 1),
+        $plist = Data::read(array(
+            'from' => '/Library/content_samples/paragraphs',
+            'depth' => 1,
             'where' => array(
                 array('is', '/Library/content_samples/paragraphs/TextBlock'),
                 array('attr', 'is_hidden', '=', false)

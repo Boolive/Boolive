@@ -29,31 +29,122 @@ class Data
     }
 
     /**
-     * Выбор объекта по ключу.
-     * @param string|array $key Ключ объекта. Ключём может быть URI, сокращенный URI или массив из объекта-родителя и имени выбираемого подчиненного
-     * @param null|Entity $owner Владелец объекта
-     * @param null|Entity $lang Язык (локаль) объекта
-     * @param int $date Дата создани объекта. Используется в качестве версии
-     * @param bool $access Признак, проверять или нет наличие доступа к объекту?
-     * @param bool $use_cache Признак, использовать кэш?
-     * @return Entity|null Найденный объект
+     * Выбор объектов по условию
+     * <h3>Пример условия в виде массива</h3>
+     * <code>
+     * $cond = array(
+     *     'from' => '/Interfaces',                     // Выбор объектов из /Interfaces
+     *     'depth' => 3,                                // Глубина выбора из from. Если 0, то выбирается from, а не его подчиненные
+     *     'select' => 'value',                         // Что выбирать? Если указано название атрибута, то вместо объектов возвращается значение указанного атрибута.
+     *     'where' => array(                            // Услвоия выборки объединенные логическим AND
+     *         array('attr', 'uri', '=', '?'),          // Сравнение атрибута
+     *         array('not', array(                      // Отрицание всех условий
+     *             array('attr', 'value', '=', '%?%')
+     *         )),
+     *         array('any', array(                      // Услвоия, объединенные логическим OR
+     *             array('child', array(                // Условия на подчиненный объект
+     *                 array('attr', 'value', '>', 10),
+     *                 array('attr', 'value', '<', 100),
+     *             ))
+     *         )),
+     *         array('is', '/Library/object')          // Кем объект является? Проверка наследования (прототипирования)
+     *     ),
+     *     'order' => array(                           // Сортировка
+     *         array('uri', 'DESC'),                   // по атрибуту uri
+     *         array('childname', 'value', 'ASC')      // по атрибуту value подчиненного с имененм childname
+     *     ),
+     *     'limit' => array(10, 15),                    // Ограничение - выбирать с 10-го не более 15 объектов
+     *     'owner' => '//user',                         // Владелец искомых объектов
+     *     'lang' => '//lang',                          // Язык (локаль) искомых объектов
+     *     'key' => 'name',                             // Атрибут, который использовать для ключей массива результата
+     * );
+     * </code>
+     * <h2>Условие строкой:</h2><pre>
+     * $cond = "
+     *   from(/Contents)
+     *   select(count)
+     *   depth(max)
+     *   where(all(
+     *       attr(uri,like,%А%),
+     *       not(attr(value,eq, m))
+     *       any(
+     *           child(title, all(
+     *               attr(value,gte,10)
+     *               attr(value,lt,100)
+     *           ))
+     *       ),
+     *       is(/Library/object)
+     *   ))
+     *   order((uri,desc),(childname,value,asc))
+     *   limit(10,15)
+     * ";</pre>
+     * <h2>Условие в URL формате</h2><pre>
+     * $cond = "
+     *   /Content&
+     *   depth=max&
+     *   where=all(
+     *       attr(uri,like,%25А%25),
+     *       not(attr(value,eq, m))
+     *       any(
+     *           child(title, all(
+     *               attr(value,gte,10)
+     *               attr(value,lt,100)
+     *           ))
+     *       ),
+     *       is(/Library/object)
+     *   )&
+     *   order=(uri,desc),(childname,value,asc)&
+     *   limit=10,15
+     * ";</pre>
+     * @param string $cond Условие выбора
+     * @param bool $access Признак, учитывать или нет права доступа на чтение?
+     * @param bool $use_cache Признак, использовать или нет кэш?
+     * @param bool $index Признак, выполнять индексирование данных перед поиском?
+     * @return array|Entity|mixed|null В зависимости от услвоия выбора результатом будет
+     * а) массив найденных объектов
+     * б) объект,
+     * в) вычисляемое значение, например, количество или null
+     * г) массив со значенями указанного атрибута найденных объектов
+     * д) значение указанного атриубта объекта
      */
-    static function read($key = '', $owner = null, $lang = null, $date = 0, $access = true, $use_cache = true, $index = false)
+    static function read($cond = '', $access = true, $use_cache = true, $index = true)
     {
-        if ($key == Entity::ENTITY_ID){
+        if ($cond == Entity::ENTITY_ID){
             return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
         }
-        $key = self::encodeKey($key);
-        // Если $key массив, то $key[0] - родитель, $key[1] - имя подчиненного
-        $skey = is_array($key)? ($key[0] instanceof Entity ? $key[0]->key() : $key[0]) : $key;
-        // Опредление хранилища по URI
-        if ($store = self::getStore($skey)){
-            // Выбор объекта
-            return $store->read($key, $owner, $lang, $date, $access, $use_cache, $index);
+        if ($cond == 'null' || is_null($cond)){
+            return null;
         }
-        return null;
+        $cond = self::parseCond($cond);
+        // Контроль доступа в условие выбора
+        if ($access) $cond['access'] = true;
+        // из кэша
+        $buffer_key = json_encode($cond);
+        if ($use_cache && Buffer::isExist($buffer_key)){
+            return Buffer::get($buffer_key);
+        }
+        // Опредление хранилища по URI
+        if ($store = self::getStore($cond['from'])){
+            // Выбор объекта
+            $result = $store->read($cond, $index);
+        }else{
+            $result = null;
+        }
+        // кэширование
+        if ($result instanceof Entity){
+            // Ключ uri
+            $cond['from'] = $result->uri();
+            Buffer::set(json_encode($cond), $result);
+            if ($result->isExist()){
+                // Если объект существует, то дополнительно ключ id
+                $cond['from'] = $result->id();
+                Buffer::set(json_encode($cond), $result);
+            }
+        }else{
+            Buffer::set($buffer_key, $result);
+        }
+        return $result;
     }
-
 
     /**
      * Сохранение объекта
@@ -115,7 +206,8 @@ class Data
             // Проверка доступа на уничтожение объекта и его подчиненных
             if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null))){
                 $objects = $store->select(array(
-                        'from' => array($object->id()),
+                        'from' => $object->id(),
+                        'depth' => 'max',
                         'where' => array('not', $acond),
                         'limit' => array(0,50)
                     ),
@@ -132,97 +224,214 @@ class Data
     }
 
     /**
-     * Поиск объектов.
-     * Пример условия:
-     * <code>
-     * $cond = array(
-     *     'from' => array('/Interfaces', 3),           // выбор объектов из /Interfaces в глубину до 3 уровней
-     *     'where' => array(                            // услвоия выборки объединенные логическим AND
-     *         array('attr', 'uri', '=', '?'),          // сравнение атрибута
-     *         array('not', array(                      // отрицание всех условий
-     *             array('attr', 'value', '=', '%?%')
-     *         )),
-     *         array('any', array(                      // услвоия объединенные логическим OR
-     *             array('child', array(                // или подчиненного
-     *                 array('attr', 'value', '>', 10),
-     *                 array('attr', 'value', '<', 100),
-     *             ))
-     *         )),
-     *         array('is', '/Library/object')          // кем объект является? проверка наследования
-     *     ),
-     *     'order' => array(                           // сортировка
-     *         array('uri', 'DESC'),                   // по атрибуту uri
-     *         array('childname', 'value', 'ASC')      // по атрибуту value подчиненного с имененм childname
-     *     ),
-     *     'limit' => array(10, 15)                    // ограничение - выбирать с 10-го не более 15 объектов
-     * );
-     * </code>
-     * @param array $cond Условие поиска в виде многомерного массива.     *
-     * @param string $keys Название атрибута, который использовать для ключей массива результата
-     * @param null|Entity $owner Владелец искомых объектов
-     * @param null|Entity $lang Язык (локаль) искомых объектов
-     * @param bool $access Признак, проверять или нет наличие доступа к объекту?
-     * @param bool $index Признак, индексировать или нет данные?
-     * @see https://github.com/Boolive/Boolive/issues/7
-     * @return mixed|array Массив объектов или результат расчета, например, количество объектов
+     * Преобразование строкового условия поиска в структуру из массивов
+     * Если условие является массивом, то оно нормализуется - определяются пункты по умолчанию, корректируется структура.
+     * Условие может быть массивом из двух элементов - объекта и строкого условия, тогда объект
+     * определяется в пункт from
+     * @param string $cond Исходное условие
+     * @return array Преобразованное условие
      */
-    static function select($cond, $keys = 'name', $owner = null, $lang = null, $access = true, $index = true)
+    static function parseCond($cond)
     {
-        // Где искать?
-        if (!isset($cond['from'][0])) $cond['from'][0] = '';
-        if ($access && IS_INSTALL){
-            $acond = Auth::getUser()->getAccessCond('read', $cond['from'][0], isset($cond['from'][1])?$cond['from'][1]: null);
-            if (empty($cond['where'])){
-                $cond['where'] = array($acond);
+        $result = array();
+        // Услвоие - строка (uri + cond + lang + owner)
+        if (is_string($cond)){
+            $uri = $cond;
+        }else
+        if (is_array($cond)){
+            // массив из объекта и строки. строка может состоять из uri, cond, lang, owner
+            if (sizeof($cond) == 2 && isset($cond[0]) && $cond[0] instanceof Entity && isset($cond[1]) && is_string($cond[1])){
+                $uri = $cond[1];
+                $entity = $cond[0];
             }else{
-                if (is_string($cond['where'][0])){
-                    if ($cond['where'][0] == 'all'){
-                       $cond['where'][1][] = $acond;
-                    }else{
-                       $cond['where'] = array($cond['where'], $acond);
-                    }
-                }else{
-                    $cond['where'][] = $acond;
-                }
+                // массив условия
+                $result = $cond;
             }
         }
-        // Определяем индекс и ищем в нём
-        if (isset($cond['from'][0]) && ($store = self::getStore($cond['from'][0]))){
-            return $store->select($cond, $keys, $owner, $lang, $access, null, $index);
-        }else{
-            return null;
+        // Преобразование условия в массив
+        $parse = function($cond){
+            // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
+            $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
+            // name(a) => (name,a)
+            $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
+            // Все значения вкавычки
+            $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
+                        //trace($m);
+                        $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+                        $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+                        return $m[1].'"'.str_replace($escapers, $replacements, $m[2]).'"';
+                    }, $cond);
+            $cond = strtr($cond, array(
+                        '(' => '[',
+                        ')' => ']',
+                        ',)' => ',""]',
+                        '"eq"' => '"="',
+                        '"neq"' => '"!="',
+                        '"gt"' => '">"',
+                        '"gte"' => '">="',
+                        '"lt"' => '"<"',
+                        '"lte"' => '"<="',
+                    ));
+            $cond = '['.$cond.']';
+            $cond = json_decode($cond);
+            if ($cond){
+                foreach ($cond as $key => $item){
+                    if (is_array($item)){
+                        $k = array_shift($item);
+                        unset($cond[$key]);
+                        if (sizeof($item)==1) $item = $item[0];
+                        $cond[$k] = $item;
+                    }else{
+                        unset($cond[$key]);
+                    }
+                }
+            }
+            return $cond;
+        };
+        if (isset($uri)){
+            $uri = trim($uri);
+            if (!preg_match('/^[^=]+\(/ui', $uri)){
+                if (mb_substr($uri,0,4)!='from'){
+                    if (preg_match('/^[a-z]+=/ui', $uri)){
+                        $uri = 'from=&'.$uri;
+                    }else{
+                        $uri = 'from='.$uri;
+                    }
+                }
+                $uri = preg_replace('#/?\?{1}#u', '&', $uri, 1);
+                parse_str($uri, $result);
+                if (isset($result['cond'])){
+                    $primary_cond = $parse($result['cond']);
+                    unset($result['cond']);
+                }else{
+                    $primary_cond = array();
+                }
+                $secondary_cond = '';
+                foreach ($result as $key => $item) $secondary_cond.=$key.'('.$item.')';
+                if (!empty($secondary_cond)){
+                    if ($secondary_cond = $parse($secondary_cond)){
+                        $result = array_replace($secondary_cond, $primary_cond);
+                    }else{
+                        $result = $primary_cond;
+                    }
+                }else{
+                    $result = $primary_cond;
+                }
+            }else{
+                $result = $parse($uri);
+            }
+            if (isset($entity)) $result['from'] = array($entity, $result['from']);
+
         }
+        if (!isset($result['depth'])){
+            $result['depth'] = 0;
+        }else
+        if ($result['depth'] === 'max'){
+            $result['depth'] = Entity::MAX_DEPTH;
+        }else{
+            $result['depth'] = intval($result['depth']);
+        }
+        if (!isset($result['owner'])) $result['owner'] = Entity::ENTITY_ID;
+        if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
+        // Нормализация from
+        if (!isset($result['from'])) $result['from'] = '';
+        if ($result['from'] instanceof Entity) $result['from'] = $result['from']->key();
+        if (is_array($result['from'])){
+            // Если from[0] сущность, from[1] строка
+            if (sizeof($result['from']) && $result['from'][0] instanceof Entity && is_string($result['from'][1])){
+                // Если глубина больше 0 или fromp[1] путь (не имя) или from[0] не существует,
+                // тогда from заменяется на uri
+                if ($result['depth']>0 || mb_substr_count($result['from'][1],'/')>0 || !$result['from'][0]->isExist()){
+                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
+                }else{
+                    $result['from'] = $result['from'][0]->key().'/'.$result['from'][1];
+                }
+            }else{
+                $result['from'] = '';
+            }
+        }
+        // Сортировка и ограничение количества бусмысленно при глубине 0
+        if ($result['depth'] == 0){
+            if (isset($result['limit'])) unset($result['limit']);
+            if (isset($result['order'])) unset($result['order']);
+        }
+        if (isset($result['order'])){
+            if (!is_array(reset($result['order']))){
+                $result['order'] = array($result['order']);
+            }
+        }
+        if (array_key_exists('key', $result) && !in_array($result['key'], array('uri', 'id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value'))){
+            $result['key'] = null;
+        }
+        if (isset($result['access'])) $result['access'] = (bool)$result['access'];
+        ksort($result);
+        $form = array('from' => $result['from']);
+        unset($result['from']);
+        return array_merge($form, $result);
+    }
+
+    static function urlencodeCond($cond)
+    {
+        $cond = F::toJSON(Data::parseCond($cond), false);
+        $cond = mb_substr($cond, 1, mb_strlen($cond)-1, 'UTF-8');
+        $cond = strtr($cond, array(
+                         '[' => '(',
+                         ']' => ')',
+                         ',""]' => ',)',
+                         '"="' => '"eq"',
+                         '"!="' => '"neq"',
+                         '">"' => '"gt"',
+                         '">="' => '"gte"',
+                         '"<"' => '"lt"',
+                         '"<="' => '"lte"'
+                    ));
+        $cond = preg_replace_callback('/"([^"]*)"/ui', function($m){
+                        //trace($m);
+                        $replacements = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+                        $escapers = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+                        return urlencode(str_replace($escapers, $replacements, $m[1]));
+                    }, $cond);
+        $cond = preg_replace('/,([a-z]+):/ui','&$1=',$cond);
+        $cond = preg_replace('/\(([a-z]+),/ui','$1(',$cond);
+        $cond = preg_replace('/\),/ui',')$1',$cond);
+        $cond = mb_substr($cond, 5, mb_strlen($cond)-6);
+        $info = explode('&', $cond, 2);
+        if (!empty($info)){
+            $cond = urldecode($info[0]).'?'.$info[1];
+        }
+        return $cond;
+    }
+
+    /**
+     * Информация о URI
+     * @param $uri
+     * @return array|bool
+     */
+    static function parseUri($uri)
+    {
+        if (is_string($uri) && preg_match('/^([^\/]*)(\/\/)?([0-9]*)(.*)$/u', $uri, $match)){
+            return array(
+                'uri' => $match[0],
+                'store' => $match[1],
+                'dslash' => $match[2],
+                'id' => $match[3],
+                'path' => $match[4]
+            );
+        }
+        return false;
     }
 
     /**
      * Проверка, является ли URI сокращенным
-     * Если да, то возвращается массив из двух элементов, иначе false
+     * Если да, то возвращается информация о URI, иначе false
      * Сокращенные URI используются в хранилищах для более оптимального хранения и поиска объектов
      * @param $uri Проверяемый URI
      * @return array|bool
      */
     static function isShortUri($uri)
     {
-        $info = F::splitRight('//', $uri);
-        return isset($info[0])? $info : false;
-    }
-
-    /**
-     * Если URI состоит из короткой части и дополнительных параметров, например "//2345/title",
-     * тогда возвращается массив из экземпляра сущности с id = 2345 и пути на подчиненного title
-     * @param $key
-     * @return array[0=>Entity, 1=>string]|string
-     */
-    static function encodeKey($key)
-    {
-        if (is_string($key) && ($info1 = self::isShortUri($key))){
-            $info2 = explode('/',$info1[1], 2);
-            if (sizeof($info2) == 2){
-                $info2[0] = Data::read($info1[0].'//'.$info2[0]);
-                return $info2;
-            }
-        }
-        return $key;
+        $info = self::parseUri($uri);
+        return !empty($info['id'])? $info : false;
     }
 
     /**

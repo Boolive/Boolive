@@ -16,11 +16,13 @@ class DirectHandler extends View
     public function getInputRule()
     {
         return Rule::arrays(array(
-            'REQUEST' => Rule::arrays(array(
-                'method' => Rule::eq('POST'),
-                'direct' => Rule::entity()->required()
-                )
-            ))
+                'REQUEST' => Rule::arrays(array(
+                    'method' => Rule::eq('POST'),
+                    'direct' => Rule::entity()->required()
+                    )
+                ),
+                'previous' => Rule::not(true)
+            )
         );
     }
 

@@ -38,7 +38,7 @@ class Explorer extends AutoWidgetList
             }
             return null;
         }else{
-            $filters = $this->filter->find(array(), 'name', true);
+            $filters = $this->filter->find(array('key'=>'name'), true);
             // Установка нового фильтра
             if (!empty($this->_input['REQUEST']['filter'])) {
                 $this->filter->real->value($this->_input['REQUEST']['filter']['real']);
@@ -55,7 +55,7 @@ class Explorer extends AutoWidgetList
                 }
             }
             // Информация и видах для меню видов
-            $kinds = $this->view_kind->find(array(), 'name', true);
+            $kinds = $this->view_kind->find(array('key'=>'name'), true);
             $kind_set = empty($this->_input['REQUEST']['view_kind']) ? null : $this->_input['REQUEST']['view_kind'];
             $v['view-kinds'] = array();
             foreach ($kinds as $name => $k) {
@@ -84,7 +84,7 @@ class Explorer extends AutoWidgetList
     protected function getList($cond = array())
     {
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
-        $filters = $this->filter->find();
+        $filters = $this->filter->find(array('key'=>'name'));
         $any = array();
         // Реальные объекты. У которых все признаки false
         if ($filters['real']->value()) {

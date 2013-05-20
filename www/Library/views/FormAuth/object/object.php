@@ -17,8 +17,9 @@ class object extends Entity
     {
         if ($this->check()){
 
-            $user = Data::select(array(
-                'from' => array('/Members'),
+            $user = Data::read(array(
+                'from' => '/Members',
+                'depth' => 'max',
                 'where' => array(
                     array('attr', 'is_link', '=', '0'),
                     array('attr', 'name', '=', $this->name->value()),
@@ -30,7 +31,7 @@ class object extends Entity
                     )),
                 ),
                 'limit' => array(0,1)
-            ), null, false);
+            ), false);
             // Пользователь найден?
             if ($user){
                 Auth::setUser($user[0], $this->remember->value()?2500000:0);

@@ -15,16 +15,16 @@ class Table extends Widget
     {
         /** @var $object \Boolive\data\Entity */
         $object = $this->_input['REQUEST']['object'];
-        $header = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Table/Header'))),null);
-        $footer = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Table/Footer'))),null);
-        $body = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Table/Body'))),null);
+        $header = $object->find(array('where' => array('is', '/Library/content_samples/tables/Table/Header')));
+        $footer = $object->find(array('where' => array('is', '/Library/content_samples/tables/Table/Footer')));
+        $body = $object->find(array('where' => array('is', '/Library/content_samples/tables/Table/Body')));
         if(sizeof($header)>0){
             //Стиль строк заголовка
             if($header[0]->style->isExist()){
               $v['header_style'] = $header[0]->style->getStyle();
             }
             //строки заголовка
-            $header['rows'] = $header[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+            $header['rows'] = $header[0]->find(array('where' => array('is', '/Library/content_samples/tables/Row')));
             $v['header']['rows'] = $this->getRowCells($header['rows']);
 
         }
@@ -33,7 +33,7 @@ class Table extends Widget
             if($footer[0]->style->isExist()){
                $v['footer_style'] = $footer[0]->style->getStyle();
              }
-            $footer['rows'] = $footer[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+            $footer['rows'] = $footer[0]->find(array('where' => array('is', '/Library/content_samples/tables/Row')));
             $v['footer']['rows'] = $this->getRowCells($footer['rows']);
         }
         //Если есть в таблицы элемент body
@@ -41,10 +41,10 @@ class Table extends Widget
             if($body[0]->style->isExist()){
                $v['body_style'] = $body[0]->style->getStyle();
             }
-            $body['rows'] = $body[0]->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+            $body['rows'] = $body[0]->find(array('where' => array('is', '/Library/content_samples/tables/Row')));
         }else{
             //Если его нет, то просто выводим все строки
-            $body['rows'] = $object->find(array('where' => array(array('is', '/Library/content_samples/tables/Row'))));
+            $body['rows'] = $object->find(array('where' => array('is', '/Library/content_samples/tables/Row')));
         }
         $v['body']['rows'] = $this->getRowCells($body['rows']);
         //Стиль таблицы
@@ -62,7 +62,7 @@ class Table extends Widget
         $rows_new = array();
         foreach($rows as $row){
             if($row->is('/Library/content_samples/tables/Row')){
-                $rows_new[$i]['cells'] = $row->find(array('where' => array(array('is', '/Library/content_samples/tables/Cell'))));
+                $rows_new[$i]['cells'] = $row->find(array('where' => array('is', '/Library/content_samples/tables/Cell')));
                 foreach($rows_new[$i]['cells'] as $cell){
                     $this->_input_child['REQUEST']['object'] = $cell;
                     //Запускаем подчиненный виджет - виджет ячейки.

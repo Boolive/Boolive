@@ -85,9 +85,10 @@ class Export extends Widget
         /** @var \Boolive\data\Entity $obj  */
         foreach ($objects as $obj){
             $info['jobs'][] = array(
-                'count' => Data::select(array(
+                'count' => Data::read(array(
                     'select' => 'count',
-                    'from' => array($obj),
+                    'from' => $obj,
+                    'depth' => 'max',
                     'where'=> array('attr', 'is_delete', '>=', 0)
                 ))+1,
                 'step' => 0,
@@ -115,12 +116,13 @@ class Export extends Widget
             if ($info['jobs'][$j]['step'] <= $info['jobs'][$j]['count']){
                 $cnt = 50;
                 // Выбор объектов начиная со step
-                $list = Data::select(array(
-                    'from' => array($info['jobs'][$j]['obj']),
+                $list = Data::read(array(
+                    'from' => $info['jobs'][$j]['obj'],
+                    'depth' => 'max',
                     'where'=> array('attr', 'is_delete', '>=', 0),
                     'order'=> array(array('id', 'asc')),
                     'limit' => array($info['jobs'][$j]['step'], $cnt)
-                ), null);
+                ));
                 if ($info['jobs'][$j]['step'] == 0){
                     $list[] = Data::read($info['jobs'][$j]['obj']);
                 }

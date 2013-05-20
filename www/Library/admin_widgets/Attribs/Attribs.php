@@ -122,7 +122,11 @@ class Attribs extends Widget
                 $v['error']['_other_'] = $error->getUserMessage(true);
             }else{
                 if ($class_changed){
-                    $this->_input['REQUEST']['object'] = Data::read($obj->id(), $obj->owner(), $obj->lang(), 0, true, false);
+                    $this->_input['REQUEST']['object'] = Data::read(array(
+                        'from' => $obj->id(),
+                        'owner' => $obj->owner(),
+                        'lang' => $obj->lang()
+                    ), true, false);
                 }
                 $v['attrib'] = $this->callLoad();
             }

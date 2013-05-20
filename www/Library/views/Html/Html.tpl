@@ -7,6 +7,7 @@
     <body>
         <?php echo $v['body']->string(); ?>
         <?php
+//        trace(\Boolive\data\Data::read('http://boolive2-git/Contents&depth=1'));
 //        trace(\Boolive\develop\Benchmark::stop('all', true), 'Benchmark');
 //        \Boolive\develop\Trace::groups('DB')->out();
         ?>

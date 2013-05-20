@@ -16,10 +16,12 @@ class AutoWidgetList extends Widget
     {
         $list = $this->getList();
         $v['view'] = array();
-        foreach ($list as $object){
-            $this->_input_child['REQUEST']['object'] = $object;
-            if ($result = $this->startChild('switch_views')){
-                $v['view'][$object->name()] = $result;
+        if (is_array($list)){
+            foreach ($list as $object){
+                $this->_input_child['REQUEST']['object'] = $object;
+                if ($result = $this->startChild('switch_views')){
+                    $v['view'][$object->name()] = $result;
+                }
             }
         }
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
@@ -42,20 +44,23 @@ class AutoWidgetList extends Widget
                 }
             }
         }
-        if (empty($cond['where'])){
-            $cond['where'] = array('is', $protos);
-        }else
-        if (is_array($cond['where'][0])){
-            $cond['where'][] = array('is', $protos);
-        }else
-        if ($cond['where'][0] == 'all'){
-            $cond['where'][] = array('is', $protos);
-        }else{
-            $cond['where'][] = array(
-                $cond['where'],
-                array('is', $protos)
-            );
+        if ($protos){
+            if (empty($cond['where'])){
+                $cond['where'] = array('is', $protos);
+            }else
+            if (is_array($cond['where'][0])){
+                $cond['where'][] = array('is', $protos);
+            }else
+            if ($cond['where'][0] == 'all'){
+                $cond['where'][] = array('is', $protos);
+            }else{
+                $cond['where'][] = array(
+                    $cond['where'],
+                    array('is', $protos)
+                );
+            }
         }
-        return $this->_input['REQUEST']['object']->find($cond, 'name', true);
+        //$cond['key'] = 'name';
+        return $this->_input['REQUEST']['object']->find($cond, true);
     }
 }

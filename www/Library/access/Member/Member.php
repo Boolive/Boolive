@@ -9,6 +9,7 @@
  */
 namespace Library\access\Member;
 
+use Boolive\data\Data;
 use Boolive\data\Entity,
     Boolive\functions\F;
 
@@ -31,7 +32,7 @@ class Member extends Entity
      * Условие доступа к объектам
      * Родитель и глубина указывается для оптимизации условия
      * @param string $action_kind Вид действия
-     * @param string $parent URI объекта, для подчиенных которого необходимо условие доступа
+     * @param string $parent URI объекта, для подчиненных которого необходимо условие доступа
      * @param int $depth Глубина затрагиваемых объектов относительно родительского
      * @return array
      */
@@ -44,21 +45,24 @@ class Member extends Entity
             $obj = $this;
             // Выбор ролей члена и всех его групп (родителей)
             do{
-                $roles = $obj->rights->find();
-                // Объединяем права в общий список
-                foreach ($roles as $r){
-                    if (($c = $r->getAccessCond($action_kind, $parent, $depth)) && is_array($c)){
-                        $need = ($c[0] == 'not')?'all':'any';
-                        if (is_null($cond)){
-                            $cond = array($need, array($c));
-                        }else
-                        if ($curr!=$need){
-                            if (sizeof($cond[1]) == 1) $cond = $cond[1][0];
-                            $cond = array($need, array($cond, $c));
-                        }else{
-                            $cond[1][] = $c;
+                if ($obj->isExist()){
+                    $rights = Data::read(array($obj, 'rights')/*, $obj->_attribs['owner'], $obj->_attribs['lang'], 0*/, false);
+                    $roles = $rights->find();
+                    // Объединяем права в общий список
+                    foreach ($roles as $r){
+                        if (($c = $r->getAccessCond($action_kind, $parent, $depth)) && is_array($c)){
+                            $need = ($c[0] == 'not')?'all':'any';
+                            if (is_null($cond)){
+                                $cond = array($need, array($c));
+                            }else
+                            if ($curr!=$need){
+                                if (sizeof($cond[1]) == 1) $cond = $cond[1][0];
+                                $cond = array($need, array($cond, $c));
+                            }else{
+                                $cond[1][] = $c;
+                            }
+                            $curr = $need;
                         }
-                        $curr = $need;
                     }
                 }
                 $obj = $obj->parent();

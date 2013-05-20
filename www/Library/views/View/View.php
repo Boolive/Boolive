@@ -99,7 +99,7 @@ class View extends Entity
             ob_end_clean();
             $this->_input_child = null;
         }else{
-            $result = null;
+            $result = false;
         }
         return $result;
     }
@@ -140,7 +140,8 @@ class View extends Entity
      */
     public function startChild($name)
     {
-        if ($result = $this->linked(true)->{$name}->linked(true)->start($this->_commands, $this->_input_child)){
+        $result = $this->linked(true)->{$name}->linked(true)->start($this->_commands, $this->_input_child);
+        if ($result!==false){
             $this->_input_child['previous'] = true;
         }
         return $result;
@@ -152,15 +153,12 @@ class View extends Entity
      */
     public function startChildren()
     {
-        if ($this->uri() == '/Library/layouts/boolive/center'){
-            $a = 10;
-        }
         $result = array();
-        $list = $this->linked(true)->find();
+        $list = $this->linked(true)->find(array('key'=>'name'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $out = $child->linked(true)->start($this->_commands, $this->_input_child);
-            if ($out){
+            if ($out!==false){
                 $result[$key] = $out;
                 $this->_input_child['previous'] = true;
             }

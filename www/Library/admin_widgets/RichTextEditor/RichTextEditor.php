@@ -49,7 +49,7 @@ class RichTextEditor extends AutoWidgetList
             $v['object'] = $this->_input['REQUEST']['object']->uri();
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
             // Текущий фильтр для отображения меню фильтра
-            $filters = $this->filter->find(array(), 'name', true);
+            $filters = $this->filter->find(array('key'=>'name'), true);
             $v['filter'] = array();
             foreach ($filters as $name => $f) {
                 if ($f instanceof \Library\basic\simple\Boolean\Boolean) {
@@ -114,7 +114,7 @@ class RichTextEditor extends AutoWidgetList
     protected function getList($cond = array())
     {
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
-        $filters = $this->filter->find();
+        $filters = $this->filter->find(array('key'=>'name'));
         $any = array();
         // Реальные объекты. У которых все признаки false
         if ($filters['real']->value()) {

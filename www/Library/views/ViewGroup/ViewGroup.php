@@ -7,8 +7,7 @@
  */
 namespace Library\views\ViewGroup;
 
-use Boolive\values\Rule,
-    Library\views\View\View;
+use Library\views\View\View;
 
 class ViewGroup extends View
 {
