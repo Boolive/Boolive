@@ -41,6 +41,7 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
  * @method static \Boolive\values\Rule lowercase() Преобразует строку в нижний регистр
  * @method static \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
+ * @method static \Boolive\values\Rule condition() Условие поиска или валидации объекта
  *
  * Методы добавления фильтра к объекту правила.
  * @method \Boolive\values\Rule max($max) Максимальное значение. Правая граница отрезка. Максимальный размер массива
@@ -67,6 +68,7 @@ use Boolive\develop\ITrace;
  * @method \Boolive\values\Rule file_upload() Информация о загружаемом файле в виде массива
  * @method \Boolive\values\Rule lowercase() Преобразует строку в нижний регистр
  * @method \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
+ * @method \Boolive\values\Rule condition() Условие поиска или валидации объекта
  */
 class Rule implements ITrace
 {

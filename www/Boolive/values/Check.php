@@ -314,7 +314,6 @@ class Check
             $value = Data::read($value);
         }else
         if (is_array($value)){
-            //$value = Data::makeObject($value);
             if (isset($value['id'])){
                 $obj = Data::read($value['id']);
             }else
@@ -752,6 +751,22 @@ class Check
         $result = mb_strtoupper($value, 'utf-8');
         if ($value != $result){
             $error = new Error('Не все символы в верхнем регистре', 'uppercase');
+        }
+        return $result;
+    }
+
+    /**
+     * Условие поиска или валидации объекта
+     * @param $value Фильтруемое значение
+     * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
+     * @param \Boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+     * @return string
+     */
+    static function condition($value, &$error, Rule $rule)
+    {
+        $result = \Boolive\data\Data::parseCond($value);
+        if ($result === null){
+            $error = new Error('Не является условием поиска', 'condition');
         }
         return $result;
     }
