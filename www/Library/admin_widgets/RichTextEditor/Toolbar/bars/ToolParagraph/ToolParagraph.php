@@ -17,6 +17,7 @@ class ToolParagraph extends Widget
     {
         // Типы абзацев
         $plist = Data::read(array(
+            'select' => 'children',
             'from' => '/Library/content_samples/paragraphs',
             'depth' => 1,
             'where' => array(

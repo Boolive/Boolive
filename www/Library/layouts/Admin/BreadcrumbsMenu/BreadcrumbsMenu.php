@@ -15,16 +15,20 @@ class BreadcrumbsMenu extends Widget{
     {
         /** @var $obj \Boolive\data\Entity */
 		$obj = $this->_input['REQUEST']['object'];
-		$v['items'] = array();
-		do{
+		$parents = $obj->find(array(
+            'select' => 'parents',
+            'depth' => array(0,'max'),
+            'order' => array('parent_cnt', 'desc')
+        ));
+        $v['items'] = array();
+        foreach ($parents as $p){
             $v['items'][] = array(
-                'title' => ($obj->title->isExist()) ? $obj->title->value() : $obj->name(),
-                'url'	=> '/admin'.$obj->uri(),
-                'uri'   => $obj->uri(),
+                'title' => ($p->title->isExist()) ? $p->title->value() : $p->name(),
+                'url' => '/admin'.$p->uri(),
+                'uri' => $p->uri(),
                 'active' => empty($v['items']) // активный первый элемент
             );
-		}while($obj = $obj->parent());
-
+        }
 		return parent::work($v);
 	}
 }

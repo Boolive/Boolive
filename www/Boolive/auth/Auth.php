@@ -72,6 +72,7 @@ class Auth
         if ($hash){
             $result = Data::read(array(
                 'from' => '/Members',
+                'select' => 'children',
                 'depth' => 'max',
                 'where' => array(
                     array('attr', 'value', '=', $hash),
@@ -110,11 +111,11 @@ class Auth
             self::$user->save(false, false, $error, false);
         }
         // Запомнить время визита (не чаще раза за 5 минут)
-        if (self::$user->isExist() && (self::$user->visit_time->value() < (time()-300))){
-            // Обновление времени визита
-            self::$user->visit_time = time();
-            //self::$user->visit_time->save(false, true, $error, false);
-        }
+//        if (self::$user->isExist() && (Data::read(array(self::$user, 'visit_time'), false)->value() < (time()-300))){
+//            // Обновление времени визита
+//            self::$user->visit_time = time();
+//            //self::$user->visit_time->save(false, true, $error, false);
+//        }
         setcookie('ID', $duration.'|'.$hash, ($duration ? time()+$duration : 0), '/');
     }
 

@@ -41,13 +41,10 @@ class MySQLStore extends Entity
      */
     public function read($cond, $index = false)
     {
-        if ($cond['from'] == '//3564'){
-            $f = 3;
-        }
         // SQL условия по выбранному индексу
-        $sql = $this->getCondSQL2($cond);
+        $sql = $this->getCondSQL($cond);
         // Индексирование
-        if ($index && $cond['depth']>0){
+        if ($index && $cond['depth'][1] > 0){
             $from = Data::read($cond['from'], !empty($cond['access']));
             // Глубина условия
             $depth = $this->getCondDepth($cond);
@@ -72,16 +69,19 @@ class MySQLStore extends Entity
         }
         $row = $q->fetch(DB::FETCH_ASSOC);
         // Выбор значения функции
-        if (isset($row['fun'])){
+        if ($cond['select'][0] == 'count'){
             // Первая строка результата. Возможно, вычисляемое значение
-            return $row['fun'];
+            return intval($row['fun']);
         }
-        // Выбор одного объекта, если глубина 0 и не указан ключ для списка
-        if ($cond['depth'] == 0 && empty($cond['key'])){
+        if ($cond['select'][0] == 'exists'){
+            return !empty($row);
+        }
+        // Выбор одного объекта и не указан ключ для списка
+        if ($cond['select'][0] == 'self' && empty($cond['key'])){
             // Выбор атрибута
-            if (isset($cond['select'])){
-                if (in_array($cond['select'], array_keys($this->_attribs)) && isset($row)){
-                    $obj = $row[$cond['select']];
+            if (isset($cond['select'][1])){
+                if (in_array($cond['select'][1], array_keys($this->_attribs)) && isset($row)){
+                    $obj = $row[$cond['select'][1]];
                 }else{
                     $obj = null;
                 }
@@ -93,7 +93,6 @@ class MySQLStore extends Entity
             }else{
                 if (isset($row['id2'])){
                     $obj = new Entity(array(
-                        'name'=>'ff',
                         'uri'=>$row['uri'],
                         'owner'=>$this->_attribs['owner'],
                         'lang'=>$this->_attribs['lang']
@@ -110,21 +109,49 @@ class MySQLStore extends Entity
             }
             return $obj;
         }
+        if ($cond['select'][0] == 'tree' && empty($cond['select'][1])){
+            if (empty($from)){
+                $from = Data::read($cond['from'], !empty($cond['access']));
+            }
+            $first_level = $from->parentCount() + $cond['depth'][0];
+            $tree_list = array();
+        }
         // Выбор списка объектов или значений
         $result = array();
         while ($row){
             // Объект или его атрибут
-            if (isset($cond['select']) && in_array($cond['select'], array_keys($this->_attribs))){
-                $obj = $row[$cond['select']];
+            if (isset($cond['select'][1]) && in_array($cond['select'][1], array_keys($this->_attribs))){
+                $obj = $row[$cond['select'][1]];
             }else{
                 $obj = $this->makeObject($row);
             }
-            if (empty($cond['key'])){
-                $result[] = $obj;
-            }else{
-                $result[$row[$cond['key']]] = $obj;
+            // Если выборка дерева, то в результате будут объекты начальной глубины
+            if (!isset($tree_list) ||
+                (isset($tree_list) && $row['parent_cnt'] == $first_level))
+            {
+                if (empty($cond['key'])){
+                    $result[] = $obj;
+                }else{
+                    $result[$row[$cond['key']]] = $obj;
+                }
+            }
+            // Подготовительные данные для формирования дерева
+            if (isset($tree_list)){
+                $tree_list[$obj->_attribs['id']] = $obj;
             }
             $row = $q->fetch(DB::FETCH_ASSOC);
+        }
+        // Формирование дерева результата (найденные объекты добавляются к найденным родителям)
+        if (isset($tree_list)){
+            foreach ($tree_list as $obj){
+                $p = $obj->_attribs['parent'];
+                if (isset($tree_list[$p])){
+                    $tree_list[$p]->_children[$obj->_attribs['name']] = $obj;
+                }
+            }
+            if ($cond['depth'][0] == 0){
+                $result = reset($result);
+            }
         }
         return $result;
     }
@@ -809,7 +836,7 @@ class MySQLStore extends Entity
      * @param bool $only_where
      * @return array Ассоциативный массив SQL запроса и значений, вставляемых в него вместо "?"
      */
-    public function getCondSQL2($cond, $only_where = false)
+    public function getCondSQL($cond, $only_where = false)
     {
         $result = array(
             'select' => '',
@@ -830,25 +857,43 @@ class MySQLStore extends Entity
 
         if (!$only_where){
             // Что?
-            if (isset($cond['select']) && !in_array($cond['select'], array_keys($this->_attribs))){
-                // Подсчёт количества объектов
-                if ($cond['select'] == 'count'){
-                    $result['select'] = 'SELECT count(*) fun';
-                }else{
-                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun';
-                }
+            if ($cond['select'][0] == 'count'){
+                $result['select'] = 'SELECT count(*) fun';
                 $calc = true;
-            }else{
+            }else
+            if (in_array($cond['select'][0], array('self', 'children', 'parents', 'tree', 'protos', 'heirs'))){
+                // @todo учитывать указанные атрибуты в $cond['select'][1..n]
                 $result['select'] = 'SELECT u.uri, obj.*';
                 $calc = false;
+            }else{
+                $result['select'] = 'SELECT 1 fun';
+                $calc = true;
             }
+
+//            if (isset($cond['select']) && !in_array($cond['select'], array_keys($this->_attribs))){
+//                // Подсчёт количества объектов
+//                if ($cond['select'] == 'count'){
+//                    $result['select'] = 'SELECT count(*) fun';
+//                }else{
+//                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun';
+//                }
+//                $calc = true;
+//            }else{
+//                $result['select'] = 'SELECT u.uri, obj.*';
+//                $calc = false;
+//            }
             $from_info = Data::parseUri($cond['from']);
+            if ($cond['select'][0] == 'count' || $cond['select'][0] == 'exists'){
+                $what = $cond['select'][1];
+            }else{
+                $what = $cond['select'][0];
+            }
             // От куда?
-            if ($cond['depth'] == 0){
+            if ($what == 'self'){
                 // Выбор одной записи = from
                 // Контроль доступа
                 if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
-                    $acond = $this->getCondSQL2(array('where'=>$acond, 'owner'=>$cond['owner'], 'lang'=>$cond['lang']), true);
+                    $acond = $this->getCondSQL(array('where'=>$acond, 'owner'=>$cond['owner'], 'lang'=>$cond['lang']), true);
                     $result['select'].= ', IF('.$acond['where'].',1,0) is_accessible';
                     $result['joins'].=$acond['joins'];
                     $result['binds'] = array_merge($acond['binds'], $result['binds']);
@@ -892,30 +937,97 @@ class MySQLStore extends Entity
                         }
                     }
                 }
-                // Выбор списка записей из from
-                if ($cond['depth'] == Entity::MAX_DEPTH){
-                    // Поиск по всей ветке
-                    $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                    $result['select'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ? AND t.object_id!=t.parent_id AND t.is_delete=0)";
-                    $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                if ($what == 'children' || $what == 'tree'){
+                    // Выбор подчиненных
+                    // Выбор списка записей из from
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        // Поиск по всей ветке
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                    }else
+                    if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
+                        // Подчиненные объекты
+                        $result['select'].= ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
+                        // Сверка parent
+                        $result['where'].= "obj.parent = ? AND ";
+                        $result['binds'][] = array($this->localId($from), DB::PARAM_INT);
+                        // Оптимизация сортировки по атрибуту order
+                        if (isset($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
+                            unset($cond['order']);
+                        }
+                    }else{
+                        // Поиск по ветке с ограниченной глубиной
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                        $binds2[] = array($from->parentCount() + $cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($from->parentCount() + $cond['depth'][1], DB::PARAM_INT);
+                    }
                 }else
-                if ($cond['depth'] == 1){
-                    // Подчиненные объекты
-                    $result['select'].= ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
-                    // Сверка parent
-                    $result['where'].= "obj.parent = ? AND ";
-                    $result['binds'][] = array($this->localId($from), DB::PARAM_INT);
-                    // Оптимизация сортировки по атрибуту order
-                    if (isset($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
-                        unset($cond['order']);
+                if ($what == 'parents'){
+                    // Выбор родителей
+                    // Выбор всех родителей from
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        // Поиск по всей ветке
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                    }else{
+                        // Поиск ограниченной глубиной (кол-ва родителей)
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {parents} f ON (f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                    }
+                }else
+                if ($what == 'protos'){
+                    // Выбор или подсчёт прототипов
+                    // Выбор всех прототипов from
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        // Поиск по всей ветке
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                    }else{
+                        // Поиск ограниченной глубиной (кол-ва прототипов)
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                    }
+                }else
+                if ($what == 'heirs'){
+                    // Выбор наследников
+                    // Выбор списка записей из from
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        // Поиск по всей ветке
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.proto_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                    }else
+                    if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
+                        // Прямые наследники
+                        $result['select'].= ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
+                        // Сверка proto
+                        $result['where'].= "obj.proto = ? AND ";
+                        $result['binds'][] = array($this->localId($from), DB::PARAM_INT);
+                        // Оптимизация сортировки по атрибуту order
+                        if (isset($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
+                            unset($cond['order']);
+                        }
+                    }else{
+                        // Поиск по ветке наследования с ограниченной глубиной
+                        $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
+                        $result['select'].= "\n  JOIN {protos} f ON (f.object_id = obj.id AND f.proto_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
+                        $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                        $binds2[] = array($from->protoCount() + $cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($from->protoCount() + $cond['depth'][1], DB::PARAM_INT);
                     }
                 }else{
-                    // Поиск по ветке с ограниченной глубиной
-
-                    $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                    $result['select'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level<=? AND f.object_id != f.parent_id AND f.is_delete=0)";
-                    $binds2[] = array($this->localId($from), DB::PARAM_INT);
-                    $binds2[] = array($from->parentCount() + $cond['depth'], DB::PARAM_INT);
+                    throw new \Exception('Incorrect selection in condition: ("'.$cond['select'][0].'","'.$cond['select'][1].'")');
                 }
                 // Условие на владельца и язык
                 $result['where'].="(obj.id, obj.owner, obj.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=obj.id AND $owner_lang GROUP BY id)\n  ";
@@ -1109,7 +1221,7 @@ class MySQLStore extends Entity
         // Полноценный SQL
         if (!$only_where){
             // Ограничение по количеству и смещение
-            if (!$calc && isset($cond['limit'])){
+            if (isset($cond['limit'])){
                 $result['limit'] = "\n  LIMIT ?,?";
                 $result['binds'][] = array((int)$cond['limit'][0], DB::PARAM_INT);
                 $result['binds'][] = array((int)$cond['limit'][1], DB::PARAM_INT);

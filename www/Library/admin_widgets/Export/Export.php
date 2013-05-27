@@ -86,7 +86,7 @@ class Export extends Widget
         foreach ($objects as $obj){
             $info['jobs'][] = array(
                 'count' => Data::read(array(
-                    'select' => 'count',
+                    'select' => array('count', 'children'),
                     'from' => $obj,
                     'depth' => 'max',
                     'where'=> array('attr', 'is_delete', '>=', 0)
@@ -117,6 +117,7 @@ class Export extends Widget
                 $cnt = 50;
                 // Выбор объектов начиная со step
                 $list = Data::read(array(
+                    'select' => array('children'),
                     'from' => $info['jobs'][$j]['obj'],
                     'depth' => 'max',
                     'where'=> array('attr', 'is_delete', '>=', 0),

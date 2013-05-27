@@ -35,7 +35,7 @@ class Data
      * $cond = array(
      *     'from' => '/Interfaces',                     // Выбор объектов из /Interfaces
      *     'depth' => 3,                                // Глубина выбора из from. Если 0, то выбирается from, а не его подчиненные
-     *     'select' => 'value',                         // Что выбирать? Если указано название атрибута, то вместо объектов возвращается значение указанного атрибута.
+     *     'select' => 'children',                      // Что выбирать?
      *     'where' => array(                            // Услвоия выборки объединенные логическим AND
      *         array('attr', 'uri', '=', '?'),          // Сравнение атрибута
      *         array('not', array(                      // Отрицание всех условий
@@ -62,7 +62,7 @@ class Data
      * <h2>Условие строкой:</h2><pre>
      * $cond = "
      *   from(/Contents)
-     *   select(count)
+     *   select(children)
      *   depth(max)
      *   where(all(
      *       attr(uri,like,%А%),
@@ -82,6 +82,7 @@ class Data
      * $cond = "
      *   /Content&
      *   depth=max&
+     *   select=children&
      *   where=all(
      *       attr(uri,like,%25А%25),
      *       not(attr(value,eq, m))
@@ -141,7 +142,11 @@ class Data
                 Buffer::set(json_encode($cond), $result);
             }
         }else{
-            Buffer::set($buffer_key, $result);
+            if ($cond['select'] == 'tree'){
+
+            }else{
+                Buffer::set($buffer_key, $result);
+            }
         }
         return $result;
     }
@@ -229,9 +234,10 @@ class Data
      * Условие может быть массивом из двух элементов - объекта и строкого условия, тогда объект
      * определяется в пункт from
      * @param string $cond Исходное условие
+     * @param array $default Условие по умолчанию
      * @return array Преобразованное условие
      */
-    static function parseCond($cond)
+    static function parseCond($cond, $default = array())
     {
         $result = array();
         // Услвоие - строка (uri + cond + lang + owner)
@@ -321,16 +327,58 @@ class Data
                 $result = $parse($uri);
             }
             if (isset($entity)) $result['from'] = array($entity, $result['from']);
+        }
 
-        }
-        if (!isset($result['depth'])){
-            $result['depth'] = 0;
+        if (!empty($default)) $result = array_replace_recursive($default, $result);
+
+        // Что выбирать
+        if (empty($result['select'])){
+            // по умолчанию self (выбирается from)
+            $result['select'] = array('self');
+            $result['depth'] = array(0,0);
         }else
-        if ($result['depth'] === 'max'){
-            $result['depth'] = Entity::MAX_DEPTH;
-        }else{
-            $result['depth'] = intval($result['depth']);
+        if (!is_array($result['select'])){
+            $result['select'] = array($result['select']);
         }
+        // Если подсчёт количества, то по умолчанию подчиненных
+        if ($result['select'][0] == 'count' && empty($result['select'][1])){
+            $result['select'][1] = 'children';
+        }else
+        // Если проверка существования, то по умолчанию self
+        if ($result['select'][0] == 'exists' && empty($result['select'][1])){
+            $result['select'][1] = 'self';
+            $result['depth'] = array(0,0);
+        }
+
+        // Глубина поиска/выбра
+        if (!isset($result['depth'])){
+            // По умолчанию в зависимости от select
+            if ($result['select'][0] == 'self' || (($result['select'][0] == 'count' || $result['select'][0] == 'exists') && $result['select'][1] == 'self')){
+                $result['depth'] = array(0,0);
+            }else
+            if ($result['select'][0] == 'parents' || $result['select'][0] == 'protos' ||
+                (($result['select'][0] == 'count' || $result['select'][0] == 'exists') && ($result['select'][1] == 'parents' || $result['select'][1] == 'protos'))
+            ){
+                // выбор всех родителей или прототипов
+                $result['depth'] = array(1, Entity::MAX_DEPTH);
+            }else{
+                // выбор непосредственных подчиненных или наследников
+                $result['depth'] = array(1,1);
+            }
+        }else
+        if (!is_array($result['depth'])){
+            $result['depth'] = array($result['depth']?1:0, $result['depth']);
+        }
+        foreach ($result['depth'] as $i => $d){
+            if ($d === 'max'){
+                $result['depth'][$i] = Entity::MAX_DEPTH;
+            }else
+            if ($d != Entity::MAX_DEPTH){
+                $result['depth'][$i] = intval($d);
+            }
+        }
+
+        // Общий владелец и язык, если не указаны конкретные
         if (!isset($result['owner'])) $result['owner'] = Entity::ENTITY_ID;
         if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
         // Нормализация from
@@ -350,10 +398,13 @@ class Data
                 $result['from'] = '';
             }
         }
-        // Сортировка и ограничение количества бусмысленно при глубине 0
-        if ($result['depth'] == 0){
+        // Сортировка и ограничение количества бессмысленно при глубине 0
+        if ($result['select'][0] == 'self'){
             if (isset($result['limit'])) unset($result['limit']);
             if (isset($result['order'])) unset($result['order']);
+        }
+        if ($result['select'][0] == 'exists'){
+            $result['limit'] = array(0,1);
         }
         if (isset($result['order'])){
             if (!is_array(reset($result['order']))){
@@ -372,7 +423,12 @@ class Data
 
     static function urlencodeCond($cond)
     {
-        $cond = F::toJSON(Data::parseCond($cond), false);
+        $cond = Data::parseCond($cond);
+        if (sizeof($cond['select']) == 1) $cond['select'] = $cond['select'][0];
+        if ($cond['select'] == 'self'){
+            unset($cond['select'], $cond['depth']);
+        }
+        $cond = F::toJSON($cond, false);
         $cond = mb_substr($cond, 1, mb_strlen($cond)-1, 'UTF-8');
         $cond = strtr($cond, array(
                          '[' => '(',

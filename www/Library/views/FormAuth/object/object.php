@@ -18,6 +18,7 @@ class object extends Entity
         if ($this->check()){
 
             $user = Data::read(array(
+                'select' => 'children',
                 'from' => '/Members',
                 'depth' => 'max',
                 'where' => array(

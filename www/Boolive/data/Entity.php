@@ -28,7 +28,7 @@ class Entity implements ITrace
     /** @const int Идентификатор сущности - эталона всех объектов */
     const ENTITY_ID = 4294967295;
     /** @const int Максимальная глубина для поиска */
-    const MAX_DEPTH = 4294967296;
+    const MAX_DEPTH = 4294967295;
     /** @var array Атрибуты */
     protected $_attribs = array(
         'uri'          => null,
@@ -200,7 +200,7 @@ class Entity implements ITrace
      * URI объекта
      * @return mixed
      */
-    public function uri($remake = false)
+    public function uri($remake = false, $encode = false)
     {
         if (!isset($this->_attribs['uri']) || $remake){
             if ($parent = $this->parent()){
@@ -208,6 +208,13 @@ class Entity implements ITrace
             }else{
                 $this->_attribs['uri'] = $this->_rename ? $this->_rename : $this->_attribs['name'];
             }
+        }
+        if ($encode){
+            $uri = urlencode($this->_attribs['uri']);
+            $uri = strtr($uri, array(
+                         '%2F' => '/'
+            ));
+            return $uri;
         }
         return $this->_attribs['uri'];
     }
@@ -624,6 +631,17 @@ class Entity implements ITrace
         return $this->_attribs;
     }
 
+    /**
+     * Атрибут объекта по имени
+     * Необходимо учитывать, что некоторые атрибуты могут быть ещё не инициалироваными
+     * @param $name Назавние возвращаемого атрибута
+     * @return mixed Значение атрибута
+     */
+    public function attr($name)
+    {
+        return $this->_attribs[$name];
+    }
+
     #################################################
     #                                               #
     #        Отношения с другими объектами          #
@@ -979,9 +997,6 @@ class Entity implements ITrace
                     'lang' => $this->_attribs['lang']
                 ));
             }
-            if (!$obj instanceof Entity){
-                $a = 10;
-            }
             if (!$obj->isExist()){
                 $obj->_attribs['name'] = $name;
                 $obj->_attribs['uri'] = $this->uri().'/'.$name;
@@ -1100,10 +1115,15 @@ class Entity implements ITrace
      */
     public function find($cond = array(), $load = true, $index = true)
     {
-        $cond = Data::parseCond($cond);
+        $cond = Data::parseCond($cond, array('select' => 'children', 'depth' => 1));
         //if (!array_key_exists('key', $cond)) $cond['key'] = 'name';
-        if ($cond['depth']==0) $cond['depth'] = 1;
-        $all = (empty($cond) && $cond['depth'] == 1);
+//        // Ели не была указана глубина, то после парсинга будет равна 0
+//        if ($cond['depth'][1]==0){
+//            $cond['depth'] = array(1,1);
+//            $cond['select'] = array('children');
+//        }
+        $all = (empty($cond['where']) && empty($cond['order']) && empty($cond['limit']) &&
+                $cond['depth'][1] == 1 && $cond['depth'][0] == 1 && $cond['select'][0] == 'children' && empty($cond['select'][1]));
 
         if ($all && $this->_all_children){
             if (isset($cond['key']) && $cond['key']){
@@ -1472,14 +1492,16 @@ class Entity implements ITrace
         if (!$this->isExist()){
             return ($p = $this->proto()) ? $p->is($proto) : false;
         }
+        if ($this->uri() == '/Contents/main/text/img1'){
+            $a = 10;
+        }
         $r = Data::read(array(
-            'select' => 1,
+            'select' => array('exists', 'self'),
             'from' => $this,
             'depth' => 0,
             'where' => array(array('is', $proto->key()), array('attr', 'is_delete', '>=', 0)),
             //'limit' => array(0,1)
         ), false);
-        $r = (bool)$r;
         return $r;
     }
 
@@ -1505,8 +1527,8 @@ class Entity implements ITrace
             if (($p = $this->proto()) && $p->of($object)) return true;
             return ($p = $this->parent()) ? $p->of($object) : false;
         }
-        return (bool)Data::read(array(
-            'select' => 1,
+        return Data::read(array(
+            'select' => array('exists', 'self'),
             'from' => $this,
             'depth' => 0,
             'where' => array('of', $object->key()),
@@ -1577,6 +1599,7 @@ class Entity implements ITrace
         if ($more_info){
             $export['id'] = $this->id();
             $export['uri'] = $this->uri();
+            if ($this->isLink()) $export['is_link'] = $this->_attribs['is_link'];
             if (!$this->isAccessible()) $export['is_accessible'] = false;
             if (!$this->isExist()) $export['is_exist'] = false;
         }
