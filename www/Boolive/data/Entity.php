@@ -1115,26 +1115,26 @@ class Entity implements ITrace
      */
     public function find($cond = array(), $load = true, $index = true)
     {
-        $cond = Data::parseCond($cond, array('select' => 'children', 'depth' => 1));
+        $cond = Data::decodeCond($cond, array('select' => 'children', 'depth' => array(1,1)));
         //if (!array_key_exists('key', $cond)) $cond['key'] = 'name';
 //        // Ели не была указана глубина, то после парсинга будет равна 0
 //        if ($cond['depth'][1]==0){
 //            $cond['depth'] = array(1,1);
 //            $cond['select'] = array('children');
 //        }
-        $all = (empty($cond['where']) && empty($cond['order']) && empty($cond['limit']) &&
-                $cond['depth'][1] == 1 && $cond['depth'][0] == 1 && $cond['select'][0] == 'children' && empty($cond['select'][1]));
-
-        if ($all && $this->_all_children){
-            if (isset($cond['key']) && $cond['key']){
-                return $this->_children;
-            }else
-            if (empty($keys)){
-                return array_values($this->_children);
-            }
-        }
+//        $all = (empty($cond['where']) && empty($cond['order']) && empty($cond['limit']) &&
+//                $cond['depth'][1] == 1 && $cond['depth'][0] == 1 && $cond['select'][0] == 'children' && empty($cond['select'][1]));
+//
+//        if ($all && $this->_all_children){
+//            if (isset($cond['key']) && $cond['key']){
+//                return $this->_children;
+//            }else
+//            if (empty($keys)){
+//                return array_values($this->_children);
+//            }
+//        }
         if ($this->isExist()){
-            $cond['from'] = $this;
+            $cond['from'] = $this->id();
             $result = Data::read($cond, true, true, $index);
         }else
         if (isset($this->_attribs['uri'])){
@@ -1142,7 +1142,7 @@ class Entity implements ITrace
             $result = Data::read($cond, true, true, $index);
         }else
         if ($p = $this->proto()){
-            $cond['from'] = $p;
+            $cond['from'] = $p->id();
             $result = Data::read($cond, true, true, $index);
             foreach ($result as $key => $obj){
                 /** @var $obj Entity */
@@ -1152,7 +1152,9 @@ class Entity implements ITrace
             return array();
         }
         // Если загружены все подчиенные, то запоминаем их для предотвращения повторных выборок
-        if (($all || $load) && is_array($result)){
+        if ($load && (($cond['select'][0] == 'children' && $cond['depth'][1] == 1) || $cond['select'][0] == 'tree')
+            && empty($cond['select'][1]) && $cond['depth'][0] == 1)
+        {
             if (isset($cond['key']) && $cond['key'] == 'name'){
                 $this->_children = $result;
             }else{
@@ -1160,18 +1162,29 @@ class Entity implements ITrace
                     $this->_children[$obj->name()] = $obj;
                 }
             }
-            $this->_all_children = true;
         }
         return $result;
     }
 
     /**
      * Список выгруженных подчиненных
-     * @return array
+     * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
+     * @return array Массив подчененных
      */
-    public function children()
+    public function children($key = 'name')
     {
-        return $this->_children;
+        if ($key === 'name'){
+            return $this->_children;
+        }else
+        if (empty($key)){
+            return array_values($this->_children);
+        }else{
+            $result = array();
+            foreach ($this->_children as $child){
+                $result[$child->_attribs[$key]];
+            }
+            return $result;
+        }
     }
 
     #################################################
@@ -1488,21 +1501,8 @@ class Entity implements ITrace
             if ($proto == $this->uri() || $proto == $this->id()) return true;
             $proto = Data::read($proto);
         }
-        if ($this->isEqual($proto)) return true;
-        if (!$this->isExist()){
-            return ($p = $this->proto()) ? $p->is($proto) : false;
-        }
-        if ($this->uri() == '/Contents/main/text/img1'){
-            $a = 10;
-        }
-        $r = Data::read(array(
-            'select' => array('exists', 'self'),
-            'from' => $this,
-            'depth' => 0,
-            'where' => array(array('is', $proto->key()), array('attr', 'is_delete', '>=', 0)),
-            //'limit' => array(0,1)
-        ), false);
-        return $r;
+        if ($proto instanceof Entity && $this->isEqual($proto)) return true;
+        return ($p = $this->proto()) ? $p->is($proto) : false;
     }
 
     /**
@@ -1523,17 +1523,8 @@ class Entity implements ITrace
             $$object = Data::read($object);
         }
         if ($this->isEqual($object)) return true;
-        if (!$this->isExist()){
-            if (($p = $this->proto()) && $p->of($object)) return true;
-            return ($p = $this->parent()) ? $p->of($object) : false;
-        }
-        return Data::read(array(
-            'select' => array('exists', 'self'),
-            'from' => $this,
-            'depth' => 0,
-            'where' => array('of', $object->key()),
-            'limit' => array(0,1)
-        ), false);
+        if (($p = $this->proto()) && $p->of($object)) return true;
+        return ($p = $this->parent()) ? $p->of($object) : false;
     }
 
     /**
