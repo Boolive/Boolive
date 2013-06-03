@@ -11,7 +11,7 @@ namespace Boolive\data;
 
 class Buffer
 {
-    private static $list = array();
+    public static $list = array();
 
     /**
      * Запись в буфер данных
@@ -60,6 +60,6 @@ class Buffer
      */
     public static function isExist($key)
     {
-        return array_key_exists($key, self::$list);
+        return isset(self::$list[$key]) || array_key_exists($key, self::$list);
     }
 }

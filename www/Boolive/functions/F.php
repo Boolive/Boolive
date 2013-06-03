@@ -272,11 +272,11 @@ class F
      * @param $file
      * @return array
      */
-    static function loadConfig($file)
+    static function loadConfig($file, $var_name = 'config')
     {
         if (is_file($file)){
             include $file;
-            if (isset($config)) return $config;
+            if (isset($$var_name)) return $$var_name;
         }
         return array();
     }

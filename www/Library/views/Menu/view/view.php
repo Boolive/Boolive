@@ -65,4 +65,12 @@ class view extends AutoWidgetList
         }
         return parent::work($v);
     }
+
+    public function getList($cond = array())
+    {
+        $cond['select'] = 'tree';
+        $cond['depth'] = array(1, 'max');
+        //$cond['order'] = array(array('order', 'asc'));
+        return parent::getList($cond);
+    }
 }

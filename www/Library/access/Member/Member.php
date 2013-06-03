@@ -38,15 +38,27 @@ class Member extends Entity
      */
     public function getAccessCond($action_kind, $parent = '', $depth = null)
     {
-        if (!array_key_exists($action_kind, $this->_rights)){
+        if (!isset($this->_rights[$action_kind])){
             $this->_rights[$action_kind] = array();
             $cond = null;
             $curr = null;
+//            if ($this->isExist()){
+//                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'order' => array('parent_cnt', 'desc')));
+//            }else{
+//                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'order' => array('parent_cnt', 'desc')));
+//                array_unshift($parents, $this);
+//            }
+
             $obj = $this;
             // Выбор ролей члена и всех его групп (родителей)
             do{
                 if ($obj->isExist()){
-                    $rights = Data::read(array($obj, 'rights')/*, $obj->_attribs['owner'], $obj->_attribs['lang'], 0*/, false);
+                    $rights = Data::read(array(
+                        'select' => 'tree',
+                        'from' => array($obj, 'rights'),
+                        'depth' => array(0, 'max')
+                    ));
+//                    $rights = Data::read(array($obj, 'rights'), false);
                     $roles = $rights->find();
                     // Объединяем права в общий список
                     foreach ($roles as $r){

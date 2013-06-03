@@ -78,7 +78,7 @@ class Auth
                     array('attr', 'value', '=', $hash),
                     array('attr', 'is_link', '=', '0')
                 ),
-                'key' => null,
+                'key' => false,
                 'limit' => array(0, 1)
             ), false);
             // Пользователь найден и не истекло время его запоминания

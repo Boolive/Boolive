@@ -19,7 +19,7 @@ class Style  extends Entity
     */
     public function getStyle()
     {
-        $style = $this->find(array('where'=>array('attr', 'is_delete', '>=', '0'), 'key'=>'name'));
+        $style = $this->find(array('key'=>'name'));
         unset($style['title'], $style['description']);
         $str = '';
         foreach($style as $name => $st){

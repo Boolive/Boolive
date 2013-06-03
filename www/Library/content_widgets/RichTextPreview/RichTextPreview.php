@@ -14,7 +14,7 @@ class RichTextPreview extends RichText
         return parent::work($v);
     }
 
-    protected function getList($cond = array())
+    public function getList($cond = array())
     {
         return parent::getList(array(
             'limit' => array(0, 2)

@@ -115,6 +115,7 @@ class MySQLStore extends Entity
             }
             $first_level = $from->parentCount() + $cond['depth'][0];
             $tree_list = array();
+            if (empty($row) && $cond['depth'][0] == 0) return $from;
         }
         // Выбор списка объектов или значений
         $result = array();
@@ -142,7 +143,19 @@ class MySQLStore extends Entity
             $row = $q->fetch(DB::FETCH_ASSOC);
         }
         // Формирование дерева результата (найденные объекты добавляются к найденным родителям)
-        if (isset($tree_list)){
+        if (isset($tree_list) && !empty($result)){
+            // Ручная сортиорвка по order
+//            if (!($cond['depth'][0] == 1 && $cond['depth'][1] == 1) && empty($cond['select'][1]) && empty($cond['limit']) &&
+//                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+//                $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
+//                $sort = function($a, $b) use ($sort_kind){
+//                    if ($a->attr('order') == $b->attr('order')) return 0;
+//                    return $sort_kind * ($a->attr('order') > $b->attr('order')?1:-1);
+//                };
+//                uasort($tree_list, $sort);
+//                uasort($result, $sort);
+//            }
+            //
             foreach ($tree_list as $obj){
                 $p = $obj->_attribs['parent'];
                 if (isset($tree_list[$p])){
@@ -797,7 +810,7 @@ class MySQLStore extends Entity
     private function getCondDepth($cond)
     {
         $depth = /*isset($cond['depth'])? $cond['depth'] : */0;
-        if (isset($cond['where'])){
+        if (!empty($cond['where'])){
             $find_depth = function($cond, $depth = 1) use (&$find_depth){
                 $d = $depth;
                 if (isset($cond[0], $cond[1]) && ($cond[0] == 'any' || $cond[0] == 'all')){
@@ -869,19 +882,6 @@ class MySQLStore extends Entity
                 $result['select'] = 'SELECT 1 fun';
                 $calc = true;
             }
-
-//            if (isset($cond['select']) && !in_array($cond['select'], array_keys($this->_attribs))){
-//                // Подсчёт количества объектов
-//                if ($cond['select'] == 'count'){
-//                    $result['select'] = 'SELECT count(*) fun';
-//                }else{
-//                    $result['select'] = 'SELECT '.$this->db->quote($cond['select']).' fun';
-//                }
-//                $calc = true;
-//            }else{
-//                $result['select'] = 'SELECT u.uri, obj.*';
-//                $calc = false;
-//            }
             $from_info = Data::parseUri($cond['from']);
             if ($cond['select'][0] == 'count' || $cond['select'][0] == 'exists'){
                 $what = $cond['select'][1];
@@ -945,6 +945,11 @@ class MySQLStore extends Entity
                         $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
                         $result['select'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
                         $binds2[] = array($this->localId($from), DB::PARAM_INT);
+                        // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
+//                        if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
+//                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+//                            $cond['order'] = false;
+//                        }
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Подчиненные объекты
@@ -953,8 +958,8 @@ class MySQLStore extends Entity
                         $result['where'].= "obj.parent = ? AND ";
                         $result['binds'][] = array($this->localId($from), DB::PARAM_INT);
                         // Оптимизация сортировки по атрибуту order
-                        if (isset($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
-                            unset($cond['order']);
+                        if (!empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
+                            $cond['order'] = false;
                         }
                     }else{
                         // Поиск по ветке с ограниченной глубиной
@@ -963,6 +968,11 @@ class MySQLStore extends Entity
                         $binds2[] = array($this->localId($from), DB::PARAM_INT);
                         $binds2[] = array($from->parentCount() + $cond['depth'][0], DB::PARAM_INT);
                         $binds2[] = array($from->parentCount() + $cond['depth'][1], DB::PARAM_INT);
+                        // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
+//                        if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
+//                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+//                            $cond['order'] = false;
+//                        }
                     }
                 }else
                 if ($what == 'parents'){
@@ -1014,10 +1024,6 @@ class MySQLStore extends Entity
                         // Сверка proto
                         $result['where'].= "obj.proto = ? AND ";
                         $result['binds'][] = array($this->localId($from), DB::PARAM_INT);
-                        // Оптимизация сортировки по атрибуту order
-                        if (isset($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
-                            unset($cond['order']);
-                        }
                     }else{
                         // Поиск по ветке наследования с ограниченной глубиной
                         $result['select'].= ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
@@ -1034,9 +1040,8 @@ class MySQLStore extends Entity
                 $result['binds'][] = array($cond['owner'], DB::PARAM_INT);
                 $result['binds'][] = array($cond['lang'], DB::PARAM_INT);
             }
-
             // Сортировка
-            if (!$calc && isset($cond['order'])){
+            if (!$calc && !empty($cond['order'])){
                 $cnt = sizeof($cond['order']);
                 for ($i=0; $i<$cnt; $i++){
                     if (($ocnt = sizeof($cond['order'][$i])-2)>=0){
@@ -1054,9 +1059,8 @@ class MySQLStore extends Entity
                 if ($result['order']) $result['order'] = "\n  ORDER BY ".$result['order'];
             }
         }
-
         // Основное условие
-        if (isset($cond['where'])){
+        if (!empty($cond['where'])){
             $store = $this;
             /**
              * Рекурсивная функция форматирования условия в SQL
@@ -1206,6 +1210,9 @@ class MySQLStore extends Entity
                     $result['where'].= " AND (".$w.')';
                 }
             }
+        }else{
+            if (!empty($result['where'])) $result['where'].=' AND ';
+            $result['where'].= 'obj.is_history = 0 AND obj.is_delete = 0';
         }
 
         // Слияния для условий по подчиненным и сортировке по ним
@@ -1221,7 +1228,7 @@ class MySQLStore extends Entity
         // Полноценный SQL
         if (!$only_where){
             // Ограничение по количеству и смещение
-            if (isset($cond['limit'])){
+            if (!empty($cond['limit'])){
                 $result['limit'] = "\n  LIMIT ?,?";
                 $result['binds'][] = array((int)$cond['limit'][0], DB::PARAM_INT);
                 $result['binds'][] = array((int)$cond['limit'][1], DB::PARAM_INT);

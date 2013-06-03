@@ -25,7 +25,7 @@ class Data
 
     static function activate(){
         // Конфиг хранилищ
-        self::$config_stores = F::loadConfig(DIR_SERVER.self::CONFIG_FILE_STORES);
+        self::$config_stores = F::loadConfig(DIR_SERVER.self::CONFIG_FILE_STORES, 'stores');
     }
 
     /**
@@ -116,14 +116,13 @@ class Data
         if ($cond == 'null' || is_null($cond)){
             return null;
         }
-        $cond = self::parseCond($cond);
+        $cond = self::decodeCond($cond);
         // Контроль доступа в условие выбора
         if ($access) $cond['access'] = true;
-        // из кэша
-        $buffer_key = json_encode($cond);
-        if ($use_cache && Buffer::isExist($buffer_key)){
-            return Buffer::get($buffer_key);
-        }
+
+        // Из буфера
+        $result = self::getBuffer($cond);
+        if (isset($result)) return $result;
         // Опредление хранилища по URI
         if ($store = self::getStore($cond['from'])){
             // Выбор объекта
@@ -131,23 +130,13 @@ class Data
         }else{
             $result = null;
         }
-        // кэширование
-        if ($result instanceof Entity){
-            // Ключ uri
-            $cond['from'] = $result->uri();
-            Buffer::set(json_encode($cond), $result);
-            if ($result->isExist()){
-                // Если объект существует, то дополнительно ключ id
-                $cond['from'] = $result->id();
-                Buffer::set(json_encode($cond), $result);
-            }
-        }else{
-            if ($cond['select'] == 'tree'){
-
-            }else{
-                Buffer::set($buffer_key, $result);
-            }
+        if (PROFILE_DATA && $cond['select'][0] == 'self' && (empty($result) || !$result->isExist())){
+            Trace::groups('Data')->group('not_exists')->group()->set(F::toJSON($cond, false));
         }
+        // В буфер
+        if ($use_cache) self::setBuffer($result, $cond);
+        if (PROFILE_DATA) Trace::groups('Data')->group($cond['select'][0])->/*group(F::toJSON($cond['where'], false))->*/group()->set(F::toJSON($cond, false));
+
         return $result;
     }
 
@@ -210,13 +199,15 @@ class Data
             $store = self::getStore($object->key());
             // Проверка доступа на уничтожение объекта и его подчиненных
             if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null))){
-                $objects = $store->select(array(
+                $objects = $store->read(array(
+                        'select' => array('children', 'uri'),
                         'from' => $object->id(),
                         'depth' => 'max',
                         'where' => array('not', $acond),
-                        'limit' => array(0,50)
-                    ),
-                    'name', null, null, false, 'uri'
+                        'limit' => array(0,50),
+                        'key' => 'name',
+                        'access' => false
+                    ), false
                 );
                 $conflicts['access'] = $objects;
             }
@@ -229,6 +220,153 @@ class Data
     }
 
     /**
+     * Выбор результата выборки из буфера
+     * @param $cond Условие выборки
+     * @return mixed|null Результат выборки или null, если результата нет в буфере
+     */
+    static function getBuffer($cond)
+    {
+        $result = null;
+        // Ключ буфера из условия выборки.
+        $buffer_cond = $cond;
+        if (!empty($cond['key'])) $buffer_cond['key'] = false;
+        $buffer_key = json_encode($buffer_cond);
+        if (Buffer::isExist($buffer_key)){
+            $result = Buffer::get($buffer_key, $cond);
+            if (is_array($result) && reset($result) instanceof Entity){
+                if (empty($cond['key'])){
+                    return array_values($result);
+                }
+                $list = array();
+                foreach ($result as $obj){
+                    $list[$obj->attr($cond['key'])] = $obj;
+                }
+                $result = $list;
+            }
+        }else
+        // Если есть буфер выборки подчиенных, в которых должен оказаться искомый объект,
+        // то проверяем его наличие в буфере
+        if ($cond['select'][0] == 'self' && !Data::isShortUri($cond['from'])){
+            $names = F::splitRight('/', $cond['from'], true);
+            // Условие переопределяется и нормалтзуется с новыми параметрам
+            $ocond = Data::decodeCond(array(
+                'from' => $names[0],
+                'depth' => array(1,1),
+                'select' => array('children'),
+                'order' => array(array('order', 'asc'))
+            ), $cond);
+            $key = json_encode($ocond);
+            if (Buffer::isExist($key)){
+                $list = Buffer::get($key);
+                if (!isset($list[$names[1]])){
+                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang']));
+                }else{
+                    return $list[$names[1]];
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Запись результата выборки в буфер
+     * Сложные выборки могут дополнительно образовывать буфер простых выборок
+     * @param $result Результат выборки
+     * @param $cond Условие выборки
+     */
+    static function setBuffer($result, $cond)
+    {
+        $key = empty($cond['key'])?false:$cond['key'];
+        if (!empty($cond['key'])) $cond['key'] = false;
+
+        $buffer_list = function($objects, $cond){
+            if (is_array($objects)){
+                $ocond = $cond;
+                $ocond['select'] = array('self');
+                $ocond['depth'] = array(0,0);
+                $ocond['where'] = false;
+                if (!empty($ocond['limit'])) $ocond['limit'] = false;
+                if (!empty($ocond['order'])) $ocond['order'] = false;
+                foreach ($objects as $obj){
+                    $ocond['from'] = $obj->id();
+                    Buffer::set(json_encode($ocond), $obj);
+                    $ocond['from'] = $obj->uri();
+                    Buffer::set(json_encode($ocond), $obj);
+                }
+            }
+        };
+        // ветка объектов
+        if ($cond['select'][0] == 'tree' && empty($cond['select'][1]) && empty($cond['limit'])){
+            $buffer_tree = function($objects, $cond, $key, $from) use (&$buffer_tree, &$buffer_list){
+                if ($objects instanceof Entity){
+                    // бефер дерева с глубиной от 0
+                    $cond['depth'][0] = 0;
+                    $cond['from'] = $from->id();
+                    Buffer::set(json_encode($cond), $objects);
+                    $cond['from'] = $from->uri();
+                    Buffer::set(json_encode($cond), $objects);
+                    $ocond = $cond;
+                    $ocond['select'] = array('self');
+                    $ocond['depth'] = array(0,0);
+                    $ocond['where'] = false;
+                    if (!empty($ocond['limit'])) $ocond['limit'] = false;
+                    if (!empty($ocond['order'])) $ocond['order'] = false;
+                    Buffer::set(json_encode($ocond), $objects);
+                    $ocond['from'] = $from->id();
+                    Buffer::set(json_encode($ocond), $objects);
+                    $objects = $objects->children($key);
+                    $cond['depth'][0] = 1;
+                }
+                if ($cond['depth'][1]>=1){
+                    // Буфер списка с глубиной от 1
+                    $lcond = $cond;
+                    $lcond['from'] = $from->id();
+                    $lcond['select'] = array('children');
+                    $lcond['depth'] = array(1,1);
+                    Buffer::set(json_encode($lcond), $objects);
+                    $lcond['from'] = $from->uri();
+                    Buffer::set(json_encode($lcond), $objects);
+                    // Буфер дерева с глубиной от 1
+                    $cond['from'] = $from->id();
+                    Buffer::set(json_encode($cond), $objects);
+                    $cond['from'] = $from->uri();
+                    Buffer::set(json_encode($cond), $objects);
+                    // Если конечная глубина больше 1, то буфер подветки
+                    foreach ($objects as $obj){
+                        $cond['from'] = $obj->id();
+                        if ($cond['depth'][1] != Entity::MAX_DEPTH) $cond['depth'] = array(0, $cond['depth'][1]-1);
+                        $buffer_tree($obj, $cond, $key, $obj);
+                    }
+                    //$buffer_list($objects, $cond);
+                }
+            };
+            $buffer_tree($result, $cond, $key, Data::read($cond['from'], !empty($cond['access'])));
+        }else
+        // один объект
+        if ($result instanceof Entity){
+            // Ключ uri
+            $cond['from'] = $result->uri();
+            Buffer::set(json_encode($cond), $result);
+            if ($result->isExist()){
+                // Если объект существует, то дополнительно ключ id
+                $cond['from'] = $result->id();
+                Buffer::set(json_encode($cond), $result);
+            }
+        }else{
+            // массив объектов
+            if ($key!='name' && $cond['select'][0] == 'children' && empty($cond['select'][1]) && $cond['depth'][0]==1 && $cond['depth'][1] == 1){
+                $list = array();
+                foreach ($result as $obj){
+                    $list[$obj->attr('name')] = $obj;
+                }
+                $result = $list;
+            }
+            Buffer::set(json_encode($cond), $result);
+            $buffer_list($result, $cond);
+        }
+    }
+
+    /**
      * Преобразование строкового условия поиска в структуру из массивов
      * Если условие является массивом, то оно нормализуется - определяются пункты по умолчанию, корректируется структура.
      * Условие может быть массивом из двух элементов - объекта и строкого условия, тогда объект
@@ -237,8 +375,11 @@ class Data
      * @param array $default Условие по умолчанию
      * @return array Преобразованное условие
      */
-    static function parseCond($cond, $default = array())
+    static function decodeCond($cond, $default = array())
     {
+        if (is_array($cond) && !empty($cond['correct'])){
+            return $cond;
+        }
         $result = array();
         // Услвоие - строка (uri + cond + lang + owner)
         if (is_string($cond)){
@@ -254,47 +395,46 @@ class Data
                 $result = $cond;
             }
         }
-        // Преобразование условия в массив
-        $parse = function($cond){
-            // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
-            $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
-            // name(a) => (name,a)
-            $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
-            // Все значения вкавычки
-            $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
-                        //trace($m);
-                        $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
-                        $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
-                        return $m[1].'"'.str_replace($escapers, $replacements, $m[2]).'"';
-                    }, $cond);
-            $cond = strtr($cond, array(
-                        '(' => '[',
-                        ')' => ']',
-                        ',)' => ',""]',
-                        '"eq"' => '"="',
-                        '"neq"' => '"!="',
-                        '"gt"' => '">"',
-                        '"gte"' => '">="',
-                        '"lt"' => '"<"',
-                        '"lte"' => '"<="',
-                    ));
-            $cond = '['.$cond.']';
-            $cond = json_decode($cond);
-            if ($cond){
-                foreach ($cond as $key => $item){
-                    if (is_array($item)){
-                        $k = array_shift($item);
-                        unset($cond[$key]);
-                        if (sizeof($item)==1) $item = $item[0];
-                        $cond[$k] = $item;
-                    }else{
-                        unset($cond[$key]);
+        if (isset($uri)){
+            $parse = function($cond){
+                // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
+                $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
+                // name(a) => (name,a)
+                $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
+                // Все значения вкавычки
+                $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
+                            //trace($m);
+                            $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+                            $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+                            return $m[1].'"'.str_replace($escapers, $replacements, $m[2]).'"';
+                        }, $cond);
+                $cond = strtr($cond, array(
+                            '(' => '[',
+                            ')' => ']',
+                            ',)' => ',""]',
+                            '"eq"' => '"="',
+                            '"neq"' => '"!="',
+                            '"gt"' => '">"',
+                            '"gte"' => '">="',
+                            '"lt"' => '"<"',
+                            '"lte"' => '"<="',
+                        ));
+                $cond = '['.$cond.']';
+                $cond = json_decode($cond);
+                if ($cond){
+                    foreach ($cond as $key => $item){
+                        if (is_array($item)){
+                            $k = array_shift($item);
+                            unset($cond[$key]);
+                            if (sizeof($item)==1) $item = $item[0];
+                            $cond[$k] = $item;
+                        }else{
+                            unset($cond[$key]);
+                        }
                     }
                 }
-            }
-            return $cond;
-        };
-        if (isset($uri)){
+                return $cond;
+            };
             $uri = trim($uri);
             if (!preg_match('/^[^=]+\(/ui', $uri)){
                 if (mb_substr($uri,0,4)!='from'){
@@ -328,10 +468,8 @@ class Data
             }
             if (isset($entity)) $result['from'] = array($entity, $result['from']);
         }
-
         if (!empty($default)) $result = array_replace_recursive($default, $result);
-
-        // Что выбирать
+        // select - Что выбирать
         if (empty($result['select'])){
             // по умолчанию self (выбирается from)
             $result['select'] = array('self');
@@ -349,8 +487,7 @@ class Data
             $result['select'][1] = 'self';
             $result['depth'] = array(0,0);
         }
-
-        // Глубина поиска/выбра
+        // depth - Глубина поиска/выбра
         if (!isset($result['depth'])){
             // По умолчанию в зависимости от select
             if ($result['select'][0] == 'self' || (($result['select'][0] == 'count' || $result['select'][0] == 'exists') && $result['select'][1] == 'self')){
@@ -374,16 +511,19 @@ class Data
                 $result['depth'][$i] = Entity::MAX_DEPTH;
             }else
             if ($d != Entity::MAX_DEPTH){
-                $result['depth'][$i] = intval($d);
+                $result['depth'][$i] = (int)$d;
             }
         }
-
         // Общий владелец и язык, если не указаны конкретные
         if (!isset($result['owner'])) $result['owner'] = Entity::ENTITY_ID;
         if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
         // Нормализация from
-        if (!isset($result['from'])) $result['from'] = '';
-        if ($result['from'] instanceof Entity) $result['from'] = $result['from']->key();
+        if (!isset($result['from'])){
+            $result['from'] = '';
+        }else
+        if ($result['from'] instanceof Entity){
+            $result['from'] = $result['from']->key();
+        }else
         if (is_array($result['from'])){
             // Если from[0] сущность, from[1] строка
             if (sizeof($result['from']) && $result['from'][0] instanceof Entity && is_string($result['from'][1])){
@@ -398,32 +538,63 @@ class Data
                 $result['from'] = '';
             }
         }
-        // Сортировка и ограничение количества бессмысленно при глубине 0
-        if ($result['select'][0] == 'self'){
-            if (isset($result['limit'])) unset($result['limit']);
-            if (isset($result['order'])) unset($result['order']);
-        }
+        // limit
         if ($result['select'][0] == 'exists'){
             $result['limit'] = array(0,1);
+        }else
+        if (empty($result['limit'])){
+            $result['limit'] = false;
         }
+        // order
         if (isset($result['order'])){
             if (!is_array(reset($result['order']))){
                 $result['order'] = array($result['order']);
             }
         }
-        if (array_key_exists('key', $result) && !in_array($result['key'], array('uri', 'id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value'))){
-            $result['key'] = null;
+        if (empty($result['order'])){
+            if ($result['select'][0] == 'children' || $result['select'][0] == 'tree'){
+                $result['order'] = array(array('order', 'asc'));
+            }else{
+                $result['order'] = false;
+            }
         }
-        if (isset($result['access'])) $result['access'] = (bool)$result['access'];
-        ksort($result);
-        $form = array('from' => $result['from']);
-        unset($result['from']);
-        return array_merge($form, $result);
+        // Сортировка и ограничение количества бессмысленно при глубине 0
+        if ($result['select'][0] == 'self'){
+            $result['limit'] = false;
+            $result['order'] = false;
+        }
+        if (!isset($result['key']) || !in_array($result['key'], array('uri', 'id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'parent_cnt', 'proto_cnt'))){
+            $result['key'] = false;
+        }
+        if (isset($result['access'])){
+            $result['access'] = (bool)$result['access'];
+        }else{
+            $result['access'] = false;
+        }
+        if (empty($result['where'])) $result['where'] = false;
+        return array(
+            'from' => $result['from'],
+            'select' => $result['select'],
+            'depth' => $result['depth'],
+            'key' => $result['key'],
+            'where' => $result['where'],
+            'owner' => $result['owner'],
+            'lang' => $result['lang'],
+            'order' => $result['order'],
+            'limit' => $result['limit'],
+            'access' => $result['access'],
+            'correct' => true
+        );
     }
 
+    /**
+     * Преобразование услвоия поиска из любого формата в url формат
+     * @param string|array $cond Исходное условие поиска
+     * @return string Преобразованное в URL условие
+     */
     static function urlencodeCond($cond)
     {
-        $cond = Data::parseCond($cond);
+        $cond = Data::decodeCond($cond);
         if (sizeof($cond['select']) == 1) $cond['select'] = $cond['select'][0];
         if ($cond['select'] == 'self'){
             unset($cond['select'], $cond['depth']);

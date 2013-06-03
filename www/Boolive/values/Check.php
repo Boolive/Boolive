@@ -764,7 +764,7 @@ class Check
      */
     static function condition($value, &$error, Rule $rule)
     {
-        $result = \Boolive\data\Data::parseCond($value);
+        $result = \Boolive\data\Data::decodeCond($value);
         if ($result === null){
             $error = new Error('Не является условием поиска', 'condition');
         }

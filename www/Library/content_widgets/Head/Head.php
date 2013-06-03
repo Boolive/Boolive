@@ -13,6 +13,7 @@ class Head extends Widget
     public function work($v = array())
     {
         $v['value'] = $this->_input['REQUEST']['object']->value();
+        $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max')));
         $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         $obj = $this->_input['REQUEST']['object'];
         $v['tag'] = 'h1';
