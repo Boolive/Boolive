@@ -205,7 +205,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
         if (isset($arg[0]) && is_array($arg[0])) $arg = $arg[0];
         $list = array();
         foreach ($arg as $name){
-            if (array_key_exists($name, $value)) $list[$name] = $value[$name];
+            if (isset($value[$name]) || array_key_exists($name, $value)) $list[$name] = $value[$name];
         }
         $this->set($list);
         return $this;
@@ -355,7 +355,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     public function offsetExists($name)
     {
         $v = $this->getValue();
-        return is_array($v) && array_key_exists($name, $v);
+        return is_array($v) && (isset($v[$name]) || array_key_exists($name, $v));
     }
 
     /**

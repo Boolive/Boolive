@@ -90,7 +90,7 @@ class Session
      */
     static function isExist($key)
     {
-        return array_key_exists($key, $_SESSION);
+        return isset($_SESSION[$key]) || array_key_exists($key, $_SESSION);
     }
 
     /**
