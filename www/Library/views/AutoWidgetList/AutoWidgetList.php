@@ -50,17 +50,18 @@ class AutoWidgetList extends Widget
             }else
             if (is_array($cond['where'][0])){
                 $cond['where'][] = array('is', $protos);
-            }else
-            if ($cond['where'][0] == 'all'){
-                $cond['where'][] = array('is', $protos);
             }else{
-                $cond['where'][] = array(
-                    $cond['where'],
-                    array('is', $protos)
-                );
+            //if ($cond['where'][0] == 'all'){
+                $cond['where'][1][] = array('is', $protos);
+//            }else{
+//                $cond['where'][] = array(
+//                    $cond['where'],
+//                    array('is', $protos)
+//                );
             }
         }
         //$cond['key'] = 'name';
+
         return $this->_input['REQUEST']['object']->find($cond, true);
     }
 }
