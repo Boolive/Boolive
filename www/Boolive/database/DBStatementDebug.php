@@ -21,11 +21,15 @@ class DBStatementDebug
     private $stmt;
     private $values = array();
     private $info;
+    private $debug = true;
+    private $count = true;
 
-    function __construct($stmt)
+    function __construct($stmt, $debug = true, $count = true)
     {
         $this->stmt = $stmt;
         $this->info['sql'] = $stmt->queryString;
+        $this->debug = $debug;
+        $this->count = $count;
     }
 
     function __destruct()
@@ -36,15 +40,22 @@ class DBStatementDebug
 
     function execute($params = null)
     {
-        Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
-        Benchmark::start('sql');
-        $result = $this->stmt->execute($params);
-        Trace::groups('DB')->group('query')->group($this->stmt->queryString)->group()->set(array(
-            'sql' => $this->stmt->queryString,
-            'values' => $params?$params:$this->values,
-            'benchmark' => Benchmark::stop('sql', true)
-            )
-        );
+        if ($this->count){
+            Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
+        }
+        if ($this->debug){
+            Benchmark::start('sql');
+            $result = $this->stmt->execute($params);
+            //Trace::groups('Data')->group('')->set($this->stmt->queryString);
+            Trace::groups('DB')->group('query')->group($this->stmt->queryString)->group()->set(array(
+                'sql' => $this->stmt->queryString,
+                'values' => $params?$params:$this->values,
+                'benchmark' => Benchmark::stop('sql', true)
+                )
+            );
+        }else{
+            $result = $this->stmt->execute($params);
+        }
         return $result;
     }
 

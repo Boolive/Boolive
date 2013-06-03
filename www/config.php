@@ -8,7 +8,7 @@
 define('IS_INSTALL', true);
 
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
-define('DOCUMENT_ROOT', get_doc_root());
+define('DOCUMENT_ROOT', get_root_dir());
 
 /** @cont string Директория сайта относительно домена (там, где файл index.php). Слеш в начале и конце обязателен! */
 define('DIR_WEB', get_web_dir());
@@ -29,11 +29,15 @@ define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_H
 /** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */
 define('TIMESTAMP', '1');
 
+/* Признак, выводить всю трассировку?*/
+define('GLOBAL_TRACE', true);
+/* Признак, профилировать запросы к модулю даных?*/
+define('PROFILE_DATA', false);
 /**
  * Определение корневой директории сервера
  * @return string
  */
-function get_doc_root(){
+function get_root_dir(){
     if (empty($_SERVER['DOCUMENT_ROOT'])){
         // Если переменной окружения нет, то вычисляем из пути на исполняемый файл
         $_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);

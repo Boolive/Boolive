@@ -35,7 +35,8 @@ class DB extends PDO
     /** @var string Префикс к имени таблиц */
     private $prefix = '';
     /** @var bool Признак, включен или нет режим отладки */
-    private $debug = false;
+    private $trace_sql = false;
+    private $trace_count = false;
 
     private $statements = array();
     /**
@@ -69,7 +70,8 @@ class DB extends PDO
             if (empty($config['password'])) $config['password'] = null;
             if (empty($config['options'])) $config['options'] = null;
             if (empty($config['prefix'])) $config['prefix'] = '';
-            if (empty($config['debug'])) $config['debug'] = false;
+            if (empty($config['trace_sql'])) $config['trace_sql'] = false;
+            if (empty($config['trace_count'])) $config['trace_count'] = false;
             // Ключ подключения
             $key = $dsn.'-'.$config['user'].'-'.$config['password'].'-'.$config['prefix'];
             if (!empty($config['options'])){
@@ -77,19 +79,20 @@ class DB extends PDO
             }
             // Если подключения нет, то создаём
             if (!isset(self::$connection[$key])){
-                self::$connection[$key] = new self($dsn, $config['user'], $config['password'], $config['options'], $config['prefix'], $config['debug']);
+                self::$connection[$key] = new self($dsn, $config['user'], $config['password'], $config['options'], $config['prefix'], $config['trace_sql'], $config['trace_count']);
             }
             return self::$connection[$key];
         }
         return null;
     }
 
-    public function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false)
+    public function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false, $count = false)
     {
         parent::__construct($dsn, $username, $passwd, $options);
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->prefix = $prefix;
-        $this->debug = $debug;
+        $this->trace_sql = $debug;
+        $this->trace_count = $count;
     }
 
     /**
@@ -157,8 +160,10 @@ class DB extends PDO
      */
     public function exec($sql)
     {
-        if ($this->debug){
+        if ($this->trace_count){
             Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
+        }
+        if ($this->trace_sql){
             Benchmark::start('sql');
             $sql = $this->addPrefixes($sql);
             $result = parent::exec($sql);
@@ -185,10 +190,10 @@ class DB extends PDO
         if (isset($this->statements[$sql])){
             return $this->statements[$sql];
         }
-        if ($this->debug){
+        if ($this->trace_sql || $this->trace_count){
             $stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
             if ($stmt instanceof PDOStatement){
-                return $this->statements[$sql] = new DBStatementDebug($stmt);
+                return $this->statements[$sql] = new DBStatementDebug($stmt, $this->trace_sql, $this->trace_count);
             }else{
                 throw new Error('PDO does not return PDOStatement');
             }
@@ -204,8 +209,10 @@ class DB extends PDO
      */
     public function query($sql)
     {
-        if ($this->debug){
+        if ($this->trace_count){
             Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
+        }
+        if ($this->trace_sql){
             Benchmark::start('sql');
             $sql = $this->AddPrefixes($sql);
             $result = parent::query($sql);
