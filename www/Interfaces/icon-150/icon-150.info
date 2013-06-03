@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/content_samples/Image",
     "is_hidden": true,
-    "order": 6,
+    "order": 8,
     "children": {
         "title": {
             "is_default_value": true,
