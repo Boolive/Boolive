@@ -467,8 +467,8 @@
          */
         getURIFromState: function(state){
             var obj = _.isArray(state.object)? _.first(state.object) : state.object;
+            if (!obj || !/^\//.test(obj)) obj = '/' + obj;
             var uri = this.options.basepath + obj;
-            if (!obj) uri = uri + '/';
             if (state.view_name){
                 uri = uri + '&view_name=' + state.view_name;
             }

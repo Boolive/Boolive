@@ -17,14 +17,14 @@
     <div class="view<?php echo $class;?>" title="<?php echo $v['alt']->escape();?>">
 		<span class="info">
             <a class="select" title="Выделить" href="<?php echo $v['uri'];?>"></a>
-            <a class="prop" title="Свойства ссылки" href="/admin<?php echo $v['uri'];?>"></a>
+            <a class="prop" title="Свойства ссылки" href="<?php echo ltrim($v['uri'],'/');?>"></a>
             <span class="value <?php echo $v['is_default_value']->bool()?'default':'';?>" title="<?php echo $v['value_full']->escape();?>"><?php echo $v['value']->escape();?></span>
             <?php if ($v['is_file']->bool()):?>
                 <span class="file"></span>
             <?php endif;?>
         </span>
 		<span class="main">
-            <a class="title" href="/admin<?php echo $v['link'];?>"><span><?php echo $v['title']->escape();?></span></a>
+            <a class="title" href="<?php echo ltrim($v['link'], '/');?>"><span><?php echo $v['title']->escape();?></span></a>
             <span class="description"><?php echo $v['description'];?></span>
         </span>
 	</div>

@@ -36,14 +36,14 @@ class ObjectItem extends Widget
         // Атрибуты
         $v['name'] = $obj->name();
         $v['value'] = (string)$obj->value();
-        $v['uri'] = $obj->uri();
+        $v['uri'] = $obj->uri(false, true);
         $v['is_virtual'] = $obj->isVirtual();
         $v['is_hidden'] = $obj->isHidden(null, false);
         $v['is_delete'] = $obj->isDelete(null, false);
         $v['is_file'] = $obj->isFile();
         $v['is_link'] = $obj->isLink();
         $v['is_default_value'] = $obj->isDefaultValue();
-        $v['link'] = $obj->linked()->uri();
+        $v['link'] = $obj->linked()->uri(false, true);
         if ($v['is_link']){
             $v['alt'] = 'Ссылка: '.$v['link'];
         }else{

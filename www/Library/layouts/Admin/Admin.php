@@ -40,12 +40,16 @@ class Admin extends Focuser
         }
         //удаление "/admin"
         $uri = mb_substr($uri, 6);
+        if (preg_match('/^\/[a-z]+:\/\//ui', $uri)){
+            $uri = ltrim($uri, '/');
+        }
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = Data::read($uri);
     }
 
     public function work($v = array())
     {
+        $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB.'admin/'));
         $v['basepath'] = DIR_WEB.'admin';
         return parent::work($v);
     }

@@ -24,17 +24,17 @@
 
             }
             $width = max(118, round((mb_strlen($s)*18+18)/50)*50+18);
-            echo '<a class="title" href="/admin'.$v['link'].'" style="min-width:'.$width.'px;"><span>'.$s.'</span></a>';
+            echo '<a class="title" href="'.ltrim($v['link'],'/').'" style="min-width:'.$width.'px;"><span>'.$s.'</span></a>';
             if (!empty($s2)) echo '<span class="mini">'.$s2.'</span>';
             ?>
         </div>
         <div class="info">
-            <a class="prop" title="Свойства ссылки" href="/admin<?php echo $v['uri'];?>"></a>
+            <a class="prop" title="Свойства ссылки" href="<?php echo ltrim($v['uri'],'/');?>"></a>
             <?php if ($v['is_file']->bool()):?>
                 <span class="file"></span>
             <?php endif;?>
             <span class="value <?php echo $v['is_default_value']->bool()?'default':'';?>" title="<?php echo $v['value_full']->escape();?>"><?php echo $v['value']->escape();?></span>
         </div>
-        <a class="select" title="Выделить" href="<?php echo $v['uri'];?>"></a>
+        <a class="select" title="Выделить" href="<?php echo ltrim($v['uri'],'/');?>"></a>
 	</div>
 </div>

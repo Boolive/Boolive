@@ -29,8 +29,7 @@ class Html extends Widget
             return true;
         }
         $v['head'] = '';
-
-        $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB, 'unic'));
+        $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB), 'unic');
         $uniq = array();
         foreach ($this->_commands->get('addHtml') as $com){
             if (empty($com[2]) || empty($uniq[$com[0]])){
