@@ -46,12 +46,13 @@ class Focuser extends Widget
                 'order' => array(
                     array('order', 'ASC')
                 ),
-                'limit' => array(0,1)
+                'limit' => array(0,1),
+                'comment' => 'read default page'
             )))){
             $object = reset($object);
         }
         // ищем в /Contents
-        if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri);
+        if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri.'&comment=readdefaultpage');
         // точное соответсвие uri
         if (!$object) $object = Data::read($uri);
         // корнеь

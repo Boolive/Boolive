@@ -18,7 +18,9 @@ class Widget extends View
      */
     protected function init()
     {
-        if (!$this->isLink()) $this->find(array('select'=>'tree', 'depth'=>array(1,'max')/*, 'order' => array('order', 'asc')*/), true);
+        if (!$this->isLink()){
+            $this->find(array('select'=>'tree', 'depth'=>array(1,'max'), 'comment' => 'read tree of widgets'/*, 'order' => array('order', 'asc')*/), true);
+        }
     }
 
     /**

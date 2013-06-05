@@ -20,7 +20,8 @@ class Allow extends Entity
         $objects = $this->find(array(
             'where' => array(
                 array('attr', 'is_link', '>', 0)
-            )
+            ),
+            'comment' => 'read allow linked children'
         ));
         foreach ($objects as $o){
             /** @var $o Entity */

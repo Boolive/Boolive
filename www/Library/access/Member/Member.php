@@ -44,7 +44,8 @@ class Member extends Entity
             $curr = null;
 //            if ($this->isExist()){
 //                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'order' => array('parent_cnt', 'desc')));
-//            }else{
+//            }
+            //else{
 //                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'order' => array('parent_cnt', 'desc')));
 //                array_unshift($parents, $this);
 //            }
@@ -56,10 +57,11 @@ class Member extends Entity
                     $rights = Data::read(array(
                         'select' => 'tree',
                         'from' => array($obj, 'rights'),
-                        'depth' => array(0, 'max')
+                        'depth' => array(0, 'max'),
+                        'comment' => 'read rights of Member'
                     ));
 //                    $rights = Data::read(array($obj, 'rights'), false);
-                    $roles = $rights->find();
+                    $roles = $rights->find(array('comment'=>'read all rights'));
                     // Объединяем права в общий список
                     foreach ($roles as $r){
                         if (($c = $r->getAccessCond($action_kind, $parent, $depth)) && is_array($c)){

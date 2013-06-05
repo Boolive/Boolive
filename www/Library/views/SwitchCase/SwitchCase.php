@@ -77,7 +77,7 @@ class SwitchCase extends View
     protected function getViews()
     {
         if (!isset($this->_views)){
-            $this->_views = $this->find(array('key'=>'name'));
+            $this->_views = $this->find(array('key'=>'name', 'comment' => 'read views in SwitchCase'));
             unset($this->_views['title'], $this->_views['description']);
         }
         return $this->_views;

@@ -15,7 +15,7 @@ class Role extends Entity
 {
     public function getAccessCond($action_kind, $parent = '', $depth = null)
     {
-        $roles = $this->{$action_kind}->find();
+        $roles = $this->{$action_kind}->find(array('comment' => 'read role action conditions'));
         $curr = null;
         $prev = null;
         $cond = null;

@@ -154,7 +154,7 @@ class View extends Entity
     public function startChildren()
     {
         $result = array();
-        $list = $this->linked(true)->find(array('key'=>'name'));
+        $list = $this->linked(true)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $out = $child->linked(true)->start($this->_commands, $this->_input_child);

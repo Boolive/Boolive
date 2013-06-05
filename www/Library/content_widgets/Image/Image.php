@@ -13,7 +13,7 @@ class Image extends Widget
     public function work($v = array())
     {
         $v['file'] = $this->_input['REQUEST']['object']->file();
-        $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max')));
+        $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'comment' => 'read tree of text element'));
         $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         return parent::work($v);
     }

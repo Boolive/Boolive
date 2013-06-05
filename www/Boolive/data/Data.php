@@ -113,17 +113,25 @@ class Data
         if ($cond == Entity::ENTITY_ID){
             return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
         }
-        if ($cond == 'null' || is_null($cond)){
+        if ($cond == 'null' || !isset($cond)){
             return null;
         }
         $cond = self::decodeCond($cond);
         // Контроль доступа в условие выбора
         if ($access) $cond['access'] = true;
-
+        if (isset($cond['comment'])){
+            $comment = ''.$cond['comment'];
+            unset($cond['comment']);
+        }else{
+            $comment = 'no comment';
+        }
         // Из буфера
-        $result = self::getBuffer($cond);
-        if (isset($result)) return $result;
-        // Опредление хранилища по URI
+        $result = Buffer::get($cond);
+        if (isset($result)){
+            if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER')->group($comment)->group()->set(F::toJSON($cond, false));
+            return $result;
+        }
+        // Определение хранилища по URI
         if ($store = self::getStore($cond['from'])){
             // Выбор объекта
             $result = $store->read($cond, $index);
@@ -131,11 +139,11 @@ class Data
             $result = null;
         }
         if (PROFILE_DATA && $cond['select'][0] == 'self' && (empty($result) || !$result->isExist())){
-            Trace::groups('Data')->group('not_exists')->group()->set(F::toJSON($cond, false));
+            Trace::groups('Data')->group('FROM STORE')->group('not_exists')->group()->set(F::toJSON($cond, false));
         }
         // В буфер
-        if ($use_cache) self::setBuffer($result, $cond);
-        if (PROFILE_DATA) Trace::groups('Data')->group($cond['select'][0])->/*group(F::toJSON($cond['where'], false))->*/group()->set(F::toJSON($cond, false));
+        if ($use_cache) Buffer::set($result, $cond);
+        if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->/*group(F::toJSON($cond['where'], false))->*/group()->set(F::toJSON($cond, false));
 
         return $result;
     }
@@ -217,153 +225,6 @@ class Data
             }
         }
         return $conflicts;
-    }
-
-    /**
-     * Выбор результата выборки из буфера
-     * @param $cond Условие выборки
-     * @return mixed|null Результат выборки или null, если результата нет в буфере
-     */
-    static function getBuffer($cond)
-    {
-        $result = null;
-        // Ключ буфера из условия выборки.
-        $buffer_cond = $cond;
-        if (!empty($cond['key'])) $buffer_cond['key'] = false;
-        $buffer_key = json_encode($buffer_cond);
-        if (Buffer::isExist($buffer_key)){
-            $result = Buffer::get($buffer_key, $cond);
-            if (is_array($result) && reset($result) instanceof Entity){
-                if (empty($cond['key'])){
-                    return array_values($result);
-                }
-                $list = array();
-                foreach ($result as $obj){
-                    $list[$obj->attr($cond['key'])] = $obj;
-                }
-                $result = $list;
-            }
-        }else
-        // Если есть буфер выборки подчиенных, в которых должен оказаться искомый объект,
-        // то проверяем его наличие в буфере
-        if ($cond['select'][0] == 'self' && !Data::isShortUri($cond['from'])){
-            $names = F::splitRight('/', $cond['from'], true);
-            // Условие переопределяется и нормалтзуется с новыми параметрам
-            $ocond = Data::decodeCond(array(
-                'from' => $names[0],
-                'depth' => array(1,1),
-                'select' => array('children'),
-                'order' => array(array('order', 'asc'))
-            ), $cond);
-            $key = json_encode($ocond);
-            if (Buffer::isExist($key)){
-                $list = Buffer::get($key);
-                if (!isset($list[$names[1]])){
-                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang']));
-                }else{
-                    return $list[$names[1]];
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Запись результата выборки в буфер
-     * Сложные выборки могут дополнительно образовывать буфер простых выборок
-     * @param $result Результат выборки
-     * @param $cond Условие выборки
-     */
-    static function setBuffer($result, $cond)
-    {
-        $key = empty($cond['key'])?false:$cond['key'];
-        if (!empty($cond['key'])) $cond['key'] = false;
-
-        $buffer_list = function($objects, $cond){
-            if (is_array($objects)){
-                $ocond = $cond;
-                $ocond['select'] = array('self');
-                $ocond['depth'] = array(0,0);
-                $ocond['where'] = false;
-                if (!empty($ocond['limit'])) $ocond['limit'] = false;
-                if (!empty($ocond['order'])) $ocond['order'] = false;
-                foreach ($objects as $obj){
-                    $ocond['from'] = $obj->id();
-                    Buffer::set(json_encode($ocond), $obj);
-                    $ocond['from'] = $obj->uri();
-                    Buffer::set(json_encode($ocond), $obj);
-                }
-            }
-        };
-        // ветка объектов
-        if ($cond['select'][0] == 'tree' && empty($cond['select'][1]) && empty($cond['limit'])){
-            $buffer_tree = function($objects, $cond, $key, $from) use (&$buffer_tree, &$buffer_list){
-                if ($objects instanceof Entity){
-                    // бефер дерева с глубиной от 0
-                    $cond['depth'][0] = 0;
-                    $cond['from'] = $from->id();
-                    Buffer::set(json_encode($cond), $objects);
-                    $cond['from'] = $from->uri();
-                    Buffer::set(json_encode($cond), $objects);
-                    $ocond = $cond;
-                    $ocond['select'] = array('self');
-                    $ocond['depth'] = array(0,0);
-                    $ocond['where'] = false;
-                    if (!empty($ocond['limit'])) $ocond['limit'] = false;
-                    if (!empty($ocond['order'])) $ocond['order'] = false;
-                    Buffer::set(json_encode($ocond), $objects);
-                    $ocond['from'] = $from->id();
-                    Buffer::set(json_encode($ocond), $objects);
-                    $objects = $objects->children($key);
-                    $cond['depth'][0] = 1;
-                }
-                if ($cond['depth'][1]>=1){
-                    // Буфер списка с глубиной от 1
-                    $lcond = $cond;
-                    $lcond['from'] = $from->id();
-                    $lcond['select'] = array('children');
-                    $lcond['depth'] = array(1,1);
-                    Buffer::set(json_encode($lcond), $objects);
-                    $lcond['from'] = $from->uri();
-                    Buffer::set(json_encode($lcond), $objects);
-                    // Буфер дерева с глубиной от 1
-                    $cond['from'] = $from->id();
-                    Buffer::set(json_encode($cond), $objects);
-                    $cond['from'] = $from->uri();
-                    Buffer::set(json_encode($cond), $objects);
-                    // Если конечная глубина больше 1, то буфер подветки
-                    foreach ($objects as $obj){
-                        $cond['from'] = $obj->id();
-                        if ($cond['depth'][1] != Entity::MAX_DEPTH) $cond['depth'] = array(0, $cond['depth'][1]-1);
-                        $buffer_tree($obj, $cond, $key, $obj);
-                    }
-                    //$buffer_list($objects, $cond);
-                }
-            };
-            $buffer_tree($result, $cond, $key, Data::read($cond['from'], !empty($cond['access'])));
-        }else
-        // один объект
-        if ($result instanceof Entity){
-            // Ключ uri
-            $cond['from'] = $result->uri();
-            Buffer::set(json_encode($cond), $result);
-            if ($result->isExist()){
-                // Если объект существует, то дополнительно ключ id
-                $cond['from'] = $result->id();
-                Buffer::set(json_encode($cond), $result);
-            }
-        }else{
-            // массив объектов
-            if ($key!='name' && $cond['select'][0] == 'children' && empty($cond['select'][1]) && $cond['depth'][0]==1 && $cond['depth'][1] == 1){
-                $list = array();
-                foreach ($result as $obj){
-                    $list[$obj->attr('name')] = $obj;
-                }
-                $result = $list;
-            }
-            Buffer::set(json_encode($cond), $result);
-            $buffer_list($result, $cond);
-        }
     }
 
     /**
@@ -519,25 +380,56 @@ class Data
         if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
         // Нормализация from
         if (!isset($result['from'])){
-            $result['from'] = '';
+            $result['from'] = array('');
         }else
-        if ($result['from'] instanceof Entity){
-            $result['from'] = $result['from']->key();
-        }else
-        if (is_array($result['from'])){
-            // Если from[0] сущность, from[1] строка
-            if (sizeof($result['from']) && $result['from'][0] instanceof Entity && is_string($result['from'][1])){
-                // Если глубина больше 0 или fromp[1] путь (не имя) или from[0] не существует,
-                // тогда from заменяется на uri
-                if ($result['depth']>0 || mb_substr_count($result['from'][1],'/')>0 || !$result['from'][0]->isExist()){
-                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
+        if (!is_array($result['from']) || (sizeof($result['from'])==2 && $result['from'][0] instanceof Entity && is_string($result['from'][1]))){
+            $result['from'] = array($result['from']);
+        }
+        foreach ($result['from'] as $i => $f){
+            if (!isset($f)){
+                $result['from'][$i] = '';
+            }else
+            if ($f instanceof Entity){
+                $result['from'][$i] = $f->key();
+            }else
+            if (is_array($f)){
+                // Если from[0] сущность, а from[1] строка
+                if (sizeof($f)==2 && $f[0] instanceof Entity && is_string($f[1])){
+                    $result['from'][$i] = $f[0]->uri().'/'.$f[1];
                 }else{
-                    $result['from'] = $result['from'][0]->key().'/'.$result['from'][1];
+                    $result['from'][$i] = '';
                 }
-            }else{
-                $result['from'] = '';
             }
         }
+        if (sizeof($result['from'])==1) $result['from'] = $result['from'][0];
+
+
+//        if (!isset($result['from'])){
+//            $result['from'] = '';
+//        }else
+//        if ($result['from'] instanceof Entity){
+//            $result['from'] = $result['from']->key();
+//        }else
+//        if (is_array($result['from'])){
+//            // Если from[0] сущность, а from[1] строка
+//            if (sizeof($result['from'])==2 && $result['from'][0] instanceof Entity && is_string($result['from'][1])){
+//                // Если глубина больше 0 или from[1] путь (не имя) или from[0] не существует,
+//                // тогда from заменяется на uri
+////                if ($result['from'][0]->isExist() && mb_substr_count($result['from'][1],'/')==0 && ($result['select'][0] == 'self')){
+////                    $result['from'] = $result['from'][0]->key().'/'.$result['from'][1];
+////                }else{
+//                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
+////                }
+////                    && $result['depth'][0] == 1)
+//                //if ($result['depth'][1]>0 || mb_substr_count($result['from'][1],'/')>0 || !$result['from'][0]->isExist()){
+//
+////                }else{
+////                    $result['from'] = $result['from'][0]->key().'/'.$result['from'][1];
+////                }
+//            }else{
+//                $result['from'] = '';
+//            }
+//        }
         // limit
         if ($result['select'][0] == 'exists'){
             $result['limit'] = array(0,1);
@@ -572,7 +464,7 @@ class Data
             $result['access'] = false;
         }
         if (empty($result['where'])) $result['where'] = false;
-        return array(
+        $r = array(
             'from' => $result['from'],
             'select' => $result['select'],
             'depth' => $result['depth'],
@@ -585,6 +477,8 @@ class Data
             'access' => $result['access'],
             'correct' => true
         );
+        if (isset($result['comment'])) $r['comment'] = $result['comment'];
+        return $r;
     }
 
     /**
@@ -636,6 +530,7 @@ class Data
      */
     static function parseUri($uri)
     {
+        if (is_array($uri)) $uri = reset($uri);
         if (is_string($uri) && preg_match('/^([^\/]*)(\/\/)?([0-9]*)(.*)$/u', $uri, $match)){
             return array(
                 'uri' => $match[0],
@@ -668,6 +563,7 @@ class Data
      */
     static function getStore($uri)
     {
+        if (is_array($uri)) $uri = reset($uri);
         foreach (self::$config_stores as $key => $config){
             if ($key == '' || mb_strpos($uri, $key) === 0){
                 if (!isset(self::$stores[$key])){
@@ -677,6 +573,58 @@ class Data
             }
         }
         return null;
+    }
+
+    static function makeObject($attribs)
+    {
+        $cond = array(
+            'from' => $attribs['id'],
+            'select' => array('self'),
+            'depth' => array(0,0),
+            'key' => false,
+            'where' => false,
+            'owner' => $attribs['owner'],
+            'lang' => $attribs['lang'],
+            'order' => false,
+            'limit' => false,
+            'access' => true,
+            'correct' => true
+        );
+        if ($obj = Buffer::get($cond, false)) return $obj;
+
+        if (isset($attribs['uri'])){
+            // Свой класс
+            if (empty($attribs['is_default_class'])){
+                try{
+                    // Имеется свой класс?
+                    if ($attribs['uri']===''){
+                        $class = 'Site';
+                    }else{
+                        $names = F::splitRight('/', $attribs['uri'], true);
+                        $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
+                    }
+                    return new $class($attribs);
+                }catch(\Exception $e){
+                    // Если файл не найден, то будет использоваться класс прототипа или Entity
+                    if ($e->getCode() == 2){
+                        if ($attribs['proto'] && ($proto = Data::read($attribs['proto'].'&comment=read proto to use his class', false))){
+                            // Класс прототипа
+                            $class = get_class($proto);
+                            return new $class($attribs);
+                        }
+                    }else{
+                        throw $e;
+                    }
+                }
+            }else
+            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
+                $proto = Data::read($attribs['is_default_class'].'&comment=read is_default_class to makeObject', false);
+                $class = get_class($proto);
+                return new $class($attribs);
+            }
+        }
+        // Базовый класс
+        return new Entity($attribs);
     }
 
     /**

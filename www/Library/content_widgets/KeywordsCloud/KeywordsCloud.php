@@ -17,7 +17,8 @@ class KeywordsCloud extends Widget
             'where' => array(
                 array('is', '/Library/content_samples/Keyword')
             ),
-            'key' => 'name'
+            'key' => 'name',
+            'comment' => 'all keywords to cloud'
         ));
         $v['title'] = $this->title->value();
         $v['max_font_size'] = $this->max_font_size->value();

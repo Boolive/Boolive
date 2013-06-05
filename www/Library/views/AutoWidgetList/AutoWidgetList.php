@@ -60,7 +60,7 @@ class AutoWidgetList extends Widget
 //                );
             }
         }
-        //$cond['key'] = 'name';
+        $cond['comment'] = 'read list of objects in the AutoWidgetList';
 
         return $this->_input['REQUEST']['object']->find($cond, true);
     }

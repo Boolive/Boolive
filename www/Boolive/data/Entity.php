@@ -60,8 +60,6 @@ class Entity implements ITrace
     /** @var array Подчиненные объекты (выгруженные из бд или новые, то есть не обязательно все существующие) */
     protected $_children = array();
     /** @var bool Признак, загружены ли все подчиненные? */
-    private $_all_children = false;
-    /** @var \Boolive\values\Rule Правило для проверки атрибутов */
     protected $_rule;
     /** @var \Boolive\data\Entity Экземпляр прототипа */
     protected $_proto = false;
@@ -77,8 +75,6 @@ class Entity implements ITrace
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
     protected $_checked = false;
-    /** @var string uri родителя */
-    //protected $_parent_uri = null;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -198,7 +194,9 @@ class Entity implements ITrace
 
     /**
      * URI объекта
-     * @return mixed
+     * @param bool $remake Признак, обновить URI? URI определяется по родителю и имени объекта
+     * @param bool $encode Признак, кодировать спецсимволы в URI?
+     * @return string
      */
     public function uri($remake = false, $encode = false)
     {
@@ -478,7 +476,8 @@ class Entity implements ITrace
             return Data::read(array(
                 'from' => $this->_attribs['is_link'],
                 'owner' => $this->owner(),
-                'lang' => $this->lang()
+                'lang' => $this->lang(),
+                'comment' => 'read link'
             ));
         }else{
             return !empty($this->_attribs['is_link']);
@@ -554,11 +553,12 @@ class Entity implements ITrace
             }
         }
         if (!empty($this->_attribs['is_default_value']) && $return_proto){
-            // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
+            // Поиск прототипа, от которого наследуется значение, чтобы возратить его
             return Data::read(array(
                 'from'=>$this->_attribs['is_default_value'],
                 'owner'=>$this->owner(),
-                'lang'=>$this->lang()
+                'lang'=>$this->lang(),
+                'comment'=>'read default value'
             ));
         }else{
             return !empty($this->_attribs['is_default_value']);
@@ -600,7 +600,8 @@ class Entity implements ITrace
             return Data::read(array(
                 'from' => $this->_attribs['is_default_class'],
                 'owner' => $this->owner(),
-                'lang' => $this->lang()
+                'lang' => $this->lang(),
+                'comment' => 'read default class'
             ));
         }else{
             return !empty($this->_attribs['is_default_class']);
@@ -689,7 +690,8 @@ class Entity implements ITrace
                 $this->_parent = Data::read(array(
                     'from' => $this->_attribs['parent'],
                     'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang']
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read parent'
                 ));
                 if (!$this->_parent->isExist()){
                     $this->_parent = null;
@@ -808,7 +810,8 @@ class Entity implements ITrace
                 $this->_proto = Data::read(array(
                     'from' => $this->_attribs['proto'],
                     'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang']
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read proto'
                 ));
                 if (!$this->_proto->isExist()){
                     $this->_proto = null;
@@ -863,7 +866,8 @@ class Entity implements ITrace
                 $this->_owner = Data::read(array(
                     'from' => $this->_attribs['owner'],
                     'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang']
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read owner'
                 ));
             }else{
                 $this->_owner = null;
@@ -901,7 +905,8 @@ class Entity implements ITrace
                 $this->_lang = Data::read(array(
                     'from' => $this->_attribs['lang'],
                     'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang']
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read lang'
                 ));
             }else{
                 $this->_lang = null;
@@ -939,7 +944,8 @@ class Entity implements ITrace
                 'order' => array(
                     array('order', 'ASC')
                 ),
-                'limit' => array(0,1)
+                'limit' => array(0,1),
+                'comment' => 'read next object'
             )
         )){
             return $next[0];
@@ -959,7 +965,8 @@ class Entity implements ITrace
                 'order' => array(
                     array('order', 'DESC')
                 ),
-                'limit' => array(0,1)
+                'limit' => array(0,1),
+                'comment' => 'read prev object'
             )
         )){
             return $prev[0];
@@ -994,7 +1001,8 @@ class Entity implements ITrace
                 $obj = Data::read(array(
                     'from' => array($this, $name),
                     'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang']
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read property by name'
                 ));
             }
             if (!$obj->isExist()){
@@ -1033,11 +1041,6 @@ class Entity implements ITrace
                 if ($this->uri().'/'.$name != $value->uri()){
                     $value->name($name, true);
                 }
-//                if (!$this->isEqual($value->parent())){
-//
-//                }else{
-//                    $value->name($name);
-//                }
             }
             // Установка себя в качетсве родителя
             $value->parent($this);
@@ -1113,26 +1116,9 @@ class Entity implements ITrace
      * @see https://github.com/Boolive/Boolive/issues/7
      * @return array
      */
-    public function find($cond = array(), $load = true, $index = true)
+    public function find($cond = array(), $load = false, $index = true)
     {
         $cond = Data::decodeCond($cond, array('select' => 'children', 'depth' => array(1,1)));
-        //if (!array_key_exists('key', $cond)) $cond['key'] = 'name';
-//        // Ели не была указана глубина, то после парсинга будет равна 0
-//        if ($cond['depth'][1]==0){
-//            $cond['depth'] = array(1,1);
-//            $cond['select'] = array('children');
-//        }
-//        $all = (empty($cond['where']) && empty($cond['order']) && empty($cond['limit']) &&
-//                $cond['depth'][1] == 1 && $cond['depth'][0] == 1 && $cond['select'][0] == 'children' && empty($cond['select'][1]));
-//
-//        if ($all && $this->_all_children){
-//            if (isset($cond['key']) && $cond['key']){
-//                return $this->_children;
-//            }else
-//            if (empty($keys)){
-//                return array_values($this->_children);
-//            }
-//        }
         if ($this->isExist()){
             $cond['from'] = $this->id();
             $result = Data::read($cond, true, true, $index);
@@ -1151,7 +1137,7 @@ class Entity implements ITrace
         }else{
             return array();
         }
-        // Если загружены все подчиенные, то запоминаем их для предотвращения повторных выборок
+        // Установка выбранных подчиенных в свойства объекта
         if ($load && (($cond['select'][0] == 'children' && $cond['depth'][1] == 1) || $cond['select'][0] == 'tree')
             && empty($cond['select'][1]) && $cond['depth'][0] == 1)
         {
@@ -1167,7 +1153,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Список выгруженных подчиненных
+     * Список выгруженных подчиненных (свойства объекта)
      * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
      * @return array Массив подчененных
      */
@@ -1499,7 +1485,7 @@ class Entity implements ITrace
         if ($proto == 'all') return true;
         if (!$proto instanceof Entity){
             if ($proto == $this->uri() || $proto == $this->id()) return true;
-            $proto = Data::read($proto);
+            $proto = Data::read($proto.'&comment=read proto for check is');
         }
         if ($proto instanceof Entity && $this->isEqual($proto)) return true;
         return ($p = $this->proto()) ? $p->is($proto) : false;
@@ -1520,7 +1506,7 @@ class Entity implements ITrace
         if ($object == 'all') return true;
         if (!$object instanceof Entity){
             if ($object == $this->uri() || $object == $this->id()) return true;
-            $$object = Data::read($object);
+            $object = Data::read($object);
         }
         if ($this->isEqual($object)) return true;
         if (($p = $this->proto()) && $p->of($object)) return true;
@@ -1570,6 +1556,7 @@ class Entity implements ITrace
      * Экпорт объекта в массив и сохранение в файл info в формате JSON
      * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
      * @param bool $save_to_file Признак, сохранять в файл?
+     * @param bool $more_info Признак, экспортировать дополнительную информацию об объекте
      * @return array
      */
     public function export($save_to_file = true, $more_info = false)
@@ -1603,7 +1590,8 @@ class Entity implements ITrace
             $children = $this->find(array(
                 'where' => array(
                     array('attr', 'is_delete', '>=', 0)
-                )
+                ),
+                'comment' => 'read children for export'
             ), false, false);
         }else
         if (!empty($children) && is_array($children)){
@@ -1611,7 +1599,8 @@ class Entity implements ITrace
                 'where' => array(
                     array('attr', 'name', 'in',  $children),
                     array('attr', 'is_delete', '>=', 0)
-                )
+                ),
+                'comment' => 'read children by names for export'
             ), false, false);
         }else{
             $children = array();
@@ -1726,7 +1715,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Значения внутренных свойств объекта для трасировки при отладки
+     * Значения внутренных свойств объекта для трасировки
      * @return array
      */
     public function trace()

@@ -79,7 +79,8 @@ class Auth
                     array('attr', 'is_link', '=', '0')
                 ),
                 'key' => false,
-                'limit' => array(0, 1)
+                'limit' => array(0, 1),
+                'comment' => 'auth user by cookie'
             ), false);
             // Пользователь найден и не истекло время его запоминания
             if (!empty($result)){
