@@ -12,12 +12,12 @@
             "order": 1
         },
         "width": {
-            "value": "259px",
+            "value": "305px",
             "proto": "/Library/content_samples/Image/style/width",
             "order": 2
         },
         "height": {
-            "value": "200px",
+            "value": "229px",
             "proto": "/Library/content_samples/Image/style/height",
             "order": 3
         },
@@ -28,7 +28,7 @@
             "order": 4
         },
         "margin-right": {
-            "value": "0",
+            "value": "auto",
             "proto": "/Library/content_samples/Image/style/margin-right",
             "order": 5
         },
@@ -39,7 +39,7 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0",
+            "value": "auto",
             "proto": "/Library/content_samples/Image/style/margin-left",
             "order": 7
         },
@@ -50,36 +50,21 @@
             "order": 8
         },
         "padding-left": {
-            "value": "20px",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Image/style/padding-left",
             "order": 9
         },
         "padding-right": {
-            "value": "0px",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Image/style/padding-right",
             "order": 10
-        },
-        "text-indent": {
-            "value": "0px",
-            "proto": "/Library/content_samples/Image/style/text-indent",
-            "order": 11
-        },
-        "description": {
-            "is_default_value": true,
-            "value": "Для оформления одного объекта",
-            "proto": "/Library/content_samples/Image/style/description",
-            "is_hidden": true,
-            "order": 12
         },
         "display": {
             "value": "block",
             "is_default_class": false,
-            "order": 13
-        },
-        "float": {
-            "value": "right",
-            "is_default_class": false,
-            "order": 14
+            "order": 11
         }
     }
 }

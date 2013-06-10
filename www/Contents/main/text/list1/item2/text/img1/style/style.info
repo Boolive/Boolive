@@ -76,7 +76,8 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/Image/style/description",
             "is_hidden": true,
-            "order": 12
+            "is_delete": true,
+            "order": 13
         }
     }
 }

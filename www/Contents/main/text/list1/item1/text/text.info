@@ -8,7 +8,8 @@
             "value": "Форматированный текст",
             "proto": "/Library/content_samples/RichText/title",
             "is_hidden": true,
-            "order": 3
+            "is_delete": true,
+            "order": 4
         }
     }
 }

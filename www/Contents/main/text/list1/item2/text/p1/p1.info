@@ -1,6 +1,7 @@
 {
     "value": "Ля-ля-ля, ля-ля-ля!",
     "proto": "/Library/content_samples/paragraphs/P",
+    "is_delete": true,
     "order": 2,
     "children": {
         "title": {

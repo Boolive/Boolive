@@ -4,5 +4,6 @@
     "is_file": true,
     "proto": "/Library/content_widgets/TitleView",
     "is_link": true,
+    "is_delete": true,
     "order": 4
 }

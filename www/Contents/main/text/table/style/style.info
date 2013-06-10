@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/tables/Table/style",
+    "is_delete": true,
     "order": 4,
     "children": {
         "title": {
@@ -73,14 +74,16 @@
         },
         "border": {
             "value": "1px solid #000",
-            "order": 12
+            "is_delete": true,
+            "order": 14
         },
         "description": {
             "is_default_value": true,
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/tables/Table/style/description",
             "is_hidden": true,
-            "order": 13
+            "is_delete": true,
+            "order": 15
         }
     }
 }

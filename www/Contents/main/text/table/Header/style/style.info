@@ -1,6 +1,7 @@
 {
     "value": "",
     "proto": "/Library/content_samples/tables/Table/Header/style",
+    "is_delete": true,
     "order": 3,
     "children": {
         "width": {

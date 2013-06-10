@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/tables/Cell/richtext",
+    "is_delete": true,
     "order": 1,
     "children": {
         "title": {

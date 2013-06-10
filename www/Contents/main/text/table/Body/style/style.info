@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/tables/Table/Body/style",
+    "is_delete": true,
     "order": 2,
     "children": {
         "title": {
@@ -11,72 +12,83 @@
             "is_hidden": true,
             "order": 1
         },
-        "width": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/width",
-            "order": 2
-        },
-        "height": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/height",
-            "order": 3
-        },
-        "margin-top": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/margin-top",
-            "order": 4
-        },
-        "margin-right": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/margin-right",
-            "order": 5
-        },
-        "margin-bottom": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/margin-bottom",
-            "order": 6
-        },
-        "margin-left": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/margin-left",
-            "order": 7
-        },
-        "text-align": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/text-align",
-            "order": 8
-        },
-        "padding-left": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/padding-left",
-            "order": 9
-        },
-        "padding-right": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/padding-right",
-            "order": 10
-        },
-        "text-indent": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Table/Body/style/text-indent",
-            "order": 11
-        },
         "description": {
             "is_default_value": true,
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/tables/Table/Body/style/description",
             "is_hidden": true,
-            "order": 12
+            "is_delete": true,
+            "order": 13
+        },
+        "height": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/height",
+            "is_delete": true,
+            "order": 14
+        },
+        "margin-bottom": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/margin-bottom",
+            "is_delete": true,
+            "order": 15
+        },
+        "margin-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/margin-left",
+            "is_delete": true,
+            "order": 16
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/margin-right",
+            "is_delete": true,
+            "order": 17
+        },
+        "margin-top": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/margin-top",
+            "is_delete": true,
+            "order": 18
+        },
+        "padding-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/padding-left",
+            "is_delete": true,
+            "order": 19
+        },
+        "padding-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/padding-right",
+            "is_delete": true,
+            "order": 20
+        },
+        "text-align": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/text-align",
+            "is_delete": true,
+            "order": 21
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/text-indent",
+            "is_delete": true,
+            "order": 22
+        },
+        "width": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Table/Body/style/width",
+            "is_delete": true,
+            "order": 23
         }
     }
 }

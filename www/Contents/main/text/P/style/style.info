@@ -4,88 +4,102 @@
     "proto": "/Library/content_samples/paragraphs/P/style",
     "order": 2,
     "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Стиль ",
-            "proto": "/Library/content_samples/paragraphs/P/style/title",
-            "is_hidden": true,
-            "order": 1
-        },
-        "width": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/width",
-            "order": 2
-        },
-        "height": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/height",
-            "order": 3
-        },
-        "margin-top": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/margin-top",
-            "order": 4
-        },
         "description": {
             "is_default_value": true,
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/paragraphs/P/style/description",
             "is_hidden": true,
-            "order": 5
+            "is_delete": true,
+            "order": 17
         },
-        "margin-bottom": {
+        "font-size": {
+            "value": "",
+            "is_default_class": false,
+            "is_delete": true,
+            "order": 18
+        },
+        "height": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/margin-bottom",
-            "order": 6
-        },
-        "text-align": {
-            "value": "left",
-            "proto": "/Library/content_samples/paragraphs/P/style/text-align",
-            "order": 8
-        },
-        "padding-left": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/padding-left",
-            "order": 9
-        },
-        "padding-right": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/paragraphs/P/style/padding-right",
-            "order": 10
+            "proto": "/Library/content_samples/paragraphs/P/style/height",
+            "is_delete": true,
+            "order": 19
         },
         "line-height": {
             "is_default_value": true,
             "value": "normal",
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
-            "order": 12
+            "is_delete": true,
+            "order": 20
+        },
+        "margin-bottom": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/margin-bottom",
+            "is_delete": true,
+            "order": 21
         },
         "margin-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
-            "order": 13
-        },
-        "text-indent": {
-            "value": "0px",
-            "is_default_class": false,
-            "order": 14
+            "is_delete": true,
+            "order": 22
         },
         "margin-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
-            "order": 15
+            "is_delete": true,
+            "order": 23
         },
-        "font-size": {
+        "margin-top": {
+            "is_default_value": true,
             "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/margin-top",
+            "is_delete": true,
+            "order": 24
+        },
+        "padding-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/padding-left",
+            "is_delete": true,
+            "order": 25
+        },
+        "padding-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/padding-right",
+            "is_delete": true,
+            "order": 26
+        },
+        "text-align": {
+            "value": "left",
+            "proto": "/Library/content_samples/paragraphs/P/style/text-align",
+            "is_delete": true,
+            "order": 27
+        },
+        "text-indent": {
+            "value": "0px",
             "is_default_class": false,
-            "order": 16
+            "is_delete": true,
+            "order": 28
+        },
+        "title": {
+            "is_default_value": true,
+            "value": "Стиль ",
+            "proto": "/Library/content_samples/paragraphs/P/style/title",
+            "is_hidden": true,
+            "is_delete": true,
+            "order": 29
+        },
+        "width": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/width",
+            "is_delete": true,
+            "order": 30
         }
     }
 }

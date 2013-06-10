@@ -38,73 +38,82 @@
             "proto": "/Library/content_samples/tables/Cell/style/margin-top",
             "order": 4
         },
-        "margin-right": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Cell/style/margin-right",
-            "order": 5
-        },
         "description": {
             "is_default_value": true,
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/tables/Cell/style/description",
             "is_hidden": true,
-            "order": 6
+            "is_delete": true,
+            "order": 14
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-bottom",
-            "order": 7
-        },
-        "text-align": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Cell/style/text-align",
-            "order": 8
+            "is_delete": true,
+            "order": 15
         },
         "margin-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-left",
-            "order": 9
+            "is_delete": true,
+            "order": 16
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/margin-right",
+            "is_delete": true,
+            "order": 17
         },
         "padding-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/padding-left",
-            "order": 10
-        },
-        "text-indent": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/content_samples/tables/Cell/style/text-indent",
-            "order": 11
+            "is_delete": true,
+            "order": 18
         },
         "padding-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/padding-right",
-            "order": 12
+            "is_delete": true,
+            "order": 19
+        },
+        "text-align": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/text-align",
+            "is_delete": true,
+            "order": 20
+        },
+        "text-indent": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/tables/Cell/style/text-indent",
+            "is_delete": true,
+            "order": 21
         },
         "width": {
             "value": "123",
             "proto": "/Library/basic/simple/Number",
-            "order": 13,
+            "is_delete": true,
+            "order": 22,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Число",
                     "proto": "/Library/basic/simple/Number/title",
                     "is_hidden": true,
-                    "order": 1
+                    "order": 3
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Числовое значение любой величены",
                     "proto": "/Library/basic/simple/Number/description",
                     "is_hidden": true,
-                    "order": 2
+                    "order": 4
                 }
             }
         }

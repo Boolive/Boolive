@@ -1,6 +1,7 @@
 {
     "value": "Хей-хей-хей! Я - пункт меню!",
     "proto": "/Library/content_samples/paragraphs/P",
+    "is_delete": true,
     "order": 1,
     "children": {
         "title": {
