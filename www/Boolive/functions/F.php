@@ -1,7 +1,7 @@
 <?php
 /**
  * Набор общих функций
- * 
+ *
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */

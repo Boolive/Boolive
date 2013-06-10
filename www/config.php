@@ -5,7 +5,7 @@
  */
 
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', true);
+define('IS_INSTALL', false);
 
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
@@ -24,13 +24,13 @@ define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
 
-// Адрес сайта, например: boolive.ru
+// Адрес сайта, например: boolive.ru. Значение по умолчанию для CLI режима запуска
 define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_HOST']);
 /** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */
 define('TIMESTAMP', '1');
 
 /* Признак, выводить всю трассировку?*/
-define('GLOBAL_TRACE', true);
+define('GLOBAL_TRACE', false);
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
 /**

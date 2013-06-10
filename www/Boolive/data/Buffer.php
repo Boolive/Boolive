@@ -17,10 +17,12 @@ class Buffer
     /**
      * Выбор результата выборки из буфера
      * @param $cond Условие выборки
+     * @param bool $check_exists Признак, проверять существование объекта в буфере родителя?
      * @return mixed|null Результат выборки или null, если результата нет в буфере
      */
     static function get($cond, $check_exists = true)
     {
+        if (empty($cond['access'])) $cond['access'] = true;
         $result = null;
         // Ключ буфера из условия выборки.
         $buffer_cond = $cond;
@@ -39,7 +41,7 @@ class Buffer
                 $result = $list;
             }
         }else
-        // Если есть буфер выборки подчиенных, в которых должен оказаться искомый объект,
+        // Если есть буфер выборки подчиненных, в которых должен оказаться искомый объект,
         // то проверяем его наличие в буфере
         if ($check_exists && $cond['select'][0] == 'self' && (is_scalar($cond['from']) && !Data::isShortUri($cond['from']))){
             $names = F::splitRight('/', $cond['from'], true);
@@ -72,7 +74,17 @@ class Buffer
     {
         $key = empty($cond['key'])?false:$cond['key'];
         if (!empty($cond['key'])) $cond['key'] = false;
-
+        if (empty($cond['access'])) $cond['access'] = true;
+        // Группа результатов
+        if (is_array($cond['from'])){
+            self::$list[json_encode($cond)] = $result;
+            if (empty($cond['limit'])){
+                foreach ($result as $key => $group){
+                    $cond['from'] = $key;
+                    self::set($group, $cond);
+                }
+            }
+        }else
         // ветка объектов
         if ($cond['select'][0] == 'tree' && empty($cond['select'][1]) && empty($cond['limit'])){
             self::setTree($result, $cond, $key, Data::read($cond['from'].'&comment=buffer tree', !empty($cond['access'])));
@@ -85,7 +97,7 @@ class Buffer
             if ($result->isExist()){
                 // Если объект существует, то дополнительно ключ id
                 $cond['from'] = $result->id();
-                self::$list[json_encode($cond)] = $result;
+                if (!isset(self::$list[$bkey = json_encode($cond)])) self::$list[$bkey] = $result;
             }
         }else{
             // массив объектов
@@ -103,8 +115,8 @@ class Buffer
 
     /**
      * Запись списка объектов в буфер
-     * @param $objects
-     * @param $cond
+     * @param array $objects Список объектов
+     * @param array $cond Услвоие, которым выбраны объекты
      */
     private static function setList($objects, $cond)
     {
@@ -117,55 +129,57 @@ class Buffer
             if (!empty($ocond['order'])) $ocond['order'] = false;
             foreach ($objects as $obj){
                 $ocond['from'] = $obj->id();
-                self::$list[json_encode($ocond)] = $obj;
+                if (!isset(self::$list[$key = json_encode($ocond)])) self::$list[$key] = $obj;
                 $ocond['from'] = $obj->uri();
-                self::$list[json_encode($ocond)] = $obj;
+                if (!isset(self::$list[$key = json_encode($ocond)])) self::$list[$key] = $obj;
             }
         }
     }
 
     /**
      * Запись в буфер дерева объектов
-     * @param $objects
-     * @param $cond
+     * @param array $objects Объект или список объектов
+     * @param array $cond Услвоие, которым выбраны объекты
      * @param $key
      * @param $from
      */
     private static function setTree($objects, $cond, $key, $from)
     {
+        $id = $from->id();
+        $uri = $from->uri();
         if ($objects instanceof Entity){
             // бефер дерева с глубиной от 0
             $cond['depth'][0] = 0;
-            $cond['from'] = $from->id();
-            self::$list[json_encode($cond)] = $objects;
-            $cond['from'] = $from->uri();
-            self::$list[json_encode($cond)] =  $objects;
+            $cond['from'] = $id;
+            if (!isset(self::$list[$bkey = json_encode($cond)])) self::$list[$bkey] = $objects;
+            $cond['from'] = $uri;
+            if (!isset(self::$list[$bkey = json_encode($cond)])) self::$list[$bkey] = $objects;
             $ocond = $cond;
             $ocond['select'] = array('self');
             $ocond['depth'] = array(0,0);
             $ocond['where'] = false;
             if (!empty($ocond['limit'])) $ocond['limit'] = false;
             if (!empty($ocond['order'])) $ocond['order'] = false;
-            self::$list[json_encode($ocond)] = $objects;
-            $ocond['from'] = $from->id();
-            self::$list[json_encode($ocond)] = $objects;
+            if (!isset(self::$list[$bkey = json_encode($ocond)])) self::$list[$bkey] = $objects;
+            $ocond['from'] = $id;
+            if (!isset(self::$list[$bkey = json_encode($ocond)])) self::$list[$bkey] = $objects;
             $objects = $objects->children($key);
             $cond['depth'][0] = 1;
         }
         if ($cond['depth'][1]>=1){
             // Буфер списка с глубиной от 1
             $ocond = $cond;
-            $ocond['from'] = $from->id();
+            $ocond['from'] = $id;
             $ocond['select'] = array('children');
             $ocond['depth'] = array(1,1);
             self::$list[json_encode($ocond)] = $objects;
-            $ocond['from'] = $from->uri();
+            $ocond['from'] = $uri;
             self::$list[json_encode($ocond)] = $objects;
             unset($ocond);
             // Буфер дерева с глубиной от 1
-            $cond['from'] = $from->id();
+            $cond['from'] = $id;
             self::$list[json_encode($cond)] = $objects;
-            $cond['from'] = $from->uri();
+            $cond['from'] = $uri;
             self::$list[json_encode($cond)] = $objects;
             // Если конечная глубина больше 1, то буфер подветки
             foreach ($objects as $obj){

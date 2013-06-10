@@ -108,7 +108,7 @@ class Data
      * г) массив со значенями указанного атрибута найденных объектов
      * д) значение указанного атриубта объекта
      */
-    static function read($cond = '', $access = true, $use_cache = true, $index = true)
+    static function read($cond = '', $access = true, $use_cache = true, $index = true, $only_cache = false)
     {
         if ($cond == Entity::ENTITY_ID){
             return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
@@ -126,26 +126,50 @@ class Data
             $comment = 'no comment';
         }
         // Из буфера
-        $result = Buffer::get($cond);
-        if (isset($result)){
-            if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER')->group($comment)->group()->set(F::toJSON($cond, false));
+        if ($use_cache){
+            $result = Buffer::get($cond);
+            if (isset($result)){
+                if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER')->group($comment)->group()->set(F::toJSON($cond, false));
+                return $result;
+            }
+        }
+        if (!$only_cache){
+            // Попытка сгруппировать выборку с возможными будущими подобными выборками
+
+//            if (is_string($cond['from'])){
+//                $from_info = Data::parseUri($cond['from']);
+//                if (empty($from_info['id'])){
+//                    $parent = F::splitRight('/', $cond['from']);
+//                    $parent = $parent[0];
+//                }else
+//                if (empty($from_info['path'])){
+//                    if ($obj = Data::read($from_info['path'], false, true, false, true)){
+//                        $parent = $obj->parent()
+//                    }
+//                }
+//                if (!empty($from_info['path']) && mb_substr_count($from_info['path'], '/')==1){
+//                    $parent = $from_info['store'].$from_info['dslash'].$from_info['id'];
+//                }
+//                if (isset($parent) && $parent = Data::read($parent, false, true, false, true)){
+//                    $a = 10;
+//                    Trace::groups('Data')->group('group_count')->group()->set(F::toJSON($cond, false));
+//                }
+//            }
+
+
+            // Определение хранилища по URI
+            if ($store = self::getStore($cond['from'])){
+                // Выбор объекта
+                $result = $store->read($cond, $index);
+            }else{
+                $result = null;
+            }
+            // В буфер
+            if ($use_cache) Buffer::set($result, $cond);
+            if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->group()->set(F::toJSON($cond, false));
             return $result;
         }
-        // Определение хранилища по URI
-        if ($store = self::getStore($cond['from'])){
-            // Выбор объекта
-            $result = $store->read($cond, $index);
-        }else{
-            $result = null;
-        }
-        if (PROFILE_DATA && $cond['select'][0] == 'self' && (empty($result) || !$result->isExist())){
-            Trace::groups('Data')->group('FROM STORE')->group('not_exists')->group()->set(F::toJSON($cond, false));
-        }
-        // В буфер
-        if ($use_cache) Buffer::set($result, $cond);
-        if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->/*group(F::toJSON($cond['where'], false))->*/group()->set(F::toJSON($cond, false));
-
-        return $result;
+        return null;
     }
 
     /**
@@ -264,7 +288,6 @@ class Data
                 $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
                 // Все значения вкавычки
                 $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
-                            //trace($m);
                             $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
                             $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
                             return $m[1].'"'.str_replace($escapers, $replacements, $m[2]).'"';
@@ -380,17 +403,14 @@ class Data
         if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
         // Нормализация from
         if (!isset($result['from'])){
-            $result['from'] = array('');
+            $result['from'] = array(null);
         }else
         if (!is_array($result['from']) || (sizeof($result['from'])==2 && $result['from'][0] instanceof Entity && is_string($result['from'][1]))){
             $result['from'] = array($result['from']);
         }
         foreach ($result['from'] as $i => $f){
-            if (!isset($f)){
-                $result['from'][$i] = '';
-            }else
             if ($f instanceof Entity){
-                $result['from'][$i] = $f->key();
+                $result['from'][$i] = $f->id();
             }else
             if (is_array($f)){
                 // Если from[0] сущность, а from[1] строка
@@ -402,34 +422,6 @@ class Data
             }
         }
         if (sizeof($result['from'])==1) $result['from'] = $result['from'][0];
-
-
-//        if (!isset($result['from'])){
-//            $result['from'] = '';
-//        }else
-//        if ($result['from'] instanceof Entity){
-//            $result['from'] = $result['from']->key();
-//        }else
-//        if (is_array($result['from'])){
-//            // Если from[0] сущность, а from[1] строка
-//            if (sizeof($result['from'])==2 && $result['from'][0] instanceof Entity && is_string($result['from'][1])){
-//                // Если глубина больше 0 или from[1] путь (не имя) или from[0] не существует,
-//                // тогда from заменяется на uri
-////                if ($result['from'][0]->isExist() && mb_substr_count($result['from'][1],'/')==0 && ($result['select'][0] == 'self')){
-////                    $result['from'] = $result['from'][0]->key().'/'.$result['from'][1];
-////                }else{
-//                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
-////                }
-////                    && $result['depth'][0] == 1)
-//                //if ($result['depth'][1]>0 || mb_substr_count($result['from'][1],'/')>0 || !$result['from'][0]->isExist()){
-//
-////                }else{
-////                    $result['from'] = $result['from'][0]->key().'/'.$result['from'][1];
-////                }
-//            }else{
-//                $result['from'] = '';
-//            }
-//        }
         // limit
         if ($result['select'][0] == 'exists'){
             $result['limit'] = array(0,1);
@@ -525,6 +517,15 @@ class Data
 
     /**
      * Информация о URI
+     * <pre>
+     * array(
+     *     'uri' => '',
+     *     'store' => '',
+     *     'dslash' => '//',
+     *     'id' => 1,
+     *     'path' => ''
+     * );
+     * </pre>
      * @param $uri
      * @return array|bool
      */
@@ -536,7 +537,7 @@ class Data
                 'uri' => $match[0],
                 'store' => $match[1],
                 'dslash' => $match[2],
-                'id' => $match[3],
+                'id' => intval($match[3]),
                 'path' => $match[4]
             );
         }
@@ -548,12 +549,15 @@ class Data
      * Если да, то возвращается информация о URI, иначе false
      * Сокращенные URI используются в хранилищах для более оптимального хранения и поиска объектов
      * @param $uri Проверяемый URI
+     * @param bool $only_id Признак, считать uri коротким, если в нём нет пути, только числововй идентификатор
      * @return array|bool
      */
-    static function isShortUri($uri)
+    static function isShortUri($uri, $only_id = false)
     {
         $info = self::parseUri($uri);
-        return !empty($info['id'])? $info : false;
+        $short = !empty($info['id'])? $info : false;
+        if ($short && $only_id && !empty($info['path'])) $short = false;
+        return $short;
     }
 
     /**
@@ -573,58 +577,6 @@ class Data
             }
         }
         return null;
-    }
-
-    static function makeObject($attribs)
-    {
-        $cond = array(
-            'from' => $attribs['id'],
-            'select' => array('self'),
-            'depth' => array(0,0),
-            'key' => false,
-            'where' => false,
-            'owner' => $attribs['owner'],
-            'lang' => $attribs['lang'],
-            'order' => false,
-            'limit' => false,
-            'access' => true,
-            'correct' => true
-        );
-        if ($obj = Buffer::get($cond, false)) return $obj;
-
-        if (isset($attribs['uri'])){
-            // Свой класс
-            if (empty($attribs['is_default_class'])){
-                try{
-                    // Имеется свой класс?
-                    if ($attribs['uri']===''){
-                        $class = 'Site';
-                    }else{
-                        $names = F::splitRight('/', $attribs['uri'], true);
-                        $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
-                    }
-                    return new $class($attribs);
-                }catch(\Exception $e){
-                    // Если файл не найден, то будет использоваться класс прототипа или Entity
-                    if ($e->getCode() == 2){
-                        if ($attribs['proto'] && ($proto = Data::read($attribs['proto'].'&comment=read proto to use his class', false))){
-                            // Класс прототипа
-                            $class = get_class($proto);
-                            return new $class($attribs);
-                        }
-                    }else{
-                        throw $e;
-                    }
-                }
-            }else
-            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
-                $proto = Data::read($attribs['is_default_class'].'&comment=read is_default_class to makeObject', false);
-                $class = get_class($proto);
-                return new $class($attribs);
-            }
-        }
-        // Базовый класс
-        return new Entity($attribs);
     }
 
     /**
@@ -650,8 +602,8 @@ class Data
 		$file = DIR_SERVER.self::CONFIG_FILE_STORES;
 		if (file_exists($file)){
 			include $file;
-			if (isset($config) && is_array($config[''])){
-				$config = $config[''];
+			if (isset($stores) && is_array($stores[''])){
+				$config = $stores[''];
 			}
 		}
         if (empty($config)){

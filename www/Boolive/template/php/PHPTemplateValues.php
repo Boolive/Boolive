@@ -2,7 +2,7 @@
 /**
  * Значения, передаваемые в php-шаблон.
  *
- * @example 
+ * @example
  * Пример использования:
  *  $v = new TemplatePHPValues();
  *  $v[0] = 'A&B';
