@@ -118,13 +118,15 @@ class Explorer extends AutoWidgetList
         } else {
             $cond['where'][] = array('any', $any);
         }
+        $cond['group'] = true;
         return parent::getList($cond);
     }
 
     /**
      * Устанавливает новый порядок объектов
      */
-    protected function callSaveOrder($object, $next){
+    protected function callSaveOrder($object, $next)
+    {
         $obj = \Boolive\data\Data::read($object['uri']);
         if (!empty($next)) {
             $next_object = \Boolive\data\Data::read($next['uri']);

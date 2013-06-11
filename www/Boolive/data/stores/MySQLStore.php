@@ -66,7 +66,7 @@ class MySQLStore extends Entity
                     }
                 }
             }
-            $multy_from = $cond['from'];
+            $multy_from = array_combine($cond['from'], $cond['from']);
             $group_result = array_fill_keys($cond['from'], $fill);
         }else{
             $multy_from = array($cond['from']);
@@ -136,6 +136,7 @@ class MySQLStore extends Entity
                 if (isset($row['id'])){
                     unset($row['id2']);
                     $group_result[$key] = $this->makeObject($row);
+                    $group_result[$key]->cond($cond);
                 }else{
                     if (isset($row['id2'])){
                         $group_result[$key] = new Entity(array(
@@ -155,6 +156,7 @@ class MySQLStore extends Entity
                     $obj = $row[$cond['select'][1]];
                 }else{
                     $obj = $this->makeObject($row);
+                    $obj->cond($cond);
                 }
                 // Если выборка дерева, то в результате будут объекты начальной глубины
                 if (!isset($tree_list[$key]) ||
@@ -192,6 +194,7 @@ class MySQLStore extends Entity
             foreach ($group_result as $key => $obj){
                 if (!isset($obj)){
                     $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
+                    $obj->cond($cond);
                     $uri = ($key===0)? $cond['from'] : $key;
                     if (!Data::isShortUri($uri)){
                         $names = F::splitRight('/', $uri, true);
@@ -1793,7 +1796,8 @@ class MySQLStore extends Entity
 	 * Проверка системных требований для установки класса
 	 * @return array
 	 */
-	static function systemRequirements(){
+	static function systemRequirements()
+    {
 		$requirements = array();
 		if (!extension_loaded('pdo') || !extension_loaded('pdo_mysql')){
 			$requirements[] = 'Требуется расширение <code>pdo_mysql</code> для PHP';

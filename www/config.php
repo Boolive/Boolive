@@ -5,7 +5,7 @@
  */
 
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', false);
+define('IS_INSTALL', true);
 
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
@@ -30,14 +30,15 @@ define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_H
 define('TIMESTAMP', '1');
 
 /* Признак, выводить всю трассировку?*/
-define('GLOBAL_TRACE', false);
+define('GLOBAL_TRACE', true);
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
 /**
  * Определение корневой директории сервера
  * @return string
  */
-function get_root_dir(){
+function get_root_dir()
+{
     if (empty($_SERVER['DOCUMENT_ROOT'])){
         // Если переменной окружения нет, то вычисляем из пути на исполняемый файл
         $_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
@@ -49,7 +50,8 @@ function get_root_dir(){
  * Определение корневой директории относительно домена сайта
  * @return string
  */
-function get_web_dir(){
+function get_web_dir()
+{
     preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)index\.php$|', $_SERVER['SCRIPT_FILENAME'], $find);
     if ($find[1] == null) {
         $find[1] = "/";

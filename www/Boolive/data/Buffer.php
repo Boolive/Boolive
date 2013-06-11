@@ -87,7 +87,9 @@ class Buffer
         }else
         // ветка объектов
         if ($cond['select'][0] == 'tree' && empty($cond['select'][1]) && empty($cond['limit'])){
-            self::setTree($result, $cond, $key, Data::read($cond['from'].'&comment=buffer tree', !empty($cond['access'])));
+            $list_key = $cond;
+            $list_key['select'][0] = 'children';
+            self::setTree($result, $cond, $key, Data::read($cond['from'].'&comment=buffer tree', !empty($cond['access'])), json_encode($list_key));
         }else
         // один объект
         if ($result instanceof Entity){
@@ -142,12 +144,15 @@ class Buffer
      * @param array $cond Услвоие, которым выбраны объекты
      * @param $key
      * @param $from
+     * @param null|string $listkey
      */
-    private static function setTree($objects, $cond, $key, $from)
+    private static function setTree($objects, $cond, $key, $from, $listkey = null)
     {
         $id = $from->id();
         $uri = $from->uri();
         if ($objects instanceof Entity){
+            // буфер всего дерева в виде списка
+            if ($listkey) self::$list[$listkey][] = $objects;
             // бефер дерева с глубиной от 0
             $cond['depth'][0] = 0;
             $cond['from'] = $id;
@@ -165,6 +170,7 @@ class Buffer
             if (!isset(self::$list[$bkey = json_encode($ocond)])) self::$list[$bkey] = $objects;
             $objects = $objects->children($key);
             $cond['depth'][0] = 1;
+
         }
         if ($cond['depth'][1]>=1){
             // Буфер списка с глубиной от 1
@@ -184,7 +190,7 @@ class Buffer
             // Если конечная глубина больше 1, то буфер подветки
             foreach ($objects as $obj){
                 if ($cond['depth'][1] != Entity::MAX_DEPTH) $cond['depth'] = array(0, $cond['depth'][1]-1);
-                self::setTree($obj, $cond, $key, $obj);
+                self::setTree($obj, $cond, $key, $obj, $listkey);
             }
         }
     }

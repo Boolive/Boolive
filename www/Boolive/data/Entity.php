@@ -75,6 +75,8 @@ class Entity implements ITrace
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
     protected $_checked = false;
+    /** @var  string Условие, которым был выбран объект */
+    protected $_cond = null;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -1155,22 +1157,35 @@ class Entity implements ITrace
     /**
      * Список выгруженных подчиненных (свойства объекта)
      * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
+     * @param array $depth Глубина подчиенных. По умолчанию
      * @return array Массив подчененных
      */
-    public function children($key = 'name')
+    public function children($key = 'name', $depth = array(1,1))
     {
-        if ($key === 'name'){
-            return $this->_children;
-        }else
-        if (empty($key)){
-            return array_values($this->_children);
-        }else{
-            $result = array();
-            foreach ($this->_children as $child){
-                $result[$child->_attribs[$key]];
+        $result = array();
+        if ($depth[0] == 1){
+            if ($key === 'name'){
+                $result = $this->_children;
+            }else
+            if (empty($key)){
+                $result = array_values($this->_children);
+            }else{
+                foreach ($this->_children as $child){
+                    $result[$child->_attribs[$key]];
+                }
             }
-            return $result;
         }
+        if ($depth[0] == 0){
+            array_unshift($result, $this);
+        }
+        if ($depth[1] > 1){
+            $depth[0]--;
+            $depth[1]--;
+            foreach ($this->_children as $child){
+                $result = array_merge($result, $child->children($key, $depth));
+            }
+        }
+        return $result;
     }
 
     #################################################
@@ -1678,6 +1693,21 @@ class Entity implements ITrace
                 $this->{$name}->import($child);
             }
         }
+    }
+
+    /**
+     * Условие, которым выбран объект
+     * Устанавливается хранилищем после выборки объекта
+     * Может быть не установленным
+     * @param mixed $cond
+     * @return mixed
+     */
+    public function cond($cond = null)
+    {
+        if (isset($cond)){
+            $this->_cond = $cond;
+        }
+        return $this->_cond;
     }
 
     /**

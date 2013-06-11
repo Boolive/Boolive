@@ -23,7 +23,8 @@ class Part extends AutoWidgetList
         );
     }
 
-    protected function getList($cond = array()){
+    protected function getList($cond = array())
+    {
         $obj = $this->_input['REQUEST']['object'];
         $count_per_page = max(1, $this->count_per_page->value());
         $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count'))/$count_per_page);
@@ -32,7 +33,8 @@ class Part extends AutoWidgetList
             'limit' => array(
                 ($this->_input['REQUEST']['page'] - 1) * $count_per_page,
                 $count_per_page
-            )
+            ),
+            'group' => true
         );
         return parent::getList($cond);
     }
