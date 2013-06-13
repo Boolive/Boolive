@@ -65,7 +65,7 @@ class SwitchCase extends View
         }
         $view = reset($views);
         while ($view){
-            if ($v['view'] = $view->linked()->start($this->_commands, $this->_input_child)){
+            if ($v['view'] = $view->start($this->_commands, $this->_input_child)){
                 $this->_input_child['previous'] = true;
                 return $v['view'];
             }
@@ -78,7 +78,13 @@ class SwitchCase extends View
     {
         if (!isset($this->_views)){
             $this->_views = $this->find(array('key'=>'name', 'comment' => 'read views in SwitchCase'));
-            unset($this->_views['title'], $this->_views['description']);
+            foreach ($this->_views as $key => $view){
+                $this->_views[$key] = $view->linked();
+                if (!$this->_views[$key] instanceof View){
+                    unset($this->_views[$key]);
+                }
+            }
+            //unset($this->_views['title'], $this->_views['description']);
         }
         return $this->_views;
     }
