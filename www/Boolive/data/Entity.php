@@ -1484,10 +1484,13 @@ class Entity implements ITrace
      */
     public function in($parent)
     {
-        if (!$parent instanceof Entity){
-            $parent = Data::read($parent);
+        if ($parent instanceof Entity){
+            $parent = $parent->uri();
+        }else
+        if (Data::isShortUri($parent)){
+            $parent = Data::read($parent)->uri();
         }
-        return $parent->uri().'/' == mb_substr($this->uri(),0,mb_strlen($parent->uri())+1);
+        return $parent.'/' == mb_substr($this->uri(),0,mb_strlen($parent)+1);
     }
 
     /**
@@ -1498,11 +1501,7 @@ class Entity implements ITrace
     public function is($proto)
     {
         if ($proto == 'all') return true;
-        if (!$proto instanceof Entity){
-            if ($proto == $this->uri() || $proto == $this->id()) return true;
-            $proto = Data::read($proto.'&comment=read proto for check is');
-        }
-        if ($proto instanceof Entity && $this->isEqual($proto)) return true;
+        if ($this->isEqual($proto)) return true;
         return ($p = $this->proto()) ? $p->is($proto) : false;
     }
 
@@ -1519,10 +1518,6 @@ class Entity implements ITrace
     public function of($object)
     {
         if ($object == 'all') return true;
-        if (!$object instanceof Entity){
-            if ($object == $this->uri() || $object == $this->id()) return true;
-            $object = Data::read($object);
-        }
         if ($this->isEqual($object)) return true;
         if (($p = $this->proto()) && $p->of($object)) return true;
         return ($p = $this->parent()) ? $p->of($object) : false;
@@ -1535,13 +1530,13 @@ class Entity implements ITrace
      */
     public function isEqual($entity)
     {
-        if (!$entity instanceof Entity){
-            return false;
-        }
-        return $this->key() == $entity->key()/* &&
+        if ($entity instanceof Entity){
+            return $this->key() == $entity->key() &&
                $this->_attribs['owner'] == $entity->_attribs['owner'] &&
-               $this->_attribs['lang'] == $entity->_attribs['lang'] &&
+               $this->_attribs['lang'] == $entity->_attribs['lang']/* &&
                $this->date() == $entity->date()*/;
+        }
+        return $this->_attribs['id'] == $entity || $this->uri() == $entity;
     }
 
     /**
