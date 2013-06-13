@@ -82,7 +82,6 @@
         },
         "float": {
             "value": "none",
-            "is_default_class": false,
             "order": 14
         }
     }

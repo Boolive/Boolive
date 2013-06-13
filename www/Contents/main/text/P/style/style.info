@@ -14,7 +14,6 @@
         },
         "font-size": {
             "value": "",
-            "is_default_class": false,
             "is_delete": true,
             "order": 18
         },
@@ -82,7 +81,6 @@
         },
         "text-indent": {
             "value": "0px",
-            "is_default_class": false,
             "is_delete": true,
             "order": 28
         },
