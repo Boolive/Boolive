@@ -94,13 +94,15 @@ class Buffer
         // один объект
         if ($result instanceof Entity){
             // Ключ uri
-            $cond['from'] = $result->uri();
-            self::$list[json_encode($cond)] = $result;
-            if ($result->isExist()){
-                // Если объект существует, то дополнительно ключ id
-                $cond['from'] = $result->id();
-                if (!isset(self::$list[$bkey = json_encode($cond)])) self::$list[$bkey] = $result;
-            }
+            //if ($result->isExist()){
+                $cond['from'] = $result->uri();
+                self::$list[json_encode($cond)] = $result;
+                if ($result->isExist()){
+                    // Если объект существует, то дополнительно ключ id
+                    $cond['from'] = $result->id();
+                    /*if (!isset(self::$list[$bkey = json_encode($cond)])) */self::$list[$bkey = json_encode($cond)] = $result;
+                }
+            //}
         }else{
             // массив объектов
             if ($key!='name' && $cond['select'][0] == 'children' && empty($cond['select'][1]) && $cond['depth'][0]==1 && $cond['depth'][1] == 1){
@@ -131,9 +133,9 @@ class Buffer
             if (!empty($ocond['order'])) $ocond['order'] = false;
             foreach ($objects as $obj){
                 $ocond['from'] = $obj->id();
-                if (!isset(self::$list[$key = json_encode($ocond)])) self::$list[$key] = $obj;
+                /*if (!isset(self::$list[$key = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $obj;
                 $ocond['from'] = $obj->uri();
-                if (!isset(self::$list[$key = json_encode($ocond)])) self::$list[$key] = $obj;
+                /*if (!isset(self::$list[$key = json_encode($ocond)]))*/ self::$list[json_encode($ocond)] = $obj;
             }
         }
     }
@@ -156,18 +158,18 @@ class Buffer
             // бефер дерева с глубиной от 0
             $cond['depth'][0] = 0;
             $cond['from'] = $id;
-            if (!isset(self::$list[$bkey = json_encode($cond)])) self::$list[$bkey] = $objects;
+            /*if (!isset(self::$list[$bkey = json_encode($cond)])) */self::$list[json_encode($cond)] = $objects;
             $cond['from'] = $uri;
-            if (!isset(self::$list[$bkey = json_encode($cond)])) self::$list[$bkey] = $objects;
+            /*if (!isset(self::$list[$bkey = json_encode($cond)])) */self::$list[json_encode($cond)] = $objects;
             $ocond = $cond;
             $ocond['select'] = array('self');
             $ocond['depth'] = array(0,0);
             $ocond['where'] = false;
             if (!empty($ocond['limit'])) $ocond['limit'] = false;
             if (!empty($ocond['order'])) $ocond['order'] = false;
-            if (!isset(self::$list[$bkey = json_encode($ocond)])) self::$list[$bkey] = $objects;
+            /*if (!isset(self::$list[$bkey = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $objects;
             $ocond['from'] = $id;
-            if (!isset(self::$list[$bkey = json_encode($ocond)])) self::$list[$bkey] = $objects;
+            /*if (!isset(self::$list[$bkey = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $objects;
             $objects = $objects->children($key);
             $cond['depth'][0] = 1;
 

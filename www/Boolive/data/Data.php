@@ -168,25 +168,49 @@ class Data
                             if (sizeof($list)>1){
                                 $key_from_group = $cond['from'];
                                 $cond['from'] = array();
-                                foreach ($list as $parent){
-                                    $cond['from'][] = $parent->attr($parent_key).'/'.$select[1];
-                                }
+                                $makefrom = function(&$cond, $list, $parent_key, $name) use (&$makefrom){
+                                    foreach ($list as $from){
+                                        if (is_array($from)){
+                                            $makefrom($cond, $from, $parent_key, $name);
+                                        }else{
+                                            $cond['from'][] = $from->attr($parent_key).'/'.$name;
+                                        }
+                                    }
+                                };
+                                $makefrom($cond, $list, $parent_key, $select[1]);
                             }
                         }
                     }
                 }else{
                     // Группировка по объектам, выбранных ранее вместе с текущим from
                     if ($from = Data::read($cond['from'], false, true, false, true)){
-                        if (($from_cond = $from->cond()) && $from_cond['select'][0]!='self' && isset(self::$group_cond[json_encode($from_cond)])){
+                        if (($from_cond = $from->cond()) && ($from_cond['select'][0]!='self' || is_array($from_cond['from'])) && isset(self::$group_cond[json_encode($from_cond)])){
                             if ($from_cond['select'][0] == 'tree') $from_cond['select'][0] = 'children';
                             $list = Buffer::get($from_cond);
                             if (sizeof($list)>1){
                                 $key_from_group = $from->id();
                                 $cond['from'] = array();
-                                foreach ($list as $from){
-                                    $cond['from'][] = $from->id();
-                                }
+                                $makefrom = function(&$cond, $list) use (&$makefrom){
+                                    foreach ($list as $from){
+                                        if (is_array($from)){
+                                            $makefrom($cond, $from);
+                                        }else{
+                                            $cond['from'][] = $from->id();
+                                        }
+                                    }
+                                };
+                                $makefrom($cond, $list);
                             }
+                        }
+                    }
+                }
+                if (isset($key_from_group)){
+                    self::$group_cond[json_encode($cond)] = true;
+                    // Из буфера групповую выборку
+                    if ($use_cache){
+                        $result = Buffer::get($cond);
+                        if (isset($result[$key_from_group])){
+                            return $result[$key_from_group];
                         }
                     }
                 }
