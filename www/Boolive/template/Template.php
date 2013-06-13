@@ -15,7 +15,7 @@ use Boolive\errors\Error,
 class Template
 {
     /** @const  Файл с ассоциациями расширений файлов на шаблонизаторы */
-    const CONFIG_FILE = 'config.templates.php';
+    const CONFIG_FILE = 'config.template.php';
     /** @var array Массив названий классов шаблонизаторов */
     static private $engines;
 

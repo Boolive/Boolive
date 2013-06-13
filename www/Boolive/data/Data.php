@@ -17,7 +17,7 @@ use Boolive\Boolive,
 class Data
 {
     /** @const  Файл конфигурации хранилищ */
-    const CONFIG_FILE_STORES = 'config.stores.php';
+    const CONFIG_FILE = 'config.data.php';
     /** @var array Конфигурация хранилищ */
     private static $config_stores;
     /** @var array Экземпляры хранилищ */
@@ -28,7 +28,7 @@ class Data
     static function activate()
     {
         // Конфиг хранилищ
-        self::$config_stores = F::loadConfig(DIR_SERVER.self::CONFIG_FILE_STORES, 'stores');
+        self::$config_stores = F::loadConfig(DIR_SERVER.self::CONFIG_FILE, 'stores');
     }
 
     /**
@@ -648,11 +648,11 @@ class Data
 	static function systemRequirements()
     {
 		$requirements = array();
-		if (file_exists(DIR_SERVER.self::CONFIG_FILE_STORES) && !is_writable(DIR_SERVER.self::CONFIG_FILE_STORES)){
-			$requirements[] = 'Удалите файл конфигурации базы данных: <code>'.DIR_SERVER.self::CONFIG_FILE_STORES.'</code>';
+		if (file_exists(DIR_SERVER.self::CONFIG_FILE) && !is_writable(DIR_SERVER.self::CONFIG_FILE)){
+			$requirements[] = 'Удалите файл конфигурации базы данных: <code>'.DIR_SERVER.self::CONFIG_FILE.'</code>';
 		}
-		if (!file_exists(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES)){
-			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES.'</code>';
+		if (!file_exists(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE)){
+			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE.'</code>';
 		}
 		return $requirements;
 	}
@@ -663,7 +663,7 @@ class Data
 	 */
 	static function installPrepare()
     {
-		$file = DIR_SERVER.self::CONFIG_FILE_STORES;
+		$file = DIR_SERVER.self::CONFIG_FILE;
 		if (file_exists($file)){
 			include $file;
 			if (isset($stores) && is_array($stores[''])){
@@ -754,9 +754,9 @@ class Data
         \Boolive\data\stores\MySQLStore::createStore($new_config, $errors);
 
         // Создание файла конфигурации из шаблона
-        $content = file_get_contents(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES);
+        $content = file_get_contents(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE);
         $content = F::Parse($content, $new_config, '{', '}');
-        $fp = fopen(DIR_SERVER.self::CONFIG_FILE_STORES, 'w');
+        $fp = fopen(DIR_SERVER.self::CONFIG_FILE, 'w');
         fwrite($fp, $content);
         fclose($fp);
 	}
