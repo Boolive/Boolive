@@ -13,6 +13,7 @@ use Boolive\database\DB,
     Boolive\functions\F,
     Boolive\file\File,
     Boolive\data\Buffer;
+use Boolive\develop\Trace;
 
 class MySQLStore extends Entity
 {
@@ -20,6 +21,8 @@ class MySQLStore extends Entity
     public $db;
     /** @var string Ключ хранилища, по которому хранилище выбирается для объектов и создаются короткие URI */
     private $key;
+
+    private $classes;
 
     /**
      * Конструктор экземпляра хранилища
@@ -140,11 +143,11 @@ class MySQLStore extends Entity
                 }else{
                     if (isset($row['id2'])){
                         $group_result[$key] = new Entity(array(
-                            'id' => $this->remoteId($row['id2']),
+                            //'id' => $this->remoteId($row['id2']),
                             'uri'=>$row['uri'],
                             'owner'=>$this->_attribs['owner'],
                             'lang'=>$this->_attribs['lang'],
-                            'is_exist' => 0
+                            //'is_exist' => 0
                         ));
                     }
                 }
@@ -178,6 +181,17 @@ class MySQLStore extends Entity
         // Формирование дерева результата (найденные объекты добавляются к найденным родителям)
         if (isset($tree_list)){
             foreach ($tree_list as $key => $tree){
+                // Ручная сортиорвка по order
+//                if (!($cond['depth'][0] == 1 && $cond['depth'][1] == 1) && empty($cond['select'][1]) && empty($cond['limit']) &&
+//                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+//                    $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
+//                    $sort = function($a, $b) use ($sort_kind){
+//                        if ($a->attr('order') == $b->attr('order')) return 0;
+//                        return $sort_kind * ($a->attr('order') > $b->attr('order')?1:-1);
+//                    };
+//                    uasort($tree, $sort);
+//                    uasort($group_result[$key], $sort);
+//                }
                 foreach ($tree as $obj){
                     $p = $obj->_attribs['parent'];
                     if (isset($tree_list[$key][$p])){
@@ -1092,10 +1106,10 @@ class MySQLStore extends Entity
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
-    //                        if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-    //                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
-    //                            $cond['order'] = false;
-    //                        }
+//                            if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
+//                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+//                                $cond['order'] = false;
+//                            }
                         }
                     }
                 }else
@@ -1682,17 +1696,21 @@ class MySQLStore extends Entity
                     // Сокращенный URI приндалежит данной секции, поэтому возвращаем вторую часть
                     return intval($info['id']);
                 }else{
-                    return $this->localId(Data::read($uri, false));
+                    return $this->localId(Data::read($uri, false, IS_INSTALL));
                 }
             }else{
                 // Получаем полный URI по сокращенному
-                $uri = Data::read($uri, false);
+                $uri = Data::read($uri, false, IS_INSTALL);
                 if ($uri->isExist()){
                     $uri = $uri->uri();
                 }else{
                     return null;
                 }
             }
+        }else
+        // Пробуем найти объект в буфере
+        if (($obj = Data::read(array('from'=>$uri,'comment'=>'MySQLStore::localId()'), false, IS_INSTALL, false, false)) && $obj->isExist()){
+            return $this->localId($obj->id());
         }
         // Поиск идентифкатора URI
         $q = $this->db->prepare('SELECT id FROM {ids} WHERE `uri`=? LIMIT 0,1 FOR UPDATE');
@@ -1757,14 +1775,13 @@ class MySQLStore extends Entity
         if (isset($attribs['uri'])){
             // Свой класс
             if (empty($attribs['is_default_class'])){
+                $class = $this->getClassById($attribs['id']);
+            }else
+            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
+                $class = $this->getClassById($attribs['is_default_class']);
+            }
+            if (isset($class)){
                 try{
-                    // Имеется свой класс?
-                    if ($attribs['uri']===''){
-                        $class = 'Site';
-                    }else{
-                        $names = F::splitRight('/', $attribs['uri'], true);
-                        $class = str_replace('/', '\\', trim($attribs['uri'],'/')) . '\\' . $names[1];
-                    }
                     $obj = new $class($attribs);
                 }catch(\Exception $e){
                     // Если файл не найден, то будет использоваться класс прототипа или Entity
@@ -1778,18 +1795,31 @@ class MySQLStore extends Entity
                         throw $e;
                     }
                 }
-            }else
-            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
-                $proto = Data::read($attribs['is_default_class'].'&comment=read is_default_class to makeObject', false);
-                $class = get_class($proto);
-                $obj = new $class($attribs);
             }
         }
         // Базовый класс
         if (!isset($obj)) $obj = new Entity($attribs);
-        // Буфер
-       //Buffer::set($obj, $cond);
         return $obj;
+    }
+
+    private function getClassById($id)
+    {
+        if (!isset($this->classes)){
+            $q = $this->db->query('SELECT ids.* FROM ids JOIN objects ON objects.id = ids.id AND objects.is_default_class = 0');
+            $this->classes = array();
+            while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                if ($row['uri']!==''){
+                    $names = F::splitRight('/', $row['uri'], true);
+                    $this->classes['//'.$row['id']] = str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                }else{
+                    $this->classes['//'.$row['id']] = 'Site';
+                }
+            }
+        }
+        if (isset($this->classes[$id])){
+            return $this->classes[$id];
+        }
+        return null;
     }
 
     /**
