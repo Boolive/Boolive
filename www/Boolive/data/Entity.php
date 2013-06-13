@@ -1531,12 +1531,12 @@ class Entity implements ITrace
     public function isEqual($entity)
     {
         if ($entity instanceof Entity){
-            return $this->key() == $entity->key() &&
+            return $this->key() === $entity->key() &&
                $this->_attribs['owner'] == $entity->_attribs['owner'] &&
                $this->_attribs['lang'] == $entity->_attribs['lang']/* &&
-               $this->date() == $entity->date()*/;
+               $this->date() == $entity->date()**/;
         }
-        return $this->_attribs['id'] == $entity || $this->uri() == $entity;
+        return isset($entity) && ($this->_attribs['id'] === $entity || $this->uri() === $entity);
     }
 
     /**
