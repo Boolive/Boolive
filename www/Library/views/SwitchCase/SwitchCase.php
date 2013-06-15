@@ -57,7 +57,7 @@ class SwitchCase extends View
         // Запускаем по очереди подчиненных варианта, пока один из них не сработает
         if ($this->_input['REQUEST']['view_name']){
             // Если указано, каким отображать, то только его пробуем запустить
-            $views = array($this->{$this->_input['REQUEST']['view_name']});
+            $views = array($this->{$this->_input['REQUEST']['view_name']}->linked());
             unset($this->_input_child['REQUEST']['view_name']);
         }else{
             // Все виджеты варианта
@@ -65,6 +65,7 @@ class SwitchCase extends View
         }
         $view = reset($views);
         while ($view){
+            /** @var View $view */
             if ($v['view'] = $view->start($this->_commands, $this->_input_child)){
                 $this->_input_child['previous'] = true;
                 return $v['view'];
