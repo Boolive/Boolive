@@ -7,13 +7,15 @@
  */
 namespace Boolive\data\stores;
 
+use Boolive\cache\Cache;
 use Boolive\database\DB,
     Boolive\data\Entity,
     Boolive\data\Data,
     Boolive\functions\F,
     Boolive\file\File,
-    Boolive\data\Buffer;
-use Boolive\develop\Trace;
+    Boolive\data\Buffer,
+    Boolive\develop\Trace;
+use Boolive\events\Events;
 
 class MySQLStore extends Entity
 {
@@ -24,6 +26,10 @@ class MySQLStore extends Entity
 
     private $classes;
 
+    private $_local_ids;
+    private $_local_ids_change = false;
+
+
     /**
      * Конструктор экземпляра хранилища
      * @param array $key Ключ хранилища. Используется для формирования и распознования сокращенных URI
@@ -33,6 +39,15 @@ class MySQLStore extends Entity
     {
         $this->key = $key;
         $this->db = DB::connect($config);
+        Events::on('Boolive::deactivate', $this, 'deactivate');
+    }
+
+    /**
+     * Обработчик системного события deactivate (завершение работы системы)
+     */
+    public function deactivate()
+    {
+        if ($this->_local_ids_change) Cache::set('mysqlstore/localids', F::toJSON($this->_local_ids, false));
     }
 
     /**
@@ -607,6 +622,7 @@ class MySQLStore extends Entity
                         $u->execute($params);
                     }
                 }
+
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->remoteId($attr['id']);
                 $entity->_attribs['name'] = $attr['name'];
@@ -616,6 +632,9 @@ class MySQLStore extends Entity
                 $entity->_changed = false;
 
                 $this->db->commit();
+
+                $this->afterWrite($attr, empty($current)?array():$current);
+
                 return true;
             }catch (\Exception $e){
                 $this->db->rollBack();
@@ -1707,17 +1726,29 @@ class MySQLStore extends Entity
                     return null;
                 }
             }
-        }else
-        // Пробуем найти объект в буфере
-        if (($obj = Data::read(array('from'=>$uri,'comment'=>'MySQLStore::localId()'), false, IS_INSTALL, false, false)) && $obj->isExist()){
-            return $this->localId($obj->id());
         }
+        // Из кэша
+        if (!isset($this->_local_ids) && IS_INSTALL){
+            if ($local_ids = Cache::get('mysqlstore/localids')){
+                $this->_local_ids = json_decode($local_ids, true);
+            }else{
+                $this->_local_ids = array();
+            }
+        }
+        if (isset($this->_local_ids[$uri])) return $this->_local_ids[$uri];
+//        else
+//        // Пробуем найти объект в буфере
+//        if (($obj = Data::read(array('from'=>$uri,'comment'=>'MySQLStore::localId()'), false, IS_INSTALL, false, false)) && $obj->isExist()){
+//            return $this->localId($obj->id());
+//        }
         // Поиск идентифкатора URI
         $q = $this->db->prepare('SELECT id FROM {ids} WHERE `uri`=? LIMIT 0,1 FOR UPDATE');
         $q->execute(array($uri));
         if ($row = $q->fetch(DB::FETCH_ASSOC)){
             $id = $row['id'];
             $is_new = false;
+            $this->_local_ids[$uri] = $id;
+            $this->_local_ids_change = true && IS_INSTALL;
         }else
         if ($create){
             // Создание идентифbкатора для URI
@@ -1805,21 +1836,53 @@ class MySQLStore extends Entity
     private function getClassById($id)
     {
         if (!isset($this->classes)){
-            $q = $this->db->query('SELECT ids.* FROM ids JOIN objects ON objects.id = ids.id AND objects.is_default_class = 0');
-            $this->classes = array();
-            while ($row = $q->fetch(DB::FETCH_ASSOC)){
-                if ($row['uri']!==''){
-                    $names = F::splitRight('/', $row['uri'], true);
-                    $this->classes['//'.$row['id']] = str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
-                }else{
-                    $this->classes['//'.$row['id']] = 'Site';
+            if ($classes = Cache::get('mysqlstore/classes')){
+                // Из кэша
+                $this->classes = json_decode($classes, true);
+            }else{
+                // Из бд и создаём кэш
+                $q = $this->db->query('SELECT ids.* FROM ids JOIN objects ON objects.id = ids.id AND objects.is_default_class = 0');
+                $this->classes = array();
+                while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                    if ($row['uri']!==''){
+                        $names = F::splitRight('/', $row['uri'], true);
+                        $this->classes['//'.$row['id']] = str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                    }else{
+                        $this->classes['//'.$row['id']] = 'Site';
+                    }
                 }
+                Cache::set('mysqlstore/classes', F::toJSON($this->classes, false));
             }
         }
         if (isset($this->classes[$id])){
             return $this->classes[$id];
         }
         return null;
+    }
+
+    private function localIdCacheValidate($new_attr, $last_attr)
+    {
+        if (isset($last_attr['name']) && isset($last_attr['parent']) &&
+            ($last_attr['name'] != $new_attr['name'] || $last_attr['parent'] != $new_attr['parent']))
+        {
+            Cache::delete('mysqlstore/localids');
+            $this->_local_ids = null;
+        }
+    }
+
+    private function classesCacheValidate($new_attr, $last_attr)
+    {
+        $last_class = isset($last_attr['is_default_class'])? $last_attr['is_default_class'] : Entity::ENTITY_ID;
+        if ($new_attr['is_default_class']!=$last_class && ($new_attr['is_default_class'] == 0 || $last_class == 0)){
+            Cache::delete('mysqlstore/classes');
+            $this->classes = null;
+        }
+    }
+
+    private function afterWrite($new_attr, $last_attr)
+    {
+        $this->classesCacheValidate($new_attr, $last_attr);
+        $this->localIdCacheValidate($new_attr, $last_attr);
     }
 
     /**
