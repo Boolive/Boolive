@@ -34,21 +34,20 @@ class view extends AutoWidgetList
     public function work($v = array())
     {
         if ($this->_input['REQUEST']['show']){
-            $obj = $this->_input['REQUEST']['object']->linked();
+            /** @var \Boolive\data\Entity $obj */
+            $obj = $this->_input['REQUEST']['object'];//->linked();
             // Название пункта
             $v['item_text'] = $obj->title->value();
             $v['item_title'] = $v['item_text'];
             // Ссылка
             $real = $obj->linked();
-    //        while ($real && $real['is_link']){
-    //            $real = $real->proto();
-    //        }
             if ($real){
                 if (substr($real->uri(), 0, 10) == '/Contents/'){
                     $v['item_href'] = substr($real->uri(), 10);
                 }else{
                     $v['item_href'] = $real->uri();
                 }
+                if (empty($v['item_text'])) $v['item_text'] = $real->title->value();
             }else{
                 $v['item_href'] = '';
             }

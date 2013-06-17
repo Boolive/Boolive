@@ -96,6 +96,8 @@ class Buffer
             // Ключ uri
             //if ($result->isExist()){
                 $cond['from'] = $result->uri();
+                $cond['select'] = array('self');
+                $cond['depth'] = array(0,0);
                 self::$list[json_encode($cond)] = $result;
                 if ($result->isExist()){
                     // Если объект существует, то дополнительно ключ id
@@ -103,7 +105,8 @@ class Buffer
                     /*if (!isset(self::$list[$bkey = json_encode($cond)])) */self::$list[$bkey = json_encode($cond)] = $result;
                 }
             //}
-        }else{
+        }else
+        if (is_array($result)){
             // массив объектов
             if ($key!='name' && $cond['select'][0] == 'children' && empty($cond['select'][1]) && $cond['depth'][0]==1 && $cond['depth'][1] == 1){
                 $list = array();
@@ -114,6 +117,8 @@ class Buffer
             }
             self::$list[json_encode($cond)] = $result;
             self::setList($result, $cond);
+        }else{
+            //self::$list[json_encode($cond)] = $result;
         }
     }
 

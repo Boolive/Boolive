@@ -29,6 +29,8 @@ class MySQLStore extends Entity
     private $_local_ids;
     private $_local_ids_change = false;
 
+    private $objects = array();
+
 
     /**
      * Конструктор экземпляра хранилища
@@ -143,7 +145,7 @@ class MySQLStore extends Entity
                 $group_result[$key] = true;
             }else
             // Выбор одного объекта и не указан ключ для списка
-            if ($cond['select'][0] == 'self' && empty($cond['key'])){
+            if (($cond['select'][0] == 'self' || $cond['select'][0] == 'link') && empty($cond['key'])){
                 // Выбор атрибута
                 if (isset($cond['select'][1])){
                     if (in_array($cond['select'][1], array_keys($this->_attribs)) && isset($row)){
@@ -197,16 +199,16 @@ class MySQLStore extends Entity
         if (isset($tree_list)){
             foreach ($tree_list as $key => $tree){
                 // Ручная сортиорвка по order
-//                if (!($cond['depth'][0] == 1 && $cond['depth'][1] == 1) && empty($cond['select'][1]) && empty($cond['limit']) &&
-//                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
-//                    $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
-//                    $sort = function($a, $b) use ($sort_kind){
-//                        if ($a->attr('order') == $b->attr('order')) return 0;
-//                        return $sort_kind * ($a->attr('order') > $b->attr('order')?1:-1);
-//                    };
-//                    uasort($tree, $sort);
-//                    uasort($group_result[$key], $sort);
-//                }
+                if (!($cond['depth'][0] == 1 && $cond['depth'][1] == 1) && empty($cond['select'][1]) && empty($cond['limit']) &&
+                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                    $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
+                    $sort = function($a, $b) use ($sort_kind){
+                        if ($a->attr('order') == $b->attr('order')) return 0;
+                        return $sort_kind * ($a->attr('order') > $b->attr('order')?1:-1);
+                    };
+                    uasort($tree, $sort);
+                    uasort($group_result[$key], $sort);
+                }
                 foreach ($tree as $obj){
                     $p = $obj->_attribs['parent'];
                     if (isset($tree_list[$key][$p])){
@@ -949,7 +951,7 @@ class MySQLStore extends Entity
                 $result['select'] = 'SELECT count(*) fun';
                 $calc = true;
             }else
-            if (in_array($cond['select'][0], array('self', 'children', 'parents', 'tree', 'protos', 'heirs'))){
+            if (in_array($cond['select'][0], array('self', 'children', 'parents', 'tree', 'protos', 'heirs', 'link'))){
                 // @todo учитывать указанные атрибуты в $cond['select'][1..n]
                 $result['select'] = 'SELECT u.uri, obj.*';
                 $calc = false;
@@ -965,11 +967,11 @@ class MySQLStore extends Entity
             }
             if ($multy = is_array($cond['from'])){
                 $multy_cnt = sizeof($cond['from']);
-                if ($what == 'self' || $cond['select'][0] == 'exists'){
+                if ($what == 'self' || $what == 'link' || $cond['select'][0] == 'exists'){
                     $cond['limit'] = array(0,$multy_cnt);
                 }
             }else{
-                if ($what == 'self'){
+                if ($what == 'self' || $what == 'link'){
                     $cond['limit'] = array(0,1);
                 }
             }
@@ -1080,10 +1082,10 @@ class MySQLStore extends Entity
                             $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
                         }
                         // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
-//                        if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-//                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
-//                            $cond['order'] = false;
-//                        }
+                        if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
+                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                            $cond['order'] = false;
+                        }
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Подчиненные объекты
@@ -1125,10 +1127,10 @@ class MySQLStore extends Entity
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
-//                            if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-//                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
-//                                $cond['order'] = false;
-//                            }
+                            if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
+                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                                $cond['order'] = false;
+                            }
                         }
                     }
                 }else
@@ -1266,6 +1268,19 @@ class MySQLStore extends Entity
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                         }
+                    }
+                }else
+                if ($what == 'link'){
+                    $result['from'] = ' FROM objects l, objects obj, ids u';
+                    if ($multy){
+                        $result['select'].= ', CONCAT("//",l.id) as `from`';
+                        $result['where'].= 'l.id IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') AND l.is_link = obj.id AND u.id = obj.id AND ';
+                        for ($i=0; $i<$multy_cnt; $i++){
+                            $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
+                        }
+                    }else{
+                        $result['where'].= 'l.id = ? AND l.is_link = obj.id AND u.id = obj.id AND ';
+                        $result['binds'][] = $this->localId($cond['from']);
                     }
                 }else{
                     throw new \Exception('Incorrect selection in condition: ("'.$cond['select'][0].'","'.$cond['select'][1].'")');
@@ -1792,16 +1807,16 @@ class MySQLStore extends Entity
         $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_link']) : $attribs['is_link'];
         $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
         $attribs['is_exist'] = 1;
-//        $attribs['order'] = intval($attribs['order']);
-//        $attribs['date'] = intval($attribs['date']);
-//        $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
-//        $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
-//        $attribs['is_file'] = intval($attribs['is_file']);
-//        $attribs['is_history'] = intval($attribs['is_history']);
-//        $attribs['is_delete'] = intval($attribs['is_delete']);
-//        $attribs['is_hidden'] = intval($attribs['is_hidden']);
-//        $attribs['index_depth'] = intval($attribs['index_depth']);
-//        $attribs['index_step'] = intval($attribs['index_step']);
+        $attribs['order'] = intval($attribs['order']);
+        $attribs['date'] = intval($attribs['date']);
+        $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
+        $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
+        $attribs['is_file'] = intval($attribs['is_file']);
+        $attribs['is_history'] = intval($attribs['is_history']);
+        $attribs['is_delete'] = intval($attribs['is_delete']);
+        $attribs['is_hidden'] = intval($attribs['is_hidden']);
+        $attribs['index_depth'] = intval($attribs['index_depth']);
+        $attribs['index_step'] = intval($attribs['index_step']);
         unset($attribs['valuef']);
         if (isset($attribs['uri'])){
             // Свой класс

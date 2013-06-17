@@ -468,13 +468,13 @@ class Entity implements ITrace
         }
         // Возвращение признака или объекта, на которого ссылается данный объект
         if (!empty($this->_attribs['is_link']) && $return_link){
-            if ($this->_attribs['is_link']==1){
-                if ($proto = $this->proto()){
-                    return $proto->isLink(null, true);
-                }else{
-                    return null;
-                }
-            }
+//            return Data::read(array(
+//                'from' => $this->key(),
+//                'select' => 'link',
+//                'owner' => $this->owner(),
+//                'lang' => $this->lang(),
+//                'comment' => 'read link'
+//            ));
             return Data::read(array(
                 'from' => $this->_attribs['is_link'],
                 'owner' => $this->owner(),

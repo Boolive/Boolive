@@ -248,7 +248,7 @@ class Data
                 if ($store = self::getStore($object->key())){
                     return $store->write($object);
                 }else{
-                    $error->section = new Error('Не определена секция объекта', 'not-exist');
+                    $error->store = new Error('Не определено хранилище объекта', 'not-exist');
                 }
             }else{
                 $error->access = new Error('Нет доступа на запись', 'write');
