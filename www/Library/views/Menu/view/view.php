@@ -11,7 +11,8 @@ use Boolive\values\Rule,
 
 class view extends AutoWidgetList
 {
-    public function getInputRule(){
+    public function getInputRule()
+    {
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // Объект для пункта меню
@@ -22,30 +23,31 @@ class view extends AutoWidgetList
         );
     }
 
-    protected function initInputChild($input){
+    protected function initInputChild($input)
+    {
         parent::initInputChild($input);
         $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['active'];
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
         $this->_input_child['REQUEST']['show'] = true;
     }
 
-    public function work($v = array()){
+    public function work($v = array())
+    {
         if ($this->_input['REQUEST']['show']){
-            $obj = $this->_input['REQUEST']['object']->linked();
+            /** @var \Boolive\data\Entity $obj */
+            $obj = $this->_input['REQUEST']['object'];//->linked();
             // Название пункта
             $v['item_text'] = $obj->title->value();
             $v['item_title'] = $v['item_text'];
             // Ссылка
             $real = $obj->linked();
-    //        while ($real && $real['is_link']){
-    //            $real = $real->proto();
-    //        }
             if ($real){
                 if (substr($real->uri(), 0, 10) == '/Contents/'){
                     $v['item_href'] = substr($real->uri(), 10);
                 }else{
                     $v['item_href'] = $real->uri();
                 }
+                if (empty($v['item_text'])) $v['item_text'] = $real->title->value();
             }else{
                 $v['item_href'] = '';
             }
@@ -71,6 +73,7 @@ class view extends AutoWidgetList
         $cond['select'] = 'tree';
         $cond['depth'] = array(1, 'max');
         //$cond['order'] = array(array('order', 'asc'));
+        $cond['group'] = true;
         return parent::getList($cond);
     }
 }

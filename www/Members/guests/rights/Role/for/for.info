@@ -3,5 +3,15 @@
     "value": "",
     "proto": "/Library/access/Role/for",
     "is_link": true,
-    "order": 5
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Область действия роли",
+            "proto": "/Library/access/Role/for/title",
+            "is_link": true,
+            "is_hidden": true,
+            "order": 1
+        }
+    }
 }

@@ -20,7 +20,7 @@ use Exception,
 class Error extends Exception implements ITrace, IteratorAggregate
 {
     /** @const string Файл со статическими сообщениями */
-	const FILE_STATIC_MESSAGE = 'config.error_messages.php';
+	const FILE_STATIC_MESSAGE = 'config.error.messages.php';
 	/** @var array Массив со статическими сообщениями */
 	private static $user_messages;
 

@@ -140,11 +140,16 @@ class View extends Entity
      */
     public function startChild($name)
     {
-        $result = $this->linked(true)->{$name}->linked(true)->start($this->_commands, $this->_input_child);
-        if ($result!==false){
-            $this->_input_child['previous'] = true;
+        $child = $this->linked(true)->{$name}->linked(true);
+        if ($child instanceof View){
+            $result = $child->start($this->_commands, $this->_input_child);
+            if ($result!==false){
+                $this->_input_child['previous'] = true;
+            }
+            return $result;
+        }else{
+            return null;
         }
-        return $result;
     }
 
     /**
@@ -157,10 +162,13 @@ class View extends Entity
         $list = $this->linked(true)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
-            $out = $child->linked(true)->start($this->_commands, $this->_input_child);
-            if ($out!==false){
-                $result[$key] = $out;
-                $this->_input_child['previous'] = true;
+            $child = $child->linked(true);
+            if ($child instanceof View){
+                $out = $child->start($this->_commands, $this->_input_child);
+                if ($out!==false){
+                    $result[$key] = $out;
+                    $this->_input_child['previous'] = true;
+                }
             }
         }
         return $result;

@@ -14,7 +14,9 @@ class Paragraph extends Widget
     {
         $v['value'] = $this->_input['REQUEST']['object']->value();
         $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'comment' => 'read tree of text element'));
-        $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
+        if ($this->_input['REQUEST']['object']->style->isExist()){
+            $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
+        }
         return parent::work($v);
     }
 }

@@ -87,7 +87,7 @@ class Events
                 if (!is_array($params)){
                     $params = array($params);
                 }
-                if (!Boolive::isIncluded(self::$handlers[$event_name][$i][0])){
+                if (is_string(self::$handlers[$event_name][$i][0]) && !Boolive::isIncluded(self::$handlers[$event_name][$i][0])){
                     Boolive::activate(self::$handlers[$event_name][$i][0]);
                 }
                 if (method_exists(self::$handlers[$event_name][$i][0], self::$handlers[$event_name][$i][1])){

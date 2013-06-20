@@ -69,7 +69,6 @@
         },
         "float": {
             "value": "left",
-            "is_default_class": false,
             "order": 12
         },
         "description": {

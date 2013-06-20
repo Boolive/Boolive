@@ -17,15 +17,18 @@ use Boolive\Boolive,
 class Data
 {
     /** @const  Файл конфигурации хранилищ */
-    const CONFIG_FILE_STORES = 'config.stores.php';
+    const CONFIG_FILE = 'config.data.php';
     /** @var array Конфигурация хранилищ */
     private static $config_stores;
     /** @var array Экземпляры хранилищ */
     private static $stores;
+    /** @var array Условия, по которым выбранны объекты, для которых объединять последующие выборки */
+    private static $group_cond = array();
 
-    static function activate(){
+    static function activate()
+    {
         // Конфиг хранилищ
-        self::$config_stores = F::loadConfig(DIR_SERVER.self::CONFIG_FILE_STORES, 'stores');
+        self::$config_stores = F::loadConfig(DIR_SERVER.self::CONFIG_FILE, 'stores');
     }
 
     /**
@@ -101,6 +104,7 @@ class Data
      * @param bool $access Признак, учитывать или нет права доступа на чтение?
      * @param bool $use_cache Признак, использовать или нет кэш?
      * @param bool $index Признак, выполнять индексирование данных перед поиском?
+     * @param bool $only_cache Признак, выбирать только из буфера?
      * @return array|Entity|mixed|null В зависимости от услвоия выбора результатом будет
      * а) массив найденных объектов
      * б) объект,
@@ -125,6 +129,11 @@ class Data
         }else{
             $comment = 'no comment';
         }
+        // Выполнять последующие группировку выборок с выбранными объектами?
+        if (isset($cond['group'])){
+            unset($cond['group']);
+            self::$group_cond[json_encode($cond)] = true;
+        }
         // Из буфера
         if ($use_cache){
             $result = Buffer::get($cond);
@@ -135,28 +144,77 @@ class Data
         }
         if (!$only_cache){
             // Попытка сгруппировать выборку с возможными будущими подобными выборками
-
-//            if (is_string($cond['from'])){
-//                $from_info = Data::parseUri($cond['from']);
-//                if (empty($from_info['id'])){
-//                    $parent = F::splitRight('/', $cond['from']);
-//                    $parent = $parent[0];
-//                }else
-//                if (empty($from_info['path'])){
-//                    if ($obj = Data::read($from_info['path'], false, true, false, true)){
-//                        $parent = $obj->parent()
-//                    }
-//                }
-//                if (!empty($from_info['path']) && mb_substr_count($from_info['path'], '/')==1){
-//                    $parent = $from_info['store'].$from_info['dslash'].$from_info['id'];
-//                }
-//                if (isset($parent) && $parent = Data::read($parent, false, true, false, true)){
-//                    $a = 10;
-//                    Trace::groups('Data')->group('group_count')->group()->set(F::toJSON($cond, false));
-//                }
-//            }
-
-
+            if (is_string($cond['from'])){
+                $what = ($cond['select'][0] == 'exists' || $cond['select'][0] == 'count')? $cond['select'][1] : $cond['select'][0];
+                // Если выбор одного объекта, то группировка по родителям выбранных ранее вместе
+                if ($what == 'self'){
+                    // Если в from есть путь, то узнаем родителя и имя выбираемого подчиненного
+                    $from_info = Data::parseUri($cond['from']);
+                    if (empty($from_info['id'])){
+                        $select = F::splitRight('/', $cond['from']);
+                        $parent_key = 'uri';
+                    }else
+                    if (!empty($from_info['path']) && mb_substr_count($from_info['path'], '/')==1){
+                        $select = array(
+                            $from_info['store'].$from_info['dslash'].$from_info['id'],
+                            ltrim($from_info['path'])
+                        );
+                        $parent_key = 'id';
+                    }
+                    if (isset($select) && ($parent = Data::read($select[0], false, true, false, true))){
+                        if (($parent_cond = $parent->cond()) && $parent_cond['select'][0]!='self' && isset(self::$group_cond[json_encode($parent_cond)])){
+                            if ($parent_cond['select'][0] == 'tree') $parent_cond['select'][0] = 'children';
+                            $list = Buffer::get($parent_cond);
+                            if (sizeof($list)>1){
+                                $key_from_group = $cond['from'];
+                                $cond['from'] = array();
+                                $makefrom = function(&$cond, $list, $parent_key, $name) use (&$makefrom){
+                                    foreach ($list as $from){
+                                        if (is_array($from)){
+                                            $makefrom($cond, $from, $parent_key, $name);
+                                        }else{
+                                            $cond['from'][] = $from->attr($parent_key).'/'.$name;
+                                        }
+                                    }
+                                };
+                                $makefrom($cond, $list, $parent_key, $select[1]);
+                            }
+                        }
+                    }
+                }else{
+                    // Группировка по объектам, выбранных ранее вместе с текущим from
+                    if ($from = Data::read($cond['from'], false, true, false, true)){
+                        if (($from_cond = $from->cond()) && ($from_cond['select'][0]!='self' || is_array($from_cond['from'])) && isset(self::$group_cond[json_encode($from_cond)])){
+                            if ($from_cond['select'][0] == 'tree') $from_cond['select'][0] = 'children';
+                            $list = Buffer::get($from_cond);
+                            if (sizeof($list)>1){
+                                $key_from_group = $from->id();
+                                $cond['from'] = array();
+                                $makefrom = function(&$cond, $list) use (&$makefrom){
+                                    foreach ($list as $from){
+                                        if (is_array($from)){
+                                            $makefrom($cond, $from);
+                                        }else{
+                                            $cond['from'][] = $from->id();
+                                        }
+                                    }
+                                };
+                                $makefrom($cond, $list);
+                            }
+                        }
+                    }
+                }
+                if (isset($key_from_group)){
+                    self::$group_cond[json_encode($cond)] = true;
+                    // Из буфера групповую выборку
+                    if ($use_cache){
+                        $result = Buffer::get($cond);
+                        if (isset($result[$key_from_group])){
+                            return $result[$key_from_group];
+                        }
+                    }
+                }
+            }
             // Определение хранилища по URI
             if ($store = self::getStore($cond['from'])){
                 // Выбор объекта
@@ -166,6 +224,10 @@ class Data
             }
             // В буфер
             if ($use_cache) Buffer::set($result, $cond);
+            if (isset($key_from_group) && $result){
+                $result = $result[$key_from_group];
+                $cond['from'] = $key_from_group;
+            }
             if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->group()->set(F::toJSON($cond, false));
             return $result;
         }
@@ -186,7 +248,7 @@ class Data
                 if ($store = self::getStore($object->key())){
                     return $store->write($object);
                 }else{
-                    $error->section = new Error('Не определена секция объекта', 'not-exist');
+                    $error->store = new Error('Не определено хранилище объекта', 'not-exist');
                 }
             }else{
                 $error->access = new Error('Нет доступа на запись', 'write');
@@ -470,6 +532,7 @@ class Data
             'correct' => true
         );
         if (isset($result['comment'])) $r['comment'] = $result['comment'];
+        if (isset($result['group'])) $r['group'] = true;
         return $r;
     }
 
@@ -499,7 +562,6 @@ class Data
                          '"<="' => '"lte"'
                     ));
         $cond = preg_replace_callback('/"([^"]*)"/ui', function($m){
-                        //trace($m);
                         $replacements = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
                         $escapers = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
                         return urlencode(str_replace($escapers, $replacements, $m[1]));
@@ -583,13 +645,14 @@ class Data
 	 * Проверка системных требований для установки класса
 	 * @return array
 	 */
-	static function systemRequirements(){
+	static function systemRequirements()
+    {
 		$requirements = array();
-		if (file_exists(DIR_SERVER.self::CONFIG_FILE_STORES) && !is_writable(DIR_SERVER.self::CONFIG_FILE_STORES)){
-			$requirements[] = 'Удалите файл конфигурации базы данных: <code>'.DIR_SERVER.self::CONFIG_FILE_STORES.'</code>';
+		if (file_exists(DIR_SERVER.self::CONFIG_FILE) && !is_writable(DIR_SERVER.self::CONFIG_FILE)){
+			$requirements[] = 'Удалите файл конфигурации базы данных: <code>'.DIR_SERVER.self::CONFIG_FILE.'</code>';
 		}
-		if (!file_exists(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES)){
-			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES.'</code>';
+		if (!file_exists(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE)){
+			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE.'</code>';
 		}
 		return $requirements;
 	}
@@ -598,8 +661,9 @@ class Data
 	 * Запрашиваемые данные для установки модуля
 	 * @return array
 	 */
-	static function installPrepare(){
-		$file = DIR_SERVER.self::CONFIG_FILE_STORES;
+	static function installPrepare()
+    {
+		$file = DIR_SERVER.self::CONFIG_FILE;
 		if (file_exists($file)){
 			include $file;
 			if (isset($stores) && is_array($stores[''])){
@@ -668,7 +732,8 @@ class Data
      * @param \Boolive\input\Input $input Параметры доступа к БД
      * @throws \Boolive\errors\Error
      */
-	static function install($input){
+	static function install($input)
+    {
 		// Параметры доступа к БД
 		$errors = new Error('Некоректные параметры доступа к СУБД', 'db');
 		$new_config = $input->REQUEST->get(\Boolive\values\Rule::arrays(array(
@@ -689,9 +754,9 @@ class Data
         \Boolive\data\stores\MySQLStore::createStore($new_config, $errors);
 
         // Создание файла конфигурации из шаблона
-        $content = file_get_contents(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE_STORES);
+        $content = file_get_contents(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE);
         $content = F::Parse($content, $new_config, '{', '}');
-        $fp = fopen(DIR_SERVER.self::CONFIG_FILE_STORES, 'w');
+        $fp = fopen(DIR_SERVER.self::CONFIG_FILE, 'w');
         fwrite($fp, $content);
         fclose($fp);
 	}

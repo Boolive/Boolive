@@ -50,7 +50,6 @@
         },
         "visit_time": {
             "value": "1368016086",
-            "is_default_class": false,
             "order": 7
         }
     }

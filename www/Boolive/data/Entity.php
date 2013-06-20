@@ -75,6 +75,8 @@ class Entity implements ITrace
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
     protected $_checked = false;
+    /** @var  string Условие, которым был выбран объект */
+    protected $_cond = null;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -466,13 +468,13 @@ class Entity implements ITrace
         }
         // Возвращение признака или объекта, на которого ссылается данный объект
         if (!empty($this->_attribs['is_link']) && $return_link){
-            if ($this->_attribs['is_link']==1){
-                if ($proto = $this->proto()){
-                    return $proto->isLink(null, true);
-                }else{
-                    return null;
-                }
-            }
+//            return Data::read(array(
+//                'from' => $this->key(),
+//                'select' => 'link',
+//                'owner' => $this->owner(),
+//                'lang' => $this->lang(),
+//                'comment' => 'read link'
+//            ));
             return Data::read(array(
                 'from' => $this->_attribs['is_link'],
                 'owner' => $this->owner(),
@@ -1155,22 +1157,35 @@ class Entity implements ITrace
     /**
      * Список выгруженных подчиненных (свойства объекта)
      * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
+     * @param array $depth Глубина подчиенных. По умолчанию
      * @return array Массив подчененных
      */
-    public function children($key = 'name')
+    public function children($key = 'name', $depth = array(1,1))
     {
-        if ($key === 'name'){
-            return $this->_children;
-        }else
-        if (empty($key)){
-            return array_values($this->_children);
-        }else{
-            $result = array();
-            foreach ($this->_children as $child){
-                $result[$child->_attribs[$key]];
+        $result = array();
+        if ($depth[0] == 1){
+            if ($key === 'name'){
+                $result = $this->_children;
+            }else
+            if (empty($key)){
+                $result = array_values($this->_children);
+            }else{
+                foreach ($this->_children as $child){
+                    $result[$child->_attribs[$key]];
+                }
             }
-            return $result;
         }
+        if ($depth[0] == 0){
+            array_unshift($result, $this);
+        }
+        if ($depth[1] > 1){
+            $depth[0]--;
+            $depth[1]--;
+            foreach ($this->_children as $child){
+                $result = array_merge($result, $child->children($key, $depth));
+            }
+        }
+        return $result;
     }
 
     #################################################
@@ -1469,10 +1484,13 @@ class Entity implements ITrace
      */
     public function in($parent)
     {
-        if (!$parent instanceof Entity){
-            $parent = Data::read($parent);
+        if ($parent instanceof Entity){
+            $parent = $parent->uri();
+        }else
+        if (Data::isShortUri($parent)){
+            $parent = Data::read($parent)->uri();
         }
-        return $parent->uri().'/' == mb_substr($this->uri(),0,mb_strlen($parent->uri())+1);
+        return $parent.'/' == mb_substr($this->uri(),0,mb_strlen($parent)+1);
     }
 
     /**
@@ -1483,11 +1501,7 @@ class Entity implements ITrace
     public function is($proto)
     {
         if ($proto == 'all') return true;
-        if (!$proto instanceof Entity){
-            if ($proto == $this->uri() || $proto == $this->id()) return true;
-            $proto = Data::read($proto.'&comment=read proto for check is');
-        }
-        if ($proto instanceof Entity && $this->isEqual($proto)) return true;
+        if ($this->isEqual($proto)) return true;
         return ($p = $this->proto()) ? $p->is($proto) : false;
     }
 
@@ -1504,10 +1518,6 @@ class Entity implements ITrace
     public function of($object)
     {
         if ($object == 'all') return true;
-        if (!$object instanceof Entity){
-            if ($object == $this->uri() || $object == $this->id()) return true;
-            $object = Data::read($object);
-        }
         if ($this->isEqual($object)) return true;
         if (($p = $this->proto()) && $p->of($object)) return true;
         return ($p = $this->parent()) ? $p->of($object) : false;
@@ -1520,13 +1530,13 @@ class Entity implements ITrace
      */
     public function isEqual($entity)
     {
-        if (!$entity instanceof Entity){
-            return false;
-        }
-        return $this->key() == $entity->key()/* &&
+        if ($entity instanceof Entity){
+            return $this->key() === $entity->key() &&
                $this->_attribs['owner'] == $entity->_attribs['owner'] &&
-               $this->_attribs['lang'] == $entity->_attribs['lang'] &&
-               $this->date() == $entity->date()*/;
+               $this->_attribs['lang'] == $entity->_attribs['lang']/* &&
+               $this->date() == $entity->date()**/;
+        }
+        return isset($entity) && ($this->_attribs['id'] === $entity || $this->uri() === $entity);
     }
 
     /**
@@ -1678,6 +1688,21 @@ class Entity implements ITrace
                 $this->{$name}->import($child);
             }
         }
+    }
+
+    /**
+     * Условие, которым выбран объект
+     * Устанавливается хранилищем после выборки объекта
+     * Может быть не установленным
+     * @param mixed $cond
+     * @return mixed
+     */
+    public function cond($cond = null)
+    {
+        if (isset($cond)){
+            $this->_cond = $cond;
+        }
+        return $this->_cond;
     }
 
     /**

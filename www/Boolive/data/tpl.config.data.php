@@ -34,7 +34,7 @@ $stores = array(
             'options' => array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'
             ),
-                        // Префикс к таблицам
+            // Префикс к таблицам
             'prefix' => '',
             // Признаки, включен или нет режим отладки. В режиме отладки трассируются запросы и подсчитывается их кол-во
             'trace_sql' => false,

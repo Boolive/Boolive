@@ -1,6 +1,6 @@
 <?php
 /**
- * Конфигурация путей
+ * Конфигурация путей и опций ядра
  * @version 1.0
  */
 
@@ -24,20 +24,21 @@ define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
 
-// Адрес сайта, например: boolive.ru. Значение по умолчанию для CLI режима запуска
+// Адрес сайта, например: boolive.ru. Значение по умолчанию для CLI режима
 define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_HOST']);
 /** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */
 define('TIMESTAMP', '1');
 
 /* Признак, выводить всю трассировку?*/
-define('GLOBAL_TRACE', false);
+define('GLOBAL_TRACE', true);
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
 /**
  * Определение корневой директории сервера
  * @return string
  */
-function get_root_dir(){
+function get_root_dir()
+{
     if (empty($_SERVER['DOCUMENT_ROOT'])){
         // Если переменной окружения нет, то вычисляем из пути на исполняемый файл
         $_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
@@ -49,7 +50,8 @@ function get_root_dir(){
  * Определение корневой директории относительно домена сайта
  * @return string
  */
-function get_web_dir(){
+function get_web_dir()
+{
     preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)index\.php$|', $_SERVER['SCRIPT_FILENAME'], $find);
     if ($find[1] == null) {
         $find[1] = "/";

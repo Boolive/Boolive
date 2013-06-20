@@ -63,7 +63,6 @@
         },
         "display": {
             "value": "block",
-            "is_default_class": false,
             "order": 11
         }
     }

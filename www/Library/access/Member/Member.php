@@ -12,6 +12,7 @@ namespace Library\access\Member;
 use Boolive\data\Data;
 use Boolive\data\Entity,
     Boolive\functions\F;
+use Library\access\Role\Role;
 
 class Member extends Entity
 {
@@ -42,29 +43,29 @@ class Member extends Entity
             $this->_rights[$action_kind] = array();
             $cond = null;
             $curr = null;
-//            if ($this->isExist()){
-//                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'order' => array('parent_cnt', 'desc')));
-//            }
-            //else{
-//                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'order' => array('parent_cnt', 'desc')));
-//                array_unshift($parents, $this);
-//            }
+            if ($this->isExist()){
+                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true));
+            }
+            else{
+                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true));
+                //array_unshift($parents, $this);
+            }
 
-            $obj = $this;
+            $obj = reset($parents);
             // Выбор ролей члена и всех его групп (родителей)
             do{
                 if ($obj->isExist()){
-                    $rights = Data::read(array(
+                    // Выбор ролей со всей информацией в них
+                    $roles = $obj->rights->find(array(
                         'select' => 'tree',
-                        'from' => array($obj, 'rights'),
-                        'depth' => array(0, 'max'),
-                        'comment' => 'read rights of Member'
+                        'depth' => array(1, 'max'),
+                        'comment' => 'read rights of Member',
                     ));
 //                    $rights = Data::read(array($obj, 'rights'), false);
-                    $roles = $rights->find(array('comment'=>'read all rights'));
+                    //$roles = $rights->find(array('comment'=>'read all roles of Member'));
                     // Объединяем права в общий список
                     foreach ($roles as $r){
-                        if (($c = $r->getAccessCond($action_kind, $parent, $depth)) && is_array($c)){
+                        if ($r instanceof Role && ($c = $r->getAccessCond($action_kind, $parent, $depth)) && is_array($c)){
                             $need = ($c[0] == 'not')?'all':'any';
                             if (is_null($cond)){
                                 $cond = array($need, array($c));
@@ -79,7 +80,7 @@ class Member extends Entity
                         }
                     }
                 }
-                $obj = $obj->parent();
+                $obj = next($parents);
             }while($obj instanceof Member);
             if (isset($cond) && sizeof($cond[1]) == 1) $cond = $cond[1][0];
             $this->_rights[$action_kind] = $cond;
