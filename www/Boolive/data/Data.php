@@ -102,7 +102,6 @@ class Data
      * ";</pre>
      * @param string $cond Условие выбора
      * @param bool $access Признак, учитывать или нет права доступа на чтение?
-     * @param bool $use_cache Признак, использовать или нет кэш?
      * @param bool $index Признак, выполнять индексирование данных перед поиском?
      * @param bool $only_cache Признак, выбирать только из буфера?
      * @return array|Entity|mixed|null В зависимости от услвоия выбора результатом будет
@@ -112,7 +111,7 @@ class Data
      * г) массив со значенями указанного атрибута найденных объектов
      * д) значение указанного атриубта объекта
      */
-    static function read($cond = '', $access = true, $use_cache = true, $index = true, $only_cache = false)
+    static function read($cond = '', $access = true, $index = true, $only_cache = false)
     {
         if ($cond == Entity::ENTITY_ID){
             return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
@@ -120,7 +119,8 @@ class Data
         if ($cond == 'null' || !isset($cond)){
             return null;
         }
-        $cond = self::decodeCond($cond);
+        $cond = self::decodeCond($cond, array(), true);
+
         // Контроль доступа в условие выбора
         if ($access) $cond['access'] = true;
         if (isset($cond['comment'])){
@@ -132,106 +132,203 @@ class Data
         // Выполнять последующие группировку выборок с выбранными объектами?
         if (isset($cond['group'])){
             unset($cond['group']);
-            self::$group_cond[json_encode($cond)] = true;
+            $group = true;
+        }else{
+            $group = false;
         }
-        // Из буфера
-        if ($use_cache){
-            $result = Buffer::get($cond);
-            if (isset($result)){
-                if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER')->group($comment)->group()->set(F::toJSON($cond, false));
-                return $result;
-            }
+        // Ограничения для возвращаемого результата
+        if (isset($cond['return'])){
+            $return = $cond['return'];
+            unset($cond['return']);
+        }else{
+            $return = false;
         }
-        if (!$only_cache){
-            // Попытка сгруппировать выборку с возможными будущими подобными выборками
-            if (is_string($cond['from'])){
-                $what = ($cond['select'][0] == 'exists' || $cond['select'][0] == 'count')? $cond['select'][1] : $cond['select'][0];
-                // Если выбор одного объекта, то группировка по родителям выбранных ранее вместе
-                if ($what == 'self'){
-                    // Если в from есть путь, то узнаем родителя и имя выбираемого подчиненного
-                    $from_info = Data::parseUri($cond['from']);
-                    if (empty($from_info['id'])){
-                        $select = F::splitRight('/', $cond['from']);
-                        $parent_key = 'uri';
-                    }else
-                    if (!empty($from_info['path']) && mb_substr_count($from_info['path'], '/')==1){
-                        $select = array(
-                            $from_info['store'].$from_info['dslash'].$from_info['id'],
-                            ltrim($from_info['path'])
-                        );
-                        $parent_key = 'id';
-                    }
-                    if (isset($select) && ($parent = Data::read($select[0], false, true, false, true))){
-                        if (($parent_cond = $parent->cond()) && $parent_cond['select'][0]!='self' && isset(self::$group_cond[json_encode($parent_cond)])){
+        // Уровень кэширования. По умолчанию 1.
+        if (isset($cond['cache'])){
+            $cache = max(min(2, $cond['cache']),0);
+            unset($cond['cache']);
+        }else{
+            $cache = 1;
+        }
+
+        $what = ($cond['select'][0] == 'exists' || $cond['select'][0] == 'count')? $cond['select'][1] : $cond['select'][0];
+
+        // @todo Создаём отдельно групповое условие
+        // Попытка сгруппировать выборку с возможными будущими подобными выборками
+        $group_cond = $cond;
+        // @todo Группировку осуществлять, если from = Entity или array(Entity, name) для self
+        // Это позволит правильно определять объект по услвоии выборки которого делать группу.
+        // Парсер условия не должен нормализовывать from в этом случаи
+        if ($cond['from'] instanceof Entity){
+            $from_type = 'entity';
+        }else
+        if (is_array($cond['from'])  && sizeof($cond['from'])==2 && $cond['from'][0] instanceof Entity && is_string($cond['from'][1])){
+            $from_type = 'entity/name';
+        }else{
+            $from_type = '';
+        }
+        $cond['from'] = self::decodeFrom($cond['from'], false);
+        //if (($from_type == 'entity' || $from_type == 'entity/name')){
+            // Если выбор одного объекта, то группировка по родителям выбранных ранее вместе
+            if ($what == 'self' && $comment == 'read_proto'){
+
+            }else
+            if ($what == 'self' && ($from_type == 'entity' || $from_type == 'entity/name')){
+                if ($from_type == 'entity'){
+                    $parent = $group_cond['from']->parent(null, false);
+                    $name = $group_cond['from']->name();
+                }else{
+                    $parent = $group_cond['from'][0];
+                    $name = $group_cond['from'][1];
+                }
+                if ($parent){
+                    if (($parent_cond = $parent->cond()) && $parent_cond['select'][0]!='self' && isset(self::$group_cond[json_encode($parent_cond)])){
+                        if (self::compareCond($parent_cond, $group_cond, array('from', 'key'))){
+                            $group_cond = $parent_cond;
+                            $select_by_cond = true;
+                        }else{
                             if ($parent_cond['select'][0] == 'tree') $parent_cond['select'][0] = 'children';
                             $list = Buffer::get($parent_cond);
                             if (sizeof($list)>1){
-                                $key_from_group = $cond['from'];
-                                $cond['from'] = array();
-                                $makefrom = function(&$cond, $list, $parent_key, $name) use (&$makefrom){
+                                $key_from_group = $parent->key().'/'.$name;
+                                $group_cond['from'] = array();
+                                $makefrom = function(&$group_cond, $list, $name) use (&$makefrom){
                                     foreach ($list as $from){
                                         if (is_array($from)){
-                                            $makefrom($cond, $from, $parent_key, $name);
-                                        }else{
-                                            $cond['from'][] = $from->attr($parent_key).'/'.$name;
+                                            if (isset($from['class'])){
+                                                $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
+                                            }else{
+                                                $makefrom($group_cond, $from, $name);
+                                            }
                                         }
                                     }
                                 };
-                                $makefrom($cond, $list, $parent_key, $select[1]);
+                                $makefrom($group_cond, $list, $name);
                             }
                         }
                     }
-                }else{
-                    // Группировка по объектам, выбранных ранее вместе с текущим from
-                    if ($from = Data::read($cond['from'], false, true, false, true)){
-                        if (($from_cond = $from->cond()) && ($from_cond['select'][0]!='self' || is_array($from_cond['from'])) && isset(self::$group_cond[json_encode($from_cond)])){
+                }
+            }else
+            if ($from_type == 'entity'){
+                // Группировка по объектам, выбранных ранее вместе с текущим from
+                //if ($from = Data::read($group_cond['from'], false, true, false, true)){
+                    if (($from_cond = $group_cond['from']->cond()) && ($from_cond['select'][0]!='self' || is_array($from_cond['from'])) && isset(self::$group_cond[json_encode($from_cond)])){
+                        if (self::compareCond($from_cond, $group_cond, array('from', 'key'))){
+                            $group_cond = $from_cond;
+                            $select_by_cond = true;
+                        }else{
                             if ($from_cond['select'][0] == 'tree') $from_cond['select'][0] = 'children';
                             $list = Buffer::get($from_cond);
                             if (sizeof($list)>1){
-                                $key_from_group = $from->id();
-                                $cond['from'] = array();
-                                $makefrom = function(&$cond, $list) use (&$makefrom){
+                                $key_from_group = $group_cond['from']->id();
+                                $group_cond['from'] = array();
+                                $makefrom = function(&$group_cond, $list) use (&$makefrom){
                                     foreach ($list as $from){
                                         if (is_array($from)){
-                                            $makefrom($cond, $from);
-                                        }else{
-                                            $cond['from'][] = $from->id();
+                                            if (isset($from['class'])){
+                                                if (isset($from['id'])) $group_cond['from'][] = $from['id'];
+                                            }else{
+                                                $makefrom($group_cond, $from);
+                                            }
                                         }
                                     }
                                 };
-                                $makefrom($cond, $list);
+                                $makefrom($group_cond, $list);
                             }
                         }
                     }
-                }
-                if (isset($key_from_group)){
-                    self::$group_cond[json_encode($cond)] = true;
-                    // Из буфера групповую выборку
-                    if ($use_cache){
-                        $result = Buffer::get($cond);
-                        if (isset($result[$key_from_group])){
-                            return $result[$key_from_group];
-                        }
+                //}
+            }
+            $group_cond['from'] = self::decodeFrom($group_cond['from'], false);
+            if (isset($key_from_group)){
+                self::$group_cond[json_encode($group_cond)] = true;
+                // Из буфера групповую выборку
+                if ($cache){
+                    $result = Buffer::get($group_cond);
+                    if (isset($result[$key_from_group])){
+                        $result = $result[$key_from_group];
                     }
                 }
             }
+//        }else{
+//            $group_cond['from'] = self::decodeFrom($group_cond['from'], false);
+//        }
+        if ($group) self::$group_cond[json_encode($cond)] = true;
+
+        // @todo Выбор из буфера по первому условию. Но выбранным объектам присваивается групповое услвоие
+        // Из 2 буфера
+        if (!isset($result) && $cache == 2){
+            $result = Buffer2::get($cond);
+            if (isset($result)){
+                if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER 2')->group($comment)->group()->set(F::toJSON($cond, false));
+                return $result;
+            }
+        }
+        // Из 1 буфера
+        if (!isset($result) && $cache){
+            $result = Buffer::get($cond);
+            if (isset($result)){
+                if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER')->group($comment)->group()->set(F::toJSON($cond, false));
+            }
+        }
+        // @todo Если не выбрали из буфера
+        if (!isset($result) && !$only_cache){
+            // @todo Выбор из хранилища. Получаем массивы
             // Определение хранилища по URI
-            if ($store = self::getStore($cond['from'])){
+            if ($store = self::getStore($group_cond['from'])){
                 // Выбор объекта
-                $result = $store->read($cond, $index);
+                $result = $store->read($group_cond, $index);
+                if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->group()->set(F::toJSON($cond, false));
             }else{
                 $result = null;
             }
+            // @todo Запись в буфер по групповому услвоию, если есть или первому. По одной выборке создаётся несколько буферов под разные условия
             // В буфер
-            if ($use_cache) Buffer::set($result, $cond);
+            if ($cache) Buffer::set($result, $group_cond);
+            // @todo Если условие автоматом сгруппировано и выбор был по нему, то выбор из группы запрашиваемого элемента
             if (isset($key_from_group) && $result){
                 $result = $result[$key_from_group];
-                $cond['from'] = $key_from_group;
             }
-            if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->group()->set(F::toJSON($cond, false));
-            return $result;
         }
-        return null;
+        // @todo Создание экземпляров
+        if (is_array($result) && empty($cond['select'][1])){
+            if (!is_array($cond['from'])) $result = array($result);
+
+            if ($what=='tree'){
+                $children_depth = isset($return['depth'])&&($what=='tree')? $return['depth'] : Entity::MAX_DEPTH;
+            }else{
+                $children_depth = 0;
+            }
+
+            foreach ($result as $gi => $gitem){
+                if (isset($gitem['class'])){
+                    $result[$gi] = new $gitem['class']($gitem, $children_depth);
+                    $result[$gi]->cond($group_cond);
+                }else{
+                    $list = array();
+                    //if ($children_depth > 0){
+
+                        foreach ($result[$gi] as $i => $item){
+                            if (isset($item['class'])){
+                                $obj = new $item['class']($item, $children_depth);
+                                $obj->cond($group_cond);
+                                if (empty($cond['key'])){
+                                    $list[] = $obj;
+                                }else{
+                                    $list[$item[$cond['key']]] = $obj;
+                                }
+                            }
+                        }
+                    //}
+                    $result[$gi] = $list;
+                }
+            }
+            if (!is_array($cond['from'])) $result = reset($result);
+        }
+        if ($cache == 2){
+            Buffer2::set($result, $cond);
+        }
+        return $result;
     }
 
     /**
@@ -320,9 +417,10 @@ class Data
      * определяется в пункт from
      * @param string $cond Исходное условие
      * @param array $default Условие по умолчанию
+     * @param bool $entity_in_from
      * @return array Преобразованное условие
      */
-    static function decodeCond($cond, $default = array())
+    static function decodeCond($cond, $default = array(), $entity_in_from = false)
     {
         if (is_array($cond) && !empty($cond['correct'])){
             return $cond;
@@ -464,26 +562,27 @@ class Data
         if (!isset($result['owner'])) $result['owner'] = Entity::ENTITY_ID;
         if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
         // Нормализация from
-        if (!isset($result['from'])){
-            $result['from'] = array(null);
-        }else
-        if (!is_array($result['from']) || (sizeof($result['from'])==2 && $result['from'][0] instanceof Entity && is_string($result['from'][1]))){
-            $result['from'] = array($result['from']);
-        }
-        foreach ($result['from'] as $i => $f){
-            if ($f instanceof Entity){
-                $result['from'][$i] = $f->id();
-            }else
-            if (is_array($f)){
-                // Если from[0] сущность, а from[1] строка
-                if (sizeof($f)==2 && $f[0] instanceof Entity && is_string($f[1])){
-                    $result['from'][$i] = $f[0]->uri().'/'.$f[1];
-                }else{
-                    $result['from'][$i] = '';
-                }
-            }
-        }
-        if (sizeof($result['from'])==1) $result['from'] = $result['from'][0];
+        $result['from'] = self::decodeFrom(isset($result['from'])?$result['from']:null, $entity_in_from);
+//        if (!isset($result['from'])){
+//            $result['from'] = array(null);
+//        }else
+//        if (!is_array($result['from']) || (sizeof($result['from'])==2 && $result['from'][0] instanceof Entity && is_string($result['from'][1]))){
+//            $result['from'] = array($result['from']);
+//        }
+//        foreach ($result['from'] as $i => $f){
+//            if ($f instanceof Entity){
+//                $result['from'][$i] = $f->id();
+//            }else
+//            if (is_array($f)){
+//                // Если from[0] сущность, а from[1] строка
+//                if (sizeof($f)==2 && $f[0] instanceof Entity && is_string($f[1])){
+//                    $result['from'][$i] = $f[0]->uri().'/'.$f[1];
+//                }else{
+//                    $result['from'][$i] = '';
+//                }
+//            }
+//        }
+//        if (sizeof($result['from'])==1) $result['from'] = $result['from'][0];
         // limit
         if ($result['select'][0] == 'exists'){
             $result['limit'] = array(0,1);
@@ -533,7 +632,45 @@ class Data
         );
         if (isset($result['comment'])) $r['comment'] = $result['comment'];
         if (isset($result['group'])) $r['group'] = true;
+        if (isset($result['return'])) $r['return'] = $result['return'];
+        if (isset($result['cache'])) $r['cache'] = $result['cache'];
         return $r;
+    }
+
+    static function decodeFrom($from, $can_entity = false)
+    {
+        if (!isset($from)){
+            $from = array(null);
+        }else
+        if (!is_array($from) || (sizeof($from)==2 && $from[0] instanceof Entity && is_string($from[1]))){
+            $from = array($from);
+        }
+        foreach ($from as $i => $f){
+            if ($f instanceof Entity){
+                if (!$can_entity) $from[$i] = $f->id();
+            }else
+            if (is_array($f)){
+                // Если from[0] сущность, а from[1] строка
+                if (sizeof($f)==2 && $f[0] instanceof Entity && is_string($f[1])){
+                    if (!$can_entity || mb_substr_count($f[1], '/')){
+                        $from[$i] = $f[0]->uri().'/'.$f[1];
+                    }
+                }else{
+                    $from[$i] = '';
+                }
+            }
+        }
+        if (sizeof($from)==1) $from = $from[0];
+        return $from;
+    }
+
+    static function compareCond($cond1, $cond2, $ignore = array())
+    {
+        foreach ($ignore as $key){
+            unset($cond1[$key]);
+            unset($cond2[$key]);
+        }
+        return json_encode($cond1) == json_encode($cond2);
     }
 
     /**

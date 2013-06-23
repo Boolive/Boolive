@@ -94,16 +94,16 @@ class MySQLStore extends Entity
         }
         // Индексирование
         // @todo Индексировать если from короткий числовой URI
-        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree')){
-            foreach ($multy_from as $key => $from){
-                $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
-                // Глубина условия
-                $depth = $this->getCondDepth($cond);
-                if ($multy_from[$key]->_attribs['index_depth']<$depth || $multy_from[$key]->_attribs['index_step']!=0){
-                    $this->makeIndex($this->localId($multy_from[$key]->id()), $this->localId($cond['owner']), $this->localId($cond['lang']), $depth);
-                }
-            }
-        }
+//        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree')){
+//            foreach ($multy_from as $key => $from){
+//                $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
+//                // Глубина условия
+//                $depth = $this->getCondDepth($cond);
+//                if ($multy_from[$key]->_attribs['index_depth']<$depth || $multy_from[$key]->_attribs['index_step']!=0){
+//                    $this->makeIndex($this->localId($multy_from[$key]->id()), $this->localId($cond['owner']), $this->localId($cond['lang']), $depth);
+//                }
+//            }
+//        }
         $q = $this->db->prepare($sql['sql']);
         foreach ($sql['binds'] as $i => $v){
             if (is_array($v)){
@@ -156,16 +156,17 @@ class MySQLStore extends Entity
                 if (isset($row['id'])){
                     unset($row['id2']);
                     $group_result[$key] = $this->makeObject($row);
-                    $group_result[$key]->cond($cond);
+//                    $group_result[$key]->cond($cond);
                 }else{
                     if (isset($row['id2'])){
-                        $group_result[$key] = new Entity(array(
+                        $group_result[$key] = /*new Entity(*/array(
                             //'id' => $this->remoteId($row['id2']),
                             'uri'=>$row['uri'],
                             'owner'=>$this->_attribs['owner'],
                             'lang'=>$this->_attribs['lang'],
+                            'class' => '\\Boolive\\data\\Entity'
                             //'is_exist' => 0
-                        ));
+                        )/*)*/;
                     }
                 }
             }
@@ -173,24 +174,24 @@ class MySQLStore extends Entity
             else{
                 // Объект или его атрибут
                 if (isset($cond['select'][1]) && in_array($cond['select'][1], array_keys($this->_attribs))){
-                    $obj = $row[$cond['select'][1]];
+                    if (empty($cond['key'])){
+                        $group_result[$key][] = $row[$cond['select'][1]];
+                    }else{
+                        $group_result[$key][$row[$cond['key']]] = $row[$cond['select'][1]];
+                    }
                 }else{
                     $obj = $this->makeObject($row);
-                    $obj->cond($cond);
-                }
-                // Если выборка дерева, то в результате будут объекты начальной глубины
-                if (!isset($tree_list[$key]) ||
-                    (isset($tree_list[$key]) && $row['parent_cnt'] == $first_level[$key]))
-                {
-                    if (empty($cond['key'])){
-                        $group_result[$key][] = $obj;
-                    }else{
-                        $group_result[$key][$row[$cond['key']]] = $obj;
+                    // Если выборка дерева, то в результате будут объекты начальной глубины
+                    if (!isset($tree_list[$key]) ||
+                        (isset($tree_list[$key]) && $row['parent_cnt'] == $first_level[$key]))
+                    {
+                        $group_result[$key][] = &$obj;
                     }
-                }
-                // Подготовительные данные для формирования дерева
-                if (isset($tree_list[$key])){
-                    $tree_list[$key][$obj->_attribs['id']] = $obj;
+                    // Подготовительные данные для формирования дерева
+                    if (isset($tree_list[$key])){
+                        $tree_list[$key][$obj['id']] = &$obj;
+                    }
+                    unset($obj);
                 }
             }
             $row = $q->fetch(DB::FETCH_ASSOC);
@@ -203,16 +204,16 @@ class MySQLStore extends Entity
                                 !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                     $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
                     $sort = function($a, $b) use ($sort_kind){
-                        if ($a->attr('order') == $b->attr('order')) return 0;
-                        return $sort_kind * ($a->attr('order') > $b->attr('order')?1:-1);
+                        if ($a['order'] == $b['order']) return 0;
+                        return $sort_kind * ($a['order'] > $b['order']?1:-1);
                     };
                     uasort($tree, $sort);
                     uasort($group_result[$key], $sort);
                 }
-                foreach ($tree as $obj){
-                    $p = $obj->_attribs['parent'];
+                foreach ($tree as $tk => $obj){
+                    $p = $obj['parent'];
                     if (isset($tree_list[$key][$p])){
-                        $tree_list[$key][$p]->_children[$obj->_attribs['name']] = $obj;
+                        $tree_list[$key][$p]['children'][$obj['name']] = &$tree_list[$key][$tk];
                     }
                 }
                 if ($cond['depth'][0] == 0 && isset($group_result[$key])){
@@ -224,13 +225,13 @@ class MySQLStore extends Entity
         if ($cond['select'][0] == 'self'){
             foreach ($group_result as $key => $obj){
                 if (!isset($obj)){
-                    $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
-                    $obj->cond($cond);
+                    $obj = /*new Entity(*/array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang'], 'class' => '\\Boolive\\data\\Entity'/*)*/);
+//                    $obj->cond($cond);
                     $uri = ($key===0)? $cond['from'] : $key;
                     if (!Data::isShortUri($uri)){
                         $names = F::splitRight('/', $uri, true);
-                        $obj->_attribs['name'] = $names[1];
-                        $obj->_attribs['uri'] = $uri;
+                        $obj/*->_attribs*/['name'] = $names[1];
+                        $obj/*->_attribs*/['uri'] = $uri;
                     }
                     $group_result[$key] = $obj;
                 }
@@ -1730,11 +1731,11 @@ class MySQLStore extends Entity
                     // Сокращенный URI приндалежит данной секции, поэтому возвращаем вторую часть
                     return intval($info['id']);
                 }else{
-                    return $this->localId(Data::read($uri, false, IS_INSTALL));
+                    return $this->localId(Data::read($uri.'&cache='.(IS_INSTALL?2:0), false));
                 }
             }else{
                 // Получаем полный URI по сокращенному
-                $uri = Data::read($uri, false, IS_INSTALL);
+                $uri = Data::read($uri.'&cache='.(IS_INSTALL?2:0), false);
                 if ($uri->isExist()){
                     $uri = $uri->uri();
                 }else{
@@ -1802,50 +1803,33 @@ class MySQLStore extends Entity
         $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['lang']);
         $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->remoteId($attribs['parent']);
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->remoteId($attribs['proto']);
-        $attribs['is_default_value'] = $attribs['is_default_value'] == 0 ? 0 : $this->remoteId($attribs['is_default_value']);
-        $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_default_class']) : $attribs['is_default_class'];
-        $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_link']) : $attribs['is_link'];
+        if ($attribs['is_default_value'] == 0) unset($attribs['is_default_value']); else $attribs['is_default_value'] = $this->remoteId($attribs['is_default_value']);
+        $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_default_class']) : intval($attribs['is_default_class']);
+        $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_link']) : intval($attribs['is_link']);
         $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
         $attribs['is_exist'] = 1;
         $attribs['order'] = intval($attribs['order']);
         $attribs['date'] = intval($attribs['date']);
         $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
         $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
-        $attribs['is_file'] = intval($attribs['is_file']);
-        $attribs['is_history'] = intval($attribs['is_history']);
-        $attribs['is_delete'] = intval($attribs['is_delete']);
-        $attribs['is_hidden'] = intval($attribs['is_hidden']);
+        if (empty($attribs['is_file'])) unset($attribs['is_file']); else $attribs['is_file'] = intval($attribs['is_file']);
+        if (empty($attribs['is_history'])) unset($attribs['is_history']); else $attribs['is_history'] = intval($attribs['is_history']);
+        if (empty($attribs['is_delete'])) unset($attribs['is_delete']); else $attribs['is_delete'] = intval($attribs['is_delete']);
+        if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
+        if (!empty($attribs['is_virtual'])) unset($attribs['is_virtual']); else $attribs['is_virtual'] = 0;
         $attribs['index_depth'] = intval($attribs['index_depth']);
         $attribs['index_step'] = intval($attribs['index_step']);
         unset($attribs['valuef']);
-        if (isset($attribs['uri'])){
-            // Свой класс
-            if (empty($attribs['is_default_class'])){
-                $class = $this->getClassById($attribs['id']);
-            }else
-            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
-                $class = $this->getClassById($attribs['is_default_class']);
-            }
-            if (isset($class)){
-                try{
-                    $obj = new $class($attribs);
-                }catch(\Exception $e){
-                    // Если файл не найден, то будет использоваться класс прототипа или Entity
-                    if ($e->getCode() == 2){
-                        if ($attribs['proto'] && ($proto = Data::read($attribs['proto'].'&comment=read proto to use his class', false))){
-                            // Класс прототипа
-                            $class = get_class($proto);
-                            $obj = new $class($attribs);
-                        }
-                    }else{
-                        throw $e;
-                    }
-                }
-            }
+        // Свой класс
+        if (empty($attribs['is_default_class'])){
+            $attribs['class'] = $this->getClassById($attribs['id']);
+        }else
+        if ($attribs['is_default_class'] != Entity::ENTITY_ID){
+            $attribs['class'] = $this->getClassById($attribs['is_default_class']);
+        }else{
+            $attribs['class'] = '\\Boolive\\data\\Entity';
         }
-        // Базовый класс
-        if (!isset($obj)) $obj = new Entity($attribs);
-        return $obj;
+        return $attribs;
     }
 
     private function getClassById($id)
@@ -1872,7 +1856,7 @@ class MySQLStore extends Entity
         if (isset($this->classes[$id])){
             return $this->classes[$id];
         }
-        return null;
+        return '\\Boolive\\data\\Entity';
     }
 
     private function localIdCacheValidate($new_attr, $last_attr)

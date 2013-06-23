@@ -125,8 +125,9 @@ class Attribs extends Widget
                     $this->_input['REQUEST']['object'] = Data::read(array(
                         'from' => $obj->id(),
                         'owner' => $obj->owner(),
-                        'lang' => $obj->lang()
-                    ), true, false);
+                        'lang' => $obj->lang(),
+                        'cache' => 0
+                    ), true);
                 }
                 $v['attrib'] = $this->callLoad();
             }

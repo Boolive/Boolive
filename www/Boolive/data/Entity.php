@@ -88,8 +88,9 @@ class Entity implements ITrace
     /**
      * Конструктор
      * @param array $attribs
+     * @param int $children_depth
      */
-    public function __construct($attribs = array())
+    public function __construct($attribs = array(), $children_depth = 0)
     {
         if (!empty($attribs['id'])){
             $attribs['is_exist'] = true;
@@ -100,6 +101,17 @@ class Entity implements ITrace
             if (!isset($attribs['parent'])){
                 $attribs['parent'] = $names[0];
             }
+        }
+        if (isset($attribs['class'])) unset($attribs['class']);
+        if (isset($attribs['children'])){
+            if ($children_depth > 0){
+                if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
+                foreach ($attribs['children'] as $name => $child){
+                    $class = isset($child['class'])? $child['class'] : '\Boolive\data\Entity';
+                    $this->_children[$name] = new $class($child, $children_depth);
+                }
+            }
+            unset($attribs['children']);
         }
         $this->_attribs = array_replace($this->_attribs, $attribs);
     }
@@ -473,13 +485,15 @@ class Entity implements ITrace
 //                'select' => 'link',
 //                'owner' => $this->owner(),
 //                'lang' => $this->lang(),
-//                'comment' => 'read link'
+//                'comment' => 'read link',
+//                'group' => true
 //            ));
             return Data::read(array(
                 'from' => $this->_attribs['is_link'],
                 'owner' => $this->owner(),
                 'lang' => $this->lang(),
-                'comment' => 'read link'
+                'comment' => 'read link',
+                'cache' => 2
             ));
         }else{
             return !empty($this->_attribs['is_link']);
@@ -560,7 +574,8 @@ class Entity implements ITrace
                 'from'=>$this->_attribs['is_default_value'],
                 'owner'=>$this->owner(),
                 'lang'=>$this->lang(),
-                'comment'=>'read default value'
+                'comment'=>'read default value',
+                'cache' => 2
             ));
         }else{
             return !empty($this->_attribs['is_default_value']);
@@ -603,7 +618,8 @@ class Entity implements ITrace
                 'from' => $this->_attribs['is_default_class'],
                 'owner' => $this->owner(),
                 'lang' => $this->lang(),
-                'comment' => 'read default class'
+                'comment' => 'read default class',
+                'cache' => 2
             ));
         }else{
             return !empty($this->_attribs['is_default_class']);
@@ -654,9 +670,10 @@ class Entity implements ITrace
     /**
      * Родитель объекта
      * @param null|Entity $new_parent Новый родитель. Чтобы удалить родителя, указывается false
+     * @param bool $load Загрузить родителя из хранилща, если ещё не загружен?
      * @return \Boolive\data\Entity|null
      */
-    public function parent($new_parent = null)
+    public function parent($new_parent = null, $load = true)
     {
         if (is_string($new_parent)) $new_parent = Data::read($new_parent);
         // Смена родителя
@@ -687,13 +704,14 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         // Возврат объекта-родителя
-        if ($this->_parent === false){
+        if ($this->_parent === false && $load){
             if (isset($this->_attribs['parent'])){
                 $this->_parent = Data::read(array(
                     'from' => $this->_attribs['parent'],
                     'owner' => $this->_attribs['owner'],
                     'lang' => $this->_attribs['lang'],
-                    'comment' => 'read parent'
+                    'comment' => 'read parent',
+                    'cache' => 2
                 ));
                 if (!$this->_parent->isExist()){
                     $this->_parent = null;
@@ -758,7 +776,7 @@ class Entity implements ITrace
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
      * @return \Boolive\data\Entity|null|false
      */
-    public function proto($new_proto = null)
+    public function proto($new_proto = null, $load = true)
     {
         if (is_string($new_proto)) $new_proto = Data::read($new_proto);
 //        if ($new_proto instanceof Entity && !$new_proto->isExist()) $new_proto = null;
@@ -807,13 +825,14 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         // Возврат объекта-прототипа
-        if ($this->_proto === false){
+        if ($this->_proto === false && $load){
             if (isset($this->_attribs['proto'])){
                 $this->_proto = Data::read(array(
                     'from' => $this->_attribs['proto'],
                     'owner' => $this->_attribs['owner'],
                     'lang' => $this->_attribs['lang'],
-                    'comment' => 'read proto'
+                    'comment' => 'read proto',
+                    'cache' => 2
                 ));
                 if (!$this->_proto->isExist()){
                     $this->_proto = null;
@@ -846,7 +865,7 @@ class Entity implements ITrace
      * @param null|Entity $new_owner Новый владелец. Чтобы сделать общим, указывается false
      * @return \Boolive\data\Entity|null
      */
-    public function owner($new_owner = null)
+    public function owner($new_owner = null, $load = true)
     {
         if (is_string($new_owner)) $new_owner = Data::read($new_owner);
         // Смена владельца
@@ -863,13 +882,14 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         // Возврат объекта-владельца
-        if ($this->_owner === false){
+        if ($this->_owner === false && $load){
             if (isset($this->_attribs['owner'])){
                 $this->_owner = Data::read(array(
                     'from' => $this->_attribs['owner'],
                     'owner' => $this->_attribs['owner'],
                     'lang' => $this->_attribs['lang'],
-                    'comment' => 'read owner'
+                    'comment' => 'read owner',
+                    'cache' => 2
                 ));
             }else{
                 $this->_owner = null;
@@ -883,7 +903,7 @@ class Entity implements ITrace
      * @param null|Entity $new_lang Новый язык. Чтобы сделать общим, указывается false
      * @return \Boolive\data\Entity|null
      */
-    public function lang($new_lang = null)
+    public function lang($new_lang = null, $load = true)
     {
         if (is_string($new_lang)) $new_lang = Data::read($new_lang);
         // Смена языка
@@ -902,13 +922,14 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         // Возврат объекта-языка
-        if ($this->_lang === false){
+        if ($this->_lang === false && $load){
             if (isset($this->_attribs['lang'])){
                 $this->_lang = Data::read(array(
                     'from' => $this->_attribs['lang'],
                     'owner' => $this->_attribs['owner'],
                     'lang' => $this->_attribs['lang'],
-                    'comment' => 'read lang'
+                    'comment' => 'read lang',
+                    'cache' => 2
                 ));
             }else{
                 $this->_lang = null;
@@ -1122,16 +1143,16 @@ class Entity implements ITrace
     {
         $cond = Data::decodeCond($cond, array('select' => 'children', 'depth' => array(1,1)));
         if ($this->isExist()){
-            $cond['from'] = $this->id();
-            $result = Data::read($cond, true, true, $index);
+            $cond['from'] = $this;//->id();
+            $result = Data::read($cond, true, $index);
         }else
         if (isset($this->_attribs['uri'])){
             $cond['from'] = $this->_attribs['uri'];
-            $result = Data::read($cond, true, true, $index);
+            $result = Data::read($cond, true, $index);
         }else
         if ($p = $this->proto()){
-            $cond['from'] = $p->id();
-            $result = Data::read($cond, true, true, $index);
+            $cond['from'] = $p;//->id();
+            $result = Data::read($cond, true, $index);
             foreach ($result as $key => $obj){
                 /** @var $obj Entity */
                 $result[$key] = $obj->birth($this);
@@ -1488,7 +1509,7 @@ class Entity implements ITrace
             $parent = $parent->uri();
         }else
         if (Data::isShortUri($parent)){
-            $parent = Data::read($parent)->uri();
+            $parent = Data::read($parent.'&cache=2')->uri();
         }
         return $parent.'/' == mb_substr($this->uri(),0,mb_strlen($parent)+1);
     }
@@ -1752,6 +1773,7 @@ class Entity implements ITrace
         $trace['_rename'] = $this->_rename;
         //$trace['_proto'] = $this->_proto;
         //$trace['_parent'] = $this->_parent;
+        $trace['_cond'] = $this->_cond;
         $trace['_children'] = $this->_children;
         return $trace;
     }

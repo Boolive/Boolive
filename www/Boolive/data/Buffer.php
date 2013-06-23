@@ -1,7 +1,7 @@
 <?php
 /**
- * Бефер данных
- * Содержит используемые экземпляры объектов для оптимизации повтороного обращения к ним
+ * Бефер атриубтов (кэш первого уровня)
+ * Содержит атрибуты выбранных объектов
  *
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
@@ -30,16 +30,6 @@ class Buffer
         $buffer_key = json_encode($buffer_cond);
         if (isset(self::$list[$buffer_key]) || array_key_exists($buffer_key, self::$list)){
             $result = self::$list[$buffer_key];
-            if (is_array($result) && reset($result) instanceof Entity){
-                if (empty($cond['key'])){
-                    return array_values($result);
-                }
-                $list = array();
-                foreach ($result as $obj){
-                    $list[$obj->attr($cond['key'])] = $obj;
-                }
-                $result = $list;
-            }
         }else
         // Если есть буфер выборки подчиненных, в которых должен оказаться искомый объект,
         // то проверяем его наличие в буфере
@@ -55,7 +45,7 @@ class Buffer
             $key = json_encode($ocond);
             if (isset(self::$list[$key]) || array_key_exists($key, self::$list)){
                 if (!isset(self::$list[$key][$names[1]])){
-                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang']));
+                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang'], 'class' => '\\Boolive\\data\\Entity');
                 }else{
                     return self::$list[$key][$names[1]];
                 }
@@ -89,21 +79,23 @@ class Buffer
         if ($cond['select'][0] == 'tree' && empty($cond['select'][1]) && empty($cond['limit'])){
             $list_key = $cond;
             $list_key['select'][0] = 'children';
-            self::setTree($result, $cond, $key, Data::read($cond['from'].'&comment=buffer tree', !empty($cond['access'])), json_encode($list_key));
+            self::setTree($result, $cond, $key, Data::read($cond['from'].'&comment=buffer tree', !empty($cond['access']))->attributes(), json_encode($list_key));
         }else
         // один объект
-        if ($result instanceof Entity){
+        if (isset($result['class'])){
             // Ключ uri
             //if ($result->isExist()){
-                $cond['from'] = $result->uri();
+            if (isset($result['uri'])){
+                $cond['from'] = $result['uri'];
                 $cond['select'] = array('self');
                 $cond['depth'] = array(0,0);
                 self::$list[json_encode($cond)] = $result;
-                if ($result->isExist()){
+                if (!empty($result['id'])){
                     // Если объект существует, то дополнительно ключ id
-                    $cond['from'] = $result->id();
+                    $cond['from'] = $result['id'];
                     /*if (!isset(self::$list[$bkey = json_encode($cond)])) */self::$list[$bkey = json_encode($cond)] = $result;
                 }
+            }
             //}
         }else
         if (is_array($result)){
@@ -111,7 +103,7 @@ class Buffer
             if ($key!='name' && $cond['select'][0] == 'children' && empty($cond['select'][1]) && $cond['depth'][0]==1 && $cond['depth'][1] == 1){
                 $list = array();
                 foreach ($result as $obj){
-                    $list[$obj->attr('name')] = $obj;
+                    $list[$obj['name']] = $obj;
                 }
                 $result = $list;
             }
@@ -137,9 +129,9 @@ class Buffer
             if (!empty($ocond['limit'])) $ocond['limit'] = false;
             if (!empty($ocond['order'])) $ocond['order'] = false;
             foreach ($objects as $obj){
-                $ocond['from'] = $obj->id();
-                /*if (!isset(self::$list[$key = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $obj;
-                $ocond['from'] = $obj->uri();
+                $ocond['from'] = $obj['id'];
+                /*if (!isset(self::$list[$ke]y = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $obj;
+                $ocond['from'] = $obj['uri'];
                 /*if (!isset(self::$list[$key = json_encode($ocond)]))*/ self::$list[json_encode($ocond)] = $obj;
             }
         }
@@ -155,9 +147,9 @@ class Buffer
      */
     private static function setTree($objects, $cond, $key, $from, $listkey = null)
     {
-        $id = $from->id();
-        $uri = $from->uri();
-        if ($objects instanceof Entity){
+        $id = $from['id'];
+        $uri = $from['uri'];
+        if (isset($objects['class'])){
             // буфер всего дерева в виде списка
             if ($listkey) self::$list[$listkey][] = $objects;
             // бефер дерева с глубиной от 0
@@ -175,9 +167,12 @@ class Buffer
             /*if (!isset(self::$list[$bkey = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $objects;
             $ocond['from'] = $id;
             /*if (!isset(self::$list[$bkey = json_encode($ocond)])) */self::$list[json_encode($ocond)] = $objects;
-            $objects = $objects->children($key);
+            if (isset($objects['children'])){
+                $objects = $objects['children'];
+            }else{
+                $objects = array();
+            }
             $cond['depth'][0] = 1;
-
         }
         if ($cond['depth'][1]>=1){
             // Буфер списка с глубиной от 1
