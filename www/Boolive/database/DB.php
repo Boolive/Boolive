@@ -187,18 +187,18 @@ class DB extends PDO
      */
     public function prepare($sql, $driver_options = array())
     {
-        if (isset($this->statements[$sql])){
-            return $this->statements[$sql];
-        }
+//        if (isset($this->statements[$sql])){
+//            return $this->statements[$sql];
+//        }
         if ($this->trace_sql || $this->trace_count){
             $stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
             if ($stmt instanceof PDOStatement){
-                return $this->statements[$sql] = new DBStatementDebug($stmt, $this->trace_sql, $this->trace_count);
+                return /*$this->statements[$sql] = */new DBStatementDebug($stmt, $this->trace_sql, $this->trace_count);
             }else{
                 throw new Error('PDO does not return PDOStatement');
             }
         }
-        return $this->statements[$sql] = parent::prepare($this->addPrefixes($sql), $driver_options);
+        return /*$this->statements[$sql] = */parent::prepare($this->addPrefixes($sql), $driver_options);
     }
 
     /**

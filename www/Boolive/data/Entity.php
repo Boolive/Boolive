@@ -85,6 +85,7 @@ class Entity implements ITrace
      */
     protected $_rename = false;
 
+    private static $_destruct_cnt = 0;
     /**
      * Конструктор
      * @param array $attribs
@@ -114,6 +115,13 @@ class Entity implements ITrace
             unset($attribs['children']);
         }
         $this->_attribs = array_replace($this->_attribs, $attribs);
+        //Trace::groups()->group('ENTITY')->group('Entity->__construct('.$this->_attribs['uri'].')')->set(0);
+    }
+
+    public function __destruct()
+    {
+//        Trace::groups()->group('ENTITY')->group('Entity->__DESCTRUCT('.$this->_attribs['uri'].')')->set(++self::$_destruct_cnt);
+//        Trace::groups()->group('ENTITY')->group('Entity->__construct('.$this->_attribs['uri'].')')->set(self::$_destruct_cnt);
     }
 
     /**

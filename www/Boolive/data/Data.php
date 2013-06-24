@@ -170,7 +170,7 @@ class Data
         $cond['from'] = self::decodeFrom($cond['from'], false);
         //if (($from_type == 'entity' || $from_type == 'entity/name')){
             // Если выбор одного объекта, то группировка по родителям выбранных ранее вместе
-            if ($what == 'self' && $comment == 'read_proto'){
+            if ($what == 'self' && $comment == 'read proto'){
 
             }else
             if ($what == 'self' && ($from_type == 'entity' || $from_type == 'entity/name')){
@@ -257,7 +257,7 @@ class Data
 
         // @todo Выбор из буфера по первому условию. Но выбранным объектам присваивается групповое услвоие
         // Из 2 буфера
-        if (!isset($result) && $cache == 2){
+        if (!isset($result) && $cache==2){
             $result = Buffer2::get($cond);
             if (isset($result)){
                 if (PROFILE_DATA) Trace::groups('Data')->group('FROM BUFFER 2')->group($comment)->group()->set(F::toJSON($cond, false));
@@ -297,16 +297,15 @@ class Data
             if ($what=='tree'){
                 $children_depth = isset($return['depth'])&&($what=='tree')? $return['depth'] : Entity::MAX_DEPTH;
             }else{
-                $children_depth = 0;
+                $children_depth = false;
             }
-
             foreach ($result as $gi => $gitem){
                 if (isset($gitem['class'])){
                     $result[$gi] = new $gitem['class']($gitem, $children_depth);
                     $result[$gi]->cond($group_cond);
                 }else{
                     $list = array();
-                    //if ($children_depth > 0){
+                    if ($children_depth===false || $children_depth > 0){
 
                         foreach ($result[$gi] as $i => $item){
                             if (isset($item['class'])){
@@ -319,13 +318,13 @@ class Data
                                 }
                             }
                         }
-                    //}
+                    }
                     $result[$gi] = $list;
                 }
             }
             if (!is_array($cond['from'])) $result = reset($result);
         }
-        if ($cache == 2){
+        if ($cache==2 && isset($result)){
             Buffer2::set($result, $cond);
         }
         return $result;

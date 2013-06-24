@@ -94,16 +94,16 @@ class MySQLStore extends Entity
         }
         // Индексирование
         // @todo Индексировать если from короткий числовой URI
-//        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree')){
-//            foreach ($multy_from as $key => $from){
-//                $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
-//                // Глубина условия
-//                $depth = $this->getCondDepth($cond);
-//                if ($multy_from[$key]->_attribs['index_depth']<$depth || $multy_from[$key]->_attribs['index_step']!=0){
-//                    $this->makeIndex($this->localId($multy_from[$key]->id()), $this->localId($cond['owner']), $this->localId($cond['lang']), $depth);
-//                }
-//            }
-//        }
+        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree')){
+            foreach ($multy_from as $key => $from){
+                $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
+                // Глубина условия
+                $depth = $this->getCondDepth($cond);
+                if ($multy_from[$key]->_attribs['index_depth']<$depth || $multy_from[$key]->_attribs['index_step']!=0){
+                    $this->makeIndex($this->localId($multy_from[$key]->id()), $this->localId($cond['owner']), $this->localId($cond['lang']), $depth);
+                }
+            }
+        }
         $q = $this->db->prepare($sql['sql']);
         foreach ($sql['binds'] as $i => $v){
             if (is_array($v)){
@@ -1731,11 +1731,11 @@ class MySQLStore extends Entity
                     // Сокращенный URI приндалежит данной секции, поэтому возвращаем вторую часть
                     return intval($info['id']);
                 }else{
-                    return $this->localId(Data::read($uri.'&cache='.(IS_INSTALL?2:0), false));
+                    return $this->localId(Data::read($uri.'&cache='.(IS_INSTALL?1:0), false));
                 }
             }else{
                 // Получаем полный URI по сокращенному
-                $uri = Data::read($uri.'&cache='.(IS_INSTALL?2:0), false);
+                $uri = Data::read($uri.'&cache='.(IS_INSTALL?1:0), false);
                 if ($uri->isExist()){
                     $uri = $uri->uri();
                 }else{

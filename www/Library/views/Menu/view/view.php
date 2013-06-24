@@ -74,7 +74,7 @@ class view extends AutoWidgetList
         $cond['depth'] = array(1, 'max');
         //$cond['order'] = array(array('order', 'asc'));
         $cond['group'] = true;
-        $cond['return'] = array('depth'=>0);
+        $cond['return'] = array('depth'=>1);
         return parent::getList($cond);
     }
 }

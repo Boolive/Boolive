@@ -60,7 +60,7 @@ class Member extends Entity
                         'select' => 'tree',
                         'depth' => array(1, 'max'),
                         'comment' => 'read rights of Member',
-                       // 'return'=>array('depth'=>0)
+                        'return'=>array('depth'=>1)
                     ));
 //                    $rights = Data::read(array($obj, 'rights'), false);
                     //$roles = $rights->find(array('comment'=>'read all roles of Member'));
