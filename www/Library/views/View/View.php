@@ -12,6 +12,8 @@ use Boolive\data\Entity,
     Boolive\values\Check,
     Boolive\values\Rule,
     Boolive\input\Input;
+use Boolive\develop\Benchmark;
+use Boolive\develop\Trace;
 
 class View extends Entity
 {
@@ -86,6 +88,9 @@ class View extends Entity
      */
     public function start(Commands $commands, $input)
     {
+//        $key = $this->uri().':'.microtime().rand();
+//        Trace::groups('VIEWS')->group($key)->set(0);
+//        Benchmark::start($key);
         //Проверка возможности работы
         if ($this->canWork($commands, $input)){
             $this->initInputChild($input);
@@ -101,6 +106,7 @@ class View extends Entity
         }else{
             $result = false;
         }
+//        Trace::groups('VIEWS')->group($key)->set(Benchmark::stop($key, true));
         return $result;
     }
 
