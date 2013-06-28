@@ -81,7 +81,7 @@ class F
     {
         if ($single){
             preg_match_all('/'.preg_quote($delim,'/').'+/ui', $str, $m, PREG_OFFSET_CAPTURE);
-            $i=sizeof($m[0])-1;
+            $i=count($m[0])-1;
             $pos = false;
             while ($i>=0){
                 if ($m[0][$i][0] === $delim){

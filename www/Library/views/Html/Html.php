@@ -13,9 +13,9 @@ use Boolive\values\Rule,
 
 class Html extends Widget
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array('previous' => Rule::not(true)));
+        $this->_input_rule = Rule::arrays(array('previous' => Rule::not(true)));
     }
 
     public function work($v = array())

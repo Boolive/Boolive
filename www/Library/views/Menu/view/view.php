@@ -11,9 +11,9 @@ use Boolive\values\Rule,
 
 class view extends AutoWidgetList
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // Объект для пункта меню
                 'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
@@ -37,20 +37,21 @@ class view extends AutoWidgetList
             /** @var \Boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['object'];//->linked();
             // Название пункта
-            $v['item_text'] = $obj->title->value();
-            $v['item_title'] = $v['item_text'];
+//            $v['item_text'] = '';//$obj->title->value();
+//            $v['item_title'] = $v['item_text'];
             // Ссылка
             $real = $obj->linked();
-            if ($real){
+            //if ($real){
                 if (substr($real->uri(), 0, 10) == '/Contents/'){
                     $v['item_href'] = substr($real->uri(), 10);
                 }else{
                     $v['item_href'] = $real->uri();
                 }
                 if (empty($v['item_text'])) $v['item_text'] = $real->title->value();
-            }else{
-                $v['item_href'] = '';
-            }
+//            }else{
+//                $v['item_href'] = '';
+//            }
+            $v['item_title'] = $v['item_text'];
             // Активность пункта
             $active = $this->_input['REQUEST']['active'];
             if ($real->isEqual($active)){
@@ -71,10 +72,11 @@ class view extends AutoWidgetList
     public function getList($cond = array())
     {
         $cond['select'] = 'tree';
-        $cond['depth'] = array(1, 'max');
+        $cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
         //$cond['order'] = array(array('order', 'asc'));
-        $cond['group'] = true;
-        $cond['return'] = array('depth'=>1);
+        $cond['group'] = true; // Для выбранных объектов однорвеменной выполнять подвыборки
+        $cond['return'] = array('depth'=>1); // получить только первый уровень дерева
+        $cond['cache'] = 2; // Кэшировать сущности
         return parent::getList($cond);
     }
 }

@@ -125,16 +125,6 @@
                         Но если прототип тоже является ссылкой, то он наследуется, а объект-ссылка ссылается на прототип прототипа. Пример: пункт меню - ссылка на статью, автор у статьи - ссылка на пользователя</span>
                 </div>
             </div>
-<!--            <div class="item">-->
-<!--                <div class="col1">-->
-<!---->
-<!--                </div>-->
-<!--                <div class="col2 item-overide">-->
-<!--                    <input class="attrib" type="checkbox" id="override" name="attrib[override]" data-name="override" value="1"/>-->
-<!--                    <label for="override">Наследует свойства прототипа</label>-->
-<!--                    <span class="error-message"></span>-->
-<!--                </div>-->
-<!--            </div>-->
             <div class="item">
                 <div class="col1">
 

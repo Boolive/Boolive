@@ -11,9 +11,9 @@
 
 class Restore extends Widget
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
                             Rule::arrays(Rule::entity(array('attr', 'is_delete', '=', 1, true))),

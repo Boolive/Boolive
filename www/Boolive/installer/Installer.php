@@ -229,7 +229,7 @@ class Installer
 									if ($lines['extends']){
 										// Определение полного названия с пространством имен
 										$find = false;
-										$u = sizeof($lines['use'])-1;
+										$u = count($lines['use'])-1;
 										while ($u>=0){
 											if (preg_match('#'.preg_quote('\\'.$lines['extends']).'$#u', '\\'.$lines['use'][$u])){
 												$lines['extends'] = $lines['use'][$u];
@@ -305,7 +305,7 @@ class Installer
             $next_classes = array();
             foreach ($classes as $class){
                 $can_work = true;
-                $cnt_j = sizeof($class['use']);
+                $cnt_j = count($class['use']);
                 $j = 0;
                 while ($can_work && $j<$cnt_j){
                     if (!((isset($result['sorted'][$class['use'][$j]]) || class_exists($class['use'][$j], false) || interface_exists($class['use'][$j], false)))){
@@ -342,7 +342,7 @@ class Installer
 		$errors = array();
 		// Недостающие модули
 		if ($classes['missing']){
-			$many = sizeof($classes['missing'])>1;
+			$many = count($classes['missing'])>1;
 			$e = 'В установочном пакете Boolive отсутству'.($many?'ю':'е').'т класс'.($many?'ы':'').': <ul>';
 			foreach ($classes['missing'] as $class => $for){
 				$e.= '<li><strong>'.$class.'</strong> <small>(требуется для '.implode(', ',array_keys($for)).')</small></li>';
@@ -385,7 +385,7 @@ class Installer
         $result = array(
             'complete' => false,
             'percent' => 0,
-            'step_cnt' => sizeof($install['modules'])
+            'step_cnt' => count($install['modules'])
         );
         $steps_at_a_time = 3;
         while (0 < $steps_at_a_time-- && $install['step'] < $result['step_cnt']){

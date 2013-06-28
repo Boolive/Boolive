@@ -40,9 +40,9 @@ class NextPrevNavigation extends Widget
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
      */
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity(array('is', $this->getTypes()))->required()
                     )

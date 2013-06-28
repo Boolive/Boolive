@@ -11,9 +11,9 @@ use Library\views\Widget\Widget,
 
 class PageNavigation extends Widget
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // объект, который отображается постранично
                 'page' => Rule::int()->default(1)->required(),

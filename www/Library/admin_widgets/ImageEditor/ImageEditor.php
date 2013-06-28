@@ -14,9 +14,9 @@ use Library\views\Widget\Widget,
 
 class ImageEditor extends Widget
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         // Отображаемый объект или над которым выполняется действие
                         'object' => Rule::entity()->required(),

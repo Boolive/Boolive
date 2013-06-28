@@ -23,7 +23,7 @@
     </div></div>
     <div class="content" contentEditable="true" onresizestart="return false;" <?php if ($s = $v['style']->string()) echo 'style="'.$s.'"';?>><?php
     $list = $v['view']->arrays(\Boolive\values\Rule::string());
-    if (!sizeof($list)) echo '<p>&#8203;</p>';
+    if (!count($list)) echo '<p>&#8203;</p>';
     foreach ($list as $item) {
         echo $item;
     }

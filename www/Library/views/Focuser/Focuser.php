@@ -15,9 +15,9 @@ use Library\views\Widget\Widget,
 
 class Focuser extends Widget
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'path' => Rule::string(),
                 )
@@ -52,7 +52,7 @@ class Focuser extends Widget
             $object = reset($object);
         }
         // ищем в /Contents
-        if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri.'&comment=readdefaultpage');
+        if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri.'&comment=read default page');
         // точное соответсвие uri
         if (!$object) $object = Data::read($uri);
         // корнеь

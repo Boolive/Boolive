@@ -11,9 +11,9 @@ use Library\views\AutoWidgetList\AutoWidgetList,
 
 class Part extends AutoWidgetList
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->required(),
                         'page'=> Rule::int()->default(1)->required() // номер страницы

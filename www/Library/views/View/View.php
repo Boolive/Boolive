@@ -18,29 +18,16 @@ use Boolive\develop\Trace;
 class View extends Entity
 {
     protected $_is_init = false;
-    /**
-     * Отфильтрованные входящих данных.
-     * Инициализируется в методе start()
-     * В качестве правила по умолчанию используется $this->getInputRule()
-     * @var mixed
-     */
+    /** @var mixed Отфильтрованные входящих данных по правилу на входящие данные */
     protected $_input;
-    /**
-     * Ошибки при проверки входящих данных
-     * @var \Boolive\errors\Error
-     */
+    /** @var Rule Правило на входящие данные */
+    protected $_input_rule;
+    /** @var \Boolive\errors\Error Ошибки при проверки входящих данных */
     protected $_input_error;
-    /**
-     * Команды, передающиеся по всем исполняемым объектам.
-     * Инициализируется в методе start()
-     * @var \Boolive\commands\Commands
-     */
-    protected $_commands;
-    /**
-     * Входящие данные для подчиенных объектов
-     * @var mixed
-     */
+    /** @var mixed Входящие данные для подчиненных объектов */
     protected $_input_child;
+    /** @var \Boolive\commands\Commands Команды, передающиеся по всем исполняемым объектам. Инициализируется в методе start() */
+    protected $_commands;
 
     /**
      * Инициализация
@@ -50,13 +37,19 @@ class View extends Entity
 
     }
 
+    public function defineInputRule()
+    {
+        $this->_input_rule = Rule::any();
+    }
+
     /**
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
      */
     public function getInputRule()
     {
-        return Rule::any();
+        if (!isset($this->_input_rule)) $this->defineInputRule();
+        return $this->_input_rule;
     }
 
     /**
@@ -106,6 +99,14 @@ class View extends Entity
         }else{
             $result = false;
         }
+//        $this->_children = array();
+        //$this->_commands = null;
+//        $this->_input = null;
+//        $this->_input_child = null;
+//        $this->_is_init = false;
+//        $this->_rule = null;
+//        $this->_parent = null;
+//        $this->_proto = null;
 //        Trace::groups('VIEWS')->group($key)->set(Benchmark::stop($key, true));
         return $result;
     }
@@ -146,7 +147,7 @@ class View extends Entity
      */
     public function startChild($name)
     {
-        $child = $this->linked(true)->{$name}->linked(true);
+        $child = $this->linked(false)->{$name}->linked(true);
         if ($child instanceof View){
             $result = $child->start($this->_commands, $this->_input_child);
             if ($result!==false){
@@ -165,7 +166,7 @@ class View extends Entity
     public function startChildren()
     {
         $result = array();
-        $list = $this->linked(true)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
+        $list = $this->linked(false)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $child = $child->linked(true);

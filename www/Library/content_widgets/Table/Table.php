@@ -18,7 +18,7 @@ class Table extends Widget
         $header = $object->find(array('where' => array('is', '/Library/content_samples/tables/Table/Header')));
         $footer = $object->find(array('where' => array('is', '/Library/content_samples/tables/Table/Footer')));
         $body = $object->find(array('where' => array('is', '/Library/content_samples/tables/Table/Body')));
-        if(sizeof($header)>0){
+        if(count($header)>0){
             //Стиль строк заголовка
             if($header[0]->style->isExist()){
               $v['header_style'] = $header[0]->style->getStyle();
@@ -29,7 +29,7 @@ class Table extends Widget
 
         }
         //Подвал
-        if(sizeof($footer)>0){
+        if(count($footer)>0){
             if($footer[0]->style->isExist()){
                $v['footer_style'] = $footer[0]->style->getStyle();
              }
@@ -37,7 +37,7 @@ class Table extends Widget
             $v['footer']['rows'] = $this->getRowCells($footer['rows']);
         }
         //Если есть в таблицы элемент body
-        if(sizeof($body)>0){
+        if(count($body)>0){
             if($body[0]->style->isExist()){
                $v['body_style'] = $body[0]->style->getStyle();
             }

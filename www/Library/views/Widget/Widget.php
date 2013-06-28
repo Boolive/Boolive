@@ -18,9 +18,9 @@ class Widget extends View
      */
     protected function init()
     {
-        if (!$this->isLink()){
-            $this->find(array('select'=>'tree', 'depth'=>array(1,'max'), 'return'=>array('depth'=>0), 'comment' => 'read tree of widgets'/*, 'order' => array('order', 'asc')*/), true);
-        }
+        //if (!$this->isLink()){
+            $this->find(array('select'=>array('tree'), 'depth'=>array(1,'max'), 'return'=>false, 'comment' => 'read tree of widgets', 'order' => array('order', 'asc')), false);
+        //}
     }
 
     /**
@@ -41,9 +41,9 @@ class Widget extends View
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
      */
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->required()
                     )

@@ -47,7 +47,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
     function __construct($message = '', $code = 0, Error $previous = null)
     {
         if (is_array($message)){
-            if (sizeof($message)>0){
+            if (count($message)>0){
                 $m = array_shift($message);
                 if (!empty($message)){
                     if (is_array($message[0])){
@@ -310,7 +310,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
 		}
 		// Поиск сообщения в массиве загруженных
 		$curr = self::$user_messages;
-		$cnt = sizeof($keys);
+		$cnt = count($keys);
 		$i = 0;
 		while ($i<$cnt && is_array($curr)){
 			if (isset($curr[$keys[$i]]) ){

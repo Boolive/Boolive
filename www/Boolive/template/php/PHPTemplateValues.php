@@ -63,7 +63,7 @@ class PHPTemplateValues extends Values
         $start = (!$this->offsetExists($name) && isset($this->_entity));
         $sub = $this->offsetGet($name);
         if ($start){
-            $sub->_entity = $this->_entity->linked(true)->{$name};
+            $sub->_entity = $this->_entity->linked(false)->{$name};
             $sub->set($this->_entity->linked(true)->startChild($name));
         }
         return $sub;

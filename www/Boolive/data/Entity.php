@@ -48,35 +48,37 @@ class Entity implements ITrace
         'is_delete'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
-        'is_virtual'   => 1,
         'is_default_value' => 0,
         'is_default_class' => 0,
-        'is_default_children' => 1,
         'is_accessible' => 1,
         'is_exist' => 0,
         'index_depth' => 0,
         'index_step' => 0
     );
-    /** @var array Подчиненные объекты (выгруженные из бд или новые, то есть не обязательно все существующие) */
+    /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
-    /** @var bool Признак, загружены ли все подчиненные? */
+    /** @var Rule Правило на атрибуты объекта */
     protected $_rule;
-    /** @var \Boolive\data\Entity Экземпляр прототипа */
+    /** @var Entity Экземпляр прототипа */
     protected $_proto = false;
-    /** @var \Boolive\data\Entity Экземпляр родителя */
+    /** @var Entity Экземпляр родителя */
     protected $_parent = false;
-    /** @var \Boolive\data\Entity Экземпляр владельца */
+    /** @var Entity Экземпляр владельца */
     protected $_owner = false;
-    /** @var \Boolive\data\Entity Экземпляр языка */
+    /** @var Entity Экземпляр языка */
     protected $_lang = false;
+    /** @var Entity Экземпляр прототипа, на которого ссылается объект */
+    protected $_link = false;
+    /** @var Entity Экземпляр прототипа, от которого берется значение по умолчанию */
+    protected $_default_value_proto = false;
     /** @var bool Принзнак, объект в процессе сохранения? */
     protected $_is_saved = false;
     /** @var bool Признак, изменены ли атрибуты объекта */
     protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
     protected $_checked = false;
-    /** @var  string Условие, которым был выбран объект */
-    protected $_cond = null;
+    /** @var array Условие, которым был выбран объект */
+    protected $_cond;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -85,11 +87,10 @@ class Entity implements ITrace
      */
     protected $_rename = false;
 
-    private static $_destruct_cnt = 0;
     /**
      * Конструктор
-     * @param array $attribs
-     * @param int $children_depth
+     * @param array $attribs Атрибуты объекта, а также атрибуты подчиенных объектов
+     * @param int $children_depth До какой глубины (вложенности) создавать экземпляры подчиненных объектов
      */
     public function __construct($attribs = array(), $children_depth = 0)
     {
@@ -104,24 +105,23 @@ class Entity implements ITrace
             }
         }
         if (isset($attribs['class'])) unset($attribs['class']);
+        if (isset($attribs['cond'])){
+            $this->_cond = $attribs['cond'];
+            unset($attribs['cond']);
+        }
         if (isset($attribs['children'])){
             if ($children_depth > 0){
                 if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
                 foreach ($attribs['children'] as $name => $child){
                     $class = isset($child['class'])? $child['class'] : '\Boolive\data\Entity';
+                    $child['cond'] = $this->_cond;
                     $this->_children[$name] = new $class($child, $children_depth);
                 }
             }
             unset($attribs['children']);
         }
-        $this->_attribs = array_replace($this->_attribs, $attribs);
-        //Trace::groups()->group('ENTITY')->group('Entity->__construct('.$this->_attribs['uri'].')')->set(0);
-    }
 
-    public function __destruct()
-    {
-//        Trace::groups()->group('ENTITY')->group('Entity->__DESCTRUCT('.$this->_attribs['uri'].')')->set(++self::$_destruct_cnt);
-//        Trace::groups()->group('ENTITY')->group('Entity->__construct('.$this->_attribs['uri'].')')->set(self::$_destruct_cnt);
+        $this->_attribs = array_replace($this->_attribs, $attribs);
     }
 
     /**
@@ -144,10 +144,8 @@ class Entity implements ITrace
                 'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя
                 'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя
                 'is_link'      => Rule::uri(), // Ссылка или нет
-                'is_virtual'   => Rule::bool()->int(), // Виртуальный или нет
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
-                'is_default_children' => Rule::bool()->int(), // Используются свойства прототипа или нет?
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'	=> Rule::arrays(array(
                         'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -187,9 +185,9 @@ class Entity implements ITrace
 
     /**
      * Имя объекта
-     * @param null $new_name
-     * @param bool $choose_unique
-     * @return mixed
+     * @param null $new_name Новое имя
+     * @param bool $choose_unique Выбирать уникальное, если уже занято указанное?
+     * @return string Имя объекта
      */
     public function name($new_name = null, $choose_unique = false)
     {
@@ -259,7 +257,7 @@ class Entity implements ITrace
     {
         $this->_attribs['uri'] = $uri;
         foreach ($this->_children as $child_name => $child){
-            /* @var \Boolive\data\Entity $child */
+            /* @var Entity $child */
             $child->updateURI(is_null($uri)? null : $uri.'/'.$child_name);
         }
     }
@@ -488,34 +486,21 @@ class Entity implements ITrace
         }
         // Возвращение признака или объекта, на которого ссылается данный объект
         if (!empty($this->_attribs['is_link']) && $return_link){
-//            return Data::read(array(
-//                'from' => $this->key(),
-//                'select' => 'link',
-//                'owner' => $this->owner(),
-//                'lang' => $this->lang(),
-//                'comment' => 'read link',
-//                'group' => true
-//            ));
-            return Data::read(array(
-                'from' => $this->_attribs['is_link'],
-                'owner' => $this->owner(),
-                'lang' => $this->lang(),
-                'comment' => 'read link',
-                'cache' => 2
-            ));
+            if ($this->_link === false){
+                $this->_link = Data::read(array(
+                    'from' => $this,
+                    'select' => 'link',
+                    'depth' => array(0,0),
+                    'owner' => $this->_attribs['owner'],
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read link',
+                    'cache' => 2
+                ));
+            }
+            return $this->_link;
         }else{
             return !empty($this->_attribs['is_link']);
         }
-    }
-
-    /**
-     * Признак, виртуальный объект или нет?
-     * Виртуальные объекты образуются автоматически за счет наследования
-     * @return bool
-     */
-    public function isVirtual()
-    {
-        return !empty($this->_attribs['is_virtual']);
     }
 
     /**
@@ -577,14 +562,24 @@ class Entity implements ITrace
             }
         }
         if (!empty($this->_attribs['is_default_value']) && $return_proto){
-            // Поиск прототипа, от которого наследуется значение, чтобы возратить его
-            return Data::read(array(
-                'from'=>$this->_attribs['is_default_value'],
-                'owner'=>$this->owner(),
-                'lang'=>$this->lang(),
-                'comment'=>'read default value',
-                'cache' => 2
-            ));
+            if ($this->_default_value_proto === false){
+                // Поиск прототипа, от которого наследуется значение, чтобы возратить его
+                $this->_default_value_proto = Data::read(array(
+                    'from' => $this,
+                    'select' => 'default_value_proto',
+                    'depth' => array(0,0),
+                    'owner' => $this->_attribs['owner'],
+                    'lang' => $this->_attribs['lang'],
+                    'comment' => 'read default value',
+                    'cache' => 2
+//                    'from'=>$this->_attribs['is_default_value'],
+//                    'owner'=>$this->_attribs['owner'],
+//                    'lang'=>$this->_attribs['lang'],
+//                    'comment'=>'read default value',
+//                    'cache' => 2
+                ));
+            }
+            return $this->_default_value_proto;
         }else{
             return !empty($this->_attribs['is_default_value']);
         }
@@ -624,29 +619,14 @@ class Entity implements ITrace
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
             return Data::read(array(
                 'from' => $this->_attribs['is_default_class'],
-                'owner' => $this->owner(),
-                'lang' => $this->lang(),
+                'owner' => $this->_attribs['owner'],
+                'lang' => $this->_attribs['lang'],
                 'comment' => 'read default class',
                 'cache' => 2
             ));
         }else{
             return !empty($this->_attribs['is_default_class']);
         }
-    }
-
-    /**
-     * Признак, наследуются ли свойства от прототипов
-     * @param null $is_default
-     * @return bool
-     */
-    public function isDefaultChildren($is_default = null)
-    {
-        if (isset($is_default) && (empty($this->_attribs['is_default_children']) == $is_default)){
-            $this->_attribs['is_default_children'] = $is_default;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return !empty($this->_attribs['is_default_children']);
     }
 
     /**
@@ -679,7 +659,7 @@ class Entity implements ITrace
      * Родитель объекта
      * @param null|Entity $new_parent Новый родитель. Чтобы удалить родителя, указывается false
      * @param bool $load Загрузить родителя из хранилща, если ещё не загружен?
-     * @return \Boolive\data\Entity|null
+     * @return Entity|null
      */
     public function parent($new_parent = null, $load = true)
     {
@@ -782,7 +762,8 @@ class Entity implements ITrace
     /**
      * Прототип объекта
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
-     * @return \Boolive\data\Entity|null|false
+     * @param bool $load Загрузить прототип из хранилща, если ещё не загружен?
+     * @return Entity|null|false
      */
     public function proto($new_proto = null, $load = true)
     {
@@ -871,7 +852,8 @@ class Entity implements ITrace
     /**
      * Владелец объекта
      * @param null|Entity $new_owner Новый владелец. Чтобы сделать общим, указывается false
-     * @return \Boolive\data\Entity|null
+     * @param bool $load Загрузить владельца из хранилща, если ещё не загружен?
+     * @return Entity|null
      */
     public function owner($new_owner = null, $load = true)
     {
@@ -909,7 +891,8 @@ class Entity implements ITrace
     /**
      * Язык объекта
      * @param null|Entity $new_lang Новый язык. Чтобы сделать общим, указывается false
-     * @return \Boolive\data\Entity|null
+     * @param bool $load Загрузить язык из хранилща, если ещё не загружен?
+     * @return Entity|null
      */
     public function lang($new_lang = null, $load = true)
     {
@@ -951,7 +934,7 @@ class Entity implements ITrace
      * Если данный объект не является ссылкой, то возарщается $this,
      * иначе возвращается первый из прототипов, не являющейся ссылкой
      * @param bool $clone Клонировать, если объект является ссылкой?
-     * @return \Boolive\data\Entity
+     * @return Entity
      */
     public function linked($clone = false)
     {
@@ -1015,7 +998,7 @@ class Entity implements ITrace
      * Получение подчиненного объекта по имени с учётом владельца и языка его родителя
      * @example $sub = $obj->sub;
      * @param string $name Имя подчиенного объекта
-     * @return \Boolive\data\Entity
+     * @return Entity
      */
     public function __get($name)
     {
@@ -1057,7 +1040,7 @@ class Entity implements ITrace
      * @example $object->sub = $sub;
      * @param $name
      * @param Entity $value
-     * @return \Boolive\data\Entity
+     * @return Entity
      */
     public function __set($name, $value)
     {
@@ -1109,7 +1092,7 @@ class Entity implements ITrace
     /**
      * Добавление подчиненного с автоматическим именованием
      * @param $value
-     * @return \Boolive\data\Entity
+     * @return Entity
      */
     public function add($value){
         $obj = $this->__set(null, $value);
@@ -1144,23 +1127,24 @@ class Entity implements ITrace
      * @param array $cond Условие поиска
      * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
      * @param bool $index Признак, индексировать или нет данные?
+     * @param bool $access
      * @see https://github.com/Boolive/Boolive/issues/7
      * @return array
      */
-    public function find($cond = array(), $load = false, $index = true)
+    public function find($cond = array(), $load = false, $index = true, $access = true)
     {
-        $cond = Data::decodeCond($cond, array('select' => 'children', 'depth' => array(1,1)));
+        $cond = Data::decodeCond($cond, array('select' => array('children'), 'depth' => array(1,1)));
         if ($this->isExist()){
             $cond['from'] = $this;//->id();
-            $result = Data::read($cond, true, $index);
+            $result = Data::read($cond, $access, $index);
         }else
         if (isset($this->_attribs['uri'])){
             $cond['from'] = $this->_attribs['uri'];
-            $result = Data::read($cond, true, $index);
+            $result = Data::read($cond, $access, $index);
         }else
         if ($p = $this->proto()){
             $cond['from'] = $p;//->id();
-            $result = Data::read($cond, true, $index);
+            $result = Data::read($cond, $access, $index);
             foreach ($result as $key => $obj){
                 /** @var $obj Entity */
                 $result[$key] = $obj->birth($this);
@@ -1255,7 +1239,6 @@ class Entity implements ITrace
                 if ($this->_lang){
                     $this->_attribs['lang'] = $this->_lang->key();
                 }
-                $this->_attribs['is_virtual'] = 0;
                 // Если создаётся история, то нужна новая дата
                 if ($history || (empty($this->_attribs['date']) && !$this->isExist())) $this->_attribs['date'] = time();
                 // Сохранение себя
@@ -1270,7 +1253,7 @@ class Entity implements ITrace
                 if ($children){
                     $children = $this->children();
                     foreach ($children as $child){
-                        /** @var \Boolive\data\Entity $child */
+                        /** @var Entity $child */
                         $child->save($history, true, $error_child, $access);
                     }
                 }
@@ -1303,8 +1286,8 @@ class Entity implements ITrace
 
     /**
      * Создание нового объекта прототипированием от себя
-     * @param null|\Boolive\data\Entity $for Для кого создаётся новый объект?
-     * @return \Boolive\data\Entity
+     * @param null|Entity $for Для кого создаётся новый объект?
+     * @return Entity
      */
     public function birth($for = null)
     {
@@ -1321,7 +1304,6 @@ class Entity implements ITrace
         $obj->lang($this->lang());
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
-        $obj->isDefaultChildren(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;
         if (isset($for)) $obj->parent($for);
         return $obj;
@@ -1360,7 +1342,7 @@ class Entity implements ITrace
         if ($children){
             foreach ($this->_children as $child){
                 $error = null;
-                /** @var \Boolive\data\Entity $child */
+                /** @var Entity $child */
                 if (!$child->check($error)){
                     $errors->_children->add($error);
                 }
@@ -1380,7 +1362,7 @@ class Entity implements ITrace
      * Проверка подчиненного в рамках его родителей
      * Возможно обращение к родителям выше уровнем, чтобы объект проверялся в ещё более глобальном окружении,
      * например для проверки уникальности значения по всему разделу/базе.
-     * @param \Boolive\data\Entity $child Проверяемый подчиненный
+     * @param Entity $child Проверяемый подчиненный
      * @param \Boolive\errors\Error $error Объект ошибок подчиненного
      * @return bool Признак, корректен объект (true) или нет (false)
      */
@@ -1432,7 +1414,7 @@ class Entity implements ITrace
                 foreach ($cond[1] as $c){
                     if ($this->verify($c)) return true;
                 }
-                return !sizeof($cond[1]);
+                return !count($cond[1]);
             // Отрицание условия (NOT)
             case 'not':
                 return !$this->verify($cond[1]);
@@ -1455,9 +1437,6 @@ class Entity implements ITrace
                 }else
                 if ($cond[1] == 'is_history'){
                     $value = $this->isHistory();
-                }else
-                if ($cond[1] == 'is_virtual'){
-                    $value = $this->isVirtual();
                 }
                 switch ($cond[2]){
                     case '=': return $value == $cond[3];
@@ -1508,7 +1487,7 @@ class Entity implements ITrace
 
     /**
      * Проверка, является ли подчиненным для указанного родителя?
-	 * @param string|\Boolive\data\Entity $parent Экземпляр родителя или его идентификатор
+	 * @param string|Entity $parent Экземпляр родителя или его идентификатор
      * @return bool
      */
     public function in($parent)
@@ -1524,7 +1503,7 @@ class Entity implements ITrace
 
     /**
      * Проверка, являектся наследником указанного прототипа?
-     * @param string|\Boolive\data\Entity $proto Экземпляр прототипа или его идентификатор
+     * @param string|Entity $proto Экземпляр прототипа или его идентификатор
      * @return bool
      */
     public function is($proto)
@@ -1541,7 +1520,7 @@ class Entity implements ITrace
      * Проверка объединяет в себе is() и in() с учётом рекурсивных отошений, образуемых между
      * родителями и прототипами всех родителей и прототипов объекта.
      * Пример из жизни: конкретный листок является частью дерева. Дерево абстрактно.
-     * @param string|\Boolive\data\Entity $object Экземпляр или идентификатор
+     * @param string|Entity $object Экземпляр или идентификатор
      * @return bool
      */
     public function of($object)
@@ -1554,7 +1533,7 @@ class Entity implements ITrace
 
     /**
      * Сравнение объектов по uri
-     * @param \Boolive\data\Entity $entity
+     * @param Entity $entity
      * @return bool
      */
     public function isEqual($entity)
@@ -1609,7 +1588,6 @@ class Entity implements ITrace
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
         if ($this->isLink()) $export['is_link'] = true;
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
-        //if (!$this->isDefaultChildren()) $export['is_default_children'] = false;
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
         if ($this->isDelete(null, false)) $export['is_delete'] = true;
         $export['order'] = $this->order();

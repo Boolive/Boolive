@@ -34,10 +34,6 @@
             /*color: #FF4A52*/
             }
 
-        .ObjectItem.tile .view.virtual{
-            background-color: #ecccff;
-            border-color: #e7bfff;
-        }
         .ObjectItem.tile .view:hover{
             background-color: rgba(128, 200, 255, 0.3);
             border-color: rgba(128, 200, 255, 0.31);

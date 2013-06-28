@@ -19,6 +19,7 @@ class RichText extends AutoWidgetList
     public function getList($cond = array())
     {
         $cond['group'] = true;
+        $cond['cache'] = 2;
         return parent::getList($cond);
     }
 }

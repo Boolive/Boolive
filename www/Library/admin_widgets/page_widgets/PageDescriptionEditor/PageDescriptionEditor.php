@@ -11,9 +11,9 @@ use Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class PageDescriptionEditor extends Widget {
-    public function getInputRule()
+    public function defineInputRule()
        {
-           return Rule::arrays(array(
+           $this->_input_rule = Rule::arrays(array(
                   'REQUEST' => Rule::arrays(array(
                           'object' => Rule::entity()->required(),
                           'call' => Rule::string()->default('')->required(),

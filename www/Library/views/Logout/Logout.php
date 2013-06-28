@@ -15,9 +15,9 @@ use Library\views\View\View,
 
 class Logout extends View
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'logout' => Rule::bool()->required()
                     )

@@ -54,7 +54,7 @@ class Check
             if (isset($filters['default']))	unset($filters['default']);
             if (isset($filters['ignore'])){
                 $ignore = $filters['ignore'];
-                if (sizeof($ignore) == 1 && is_array($ignore[0])) $ignore = $ignore[0];
+                if (count($ignore) == 1 && is_array($ignore[0])) $ignore = $ignore[0];
                 unset($filters['ignore']);
             }else{
                 $ignore = array();
@@ -199,8 +199,10 @@ class Check
     {
         $result = array();
         if (is_array($value)){
+            $err_msg = 'Неверная структура.';
             // Контейнер для ошибок на элементы
-            $error = new Error('Неверная структура.', 'arrays');
+            $error = null;
+            //$error = new Error('Неверная структура.', 'arrays');
             // Сведения о правиле
             $rule_sub = array();
             $rule_default = null;
@@ -242,6 +244,7 @@ class Check
                     // Если на элемент нет правила, то его не будет в результате
                 }
                 if ($sub_error){
+                    if (!$error) $error = new Error($err_msg, 'arrays');
                     $error->{$key}->add($sub_error);
                 }
             }
@@ -250,13 +253,14 @@ class Check
                 if (isset($rule->required) && !isset($rule->forbidden)){
                     $result[$key] = self::filter(null, $rule, $sub_error);
                     if ($sub_error){
+                        if (!$error) $error = new Error($err_msg, 'arrays');
                         $error->{$key}->add($sub_error);
                     }
                 }
 
             }
             // Если ошибок у элементов нет, то удаляем объект исключения
-            if (!$error->isExist()){
+            if (!isset($error) || !$error->isExist()){
                 $error = null;
             }
         }else{
@@ -309,31 +313,26 @@ class Check
     static function entity($value, &$error, Rule $rule)
     {
         $cond = isset($rule->entity[0])? $rule->entity[0] : false;
-        if (is_string($value)){
-            // Пробуем получить объект по uri
-            $value = Data::read($value);
-        }else
-        if (is_array($value)){
-            if (isset($value['id'])){
-                $obj = Data::read($value['id']);
+        if (!is_object($value)){
+            if (is_string($value)){
+                // Пробуем получить объект по uri
+                $value = Data::read($value.'&cache=2');
             }else
-            if (isset($value['uri'])){
-                $obj = Data::read($value['uri']);
-            }else
-            if (isset($value['proto'])){
-                $obj = Data::read($value['proto'])->birth();
-                if (isset($value['parent']) && $parent = Data::read($value['parent'])){
-                    $parent->__set(null, $obj);
+            if (is_array($value)){
+                if (isset($value['id'])){
+                    $value = Data::read($value['id'].'&cache=2');
+                }else
+                if (isset($value['uri'])){
+                    $value = Data::read($value['uri'].'&cache=2');
+                }else
+                if (isset($value['proto'])){
+                    $value = Data::read($value['proto'])->birth();
+                    if (isset($value['parent']) && $parent = Data::read($value['parent'])){
+                        $parent->__set(null, $value);
+                    }
                 }
+                unset($value['uri'], $value['proto'], $value['value']);
             }
-            unset($value['uri'], $value['proto'], $value['value']);
-            // Подгрузка или установка подчиенных
-            if (isset($obj) && isset($value['_children']) && is_array($value['_children'])){
-                foreach ($value['_children'] as $name => $child){
-
-                }
-            }
-
         }
         if (!$value instanceof Entity){
             $error = new Error('Не является объектом данных', 'entity');
@@ -365,7 +364,7 @@ class Check
     {
         $rules = $rule->any;
         if (empty($rules)) return $value;
-        if (sizeof($rules) == 1 && is_array(reset($rules))) $rules = reset($rules);
+        if (count($rules) == 1 && is_array(reset($rules))) $rules = reset($rules);
         $result = null;
         foreach ($rules as $rule){
             $error = null;
@@ -391,7 +390,7 @@ class Check
         if (is_string($value) && mb_strlen($value) > $max){
             $result = mb_substr($value, 0, $max);
         }else
-        if (is_array($value) && sizeof($value) > $max){
+        if (is_array($value) && count($value) > $max){
             $result = array_slice($value, 0, $max);
         }else{
             $result = $value;
@@ -418,7 +417,7 @@ class Check
         if (is_string($value) && mb_strlen($value) < $min){
             $error = new Error(array('Меньше "%s" символов(а).', $min), 'min');
         }else
-        if (is_array($value) && sizeof($value) < $min){
+        if (is_array($value) && count($value) < $min){
             $error = new Error(array('Элементов меньше "%s".', $min), 'min');
         }
         return $result;
@@ -440,7 +439,7 @@ class Check
         if (is_string($value) && !(mb_strlen($value) < $less)){
             $result = mb_substr($value, 0, $less - 1);
         }else
-        if (is_array($value) && !(sizeof($value) < $less)){
+        if (is_array($value) && !(count($value) < $less)){
             $result = array_slice($value, 0, $less - 1);
         }else{
             $result = $value;
@@ -470,7 +469,7 @@ class Check
                 $error = new Error(array('Меньше "%s" символов(а).', $more+1), 'more');
             }
         }else
-        if (is_array($value) && !(sizeof($value) > $more)){
+        if (is_array($value) && !(count($value) > $more)){
             $error = new Error(array('Не больше "%s".', $more), 'more');
         }
         return $value;
@@ -521,7 +520,7 @@ class Check
     static function in($value, &$error, Rule $rule)
     {
         $list = $rule->in;
-        if (sizeof($list) == 1 && is_array($list[0])) $list = $list[0];
+        if (count($list) == 1 && is_array($list[0])) $list = $list[0];
         if (!in_array($value, $list)){
             $value = null;
             $error = new Error('Не в списке допустимых.', 'in');
@@ -539,7 +538,7 @@ class Check
     static function not_in($value, &$error, Rule $rule)
     {
         $list = $rule->not_in;
-        if (sizeof($list) == 1 && is_array($list[0])) $list = $list[0];
+        if (count($list) == 1 && is_array($list[0])) $list = $list[0];
         if (in_array($value, $list)){
             $value = null;
             $error = new Error('В списке запрещенных.', 'not_in');
@@ -675,7 +674,7 @@ class Check
     {
         if (is_scalar($value)){
             $patterns = $rule->regexp;
-            if (sizeof($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
+            if (count($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
             foreach ($patterns as $pattern){
                 if (preg_match($pattern, $value)) return $value;
             }
@@ -695,7 +694,7 @@ class Check
     {
         if (is_scalar($value)){
             $patterns = $rule->ospatterns;
-            if (sizeof($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
+            if (count($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
             foreach ($patterns as $pattern){
                 if (fnmatch($pattern, $value)) return $value;
             }
@@ -764,7 +763,7 @@ class Check
      */
     static function condition($value, &$error, Rule $rule)
     {
-        $result = \Boolive\data\Data::decodeCond($value);
+        $result = \Boolive\data\Data::decodeCond($value, array(), true);
         if ($result === null){
             $error = new Error('Не является условием поиска', 'condition');
         }

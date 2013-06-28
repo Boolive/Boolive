@@ -14,7 +14,7 @@ class Head extends Widget
     public function work($v = array())
     {
         $v['value'] = $this->_input['REQUEST']['object']->value();
-        $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'return'=>array('depth'=>0), 'comment' => 'read tree of text element'));
+        $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'return'=>false, 'comment' => 'read tree of text element'));
         if ($this->_input['REQUEST']['object']->style->isExist()){
             $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         }
@@ -23,9 +23,7 @@ class Head extends Widget
         Data::read(array(
             'from' => '/Library/content_samples/paragraphs',
             'select' => 'children',
-            'return' => array(
-                'limit' => array(0,0)
-            )
+            'return' => false
         ));
         if ($obj->is('/Library/content_samples/paragraphs/H2')){
             $v['tag'] = 'h2';

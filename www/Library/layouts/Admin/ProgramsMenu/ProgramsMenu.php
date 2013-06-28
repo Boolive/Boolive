@@ -12,9 +12,9 @@ use Library\views\Widget\Widget,
 class ProgramsMenu extends Widget
 {
 
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
                             Rule::arrays(Rule::entity()),

@@ -12,6 +12,7 @@ namespace Library\access\Member;
 use Boolive\data\Data;
 use Boolive\data\Entity,
     Boolive\functions\F;
+use Boolive\develop\Trace;
 use Library\access\Role\Role;
 
 class Member extends Entity
@@ -40,14 +41,15 @@ class Member extends Entity
     public function getAccessCond($action_kind, $parent = '', $depth = null)
     {
         if (!isset($this->_rights[$action_kind])){
+            //Trace::groups('Data')->group('START getAccess');
             $this->_rights[$action_kind] = array();
             $cond = null;
             $curr = null;
             if ($this->isExist()){
-                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true));
+                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true), false, true, false);
             }
             else{
-                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true));
+                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true), false, true, false);
                 //array_unshift($parents, $this);
             }
 
@@ -61,7 +63,7 @@ class Member extends Entity
                         'depth' => array(1, 'max'),
                         'comment' => 'read rights of Member',
                         'return'=>array('depth'=>1)
-                    ));
+                    ), false);
 //                    $rights = Data::read(array($obj, 'rights'), false);
                     //$roles = $rights->find(array('comment'=>'read all roles of Member'));
                     // Объединяем права в общий список
@@ -72,7 +74,7 @@ class Member extends Entity
                                 $cond = array($need, array($c));
                             }else
                             if ($curr!=$need){
-                                if (sizeof($cond[1]) == 1) $cond = $cond[1][0];
+                                if (count($cond[1]) == 1) $cond = $cond[1][0];
                                 $cond = array($need, array($cond, $c));
                             }else{
                                 $cond[1][] = $c;
@@ -83,8 +85,11 @@ class Member extends Entity
                 }
                 $obj = next($parents);
             }while($obj instanceof Member);
-            if (isset($cond) && sizeof($cond[1]) == 1) $cond = $cond[1][0];
-            $this->_rights[$action_kind] = $cond;
+            if (isset($cond)){
+                if (count($cond[1]) == 1) $cond = $cond[1][0];
+                $this->_rights[$action_kind] = $cond;
+            }
+            //Trace::groups('Data')->group('END getAccess');
         }
         return $this->_rights[$action_kind];
     }

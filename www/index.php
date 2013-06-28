@@ -26,11 +26,3 @@ if (Boolive::activate()){
     include DIR_SERVER_ENGINE.'installer/Installer.php';
     Installer::start();
 }
-
-//
-//trace(Data::read(array(
-//    'from' => array('/Contents/main', '/Contents/news'),
-//    'select' => array('tree'),
-//    'depth' => array(1,2),
-//    'key' => 'name'
-//)), false, false, false);

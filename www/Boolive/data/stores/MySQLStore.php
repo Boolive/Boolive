@@ -156,17 +156,14 @@ class MySQLStore extends Entity
                 if (isset($row['id'])){
                     unset($row['id2']);
                     $group_result[$key] = $this->makeObject($row);
-//                    $group_result[$key]->cond($cond);
                 }else{
                     if (isset($row['id2'])){
-                        $group_result[$key] = /*new Entity(*/array(
-                            //'id' => $this->remoteId($row['id2']),
+                        $group_result[$key] = array(
                             'uri'=>$row['uri'],
                             'owner'=>$this->_attribs['owner'],
                             'lang'=>$this->_attribs['lang'],
                             'class' => '\\Boolive\\data\\Entity'
-                            //'is_exist' => 0
-                        )/*)*/;
+                        );
                     }
                 }
             }
@@ -201,7 +198,7 @@ class MySQLStore extends Entity
             foreach ($tree_list as $key => $tree){
                 // Ручная сортиорвка по order
                 if (!($cond['depth'][0] == 1 && $cond['depth'][1] == 1) && empty($cond['select'][1]) && empty($cond['limit']) &&
-                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                                !empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                     $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
                     $sort = function($a, $b) use ($sort_kind){
                         if ($a['order'] == $b['order']) return 0;
@@ -429,7 +426,7 @@ class MySQLStore extends Entity
                 }else
                 // Если старое значение является файлом и выполняется редактирование со сменой is_history или
                 // добавляется новая актуальная запись, то перемещаем старый файл либо в историю, либо из неё
-                if ((!$add || ($add && !$entity->isVirtual() && $attr['is_history']==0)) && $current['is_file']==1){
+                if ((!$add || ($add && $attr['is_history']==0)) && $current['is_file']==1){
                     if ($current['is_history']==0){
                         $to = $entity->dir(true).'_history_/'.$fname_pf.$current['date'].'_'.$current['value'];
                         $from = $entity->dir(true).$fname_pf.$current['value'];
@@ -474,9 +471,9 @@ class MySQLStore extends Entity
                     unset($q);
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
-                        'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_virtual', 'is_default_value', 'is_default_class',
-                        'is_default_children', 'proto_cnt', 'parent_cnt', 'valuef');
-                $cnt = sizeof($attr_names);
+                        'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_default_value', 'is_default_class',
+                        'proto_cnt', 'parent_cnt', 'valuef');
+                $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id+owner+lang+date
                 if ($add){
@@ -510,15 +507,6 @@ class MySQLStore extends Entity
                 }
                 $this->db->commit();
                 $this->db->beginTransaction();
-
-                // Если был виртуальным, то отмена виртуальности у родителей и прототипов
-//                if ((!$entity->isExist() && !$attr['is_virtual']) || (!empty($current['is_virtual']) && !$attr['is_virtual'])){
-//                    $q = $this->db->prepare('
-//                        UPDATE {objects}, {trees} SET is_virtual = 0
-//                        WHERE {objects}.id = {trees}.parent_id AND {trees}.object_id = ? AND {trees}.type IN (0,1,3) AND is_virtual
-//                    ');
-//                    $q->execute(array($attr['id']));
-//                }
 
                 if (!$new_id && empty($current)){
                     // Если объект еще не был создан, но его уже прототипировали другие
@@ -627,7 +615,7 @@ class MySQLStore extends Entity
                 }
 
                 // Обновление экземпляра
-                $entity->_attribs['id'] = $this->remoteId($attr['id']);
+                $entity->_attribs['id'] = $this->key.'//'.$attr['id'];
                 $entity->_attribs['name'] = $attr['name'];
                 $entity->_attribs['value'] = $attr['value'];
                 $entity->_attribs['is_file'] = $attr['is_file'];
@@ -723,9 +711,9 @@ class MySQLStore extends Entity
             }
             // Очередь индексация прототипов
             $stack = array();
-            $i = sizeof($protos)-1;
+            $i = count($protos)-1;
             try{
-            while ($i>0 && ($protos[$i]['is_link'] == $protos[$i-1]['is_link']) && $protos[$i]['is_default_children'] && ($protos[$i]['index_depth'] < $depth || $protos[$i]['index_step']!=0)){
+            while ($i>0 && ($protos[$i]['is_link'] == $protos[$i-1]['is_link']) && ($protos[$i]['index_depth'] < $depth || $protos[$i]['index_step']!=0)){
                 $stack[] = array($protos[$i], $protos[$i-1]);
                 $i--;
             }
@@ -736,20 +724,20 @@ class MySQLStore extends Entity
             $update = $this->db->prepare('UPDATE {objects} SET index_depth = ?, index_step =? WHERE id = ?');
             $update->execute(array($depth, 0, $obj));
 
-            if (sizeof($stack)){
+            if (count($stack)){
                 $size = 10;
                 // Запрос на добавление виртуальных
                 $insert = $this->db->prepare('
                     INSERT IGNORE INTO {objects} (id, owner, lang, `date`, `name`, `order`, parent, parent_cnt, proto, proto_cnt,
-                    `value`, valuef, is_file, is_history, is_delete, is_hidden, is_link, is_virtual, is_default_value,
-                    is_default_class, is_default_children, index_depth, index_step)
+                    `value`, valuef, is_file, is_history, is_delete, is_hidden, is_link, is_default_value,
+                    is_default_class, index_depth, index_step)
                     VALUES (:id, :owner, :lang, :date, :name, :order, :parent, :parent_cnt, :proto, :proto_cnt,
-                    :value, :valuef, :is_file, :is_history, :is_delete, :is_hidden, :is_link, :is_virtual, :is_default_value,
-                    :is_default_class, :is_default_children, :index_depth, :index_step)
+                    :value, :valuef, :is_file, :is_history, :is_delete, :is_hidden, :is_link, :is_default_value,
+                    :is_default_class, :index_depth, :index_step)
                 ');
                 // Выбор реальных подчиненных для вложенной индексации
                 $select_real = $this->db->prepare('
-                    SELECT {ids}.uri, {objects}.* FROM {objects}, {ids} WHERE parent=:from AND is_virtual!=:virt AND is_history=0 AND {objects}.id = {ids}.id
+                    SELECT {ids}.uri, {objects}.* FROM {objects}, {ids} WHERE parent=:from AND is_history=0 AND {objects}.id = {ids}.id
                     LIMIT :start, '.$size
                 );
                 // Запрос для поиска виртуальных объектов
@@ -757,8 +745,8 @@ class MySQLStore extends Entity
                     SELECT CONCAT(:from_uri, SUBSTRING({ids}.uri, :proto_uri_length)) uri, id2.id,
                     {objects}.owner, {objects}.lang ,{objects}.date, {objects}.name ,{objects}.order, :from_id parent, :from_parent_cnt parent_cnt, {objects}.id proto, ({objects}.proto_cnt+1) AS proto_cnt,
                     {objects}.value, {objects}.valuef, {objects}.is_file, {objects}.is_history, {objects}.is_delete, {objects}.is_hidden, {objects}.is_link,
-                    :virt is_virtual, IF({objects}.is_default_value!=0, {objects}.is_default_value, {objects}.id) is_default_value,
-                    IF({objects}.is_default_class!=0, {objects}.is_default_class, {objects}.id) is_default_class, 1 is_default_children, 0 index_depth, 0 index_step
+                    IF({objects}.is_default_value!=0, {objects}.is_default_value, {objects}.id) is_default_value,
+                    IF({objects}.is_default_class!=0, {objects}.is_default_class, {objects}.id) is_default_class, 0 index_depth, 0 index_step
                     FROM {objects}
                     JOIN {ids} ON ({ids}.id = {objects}.id)
                     LEFT JOIN {ids} id2 ON (id2.uri = CONCAT(:from_uri, SUBSTRING({ids}.uri, :proto_uri_length)))
@@ -777,14 +765,13 @@ class MySQLStore extends Entity
                 $select->bindParam(':proto_uri_length', $proto_uri_length, DB::PARAM_INT);
                 $select->bindParam(':from_id', $from_id, DB::PARAM_INT);
                 $select->bindParam(':from_parent_cnt', $from_parent_cnt, DB::PARAM_INT);
-                $select->bindParam(':virt', $virt, DB::PARAM_INT);
                 $select->bindParam(':proto', $proto_id, DB::PARAM_INT);
                 $select->bindParam(':start', $start, DB::PARAM_INT);
                 //$select->bindParam(':size', $size, DB::PARAM_INT);
                 $max_steps = ceil(50 / $depth);
                 // Индексирование прототипов
                 // У каждого прототипа выбираются подчиненные, чтобы их сохранить наследнику из $stack
-                for ($i = sizeof($stack)-1; $i>=0; $i--){
+                for ($i = count($stack)-1; $i>=0; $i--){
                     // Фиксируем, что индексация выполнена, чтобы на асинхронные запросы она не повторилась
                     $update->execute(array($depth, 0, $from_id));
 
@@ -800,8 +787,8 @@ class MySQLStore extends Entity
                     $size = (int)$size;
                     $steps = 1;
                     $select_cnt = 0;
-                    // Поиск виртуальных подчиненных, если подчиненные наследуются от прототипа
-                    if ($from['is_default_children']){
+                    // Поиск виртуальных подчиненных
+
                         do{
                             $select->bindParam(':start', $start, DB::PARAM_INT);
                             $select->execute();
@@ -826,7 +813,7 @@ class MySQLStore extends Entity
                             }
                             $start+= $size;
                         }while($select_cnt == $size && ++$steps < $max_steps);
-                    }
+
                     // Смещение для следующего шага индексирования
                     $index_step = ($select_cnt == $size ? $start : 0);
 
@@ -891,7 +878,7 @@ class MySQLStore extends Entity
                 if (isset($cond[0], $cond[1]) && ($cond[0] == 'any' || $cond[0] == 'all')){
                     $cond = $cond[1];
                 }
-                $cnt = sizeof($cond);
+                $cnt = count($cond);
                 for ($i=0; $i<$cnt; $i++){
                     if (is_array($cond[$i]) && !empty($cond[$i])){
                         if ($cond[$i][0]=='child'){
@@ -907,9 +894,9 @@ class MySQLStore extends Entity
             $depth = $find_depth($cond['where']);
         }
 //        if ($depth == 1 && isset($cond['order'])){
-//            $cnt = sizeof($cond['order']);
+//            $cnt = count($cond['order']);
 //            while ($depth==1 && --$cnt>=0){
-//                if (sizeof($cond['order'][$cnt])==3) $depth = 2;
+//                if (count($cond['order'][$cnt])==3) $depth = 2;
 //            }
 //        }
 //        if (isset($cond['depth']) && $cond['depth']!='max' && $cond['depth']>1){
@@ -952,7 +939,7 @@ class MySQLStore extends Entity
                 $result['select'] = 'SELECT count(*) fun';
                 $calc = true;
             }else
-            if (in_array($cond['select'][0], array('self', 'children', 'parents', 'tree', 'protos', 'heirs', 'link'))){
+            if (in_array($cond['select'][0], array('self', 'children', 'parents', 'tree', 'protos', 'heirs'))){
                 // @todo учитывать указанные атрибуты в $cond['select'][1..n]
                 $result['select'] = 'SELECT u.uri, obj.*';
                 $calc = false;
@@ -967,8 +954,8 @@ class MySQLStore extends Entity
                 $what = $cond['select'][0];
             }
             if ($multy = is_array($cond['from'])){
-                $multy_cnt = sizeof($cond['from']);
-                if ($what == 'self' || $what == 'link' || $cond['select'][0] == 'exists'){
+                $multy_cnt = count($cond['from']);
+                if ($what == 'self' || $cond['select'][0] == 'exists'){
                     $cond['limit'] = array(0,$multy_cnt);
                 }
             }else{
@@ -1084,7 +1071,7 @@ class MySQLStore extends Entity
                         }
                         // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
                         if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                            !empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                             $cond['order'] = false;
                         }
                     }else
@@ -1104,7 +1091,7 @@ class MySQLStore extends Entity
                             $result['binds'][] = array($this->localId($cond['from']), DB::PARAM_INT);
                         }
                         // Оптимизация сортировки по атрибуту order
-                        if (!empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
+                        if (!empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
                             $cond['order'] = false;
                         }
                     }else{
@@ -1129,7 +1116,7 @@ class MySQLStore extends Entity
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
                             if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                                !empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                                 $cond['order'] = false;
                             }
                         }
@@ -1270,19 +1257,6 @@ class MySQLStore extends Entity
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                         }
                     }
-                }else
-                if ($what == 'link'){
-                    $result['from'] = ' FROM objects l, objects obj, ids u';
-                    if ($multy){
-                        $result['select'].= ', CONCAT("//",l.id) as `from`';
-                        $result['where'].= 'l.id IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') AND l.is_link = obj.id AND u.id = obj.id AND ';
-                        for ($i=0; $i<$multy_cnt; $i++){
-                            $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
-                        }
-                    }else{
-                        $result['where'].= 'l.id = ? AND l.is_link = obj.id AND u.id = obj.id AND ';
-                        $result['binds'][] = $this->localId($cond['from']);
-                    }
                 }else{
                     throw new \Exception('Incorrect selection in condition: ("'.$cond['select'][0].'","'.$cond['select'][1].'")');
                 }
@@ -1293,9 +1267,9 @@ class MySQLStore extends Entity
             }
             // Сортировка
             if (!$calc && !empty($cond['order'])){
-                $cnt = sizeof($cond['order']);
+                $cnt = count($cond['order']);
                 for ($i=0; $i<$cnt; $i++){
-                    if (($ocnt = sizeof($cond['order'][$i])-2)>=0){
+                    if (($ocnt = count($cond['order'][$i])-2)>=0){
                         $jtable = $pretabel = 'obj';
                         if ($ocnt>0){
                             // Сортировка по подчиненным объектами. Требуется слияние таблиц
@@ -1329,7 +1303,7 @@ class MySQLStore extends Entity
                     $glue = $cond[0] == 'any'?' OR ':' AND ';
                     $cond = $cond[1];
                 }else
-                if (sizeof($cond)>0 && !is_array($cond[0])){
+                if (count($cond)>0 && !is_array($cond[0])){
                     $cond = array($cond);
                     $glue = ' AND ';
                 }
@@ -1358,7 +1332,7 @@ class MySQLStore extends Entity
                             // Учитываем особенность синтаксиса условия IN
                             if (mb_strtolower($c[2]) == 'in'){
                                 if (!is_array($c[3])) $c[3] = array($c[3]);
-                                $cond[$i].='('.str_repeat('?,', sizeof($c[3])-1).'?)';
+                                $cond[$i].='('.str_repeat('?,', count($c[3])-1).'?)';
                                 $result['binds'] = array_merge($result['binds'], $c[3]);
                             }else{
                                 $cond[$i].= '?';
@@ -1385,9 +1359,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (sizeof($c)>0){
+                            if (count($c)>0){
                                 $alias = 'is'.$t_cnt;
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1401,9 +1375,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (sizeof($c)>0){
+                            if (count($c)>0){
                                 $alias = 'is'.$t_cnt;
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1419,8 +1393,8 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (sizeof($c)>0){
-                                $of = rtrim(str_repeat('?,', sizeof($c)), ',');
+                            if (count($c)>0){
+                                $of = rtrim(str_repeat('?,', count($c)), ',');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c, $c);
@@ -1752,11 +1726,6 @@ class MySQLStore extends Entity
             }
         }
         if (isset($this->_local_ids[$uri])) return $this->_local_ids[$uri];
-//        else
-//        // Пробуем найти объект в буфере
-//        if (($obj = Data::read(array('from'=>$uri,'comment'=>'MySQLStore::localId()'), false, IS_INSTALL, false, false)) && $obj->isExist()){
-//            return $this->localId($obj->id());
-//        }
         // Поиск идентифкатора URI
         $q = $this->db->prepare('SELECT id FROM {ids} WHERE `uri`=? LIMIT 0,1 FOR UPDATE');
         $q->execute(array($uri));
@@ -1780,17 +1749,6 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Создание внешнего идентификатора на основе локального
-     * К идентифкатору добавляется ключ хранилища
-     * @param $id
-     * @return string
-     */
-    public function remoteId($id)
-    {
-        return $this->key.'//'.$id;
-    }
-
-    /**
      * Создание объекта из атрибутов
      * @param array $attribs Атриубты объекта
      * @throws \Exception
@@ -1798,14 +1756,14 @@ class MySQLStore extends Entity
      */
     public function makeObject($attribs)
     {
-        $attribs['id'] = $this->remoteId($attribs['id']);
-        $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['owner']);
-        $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->remoteId($attribs['lang']);
-        $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->remoteId($attribs['parent']);
-        $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->remoteId($attribs['proto']);
-        if ($attribs['is_default_value'] == 0) unset($attribs['is_default_value']); else $attribs['is_default_value'] = $this->remoteId($attribs['is_default_value']);
-        $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_default_class']) : intval($attribs['is_default_class']);
-        $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->remoteId($attribs['is_link']) : intval($attribs['is_link']);
+        $attribs['id'] = $this->key.'//'.$attribs['id'];
+        $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->key.'//'.$attribs['owner'];
+        $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->key.'//'.$attribs['lang'];
+        $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->key.'//'.$attribs['parent'];
+        $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->key.'//'.$attribs['proto'];
+        if ($attribs['is_default_value'] == 0) unset($attribs['is_default_value']); else $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
+        $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_default_class'] : $attribs['is_default_class'];
+        $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_link'] : $attribs['is_link'];
         $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
         $attribs['is_exist'] = 1;
         $attribs['order'] = intval($attribs['order']);
@@ -1816,7 +1774,6 @@ class MySQLStore extends Entity
         if (empty($attribs['is_history'])) unset($attribs['is_history']); else $attribs['is_history'] = intval($attribs['is_history']);
         if (empty($attribs['is_delete'])) unset($attribs['is_delete']); else $attribs['is_delete'] = intval($attribs['is_delete']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
-        if (!empty($attribs['is_virtual'])) unset($attribs['is_virtual']); else $attribs['is_virtual'] = 0;
         $attribs['index_depth'] = intval($attribs['index_depth']);
         $attribs['index_step'] = intval($attribs['index_step']);
         unset($attribs['valuef']);
@@ -1981,10 +1938,8 @@ class MySQLStore extends Entity
                   `is_delete` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
-                  `is_virtual` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Виртуальный или нет? Виртуальные сохраняются для оптимизации',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
-                  `is_default_children` INT(10) NOT NULL DEFAULT '1' COMMENT 'Используются подчинённые прототипа или нет?',
                   `index_depth` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'Глубина индексации подчинённых',
                   `index_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг индексирование. Если не 0, то индексирование не закончено',
                   PRIMARY KEY (`id`,`owner`,`lang`,`date`),

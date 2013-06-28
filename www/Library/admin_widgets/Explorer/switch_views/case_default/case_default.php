@@ -11,9 +11,9 @@ use Boolive\values\Rule,
 
 class case_default extends SwitchCase
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'view_kind' => Rule::eq('list')->required(),
                         'object' => Rule::any(

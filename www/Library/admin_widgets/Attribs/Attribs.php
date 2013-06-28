@@ -14,9 +14,9 @@ use Library\views\Widget\Widget,
 
 class Attribs extends Widget
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->required(),
                         'call' => Rule::string()->default('')->required(),
@@ -104,7 +104,6 @@ class Attribs extends Widget
             $obj->isHidden(!empty($attribs['is_hidden']));
             $obj->isLink(!empty($attribs['is_link']));
             $obj->isDefaultClass(empty($attribs['is_logic']));
-            $obj->isDefaultChildren(!empty($attribs['override']));
 
             // Проверка и сохранение
             /** @var $error \Boolive\errors\Error */
@@ -163,7 +162,6 @@ class Attribs extends Widget
             'is_logic' => (bool)$obj->isDefaultClass() != self::ENTITY_ID,//['is_logic'],
             'is_hidden' => (bool)$obj->isHidden(null, false),
             'is_link' => (bool)$obj->isLink(),
-            'override' => (bool)$obj->isDefaultChildren(),
             'class' => get_class($obj),
             'class_self' => trim(str_replace('/', '\\', $obj->dir().$obj->name()), '\\')
         );

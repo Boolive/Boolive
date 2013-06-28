@@ -173,7 +173,7 @@ class File
     {
         $path = str_replace('\\','/',$path);
         $list = F::explode('/', $path, -2);
-        if (sizeof($list)<2){
+        if (count($list)<2){
             array_unshift($list, '');
         }
         $info = array('dir'=>$list[0], 'name'=>$list[1], 'base'=> '', 'ext'=>'', 'back'=>false);
@@ -182,7 +182,7 @@ class File
         }
         $list = F::explode('.', $info['name'], -2);
         // Если $list имеет один элемент, то это не расширение
-        if (sizeof($list)>1){
+        if (count($list)>1){
             $info['ext'] = strtolower($list[1]);
         }else{
             $info['ext'] = '';

@@ -30,8 +30,8 @@ class AutoWidgetList extends Widget
 
     protected function getList($cond = array())
     {
-        $cases = $this->linked(true)->switch_views->linked(true)->getCases();
-        $cnt = sizeof($cases);
+        $cases = $this->linked(false)->switch_views->linked(true)->getCases();
+        $cnt = count($cases);
         $protos = array();
         while ($cnt > 0){
             $cnt--;

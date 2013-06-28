@@ -39,9 +39,6 @@
                 vertical-align: middle;
 				font-size: 9pt;
 				}
-                .ObjectItem.list .virtual .main .title{
-                    color: #8040A0;
-                    }
                 .ObjectItem.list .hidden .main .title{
                     opacity: 0.5;
                     }

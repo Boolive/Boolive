@@ -27,7 +27,7 @@
                 <li><a href="/admin<?php echo $uri;?>" class="txt-tag" target="_blank"><?php echo $uri;?></a></li>
             <?php
                 endforeach;
-                if (sizeof($conflicts['access'])>=50) echo '<li>Список неполный</li>';
+                if (count($conflicts['access'])>=50) echo '<li>Список неполный</li>';
             ?>
             </ul>
         <?php endif; ?>
@@ -40,7 +40,7 @@
                 <li><a href="/admin<?php echo $uri;?>" class="txt-tag" target="_blank"><?php echo $uri;?></a></li>
             <?php
                 endforeach;
-                if (sizeof($conflicts['heirs'])>=50) echo '<li>Список неполный</li>';
+                if (count($conflicts['heirs'])>=50) echo '<li>Список неполный</li>';
             ?>
             </ul>
         <?php endif; ?>

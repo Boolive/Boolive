@@ -1,9 +1,6 @@
 <div class="ObjectItem list" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-p="ObjectItem">
 	<?php
         $class = '';
-        if($v['is_virtual']->bool()){
-            $class .= ' virtual';
-        }
         if($v['is_hidden']->bool()){
             $class .= ' hidden';
         }

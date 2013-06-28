@@ -37,7 +37,6 @@ class ObjectItem extends Widget
         $v['name'] = $obj->name();
         $v['value'] = (string)$obj->value();
         $v['uri'] = $obj->uri(false, true);
-        $v['is_virtual'] = $obj->isVirtual();
         $v['is_hidden'] = $obj->isHidden(null, false);
         $v['is_delete'] = $obj->isDelete(null, false);
         $v['is_file'] = $obj->isFile();

@@ -13,9 +13,9 @@ use Library\views\AutoWidgetList\AutoWidgetList,
 
 class Feedback extends AutoWidgetList
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         // Модель формы
                         'object' => Rule::entity()->required(),

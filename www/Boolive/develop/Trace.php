@@ -102,7 +102,7 @@ class Trace
      */
     public function group($key = null)
     {
-        if (empty($key)) $key = sizeof($this->list);
+        if (empty($key)) $key = count($this->list);
         if (!isset($this->list[$key])){
             $this->list[$key] = new Trace($key, null);
         }
@@ -192,7 +192,7 @@ class Trace
                 if (isset($var->value)){
                     $out.= $pfx.self::format($var->value, $trace_buf, $pfx, $html)."\n";
                 }
-                $cnt = sizeof($var->list);
+                $cnt = count($var->list);
                 foreach ($var->list as $var){
                     $cnt--;
                     $out.= $pfx.self::format($var, $trace_buf, ($cnt?$pfx.$sp:$pfx.$sp3), $html)."\n";
@@ -214,7 +214,7 @@ class Trace
         }else
         // если массив
         if (is_array($var)){
-            $cnt = sizeof($var);
+            $cnt = count($var);
             if ($cnt == 0){
                 $out.='{Array} ()';
             }else{
@@ -252,7 +252,7 @@ class Trace
                 if (!is_array($list)){
                     $out.= "\n".$pfx.self::format($list, $trace_buf, $pfx, $html);
                 }else{
-                    $cnt = sizeof($list);
+                    $cnt = count($list);
                     if ($cnt > 0){
                         foreach ($list as $name => $value){
                             $cnt--;

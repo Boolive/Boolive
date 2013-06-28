@@ -15,7 +15,7 @@
 		<h2>Системные требования</h2>
 		<ul>
 		<?php
-		$cnt = sizeof($v['errors']);
+		$cnt = count($v['errors']);
 		for ($i=0; $i<$cnt; ++$i){
 			echo '<li><span>'.$v['errors'][$i].'</span></li>';
 		}

@@ -10,9 +10,9 @@ use Library\views\AutoWidgetList\AutoWidgetList, Boolive\values\Rule;;
 
 class Explorer extends AutoWidgetList
 {
-    public function getInputRule()
+    public function defineInputRule()
     {
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::entity()->required(),
                         'filter' => Rule::arrays(Rule::string()),
@@ -38,13 +38,12 @@ class Explorer extends AutoWidgetList
             }
             return null;
         }else{
-            $filters = $this->filter->find(array('key'=>'name'), true);
+            $filters = $this->filter->find(array('key'=>'name', 'cache'=>2), true);
             // Установка нового фильтра
             if (!empty($this->_input['REQUEST']['filter'])) {
                 $this->filter->real->value($this->_input['REQUEST']['filter']['real']);
                 $this->filter->hidden->value(!empty($this->_input['REQUEST']['filter']['hidden']));
                 $this->filter->deleted->value(!empty($this->_input['REQUEST']['filter']['deleted']));
-                $this->filter->virtual->value(!empty($this->_input['REQUEST']['filter']['virtual']));
                 $this->filter->save();
             }
             // Текущий фильтр для отображения меню фильтра
@@ -84,14 +83,13 @@ class Explorer extends AutoWidgetList
     protected function getList($cond = array())
     {
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
-        $filters = $this->filter->find(array('key'=>'name'));
+        $filters = $this->filter->find(array('key'=>'name', 'cache'=>2));
         $any = array();
         // Реальные объекты. У которых все признаки false
         if ($filters['real']->value()) {
             $any[] = array('all', array(
                 array('attr', 'is_hidden', '=', 0),
-                array('attr', 'is_delete', '=', 0),
-                array('attr', 'is_virtual', '=', 0)
+                array('attr', 'is_delete', '=', 0)
             ));
         }
         // Скрытые объекты
@@ -105,12 +103,6 @@ class Explorer extends AutoWidgetList
             $any[] = array('attr', 'is_delete', '!=', 0 );
         }else{
             $cond['where'][] = array('attr', 'is_delete', '=', 0);
-        }
-        // Виртуальные объекты
-        if ($filters['virtual']->value()) {
-            $any[] = array('attr', 'is_virtual', '!=', 0);
-        }else{
-            $cond['where'][] = array('attr', 'is_virtual', '=', 0);
         }
         // Никакие
         if (empty($any)) {

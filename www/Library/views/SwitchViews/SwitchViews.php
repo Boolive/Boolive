@@ -19,10 +19,9 @@ class SwitchViews extends Widget
 {
     protected $_cases;
 
-    public function getInputRule()
+    public function defineInputRule()
     {
-
-        return Rule::arrays(array(
+        $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
                             Rule::arrays(Rule::entity()),  // массив объектов

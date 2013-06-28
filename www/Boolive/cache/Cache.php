@@ -8,6 +8,7 @@
  */
 namespace Boolive\cache;
 
+use Boolive\data\Entity;
 use Boolive\functions\F;
 
 class Cache
@@ -68,5 +69,26 @@ class Cache
             }
         }
         return null;
+    }
+
+    /**
+     * Получение идентификатора значения
+     * @param string $value
+     * @return string
+     */
+    static function getId($value)
+    {
+        if (is_array($value)){
+            array_walk_recursive($value, function(&$v, $k){$v = Cache::idValue($v);});
+            $value = F::implodeRecursive(';', $value);
+        }else
+        if (is_object($value)){
+            if ($value instanceof Entity){
+                $value = $value->uri().'&v='.$value->date();
+            }else{
+                $value = (string)$value;
+            }
+        }
+        return $value;
     }
 }
