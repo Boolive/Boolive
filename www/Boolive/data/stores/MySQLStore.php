@@ -492,8 +492,9 @@ class MySQLStore extends Entity
                     }
                     $q->execute();
                 }else{
+                    $attr['date'] = time();
                     $q = $this->db->prepare('
-                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ?
+                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ? AND owner=? AND lang=? AND date=?
                     ');
                     $i = 0;
                     foreach ($attr_names as $name){
@@ -502,8 +503,15 @@ class MySQLStore extends Entity
                         $type = is_int($value)? DB::PARAM_INT : (is_bool($value) ? DB::PARAM_BOOL : (is_null($value)? DB::PARAM_NULL : DB::PARAM_STR));
                         $q->bindValue($i, $value, $type);
                     }
-                    $q->bindValue($i+1, $attr['id']);
+                    $q->bindValue(++$i, $attr['id']);
+                    $q->bindValue(++$i, $current['owner']);
+                    $q->bindValue(++$i, $current['lang']);
+                    $q->bindValue(++$i, $current['date']);
                     $q->execute();
+                }
+                if ($q->rowCount()>0){
+                    // Обновить дату изменения у родителей
+                    $this->updateDate($attr['id'], $attr['date']);
                 }
                 $this->db->commit();
                 $this->db->beginTransaction();
@@ -645,6 +653,9 @@ class MySQLStore extends Entity
     public function delete($entity)
     {
         $id = $this->localId($entity->key(), false);
+        // Обновить дату изменения у родителей
+        $this->updateDate($id, time());
+        // Удалить объект
         $q = $this->db->prepare('
             DELETE ids, objects, parents, protos FROM parents p, ids, objects, parents, protos
             WHERE p.parent_id = ?
@@ -676,6 +687,21 @@ class MySQLStore extends Entity
         ');
         $q->execute(array($id));
         return $q->fetchAll(DB::FETCH_COLUMN, 0);
+    }
+
+    /**
+     * Обновление даты изменения объекта и всех его родителей
+     * @param int $local_id Локальный идентификатор объекта
+     * @param int $date Новая дата изменения объекта
+     * @return bool Признак, было ли совершено обновление?
+     */
+    private function updateDate($local_id, $date)
+    {
+        $q = $this->db->prepare('
+            UPDATE {objects}, {parents} SET {objects}.date=? WHERE {parents}.object_id = ? AND {parents}.parent_id = {objects}.id AND {objects}.is_history=0
+        ');
+        $q->execute(array($date, $local_id));
+        return $q->rowCount()>0;
     }
 
     /**
