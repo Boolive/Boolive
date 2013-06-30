@@ -25,6 +25,8 @@ class Commands
      */
     private $commands = array();
 
+    private $groups = array();
+
     /**
      * Создание команды через вызов одноименной функции.
      * @param string $name Название команды
@@ -53,7 +55,19 @@ class Commands
         }else{
             array_unshift($this->commands[$name], $args);
         }
+        // Добавление команды в группы
+        foreach ($this->groups as $key => $g){
+            $this->groups[$key][] = array($name, $args, $push);
+        }
+    }
 
+    /**
+     * Добавление списка команд
+     * @param array $list Массив команд
+     */
+    public function setList($list)
+    {
+        foreach ($list as $com) $this->set($com[0], $com[1], $com[2]);
     }
 
     /**
@@ -124,5 +138,20 @@ class Commands
             return !empty($this->commands);
         }
         return !empty($this->commands[$name]);
+    }
+
+    public function group($name)
+    {
+        $this->groups[$name] = array();
+    }
+
+    public function ungroup($name)
+    {
+        unset($this->groups[$name]);
+    }
+
+    public function getGroup($name)
+    {
+        return $this->groups[$name];
     }
 }
