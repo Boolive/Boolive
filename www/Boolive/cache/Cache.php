@@ -36,7 +36,6 @@ class Cache
 
     static function set($key, $value)
     {
-        // Определение хранилища по URI
         if ($store = self::getStore($key)){
             return $store->set($key, $value);
         }
@@ -45,9 +44,19 @@ class Cache
 
     static function delete($key)
     {
-        // Определение хранилища по URI
         if ($store = self::getStore($key)){
             return $store->delete($key);
+        }
+        return false;
+    }
+
+    /**
+     * Чистка кэша от старых значений
+     */
+    static function clear($key)
+    {
+        if ($store = self::getStore($key)){
+            return $store->clear($key);
         }
         return false;
     }
@@ -79,12 +88,12 @@ class Cache
     static function getId($value)
     {
         if (is_array($value)){
-            array_walk_recursive($value, function(&$v, $k){$v = Cache::idValue($v);});
-            $value = F::implodeRecursive(';', $value);
+            array_walk_recursive($value, function(&$v, $k){$v = Cache::getId($v);});
+            $value = json_encode($value);
         }else
         if (is_object($value)){
             if ($value instanceof Entity){
-                $value = $value->uri().'&v='.$value->date();
+                $value = $value->uri().'&v='.$value->isExist()?$value->date():$value->value();
             }else{
                 $value = (string)$value;
             }

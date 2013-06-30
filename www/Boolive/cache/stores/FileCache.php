@@ -14,6 +14,8 @@ class FileCache
     private $dir;
     /** @var  string Ключ хранилища */
     private $store_key;
+    /** @var int Период в секундак после последнего обращения к кэшу, когда его можно удалить */
+    private $clear_period = 0;
 
     function __construct($store_key, $config)
     {
@@ -31,7 +33,7 @@ class FileCache
     {
         try{
             $file = $this->dir.$key.'.cache';
-			if ($time > 0 && is_file($file) && (time() - filemtime($file) > $time)){
+			if ($time > 0 && is_file($file) && (time() - filemtime($file)) > $time){
                 $this->delete($key);
             }else{
                 return file_get_contents($file);
@@ -53,7 +55,7 @@ class FileCache
 			$temp = $file.rand(0, 1000);
 			$path = dirname($file);
 			// Создание директории для кэш файла
-			if (!file_exists($path)) mkdir($path, 0777, true);
+			if (!is_dir($path)) mkdir($path, 0777, true);
 			// Создание кэш файла с временным именем
 			$f = fopen($temp, 'w');
 			fwrite($f, $value);
@@ -85,5 +87,23 @@ class FileCache
 		}catch (\Exception $e){
 			return false;
 		}
+    }
+
+    /**
+     * Очистка старых кэш значений
+     * @param $key
+     */
+    public function clear($key, $ext = '.cache')
+    {
+        if (is_file($file = $this->dir.$key.$ext)){
+            if (time()-fileatime($file) > $this->clear_period) unlink($file);
+        }else
+        if (is_dir($dir = $this->dir.$key)){
+            $dirs = array_diff(scandir($dir), array('.', '..'));
+            foreach ($dirs as $d){
+                $this->clear(($key?$key.'/':'').$d, '');
+            }
+            if (!$dirs) rmdir($dir);
+        }
     }
 }
