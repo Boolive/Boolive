@@ -7,6 +7,7 @@ Version 2.0.alpha work in progress
 - new: Added support of conditions of string type (VladimirShestakov)
 - new #126: Multiple "from" in the condition of reading objects and automatic grouping of selections are added (VladimirShestakov)
 - new #127: The caching module in files is created (VladimirShestakov)
+- new #128: Caching of views (widgets) (VladimirShestakov)
 - new #129: Cascade updating of date of editing objects is added (VladimirShestakov)
 - enh: Data::select() method  is combined with Data::read() (VladimirShestakov)
 - enh: Added style for output of function trace() (VladimirShestakov)

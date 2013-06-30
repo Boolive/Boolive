@@ -269,7 +269,7 @@ class Entity implements ITrace
      */
     public function date()
     {
-        if (isset($this->_attribs['date'])){
+        if (!isset($this->_attribs['date'])){
             $this->_attribs['date'] = time();
         }
         return (int)$this->_attribs['date'];

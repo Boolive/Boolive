@@ -7,6 +7,7 @@
  */
 namespace Library\views\View;
 
+use Boolive\cache\Cache;
 use Boolive\data\Entity,
     Boolive\commands\Commands,
     Boolive\values\Check,
@@ -39,7 +40,7 @@ class View extends Entity
 
     public function defineInputRule()
     {
-        $this->_input_rule = Rule::any();
+        $this->_input_rule = Rule::null()->ignore('null');
     }
 
     /**
@@ -86,6 +87,17 @@ class View extends Entity
 //        Benchmark::start($key);
         //Проверка возможности работы
         if ($this->canWork($commands, $input)){
+
+            if ($this->cache->value()){
+                $key = 'views'.$this->uri().'/'.$this->date().'&'.md5(Cache::getId($this->_input));
+                if ($result = Cache::get($key)){
+                    $result = json_decode($result, true);
+                    $commands->setList($result[1]);
+                    return $result[0];
+                }
+                $commands->group($key);
+            }
+
             $this->initInputChild($input);
             //Выполнение подчиненных
             ob_start();
@@ -96,9 +108,14 @@ class View extends Entity
                 }
             ob_end_clean();
             $this->_input_child = null;
+            if (isset($key)){
+                Cache::set($key, json_encode(array($result, $commands->getGroup($key))));
+                $commands->ungroup($key);
+            }
         }else{
             $result = false;
         }
+
 //        $this->_children = array();
         //$this->_commands = null;
 //        $this->_input = null;

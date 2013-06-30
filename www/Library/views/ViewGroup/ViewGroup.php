@@ -11,10 +11,10 @@ use Library\views\View\View;
 
 class ViewGroup extends View
 {
-    protected function initInputChild($input)
-    {
-        parent::initInputChild($this->_input);
-    }
+//    protected function initInputChild($input)
+//    {
+//        parent::initInputChild($this->_input);
+//    }
 
     public function work()
     {
