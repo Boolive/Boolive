@@ -7,9 +7,10 @@
  */
 namespace Library\admin_widgets\Destroy;
 
-use Boolive\data\Data;
-use Boolive\file\File;
-use Library\views\Widget\Widget,
+use Boolive\data\Data,
+    Boolive\errors\Error,
+    Boolive\file\File,
+    Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class Destroy extends Widget
@@ -36,10 +37,14 @@ class Destroy extends Widget
         // Удаление
         if ($this->_input['REQUEST']['call'] == 'destroy'){
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
-            foreach ($objects as $o){
-                /** @var \Boolive\data\Entity $o */
-                // Уничтожение с проверкой доступа и целостностью данных
-                $o->destroy($error, true, true);
+            try{
+                foreach ($objects as $o){
+                    /** @var \Boolive\data\Entity $o */
+                    // Уничтожение с проверкой доступа и целостностью данных
+                    $o->destroy(true, true);
+                }
+            }catch (Error $e){
+                $v['error'] = $e->__toArray();
             }
             $v['result'] = true;
             return $v;
@@ -51,15 +56,15 @@ class Destroy extends Widget
             $v['objects'] = array();
             $v['conflicts'] = array();
             foreach ($objects as $o){
-                $item = array();
-                if (!($item['title'] = $o->title->value())){
-                    $item['title'] = $o->name();
-                }
-                $item['uri'] = $o->uri();
-                $v['objects'][] = $item;
-                $v['data-o'][]=$item['uri'];
-                $conflits = Data::deleteConflicts($o, true, true);
-                $v['conflicts'] = array_merge_recursive($v['conflicts'], $conflits);
+//                $item = array();
+//                if (!($item['title'] = $o->title->value())){
+//                    $item['title'] = $o->name();
+//                }
+               // $item['uri'] = $o->uri();
+//                $v['objects'][] = $item;
+                $v['data-o'][]=$o->uri();
+//                $conflits = Data::deleteConflicts($o, true, true);
+//                $v['conflicts'] = array_merge_recursive($v['conflicts'], $conflits);
             }
             $v['data-o'] = json_encode($v['data-o']);
             $v['title'] = $this->title->value();

@@ -7,15 +7,17 @@
  */
 namespace Boolive\data\stores;
 
-use Boolive\cache\Cache;
-use Boolive\database\DB,
+use Boolive\auth\Auth,
+    Boolive\cache\Cache,
+    Boolive\database\DB,
     Boolive\data\Entity,
     Boolive\data\Data,
     Boolive\functions\F,
     Boolive\file\File,
     Boolive\data\Buffer,
-    Boolive\develop\Trace;
-use Boolive\events\Events;
+    Boolive\develop\Trace,
+    Boolive\errors\Error,
+    Boolive\events\Events;
 
 class MySQLStore extends Entity
 {
@@ -162,7 +164,7 @@ class MySQLStore extends Entity
                             'uri'=>$row['uri'],
                             'owner'=>$this->_attribs['owner'],
                             'lang'=>$this->_attribs['lang'],
-                            'class' => '\\Boolive\\data\\Entity'
+                            'class' => '\\Boolive\\data\\Entity',
                         );
                     }
                 }
@@ -240,12 +242,18 @@ class MySQLStore extends Entity
     /**
      * Сохранение объекта
      * @param \Boolive\data\Entity $entity Сохраняемый объект
-     * @throws \Exception
-     * @return \Boolive\data\Entity Признак, сохранен объект или нет?
+     * @param bool $access Признак, проверять доступ или нет?
+     * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \Exception Системные ошибки
      */
-    public function write($entity)
+    public function write($entity, $access)
     {
-        if ($entity->check()){
+        if ($access && IS_INSTALL && !($entity->isAccessible() && Auth::getUser()->checkAccess('write', $entity))){
+            $error = new Error('Запрещенное действие над объектом', $entity->uri());
+            $error->access = new Error('Нет доступа на запись', 'write');
+            throw $error;
+        }
+        if ($entity->check($error)){
             try{
                 // Атрибуты отфильтрованы, так как нет ошибок
                 $attr = $entity->_attribs;
@@ -268,22 +276,23 @@ class MySQLStore extends Entity
                 $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
                 // Ссылка
                 $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
-
+                // URI до сохранения объекта
+                $curr_uri = $attr['uri'];
                 // Подбор уникального имени, если указана необходимость в этом
-                if ($entity->_rename){
+                if ($entity->_autoname){
                     $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE parent=? AND `name`=? LIMIT 0,1');
-                    $q->execute(array($attr['parent'], $entity->_rename));
+                    $q->execute(array($attr['parent'], $entity->_autoname));
                     if ($q->fetch()){
                         //Выбор записи по шаблону имени с самым большим префиксом
                         $q = $this->db->prepare('SELECT `name` FROM {objects} WHERE parent=? AND `name` REGEXP ? ORDER BY CAST((SUBSTRING_INDEX(`name`, "_", -1)+1) AS SIGNED) DESC LIMIT 0,1');
-                        $q->execute(array($attr['parent'], '^'.$entity->_rename.'(_[0-9]+)?$'));
+                        $q->execute(array($attr['parent'], '^'.$entity->_autoname.'(_[0-9]+)?$'));
                         if ($row = $q->fetch(DB::FETCH_ASSOC)){
-                            preg_match('|^'.preg_quote($entity->_rename).'(?:_([0-9]+))?$|u', $row['name'], $match);
-                            $entity->_rename.= '_'.(isset($match[1]) ? ($match[1]+1) : 1);
+                            preg_match('|^'.preg_quote($entity->_autoname).'(?:_([0-9]+))?$|u', $row['name'], $match);
+                            $entity->_autoname.= '_'.(isset($match[1]) ? ($match[1]+1) : 1);
                         }
                     }
                     $temp_name = $attr['name'];
-                    $attr['name'] = $entity->_rename;
+                    $attr['name'] = $entity->_attribs['name'] = $entity->_autoname;
                     $attr['uri'] = $entity->uri(true);
                 }
                 // Локальный идентификатор объекта
@@ -351,7 +360,7 @@ class MySQLStore extends Entity
                 }
                 $this->db->beginTransaction();
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных
-                if ($entity->_rename || (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent']))){
+                if (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent'])){
                     // Обновление URI в ids
                     // Текущий URI
                     $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
@@ -624,35 +633,72 @@ class MySQLStore extends Entity
 
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->key.'//'.$attr['id'];
+                $entity->_attribs['date'] = $attr['date'];
                 $entity->_attribs['name'] = $attr['name'];
                 $entity->_attribs['value'] = $attr['value'];
                 $entity->_attribs['is_file'] = $attr['is_file'];
                 $entity->_attribs['is_exist'] = 1;
                 $entity->_changed = false;
-
+                $entity->_autoname = false;
+                if ($entity->_attribs['uri'] != $curr_uri){
+                    $entity->updateURI();
+                }
                 $this->db->commit();
 
                 $this->afterWrite($attr, empty($current)?array():$current);
 
-                return true;
             }catch (\Exception $e){
                 $this->db->rollBack();
                 $q = $this->db->query('SHOW ENGINE INNODB STATUS');
                 trace($q->fetchAll(DB::FETCH_ASSOC));
                 throw $e;
             }
+        }else{
+            throw $error;
         }
-        return false;
     }
 
     /**
      * Удаление объекта и его подчиненных, если они никем не используются
      * @param Entity $entity Уничтожаемый объект
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
+     * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
      * @return bool
      */
-    public function delete($entity)
+    public function delete($entity, $access, $integrity)
     {
+        // Проверка доступа на уничтожение объекта и его подчиненных
+        if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $entity->id(), null))){
+            $not_access = $this->read(array(
+                    'select' => array('exists', 'children'),
+                    'from' => $entity->id(),
+                    'depth' => array(0, 'max'),
+                    'where' => array('not', $acond),
+                    'access' => false
+                ), false
+            );
+            if ($not_access){
+                $error = new Error('Запрещенное действие над объектом', $entity->uri());
+                $error->access = new Error('Нет доступа на уничтожение объекта или любого из его подчиненных', 'delete');
+                throw $error;
+            }
+        }
         $id = $this->localId($entity->key(), false);
+        // Проверка целосности - поиск наследников объекта и наследников его подчиненных
+        if ($integrity){
+            $q = $this->db->prepare('
+              SELECT 1 FROM ids, objects, parents, protos
+              WHERE ids.id = objects.id AND ids.id = protos.object_id AND parents.parent_id = ? AND protos.proto_id = parents.object_id AND protos.level > 0 AND parents.is_delete = 0 AND protos.is_delete = 0
+              LIMIT 0,1
+            ');
+            $q->execute(array($id));
+            if ($row = $q->fetch(DB::FETCH_ASSOC)){
+                $error = new Error('Недопустимое действие над объектом', $entity->uri());
+                $error->integrity = new Error('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов', 'heirs-exists');
+                throw $error;
+            }
+        }
         // Обновить дату изменения у родителей
         $this->updateDate($id, time());
         // Удалить объект
@@ -669,24 +715,6 @@ class MySQLStore extends Entity
         // Удалении директории со всеми файлами
         File::clearDir($entity->dir(true), true);
         return $q->rowCount() > 0;
-    }
-
-    /**
-     * Поиск конфликтов при уничтожении объекта
-     * @param Entity $entity Уничтожаемый объект
-     * @return array URI объектов, которые наследуют удаляемый объект или подчиенных удяляемого объект
-     */
-    public function deleteConflicts($entity)
-    {
-        $id = $this->localId($entity->key(), false);
-        // Проверить всех подчиненных, кто их наследует
-        $q = $this->db->prepare('
-          SELECT ids.uri FROM ids, objects, parents, protos
-          WHERE ids.id = objects.id AND ids.id = protos.object_id AND parents.parent_id = ? AND protos.proto_id = parents.object_id AND protos.level > 0 AND parents.is_delete = 0 AND protos.is_delete = 0
-          LIMIT 0,50
-        ');
-        $q->execute(array($id));
-        return $q->fetchAll(DB::FETCH_COLUMN, 0);
     }
 
     /**
@@ -956,8 +984,18 @@ class MySQLStore extends Entity
         // количество услой IS
         $t_cnt = 1;
         // Условия для локализации и персонализации
-        $owner_lang = ($cond['owner'] == Entity::ENTITY_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
-        $owner_lang.= ($cond['lang'] == Entity::ENTITY_ID)? ' AND `lang` = ?' : ' AND `lang` IN (?, 4294967295)';
+        $owner_lang = '1';
+        if (isset($cond['owner'])){
+            $owner_lang = ($cond['owner'] == Entity::ENTITY_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
+        }
+        if (isset($cond['lang'])){
+            if ($owner_lang == '1'){
+                $owner_lang = '';
+            }else{
+                $owner_lang.=' AND ';
+            }
+            $owner_lang.= ($cond['lang'] == Entity::ENTITY_ID)? '`lang` = ?' : '`lang` IN (?, 4294967295)';
+        }
 
         if (!$only_where){
             // Что?

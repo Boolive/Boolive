@@ -7,7 +7,8 @@
  */
 namespace Library\admin_widgets\page_widgets\PageDescriptionEditor;
 
-use Library\views\Widget\Widget,
+use Boolive\errors\Error,
+    Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class PageDescriptionEditor extends Widget {
@@ -37,33 +38,34 @@ class PageDescriptionEditor extends Widget {
     }
 
     /**
-        * Сохранение атрибутов объекта
-        * @return mixed
-        */
-       protected function callSave()
-       {
-           $v = array();
-           if ($this->_input['REQUEST']['Page']['description']==''){
-               $v['error']['value'] = 'Нельзя сохранить пустое описание';
-           }else{
-               $obj  = $this->_input['REQUEST']['object'];
-               $obj->value($this->_input['REQUEST']['Page']['description']);
-               $error = null;
-               $obj->save(false, false, $error);
-               if (isset($error) && $error->isExist()){
-                   $v['error'] = array();
-                   if ($error->isExist('_attribs')){
-                      foreach ($error->_attribs as $key => $e){
-                          /** @var $e \Boolive\errors\Error */
-                          $v['error'][$key] = $e->getUserMessage(true,' ');
-                      }
-                      $error->delete('_attribs');
-                  }
-                  $v['error']['_other_'] = $error->getUserMessage(true);
-               }
-               $v['description'] = $obj->value();
-           }
-           return $v;
-       }
+    * Сохранение атрибутов объекта
+    * @return mixed
+    */
+    protected function callSave()
+    {
+        $v = array();
+        if ($this->_input['REQUEST']['Page']['description']==''){
+           $v['error']['value'] = 'Нельзя сохранить пустое описание';
+        }else{
+            $obj = $this->_input['REQUEST']['object'];
+            $obj->value($this->_input['REQUEST']['Page']['description']);
+            try{
+                $obj->save(false, false);
+                $v['description'] = $obj->value();
+            }catch(Error $error){
+                $v['error'] = array();
+                if ($error->isExist('_attribs')){
+                    foreach ($error->_attribs as $key => $e){
+                        /** @var $e \Boolive\errors\Error */
+                        $v['error'][$key] = $e->getUserMessage(true, ' ');
+                    }
+                    $error->delete('_attribs');
+                }
+                $v['error']['_other_'] = $error->getUserMessage(true);
+            }
+
+        }
+        return $v;
+    }
 
 }

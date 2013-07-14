@@ -8,8 +8,9 @@
  */
 namespace Library\admin_widgets\ImageEditor;
 
-use Boolive\data\Entity;
-use Library\views\Widget\Widget,
+use Boolive\data\Entity,
+    Boolive\errors\Error,
+    Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class ImageEditor extends Widget
@@ -86,15 +87,13 @@ class ImageEditor extends Widget
             $obj = $this->_input['REQUEST']['object'];
             if (isset($this->_input['FILES']['attrib']['file'])) {
                 $obj->file($this->_input['FILES']['attrib']['file']);
-                // Проверка и сохранение
-                /** @var $error \Boolive\errors\Error */
-                $error = null;
-                $obj->save(false, false, $error);
-                if (isset($error) && $error->isExist()) {
-                    $v['error']['value'] = $error->getUserMessage(true);
-                } else {
+                //Cохранение
+                try{
+                    $obj->save(false, false);
                     $v['attrib'] = $this->callLoad();
                     $v['attrib']['file'].='?'.rand();
+                }catch (Error $error){
+                    $v['error']['value'] = $error->getUserMessage(true);
                 }
                 return $v;
             }

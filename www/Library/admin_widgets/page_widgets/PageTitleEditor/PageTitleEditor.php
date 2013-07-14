@@ -6,7 +6,8 @@
  */
 namespace Library\admin_widgets\page_widgets\PageTitleEditor;
 
-use Library\views\Widget\Widget,
+use Boolive\errors\Error,
+    Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class PageTitleEditor extends Widget
@@ -48,20 +49,20 @@ class PageTitleEditor extends Widget
         }else{
             $obj  = $this->_input['REQUEST']['object'];
             $obj->value($this->_input['REQUEST']['Page']['title']);
-            $error = null;
-            $obj->save(false, false, $error);
-            if (isset($error) && $error->isExist()){
+            try{
+                $obj->save(false, false);
+                $v['title'] = $obj->value();
+            }catch (Error $error){
                 $v['error'] = array();
                 if ($error->isExist('_attribs')){
-                   foreach ($error->_attribs as $key => $e){
-                       /** @var $e \Boolive\errors\Error */
-                       $v['error'][$key] = $e->getUserMessage(true,' ');
-                   }
-                   $error->delete('_attribs');
-               }
-               $v['error']['_other_'] = $error->getUserMessage(true);
+                    foreach ($error->_attribs as $key => $e){
+                        /** @var $e \Boolive\errors\Error */
+                        $v['error'][$key] = $e->getUserMessage(true,' ');
+                    }
+                    $error->delete('_attribs');
+                }
+                $v['error']['_other_'] = $error->getUserMessage(true);
             }
-            $v['title'] = $obj->value();
         }
         return $v;
     }

@@ -8,7 +8,8 @@
  */
 namespace Library\admin_widgets\Attribs;
 
-use Library\views\Widget\Widget,
+use Boolive\errors\Error,
+    Library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\data\Data;
 
@@ -105,21 +106,9 @@ class Attribs extends Widget
             $obj->isLink(!empty($attribs['is_link']));
             $obj->isDefaultClass(empty($attribs['is_logic']));
 
-            // Проверка и сохранение
-            /** @var $error \Boolive\errors\Error */
-            $error = null;
-            $obj->save(false, false, $error);
-            if (isset($error) && $error->isExist()){
-                $v['error'] = array();
-                if ($error->isExist('_attribs')){
-                    foreach ($error->_attribs as $key => $e){
-                        /** @var $e \Boolive\errors\Error */
-                        $v['error'][$key] = $e->getUserMessage(true,' ');
-                    }
-                    $error->delete('_attribs');
-                }
-                $v['error']['_other_'] = $error->getUserMessage(true);
-            }else{
+            // Сохранение
+            try{
+                $obj->save(false, false);
                 if ($class_changed){
                     $this->_input['REQUEST']['object'] = Data::read(array(
                         'from' => $obj->id(),
@@ -129,6 +118,17 @@ class Attribs extends Widget
                     ), true);
                 }
                 $v['attrib'] = $this->callLoad();
+            }catch (Error $error){
+                $v['error'] = $error->__toArray();
+//                $v['error'] = array();
+//                if ($error->isExist('_attribs')){
+//                    foreach ($error->_attribs as $key => $e){
+//                        /** @var $e \Boolive\errors\Error */
+//                        $v['error'][$key] = $e->getUserMessage(true,' ');
+//                    }
+//                    $error->delete('_attribs');
+//                }
+//                $v['error']['_other_'] = $error->getUserMessage(true);
             }
         }
         return $v;
@@ -157,7 +157,7 @@ class Attribs extends Widget
             'is_file_null' => $obj->proto() ? $obj->proto()->isFile() : false,
 //            'lang' => $obj->_attribs['lang'],
 //            'owner' => $obj->_attribs['owner'],
-            'date' => date('j.m.Y, G:s', $obj->date()),
+            'date' => date('j.m.Y, G:i', $obj->date()),
             'order' => $obj->order(),
             'is_logic' => (bool)$obj->isDefaultClass() != self::ENTITY_ID,//['is_logic'],
             'is_hidden' => (bool)$obj->isHidden(null, false),

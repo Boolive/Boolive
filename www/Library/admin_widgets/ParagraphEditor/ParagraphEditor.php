@@ -8,8 +8,9 @@
  */
 namespace Library\admin_widgets\ParagraphEditor;
 
-use Boolive\data\Entity;
-use Library\views\Widget\Widget,
+use Boolive\data\Entity,
+    Boolive\errors\Error,
+    Library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\data\Data;
 
@@ -165,10 +166,10 @@ class ParagraphEditor extends Widget
         //$value = htmlentities($value, null, 'UTF-8');
         $object->value($value);
         // Проверка и сохранение
-        /** @var $error \Boolive\errors\Error */
-        $error = null;
-        $object->save(false, false, $error);
-        if (isset($error) && $error->isExist()){
+        try{
+            $object->save(false, false);
+            $v['attrib'] = $this->callLoad();
+        }catch (Error $error){
             $v['error'] = array();
             if ($error->isExist('_attribs')){
                 foreach ($error->_attribs as $key => $e){
@@ -178,8 +179,6 @@ class ParagraphEditor extends Widget
                 $error->delete('_attribs');
             }
             $v['error']['_other_'] = $error->getUserMessage(true);
-        }else{
-            $v['attrib'] = $this->callLoad();
         }
         return $v;
     }

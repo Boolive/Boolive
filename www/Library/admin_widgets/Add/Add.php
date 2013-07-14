@@ -42,7 +42,8 @@ class Add extends AutoWidgetList
                     if ($proto->uri() == '/Library/basic/simple/Object'){
                         $obj->proto(false);
                     }
-                    $obj->save(false, false, $error);
+                    // @todo Обрабатывать ошибки
+                    $obj->save(false, false);
                     $v['result'][] = $obj->uri();
                 }
             }

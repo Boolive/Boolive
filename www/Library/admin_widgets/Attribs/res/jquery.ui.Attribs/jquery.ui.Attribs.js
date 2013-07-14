@@ -132,7 +132,7 @@
                     item.find('[data-name="proto-uri"]').text(value?value:'/').attr('href', value).show();
                     item.find('[data-name="proto-delete"]:first').show();
                 }else{
-                    item.find('[data-name="proto-uri"]').text('Entity');
+                    item.find('[data-name="proto-uri"]').text('Выбрать...');
                     item.find('[data-name="proto-delete"]').hide();
                 }
             })
@@ -344,13 +344,25 @@
                         success: function(responseText, statusText, xhr, $form){
                             if (responseText.out.error){
                                 self.model.set_process('start', false);
-                                for(var e in responseText.out.error){
-                                    if (e == 'file'){
-                                        self.model.set_error('value', responseText.out.error[e]);
-                                    }else{
-                                        self.model.set_error(e, responseText.out.error[e]);
+
+                                if (_.isObject(responseText.out.error.list._attribs) && _.isObject(responseText.out.error.list._attribs.list)){
+                                    var list = responseText.out.error.list._attribs.list;
+                                    for(var e in list){
+                                        if (e == 'file'){
+                                            self.model.set_error('value', self.errorMessage(list[e], true));
+                                        }else{
+                                            self.model.set_error(e, self.errorMessage(list[e], true));
+                                        }
                                     }
                                 }
+                                self.submit_msg.text(self.errorMessage(responseText.out.error, false));
+//                                for(var e in responseText.out.error){
+//                                    if (e == 'file'){
+//                                        self.model.set_error('value', responseText.out.error[e]);
+//                                    }else{
+//                                        self.model.set_error(e, responseText.out.error[e]);
+//                                    }
+//                                }
                             }else{
                                 if (self.model.is_change_attrib('name') || self.model.is_change_attrib('parent')){
                                     self.callParents('setState', [{object: responseText.out.attrib.uri}, true]);
@@ -492,6 +504,20 @@
                 return m[1];
             }else{
                 return '';
+            }
+        },
+
+        errorMessage: function(error, sub, glue){
+            if (!error.list || _.isEmpty(error.list) || _.isUndefined(sub)){
+                return error.message;
+            }else{
+                var result = '';
+                if (!glue) glue = '';
+                for (var i in error.list){
+                    if (!result) result+=glue;
+                    result+= this.errorMessage(error.list[i], sub, glue);
+                }
+                return result;
             }
         }
     })

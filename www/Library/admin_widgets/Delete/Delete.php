@@ -36,6 +36,7 @@ class Delete extends Widget
             foreach ($objects as $o){
                 /** @var \Boolive\data\Entity $o */
                 $o->isDelete(true);
+                // @todo Обрабатывать ошибки
                 $o->save();
             }
             $v['result'] = true;

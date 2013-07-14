@@ -23,8 +23,14 @@
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
                 self.callServer('destroy', {object: self.options.object}, function(result, textStatus, jqXHR){
+                    //@todo Обработать ошибки (контроль доступа и целостности)
+                    if (result.out.error){
+                        alert('Невозможно уничтожить. Нет доступа или объект используется');
+                    }else{
+                       history.back();
+                    }
                     // Вход в родительский объект
-                    history.back();
+
 //                    self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
                 });
             });
