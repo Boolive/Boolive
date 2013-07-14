@@ -16,6 +16,8 @@ Options +FollowSymLinks
 
 # Отключение index файла, так как используется mod_rewrite
 DirectoryIndex Off
+# Не добавлять слэшь в конец REQUEST_URI
+DirectorySlash Off
 
 # Правила изменеия запросов ("чистые" ссылки)
 <IfModule mod_rewrite.c>
