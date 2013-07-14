@@ -1,0 +1,24 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/View",
+    "is_default_class": false,
+    "date": 1372616304,
+    "order": 22,
+    "children": {
+        "title": {
+            "value": "RESTful",
+            "proto": "/Library/views/View/title",
+            "is_hidden": true,
+            "date": 1372616304,
+            "order": 1
+        },
+        "description": {
+            "value": "Обработчик запросов на получение, создание, изменение и удаление объектов. ",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "date": 1372616304,
+            "order": 2
+        }
+    }
+}
