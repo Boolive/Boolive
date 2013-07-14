@@ -46,7 +46,7 @@
         <?php endif; ?>
         <div class="buttons">
             <?php if (true || empty($conflicts)): ?>
-                <a class="btn btn-danger submit" href="#">Да</a>
+                <a class="btn btn-danger submit" href="#">Уничтожить</a>
             <?php endif; ?>
             <a class="btn cancel" href="#">Отмена</a>
         </div>

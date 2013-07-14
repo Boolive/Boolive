@@ -18,7 +18,7 @@
         <p class="mini"><?php echo $v['message'];?></p>
 
         <div class="buttons">
-                <a class="btn btn-danger submit" href="#">Да</a>
+                <a class="btn btn-danger submit" href="#">Удалить в корзину</a>
                 <a class="btn cancel" href="#">Отмена</a>
         </div>
      </div>

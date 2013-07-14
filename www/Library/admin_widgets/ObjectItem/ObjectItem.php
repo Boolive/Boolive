@@ -15,12 +15,8 @@ class ObjectItem extends Widget
         /** @var $obj \Boolive\data\Entity */
         $obj = $this->_input['REQUEST']['object'];
         // Заголовк объекта
-        if ($obj->title->isExist()){
-            $v['title'] = $obj->title->value();
-        }else
-        if ($obj->isLink()){
-            $v['title'] = $obj->linked()->title->value();
-        }
+        $v['title'] = $obj->linked()->title->value();
+
         if (empty($v['title'])){
             $v['title'] = $obj->name();
         }

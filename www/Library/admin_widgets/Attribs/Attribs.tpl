@@ -9,12 +9,12 @@
             </div>
             <div class="item">
                 <div class="col1">
-                    <label>Родитель и Название</label>
+                    <label title="URI - идентфиикатор объекта">Название с путём</label>
                 </div>
                 <div class="col2 item-parent item-name">
                     <!--<span class="name" data-name="name"></span><span data-name="uri" class="txt-tag"></span>
                     <span class="error-message"></span>00>-->
-                    <span data-name="parent-uri" class="input-pfx tag-link">&nbsp;</span><input class="attrib inpt name" type="text" id="name" name="attrib[name]" data-name="name" value=""/>
+                    <span data-name="parent-uri" title="Родитель" class="input-pfx tag-link">&nbsp;</span><input class="attrib inpt name" type="text" id="name" name="attrib[name]" data-name="name" value=""/>
                     <input type="hidden" name="attrib[parent]" value="">
                     <span class="description"></span>
                     <span class="error-message"></span>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="col2 item-proto">
                     <span class="input-pfx tag-link" data-name="proto-uri" title="Сменить прототип...">&nbsp;</span>
-                    <a class="btn-icon-delete" href="" data-name="proto-delete" style="display: none;"></a>
+                    <a class="btn-icon-delete" title="Удалить прототип у объекта" href="" data-name="proto-delete" style="display: none;"></a>
                     <input type="hidden" name="attrib[proto]" value="">
                     <span class="error-message"></span>
                     <span class="description">Наследуемый объект или на кого ссылается.</span>
@@ -59,7 +59,7 @@
                 <div class="col2 item-order">
                     <input class="attrib inpt order" type="text" id="order" name="attrib[order]" data-name="order" value=""/>
                     <span class="error-message"></span>
-                    <span class="description">Используется для упорядочивания объектов по возрастанию.</span>
+                    <span class="description">Используется для ручного упорядочивания объектов</span>
                 </div>
             </div>
             <!--<div class="item">
@@ -121,8 +121,9 @@
                     <input class="attrib" type="checkbox" id="is_link" name="attrib[is_link]" data-name="is_link" value="1"/>
                     <label for="is_link">Ссылка</label>
                     <span class="error-message"></span><br>
-                    <span class="description">Объект-ссылка не наследует прототип (его класс и свойства), а только ссылается на него.
-                        Но если прототип тоже является ссылкой, то он наследуется, а объект-ссылка ссылается на прототип прототипа. Пример: пункт меню - ссылка на статью, автор у статьи - ссылка на пользователя</span>
+                    <span class="description">Если объект является ссылкой, то свойства прототипа не наследуются.
+                        Ссылка используется, чтобы сослаться на прототип и использовать его.
+                        Например, автор статьи - это ссылка на пользователя.</span>
                 </div>
             </div>
             <div class="item">
@@ -133,9 +134,9 @@
                     <input class="attrib" type="checkbox" id="is_logic" name="attrib[is_logic]" data-name="is_logic" value="1"/>
                     <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой класс</label>
                     <span class="error-message"></span><br>
-                    <span class="description">Классом определяется логика объекта - проверка атрибутов и различные функции.<br>
-                        Свой класс с названием <span class="txt-tag class_name_self"></span> должен быть в директории объекта.<br>
-                    Текущий класс: <span class="txt-tag class_name"></span><br>
+                    <span class="description">Своим классом дополняется базовая логика объекта.<br>
+                    Свой класс <span class="txt-tag class_name_self"></span> должен быть в директории объекта.<br>
+                    Используется класс: <span class="txt-tag class_name"></span><br>
                     </span>
                 </div>
             </div>
