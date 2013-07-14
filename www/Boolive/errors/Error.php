@@ -34,8 +34,8 @@ class Error extends Exception implements ITrace, IteratorAggregate
     private $is_temp;
     /** @var array Аргументы для вставки в текст сообщения */
     private $args;
-
-    protected $code ;
+    /** @var string|int Код ошибки */
+    protected $code;
 
     /**
      * @param string|array $message Текст сообщения (имя исключения). С помощью массива передаётся текст сообщения и
@@ -204,14 +204,14 @@ class Error extends Exception implements ITrace, IteratorAggregate
 
     /**
      * Пользовательские сообщения об ошибке
-     * Возвращаются сообщения либо всех подчиенных исключений, либо тольок свой сообщение, если нет подчиенных
+     * Возвращаются сообщения либо всех подчиенных исключений, либо только своё сообщение, если нет подчиненных
      * @param bool $all_sub Признак, возратить все сообщения на вложенные исключения?
      * @param string $postfix Строка, которую добавлять в конец каждого сообщения.
      * @return string
      */
     public function getUserMessage($all_sub = false, $postfix = "")
     {
-        // Объединение сообщений подчиенных исключений
+        // Объединение сообщений подчиненных исключений
         if ($all_sub && $this->isExist()){
             $message = '';
             foreach ($this->list as $e){
@@ -237,6 +237,54 @@ class Error extends Exception implements ITrace, IteratorAggregate
         }
         // Сообщение по-умолчанию
         return array(vsprintf($this->getMessageText(), $this->args));
+    }
+
+    /**
+     * Создание исключение из массива, описывающего параметры исключения
+     * Обратная функция для __toArray()
+     * @param array $errors
+     * @return Error
+     */
+    static function __fromArray($errors)
+    {
+        if (is_array($errors)){
+            if (isset($errors['code'], $errors['message'])){
+                $result = new Error($errors['message'], $errors['code']);
+                if (isset($errors['list']) && is_array($errors['list'])){
+                    foreach ($errors['list'] as $name => $e){
+                        $result->add(self::__fromArray($e));
+                    }
+                }
+                return $result;
+            }
+        }
+        return new Error();
+    }
+
+    /**
+     * Конвертирование исключение в массив
+     * @param bool $user_message Признак, возвращать пользовательские сообщения или программные?
+     * @return array Многомерный массив с информацией об исключени
+     */
+    public function __toArray($user_message = true)
+    {
+        $result = array(
+            'code' => $this->code,
+            'message' => $user_message ? $this->getUserMessage() : (empty($this->args)?$this->message:array($this->message, $this->args)),
+            'list' => array()
+        );
+        foreach ($this->list as $name => $e){
+            if ($e instanceof Error){
+                $result['list'][$name] = $e->__toArray();
+            }else{
+                /** @var $e Exception */
+                $result['list'][$name] = array(
+                    'code' => $this->getCode(),
+                    'message' => $this->getMessage(),
+                );
+            }
+        }
+        return $result;
     }
 
     /**
