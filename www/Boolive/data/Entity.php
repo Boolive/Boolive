@@ -85,7 +85,7 @@ class Entity implements ITrace
      * Если строка, то определяет базовое имя, к кторому будут подбираться числа для уникальности
      * @var bool|string
      */
-    protected $_rename = false;
+    protected $_autoname = false;
 
     /**
      * Конструктор
@@ -139,11 +139,11 @@ class Entity implements ITrace
                 'parent'       => Rule::uri(), // URI родителя
                 'proto'        => Rule::uri(), // URI прототипа
                 'value'	 	   => Rule::string(), // Значение любой длины
-                'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (значение = имя файла). Путь на файл по uri
-                'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет
-                'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя
-                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя
-                'is_link'      => Rule::uri(), // Ссылка или нет
+                'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (value = имя файла, uri = директория)
+                'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет?
+                'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя?
+                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя?
+                'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
                 // Сведения о загружаемом файле. Не является атрибутом объекта
@@ -151,7 +151,8 @@ class Entity implements ITrace
                         'tmp_name'	=> Rule::string(), // Путь на связываемый файл
                         'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
                         'size'		=> Rule::int(), // Размер в байтах
-                        'error'		=> Rule::int()->eq(0, true) // Код ошибки. Если 0, то ошибки нет
+                        'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
+                        'type'      => Rule::string() // MIME тип файла
                     )
                 ),
             )
@@ -195,17 +196,17 @@ class Entity implements ITrace
         // Смена имени
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
             if ($choose_unique){
-                $this->_rename = $new_name;
-                $new_name = uniqid($new_name);
+                $this->_autoname = $new_name;
+                //$new_name = uniqid($new_name);
             }
             $this->_attribs['name'] = $new_name;
 
-            if (isset($this->_attribs['uri'])){
-                $uri = F::splitRight('/',$this->_attribs['uri'], true);
-                $this->updateURI(is_null($uri[0])? $new_name : $uri[0].'/'.$new_name);
-            }else{
-                $this->updateURI(null);
-            }
+//            if (isset($this->_attribs['uri'])){
+//                $uri = F::splitRight('/',$this->_attribs['uri'], true);
+//                $this->updateURI(is_null($uri[0])? $new_name : $uri[0].'/'.$new_name);
+//            }else{
+//                $this->updateURI(null);
+//            }
             $this->_changed = true;
             $this->_checked = false;
         }
@@ -222,14 +223,15 @@ class Entity implements ITrace
     {
         if (!isset($this->_attribs['uri']) || $remake){
             if ($parent = $this->parent()){
-               $this->_attribs['uri'] = $parent->uri().'/'.($this->_rename ? $this->_rename : $this->_attribs['name']);
+               $this->_attribs['uri'] = $parent->uri().'/'./*($this->_autoname ? $this->_autoname : */$this->_attribs['name']/*)*/;
             }else{
-                $this->_attribs['uri'] = $this->_rename ? $this->_rename : $this->_attribs['name'];
+                $this->_attribs['uri'] = /*$this->_autoname ? $this->_autoname : */$this->_attribs['name'];
             }
         }
         if ($encode){
             $uri = urlencode($this->_attribs['uri']);
             $uri = strtr($uri, array(
+                         '%3A' => ':',
                          '%2F' => '/'
             ));
             return $uri;
@@ -248,17 +250,16 @@ class Entity implements ITrace
         return isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
     }
 
-        /**
+    /**
      * Каскадное обновление URI подчиненных на основании своего uri
      * Обновляются uri только выгруженных/присоединенных на данный момент подчиенных
-     * @param $uri Свой новый URI
      */
-    private function updateURI($uri)
+    protected function updateURI()
     {
-        $this->_attribs['uri'] = $uri;
         foreach ($this->_children as $child_name => $child){
             /* @var Entity $child */
-            $child->updateURI(is_null($uri)? null : $uri.'/'.$child_name);
+            $child->_attribs['uri'] = $this->_attribs['uri'].'/'.$child_name;
+            $child->updateURI();
         }
     }
 
@@ -347,6 +348,7 @@ class Entity implements ITrace
                     );
                 }
                 $this->_attribs['file'] = $new_file;
+                $this->_attribs['is_file'] = 1;
             }
             $this->_attribs['is_default_value'] = 0;
             $this->_changed = true;
@@ -372,10 +374,12 @@ class Entity implements ITrace
      */
     public function dir($root = false)
     {
+        $dir = $this->uri();
+        if (Data::isAbsoluteUri($dir)) return $dir.'/';
         if ($root){
-            return DIR_SERVER_PROJECT.ltrim($this->uri().'/','/');
+            return DIR_SERVER_PROJECT.ltrim($dir.'/','/');
         }else{
-            return DIR_WEB_PROJECT.ltrim($this->uri().'/','/');
+            return DIR_WEB_PROJECT.ltrim($dir.'/','/');
         }
     }
 
@@ -673,7 +677,7 @@ class Entity implements ITrace
                 $this->_attribs['parent'] = null;
                 $this->_attribs['parent_cnt'] = 0;
                 $this->_parent = null;
-                $this->updateURI($this->name());
+                //$this->updateURI($this->name());
             }else{
                 // Смена родителя
                 $this->_parent = $new_parent;
@@ -683,7 +687,7 @@ class Entity implements ITrace
                 //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
                 // Обновление доступа
                 if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
-                $this->updateURI($new_parent->uri().'/'.$this->name());
+               // $this->updateURI($new_parent->uri().'/'.$this->name());
             }
             // Обновление зависимых от родителя признаков
             $this->isDelete($is_delete);
@@ -1049,8 +1053,8 @@ class Entity implements ITrace
             // Если имя неопределенно, то потрубуется подобрать уникальное автоматически при сохранении
             // Перед сохранением используется временное имя
             if (is_null($name)){
-                $name = uniqid($value->_attribs['name']);
                 $value->name($value->_attribs['name'], true);
+                $name = uniqid($value->_attribs['name']);
             }else{
                 if ($this->uri().'/'.$name != $value->uri()){
                     $value->name($name, true);
@@ -1062,6 +1066,7 @@ class Entity implements ITrace
             $this->_children[$name] = $value;
             return $value;
         }else{
+            if (empty($name)) $name = 'entity';
             // Установка значения для подчиненного
             $this->__get($name)->value($value);
             return $this->__get($name);
@@ -1211,22 +1216,19 @@ class Entity implements ITrace
      * Сохранение объекта в секции
      * @param bool $history Признак, создавать историю изменения объекта или нет?
      * @param bool $children Признак, сохранять подчиенных или нет?
-     * @param null|Error $error Ошибки при сохранении объекта
      * @param bool $access Признак, проверять доступ на запись или нет?
      * @throws \Exception
      * @return bool
      */
-    public function save($history = false, $children = true, &$error = null, $access = true)
+    public function save($history = false, $children = true, $access = true)
     {
-        if (!$this->_is_saved && $this->check($error, $children)){
+        if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;
                 // Сохранение родителя, если не сохранен или требует переименования
                 if ($this->_parent){
-                    if (!$this->_parent->isExist() || $this->_parent->_rename){
-                        if (!$this->_parent->save(false, false, $parent_error)){
-                            throw $parent_error;
-                        }
+                    if (!$this->_parent->isExist() || $this->_parent->_autoname){
+                        $this->_parent->save(false, false);
                     }
                     $this->_attribs['parent'] = $this->_parent->key();
                 }
@@ -1242,20 +1244,23 @@ class Entity implements ITrace
                 // Если создаётся история, то нужна новая дата
                 if ($history || (empty($this->_attribs['date']) && !$this->isExist())) $this->_attribs['date'] = time();
                 // Сохранение себя
-                if ($this->_changed && Data::write($this, $error, $access)){
-                    if ($this->_rename){
-                        $this->updateURI($this->_attribs['uri']);
-                        $this->_rename = false;
-                    }
+                if ($this->_changed && Data::write($this, $access)){
                     $this->_changed = false;
                 }
-                // Сохранение подчиененных
+                // Сохранение подчиненных
                 if ($children){
                     $children = $this->children();
+                    // Ошибки свойств группируются
+                    $errors = new Error('Неверный объект', $this->uri());
                     foreach ($children as $child){
                         /** @var Entity $child */
-                        $child->save($history, true, $error_child, $access);
+                        try{
+                            $child->save($history, true, $access);
+                        }catch (Error $e){
+                            $errors->_children->add($e);
+                        }
                     }
+                    if ($errors->isExist()) throw $errors;
                 }
                 $this->_is_saved = false;
                 return true;
@@ -1270,15 +1275,14 @@ class Entity implements ITrace
     /**
      * Уничтожение объекта
      * Полностью удаляется объект и его подчиненных.
-     * @param null|Error $error Ошибки при уничтожении объекта
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
      * @param bool $integrity Признак, проверять целостность данных?
      * @return bool Были ли объекты уничтожены?
      */
-    public function destroy(&$error = null, $access = true, $integrity = true)
+    public function destroy($access = true, $integrity = true)
     {
         if ($this->isExist()){
-            return Data::delete($this, $error, $access, $integrity);
+            return Data::delete($this, $access, $integrity);
         }else{
             return false;
         }
@@ -1514,21 +1518,13 @@ class Entity implements ITrace
     }
 
     /**
-     * Проверка, является ли частью указанного объекта.
-     * Например, указанный объект $object может быть наследником для любого родителя проверяемого объекта $this
-     * или, наоборот, указанный объект $object может быть родителем для любого прототипа проверяемого объекта $this.
-     * Проверка объединяет в себе is() и in() с учётом рекурсивных отошений, образуемых между
-     * родителями и прототипами всех родителей и прототипов объекта.
-     * Пример из жизни: конкретный листок является частью дерева. Дерево абстрактно.
-     * @param string|Entity $object Экземпляр или идентификатор
+     * Проверка, является подчиенным или наследником для указанного объекта
+     * @param string|Entity $object Объект или идентификатор объекта, с котоым проверяется наследство или родительство
      * @return bool
      */
     public function of($object)
     {
-        if ($object == 'all') return true;
-        if ($this->isEqual($object)) return true;
-        if (($p = $this->proto()) && $p->of($object)) return true;
-        return ($p = $this->parent()) ? $p->of($object) : false;
+        return $this->in($object) || $this->is($object);
     }
 
     /**
@@ -1575,9 +1571,10 @@ class Entity implements ITrace
      * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
      * @param bool $save_to_file Признак, сохранять в файл?
      * @param bool $more_info Признак, экспортировать дополнительную информацию об объекте
+     * @param bool $properties Признак, экспортирвоать свойсвта или нет?
      * @return array
      */
-    public function export($save_to_file = true, $more_info = false)
+    public function export($save_to_file = true, $more_info = false, $properties = true)
     {
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
@@ -1590,46 +1587,56 @@ class Entity implements ITrace
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
         if ($this->isDelete(null, false)) $export['is_delete'] = true;
+        $export['date'] = $this->date();
         $export['order'] = $this->order();
         if ($more_info){
             $export['id'] = $this->id();
             $export['uri'] = $this->uri();
+            $export['name'] = $this->name();
+            if ($this->parent()) $export['parent'] = $this->parent()->uri();
             if ($this->isLink()) $export['is_link'] = $this->_attribs['is_link'];
+            if (!$this->isHidden()) $export['is_hidden'] = false;
+            if (!$this->isDelete()) $export['is_delete'] = false;
+            $export['is_history'] = $this->isHistory();
+            $export['is_default_value'] = $this->_attribs['is_default_value'];
+            $export['is_default_class'] = $this->_attribs['is_default_class'];
             if (!$this->isAccessible()) $export['is_accessible'] = false;
             if (!$this->isExist()) $export['is_exist'] = false;
         }
-        // Свойства
-        $export['children'] = array();
-        // Названия подчиненных, которые экспортировать вместе с объектом
-        $children = $this->exportedProperties();
-        // Выбор подчиненных
-        if ($children === true){
-            $children = $this->find(array(
-                'where' => array(
-                    array('attr', 'is_delete', '>=', 0)
-                ),
-                'comment' => 'read children for export'
-            ), false, false);
-        }else
-        if (!empty($children) && is_array($children)){
-            $children = $this->find(array(
-                'where' => array(
-                    array('attr', 'name', 'in',  $children),
-                    array('attr', 'is_delete', '>=', 0)
-                ),
-                'comment' => 'read children by names for export'
-            ), false, false);
-        }else{
-            $children = array();
-        }
-        if (is_array($children)){
-            foreach ($children as $child){
-                if ($child->isExist()){
-                    $export['children'][$child->name()] = $child->export(false, $more_info);
+        if ($properties){
+            // Свойства
+            $export['children'] = array();
+            // Названия подчиненных, которые экспортировать вместе с объектом
+            $children = $this->exportedProperties();
+            // Выбор подчиненных
+            if ($children === true){
+                $children = $this->find(array(
+                    'where' => array(
+                        array('attr', 'is_delete', '>=', 0)
+                    ),
+                    'comment' => 'read children for export'
+                ), false, false);
+            }else
+            if (!empty($children) && is_array($children)){
+                $children = $this->find(array(
+                    'where' => array(
+                        array('attr', 'name', 'in',  $children),
+                        array('attr', 'is_delete', '>=', 0)
+                    ),
+                    'comment' => 'read children by names for export'
+                ), false, false);
+            }else{
+                $children = array();
+            }
+            if (is_array($children)){
+                foreach ($children as $child){
+                    if ($child->isExist()){
+                        $export['children'][$child->name()] = $child->export(false, $more_info);
+                    }
                 }
             }
+            if (empty($export['children'])) unset($export['children']);
         }
-        if (empty($export['children'])) unset($export['children']);
         // Сохранение в info файл
         if ($save_to_file){
             $content = F::toJSON($export);
@@ -1756,7 +1763,7 @@ class Entity implements ITrace
         $trace['_attribs'] = $this->_attribs;
         $trace['_changed'] = $this->_changed;
         $trace['_checked'] = $this->_checked;
-        $trace['_rename'] = $this->_rename;
+        $trace['_autoname'] = $this->_autoname;
         //$trace['_proto'] = $this->_proto;
         //$trace['_parent'] = $this->_parent;
         $trace['_cond'] = $this->_cond;
