@@ -33,27 +33,27 @@ class Buffer
         $buffer_key = json_encode($buffer_cond);
         if (isset(self::$list_plain[$buffer_key]) || array_key_exists($buffer_key, self::$list_plain)){
             $result = self::$list_plain[$buffer_key];
-        }else
+        }//else
         // Если есть буфер выборки подчиненных, в которых должен оказаться искомый объект,
         // то проверяем его наличие в буфере
-        if ($check_exists && $cond['select'][0] == 'self' && (is_scalar($cond['from']) && !Data::isShortUri($cond['from']))){
-            $names = F::splitRight('/', $cond['from'], true);
-            // Условие переопределяется и нормалтзуется с новыми параметрам
-            $ocond = Data::decodeCond(array(
-                'from' => $names[0],
-                'depth' => array(1,1),
-                'select' => array('children'),
-                'order' => array(array('order', 'asc'))
-            ), $cond);
-            $key = json_encode($ocond);
-            if (isset(self::$list_plain[$key]) || array_key_exists($key, self::$list_plain)){
-                if (!isset(self::$list_plain[$key][$names[1]])){
-                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang'], 'class' => '\\Boolive\\data\\Entity');
-                }else{
-                    return self::$list_plain[$key][$names[1]];
-                }
-            }
-        }
+//        if ($check_exists && $cond['select'][0] == 'self' && (is_scalar($cond['from']) && !Data::isShortUri($cond['from']))){
+//            $names = F::splitRight('/', $cond['from'], true);
+//            // Условие переопределяется и нормалтзуется с новыми параметрам
+//            $ocond = Data::decodeCond(array(
+//                'from' => $names[0],
+//                'depth' => array(1,1),
+//                'select' => array('children'),
+//                'order' => array(array('order', 'asc'))
+//            ), $cond);
+//            $key = json_encode($ocond);
+//            if (isset(self::$list_plain[$key]) || array_key_exists($key, self::$list_plain)){
+//                if (!isset(self::$list_plain[$key][$names[1]])){
+//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang'], 'class' => '\\Boolive\\data\\Entity');
+//                }else{
+//                    return self::$list_plain[$key][$names[1]];
+//                }
+//            }
+//        }
         return $result;
     }
 
@@ -72,8 +72,8 @@ class Buffer
         if (is_array($cond['from'])){
             self::$list_plain[json_encode($cond)] = $result;
             if (empty($cond['limit'])){
-                foreach ($result as $key => $group){
-                    $cond['from'] = $key;
+                foreach ($result as $rkey => $group){
+                    $cond['from'] = $rkey;
                     self::setPlain($group, $cond);
                 }
             }
@@ -237,27 +237,27 @@ class Buffer
                 }
                 $result = $list_entity;
             }
-        }else
+        }//else
         // Если есть буфер выборки подчиненных, в которых должен оказаться искомый объект,
         // то проверяем его наличие в буфере
-        if ($check_exists && $cond['select'][0] == 'self' && (is_scalar($cond['from']) && !Data::isShortUri($cond['from']))){
-            $names = F::splitRight('/', $cond['from'], true);
-            // Условие переопределяется и нормалтзуется с новыми параметрам
-            $ocond = Data::decodeCond(array(
-                'from' => $names[0],
-                'depth' => array(1,1),
-                'select' => array('children'),
-                'order' => array(array('order', 'asc'))
-            ), $cond);
-            $key = json_encode($ocond);
-            if (isset(self::$list_entity[$key]) || array_key_exists($key, self::$list_entity)){
-                if (!isset(self::$list_entity[$key][$names[1]])){
-                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang']));
-                }else{
-                    return self::$list_entity[$key][$names[1]];
-                }
-            }
-        }
+//        if ($check_exists && $cond['select'][0] == 'self' && (is_scalar($cond['from']) && !Data::isShortUri($cond['from']))){
+//            $names = F::splitRight('/', $cond['from'], true);
+//            // Условие переопределяется и нормалтзуется с новыми параметрам
+//            $ocond = Data::decodeCond(array(
+//                'from' => $names[0],
+//                'depth' => array(1,1),
+//                'select' => array('children'),
+//                'order' => array(array('order', 'asc'))
+//            ), $cond);
+//            $key = json_encode($ocond);
+//            if (isset(self::$list_entity[$key]) || array_key_exists($key, self::$list_entity)){
+//                if (!isset(self::$list_entity[$key][$names[1]])){
+//                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang']));
+//                }else{
+//                    return self::$list_entity[$key][$names[1]];
+//                }
+//            }
+//        }
         return $result;
     }
 
