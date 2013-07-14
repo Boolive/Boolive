@@ -2,12 +2,14 @@
     "value": "jquery.ui.Restore.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "date": 1372616240,
     "order": 3,
     "children": {
         "title": {
             "value": "Boolive.Restore",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_hidden": true,
+            "date": 1372616240,
             "order": 1
         },
         "description": {
@@ -15,6 +17,7 @@
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_hidden": true,
+            "date": 1372616240,
             "order": 2
         },
         "depends": {
@@ -22,6 +25,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
+            "date": 1372616240,
             "order": 3
         }
     }

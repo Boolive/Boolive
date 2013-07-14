@@ -2,6 +2,7 @@
     "value": "А я - второй параграф =)",
     "proto": "/Library/content_samples/paragraphs/P",
     "is_delete": true,
+    "date": 1372616197,
     "order": 2,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
+            "date": 1372616197,
             "order": 2
         }
     }

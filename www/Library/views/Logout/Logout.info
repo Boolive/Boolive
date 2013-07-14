@@ -2,18 +2,21 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
+    "date": 1372616302,
     "order": 17,
     "children": {
         "title": {
             "value": "Выход",
             "proto": "/Library/views/View/title",
             "is_hidden": true,
+            "date": 1372616302,
             "order": 1
         },
         "description": {
             "value": "Отмена авторизации",
             "proto": "/Library/views/View/description",
             "is_hidden": true,
+            "date": 1372616302,
             "order": 2
         }
     }

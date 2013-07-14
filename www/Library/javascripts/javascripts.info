@@ -2,17 +2,20 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Package",
+    "date": 1372616285,
     "order": 9,
     "children": {
         "title": {
             "value": "JavaScripts",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
+            "date": 1372616285,
             "order": 1
         },
         "description": {
             "value": "Пакет с JavaScript-библиотеками, плагинами и заготовками для написания собственных скриптов",
             "is_hidden": true,
+            "date": 1372616285,
             "order": 2
         }
     }

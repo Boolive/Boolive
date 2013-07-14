@@ -3,24 +3,28 @@
     "value": "AutoWidget.tpl",
     "is_file": true,
     "proto": "/Library/views/AutoWidget",
+    "date": 1372616266,
     "order": 6,
     "children": {
         "title": {
             "value": "Виджет содержимого",
             "proto": "/Library/views/AutoWidget/title",
             "is_hidden": true,
+            "date": 1372616266,
             "order": 1
         },
         "description": {
             "value": "Отображает объекты содержимого, если есть для них подходящие виджеты в вариантах отображения",
             "proto": "/Library/views/AutoWidget/description",
             "is_hidden": true,
+            "date": 1372616266,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidget/res",
+            "date": 1372616266,
             "order": 4,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidget/res/title",
                     "is_hidden": true,
+                    "date": 1372616266,
                     "order": 1
                 },
                 "description": {
@@ -35,9 +40,16 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidget/res/description",
                     "is_hidden": true,
+                    "date": 1372616266,
                     "order": 2
                 }
             }
+        },
+        "cache": {
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "date": 1372616267,
+            "order": 5
         }
     }
 }

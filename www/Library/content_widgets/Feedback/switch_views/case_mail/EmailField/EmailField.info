@@ -2,6 +2,7 @@
     "value": "EmailField.tpl",
     "is_file": true,
     "proto": "/Library/views/FormField",
+    "date": 1372616268,
     "order": 4,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Поле формы",
             "proto": "/Library/views/FormField/title",
             "is_hidden": true,
+            "date": 1372616268,
             "order": 1
         },
         "description": {
@@ -16,12 +18,14 @@
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/FormField/description",
             "is_hidden": true,
+            "date": 1372616268,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/FormField/res",
+            "date": 1372616268,
             "order": 3,
             "children": {
                 "title": {
@@ -29,6 +33,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/FormField/res/title",
                     "is_hidden": true,
+                    "date": 1372616268,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +41,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/FormField/res/description",
                     "is_hidden": true,
+                    "date": 1372616268,
                     "order": 2
                 }
             }

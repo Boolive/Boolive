@@ -1,12 +1,14 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Part",
-    "order": 4,
+    "date": 1372616222,
+    "order": 8,
     "children": {
         "title": {
             "value": "Лента новостей",
             "proto": "/Library/content_samples/Part/title",
             "is_hidden": true,
+            "date": 1372616216,
             "order": 1
         }
     }

@@ -1,0 +1,16 @@
+{
+    "value": "",
+    "proto": "/Library/content_samples/Comment",
+    "date": 1373282269,
+    "order": 1,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Комментарий",
+            "proto": "/Library/content_samples/Comment/title",
+            "is_hidden": true,
+            "date": 1372616255,
+            "order": 2
+        }
+    }
+}

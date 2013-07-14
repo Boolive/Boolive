@@ -1,6 +1,7 @@
 {
     "value": "1",
     "proto": "/Library/content_samples/Keyword",
+    "date": 1372616223,
     "order": 1,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Ключевое слово",
             "proto": "/Library/content_samples/Keyword/title",
             "is_hidden": true,
+            "date": 1372616223,
             "order": 1
         }
     }

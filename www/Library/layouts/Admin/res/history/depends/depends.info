@@ -2,5 +2,24 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/javascripts/history/depends",
-    "order": 7
+    "date": 1372616291,
+    "order": 7,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Используемые скрипты",
+            "proto": "/Library/javascripts/history/depends/title",
+            "is_hidden": true,
+            "date": 1372616291,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Скрипты и любые другие объекты, необходиыме для работы",
+            "proto": "/Library/javascripts/history/depends/description",
+            "is_hidden": true,
+            "date": 1372616291,
+            "order": 2
+        }
+    }
 }

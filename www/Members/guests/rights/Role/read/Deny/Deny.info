@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Deny",
+    "date": 1372616308,
     "order": 2,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Запрет",
             "proto": "/Library/access/Deny/title",
             "is_hidden": true,
+            "date": 1372616308,
             "order": 1
         },
         "description": {
@@ -16,6 +18,7 @@
             "value": "Запрет доступа к объектам",
             "proto": "/Library/access/Deny/description",
             "is_hidden": true,
+            "date": 1372616308,
             "order": 2
         }
     }

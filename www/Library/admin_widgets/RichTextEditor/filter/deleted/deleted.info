@@ -1,11 +1,13 @@
 {
     "value": 0,
     "proto": "/Library/basic/simple/Boolean",
+    "date": 1372616243,
     "order": 3,
     "children": {
         "title": {
             "value": "Удаленные",
             "proto": "/Library/basic/simple/Boolean/title",
+            "date": 1372616243,
             "order": 1
         }
     }

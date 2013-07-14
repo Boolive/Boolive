@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/SwitchCase/res",
+    "date": 1372616231,
     "order": 3,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Ресурсы",
             "proto": "/Library/views/SwitchCase/res/title",
             "is_hidden": true,
+            "date": 1372616231,
             "order": 1
         },
         "description": {
@@ -16,6 +18,7 @@
             "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
             "proto": "/Library/views/SwitchCase/res/description",
             "is_hidden": true,
+            "date": 1372616231,
             "order": 2
         }
     }

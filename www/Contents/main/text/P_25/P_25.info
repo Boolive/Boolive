@@ -1,6 +1,7 @@
 {
     "value": "Boolive ",
     "proto": "/Library/content_samples/paragraphs/H2",
+    "date": 1372616194,
     "order": 10,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
+            "date": 1372616194,
             "order": 1
         }
     }

@@ -1,6 +1,7 @@
 {
     "value": "Этот параграф выводиться в заголовке таблицы во второй ячейке",
     "proto": "/Library/content_samples/paragraphs/P",
+    "date": 1372616208,
     "order": 2,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
+            "date": 1372616208,
             "order": 2
         }
     }

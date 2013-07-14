@@ -2,12 +2,14 @@
     "value": "jquery.ui.Explorer.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "date": 1372616230,
     "order": 5,
     "children": {
         "title": {
             "value": "Boolive.Explorer",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_hidden": true,
+            "date": 1372616230,
             "order": 2
         },
         "depends": {
@@ -15,6 +17,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
+            "date": 1372616230,
             "order": 3
         }
     }

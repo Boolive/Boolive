@@ -1,6 +1,7 @@
 {
     "value": "",
     "proto": "/Library/views/Html/body",
+    "date": 1372616222,
     "order": 3,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Основная область вставки",
             "proto": "/Library/views/Html/body/title",
             "is_hidden": true,
+            "date": 1372616222,
             "order": 1
         },
         "description": {
@@ -15,6 +17,7 @@
             "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
             "proto": "/Library/views/Html/body/description",
             "is_hidden": true,
+            "date": 1372616222,
             "order": 2
         }
     }

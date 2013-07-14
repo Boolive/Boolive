@@ -3,24 +3,28 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
+    "date": 1372616302,
     "order": 4,
     "children": {
         "title": {
             "value": "Виджет пунктов меню",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
+            "date": 1372616302,
             "order": 1
         },
         "description": {
             "value": "Отображает пункт меню и подчиненные пункты рекурсивно подходящими виджетами из вариантов отображения.",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
+            "date": 1372616303,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
+            "date": 1372616303,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
+                    "date": 1372616303,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
+                    "date": 1372616303,
                     "order": 2
                 }
             }

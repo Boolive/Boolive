@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/tables/Cell/style",
+    "date": 1372616211,
     "order": 2,
     "children": {
         "description": {
@@ -10,12 +11,14 @@
             "proto": "/Library/content_samples/tables/Cell/style/description",
             "is_hidden": true,
             "is_delete": true,
+            "date": 1372616211,
             "order": 14
         },
         "height": {
             "value": "100",
             "proto": "/Library/basic/simple/Number",
             "is_delete": true,
+            "date": 1372616211,
             "order": 15,
             "children": {
                 "title": {
@@ -23,6 +26,7 @@
                     "value": "Число",
                     "proto": "/Library/basic/simple/Number/title",
                     "is_hidden": true,
+                    "date": 1372616211,
                     "order": 3
                 },
                 "description": {
@@ -30,6 +34,7 @@
                     "value": "Числовое значение любой величены",
                     "proto": "/Library/basic/simple/Number/description",
                     "is_hidden": true,
+                    "date": 1372616211,
                     "order": 4
                 }
             }
@@ -39,6 +44,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-bottom",
             "is_delete": true,
+            "date": 1372616211,
             "order": 16
         },
         "margin-left": {
@@ -46,6 +52,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-left",
             "is_delete": true,
+            "date": 1372616211,
             "order": 17
         },
         "margin-right": {
@@ -53,6 +60,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-right",
             "is_delete": true,
+            "date": 1372616211,
             "order": 18
         },
         "margin-top": {
@@ -60,6 +68,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-top",
             "is_delete": true,
+            "date": 1372616211,
             "order": 19
         },
         "padding-left": {
@@ -67,6 +76,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/padding-left",
             "is_delete": true,
+            "date": 1372616211,
             "order": 20
         },
         "padding-right": {
@@ -74,6 +84,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/padding-right",
             "is_delete": true,
+            "date": 1372616211,
             "order": 21
         },
         "text-align": {
@@ -81,6 +92,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/text-align",
             "is_delete": true,
+            "date": 1372616211,
             "order": 22
         },
         "text-indent": {
@@ -88,6 +100,7 @@
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/text-indent",
             "is_delete": true,
+            "date": 1372616211,
             "order": 23
         },
         "title": {
@@ -96,12 +109,14 @@
             "proto": "/Library/content_samples/tables/Cell/style/title",
             "is_hidden": true,
             "is_delete": true,
+            "date": 1372616211,
             "order": 24
         },
         "width": {
             "value": "200",
             "proto": "/Library/basic/simple/Number",
             "is_delete": true,
+            "date": 1372616211,
             "order": 25,
             "children": {
                 "title": {
@@ -109,6 +124,7 @@
                     "value": "Число",
                     "proto": "/Library/basic/simple/Number/title",
                     "is_hidden": true,
+                    "date": 1372616211,
                     "order": 3
                 },
                 "description": {
@@ -116,6 +132,7 @@
                     "value": "Числовое значение любой величены",
                     "proto": "/Library/basic/simple/Number/description",
                     "is_hidden": true,
+                    "date": 1372616211,
                     "order": 4
                 }
             }

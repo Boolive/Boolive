@@ -4,6 +4,7 @@
     "is_file": true,
     "proto": "/Library/admin_widgets/Attribs",
     "is_link": true,
+    "date": 1372616239,
     "order": 7,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "Атрибуты",
             "proto": "/Library/admin_widgets/Attribs/title",
             "is_hidden": true,
+            "date": 1372616239,
             "order": 1
         },
         "description": {
@@ -18,6 +20,7 @@
             "value": "Редактор атрибутов любого объекта",
             "proto": "/Library/admin_widgets/Attribs/description",
             "is_hidden": true,
+            "date": 1372616239,
             "order": 2
         }
     }

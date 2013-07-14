@@ -1,6 +1,7 @@
 {
     "value": "Подзаголовок подчиненной страницы",
     "proto": "/Library/content_samples/paragraphs/H2",
+    "date": 1372616189,
     "order": 3,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Заголовок 2",
             "proto": "/Library/content_samples/paragraphs/H2/title",
             "is_hidden": true,
+            "date": 1372616189,
             "order": 1
         }
     }

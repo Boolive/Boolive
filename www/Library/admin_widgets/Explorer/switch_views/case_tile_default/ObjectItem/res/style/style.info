@@ -2,6 +2,7 @@
     "value": "style.css",
     "is_file": true,
     "proto": "/Library/admin_widgets/ObjectItem/res/style",
+    "date": 1372616231,
     "order": 3,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "CSS",
             "proto": "/Library/admin_widgets/ObjectItem/res/style/title",
             "is_hidden": true,
+            "date": 1372616231,
             "order": 1
         },
         "description": {
@@ -16,6 +18,7 @@
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "proto": "/Library/admin_widgets/ObjectItem/res/style/description",
             "is_hidden": true,
+            "date": 1372616231,
             "order": 2
         }
     }

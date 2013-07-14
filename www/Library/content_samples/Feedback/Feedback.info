@@ -1,11 +1,13 @@
 {
     "value": "",
     "is_default_class": false,
+    "date": 1372616255,
     "order": 9,
     "children": {
         "title": {
             "value": "Обратная связь",
             "is_hidden": true,
+            "date": 1372616255,
             "order": 4
         }
     }

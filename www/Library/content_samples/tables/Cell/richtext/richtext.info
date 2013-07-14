@@ -1,6 +1,7 @@
 {
     "value": "",
     "proto": "/Library/content_samples/RichText",
+    "date": 1372616263,
     "order": 1,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Форматированный текст",
             "proto": "/Library/content_samples/RichText/title",
             "is_hidden": true,
+            "date": 1372616263,
             "order": 1
         }
     }

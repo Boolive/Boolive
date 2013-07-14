@@ -2,11 +2,13 @@
     "value": "",
     "proto": "/Library/content_samples/tables/Table/Header/style",
     "is_delete": true,
+    "date": 1372616213,
     "order": 3,
     "children": {
         "width": {
             "value": "234",
             "proto": "/Library/basic/simple/Number",
+            "date": 1372616213,
             "order": 1,
             "children": {
                 "title": {
@@ -14,6 +16,7 @@
                     "value": "Число",
                     "proto": "/Library/basic/simple/Number/title",
                     "is_hidden": true,
+                    "date": 1372616213,
                     "order": 1
                 },
                 "description": {
@@ -21,6 +24,7 @@
                     "value": "Числовое значение любой величены",
                     "proto": "/Library/basic/simple/Number/description",
                     "is_hidden": true,
+                    "date": 1372616213,
                     "order": 2
                 }
             }
@@ -30,60 +34,70 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/tables/Table/Header/style/title",
             "is_hidden": true,
+            "date": 1372616213,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/height",
+            "date": 1372616213,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/margin-top",
+            "date": 1372616213,
             "order": 4
         },
         "margin-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/margin-right",
+            "date": 1372616213,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/margin-bottom",
+            "date": 1372616213,
             "order": 6
         },
         "margin-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/margin-left",
+            "date": 1372616213,
             "order": 7
         },
         "text-align": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/text-align",
+            "date": 1372616213,
             "order": 8
         },
         "padding-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/padding-left",
+            "date": 1372616213,
             "order": 9
         },
         "padding-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/padding-right",
+            "date": 1372616213,
             "order": 10
         },
         "text-indent": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Table/Header/style/text-indent",
+            "date": 1372616213,
             "order": 11
         },
         "description": {
@@ -91,6 +105,7 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/tables/Table/Header/style/description",
             "is_hidden": true,
+            "date": 1372616213,
             "order": 12
         }
     }

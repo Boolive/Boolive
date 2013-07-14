@@ -1,12 +1,14 @@
 {
     "value": 1,
     "proto": "/Library/basic/simple/Boolean",
+    "date": 1373124803,
     "order": 3,
     "children": {
         "title": {
             "value": "Плитка",
             "proto": "/Library/basic/simple/Boolean/title",
             "is_hidden": true,
+            "date": 1372616232,
             "order": 1
         },
         "description": {
@@ -14,6 +16,7 @@
             "value": "Логическое значение ДА/НЕТ",
             "proto": "/Library/basic/simple/Boolean/description",
             "is_hidden": true,
+            "date": 1372616232,
             "order": 2
         }
     }

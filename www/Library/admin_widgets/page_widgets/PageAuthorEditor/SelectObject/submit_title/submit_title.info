@@ -2,5 +2,6 @@
     "is_default_value": true,
     "value": "Выбрать",
     "proto": "/Library/admin_widgets/SelectObject/submit_title",
+    "date": 1372616247,
     "order": 3
 }

@@ -1,6 +1,7 @@
 {
     "value": "/Library/views/FormAuth/object/remember",
     "proto": "/Library/views/SwitchCase",
+    "date": 1372616301,
     "order": 5,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Вариант переключателя",
             "proto": "/Library/views/SwitchCase/title",
             "is_hidden": true,
+            "date": 1372616301,
             "order": 2
         },
         "description": {
@@ -15,6 +17,7 @@
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
             "is_hidden": true,
+            "date": 1372616301,
             "order": 4
         }
     }

@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Image/style",
+    "date": 1372616232,
     "order": 2,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/Image/style/title",
             "is_hidden": true,
+            "date": 1372616232,
             "order": 1
         }
     }

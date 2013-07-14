@@ -1,17 +1,20 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
+    "date": 1372616224,
     "order": 10,
     "children": {
         "title": {
             "value": "Пользователи и доступ",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
+            "date": 1372616224,
             "order": 1
         },
         "description": {
             "value": "",
             "is_hidden": true,
+            "date": 1372616224,
             "order": 2
         }
     }

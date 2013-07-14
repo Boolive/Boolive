@@ -2,23 +2,27 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
+    "date": 1372616307,
     "order": 4,
     "children": {
         "res": {
             "value": "",
             "proto": "/Library/views/ViewGroup",
+            "date": 1372616307,
             "order": 0,
             "children": {
                 "title": {
                     "value": "Ресурсы",
                     "proto": "/Library/views/ViewGroup/title",
                     "is_hidden": true,
+                    "date": 1372616306,
                     "order": 1
                 },
                 "description": {
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/ViewGroup/description",
                     "is_hidden": true,
+                    "date": 1372616307,
                     "order": 2
                 }
             }
@@ -27,13 +31,38 @@
             "value": "Виджет",
             "proto": "/Library/views/View/title",
             "is_hidden": true,
+            "date": 1372616307,
             "order": 1
         },
         "description": {
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/View/description",
             "is_hidden": true,
+            "date": 1372616307,
             "order": 2
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/basic/simple/Boolean",
+            "date": 1372616307,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Кэшировать?",
+                    "proto": "/Library/basic/simple/Boolean/title",
+                    "is_hidden": true,
+                    "date": 1372616307,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/basic/simple/Boolean/description",
+                    "is_hidden": true,
+                    "date": 1372616307,
+                    "order": 2
+                }
+            }
         }
     }
 }

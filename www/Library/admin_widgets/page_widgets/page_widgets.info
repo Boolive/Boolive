@@ -2,17 +2,20 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Package",
+    "date": 1372616246,
     "order": 19,
     "children": {
         "title": {
             "value": "Виджеты страницы",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
+            "date": 1372616246,
             "order": 1
         },
         "description": {
             "value": "Мини редакторы для свойств страницы",
             "is_hidden": true,
+            "date": 1372616246,
             "order": 2
         }
     }

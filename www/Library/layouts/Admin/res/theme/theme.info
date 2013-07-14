@@ -2,12 +2,14 @@
     "value": "theme.css",
     "is_file": true,
     "proto": "/Library/views/Css",
+    "date": 1372616292,
     "order": 8,
     "children": {
         "title": {
             "value": "CSS Theme",
             "proto": "/Library/views/Css/title",
             "is_hidden": true,
+            "date": 1372616292,
             "order": 1
         },
         "description": {
@@ -15,6 +17,7 @@
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "proto": "/Library/views/Css/description",
             "is_hidden": true,
+            "date": 1372616292,
             "order": 2
         }
     }

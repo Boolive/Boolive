@@ -1,6 +1,7 @@
 {
-    "value": "Формирование страницы",
+    "value": "Формирование страницы11",
     "proto": "/Library/content_samples/paragraphs/H1",
+    "date": 1372616195,
     "order": 3,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Заголовок 1",
             "proto": "/Library/content_samples/paragraphs/H1/title",
             "is_hidden": true,
+            "date": 1372616196,
             "order": 1
         }
     }

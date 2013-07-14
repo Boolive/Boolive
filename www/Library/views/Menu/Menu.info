@@ -3,24 +3,35 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
+    "date": 1372616302,
     "order": 13,
     "children": {
         "title": {
             "value": "Меню",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
+            "date": 1372616302,
             "order": 1
         },
         "description": {
             "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
             "proto": "/Library/views/View/description",
             "is_hidden": true,
+            "date": 1372616302,
             "order": 2
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "date": 1372616307,
+            "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
+            "date": 1372616302,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +39,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
+                    "date": 1372616302,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +47,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
+                    "date": 1372616302,
                     "order": 2
                 }
             }
@@ -44,6 +57,7 @@
             "value": "",
             "proto": "/Contents",
             "is_link": true,
+            "date": 1372616302,
             "order": 5
         }
     }

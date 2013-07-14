@@ -2,12 +2,14 @@
     "value": "",
     "proto": "/Library/content_samples/paragraphs/TextBlock",
     "is_hidden": true,
+    "date": 1372616261,
     "order": 4,
     "children": {
         "title": {
             "value": "Заголовок",
             "proto": "/Library/content_samples/paragraphs/TextBlock/title",
             "is_hidden": true,
+            "date": 1372616261,
             "order": 1
         }
     }

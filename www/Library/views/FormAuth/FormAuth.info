@@ -3,24 +3,28 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
+    "date": 1372616299,
     "order": 18,
     "children": {
         "title": {
             "value": "Вход",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
+            "date": 1372616299,
             "order": 1
         },
         "description": {
             "value": "Форма аутентификации пользователя",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
+            "date": 1372616299,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
+            "date": 1372616299,
             "order": 4,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
+                    "date": 1372616299,
                     "order": 2
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
+                    "date": 1372616299,
                     "order": 3
                 }
             }
@@ -42,11 +48,13 @@
         "object": {
             "value": "",
             "is_default_class": false,
+            "date": 1372616299,
             "order": 5,
             "children": {
                 "title": {
                     "value": "Модель авторизации",
                     "is_hidden": true,
+                    "date": 1372616299,
                     "order": 1
                 }
             }

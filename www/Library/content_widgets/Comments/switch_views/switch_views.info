@@ -3,6 +3,7 @@
     "value": "SwitchViews.tpl",
     "is_file": true,
     "proto": "/Library/views/SwitchViews",
+    "date": 1372616266,
     "order": 4,
     "children": {
         "title": {
@@ -10,6 +11,7 @@
             "value": "Переключатель вариантов отображения (исполнения)",
             "proto": "/Library/views/SwitchViews/title",
             "is_hidden": true,
+            "date": 1372616266,
             "order": 1
         },
         "description": {
@@ -17,12 +19,14 @@
             "value": "Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ",
             "proto": "/Library/views/SwitchViews/description",
             "is_hidden": true,
+            "date": 1372616266,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/SwitchViews/res",
+            "date": 1372616266,
             "order": 3,
             "children": {
                 "title": {
@@ -30,6 +34,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/SwitchViews/res/title",
                     "is_hidden": true,
+                    "date": 1372616266,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +42,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/SwitchViews/res/description",
                     "is_hidden": true,
+                    "date": 1372616266,
                     "order": 2
                 }
             }

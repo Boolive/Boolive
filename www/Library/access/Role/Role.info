@@ -1,16 +1,19 @@
 {
     "value": "",
     "is_default_class": false,
+    "date": 1372616225,
     "order": 6,
     "children": {
         "title": {
             "value": "Роль",
             "is_hidden": true,
+            "date": 1372616225,
             "order": 1
         },
         "description": {
             "value": "Сгруппированные права доустапа",
             "is_hidden": true,
+            "date": 1372616225,
             "order": 2
         }
     }

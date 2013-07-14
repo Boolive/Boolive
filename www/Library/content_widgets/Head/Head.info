@@ -3,24 +3,28 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
+    "date": 1372616268,
     "order": 8,
     "children": {
         "title": {
             "value": "Виджет заголовка в тексте",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
+            "date": 1372616268,
             "order": 3
         },
         "description": {
             "value": "Отображает заголовок форматированного текста",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
+            "date": 1372616268,
             "order": 4
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
+            "date": 1372616268,
             "order": 5,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
+                    "date": 1372616268,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
+                    "date": 1372616268,
                     "order": 2
                 }
             }

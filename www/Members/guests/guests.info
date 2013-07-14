@@ -1,12 +1,14 @@
 {
     "value": "",
     "proto": "/Library/access/Group",
+    "date": 1372616307,
     "order": 2,
     "children": {
         "title": {
             "value": "Гости",
             "proto": "/Library/access/Group/title",
             "is_hidden": true,
+            "date": 1372616307,
             "order": 1
         },
         "description": {
@@ -14,6 +16,7 @@
             "value": "Базовый объект для пользователей и групп",
             "proto": "/Library/access/Group/description",
             "is_hidden": true,
+            "date": 1372616307,
             "order": 2
         }
     }

@@ -1,12 +1,14 @@
 {
     "value": "",
     "proto": "/Library/views/ViewGroup",
+    "date": 1372616292,
     "order": 6,
     "children": {
         "title": {
             "value": "Центр",
             "proto": "/Library/views/ViewGroup/title",
             "is_hidden": true,
+            "date": 1372616292,
             "order": 1
         },
         "description": {
@@ -14,6 +16,7 @@
             "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
             "proto": "/Library/views/ViewGroup/description",
             "is_hidden": true,
+            "date": 1372616292,
             "order": 2
         }
     }

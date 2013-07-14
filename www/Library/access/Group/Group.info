@@ -2,12 +2,14 @@
     "value": "",
     "proto": "/Library/access/Member",
     "is_default_class": false,
+    "date": 1372616224,
     "order": 4,
     "children": {
         "title": {
             "value": "Группа пользователей",
             "proto": "/Library/access/Member/title",
             "is_hidden": true,
+            "date": 1372616224,
             "order": 1
         },
         "description": {
@@ -15,6 +17,7 @@
             "value": "Базовый объект для пользователей и групп",
             "proto": "/Library/access/Member/description",
             "is_hidden": true,
+            "date": 1372616224,
             "order": 2
         }
     }

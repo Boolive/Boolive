@@ -1,6 +1,7 @@
 {
     "value": "​Шаблонизация",
     "proto": "/Library/content_samples/paragraphs/H3",
+    "date": 1372616191,
     "order": 51,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Заголовок 3",
             "proto": "/Library/content_samples/paragraphs/H3/title",
             "is_hidden": true,
+            "date": 1372616191,
             "order": 1
         }
     }

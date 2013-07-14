@@ -3,11 +3,13 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
+    "date": 1372616269,
     "order": 24,
     "children": {
         "res": {
             "value": "",
             "proto": "/Library/views/Widget/res",
+            "date": 1372616269,
             "order": 0,
             "children": {
                 "title": {
@@ -15,6 +17,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
+                    "date": 1372616269,
                     "order": 2
                 },
                 "description": {
@@ -22,6 +25,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
+                    "date": 1372616269,
                     "order": 3
                 }
             }
@@ -30,12 +34,14 @@
             "value": "Виджет списка ключевых слов",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
+            "date": 1372616269,
             "order": 1
         },
         "description": {
             "value": "Отображает ключевые слова страницы или другого содержимого",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
+            "date": 1372616269,
             "order": 2
         }
     }

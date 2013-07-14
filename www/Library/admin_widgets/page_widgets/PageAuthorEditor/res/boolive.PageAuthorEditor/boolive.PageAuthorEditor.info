@@ -2,12 +2,14 @@
     "value": "boolive.PageAuthorEditor.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "date": 1372616247,
     "order": 3,
     "children": {
         "title": {
             "value": "скрипт лоя смены автора",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_hidden": true,
+            "date": 1372616247,
             "order": 1
         },
         "description": {
@@ -15,12 +17,14 @@
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_hidden": true,
+            "date": 1372616247,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
+            "date": 1372616247,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/title",
                     "is_hidden": true,
+                    "date": 1372616247,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/description",
                     "is_hidden": true,
+                    "date": 1372616247,
                     "order": 2
                 }
             }

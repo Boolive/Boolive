@@ -1,6 +1,7 @@
 {
     "value": "Заголовок",
     "proto": "/Library/content_samples/paragraphs/H1",
+    "date": 1372616219,
     "order": 1,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
+            "date": 1372616219,
             "order": 2
         }
     }

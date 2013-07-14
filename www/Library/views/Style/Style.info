@@ -1,56 +1,69 @@
 {
     "value": "",
     "is_default_class": false,
+    "date": 1372616304,
     "order": 20,
     "children": {
         "title": {
             "value": "Стиль ",
             "is_hidden": true,
+            "date": 1372616304,
             "order": 1
         },
         "description": {
             "value": "Для оформления одного объекта",
             "is_hidden": true,
+            "date": 1372616304,
             "order": 2
         },
         "width": {
             "value": "",
+            "date": 1372616305,
             "order": 3
         },
         "height": {
             "value": "",
+            "date": 1372616305,
             "order": 4
         },
         "margin-top": {
             "value": "",
+            "date": 1372616305,
             "order": 5
         },
         "margin-right": {
             "value": "",
+            "date": 1372616305,
             "order": 6
         },
         "margin-bottom": {
             "value": "",
+            "date": 1372616305,
             "order": 7
         },
         "margin-left": {
             "value": "",
+            "date": 1372616305,
             "order": 8
         },
         "text-align": {
             "value": "",
+            "date": 1372616305,
             "order": 9
         },
         "padding-left": {
             "value": "",
+            "date": 1372616305,
             "order": 10
         },
         "padding-right": {
             "value": "",
+            "date": 1372616305,
             "order": 11
         },
         "text-indent": {
             "value": "",
+            "date": 1372616305,
             "order": 12
         }
     }

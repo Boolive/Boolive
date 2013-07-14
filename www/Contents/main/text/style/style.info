@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page/text/style",
+    "date": 1372616201,
     "order": 2,
     "children": {
         "title": {
@@ -9,60 +10,71 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/Page/text/style/title",
             "is_hidden": true,
+            "date": 1372616201,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/width",
+            "date": 1372616201,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/height",
+            "date": 1372616201,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/margin-top",
+            "date": 1372616201,
             "order": 4
         },
         "margin-right": {
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/margin-right",
+            "date": 1372616201,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/margin-bottom",
+            "date": 1372616201,
             "order": 6
         },
         "margin-left": {
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/margin-left",
+            "date": 1372616201,
             "order": 7
         },
         "text-align": {
             "value": "",
             "proto": "/Library/content_samples/Page/text/style/text-align",
+            "date": 1372616201,
             "order": 8
         },
         "padding-left": {
             "value": "60px",
             "proto": "/Library/content_samples/Page/text/style/padding-left",
+            "date": 1372616201,
             "order": 9
         },
         "padding-right": {
             "value": "50px",
             "proto": "/Library/content_samples/Page/text/style/padding-right",
+            "date": 1372616201,
             "order": 10
         },
         "text-indent": {
             "value": "0px",
             "proto": "/Library/content_samples/Page/text/style/text-indent",
+            "date": 1372616201,
             "order": 11
         },
         "description": {
@@ -70,6 +82,7 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/Page/text/style/description",
             "is_hidden": true,
+            "date": 1372616201,
             "order": 12
         }
     }

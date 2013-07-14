@@ -2,18 +2,21 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/admin_widgets/Programs/switch_views/case_default/res",
+    "date": 1372616240,
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Ресурсы",
             "proto": "/Library/admin_widgets/Programs/switch_views/case_default/res/title",
+            "date": 1372616240,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
             "proto": "/Library/admin_widgets/Programs/switch_views/case_default/res/description",
+            "date": 1372616240,
             "order": 2
         }
     }

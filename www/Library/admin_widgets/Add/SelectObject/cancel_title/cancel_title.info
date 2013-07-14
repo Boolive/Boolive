@@ -2,5 +2,6 @@
     "is_default_value": true,
     "value": "Отмена",
     "proto": "/Library/admin_widgets/SelectObject/cancel_title",
+    "date": 1372616226,
     "order": 4
 }

@@ -1,12 +1,14 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
+    "date": 1372616258,
     "order": 3,
     "children": {
         "title": {
             "value": "Списки",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
+            "date": 1372616258,
             "order": 3
         }
     }

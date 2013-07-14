@@ -1,12 +1,14 @@
 {
     "value": "",
     "proto": "/Library/basic/simple/Email",
+    "date": 1372616255,
     "order": 1,
     "children": {
         "title": {
             "value": "Email адрес",
             "proto": "/Library/basic/simple/Email/title",
             "is_hidden": true,
+            "date": 1372616255,
             "order": 1
         },
         "description": {
@@ -14,6 +16,7 @@
             "value": "Адрес электронной почты",
             "proto": "/Library/basic/simple/Email/description",
             "is_hidden": true,
+            "date": 1372616255,
             "order": 2
         }
     }

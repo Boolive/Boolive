@@ -2,18 +2,21 @@
     "value": "",
     "proto": "/Library/views/Widget",
     "is_default_class": false,
+    "date": 1372616305,
     "order": 9,
     "children": {
         "title": {
             "value": "Вариант переключателя",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
+            "date": 1372616305,
             "order": 1
         },
         "description": {
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
+            "date": 1372616305,
             "order": 2
         }
     }

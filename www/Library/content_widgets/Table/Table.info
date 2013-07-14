@@ -3,22 +3,26 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
+    "date": 1372616282,
     "order": 16,
     "children": {
         "title": {
             "value": "Виджет таблицы",
             "is_hidden": true,
+            "date": 1372616283,
             "order": 1
         },
         "description": {
             "value": "Отображает таблицы в форматированном тексте. ",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
+            "date": 1372616283,
             "order": 2
         },
         "res": {
             "value": "",
             "proto": "/Library/views/Widget/res",
+            "date": 1372616283,
             "order": 3,
             "children": {
                 "title": {
@@ -26,6 +30,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
+                    "date": 1372616283,
                     "order": 2
                 },
                 "description": {
@@ -33,6 +38,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
+                    "date": 1372616283,
                     "order": 3
                 }
             }

@@ -1,18 +1,22 @@
 {
     "is_default_value": true,
     "value": "",
+    "is_hidden": true,
+    "date": 1372616275,
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "",
             "is_hidden": true,
+            "date": 1372616275,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "",
             "is_hidden": true,
+            "date": 1372616275,
             "order": 2
         }
     }

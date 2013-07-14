@@ -2,24 +2,28 @@
     "value": "ListView.tpl",
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
+    "date": 1372616270,
     "order": 17,
     "children": {
         "title": {
             "value": "Виджет списка в тексте",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
+            "date": 1372616270,
             "order": 1
         },
         "description": {
             "value": "Отображает списки в форматированном тексте",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
+            "date": 1372616270,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
+            "date": 1372616270,
             "order": 8,
             "children": {
                 "title": {
@@ -27,6 +31,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
+                    "date": 1372616270,
                     "order": 1
                 },
                 "description": {
@@ -34,6 +39,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
+                    "date": 1372616270,
                     "order": 2
                 }
             }

@@ -1,6 +1,7 @@
 {
     "value": "",
     "proto": "/Library/content_samples/paragraphs/TextBlock/style",
+    "date": 1372616196,
     "order": 2,
     "children": {
         "title": {
@@ -8,62 +9,74 @@
             "value": "Стиль ",
             "proto": "/Library/views/Style/title",
             "is_hidden": true,
+            "date": 1372616196,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/width",
+            "date": 1372616196,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/height",
+            "date": 1372616196,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/margin-top",
+            "date": 1372616196,
             "order": 4
         },
         "margin-right": {
             "value": "auto",
+            "date": 1372616196,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/margin-bottom",
+            "date": 1372616196,
             "order": 6
         },
         "margin-left": {
             "value": "auto",
+            "date": 1372616196,
             "order": 7
         },
         "text-align": {
             "value": "left",
             "proto": "/Library/views/Style/text-align",
+            "date": 1372616196,
             "order": 8
         },
         "padding-left": {
             "value": "0px",
             "proto": "/Library/views/Style/padding-left",
+            "date": 1372616196,
             "order": 9
         },
         "padding-right": {
             "value": "0px",
             "proto": "/Library/views/Style/padding-right",
+            "date": 1372616196,
             "order": 10
         },
         "text-indent": {
             "value": "0px",
+            "date": 1372616196,
             "order": 11
         },
         "line-height": {
             "value": "1",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
+            "date": 1372616196,
             "order": 12
         },
         "description": {
@@ -71,14 +84,17 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/description",
             "is_hidden": true,
+            "date": 1372616196,
             "order": 13
         },
         "font-size": {
             "value": "",
+            "date": 1372616196,
             "order": 14
         },
         "float": {
             "value": "none",
+            "date": 1372616196,
             "order": 15
         }
     }

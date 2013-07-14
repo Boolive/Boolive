@@ -1,6 +1,7 @@
 {
     "value": "Вова! Страница сайта. ПППП",
     "proto": "/Library/content_samples/paragraphs/H2",
+    "date": 1372616201,
     "order": 36,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
             "is_delete": true,
+            "date": 1372616201,
             "order": 1
         }
     }

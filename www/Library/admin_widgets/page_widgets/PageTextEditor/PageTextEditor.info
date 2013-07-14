@@ -3,18 +3,21 @@
     "is_file": true,
     "proto": "/Library/content_widgets/RichTextPreview",
     "is_default_class": false,
+    "date": 1372616250,
     "order": 7,
     "children": {
         "title": {
             "value": "Редактор текста страницы",
             "proto": "/Library/content_widgets/RichTextPreview/title",
             "is_hidden": true,
+            "date": 1372616250,
             "order": 1
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_widgets/RichTextPreview/res",
+            "date": 1372616250,
             "order": 2,
             "children": {
                 "title": {
@@ -22,6 +25,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
+                    "date": 1372616250,
                     "order": 1
                 },
                 "description": {
@@ -29,6 +33,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
+                    "date": 1372616250,
                     "order": 2
                 }
             }
@@ -38,6 +43,7 @@
             "value": "Отображает элементы форматированного текста подходящими виджетами из вариантов отображения",
             "proto": "/Library/content_widgets/RichTextPreview/description",
             "is_hidden": true,
+            "date": 1372616250,
             "order": 7
         }
     }

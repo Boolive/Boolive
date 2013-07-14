@@ -1,12 +1,14 @@
 {
     "value": "",
     "proto": "/Library/views/ViewGroup",
+    "date": 1372616293,
     "order": 4,
     "children": {
         "title": {
             "value": "Боковая панель",
             "proto": "/Library/views/ViewGroup/title",
             "is_hidden": true,
+            "date": 1372616293,
             "order": 1
         },
         "description": {
@@ -14,6 +16,7 @@
             "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
             "proto": "/Library/views/ViewGroup/description",
             "is_hidden": true,
+            "date": 1372616293,
             "order": 3
         }
     }

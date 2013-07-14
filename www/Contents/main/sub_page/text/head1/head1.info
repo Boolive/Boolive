@@ -1,6 +1,7 @@
 {
     "value": "Заголовок подчиненной страницы",
     "proto": "/Library/content_samples/paragraphs/Head",
+    "date": 1372616188,
     "order": 12,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Заголовок",
             "proto": "/Library/content_samples/paragraphs/Head/title",
             "is_hidden": true,
+            "date": 1372616188,
             "order": 1
         }
     }

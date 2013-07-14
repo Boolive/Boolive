@@ -3,24 +3,28 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
+    "date": 1372616267,
     "order": 7,
     "children": {
         "title": {
             "value": "Форма обратной связи",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
+            "date": 1372616267,
             "order": 3
         },
         "description": {
             "value": "Для отправки сообщений по почте администратору (менеджеру) сайта",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
+            "date": 1372616267,
             "order": 4
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
+            "date": 1372616267,
             "order": 6,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
+                    "date": 1372616267,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
+                    "date": 1372616267,
                     "order": 2
                 }
             }

@@ -1,16 +1,19 @@
 {
     "value": 0,
     "is_default_class": false,
+    "date": 1372616254,
     "order": 8,
     "children": {
         "title": {
             "value": "Булево",
             "is_hidden": true,
+            "date": 1372616254,
             "order": 1
         },
         "description": {
             "value": "Логическое значение ДА/НЕТ",
             "is_hidden": true,
+            "date": 1372616254,
             "order": 2
         }
     }

@@ -1,6 +1,7 @@
 {
     "value": "info@boolive.ru",
     "proto": "/Library/content_samples/Feedback/email_to",
+    "date": 1372616183,
     "order": 2,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Email",
             "proto": "/Library/content_samples/Feedback/email_to/title",
             "is_hidden": true,
+            "date": 1372616183,
             "order": 1
         },
         "description": {
@@ -15,6 +17,7 @@
             "value": "Адрес электронной почты",
             "proto": "/Library/content_samples/Feedback/email_to/description",
             "is_hidden": true,
+            "date": 1372616183,
             "order": 2
         }
     }

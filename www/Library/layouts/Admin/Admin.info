@@ -3,24 +3,28 @@
     "is_file": true,
     "proto": "/Library/views/Focuser",
     "is_default_class": false,
+    "date": 1372616290,
     "order": 2,
     "children": {
         "title": {
             "value": "Макет Админ-панели",
             "proto": "/Library/views/Focuser/title",
             "is_hidden": true,
+            "date": 1372616290,
             "order": 1
         },
         "description": {
             "value": "Панель управления сайтом ",
             "proto": "/Library/views/Focuser/description",
             "is_hidden": true,
+            "date": 1372616290,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Focuser/res",
+            "date": 1372616290,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Focuser/res/title",
                     "is_hidden": true,
+                    "date": 1372616290,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Focuser/res/description",
                     "is_hidden": true,
+                    "date": 1372616290,
                     "order": 2
                 }
             }

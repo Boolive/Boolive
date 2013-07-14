@@ -4,6 +4,7 @@
     "is_file": true,
     "proto": "/Library/javascripts/history",
     "is_link": true,
+    "date": 1372616291,
     "order": 4,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "HTML5 History API",
             "proto": "/Library/javascripts/history/title",
             "is_hidden": true,
+            "date": 1372616291,
             "order": 1
         },
         "description": {
@@ -18,6 +20,7 @@
             "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
             "proto": "/Library/javascripts/history/description",
             "is_hidden": true,
+            "date": 1372616291,
             "order": 2
         }
     }

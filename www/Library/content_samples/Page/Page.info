@@ -1,26 +1,31 @@
 {
     "value": "",
     "is_default_class": false,
+    "date": 1372616257,
     "order": 7,
     "children": {
         "description": {
             "value": "",
+            "date": 1372616257,
             "order": 1,
             "children": {
                 "title": {
                     "value": "Описание ",
                     "is_hidden": true,
+                    "date": 1372616257,
                     "order": 1
                 }
             }
         },
         "title": {
             "value": "Страница",
+            "date": 1372616257,
             "order": 2,
             "children": {
                 "title": {
                     "value": "Название",
                     "is_hidden": true,
+                    "date": 1372616257,
                     "order": 1
                 }
             }

@@ -1,10 +1,12 @@
 {
     "value": "",
+    "date": 1372616254,
     "order": 7,
     "children": {
         "title": {
             "value": "Язык",
             "is_hidden": true,
+            "date": 1372616254,
             "order": 1
         }
     }

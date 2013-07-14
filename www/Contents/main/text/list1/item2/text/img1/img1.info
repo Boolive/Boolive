@@ -2,6 +2,7 @@
     "value": "nota.png",
     "is_file": true,
     "proto": "/Library/content_samples/Image",
+    "date": 1372616198,
     "order": 1,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Изображение",
             "proto": "/Library/content_samples/Image/title",
             "is_hidden": true,
+            "date": 1372616198,
             "order": 2
         }
     }

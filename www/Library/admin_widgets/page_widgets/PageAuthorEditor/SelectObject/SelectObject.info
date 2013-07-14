@@ -3,12 +3,14 @@
     "value": "SelectObject.tpl",
     "is_file": true,
     "proto": "/Library/admin_widgets/SelectObject",
+    "date": 1372616246,
     "order": 3,
     "children": {
         "title": {
             "value": "Виджет выбора автора",
             "proto": "/Library/admin_widgets/SelectObject/title",
             "is_hidden": true,
+            "date": 1372616246,
             "order": 1
         },
         "description": {
@@ -16,12 +18,14 @@
             "value": "Представляет собой обозреватель объектов с функцией выбора объекта",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_hidden": true,
+            "date": 1372616246,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
+            "date": 1372616246,
             "order": 5,
             "children": {
                 "title": {
@@ -29,6 +33,7 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/SelectObject/res/title",
                     "is_hidden": true,
+                    "date": 1372616246,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +41,7 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_hidden": true,
+                    "date": 1372616246,
                     "order": 6
                 }
             }

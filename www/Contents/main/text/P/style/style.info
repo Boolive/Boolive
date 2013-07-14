@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/paragraphs/P/style",
+    "date": 1372616192,
     "order": 2,
     "children": {
         "description": {
@@ -10,11 +11,13 @@
             "proto": "/Library/content_samples/paragraphs/P/style/description",
             "is_hidden": true,
             "is_delete": true,
+            "date": 1372616192,
             "order": 17
         },
         "font-size": {
             "value": "",
             "is_delete": true,
+            "date": 1372616192,
             "order": 18
         },
         "height": {
@@ -22,6 +25,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/height",
             "is_delete": true,
+            "date": 1372616192,
             "order": 19
         },
         "line-height": {
@@ -29,6 +33,7 @@
             "value": "normal",
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
             "is_delete": true,
+            "date": 1372616192,
             "order": 20
         },
         "margin-bottom": {
@@ -36,6 +41,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-bottom",
             "is_delete": true,
+            "date": 1372616192,
             "order": 21
         },
         "margin-left": {
@@ -43,6 +49,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
             "is_delete": true,
+            "date": 1372616192,
             "order": 22
         },
         "margin-right": {
@@ -50,6 +57,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
             "is_delete": true,
+            "date": 1372616192,
             "order": 23
         },
         "margin-top": {
@@ -57,6 +65,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-top",
             "is_delete": true,
+            "date": 1372616192,
             "order": 24
         },
         "padding-left": {
@@ -64,6 +73,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-left",
             "is_delete": true,
+            "date": 1372616192,
             "order": 25
         },
         "padding-right": {
@@ -71,17 +81,20 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-right",
             "is_delete": true,
+            "date": 1372616192,
             "order": 26
         },
         "text-align": {
             "value": "left",
             "proto": "/Library/content_samples/paragraphs/P/style/text-align",
             "is_delete": true,
+            "date": 1372616192,
             "order": 27
         },
         "text-indent": {
             "value": "0px",
             "is_delete": true,
+            "date": 1372616192,
             "order": 28
         },
         "title": {
@@ -90,6 +103,7 @@
             "proto": "/Library/content_samples/paragraphs/P/style/title",
             "is_hidden": true,
             "is_delete": true,
+            "date": 1372616192,
             "order": 29
         },
         "width": {
@@ -97,6 +111,7 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/width",
             "is_delete": true,
+            "date": 1372616192,
             "order": 30
         }
     }

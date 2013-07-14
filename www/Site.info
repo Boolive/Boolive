@@ -2,18 +2,28 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
+    "date": 1373790364,
     "order": 1,
     "children": {
         "title": {
             "value": "Сайт",
             "is_hidden": true,
+            "date": 1372616182,
             "order": 1
         },
         "description": {
             "value": "Корневой объект сайта",
             "proto": "/Library/views/View/description",
             "is_hidden": true,
+            "date": 1372616182,
             "order": 2
+        },
+        "cache": {
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "is_hidden": true,
+            "date": 1372616309,
+            "order": 11
         }
     }
 }

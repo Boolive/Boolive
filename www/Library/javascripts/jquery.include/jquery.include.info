@@ -2,24 +2,28 @@
     "value": "jquery.include.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/jQueryScript",
+    "date": 1372616287,
     "order": 14,
     "children": {
         "title": {
             "value": "Загрузчик JS/CSS файлов",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_hidden": true,
+            "date": 1372616287,
             "order": 1
         },
         "description": {
             "value": "Плагин для динамической загрузки JavaScript и CSS файлов со стороны клиента (браузера)",
             "proto": "/Library/javascripts/patterns/jQueryScript/description",
             "is_hidden": true,
+            "date": 1372616287,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
+            "date": 1372616287,
             "order": 3,
             "children": {
                 "title": {
@@ -27,6 +31,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/title",
                     "is_hidden": true,
+                    "date": 1372616287,
                     "order": 1
                 },
                 "description": {
@@ -34,6 +39,7 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
                     "is_hidden": true,
+                    "date": 1372616287,
                     "order": 2
                 }
             }

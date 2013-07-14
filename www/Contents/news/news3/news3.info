@@ -1,11 +1,13 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Page",
+    "date": 1372616221,
     "order": 4,
     "children": {
         "title": {
             "value": "Третья новость",
             "proto": "/Library/content_samples/Page/title",
+            "date": 1372616221,
             "order": 0,
             "children": {
                 "title": {
@@ -13,6 +15,7 @@
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
                     "is_hidden": true,
+                    "date": 1372616219,
                     "order": 1
                 }
             }
@@ -21,6 +24,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/description",
+            "date": 1372616219,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Описание ",
                     "proto": "/Library/content_samples/Page/description/title",
                     "is_hidden": true,
+                    "date": 1372616219,
                     "order": 1
                 }
             }

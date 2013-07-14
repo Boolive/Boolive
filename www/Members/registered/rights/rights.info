@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Group/rights",
+    "date": 1372616309,
     "order": 4,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Права доступа",
             "proto": "/Library/access/Group/rights/title",
             "is_hidden": true,
+            "date": 1372616309,
             "order": 1
         }
     }

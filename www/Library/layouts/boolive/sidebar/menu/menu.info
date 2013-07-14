@@ -3,11 +3,13 @@
     "value": "Menu.tpl",
     "is_file": true,
     "proto": "/Library/views/Menu",
+    "date": 1372616293,
     "order": 2,
     "children": {
         "title": {
             "value": "Содержимое",
             "is_hidden": true,
+            "date": 1372616293,
             "order": 1
         },
         "description": {
@@ -15,12 +17,14 @@
             "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
             "proto": "/Library/views/Menu/description",
             "is_hidden": true,
+            "date": 1372616293,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Menu/res",
+            "date": 1372616294,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Menu/res/title",
                     "is_hidden": true,
+                    "date": 1372616294,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +40,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Menu/res/description",
                     "is_hidden": true,
+                    "date": 1372616294,
                     "order": 2
                 }
             }
@@ -44,7 +50,32 @@
             "value": "",
             "proto": "/Library/views/Menu/object",
             "is_link": true,
+            "date": 1372616294,
             "order": 4
+        },
+        "cache": {
+            "value": 1,
+            "proto": "/Library/views/Widget/cache",
+            "date": 1372616294,
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/Widget/cache/title",
+                    "is_hidden": true,
+                    "date": 1372616294,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/Widget/cache/description",
+                    "is_hidden": true,
+                    "date": 1372616294,
+                    "order": 2
+                }
+            }
         }
     }
 }

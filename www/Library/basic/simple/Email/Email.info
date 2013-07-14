@@ -1,16 +1,19 @@
 {
-    "value": "",
+    "value": "name@mail.com",
     "is_default_class": false,
+    "date": 1373780367,
     "order": 4,
     "children": {
         "title": {
             "value": "Email",
             "is_hidden": true,
+            "date": 1372616254,
             "order": 1
         },
         "description": {
             "value": "Адрес электронной почты",
             "is_hidden": true,
+            "date": 1372616254,
             "order": 2
         }
     }

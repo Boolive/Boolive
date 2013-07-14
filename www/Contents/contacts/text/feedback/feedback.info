@@ -1,6 +1,7 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Feedback",
+    "date": 1372616182,
     "order": 9,
     "children": {
         "title": {
@@ -8,6 +9,7 @@
             "value": "Обратная связь",
             "proto": "/Library/content_samples/Feedback/title",
             "is_hidden": true,
+            "date": 1372616182,
             "order": 4
         }
     }
