@@ -41,7 +41,7 @@ class Input extends Values
             'REQUEST' => array(),
             'FILES' => isset($_FILES)? self::normalizeFiles() : array(),
             'COOKIE' => isset($_COOKIE)? $_COOKIE : array(),
-            'RAW' => empty($HTTP_RAW_POST_DATA)?'':$HTTP_RAW_POST_DATA, // Неформатированные данные
+            'RAW' => file_get_contents("php://input"), // Неформатированные данные
             'SERVER' => $_SERVER
         );
         if (isset($_SERVER['REQUEST_URI'])){
@@ -63,7 +63,7 @@ class Input extends Values
         // Аргументы из консоли (режим CLI)
         if (empty($values['REQUEST']) && isset($_SERVER['argv'])) $values['REQUEST'] = $_SERVER['argv'];
         // Метод запроса
-        if (isset($values['SERVER']['REQUEST_METHOD'])){
+        if (isset($values['SERVER']['REQUEST_METHOD']) && !isset($values['REQUEST']['method'])){
             $values['REQUEST']['method'] = $values['SERVER']['REQUEST_METHOD'];
         }
         // Создание контейнера
