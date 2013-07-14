@@ -328,6 +328,14 @@ class Data
             // Определение хранилища по URI
             if ($store = self::getStore($group_cond['from'])){
                 $result = $store->read($group_cond, $index);
+                // @todo Если выбран объект, но он не существует, хотя имеется  его uri, но uri не соответсвует хранилищу, то выбрать объект повторно по uri
+                if ($group_cond['select'][0] == 'self' && empty($result['is_exists']) && isset($result['uri']) && Data::isAbsoluteUri($result['uri'])){
+                    $group_cond2 = $group_cond;
+                    $group_cond2['from'] = $result['uri'];
+                    if (($store2 = self::getStore($result['uri'])) && $store != $store2){
+                        $result = $store2->read($group_cond2, $index);
+                    }
+                }
                 if (PROFILE_DATA) Trace::groups('Data')->group('FROM STORE')->group($comment)->group()->set(F::toJSON($group_cond, false));
             }else{
                 $result = null;
@@ -354,14 +362,22 @@ class Data
             foreach ($result as $gi => $gitem){
                 if (isset($gitem['class'])){
                     $gitem['cond'] = $group_cond;
-                    $result[$gi] = new $gitem['class']($gitem, $children_depth);
+                    try{
+                        $result[$gi] = new $gitem['class']($gitem, $children_depth);
+                    }catch (\Exception $e){
+                        $result[$gi] = new Entity($gitem, $children_depth);
+                    }
                 }else{
                     $list = array();
                     if ($children_depth===false || $children_depth > 0){
                         foreach ($result[$gi] as $item){
                             if (isset($item['class'])){
                                 $item['cond'] = $cond;
-                                $obj = new $item['class']($item, $children_depth);
+                                try{
+                                    $obj = new $item['class']($item, $children_depth);
+                                }catch (\Exception $e){
+                                    $obj = new Entity($item, $children_depth);
+                                }
                                 if (empty($cond['key'])){
                                     $list[] = $obj;
                                 }else{
@@ -388,22 +404,20 @@ class Data
 
     /**
      * Сохранение объекта
-     * @param Entity $object Сохраняемый объект
-     * @param \Boolive\errors\Error $error Контейнер для ошибок при сохранении
+     * @param Entity $entity Сохраняемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
+     * @throws \Boolive\errors\Error
      * @return bool Признак, сохранен или нет объект?
      */
-    static function write($object, &$error, $access = true)
+    static function write($entity, $access = true)
     {
-        if ($object->id() != Entity::ENTITY_ID){
-            if (!$access || !IS_INSTALL || ($object->isAccessible() && Auth::getUser()->checkAccess('write', $object))){
-                if ($store = self::getStore($object->key())){
-                    return $store->write($object);
-                }else{
-                    $error->store = new Error('Не определено хранилище объекта', 'not-exist');
-                }
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore($entity->key())){
+                return $store->write($entity, $access);
             }else{
-                $error->access = new Error('Нет доступа на запись', 'write');
+                $error = new Error('Невозможно сохранить объект', $entity->uri());
+                $error->store = new Error('Неопределено хранилище для объекта', 'not-exist');
+                throw $error;
             }
         }
         return false;
@@ -411,58 +425,24 @@ class Data
 
     /**
      * Уничтожение объекта и его подчиенных
-     * @param Entity $object Уничтожаемый объект
-     * @param \Boolive\errors\Error $error Контейнер для ошибок при уничтожении
+     * @param Entity $entity Уничтожаемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
      * @param bool $integrity Признак, проверять целостность данных?
+     * @throws \Boolive\errors\Error
      * @return bool Признак, был уничтожен объект или нет?
      */
-    static function delete($object, &$error, $access = true, $integrity = true)
+    static function delete($entity, $access = true, $integrity = true)
     {
-        if ($object->id() != Entity::ENTITY_ID){
-            $store = self::getStore($object->key());
-            // Проверка доступа на уничтожение объекта и его подчиненных
-            if (!self::deleteConflicts($object, $access, $integrity)){
-                return $store->delete($object);
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore($entity->key())){
+                return $store->delete($entity, $access, $integrity);
             }else{
-                $error->destroy = new Error('Имеются конфлиткты при уничтожении объектов', 'destroy');
+                $error = new Error('Невозможно удалить объект', $entity->uri());
+                $error->store = new Error('Неопределено хранилище объекта', 'not-exist');
+                throw $error;
             }
         }
         return false;
-    }
-
-    /**
-     * Поиск объектов, из-за которых невозможно уничтожение объекта
-     * @param Entity $object Проверяемый объект
-     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
-     * @param bool $integrity Признак, проверять целостность данных?
-     * @return array Массив URI объектов, из-за которых невозможно уничтожение объекта
-     */
-    static function deleteConflicts($object, $access = true, $integrity = true)
-    {
-        $conflicts = array();
-        if ($object->id() != Entity::ENTITY_ID){
-            $store = self::getStore($object->key());
-            // Проверка доступа на уничтожение объекта и его подчиненных
-            if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $object->id(), null))){
-                $objects = $store->read(array(
-                        'select' => array('children', 'uri'),
-                        'from' => $object->id(),
-                        'depth' => 'max',
-                        'where' => array('not', $acond),
-                        'limit' => array(0,50),
-                        'key' => 'name',
-                        'access' => false
-                    ), false
-                );
-                $conflicts['access'] = $objects;
-            }
-            // Проверка использования в качестве прототипа
-            if ($integrity && ($objects = $store->deleteConflicts($object))){
-                $conflicts['heirs'] = $objects;
-            }
-        }
-        return $conflicts;
     }
 
     /**
@@ -566,6 +546,9 @@ class Data
             }else{
                 $result = $parse($uri);
             }
+            foreach ($result as $key => $value){
+                if ($value === 'false' || $value === '0') $result[$key] = false;
+            }
             if (isset($entity)) $result['from'] = array($entity, $result['from']);
         }
         if (!empty($default)) $result = array_replace_recursive($default, $result);
@@ -620,6 +603,11 @@ class Data
             if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
             // Нормализация from
             $result['from'] = self::decodeFrom(isset($result['from'])?$result['from']:null, $entity_in_from);
+            if ($result['select'][0] == 'self' && is_string($result['from']) && ($f = rtrim($result['from'],'/'))!=$result['from']){
+                $result['from'] = $f;
+                $result['select'][0] = 'children';
+                $result['depth'] = array(1,1);
+            }
             // limit
             if ($result['select'][0] == 'exists'){
                 $result['limit'] = array(0,1);
@@ -629,7 +617,7 @@ class Data
             }
             // order
             if (isset($result['order'])){
-                if (!is_array(reset($result['order']))){
+                if (!empty($result['order']) && !is_array(reset($result['order']))){
                     $result['order'] = array($result['order']);
                 }
             }
@@ -721,13 +709,28 @@ class Data
     static function urlencodeCond($cond)
     {
         $cond = Data::decodeCond($cond, array(), true);
+        if (is_array($cond['from'])){
+            $info = parse_url(reset($cond['from']));
+            $base_url = '';
+            if (isset($info['scheme'])) $base_url.= $info['scheme'].'://';
+            if (isset($info['host'])) $base_url.= $info['host'];
+            if ($base_url_length = mb_strlen($base_url)){
+                foreach ($cond['from'] as $i => $from){
+                    if (mb_substr($from,0,$base_url_length) == $base_url) $cond['from'][$i] = mb_substr($from, $base_url_length);
+                }
+            }
+        }
         if (count($cond['select']) == 1) $cond['select'] = $cond['select'][0];
         if ($cond['select'] == 'self'){
             unset($cond['select'], $cond['depth']);
         }
-        $cond = F::toJSON($cond, false);
-        $cond = mb_substr($cond, 1, mb_strlen($cond)-1, 'UTF-8');
-        $cond = strtr($cond, array(
+        unset($cond['correct']);
+        foreach ($cond as $key => $c){
+            if (empty($c)) unset($cond[$key]);
+        }
+        $url = F::toJSON($cond, false);
+        $url = mb_substr($url, 1, mb_strlen($url)-1, 'UTF-8');
+        $url = strtr($url, array(
                          '[' => '(',
                          ']' => ')',
                          ',""]' => ',)',
@@ -738,20 +741,24 @@ class Data
                          '"<"' => '"lt"',
                          '"<="' => '"lte"'
                     ));
-        $cond = preg_replace_callback('/"([^"]*)"/ui', function($m){
+        $url = preg_replace_callback('/"([^"]*)"/ui', function($m){
                         $replacements = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
                         $escapers = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
                         return urlencode(str_replace($escapers, $replacements, $m[1]));
-                    }, $cond);
-        $cond = preg_replace('/,([a-z]+):/ui','&$1=',$cond);
-        $cond = preg_replace('/\(([a-z]+),/ui','$1(',$cond);
-        $cond = preg_replace('/\),/ui',')$1',$cond);
-        $cond = mb_substr($cond, 5, mb_strlen($cond)-6);
-        $info = explode('&', $cond, 2);
-        if (!empty($info)){
-            $cond = urldecode($info[0]).'?'.$info[1];
+                    }, $url);
+        $url = preg_replace('/,([a-z]+):/ui','&$1=',$url);
+        $url = preg_replace('/\(([a-z]+),/ui','$1(',$url);
+        $url = preg_replace('/\),/ui',')$1',$url);
+        $url = mb_substr($url, 5, mb_strlen($url)-6);
+        if (isset($base_url)){
+            $url = $base_url.'?from='.$url;
+        }else{
+            $info = explode('&', $url, 2);
+            if (!empty($info)){
+                $url = urldecode($info[0]).'?'.$info[1];
+            }
         }
-        return $cond;
+        return $url;
     }
 
     /**
@@ -797,6 +804,16 @@ class Data
         $short = !empty($info['id'])? $info : false;
         if ($short && $only_id && !empty($info['path'])) $short = false;
         return $short;
+    }
+
+    /**
+     * Проверяет, является ли URI абсолютным, т.е. начиается со схемы
+     * @param $uri
+     * @return bool
+     */
+    static function isAbsoluteUri($uri)
+    {
+        return (bool)preg_match('|^[a-z]+:\/\/|ui', $uri);
     }
 
     /**
