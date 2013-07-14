@@ -608,7 +608,7 @@ class Check
     static function email($value, &$error, Rule $rule)
     {
         if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)){
-            $error = new Error('Не Email адрес.', 'email');
+            $error = new Error('Не email адрес', 'email');
         }
         return $value;
     }
@@ -623,7 +623,7 @@ class Check
     static function url($value, &$error, Rule $rule)
     {
         if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_URL)){
-            $error = new Error('Не URL.', 'url');
+            $error = new Error('Не URL', 'url');
         }
         return $value;
     }
@@ -643,7 +643,7 @@ class Check
             $check = 'http://'.trim($check, '/');
         }
         if (!is_scalar($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
-            $error = new Error(array('%s Не URI.', $value), 'uri');
+            $error = new Error(array('%s Не URI', $value), 'uri');
         }
         return $value;
     }
@@ -658,7 +658,7 @@ class Check
     static function ip($value, &$error, Rule $rule)
     {
         if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_IP)){
-            $error = new Error('Не IP адрес.', 'ip');
+            $error = new Error('Не IP адрес', 'ip');
         }
         return $value;
     }
@@ -679,7 +679,7 @@ class Check
                 if (preg_match($pattern, $value)) return $value;
             }
         }
-        $error = new Error('Не соответствует регулярному выражению.', 'regexp');
+        $error = new Error('Не соответствует регулярному выражению', 'regexp');
         return $value;
     }
 
@@ -699,7 +699,7 @@ class Check
                 if (fnmatch($pattern, $value)) return $value;
             }
         }
-        $error = new Error('Не соответствует шаблону.', 'ospatterns');
+        $error = new Error('Не соответствует шаблону', 'ospatterns');
         return $value;
     }
 
@@ -718,7 +718,7 @@ class Check
                 return '#'.$value;
             }
         }
-        $error = new Error('Не код цвета.', 'color');
+        $error = new Error('Не код цвета', 'color');
         return '#000000';
     }
 
