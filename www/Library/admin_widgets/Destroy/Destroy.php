@@ -56,12 +56,12 @@ class Destroy extends Widget
             $v['objects'] = array();
             $v['conflicts'] = array();
             foreach ($objects as $o){
-//                $item = array();
-//                if (!($item['title'] = $o->title->value())){
-//                    $item['title'] = $o->name();
-//                }
-               // $item['uri'] = $o->uri();
-//                $v['objects'][] = $item;
+                $item = array();
+                if (!($item['title'] = $o->title->value())){
+                    $item['title'] = $o->name();
+                }
+                $item['uri'] = $o->uri();
+                $v['objects'][] = $item;
                 $v['data-o'][]=$o->uri();
 //                $conflits = Data::deleteConflicts($o, true, true);
 //                $v['conflicts'] = array_merge_recursive($v['conflicts'], $conflits);
