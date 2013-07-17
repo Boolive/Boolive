@@ -29,7 +29,7 @@
                     <a class="btn-icon-delete" title="Удалить прототип у объекта" href="" data-name="proto-delete" style="display: none;"></a>
                     <input type="hidden" name="attrib[proto]" value="">
                     <span class="error-message"></span>
-                    <span class="description">Наследуемый объект или на кого ссылается.</span>
+                    <span class="description">Наследуемый объект или на кого ссылаться.</span>
                 </div>
             </div>
             <div class="item">
@@ -40,7 +40,7 @@
                     <div class="inpt value">
                         <textarea class="attrib" id="value" name="attrib[value]" rows="5" cols="0" data-name="value"></textarea>
                         <div class="tags">
-                            <div title="Загрузить файл" class="tag fileupload">Загрузить
+                            <div title="Загрузить файл" class="tag fileupload">Выбрать файл
                                 <input type="file" size="1" name="attrib[file]"/>
                             </div>
                             <div class="tag is_file" data-name="is_file">Файл</div>
