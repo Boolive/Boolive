@@ -573,7 +573,11 @@ class Check
     static function escape($value, &$error, Rule $rule)
     {
         if (is_scalar($value)){
-            $result = htmlentities($value, ENT_QUOTES, 'UTF-8');
+            if (empty($rule->escape)){
+                $result = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+            }else{
+                $result = htmlentities($value, ENT_QUOTES, 'UTF-8');
+            }
             if ($result != $value) $error = new Error('html символы.', 'escape');
             return $result;
         }
