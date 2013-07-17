@@ -23,7 +23,7 @@ class Benchmark
     static function activate()
     {
         self::start('all');
-        self::$start['all']['time'] = $_SERVER['BOOLIVE_TIME'];
+        self::$start['all']['time'] = START_TIME;
     }
 
     /**

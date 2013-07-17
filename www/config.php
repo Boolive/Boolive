@@ -3,6 +3,8 @@
  * Конфигурация путей и опций ядра
  * @version 1.0
  */
+/** @const Времея начала работы системы */
+define('START_TIME', microtime(true));
 
 /** @cont bool Установлена ли система Boolive? */
 define('IS_INSTALL', true);

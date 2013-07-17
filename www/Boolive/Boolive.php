@@ -31,25 +31,23 @@ namespace Boolive
          * @return bool
          */
         static function activate($class_name = ''){
-            $class_name = ltrim($class_name, '\\');
-            // Если ещё не подключен
-            if (!self::isIncluded($class_name)){
-
-                if (empty($class_name)){
-                    $_SERVER['BOOLIVE_TIME'] = microtime(true);
-                    // Актвация самого себя
-                    self::$activated = array();
-                    self::$included = array();
-                    self::$error_reporting = error_reporting();
-                    if (IS_INSTALL){
-                        self::init();
-                        // При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
-                        \Boolive\events\Events::trigger('Boolive::activate');
-                    }else{
-                        // Ядро не инициализировано
-                        return false;
-                    }
+            if (empty($class_name)){
+                // Актвация самого себя
+                self::$activated = array();
+                self::$included = array();
+                self::$error_reporting = error_reporting();
+                if (IS_INSTALL){
+                    self::init();
+                    // При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
+                    \Boolive\events\Events::trigger('Boolive::activate');
                 }else{
+                    // Ядро не инициализировано
+                    return false;
+                }
+            }else{
+                $class_name = ltrim($class_name, '\\');
+                // Если ещё не подключен
+                if (!self::isIncluded($class_name)){
                     // Подключение и активация запрашиваемого модуля
                     // Путь по имени класса
                     $names = explode('\\', $class_name, 2);
@@ -70,7 +68,6 @@ namespace Boolive
                             $class_name::activate();
                         }
                     }
-
                 }
             }
             return true;
