@@ -17,8 +17,8 @@ class case_tile_default extends SwitchCase
                 'REQUEST' => Rule::arrays(array(
                         'view_kind' => Rule::eq('tile')->required(),
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('is', $this->value()))),
-                            Rule::entity(array('is', $this->value()))
+                            Rule::arrays(Rule::entity($this->value())),
+                            Rule::entity($this->value())
                         )->required(),
                         'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
                     )

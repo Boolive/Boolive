@@ -7,6 +7,7 @@
  */
 namespace Library\views\AutoWidgetList;
 
+use Boolive\data\Data;
 use Library\views\SwitchCase\SwitchCase;
 use Library\views\Widget\Widget;
 
@@ -32,27 +33,37 @@ class AutoWidgetList extends Widget
     {
         $cases = $this->linked(false)->switch_views->linked(true)->getCases();
         $cnt = count($cases);
-        $protos = array();
+        $or = array();
+        $is = array();
         while ($cnt > 0){
             $cnt--;
             if ($cases[$cnt] instanceof SwitchCase){
-                if ($cases[$cnt]->value() == 'all'){
-                    $protos = array();
+                if ($cases[$cnt]->value() == ''){
+                    $is = array();
+                    $or = array();
                     $cnt = 0;
                 }else{
-                    $protos[] = $cases[$cnt]->value();
+                    $case_cond = Data::parseCond($cases[$cnt]->value());
+                    if (count($case_cond) == 1 && isset($case_cond[0][0])&& $case_cond[0][0] == 'is'){
+                        $is[] = $case_cond[0][1];
+                    }else{
+                        $or[] = count($case_cond) == 1 ? reset($case_cond) : $case_cond;
+                    }
                 }
             }
         }
-        if ($protos){
+        if ($is) $or[] = array('is', $is);
+
+        if ($or){
+            $or = sizeof($or) == 1 ? reset($or) : array('any', $or);
             if (empty($cond['where'])){
-                $cond['where'] = array('is', $protos);
+                $cond['where'] = $or;
             }else
             if (is_array($cond['where'][0])){
-                $cond['where'][] = array('is', $protos);
+                $cond['where'][] = $or;
             }else{
             //if ($cond['where'][0] == 'all'){
-                $cond['where'][1][] = array('is', $protos);
+                $cond['where'][1][] = $or;
 //            }else{
 //                $cond['where'][] = array(
 //                    $cond['where'],
