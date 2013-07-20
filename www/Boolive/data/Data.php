@@ -119,7 +119,7 @@ class Data
         if ($cond == 'null' || !isset($cond)){
             return null;
         }
-        $cond = self::decodeCond($cond, array(), true, true);
+        $cond = self::normalizeCond($cond, array(), true, true);
 
         // Контроль доступа в условие выбора
         if ($access) $cond['access'] = true;
@@ -165,7 +165,7 @@ class Data
         }else{
             $from_type = '';
         }
-        $cond['from'] = self::decodeFrom($cond['from'], false);
+        $cond['from'] = self::normalizeFrom($cond['from'], false);
 
         // Если выбор одного объекта, то группировка по родителям выбранных ранее вместе
         if ($what == 'self' && ($from_type == 'entity' || $from_type == 'entity/name')){
@@ -297,7 +297,7 @@ class Data
         }
         // Если автоматическая группировка, то по такому услвоию тоже группировать потом
         if (isset($key_from_group)){
-            $group_cond['from'] = self::decodeFrom($group_cond['from'], false);
+            $group_cond['from'] = self::normalizeFrom($group_cond['from'], false);
             self::$group_cond[json_encode($group_cond)] = true;
         }else{
             $group_cond['from'] = $cond['from'];
@@ -446,17 +446,17 @@ class Data
     }
 
     /**
-     * Преобразование строкового условия поиска в структуру из массивов
-     * Если условие является массивом, то оно нормализуется - определяются пункты по умолчанию, корректируется структура.
+     * Нормализация условия поиска.
+     * Определяются пункты по умолчанию, корректируется структура.
      * Условие может быть массивом из двух элементов - объекта и строкого условия, тогда объект
      * определяется в пункт from
-     * @param string $cond Исходное условие
+     * @param string $cond Исходное условие в виде строки, url или массива
      * @param array $default Условие по умолчанию
-     * @param bool $normalize Признак, выполнять нормализацию услвоия?
+     * @param bool $normalize Признак, нормализовать элменты услвоия (по умолчани, отсортировать, привести к общему формату)?
      * @param bool $entity_in_from Признак, допустимы сущности в from или преобразовать их uri/id?
      * @return array Преобразованное условие
      */
-    static function decodeCond($cond, $default = array(), $normalize = false, $entity_in_from = false)
+    static function normalizeCond($cond, $default = array(), $normalize = false, $entity_in_from = false)
     {
         if (is_array($cond) && !empty($cond['correct'])){
             return $cond;
@@ -477,77 +477,10 @@ class Data
             }
         }
         if (isset($uri)){
-            $parse = function($cond){
-                // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
-                $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
-                // name(a) => (name,a)
-                $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
-                // Все значения вкавычки
-                $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
-                            $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
-                            $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
-                            return $m[1].'"'.str_replace($escapers, $replacements, $m[2]).'"';
-                        }, $cond);
-                $cond = strtr($cond, array(
-                            '(' => '[',
-                            ')' => ']',
-                            ',)' => ',""]',
-                            '"eq"' => '"="',
-                            '"neq"' => '"!="',
-                            '"gt"' => '">"',
-                            '"gte"' => '">="',
-                            '"lt"' => '"<"',
-                            '"lte"' => '"<="',
-                        ));
-                $cond = '['.$cond.']';
-                $cond = json_decode($cond);
-                if ($cond){
-                    foreach ($cond as $key => $item){
-                        if (is_array($item)){
-                            $k = array_shift($item);
-                            unset($cond[$key]);
-                            if (count($item)==1) $item = $item[0];
-                            $cond[$k] = $item;
-                        }else{
-                            unset($cond[$key]);
-                        }
-                    }
-                }
-                return $cond;
-            };
-            $uri = trim($uri);
             if (!preg_match('/^[^=]+\(/ui', $uri)){
-                if (mb_substr($uri,0,4)!='from'){
-                    if (preg_match('/^[a-z]+=/ui', $uri)){
-                        $uri = 'from=&'.$uri;
-                    }else{
-                        $uri = 'from='.$uri;
-                    }
-                }
-                $uri = preg_replace('#/?\?{1}#u', '&', $uri, 1);
-                parse_str($uri, $result);
-                if (isset($result['cond'])){
-                    $primary_cond = $parse($result['cond']);
-                    unset($result['cond']);
-                }else{
-                    $primary_cond = array();
-                }
-                $secondary_cond = '';
-                foreach ($result as $key => $item) $secondary_cond.=$key.'('.$item.')';
-                if (!empty($secondary_cond)){
-                    if ($secondary_cond = $parse($secondary_cond)){
-                        $result = array_replace($secondary_cond, $primary_cond);
-                    }else{
-                        $result = $primary_cond;
-                    }
-                }else{
-                    $result = $primary_cond;
-                }
+                $result = self::urldecodeCond($uri);
             }else{
-                $result = $parse($uri);
-            }
-            foreach ($result as $key => $value){
-                if ($value === 'false' || $value === '0') $result[$key] = false;
+                $result = self::parseCond($uri);
             }
             if (isset($entity)) $result['from'] = array($entity, $result['from']);
         }
@@ -602,7 +535,7 @@ class Data
             if (!isset($result['owner'])) $result['owner'] = Entity::ENTITY_ID;
             if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
             // Нормализация from
-            $result['from'] = self::decodeFrom(isset($result['from'])?$result['from']:null, $entity_in_from);
+            $result['from'] = self::normalizeFrom(isset($result['from'])?$result['from']:null, $entity_in_from);
             if ($result['select'][0] == 'self' && is_string($result['from']) && ($f = rtrim($result['from'],'/'))!=$result['from']){
                 $result['from'] = $f;
                 $result['select'][0] = 'children';
@@ -664,7 +597,13 @@ class Data
         return $result;
     }
 
-    static function decodeFrom($from, $can_entity = false)
+    /**
+     * Нормализация элемента from в условии.
+     * @param array $from Элмент "from" из условия в формате массива
+     * @param bool $can_entity Признак, может ли быть сущностью? Если нет, то заменяется на идентификатор сущности
+     * @return array|string
+     */
+    static function normalizeFrom($from, $can_entity = false)
     {
         if (!isset($from)){
             return '';
@@ -692,23 +631,53 @@ class Data
         return (count($from)==1) ? $from[0] : $from;
     }
 
-    static function compareCond($cond1, $cond2, $ignore = array())
+    /**
+     * Преобразование условия из URL формата в массив
+     * Пример:
+     *  Условие: from=/main/&where=is(/Library/Comment)&limit=0,10
+     *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /Library/Comment (можно не писать "from=")
+     * @param string $uri Условие поиска в URL формате
+     * @return array
+     */
+    static function urldecodeCond($uri)
     {
-        foreach ($ignore as $key){
-            unset($cond1[$key]);
-            unset($cond2[$key]);
+        $uri = trim($uri);
+        if (mb_substr($uri,0,4)!='from'){
+            if (preg_match('/^[a-z]+=/ui', $uri)){
+                $uri = 'from=&'.$uri;
+            }else{
+                $uri = 'from='.$uri;
+            }
         }
-        return json_encode($cond1) == json_encode($cond2);
+        $uri = preg_replace('#/?\?{1}#u', '&', $uri, 1);
+        parse_str($uri, $params);
+        $uri_s= '';
+        foreach ($params as $key => $item) $uri_s.=$key.'('.$item.')';
+        $result = self::parseCond($uri_s);
+        if ($result){
+            foreach ($result as $key => $item){
+                if (is_array($item)){
+                    $k = array_shift($item);
+                    unset($result[$key]);
+                    if (count($item)==1) $item = $item[0];
+                    if ($item === 'false' || $item === '0') $item = false;
+                    $result[$k] = $item;
+                }else{
+                    unset($result[$key]);
+                }
+            }
+        }
+        return $result;
     }
 
     /**
-     * Преобразование услвоия поиска из любого формата в url формат
+     * Преобразование условия поиска из массива или строки в url формат
      * @param string|array $cond Исходное условие поиска
      * @return string Преобразованное в URL условие
      */
     static function urlencodeCond($cond)
     {
-        $cond = Data::decodeCond($cond, array(), true);
+        $cond = self::normalizeCond($cond, array(), true);
         if (is_array($cond['from'])){
             $info = parse_url(reset($cond['from']));
             $base_url = '';
@@ -788,6 +757,58 @@ class Data
             );
         }
         return false;
+    }
+
+    /**
+     * Преобразование строкового условия в массив
+     * Пример:
+     *  Условие: select(children)from(/main)where(is(/Library/Comment))limit(0,10)
+     *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /Library/Comment (можно не писать "from=")
+     * @param $cond
+     * @return array
+     */
+    static function parseCond($cond)
+    {
+        // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
+        $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
+        // name(a) => (name,a)
+        $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
+        // Все значения в кавычки
+        $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
+                    $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+                    $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+                    return $m[1].'"'.str_replace($escapers, $replacements, $m[2]).'"';
+                }, $cond);
+        $cond = strtr($cond, array(
+                    '(' => '[',
+                    ')' => ']',
+                    ',)' => ',""]',
+                    '"eq"' => '"="',
+                    '"neq"' => '"!="',
+                    '"gt"' => '">"',
+                    '"gte"' => '">="',
+                    '"lt"' => '"<"',
+                    '"lte"' => '"<="',
+                ));
+        $cond = '['.$cond.']';
+        $cond = json_decode($cond);
+        return $cond;
+    }
+
+    /**
+     * Сравнене услвоий поиска в формате массива
+     * @param array $cond1 Первое условие
+     * @param array $cond2 Второе условие
+     * @param array $ignore Ключи условий, которые игнорировать при сравнении
+     * @return bool Признак, равны или нет услвоия
+     */
+    static function compareCond($cond1, $cond2, $ignore = array())
+    {
+        foreach ($ignore as $key){
+            unset($cond1[$key]);
+            unset($cond2[$key]);
+        }
+        return json_encode($cond1) == json_encode($cond2);
     }
 
     /**

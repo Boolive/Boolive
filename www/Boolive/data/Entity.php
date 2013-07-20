@@ -1145,7 +1145,7 @@ class Entity implements ITrace
      */
     public function find($cond = array(), $load = false, $index = true, $access = true)
     {
-        $cond = Data::decodeCond($cond, array('select' => array('children'), 'depth' => array(1,1)));
+        $cond = Data::normalizeCond($cond, array('select' => array('children'), 'depth' => array(1,1)));
         if ($this->isExist()){
             $cond['from'] = $this;//->id();
             $result = Data::read($cond, $access, $index);
