@@ -29,6 +29,13 @@ class Entity implements ITrace
     const ENTITY_ID = 4294967295;
     /** @const int Максимальная глубина для поиска */
     const MAX_DEPTH = 4294967295;
+    /** @const int Объекты отличаются атрибутами */
+    const DIFF_CHANGE = 1;
+    /** @const int Объет удален */
+    const DIFF_DELETE = 2;
+    /** @const int Объект добавлен */
+    const DIFF_ADD = 3;
+
     /** @var array Атрибуты */
     protected $_attribs = array(
         'uri'          => null,
@@ -767,7 +774,7 @@ class Entity implements ITrace
      * Прототип объекта
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
      * @param bool $load Загрузить прототип из хранилща, если ещё не загружен?
-     * @return Entity|null|false
+     * @return Entity|null|bool
      */
     public function proto($new_proto = null, $load = true)
     {
@@ -1405,24 +1412,21 @@ class Entity implements ITrace
     public function verify($cond)
     {
         if (empty($cond)) return true;
+        if (is_string($cond)) $cond = Data::parseCond($cond);
         if (is_array($cond[0])) $cond = array('all', $cond);
         switch ($cond[0]){
-            // Все услвоия (AND)
             case 'all':
                 foreach ($cond[1] as $c){
                     if (!$this->verify($c)) return false;
                 }
                 return true;
-            // Хотябы одно условие (OR)
             case 'any':
                 foreach ($cond[1] as $c){
                     if ($this->verify($c)) return true;
                 }
                 return !count($cond[1]);
-            // Отрицание условия (NOT)
             case 'not':
                 return !$this->verify($cond[1]);
-            // Сравнение атрибута
             case 'attr':
                 if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value'))){
                     $value = $this->{$cond[1]}();
@@ -1458,7 +1462,6 @@ class Entity implements ITrace
                         return in_array($value, $cond[3]);
                 }
                 return false;
-            // Услвоия на подчиненного
             case 'child':
                 $child = $this->{$cond[1]};
                 if ($child->isExist()){
@@ -1468,23 +1471,25 @@ class Entity implements ITrace
                     return true;
                 }
                 return false;
-            // Проверка наследования
+            case 'in':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $parent){
+                    if ($this->in($parent)) return true;
+                }
+                return false;
+                break;
             case 'is':
                 if (!is_array($cond[1])) $cond[1] = array($cond[1]);
                 foreach ($cond[1] as $proto){
                     if ($this->is($proto)) return true;
                 }
                 return false;
-            // Является частью чего-то с учётом наследования
-            // Например заголовок статьи story1 является его частью и частью эталона статьи
-            // Пример из жизни: Ветка является частью дерева, но не конкретезируется, какого именно
             case 'of':
                 if (!is_array($cond[1])) $cond[1] = array($cond[1]);
                 foreach ($cond[1] as $obj){
                     if ($this->of($obj)) return true;
                 }
                 return false;
-            // Неподдерживаемые условия
             default: return false;
         }
     }
