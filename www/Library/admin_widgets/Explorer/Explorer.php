@@ -6,6 +6,7 @@
  */
 namespace Library\admin_widgets\Explorer;
 
+use Boolive\data\Entity;
 use Library\views\AutoWidgetList\AutoWidgetList, Boolive\values\Rule;;
 
 class Explorer extends AutoWidgetList
@@ -89,7 +90,8 @@ class Explorer extends AutoWidgetList
         if ($filters['real']->value()) {
             $any[] = array('all', array(
                 array('attr', 'is_hidden', '=', 0),
-                array('attr', 'is_delete', '=', 0)
+                array('attr', 'is_delete', '=', 0),
+                array('attr', 'diff', '>=', Entity::DIFF_NO)
             ));
         }
         // Скрытые объекты

@@ -18,7 +18,11 @@ class BreadcrumbsMenu extends Widget{
 		$parents = $obj->find(array(
             'select' => 'parents',
             'depth' => array(0,'max'),
-            'order' => array('parent_cnt', 'desc')
+            'order' => array('parent_cnt', 'desc'),
+            'where' => array(
+                array('attr', 'diff', '>=', 0),
+                array('attr', 'is_delete', '>=', 0)
+            )
         ));
         $v['items'] = array();
         foreach ($parents as $p){
