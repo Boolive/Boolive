@@ -481,7 +481,7 @@ class MySQLStore extends Entity
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
                         'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt', 'valuef');
+                        'proto_cnt', 'parent_cnt', 'valuef', 'diff');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id+owner+lang+date
@@ -1391,6 +1391,15 @@ class MySQLStore extends Entity
                             if ($c[1] == 'value'){
                                 $c[1] = is_numeric($c[3]) ? 'valuef': 'value';
                             }
+                            if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'owner' || $c[1] == 'lang'){
+                                if (is_array($c[3])){
+                                    foreach ($c[3] as $ci => $cv){
+                                        $c[3][$ci] = $this->localId($cv, false);
+                                    }
+                                }else{
+                                    $c[3] = $this->localId($c[3], false);
+                                }
+                            }
                             // sql услвоие
                             $cond[$i] = '`'.$table.'`.`'.$c[1].'` '.$c[2];
                             // Учитываем особенность синтаксиса условия IN
@@ -1402,7 +1411,7 @@ class MySQLStore extends Entity
                                 $cond[$i].= '?';
                                 $result['binds'][] = $c[3];
                             }
-                            if ($c[1] == 'is_history' || $c[1] == 'is_delete'){
+                            if ($c[1] == 'is_history' || $c[1] == 'is_delete' || $c[1] == 'diff'){
                                 $attr_exists[$c[1]] = true;
                             }
                         }else
@@ -1479,7 +1488,8 @@ class MySQLStore extends Entity
                     $more_cond = array();
                     if (empty($attr_exists['is_history'])) $more_cond[] = '`'.$table.'`.is_history = 0';
                     if (empty($attr_exists['is_delete'])) $more_cond[]  = '`'.$table.'`.is_delete = 0';
-                    $attr_exists = array('is_history' => true, 'is_delete' => true);
+                    if (empty($attr_exists['diff'])) $more_cond[]  = '`'.$table.'`.diff != '.Entity::DIFF_ADD;
+                    $attr_exists = array('is_history' => true, 'is_delete' => true, 'diff' => true);
                     if ($glue == ' AND '){
                         $cond = array_merge($cond, $more_cond);
                     }else
@@ -1490,7 +1500,7 @@ class MySQLStore extends Entity
                 }
                 return implode($glue, $cond);
             };
-            $attr_exists = $only_where ? array('is_history' => true, 'is_delete' => true) : array();
+            $attr_exists = $only_where ? array('is_history' => true, 'is_delete' => true, 'diff' => true) : array();
             // Если услвоия есть, то добавляем их в SQL
             if ($w = $convert($cond['where'], ' AND ', 'obj', 0, $attr_exists)){
                 if (empty($result['where'])){
@@ -1504,7 +1514,7 @@ class MySQLStore extends Entity
                 $result['from'].= ' AND obj.is_history = 0';
             }else{
                 if (!empty($result['where'])) $result['where'].=' AND ';
-                $result['where'].= 'obj.is_history = 0 AND obj.is_delete = 0';
+                $result['where'].= 'obj.is_history = 0 AND obj.is_delete = 0 AND obj.diff != '.Entity::DIFF_ADD;
             }
         }
 
@@ -2006,6 +2016,8 @@ class MySQLStore extends Entity
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
                   `index_depth` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'Глубина индексации подчинённых',
                   `index_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг индексирование. Если не 0, то индексирование не закончено',
+                  `index_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
+                  `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных отличий. Коды Entity::DIFF_*',
                   PRIMARY KEY (`id`,`owner`,`lang`,`date`),
                   KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
                   KEY `indexation` (`parent`,`is_history`,`id`)

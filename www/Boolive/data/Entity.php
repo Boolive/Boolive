@@ -60,7 +60,9 @@ class Entity implements ITrace
         'is_accessible' => 1,
         'is_exist' => 0,
         'index_depth' => 0,
-        'index_step' => 0
+        'index_step' => 0,
+        'index_time' => 0,
+        'diff' => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
@@ -153,6 +155,7 @@ class Entity implements ITrace
                 'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
+                'diff'         => Rule::int(), // Код обнаруженных отличий
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'	=> Rule::arrays(array(
                         'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -638,6 +641,19 @@ class Entity implements ITrace
         }else{
             return !empty($this->_attribs['is_default_class']);
         }
+    }
+
+    /**
+     * Найденные отличия в объекте
+     * @param null|int $diff
+     * @return int Код отличия
+     */
+    public function diff($diff = null)
+    {
+        if (isset($diff)){
+            $this->_attribs['diff'] = $diff;
+        }
+        return $this->_attribs['diff'];
     }
 
     /**
@@ -1428,7 +1444,7 @@ class Entity implements ITrace
             case 'not':
                 return !$this->verify($cond[1]);
             case 'attr':
-                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value'))){
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff'))){
                     $value = $this->{$cond[1]}();
                 }else
                 if ($cond[1] == 'is_hidden'){
