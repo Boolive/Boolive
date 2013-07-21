@@ -24,11 +24,13 @@ use Exception,
 class Entity implements ITrace
 {
     /** @const int Максимальное порядковое значение */
-    const MAX_ORDER = 4294967296;
+    const MAX_ORDER = 4294967295;
     /** @const int Идентификатор сущности - эталона всех объектов */
     const ENTITY_ID = 4294967295;
     /** @const int Максимальная глубина для поиска */
     const MAX_DEPTH = 4294967295;
+    /** @const int У объекта нет отличий */
+    const DIFF_NO = 0;
     /** @const int Объекты отличаются атрибутами */
     const DIFF_CHANGE = 1;
     /** @const int Объет удален */
@@ -59,9 +61,8 @@ class Entity implements ITrace
         'is_default_class' => 0,
         'is_accessible' => 1,
         'is_exist' => 0,
-        'index_depth' => 0,
-        'index_step' => 0,
-        'index_time' => 0,
+        'update_step' => 0,
+        'update_time' => 0,
         'diff' => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
@@ -143,7 +144,7 @@ class Entity implements ITrace
                 'name'         => Rule::string()->regexp('|^[^/@]*$|')->max(50)->required(), // Имя объекта
                 'owner'		   => Rule::uri(), // Владелец (идентификатор объекта-пользователя)
                 'lang'		   => Rule::uri(), // Язык (идентификатор объекта-языка)
-                'order'		   => Rule::int(), // Порядковый номер. Уникален в рамках родителя
+                'order'		   => Rule::int()->max(4294967295), // Порядковый номер. Уникален в рамках родителя
                 'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
                 'parent'       => Rule::uri(), // URI родителя
                 'proto'        => Rule::uri(), // URI прототипа
@@ -1329,6 +1330,8 @@ class Entity implements ITrace
         $obj->proto($this);
         $obj->owner($this->owner());
         $obj->lang($this->lang());
+        $obj->isHidden($this->isHidden());
+        $obj->isDelete($this->isDelete());
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;

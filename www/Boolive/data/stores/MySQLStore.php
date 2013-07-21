@@ -25,14 +25,11 @@ class MySQLStore extends Entity
     public $db;
     /** @var string Ключ хранилища, по которому хранилище выбирается для объектов и создаются короткие URI */
     private $key;
-
+    /** @var array  */
     private $classes;
 
     private $_local_ids;
     private $_local_ids_change = false;
-
-    private $objects = array();
-
 
     /**
      * Конструктор экземпляра хранилища
@@ -94,15 +91,14 @@ class MySQLStore extends Entity
             $multy_from = array($cond['from']);
             $group_result = array($fill);
         }
-        // Индексирование
-        // @todo Индексировать если from короткий числовой URI
+        // Обновление. Для новых объектов автоматом прототипируются подчиненные объекты
         if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree')){
             foreach ($multy_from as $key => $from){
                 $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
-                // Глубина условия
-                $depth = $this->getCondDepth($cond);
-                if ($multy_from[$key]->_attribs['index_depth']<$depth || $multy_from[$key]->_attribs['index_step']!=0){
-                    $this->makeIndex($this->localId($multy_from[$key]->id()), $this->localId($cond['owner']), $this->localId($cond['lang']), $depth);
+                // Поиск обновлений, если ещё небыло обновлений, они не завершилась или были больше 5 минут назад
+                if ($multy_from[$key]->_attribs['update_time'] = 0 || $multy_from[$key]->_attribs['update_step']!=0 ||
+                    (time()-$multy_from[$key]->_attribs['update_time']) > 300){
+                    $this->refresh($multy_from[$key], 10, 2);
                 }
             }
         }
@@ -243,10 +239,12 @@ class MySQLStore extends Entity
      * Сохранение объекта
      * @param \Boolive\data\Entity $entity Сохраняемый объект
      * @param bool $access Признак, проверять доступ или нет?
+     * @param bool $force_add Принудительное добавление объекта. Используется для внутренних быстрых добалений
      * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws
      * @throws \Exception Системные ошибки
      */
-    public function write($entity, $access)
+    public function write($entity, $access, $force_add = false)
     {
         if ($access && IS_INSTALL && !($entity->isAccessible() && Auth::getUser()->checkAccess('write', $entity))){
             $error = new Error('Запрещенное действие над объектом', $entity->uri());
@@ -333,7 +331,7 @@ class MySQLStore extends Entity
                 // По умолчанию считаем, что запись добавляется (учёт истории)
                 $add = true;
                 // Проверяем, может запись с указанной датой существует и её тогда редактировать?
-                if (isset($attr['date'])){
+                if (!$force_add && isset($attr['date'])){
                     // Поиск записи по полному ключю id+lang+owner+date
                     $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND owner=? AND lang=? AND {objects}.id={ids}.id AND date=? LIMIT 0,1');
                     $q->execute(array($attr['id'], $attr['owner'], $attr['lang'], $attr['date']));
@@ -345,8 +343,8 @@ class MySQLStore extends Entity
                 }else{
                     $attr['date'] = time();
                 }
-                // Если новое значение не отличается от старого, то будем редактировать страую запись. Поиск какой именно.
-                if ($add){
+                // Если добавляется новая версия объекта, то добавление возможно, если у объекта новое значение (или файл)
+                if (!$force_add && $add){
                     // Поиск самой свежей записи с учётом is_histrory
                     $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND owner=? AND lang=? AND {objects}.id={ids}.id AND is_history=? ORDER BY `date` DESC LIMIT 0,1');
                     $q->execute(array($attr['id'], $attr['owner'], $attr['lang'], $attr['is_history']));
@@ -435,7 +433,7 @@ class MySQLStore extends Entity
                 }else
                 // Если старое значение является файлом и выполняется редактирование со сменой is_history или
                 // добавляется новая актуальная запись, то перемещаем старый файл либо в историю, либо из неё
-                if ((!$add || ($add && $attr['is_history']==0)) && $current['is_file']==1){
+                if (!$force_add && (!$add || ($add && $attr['is_history']==0)) && $current['is_file']==1){
                     if ($current['is_history']==0){
                         $to = $entity->dir(true).'_history_/'.$fname_pf.$current['date'].'_'.$current['value'];
                         $from = $entity->dir(true).$fname_pf.$current['value'];
@@ -473,7 +471,7 @@ class MySQLStore extends Entity
                 }
                 // Текущую акуальную запись в историю
                 // Если добавление новой актуальной записи или востановление из истории
-                if ((($add && $entity->isExist()) || (!$add && $current['is_history'])) && (isset($attr['is_history']) && $attr['is_history']==0)){
+                if (!$force_add && (($add && $entity->isExist()) || (!$add && $current['is_history'])) && (isset($attr['is_history']) && $attr['is_history']==0)){
                     // Смена истории, если есть уже записи.
                     $q = $this->db->prepare('UPDATE {objects} SET `is_history`=1 WHERE `id`=? AND owner=? AND lang=? AND is_history=0');
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['id']));
@@ -630,7 +628,6 @@ class MySQLStore extends Entity
                         $u->execute($params);
                     }
                 }
-
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->key.'//'.$attr['id'];
                 $entity->_attribs['date'] = $attr['date'];
@@ -714,7 +711,135 @@ class MySQLStore extends Entity
         $q->execute(array($id));
         // Удалении директории со всеми файлами
         File::clearDir($entity->dir(true), true);
+        Cache::delete('mysqlstore/localids');
         return $q->rowCount() > 0;
+    }
+
+    /**
+     * Поиск обновлений для объекта в прототипе или info файле.
+     * Если для объекта есть обновления, то он помечается признаком dif = changed
+     * Ищутся новые свойства (подчиненные объекты) от прототипа или info файлов. Найденные объекты сохраняются с признаком dif = new, если уже были проиндексированы после создания. Иначе без признака.
+     * Проверяются существующие свойства объекта, если их прототип отсутсвует, но был свойством прототипа родителя, то такие свойства помечаются dif = delete
+     * Для каждого свойства запускается findUpdate()
+     *
+     * @param Entity $entity Обновляеый объект
+     * @param int $step_size Количество проверяемых подчиненных за раз
+     * @param int $depth Глубина обновления
+     * @throws \Exception
+     */
+    public function refresh($entity, $step_size = 50, $depth = 1)
+    {
+        // Выбрать прототип. Если прототип не индексирован, то индексировать его
+        $proto = $entity->proto();
+        // Если у объекта прототип указан, но он не выбран (не существует), то сохранить объект с diff = delete.
+        if (!$proto && $entity->_attribs['proto']){
+            $entity->_attribs['diff'] = Entity::DIFF_DELETE;
+        }
+        if ($proto){
+            // Сравнить прототип с объектом. Если объект использует значение по умолчанию и оно отличается от прототипа, то сохранить объект с признаком dif = change.
+            if ($entity->isDefaultValue() && $entity->value()!=$proto->value()){
+                $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
+            }else
+            if ($entity->_attribs['update_time']!=0 && is_file($entity->dir(true).$entity->name().'.info')){
+                $info = json_decode(file_get_contents($entity->dir(true).$entity->name().'.info'), true);
+                if (is_array($info)){
+                    // @todo Сравнить атриубты объекта.
+                    // @todo Проверить изменения для всех $info['children'] рекурсивно
+                }
+            }
+            try{
+                $this->db->beginTransaction();
+                // Сохранить время индексации объекта
+                $osave = $this->db->prepare('
+                    UPDATE {objects} SET `diff` = :diff, update_time = :itime, update_step = :istep
+                    WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
+                ');
+                $id = $this->localId($entity->id(), false);
+                // Поиск обновлений для подчиненных
+                if ($depth > 0){
+                    // Удалить объекты с diff=add.
+                    $q = $this->db->prepare('
+                        DELETE ids, objects, parents, protos FROM parents p, ids, objects, parents, protos
+                        WHERE objects.parent = ?
+                        AND objects.diff = ?
+                        AND p.object_id = ids.id
+                        AND p.object_id = objects.id
+                        AND p.object_id = protos.object_id
+                        AND p.object_id = parents.object_id
+                        AND p.is_delete = 0
+                    ');
+                    $q->execute(array($id, Entity::DIFF_ADD));
+                    Cache::delete('mysqlstore/localids');
+                    // У остальных обнулить diff
+                    $q = $this->db->prepare('UPDATE {objects} SET `diff` = 0 WHERE parent = ? AND diff > 0');
+                    $q->execute(array($id));
+                    // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
+                    $pchildren = $proto->find(array(
+                        'select' => array('children'),
+                        'limit' => array($entity->_attribs['update_step'], $step_size),
+                        'key' => 'uri'
+                    ), false, false, false);
+                    if (count($pchildren) < $step_size){
+                        // В следующий раз обновление по новой
+                        $entity->_attribs['update_step'] = 0;
+                    }else{
+                        // В следующий раз обновление будет продолжено
+                        $entity->_attribs['update_step'] = $entity->_attribs['update_step'] + $step_size;
+                    }
+                    // время обновляется если update_step =0 или объект ранее был полностью унаследован от прототипа после создания
+                    $entity->_attribs['update_time'] = ($entity->_attribs['update_time'] || !$entity->_attribs['update_step'])? time() : 0;
+                    // Сохранение объекта с новыми diff, update_time, update_step
+                    $osave->execute(array(
+                        ':diff' => $entity->_attribs['diff'],
+                        ':itime' => $entity->_attribs['update_time'],
+                        ':istep' => $entity->_attribs['update_step'],
+                        ':id' => $this->localId($entity->id()),
+                        ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
+                        ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
+                    ));
+                    $pids = array();
+                    foreach ($pchildren as $pchild){
+                        $pids[] = $pchild->key();
+                    }
+                    // У объекта выбрать подчиненные, которые прототипируются от выбранных $step_size подчиненных прототипа.
+                    $ochildren = $entity->find(array(
+                        'where' => array('attr', 'proto', 'in', $pids),
+                    ), false, false, false);
+                    // Для выбранных по прототипам подчиненных выполнить findUpdate с $depth-1
+                    foreach ($ochildren as $child){
+                        /** @var $child Entity */
+                        self::refresh($child, $step_size, $depth-1);
+                        // Из $pchildren удаляем объект, используемый в качесвте прототпа
+                        if (($p = $child->proto()) && isset($pchildren[$p->uri()])) unset($pchildren[$p->uri()]);
+                    }
+                    $diff = isset($entity->_attribs['update_time']) && $entity->_attribs['update_time'] == 0 ? Entity::DIFF_NO : Entity::DIFF_ADD;
+                    // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
+                    foreach ($pchildren as $proto){
+                        /** @var $proto Entity */
+                        $child = $proto->birth($entity);
+                        $child->_attribs['diff'] = $diff;
+                        $this->write($child, false, true);
+                    }
+                    // @todo Сканирование директорие на наличие поддиректорий с файлами .info
+                    // @todo По пути на файл выбирать объект из бд. Если объекта нет, то файлом опредлен новый объект.
+                }else{
+                    // время обновляется если объект ранее был полностью унаследован от прототипа после создания
+                    $entity->_attribs['update_time'] = $entity->_attribs['update_time']?time():0;
+                    $osave->execute(array(
+                        ':diff' => $entity->_attribs['diff'],
+                        ':itime' => $entity->_attribs['update_time'],
+                        ':istep' => 0,
+                        ':id' => $this->localId($entity->id()),
+                        ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
+                        ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
+                    ));
+                }
+                $this->db->commit();
+            }catch(\Exception $e){
+                $this->db->rollBack();
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -723,7 +848,7 @@ class MySQLStore extends Entity
      * @param int $date Новая дата изменения объекта
      * @return bool Признак, было ли совершено обновление?
      */
-    private function updateDate($local_id, $date)
+    protected function updateDate($local_id, $date)
     {
         $q = $this->db->prepare('
             UPDATE {objects}, {parents} SET {objects}.date=? WHERE {parents}.object_id = ? AND {parents}.parent_id = {objects}.id AND {objects}.is_history=0
@@ -733,240 +858,13 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Индексирование объекта в соответсвии с условием поиска
-     * При индексировании создаются виртуальные объекты, автоматически наследуемые от прототипов
-     * @param Entity $obj Индексируемый объект
-     * @param int $owner Идентификатор владельца
-     * @param int $lang Идентификатор языка (локали)
-     * @param int $depth Глубина индексации
-     * @param null $start_depth Стартовая глубина индексации для рекурсивной обработки
-     * @throws \Exception
-     */
-    public function makeIndex($obj, $owner, $lang, $depth, $start_depth = null)
-    {
-        if (!isset($start_depth)) $start_depth = $depth;
-        try{
-            $this->db->beginTransaction();
-            // Выбор всех прототипов с учётом владельца и языка
-            $q = $this->db->prepare('
-                SELECT i.uri, o.* FROM {ids} i
-                JOIN {protos} t ON (t.proto_id = i.id AND t.object_id = ? AND t.is_delete = 0)
-                JOIN {objects} o ON (o.id = i.id
-                    AND (o.id, o.owner, o.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=o.id AND `owner` IN (?, 4294967295) AND `lang` IN (?, 4294967295) GROUP BY id)
-                    AND is_history=0
-                )
-            ');
-            $q->execute(array($obj, $owner, $lang));
-            $protos = array();
-            $real = array();
-            while ($row = $q->fetch(DB::FETCH_ASSOC)){
-                $protos[$row['proto_cnt']] = $row;
-                $real[] = $row;
-            }
-            // Очередь индексация прототипов
-            $stack = array();
-            $i = count($protos)-1;
-            try{
-            while ($i>0 && ($protos[$i]['is_link'] == $protos[$i-1]['is_link']) && ($protos[$i]['index_depth'] < $depth || $protos[$i]['index_step']!=0)){
-                $stack[] = array($protos[$i], $protos[$i-1]);
-                $i--;
-            }
-            }catch (\Exception $e){
-                throw $e;
-            }
-            // Обновление index_depth
-            $update = $this->db->prepare('UPDATE {objects} SET index_depth = ?, index_step =? WHERE id = ?');
-            $update->execute(array($depth, 0, $obj));
-
-            if (count($stack)){
-                $size = 10;
-                // Запрос на добавление виртуальных
-                $insert = $this->db->prepare('
-                    INSERT IGNORE INTO {objects} (id, owner, lang, `date`, `name`, `order`, parent, parent_cnt, proto, proto_cnt,
-                    `value`, valuef, is_file, is_history, is_delete, is_hidden, is_link, is_default_value,
-                    is_default_class, index_depth, index_step)
-                    VALUES (:id, :owner, :lang, :date, :name, :order, :parent, :parent_cnt, :proto, :proto_cnt,
-                    :value, :valuef, :is_file, :is_history, :is_delete, :is_hidden, :is_link, :is_default_value,
-                    :is_default_class, :index_depth, :index_step)
-                ');
-                // Выбор реальных подчиненных для вложенной индексации
-                $select_real = $this->db->prepare('
-                    SELECT {ids}.uri, {objects}.* FROM {objects}, {ids} WHERE parent=:from AND is_history=0 AND {objects}.id = {ids}.id
-                    LIMIT :start, '.$size
-                );
-                // Запрос для поиска виртуальных объектов
-                $select = $this->db->prepare('
-                    SELECT CONCAT(:from_uri, SUBSTRING({ids}.uri, :proto_uri_length)) uri, id2.id,
-                    {objects}.owner, {objects}.lang ,{objects}.date, {objects}.name ,{objects}.order, :from_id parent, :from_parent_cnt parent_cnt, {objects}.id proto, ({objects}.proto_cnt+1) AS proto_cnt,
-                    {objects}.value, {objects}.valuef, {objects}.is_file, {objects}.is_history, {objects}.is_delete, {objects}.is_hidden, {objects}.is_link,
-                    IF({objects}.is_default_value!=0, {objects}.is_default_value, {objects}.id) is_default_value,
-                    IF({objects}.is_default_class!=0, {objects}.is_default_class, {objects}.id) is_default_class, 0 index_depth, 0 index_step
-                    FROM {objects}
-                    JOIN {ids} ON ({ids}.id = {objects}.id)
-                    LEFT JOIN {ids} id2 ON (id2.uri = CONCAT(:from_uri, SUBSTRING({ids}.uri, :proto_uri_length)))
-                    WHERE parent = :proto AND is_history = 0 AND id2.id IS NULL
-                    LIMIT :start, '.$size
-                );
-
-                $start = 0;
-                $from_uri = ''; // URI родителя для виртуальных объектов
-                $proto_uri_length = 0; // Длина URI прототипа
-                $from_id = 0; // Идентификатор родителя
-                $from_parent_cnt = 0; // Кол-во родителей у родителя + 1
-                $proto_id = 0; // Идентификатор прототипа у которого выбираются подчиенные
-                $virt = $start_depth + 1; // Признак виртуальности для различия, кем был выявлен виртуальный объект. Чтобы не пропустить его вложенную индексацию при других итерациях
-                $select->bindParam(':from_uri', $from_uri);
-                $select->bindParam(':proto_uri_length', $proto_uri_length, DB::PARAM_INT);
-                $select->bindParam(':from_id', $from_id, DB::PARAM_INT);
-                $select->bindParam(':from_parent_cnt', $from_parent_cnt, DB::PARAM_INT);
-                $select->bindParam(':proto', $proto_id, DB::PARAM_INT);
-                $select->bindParam(':start', $start, DB::PARAM_INT);
-                //$select->bindParam(':size', $size, DB::PARAM_INT);
-                $max_steps = ceil(50 / $depth);
-                // Индексирование прототипов
-                // У каждого прототипа выбираются подчиненные, чтобы их сохранить наследнику из $stack
-                for ($i = count($stack)-1; $i>=0; $i--){
-                    // Фиксируем, что индексация выполнена, чтобы на асинхронные запросы она не повторилась
-                    $update->execute(array($depth, 0, $from_id));
-
-                    //$max_step = ceil(50/$steps); $steps*=$steps+1;
-                    $from = $stack[$i][0];
-                    $proto = $stack[$i][1];
-                    $from_uri = $from['uri'];
-                    $proto_uri_length = mb_strlen($proto['uri']) + 1;
-                    $from_id = $from['id'];
-                    $from_parent_cnt = $from['parent_cnt'] + 1;
-                    $proto_id = $proto['id'];
-                    $start = (int)$proto['index_step'];
-                    $size = (int)$size;
-                    $steps = 1;
-                    $select_cnt = 0;
-                    // Поиск виртуальных подчиненных
-
-                        do{
-                            $select->bindParam(':start', $start, DB::PARAM_INT);
-                            $select->execute();
-                            $select_cnt = 0;
-                            while ($row = $select->fetch(DB::FETCH_ASSOC)){
-                                // URI уже для свойсвта наследника, получаем id для свойства наследника
-                                $row['id'] = $this->localId($row['uri']);
-                                if ($from['is_link']) $row['is_link'] = 1;
-                                unset($row['uri']);
-                                // Запись унаследованного свойсвта
-                                $insert->execute($row);
-                                $select_cnt++;
-                                // Создание отношений в таблице дерева
-                                if ($insert->rowCount()){
-                                    $this->makeParents($row['id'], $row['parent'], 0, false);
-                                    $this->makeProtos($row['id'], $row['proto'], 0, false);
-                                }
-                                // Вложенная индексация виртуальных
-                                if ($depth > 1){
-                                    $this->makeIndex($row['id'], $row['owner'], $row['lang'], $depth - 1, $start_depth);
-                                }
-                            }
-                            $start+= $size;
-                        }while($select_cnt == $size && ++$steps < $max_steps);
-
-                    // Смещение для следующего шага индексирования
-                    $index_step = ($select_cnt == $size ? $start : 0);
-
-                    // Вложенное индексирование не виртуальных подчиненных
-                    if ($depth > 1){
-                        $start = (int)$proto['index_step'];
-                        $steps = 1;
-                        $size = (int)$size;
-                        $select_real->bindParam(':from', $from_id, DB::PARAM_INT);
-                        $select_real->bindParam(':virt', $virt, DB::PARAM_INT);
-                        $select_real->bindParam(':start', $start, DB::PARAM_INT);
-                        //$select_real->bindParam(':size', $size, DB::PARAM_INT);
-                        do{
-                            $select_real->execute();
-                            $select_cnt = 0;
-                            while ($row = $select_real->fetch(DB::FETCH_ASSOC)){
-                                $this->makeIndex($row['id'], $row['owner'], $row['lang'], $depth - 1, $start_depth);
-                                $select_cnt++;
-                            }
-                            $start+= $size;
-                        }while($select_cnt == $size && ++$steps < $max_steps);
-
-                        $index_step = ($index_step ==0 && $select_cnt == $size ? $start : $index_step);
-                    }
-                    // Если индексация не закончена, то запоминаем позицию индексирования
-                    if ($index_step > 0) $update->execute(array($depth, $index_step, $from_id));
-                }
-            }else{
-                $update->execute(array($depth, 0, $obj));
-            }
-            $this->db->commit();
-        }catch (\Exception $e){
-            $this->db->rollBack();
-            throw $e;
-        }
-    }
-
-    /**
-     * Очистка индекса объекта и его родителей
-     * @param $parent_id
-     * @param int $object_id
-     * @return void
-     * @internal param bool $self Признак, очищать свой индекс (true) или только родителей (false)?
-     */
-    private function clearIndex($parent_id, $object_id = 0)
-    {
-        $this->db->exec('UPDATE {objects} SET index_depth = 0, index_step = 0');
-    }
-
-    /**
-     * Определение глубины условия
-     * Глубина зависит от охвата поиска в from и от условий или сортировке по подчиненным
-     * @param array $cond Условие поиска
-     * @return int
-     */
-    private function getCondDepth($cond)
-    {
-        $depth = /*isset($cond['depth'])? $cond['depth'] : */0;
-        if (!empty($cond['where'])){
-            $find_depth = function($cond, $depth = 1) use (&$find_depth){
-                $d = $depth;
-                if (isset($cond[0], $cond[1]) && ($cond[0] == 'any' || $cond[0] == 'all')){
-                    $cond = $cond[1];
-                }
-                $cnt = count($cond);
-                for ($i=0; $i<$cnt; $i++){
-                    if (is_array($cond[$i]) && !empty($cond[$i])){
-                        if ($cond[$i][0]=='child'){
-                            $d = max($find_depth($cond[$i][2], $depth+1), $d);
-                        }else
-                        if (in_array($cond[$i][0], array('any', 'not', 'all'))){
-                            $d = max($find_depth($cond[$i][1], $depth), $d);
-                        }
-                    }
-                }
-                return $d;
-            };
-            $depth = $find_depth($cond['where']);
-        }
-//        if ($depth == 1 && isset($cond['order'])){
-//            $cnt = count($cond['order']);
-//            while ($depth==1 && --$cnt>=0){
-//                if (count($cond['order'][$cnt])==3) $depth = 2;
-//            }
-//        }
-//        if (isset($cond['depth']) && $cond['depth']!='max' && $cond['depth']>1){
-//            $depth+= $cond['depth']-1;
-//        }
-        return $depth;
-    }
-
-    /**
      * Конвертирование условия поиска в SQL запрос
      * @param array $cond Условие поиска
      * @param bool $only_where
      * @throws \Exception
      * @return array Ассоциативный массив SQL запроса и значений, вставляемых в него вместо "?"
      */
-    public function getCondSQL($cond, $only_where = false)
+    protected function getCondSQL($cond, $only_where = false)
     {
         $result = array(
             'select' => '',
@@ -1360,7 +1258,7 @@ class MySQLStore extends Entity
              * @param array $attr_exists Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
              * @return string SQL условия в WHERE
              */
-            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, &$index_table, $t_cnt, $store){
+            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, $t_cnt, $store){
                 $level++;
                 // Нормализация групп условий
                 if ($cond[0] == 'any' || $cond[0] == 'all'){
@@ -1405,8 +1303,12 @@ class MySQLStore extends Entity
                             // Учитываем особенность синтаксиса условия IN
                             if (mb_strtolower($c[2]) == 'in'){
                                 if (!is_array($c[3])) $c[3] = array($c[3]);
-                                $cond[$i].='('.str_repeat('?,', count($c[3])-1).'?)';
-                                $result['binds'] = array_merge($result['binds'], $c[3]);
+                                if (empty($c[3])){
+                                    $cond[$i].='(NULL)';
+                                }else{
+                                    $cond[$i].='('.str_repeat('?,', count($c[3])-1).'?)';
+                                    $result['binds'] = array_merge($result['binds'], $c[3]);
+                                }
                             }else{
                                 $cond[$i].= '?';
                                 $result['binds'][] = $c[3];
@@ -1544,12 +1446,12 @@ class MySQLStore extends Entity
 
     /**
      * Создание или обновление отношений между родителями объекта
-     * @param $object
-     * @param $parent
-     * @param $dl Разница между новым и старым уровнем вложенности
-     * @param bool $remake
+     * @param $object Объект, для которого обновляются отношения с родителем
+     * @param $parent Новый родитель объекта
+     * @param int $dl Разница между новым и старым уровнем вложенности объекта
+     * @param bool $remake Признак, отношения обновлять (при смене родителя) или создавать новые (новый объект)
      */
-    public function makeParents($object, $parent, $dl, $remake = false)
+    private function makeParents($object, $parent, $dl, $remake = false)
     {
         if ($remake){
             // У подчинённых удалить отношения с родителями, которые есть у $object
@@ -1607,7 +1509,7 @@ class MySQLStore extends Entity
      * @param bool $remake Признак, отношения обновлять (при смене прототипа) или создавать новые (новый объект)
      * @param bool $incomplete Признак, объект небыл сохранен, но его уже прототипировали?
      */
-    public function makeProtos($object, $proto, $dl, $remake = false, $incomplete = false)
+    private function makeProtos($object, $proto, $dl, $remake = false, $incomplete = false)
     {
         if ($remake){
             // У наследников удалить отношения с прототипами, которые есть у $object
@@ -1756,14 +1658,14 @@ class MySQLStore extends Entity
     }
 
     /**
-     * Cоздание идентификатора для указанного URI.
+     * Создание идентификатора для указанного URI.
      * Если объект с указанным URI существует, то будет возвращен его идентификатор
      * @param string $uri URI для которого нужно получить идентификатор
      * @param bool $create Создать идентификатор, если отсутствует?
      * @param bool $is_new
      * @return int|null
      */
-    public function localId($uri, $create = true, &$is_new = false)
+    private function localId($uri, $create = true, &$is_new = false)
     {
         $is_new = false;
         if ($uri instanceof Entity){
@@ -1824,11 +1726,11 @@ class MySQLStore extends Entity
 
     /**
      * Создание объекта из атрибутов
-     * @param array $attribs Атриубты объекта
+     * @param array $attribs Атриубты объекта, выбранные из базы данных
      * @throws \Exception
      * @return Entity
      */
-    public function makeObject($attribs)
+    private function makeObject($attribs)
     {
         $attribs['id'] = $this->key.'//'.$attribs['id'];
         $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->key.'//'.$attribs['owner'];
@@ -1848,8 +1750,9 @@ class MySQLStore extends Entity
         if (empty($attribs['is_history'])) unset($attribs['is_history']); else $attribs['is_history'] = intval($attribs['is_history']);
         if (empty($attribs['is_delete'])) unset($attribs['is_delete']); else $attribs['is_delete'] = intval($attribs['is_delete']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
-        $attribs['index_depth'] = intval($attribs['index_depth']);
-        $attribs['index_step'] = intval($attribs['index_step']);
+        $attribs['update_step'] = intval($attribs['update_step']);
+        $attribs['update_time'] = intval($attribs['update_time']);
+        $attribs['diff'] = intval($attribs['diff']);
         unset($attribs['valuef']);
         // Свой класс
         if (empty($attribs['is_default_class'])){
@@ -1863,6 +1766,11 @@ class MySQLStore extends Entity
         return $attribs;
     }
 
+    /**
+     * Название класса по идентификатору объекта для которого он определен
+     * @param $id Идентификатор объекта со своим классом
+     * @return string Название класса с пространством имен
+     */
     private function getClassById($id)
     {
         if (!isset($this->classes)){
@@ -1890,6 +1798,11 @@ class MySQLStore extends Entity
         return '\\Boolive\\data\\Entity';
     }
 
+    /**
+     * Валидация кэша соответствия локальных идентификаторов uri
+     * @param $new_attr Новые атрибуты объекта
+     * @param $last_attr Старые атриубты объекта
+     */
     private function localIdCacheValidate($new_attr, $last_attr)
     {
         if (isset($last_attr['name']) && isset($last_attr['parent']) &&
@@ -1900,6 +1813,11 @@ class MySQLStore extends Entity
         }
     }
 
+    /**
+     * Валидация кэша соответствия названий классов идентифкаторам
+     * @param $new_attr Новые атрибуты объекта
+     * @param $last_attr Старые атриубты объекта
+     */
     private function classesCacheValidate($new_attr, $last_attr)
     {
         $last_class = isset($last_attr['is_default_class'])? $last_attr['is_default_class'] : Entity::ENTITY_ID;
@@ -1909,6 +1827,11 @@ class MySQLStore extends Entity
         }
     }
 
+    /**
+     * Действия после сохранения объекта
+     * @param $new_attr Новые атрибуты объекта
+     * @param $last_attr Старые атриубты объекта
+     */
     private function afterWrite($new_attr, $last_attr)
     {
         $this->classesCacheValidate($new_attr, $last_attr);
@@ -2014,10 +1937,9 @@ class MySQLStore extends Entity
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
-                  `index_depth` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'Глубина индексации подчинённых',
-                  `index_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг индексирование. Если не 0, то индексирование не закончено',
-                  `index_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
-                  `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных отличий. Коды Entity::DIFF_*',
+                  `update_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг обновления. Если не 0, то обновление не закончено',
+                  `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
+                  `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды Entity::DIFF_*',
                   PRIMARY KEY (`id`,`owner`,`lang`,`date`),
                   KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
                   KEY `indexation` (`parent`,`is_history`,`id`)
