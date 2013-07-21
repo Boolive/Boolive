@@ -2,7 +2,7 @@
     "value": "Виджеты",
     "proto": "/Library/content_samples/paragraphs/H2",
     "date": 1372616193,
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "is_default_value": true,

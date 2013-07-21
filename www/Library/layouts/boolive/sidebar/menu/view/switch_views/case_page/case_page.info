@@ -1,6 +1,6 @@
 {
     "is_default_value": true,
-    "value": "/Library/content_samples/Page",
+    "value": "is(/Library/content_samples/Page)",
     "proto": "/Library/views/Menu/view/switch_views/case_page",
     "date": 1372616294,
     "order": 4,

@@ -1,6 +1,6 @@
 {
     "is_default_value": true,
-    "value": "/Library/content_samples/Feedback",
+    "value": "is(/Library/content_samples/Feedback)",
     "proto": "/Library/content_widgets/RichTextPreview/switch_views/case_feedback",
     "date": 1372616251,
     "order": 7

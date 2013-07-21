@@ -1,5 +1,5 @@
 {
-    "value": "/Library/content_samples/Part/title",
+    "value": "is(/Library/content_samples/Part/title)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616277,
     "order": 7,

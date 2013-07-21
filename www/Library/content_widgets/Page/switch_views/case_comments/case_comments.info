@@ -1,5 +1,5 @@
 {
-    "value": "/Library/content_samples/Page/comments",
+    "value": "is(/Library/content_samples/Page/comments)",
     "proto": "/Library/views/SwitchCase",
     "is_delete": true,
     "date": 1372616272,

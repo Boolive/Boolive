@@ -1,5 +1,5 @@
 {
-    "value": "/Library/content_samples/Feedback",
+    "value": "is(/Library/content_samples/Feedback)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616278,
     "order": 7,

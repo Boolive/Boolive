@@ -1,5 +1,5 @@
 {
-    "value": "/Library/content_samples/paragraphs/TextBlock",
+    "value": "is(/Library/content_samples/paragraphs/TextBlock)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616245,
     "order": 7,

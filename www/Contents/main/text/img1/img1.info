@@ -2,8 +2,8 @@
     "value": "img1.jpg",
     "is_file": true,
     "proto": "/Library/content_samples/Image",
-    "date": 1372616196,
-    "order": 7,
+    "date": 1373824648,
+    "order": 4,
     "children": {
         "title": {
             "is_default_value": true,

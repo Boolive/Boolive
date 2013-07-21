@@ -3,7 +3,7 @@
     "proto": "/Library/content_samples/paragraphs/H2",
     "is_delete": true,
     "date": 1372616193,
-    "order": 12,
+    "order": 13,
     "children": {
         "title": {
             "is_default_value": true,

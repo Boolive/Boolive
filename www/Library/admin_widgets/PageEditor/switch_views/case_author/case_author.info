@@ -1,5 +1,5 @@
 {
-    "value": "/Library/access/User",
+    "value": "is(/Library/access/User)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616234,
     "order": 8,

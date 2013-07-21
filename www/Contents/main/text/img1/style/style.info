@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Image/style",
-    "date": 1372616196,
+    "date": 1373824648,
     "order": 2,
     "children": {
         "title": {
@@ -46,9 +46,9 @@
             "order": 6
         },
         "margin-left": {
-            "value": "0",
+            "value": "auto",
             "proto": "/Library/content_samples/Image/style/margin-left",
-            "date": 1372616196,
+            "date": 1373824648,
             "order": 7
         },
         "text-align": {

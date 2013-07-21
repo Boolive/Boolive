@@ -2,7 +2,7 @@
     "value": "​Шаблонизация",
     "proto": "/Library/content_samples/paragraphs/H3",
     "date": 1372616191,
-    "order": 51,
+    "order": 52,
     "children": {
         "title": {
             "is_default_value": true,

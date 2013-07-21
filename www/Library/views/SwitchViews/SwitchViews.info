@@ -20,6 +20,13 @@
             "date": 1372616306,
             "order": 2
         },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "date": 1372616307,
+            "order": 3
+        },
         "res": {
             "is_default_value": true,
             "value": "",

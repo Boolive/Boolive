@@ -1,5 +1,5 @@
 {
-    "value": "/Library/views/FormAuth/object/remember",
+    "value": "is(/Library/views/FormAuth/object/remember)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616301,
     "order": 5,

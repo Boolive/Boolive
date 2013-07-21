@@ -1,5 +1,5 @@
 {
-    "value": "/Library/content_samples/RichText",
+    "value": "is(/Library/content_samples/RichText)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616284,
     "order": 4,

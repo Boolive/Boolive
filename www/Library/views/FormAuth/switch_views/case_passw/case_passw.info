@@ -1,5 +1,5 @@
 {
-    "value": "/Library/views/FormAuth/object/passw",
+    "value": "is(/Library/views/FormAuth/object/passw)",
     "proto": "/Library/views/SwitchCase",
     "date": 1372616300,
     "order": 4,
