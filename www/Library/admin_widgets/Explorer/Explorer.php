@@ -45,6 +45,7 @@ class Explorer extends AutoWidgetList
                 $this->filter->real->value($this->_input['REQUEST']['filter']['real']);
                 $this->filter->hidden->value(!empty($this->_input['REQUEST']['filter']['hidden']));
                 $this->filter->deleted->value(!empty($this->_input['REQUEST']['filter']['deleted']));
+                $this->filter->updates->value(!empty($this->_input['REQUEST']['filter']['updates']));
                 $this->filter->save();
             }
             // Текущий фильтр для отображения меню фильтра
@@ -91,7 +92,7 @@ class Explorer extends AutoWidgetList
             $any[] = array('all', array(
                 array('attr', 'is_hidden', '=', 0),
                 array('attr', 'is_delete', '=', 0),
-                array('attr', 'diff', '>=', Entity::DIFF_NO)
+                array('attr', 'diff', '!=', Entity::DIFF_ADD)
             ));
         }
         // Скрытые объекты
@@ -105,6 +106,12 @@ class Explorer extends AutoWidgetList
             $any[] = array('attr', 'is_delete', '!=', 0 );
         }else{
             $cond['where'][] = array('attr', 'is_delete', '=', 0);
+        }
+        // Обновления
+        if ($filters['updates']->value()) {
+            $any[] = array('attr', 'diff', '!=', Entity::DIFF_NO);
+        }else{
+            $cond['where'][] = array('attr', 'diff', '!=', Entity::DIFF_ADD);
         }
         // Никакие
         if (empty($any)) {
