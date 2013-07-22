@@ -178,9 +178,10 @@ class View extends Entity
 
     /**
      * Запуск всех подчиненных объектов
+     * @param bool $all Признак, запускать все подчиенные (true), или пока не возвратится результат от одного из запущенных (false)
      * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
      */
-    public function startChildren()
+    public function startChildren($all = true)
     {
         $result = array();
         $list = $this->linked(false)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
@@ -192,6 +193,7 @@ class View extends Entity
                 if ($out!==false){
                     $result[$key] = $out;
                     $this->_input_child['previous'] = true;
+                    if (!$all) return $result;
                 }
             }
         }
