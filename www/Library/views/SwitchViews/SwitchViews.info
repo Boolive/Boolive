@@ -4,7 +4,7 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "date": 1372616305,
-    "order": 8,
+    "order": 9,
     "children": {
         "title": {
             "value": "Переключатель вариантов отображения (исполнения)",

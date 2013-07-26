@@ -1,9 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "Export.tpl",
-    "is_file": true,
-    "proto": "/Library/admin_widgets/Programs/switch_views/case_default/Export",
-    "is_link": true,
-    "date": 1372616240,
-    "order": 11
-}

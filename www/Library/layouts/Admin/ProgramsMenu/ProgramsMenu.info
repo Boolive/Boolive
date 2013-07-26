@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1372616291,
+    "date": 1374862971,
     "order": 6,
     "children": {
         "title": {
@@ -42,6 +42,31 @@
                     "is_hidden": true,
                     "date": 1372616291,
                     "order": 4
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "date": 1374862753,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/Widget/cache/title",
+                    "is_hidden": true,
+                    "date": 1374862756,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/Widget/cache/description",
+                    "is_hidden": true,
+                    "date": 1374862756,
+                    "order": 2
                 }
             }
         }

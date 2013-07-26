@@ -3,7 +3,7 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "date": 1372616299,
-    "order": 10,
+    "order": 11,
     "children": {
         "title": {
             "value": "Фокусировщик",

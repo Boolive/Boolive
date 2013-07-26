@@ -2,13 +2,14 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
-    "date": 1374381767,
+    "date": 1374863083,
     "order": 1,
     "children": {
         "title": {
             "value": "Сайт",
+            "proto": "/Library/views/View/title",
             "is_hidden": true,
-            "date": 1372616182,
+            "date": 1374863083,
             "order": 1
         },
         "description": {
@@ -23,7 +24,25 @@
             "proto": "/Library/views/Widget/cache",
             "is_hidden": true,
             "date": 1372616309,
-            "order": 11
+            "order": 11,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/Widget/cache/title",
+                    "is_hidden": true,
+                    "date": 1374863096,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/Widget/cache/description",
+                    "is_hidden": true,
+                    "date": 1374863096,
+                    "order": 2
+                }
+            }
         }
     }
 }

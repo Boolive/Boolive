@@ -13,9 +13,9 @@ use Boolive\Boolive,
     Boolive\input\Input,
     Boolive\installer\Installer;
 // Подключение конфигурации путей
-require 'config.php';
+include 'config.php';
 // Подключение движка Boolive
-require DIR_SERVER_ENGINE.'Boolive.php';
+include DIR_SERVER_ENGINE.'Boolive.php';
 // Активация Boolive
 if (Boolive::activate()){
     // Исполнение корневого объекта. Передаётся экземпляр команд и все входящие данные.
@@ -26,3 +26,9 @@ if (Boolive::activate()){
     include DIR_SERVER_ENGINE.'installer/Installer.php';
     Installer::start();
 }
+//if (GLOBAL_TRACE){
+//    \Boolive\develop\Trace::groups()->group('Benchmark')->set(\Boolive\develop\Benchmark::stop('all', true));
+//    \Boolive\develop\Trace::groups()->out();
+//}
+$obj = Data::read('/Members/registered/admins/admin/rights/Role');
+//Data::findUpdates($obj, 10, 2);

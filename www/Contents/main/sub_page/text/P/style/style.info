@@ -96,6 +96,13 @@
             "value": "",
             "date": 1372616188,
             "order": 15
+        },
+        "text-indent_1": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/text-indent",
+            "date": 1374861777,
+            "order": 16
         }
     }
 }

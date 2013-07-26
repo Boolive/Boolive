@@ -4,7 +4,7 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "date": 1372616302,
-    "order": 16,
+    "order": 17,
     "children": {
         "description": {
             "value": "Отображает изображение с ссылкой на главную страницу сайта",

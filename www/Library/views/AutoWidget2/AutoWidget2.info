@@ -32,7 +32,25 @@
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "date": 1374514117,
-            "order": 5
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/Widget/cache/title",
+                    "is_hidden": true,
+                    "date": 1374580345,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/Widget/cache/description",
+                    "is_hidden": true,
+                    "date": 1374580345,
+                    "order": 2
+                }
+            }
         }
     }
 }

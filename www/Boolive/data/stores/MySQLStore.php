@@ -751,7 +751,7 @@ class MySQLStore extends Entity
         $id = $this->localId($entity->id(), false);
         $update_time = $entity->_attribs['update_time'];
         // Проверка изменений в прототипе
-        if ($proto){
+        if ($proto && $entity->isLink() == $proto->isLink()){
             // Сравнить прототип с объектом. Если объект использует значение по умолчанию и оно отличается от прототипа, то сохранить объект с признаком dif = change.
             if ($entity->isDefaultValue() && $entity->value()!=$proto->value()){
                 $entity->_attribs['diff'] = Entity::DIFF_CHANGE;

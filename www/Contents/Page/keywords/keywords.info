@@ -1,0 +1,17 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/Page/keywords",
+    "date": 1374861442,
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Ключевые слова",
+            "proto": "/Library/content_samples/Page/keywords/title",
+            "is_hidden": true,
+            "date": 1374861490,
+            "order": 1
+        }
+    }
+}

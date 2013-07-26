@@ -3,5 +3,78 @@
     "value": "",
     "proto": "/Library/content_samples/Image/style",
     "date": 1372616285,
-    "order": 2
+    "order": 2,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Стиль ",
+            "proto": "/Library/content_samples/Image/style/title",
+            "is_hidden": true,
+            "date": 1374858152,
+            "order": 1
+        },
+        "width": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/width",
+            "date": 1374858152,
+            "order": 2
+        },
+        "height": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/height",
+            "date": 1374858152,
+            "order": 3
+        },
+        "margin-top": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/margin-top",
+            "date": 1374858152,
+            "order": 4
+        },
+        "margin-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/margin-right",
+            "date": 1374858152,
+            "order": 5
+        },
+        "margin-bottom": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/margin-bottom",
+            "date": 1374858152,
+            "order": 6
+        },
+        "margin-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/margin-left",
+            "date": 1374858152,
+            "order": 7
+        },
+        "text-align": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/text-align",
+            "date": 1374858152,
+            "order": 8
+        },
+        "padding-left": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/padding-left",
+            "date": 1374858153,
+            "order": 9
+        },
+        "padding-right": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/Image/style/padding-right",
+            "date": 1374858153,
+            "order": 10
+        }
+    }
 }

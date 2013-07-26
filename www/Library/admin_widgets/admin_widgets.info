@@ -1,8 +1,8 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "date": 1374381767,
-    "order": 6,
+    "date": 1374862612,
+    "order": 7,
     "children": {
         "title": {
             "value": "Виджеты админки",

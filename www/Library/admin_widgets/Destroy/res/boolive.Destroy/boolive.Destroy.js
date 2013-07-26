@@ -26,6 +26,7 @@
                     //@todo Обработать ошибки (контроль доступа и целостности)
                     if (result.out.error){
                         alert('Невозможно уничтожить. Нет доступа или объект используется');
+                        console.log(result.out.error);
                     }else{
                        history.back();
                     }

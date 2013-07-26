@@ -1,0 +1,25 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/AutoWidgetList2/views",
+    "date": 1374862971,
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Список видов",
+            "proto": "/Library/views/AutoWidgetList2/views/title",
+            "is_hidden": true,
+            "date": 1374583268,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
+            "proto": "/Library/views/AutoWidgetList2/views/description",
+            "is_hidden": true,
+            "date": 1374583268,
+            "order": 2
+        }
+    }
+}

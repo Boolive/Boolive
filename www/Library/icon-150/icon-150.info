@@ -3,15 +3,14 @@
     "is_file": true,
     "proto": "/Library/content_samples/Image",
     "is_hidden": true,
-    "date": 1372616284,
-    "order": 11,
+    "date": 1374858164,
+    "order": 2,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Изображение",
+            "value": "Иконка",
             "proto": "/Library/content_samples/Image/title",
             "is_hidden": true,
-            "date": 1372616285,
+            "date": 1374858164,
             "order": 1
         }
     }

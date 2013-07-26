@@ -4,7 +4,7 @@
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
     "date": 1372616299,
-    "order": 18,
+    "order": 19,
     "children": {
         "title": {
             "value": "Вход",

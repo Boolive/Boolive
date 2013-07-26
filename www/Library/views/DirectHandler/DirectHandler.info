@@ -3,7 +3,7 @@
     "proto": "/Library/views/View",
     "is_default_class": false,
     "date": 1372616299,
-    "order": 11,
+    "order": 12,
     "children": {
         "title": {
             "value": "Обработчик направленных запросов",

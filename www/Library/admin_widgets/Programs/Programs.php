@@ -6,10 +6,10 @@
  */
 namespace Library\admin_widgets\Programs;
 
-use Library\views\AutoWidget\AutoWidget,
+use Library\views\AutoWidget2\AutoWidget2,
     Boolive\values\Rule;
 
-class Programs extends AutoWidget
+class Programs extends AutoWidget2
 {
     public function defineInputRule()
     {

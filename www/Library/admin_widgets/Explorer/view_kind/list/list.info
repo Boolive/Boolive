@@ -1,7 +1,7 @@
 {
-    "value": 0,
+    "value": 1,
     "proto": "/Library/basic/simple/Boolean",
-    "date": 1374381767,
+    "date": 1374646243,
     "order": 2,
     "children": {
         "title": {

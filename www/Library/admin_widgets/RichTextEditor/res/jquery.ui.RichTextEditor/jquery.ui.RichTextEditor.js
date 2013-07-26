@@ -173,7 +173,7 @@
         call_program_show: function(){
             if (this._hide){
                 this._hide = false;
-                $('.Admin').addClass('RichTextBG');
+                $('.common_background').addClass('RichTextBG');
                 //this._save_inteval = setInterval(function(){self._save()}, 10000);
             }
         },

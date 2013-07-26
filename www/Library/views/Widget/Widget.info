@@ -2,14 +2,28 @@
     "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
-    "date": 1372616307,
-    "order": 4,
+    "date": 1374579560,
+    "order": 5,
     "children": {
+        "title": {
+            "value": "Виджет",
+            "proto": "/Library/views/View/title",
+            "is_hidden": true,
+            "date": 1372616307,
+            "order": 1
+        },
+        "description": {
+            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "date": 1372616307,
+            "order": 2
+        },
         "res": {
             "value": "",
             "proto": "/Library/views/ViewGroup",
-            "date": 1372616307,
-            "order": 0,
+            "date": 1374579560,
+            "order": 3,
             "children": {
                 "title": {
                     "value": "Ресурсы",
@@ -27,26 +41,12 @@
                 }
             }
         },
-        "title": {
-            "value": "Виджет",
-            "proto": "/Library/views/View/title",
-            "is_hidden": true,
-            "date": 1372616307,
-            "order": 1
-        },
-        "description": {
-            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
-            "proto": "/Library/views/View/description",
-            "is_hidden": true,
-            "date": 1372616307,
-            "order": 2
-        },
         "cache": {
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/basic/simple/Boolean",
             "date": 1372616307,
-            "order": 3,
+            "order": 4,
             "children": {
                 "title": {
                     "value": "Кэшировать?",

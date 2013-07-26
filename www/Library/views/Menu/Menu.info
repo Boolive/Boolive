@@ -4,7 +4,7 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "date": 1372616302,
-    "order": 13,
+    "order": 14,
     "children": {
         "title": {
             "value": "Меню",

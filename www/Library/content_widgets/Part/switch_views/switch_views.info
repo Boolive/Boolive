@@ -46,6 +46,13 @@
                     "order": 2
                 }
             }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/AutoWidgetList/switch_views/cache",
+            "date": 1374861770,
+            "order": 8
         }
     }
 }

@@ -1,0 +1,74 @@
+{
+    "value": "item_view.tpl",
+    "is_file": true,
+    "proto": "/Library/views/AutoWidgetList2",
+    "is_default_class": false,
+    "date": 1374862971,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Виджет автоотображения пунктов меню",
+            "proto": "/Library/views/AutoWidgetList2/title",
+            "is_hidden": true,
+            "date": 1374583175,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает пункт меню и подчиненные пункты меню, выбирая для этого соответствующий вид из списка видов.",
+            "proto": "/Library/views/AutoWidgetList2/description",
+            "is_hidden": true,
+            "date": 1374583231,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/AutoWidgetList2/res",
+            "date": 1374583101,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/AutoWidgetList2/res/title",
+                    "is_hidden": true,
+                    "date": 1374583257,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/AutoWidgetList2/res/description",
+                    "is_hidden": true,
+                    "date": 1374583257,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/AutoWidgetList2/cache",
+            "date": 1374583101,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/AutoWidgetList2/cache/title",
+                    "is_hidden": true,
+                    "date": 1374583263,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/AutoWidgetList2/cache/description",
+                    "is_hidden": true,
+                    "date": 1374583263,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

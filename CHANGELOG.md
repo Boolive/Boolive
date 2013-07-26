@@ -6,6 +6,7 @@ Version 2.0.alpha work in progress
 - new: Was added the rule for check a conditions for reading or verifying objects (VladimirShestakov)
 - new: Added support of conditions of string type (VladimirShestakov)
 - new: Converting Error to the array and array to the Error is added (VladimirShestakov)
+- new #101: Grouping of programs in the admin panel menu is added (VladimirShestakov)
 - new #120: External storage HTTPStore is created (VladimirShestakov)
 - new #121: RESTful service is created (VladimirShestakov)
 - new #126: Multiple "from" in the condition of reading objects and automatic grouping of selections are added (VladimirShestakov)

@@ -16,7 +16,7 @@ class RichTextEditor extends AutoWidgetList
     {
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required(),
+                        'object' => Rule::entity(array('is', '/Library/content_samples/RichText'))->required(),
                         'call' => Rule::string()->default('')->required(),
                         'saveProperties' => Rule::arrays(array(
                             //'proto' => Rule::entity(),

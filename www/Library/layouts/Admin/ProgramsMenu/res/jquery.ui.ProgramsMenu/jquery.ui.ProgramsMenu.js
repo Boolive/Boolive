@@ -17,7 +17,7 @@
                 var s = self.callParents('getState');
                 self.callParents('setState', [{
                     object:  (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected,
-                    view_name: $(this).attr('href')
+                    view_name: $(this).attr('data-program')
                 }]);
             });
             self.reload = _.throttle(self.reload, 500);
@@ -56,7 +56,7 @@
                 if (!state.view_name){
                     sel = this.element.find('> ul > li:first-child');
                 }else{
-                    sel = this.element.find('> ul > li a[href="' + state.view_name+'"]').parent();
+                    sel = this.element.find('> ul > li a[data-program="' + state.view_name+'"]').parent();
                 }
                 if (sel != this._active_items){
                     if (this._active_items) this._active_items.removeClass('active');

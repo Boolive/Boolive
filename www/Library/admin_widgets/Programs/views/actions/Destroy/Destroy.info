@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "Destroy.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Destroy",
+    "is_link": true,
+    "date": 1374574853,
+    "order": 16
+}

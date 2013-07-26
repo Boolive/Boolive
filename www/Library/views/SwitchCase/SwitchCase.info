@@ -3,7 +3,7 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "date": 1372616305,
-    "order": 9,
+    "order": 10,
     "children": {
         "title": {
             "value": "Вариант переключателя",

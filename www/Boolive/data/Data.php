@@ -190,7 +190,9 @@ class Data
                                 foreach ($list as $from){
                                     if (is_array($from)){
                                         if (isset($from['class'])){
-                                            $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
+                                            if (isset($from['id']) || isset($from['uri'])){
+                                                $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
+                                            }
                                         }else{
                                             $makefrom($group_cond, $from, $name);
                                         }

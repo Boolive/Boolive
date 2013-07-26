@@ -1,46 +1,46 @@
 {
     "value": "Programs.tpl",
     "is_file": true,
-    "proto": "/Library/views/AutoWidget",
+    "proto": "/Library/views/AutoWidget2",
     "is_default_class": false,
-    "date": 1372616237,
+    "date": 1374862612,
     "order": 8,
     "children": {
         "title": {
             "value": "Программы для работы с объектами",
-            "proto": "/Library/views/AutoWidget/title",
+            "proto": "/Library/views/AutoWidget2/title",
             "is_hidden": true,
-            "date": 1372616237,
+            "date": 1374515695,
             "order": 1
         },
         "description": {
             "value": "Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты",
-            "proto": "/Library/views/AutoWidget/description",
+            "proto": "/Library/views/AutoWidget2/description",
             "is_hidden": true,
-            "date": 1372616237,
+            "date": 1374515717,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/AutoWidget/res",
-            "date": 1372616237,
+            "proto": "/Library/views/AutoWidget2/res",
+            "date": 1374858079,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/views/AutoWidget/res/title",
+                    "proto": "/Library/views/AutoWidget2/res/title",
                     "is_hidden": true,
-                    "date": 1372616237,
+                    "date": 1374515775,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidget/res/description",
-                    "date": 1372616237,
-                    "order": 4
+                    "date": 1374858079,
+                    "order": 2
                 }
             }
         }

@@ -4,7 +4,7 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "date": 1372616301,
-    "order": 19,
+    "order": 20,
     "children": {
         "title": {
             "value": "Поле формы",

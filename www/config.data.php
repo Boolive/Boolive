@@ -20,7 +20,7 @@ $stores = array(
                 // Тип СУБД
                 'driver' => 'mysql',
                 // Имя базы данных
-                'dbname' => 'boolive-test12',
+                'dbname' => 'boolive-test13',
                 // Адрес сервера
                 'host' => 'localhost',
                 // Порт
@@ -38,7 +38,7 @@ $stores = array(
             'prefix' => '',
             // Признаки, включен или нет режим отладки. В режиме отладки трассируются запросы и подсчитывается их кол-во
             'trace_sql' => false,
-//            'trace_count' => true,
+            'trace_count' => false,
         )
     )
 );

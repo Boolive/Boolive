@@ -20,7 +20,7 @@ use Boolive\values\Values,
 
 /**
  * @property \Boolive\values\Values path Элементы пути URI
- * @property \Boolive\values\Values REQUEST GET+POST данные или аргументы командной строки
+ * @property \Boolive\values\Values REQUEST = GET+POST+argv данные или аргументы командной строки
  * @property \Boolive\values\Values FILES Загруженные файлы
  * @property \Boolive\values\Values COOKIE Куки
  * @property \Boolive\values\Values RAW Неформатированные данные
