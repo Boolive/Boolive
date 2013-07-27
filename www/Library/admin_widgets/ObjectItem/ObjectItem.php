@@ -49,6 +49,7 @@ class ObjectItem extends Widget
         if ($v['value']!=$v['value_full']){
             $v['value'].='...';
         }
+        $v['diff'] = $obj->diff();
         return parent::work($v);
     }
 }

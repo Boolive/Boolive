@@ -10,6 +10,17 @@
         if($v['is_link']->bool()){
             $class .= ' link';
         }
+        switch ($diff = $v['diff']->int()){
+            case \Boolive\data\Entity::DIFF_CHANGE:
+                $class .= ' diff_change';
+                break;
+            case \Boolive\data\Entity::DIFF_ADD:
+                $class .= ' diff_add';
+                break;
+            case \Boolive\data\Entity::DIFF_DELETE:
+                $class .= ' diff_delete';
+                break;
+        }
     ?>
     <div class="view<?php echo $class;?>" <?php echo $v['style']->string();?> title="<?php echo $v['alt']->escape();?>">
 		<div class="title-group">

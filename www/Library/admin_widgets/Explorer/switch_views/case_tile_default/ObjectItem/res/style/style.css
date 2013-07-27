@@ -33,6 +33,9 @@
             /*border-color: rgba(255, 184, 181, 0.305);*/
             /*color: #FF4A52*/
             }
+        /*.ObjectItem.tile .view.diff_add{*/
+                /*border-color: #9ce62e;*/
+            /*}*/
 
         .ObjectItem.tile .view:hover{
             background-color: rgba(128, 200, 255, 0.3);
@@ -63,6 +66,50 @@
                 text-decoration: line-through;
             }
 
+            .ObjectItem.tile .view.diff_add .title-group .title:before{
+                content: '+';
+                vertical-align: middle;
+                font-family: "Times New Roman";
+                background-color: #85cc29;;
+                font-weight: bold;
+                line-height: 5px;
+                color: #FFF;
+                margin-right: 4px;
+                text-decoration: none;
+                border-radius: 16px;
+                box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.5);
+                padding: 0 8px;
+                }
+            .ObjectItem.tile .view.diff_change .title-group .title:before{
+                content: '!';
+                vertical-align: middle;
+                font-family: "Times New Roman";
+                background-color: #9352cc;
+                font-weight: bold;
+                line-height: 5px;
+                color: #FFF;
+                margin-right: 4px;
+                text-decoration: none;
+                border-radius: 16px;
+                padding: 0 12px;
+                }
+            .ObjectItem.tile .view.diff_delete .title-group .title:before{
+                content: '×';
+                vertical-align: middle;
+                font-family: "Times New Roman";
+                background-color: #e67573;
+                font-weight: bold;
+                line-height: 5px;
+                color: #FFF;
+                margin-right: 4px;
+                text-decoration: none;
+                border-radius: 16px;
+                padding: 0 8px;
+                }
+            .ObjectItem.tile .view.diff_delete .title-group .title > *{
+                /*color: #e67573;*/
+            }
+
             .ObjectItem.tile .view .title-group > *{
                 display: inline-block;
                 text-decoration: none;
@@ -75,6 +122,12 @@
                     }
                     .ObjectItem.tile .view.link .title-group .title > *{
                         color: #0073bf;
+                    }
+                    .ObjectItem.tile .view.diff_add .title-group .title > *{
+                        /*color: #75b324;*/
+                        }
+                    .ObjectItem.tile .view.diff_change .title-group .title > *{
+                        /*color: #9352cc;*/
                     }
             .ObjectItem.tile .view .title-group .mini{
                 font-size: 12pt;

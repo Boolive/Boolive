@@ -63,6 +63,47 @@
                         .ObjectItem.list .link .main .title > *{
                             color: #0073bf;
                         }
+                    .ObjectItem.list .view.diff_add .main .title:before{
+                        content: '+';
+                        vertical-align: middle;
+                        font-family: "Times New Roman";
+                        background-color: #85cc29;;
+                        font-weight: bold;
+                        line-height: 5px;
+                        color: #FFF;
+                        margin-right: 4px;
+                        text-decoration: none;
+                        border-radius: 10px;
+                        box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.5);
+                        padding: 0 5px;
+                        }
+                    .ObjectItem.list .view.diff_change .main .title:before{
+                        content: '!';
+                        vertical-align: middle;
+                        font-family: "Times New Roman";
+                        background-color: #9352cc;
+                        font-weight: bold;
+                        line-height: 5px;
+                        color: #FFF;
+                        margin-right: 4px;
+                        text-decoration: none;
+                        border-radius: 10px;
+                        padding: 0 7px;
+                        }
+                    .ObjectItem.list .view.diff_delete .main .title:before{
+                        content: '×';
+                        vertical-align: middle;
+                        font-family: "Times New Roman";
+                        background-color: #e67573;
+                        font-weight: bold;
+                        line-height: 5px;
+                        color: #FFF;
+                        margin-right: 4px;
+                        text-decoration: none;
+                        border-radius: 10px;
+                        padding: 0 5px;
+                        }
+
                     .ObjectItem.list .main .title > *{
                         color: #000;
                         }
