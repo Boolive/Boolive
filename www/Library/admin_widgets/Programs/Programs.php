@@ -33,7 +33,7 @@ class Programs extends AutoWidget2
         if ($this->_input['REQUEST']['object'] instanceof Entity){
             /** @var Entity $obj */
             $obj = $this->_input['REQUEST']['object'];
-            if ($obj->_attribs['update_time']!=0 && ($obj->_attribs['update_step']!=0 || (time()-$obj->_attribs['update_time']) > 300)){
+            if (($obj->_attribs['update_time']!=0 || $obj->_attribs['diff'] == Entity::DIFF_ADD) && (time()-$obj->_attribs['date']) > 300){
                 Data::refresh($obj, 50, 1, true);
             }
         }

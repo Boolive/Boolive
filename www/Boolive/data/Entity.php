@@ -693,7 +693,7 @@ class Entity implements ITrace
     {
         if (is_string($new_parent)) $new_parent = Data::read($new_parent);
         // Смена родителя
-        if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->isEqual($this->parent()))){
+        if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->isEqual($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1)){
             $is_delete = $this->isDelete(null, false);
             $is_hidden = $this->isHidden(null, false);
             if (empty($new_parent)){
@@ -1723,6 +1723,7 @@ class Entity implements ITrace
         if (!empty($info['children']) && is_array($info['children'])){
             foreach ($info['children'] as $name => $child){
                 //$child['uri'] = $this->uri().'/'.$name;
+                if ($this->diff() == Entity::DIFF_ADD) $this->{$name}->diff(Entity::DIFF_ADD);
                 $this->{$name}->import($child);
             }
         }
