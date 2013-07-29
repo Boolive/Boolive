@@ -92,7 +92,7 @@ class MySQLStore extends Entity
             $group_result = array($fill);
         }
         // Обновление. Для новых объектов автоматом прототипируются подчиненные объекты
-        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree')){
+        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree') && IS_INSTALL){
             foreach ($multy_from as $key => $from){
                 $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
                 // Поиск обновлений, если ещё небыло обновлений, они не завершилась или были больше 5 минут назад
@@ -480,7 +480,7 @@ class MySQLStore extends Entity
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
                         'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt', 'valuef', 'diff');
+                        'proto_cnt', 'parent_cnt', 'valuef', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id+owner+lang+date
@@ -737,165 +737,195 @@ class MySQLStore extends Entity
      */
     public function refresh($entity, $step_size = 50, $depth = 1, $from_file = true, $clear_last_updates = true)
     {
-        // Выбрать прототип. Если прототип не индексирован, то индексировать его
-        $proto = $entity->proto();
-        // Если у объекта прототип указан, но он не выбран (не существует), то сохранить объект с diff = delete.
-        if (!$proto && $entity->_attribs['proto']){
-            $entity->_attribs['diff'] = Entity::DIFF_DELETE;
-        }else{
-            $entity->_attribs['diff'] = $entity->_attribs['diff']==Entity::DIFF_ADD ? Entity::DIFF_ADD : Entity::DIFF_NO;
-        }
-        $id = $this->localId($entity->id(), false);
-        $update_time = $entity->_attribs['update_time'];
-        if ($depth > 0 && $clear_last_updates){
-            // Удалить объекты с diff=add.
-            $q = $this->db->prepare('
-                DELETE objects, parents, protos FROM parents p, objects, parents, protos
-                WHERE p.parent_id = ? AND p.level > 0 AND objects.id = p.object_id AND objects.diff = ?
-                AND p.object_id = parents.object_id
-                AND p.object_id = protos.object_id
-            ');
-            $q->execute(array($id, Entity::DIFF_ADD));
-            Cache::delete('mysqlstore/localids');
-            // У остальных обнулить diff
-            $q = $this->db->prepare('UPDATE {objects} SET `diff` = 0 WHERE parent = ? AND diff > 0');
-            $q->execute(array($id));
-        }
-        // Проверка изменений в прототипе
-        if ($proto && $entity->isLink() == $proto->isLink()){
-            // Сравнить прототип с объектом. Если объект использует значение по умолчанию и оно отличается от прототипа, то сохранить объект с признаком dif = change.
-            if ($entity->isDefaultValue() && $entity->value()!=$proto->value()){
-                $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
-            }
-            // Поиск обновлений для подчиненных
-            if ($depth > 0){
-                // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
-                $pchildren = $proto->find(array(
-                    'select' => array('children'),
-                    'limit' => array($entity->_attribs['update_step'], $step_size),
-                    'key' => 'uri'
-                ), false, false, false);
-                if (count($pchildren) < $step_size){
-                    // В следующий раз обновление по новой
-                    $entity->_attribs['update_step'] = 0;
-                }else{
-                    // В следующий раз обновление будет продолжено
-                    $entity->_attribs['update_step'] = $entity->_attribs['update_step'] + $step_size;
-                }
-                // время обновляется если update_step =0 или объект ранее был полностью унаследован от прототипа после создания
-                $entity->_attribs['update_time'] = ($update_time || !$entity->_attribs['update_step'])? time() : 0;
+        // Поиск обновлений если ранее не были найдены изменения в info файлах родителей
+        if ($entity->_attribs['diff_from'] >= 0 || $entity->_attribs['diff'] == Entity::DIFF_NO){
+            $id = $this->localId($entity->id(), false);
+            $update_time = $entity->_attribs['update_time'];
+            // 1. Поиск обновлений в прототипе
 
-                $pids = array();
-                foreach ($pchildren as $pchild){
-                    $pids[] = $pchild->key();
+            // Выбрать прототип. Если прототип не индексирован, то индексировать его
+
+            $proto = $entity->proto();
+            // Если у объекта прототип указан, но он не выбран (не существует), то сохранить объект с diff = delete.
+            if (!$proto && $entity->_attribs['proto']){
+                $entity->_attribs['diff'] = Entity::DIFF_DELETE;
+                $entity->_attribs['diff_from'] = 1; // от прототипа
+            }else{
+                $entity->_attribs['diff'] = $entity->_attribs['diff']==Entity::DIFF_ADD ? Entity::DIFF_ADD : Entity::DIFF_NO;
+                $entity->_attribs['diff_from'] = intval($entity->_attribs['diff_from']);
+            }
+            if ($proto && $entity->isLink() == $proto->isLink()){
+                if ($depth > 0 && $clear_last_updates){
+                    // Удалить объекты с diff=add.
+                    $q = $this->db->prepare('
+                        DELETE objects, parents, protos FROM parents p, objects, parents, protos
+                        WHERE p.parent_id = ? AND p.level > 0 AND objects.id = p.object_id AND objects.diff = ? AND objects.diff_from = 1
+                        AND p.object_id = parents.object_id
+                        AND p.object_id = protos.object_id
+                    ');
+                    $q->execute(array($id, Entity::DIFF_ADD));
+                    Cache::delete('mysqlstore/localids');
+                    // У остальных обнулить diff
+                    $q = $this->db->prepare('UPDATE {objects} SET `diff` = 0 WHERE parent = ? AND diff > 0 AND diff_from = 1');
+                    $q->execute(array($id));
                 }
-                // У объекта выбрать подчиненные, которые прототипируются от выбранных $step_size подчиненных прототипа.
-                $ochildren = $entity->find(array(
-                    'where' => array('attr', 'proto', 'in', $pids),
-                ), false, false, false);
-                // Для выбранных по прототипам подчиненных выполнить findUpdate с $depth-1
-                foreach ($ochildren as $child){
-                    /** @var $child Entity */
-                    self::refresh($child, $step_size, $depth-1, $from_file, false);
-                    // Из $pchildren удаляем объект, используемый в качесвте прототпа
-                    if (($p = $child->proto()) && isset($pchildren[$p->uri()])) unset($pchildren[$p->uri()]);
+                // Сравнить прототип с объектом. Если объект использует значение по умолчанию и оно отличается от прототипа, то сохранить объект с признаком dif = change.
+                if ($entity->isDefaultValue() && $entity->value()!=$proto->value()){
+                    $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
+                    $entity->_attribs['diff_from'] = 1;
                 }
-                $diff = $update_time == 0 ? Entity::DIFF_NO : Entity::DIFF_ADD;
-                // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
-                foreach ($pchildren as $proto){
-                    /** @var $proto Entity */
-                    $child = $proto->birth($entity);
-                    $child->_attribs['diff'] = $diff;
-                    $this->write($child, false, true);
+                // Поиск обновлений для подчиненных
+                if ($depth > 0){
+                    // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
+                    $pchildren = $proto->find(array(
+                        'select' => array('children'),
+                        'limit' => array($entity->_attribs['update_step'], $step_size),
+                        'key' => 'uri'
+                    ), false, false, false);
+                    if (count($pchildren) < $step_size){
+                        // В следующий раз обновление по новой
+                        $entity->_attribs['update_step'] = 0;
+                    }else{
+                        // В следующий раз обновление будет продолжено
+                        $entity->_attribs['update_step'] = $entity->_attribs['update_step'] + $step_size;
+                    }
+                    // время обновляется если update_step =0 или объект ранее был полностью унаследован от прототипа после создания
+                    $entity->_attribs['update_time'] = ($update_time || !$entity->_attribs['update_step'])? time() : 0;
+
+                    $pids = array();
+                    foreach ($pchildren as $pchild){
+                        $pids[] = $pchild->key();
+                    }
+                    // У объекта выбрать подчиненные, которые прототипируются от выбранных $step_size подчиненных прототипа.
+                    $ochildren = $entity->find(array(
+                        'where' => array('attr', 'proto', 'in', $pids),
+                    ), false, false, false);
+                    // Для выбранных по прототипам подчиненных выполнить findUpdate с $depth-1
+                    foreach ($ochildren as $child){
+                        /** @var $child Entity */
+                        self::refresh($child, $step_size, $depth-1, $from_file, false);
+                        // Из $pchildren удаляем объект, используемый в качесвте прототпа
+                        if (($p = $child->proto()) && isset($pchildren[$p->uri()])) unset($pchildren[$p->uri()]);
+                    }
+                    $diff = $update_time == 0 ? Entity::DIFF_NO : Entity::DIFF_ADD;
+                    // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
+                    foreach ($pchildren as $proto){
+                        /** @var $proto Entity */
+                        $child = $proto->birth($entity);
+                        $child->_attribs['diff'] = $diff;
+                        $this->write($child, false, true);
+                    }
+                }else{
+                    // время обновляется если объект ранее был полностью унаследован от прототипа после создания
+                    $entity->_attribs['update_time'] = $update_time ? time() : 0;
+                    $entity->_attribs['update_step'] = 0;
                 }
             }else{
-                // время обновляется если объект ранее был полностью унаследован от прототипа после создания
-                $entity->_attribs['update_time'] = $update_time ? time() : 0;
+                $entity->_attribs['update_time'] = time();
                 $entity->_attribs['update_step'] = 0;
             }
-        }else{
-            $entity->_attribs['update_time'] = time();
-            $entity->_attribs['update_step'] = 0;
-        }
-        // Подготовка запроса для сохранения времени индексации объекта
-        $osave = $this->db->prepare('
-            UPDATE {objects} SET `diff` = :diff, update_time = :itime, update_step = :istep
-            WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
-        ');
-        $osave->execute(array(
-            ':diff' => $entity->_attribs['diff'],
-            ':itime' => $entity->_attribs['update_time'],
-            ':istep' => 0,
-            ':id' => $this->localId($entity->id()),
-            ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
-            ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
-        ));
-
-        // Проверка изменений в info файлах
-        if ($from_file && ($entity->_attribs['diff'] != Entity::DIFF_DELETE)){
             // Подготовка запроса для сохранения времени индексации объекта
-            $osave2 = $this->db->prepare('
-                UPDATE {objects} SET `diff` = :diff, update_time = :itime
+            $osave = $this->db->prepare('
+                UPDATE {objects} SET update_time = :itime, update_step = :istep, `diff` = :diff, `diff_from`= :diff_from
                 WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
             ');
-            /** @var callback $process_info Сверка сущности с массивом атрибутов */
-            $process_info = function($info, $entity)use(&$process_info, $osave2){
-                /** @var Entity $entity */
-                if (is_array($info)){
-                    if (isset($info['children'])){
-                        $children = $info['children'];
-                        unset($info['children']);
-                    }else{
-                        $children = array();
-                    }
-                    if ($entity->isExist() && $entity->diff()!=Entity::DIFF_ADD){
-                        // Проверка различий в атрибутах
-                        if ((isset($info['proto']) && $entity->proto()->uri()!=$info['proto']) ||
-                            (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
-                            (isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
-                            (isset($info['is_hidden']) && $entity->isHidden()!=$info['is_hidden']) ||
-                            (isset($info['is_delete']) && $entity->isDelete()!=$info['is_delete']) ||
-                            (isset($info['is_link']) && $entity->isLink()!=$info['is_link']) ||
-                            (isset($info['is_default_value']) && $entity->isDefaultValue()!=$info['is_default_value']) ||
-                            (isset($info['is_default_class']) && $entity->isDefaultClass()!=$info['is_default_class'])
-                        ){
-                            $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
-                            $osave2->execute(array(
-                                ':diff' => $entity->_attribs['diff'],
-                                ':itime' => $entity->_attribs['update_time']==0 ? 0 : $entity->_attribs['update_time']=time(),
-                                ':id' => $this->localId($entity->id()),
-                                ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
-                                ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
-                            ));
-                        }
-                    }else{
-                        $entity->diff(Entity::DIFF_ADD);
-                        $entity->import($info);
-                        $entity->order(Entity::MAX_ORDER);
-                        $this->write($entity, false, true);
-                    }
-                    // Проверка подчиненных
-                    foreach ($children as $name => $child_info){
-                        $child = $entity->{$name};
-                        $process_info($child_info, $child);
-                    }
+            $osave->execute(array(
+                ':itime' => $entity->_attribs['update_time'],
+                ':istep' => 0,
+                ':diff' => $entity->_attribs['diff'],
+                ':diff_from' => $entity->_attribs['diff_from'],
+                ':id' => $this->localId($entity->id()),
+                ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
+                ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
+            ));
+
+            // 2. Поиск изменений в info файлах
+            if ($from_file && ($entity->_attribs['diff'] != Entity::DIFF_DELETE)){
+                if ($depth > 0 && $clear_last_updates){
+                    // Удалить объекты с diff=add.
+                    $q = $this->db->prepare('
+                        DELETE objects, parents, protos FROM parents p, objects, parents, protos
+                        WHERE p.parent_id = ? AND p.level > 0 AND objects.id = p.object_id AND objects.diff = ?
+                        AND (objects.diff_from = 0 OR (objects.diff_from < 0 AND objects.parent_cnt+objects.diff_from = ?))
+                        AND p.object_id = parents.object_id
+                        AND p.object_id = protos.object_id
+                    ');
+                    $q->execute(array($id, Entity::DIFF_ADD, $entity->parentCount()));
+                    Cache::delete('mysqlstore/localids');
+                    // У остальных обнулить diff
+                    $q = $this->db->prepare('
+                        UPDATE {objects} SET `diff` = 0 WHERE parent = ? AND diff > 0
+                        AND (objects.diff_from = 0 OR (objects.diff_from < 0 AND objects.parent_cnt+objects.diff_from = ?))
+                    ');
+                    $q->execute(array($id, $entity->parentCount()));
                 }
-            };
-            $f = $entity->dir(true).$entity->name().'.info';
-            if ($update_time!=0 && is_file($f) && filemtime($f) > $entity->date()){
-                $info = json_decode(file_get_contents($f), true);
-                $process_info($info, $entity);
-            }
-            if ($depth > 0){
-                $dir = $entity->dir(true);
-                if (is_dir($dir)){
-                    $dirs = array_diff(scandir($dir), array('.', '..'));
-                    foreach ($dirs as $d){
-                        $f = $dir.$d.'/'.$d.'.info';
-                        if (is_file($f)){
-                            $child_info = json_decode(file_get_contents($f), true);
-                            $child = $entity->{$d};
-                            $process_info($child_info, $child);
+                // Подготовка запроса для сохранения времени индексации объекта
+                $osave2 = $this->db->prepare('
+                    UPDATE {objects} SET update_time = :itime, `diff` = :diff, `diff_from`=:diff_from
+                    WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
+                ');
+                /** @var callback $process_info Сверка сущности с массивом атрибутов */
+                $process_info = function($info, $entity, $level = 0)use(&$process_info, $osave2){
+                    /** @var Entity $entity */
+                    if (is_array($info)){
+                        if (isset($info['children'])){
+                            $children = $info['children'];
+                            unset($info['children']);
+                        }else{
+                            $children = array();
+                        }
+                        if ($entity->isExist() && $entity->diff()!=Entity::DIFF_ADD){
+                            // Проверка различий в атрибутах
+
+                            if ((isset($info['proto']) && ($p = $entity->proto()) && $p->uri()!=$info['proto']) ||
+                                (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
+                                (isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
+                                (isset($info['is_hidden']) && $entity->isHidden()!=$info['is_hidden']) ||
+                                (isset($info['is_delete']) && $entity->isDelete()!=$info['is_delete']) ||
+                                (isset($info['is_link']) && $entity->isLink()!=$info['is_link']) ||
+                                (isset($info['is_default_value']) && $entity->isDefaultValue()!=$info['is_default_value']) ||
+                                (isset($info['is_default_class']) && $entity->isDefaultClass()!=$info['is_default_class'])
+                            ){
+                                $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
+                                $osave2->execute(array(
+                                    ':itime' => $entity->_attribs['update_time']==0 ? 0 : $entity->_attribs['update_time']=time(),
+                                    ':diff' => $entity->_attribs['diff'],
+                                    ':diff_from' => $level,
+                                    ':id' => $this->localId($entity->id()),
+                                    ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
+                                    ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
+                                ));
+                            }
+                        }else{
+                            $entity->diff(Entity::DIFF_ADD);
+                            $entity->diff_from($level);
+                            $entity->import($info);
+                            $entity->order(Entity::MAX_ORDER);
+                            $this->write($entity, false, true);
+                        }
+                        // Проверка подчиненных
+                        foreach ($children as $name => $child_info){
+                            $child = $entity->{$name};
+                            $process_info($child_info, $child, $level-1);
+                        }
+                    }
+                };
+                $f = $entity->dir(true).$entity->name().'.info';
+                if ($update_time!=0 && is_file($f) && filemtime($f) > $entity->date()){
+                    $info = json_decode(file_get_contents($f), true);
+                    $process_info($info, $entity, 0);
+                }
+                if ($depth > 0){
+                    $dir = $entity->dir(true);
+                    if (is_dir($dir)){
+                        $dirs = array_diff(scandir($dir), array('.', '..'));
+                        foreach ($dirs as $d){
+                            $f = $dir.$d.'/'.$d.'.info';
+                            if (is_file($f)){
+                                $child_info = json_decode(file_get_contents($f), true);
+                                $child = $entity->{$d};
+                                $process_info($child_info, $child, 0);
+                            }
                         }
                     }
                 }
@@ -1814,6 +1844,7 @@ class MySQLStore extends Entity
         $attribs['update_step'] = intval($attribs['update_step']);
         $attribs['update_time'] = intval($attribs['update_time']);
         $attribs['diff'] = intval($attribs['diff']);
+        $attribs['diff_from'] = intval($attribs['diff_from']);
         unset($attribs['valuef']);
         // Свой класс
         if (empty($attribs['is_default_class'])){
@@ -2001,6 +2032,7 @@ class MySQLStore extends Entity
                   `update_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг обновления. Если не 0, то обновление не закончено',
                   `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
                   `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды Entity::DIFF_*',
+                  `diff_from` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'От куда изменения. 1 - от прототипа. 0 и меньше от info файла. Кодируется относительное расположение info файла',
                   PRIMARY KEY (`id`,`owner`,`lang`,`date`),
                   KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
                   KEY `indexation` (`parent`,`is_history`,`id`)

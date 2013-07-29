@@ -63,7 +63,8 @@ class Entity implements ITrace
         'is_exist' => 0,
         'update_step' => 0,
         'update_time' => 0,
-        'diff' => 0
+        'diff' => 0,
+        'diff_from' => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
@@ -156,7 +157,8 @@ class Entity implements ITrace
                 'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
-                'diff'         => Rule::int(), // Код обнаруженных отличий
+                'diff'         => Rule::int(), // Код обнаруженных обновлений
+                'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'	=> Rule::arrays(array(
                         'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -655,6 +657,19 @@ class Entity implements ITrace
             $this->_attribs['diff'] = $diff;
         }
         return $this->_attribs['diff'];
+    }
+
+    /**
+     * От куда найдены отличия в объекте?
+     * @param null|int $diff_from
+     * @return int Код отличия
+     */
+    public function diff_from($diff_from = null)
+    {
+        if (isset($diff_from)){
+            $this->_attribs['diff_from'] = $diff_from;
+        }
+        return $this->_attribs['diff_from'];
     }
 
     /**
@@ -1447,7 +1462,7 @@ class Entity implements ITrace
             case 'not':
                 return !$this->verify($cond[1]);
             case 'attr':
-                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff'))){
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
                     $value = $this->{$cond[1]}();
                 }else
                 if ($cond[1] == 'is_hidden'){
@@ -1724,6 +1739,7 @@ class Entity implements ITrace
             foreach ($info['children'] as $name => $child){
                 //$child['uri'] = $this->uri().'/'.$name;
                 if ($this->diff() == Entity::DIFF_ADD) $this->{$name}->diff(Entity::DIFF_ADD);
+                if ($this->diff_from() < 1) $this->{$name}->diff_from($this->diff_from()-1);
                 $this->{$name}->import($child);
             }
         }
