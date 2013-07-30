@@ -460,13 +460,31 @@ class Data
      * @param bool $from_file Признак, проверять или нет изменения в .info файлах
      * @throws \Boolive\errors\Error
      */
-    static function refresh($entity, $step_size = 50, $depth = 1, $from_file = true)
+    static function findUpdates($entity, $step_size = 50, $depth = 1, $from_file = true)
     {
         if ($entity->id() != Entity::ENTITY_ID){
             if ($store = self::getStore($entity->key())){
-                $store->refresh($entity, $step_size, $depth, $from_file);
+                $store->findUpdates($entity, $step_size, $depth, $from_file);
             }else{
                 $error = new Error('Невозможно проверить обновления для объекта', $entity->uri());
+                $error->store = new Error('Неопределено хранилище объекта', 'not-exist');
+                throw $error;
+            }
+        }
+    }
+
+    /**
+     * Применение ранее найденных обновлдений для объекта
+     * @param Entity $entity Объект, для которого применяются обновления
+     * @throws \Boolive\errors\Error
+     */
+    static function applyUpdates($entity)
+    {
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore($entity->key())){
+                $store->applyUpdates($entity);
+            }else{
+                $error = new Error('Невозможно применить обновления для объекта', $entity->uri());
                 $error->store = new Error('Неопределено хранилище объекта', 'not-exist');
                 throw $error;
             }

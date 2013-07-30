@@ -655,6 +655,8 @@ class Entity implements ITrace
     {
         if (isset($diff)){
             $this->_attribs['diff'] = $diff;
+            $this->_changed = true;
+            $this->_checked = false;
         }
         return $this->_attribs['diff'];
     }
@@ -668,6 +670,8 @@ class Entity implements ITrace
     {
         if (isset($diff_from)){
             $this->_attribs['diff_from'] = $diff_from;
+            $this->_changed = true;
+            $this->_checked = false;
         }
         return $this->_attribs['diff_from'];
     }
