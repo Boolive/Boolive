@@ -19,6 +19,10 @@ class item_view extends AutoWidgetList2
     {
         $this->_input_rule = Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                            Rule::arrays(Rule::entity()),
+                            Rule::entity()
+                        )->required(),
                 'program' => Rule::entity(array('is', '/Library/views/ViewSingle'))->required(), // Объект для пункта меню
                 //'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
                 'show' => Rule::bool()->default(true)->required() // Показывать пункт или только его подчиенных?

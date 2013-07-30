@@ -6,23 +6,24 @@
  */
 namespace Library\layouts\Admin\ProgramsMenu;
 
-use Library\views\Widget\Widget;
+use Library\views\Widget\Widget,
+    Boolive\values\Rule;
 
 class ProgramsMenu extends Widget
 {
-//    public function defineInputRule()
-//    {
-//        $this->_input_rule = Rule::arrays(array(
-//                'REQUEST' => Rule::arrays(array(
-//                        'object' => Rule::any(
-//                            Rule::arrays(Rule::entity()),
-//                            Rule::entity()
-//                        )->required()
-//                    )
-//                )
-//            )
-//        );
-//    }
+    public function defineInputRule()
+    {
+        $this->_input_rule = Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
+                        'object' => Rule::any(
+                            Rule::arrays(Rule::entity()),
+                            Rule::entity()
+                        )->required()
+                    )
+                )
+            )
+        );
+    }
 
     protected function initInputChild($input){
         parent::initInputChild($input);
