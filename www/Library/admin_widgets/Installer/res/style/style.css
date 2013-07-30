@@ -1,0 +1,56 @@
+.Installer{
+    width: 100%;
+    height: 100%;
+	}
+    .Installer .buttons{
+        padding: 30px 0;
+    }
+    .Installer .btn-primary{
+        background-color: #00C4A1;
+        border-color: #00a687;
+        }
+        .Installer .btn-primary:hover{
+            background-color: #00a687;
+            border-color: #00a687;
+            }
+    .Installer .txt-primary{
+        color: #00a687;
+    }
+	.Installer .btn {
+        float: left;
+        margin-right: 0;
+		}
+        .Installer .diff:before{
+            vertical-align: middle;
+            font-family: "Times New Roman";
+            font-weight: bold;
+            color: #FFF;
+            margin-right: 4px;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 0 4px 1px 4px;
+            display: inline-block;
+        }
+        .Installer .diff.add{
+            color: #85cc29;
+        }
+        .Installer .diff.add:before{
+            background-color: #85cc29;
+            content: '+';
+            }
+        .Installer .diff.change{
+            color: #9352cc;
+            }
+        .Installer .diff.change:before{
+            content: '!';
+            background-color: #9352cc;
+            padding: 0 6px 1px 6px;
+            }
+        .Installer .diff.delete{
+            color: #e67573;
+            }
+        .Installer .diff.delete:before{
+            content: '-';
+            background-color: #e67573;
+            padding: 0 6px 1px 6px;
+            }

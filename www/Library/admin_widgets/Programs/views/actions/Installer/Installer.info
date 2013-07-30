@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "Installer.tpl",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/Installer",
+    "is_link": true,
+    "date": 1375035325,
+    "order": 21
+}
