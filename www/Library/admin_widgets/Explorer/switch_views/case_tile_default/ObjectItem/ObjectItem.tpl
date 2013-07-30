@@ -10,7 +10,7 @@
         if($v['is_link']->bool()){
             $class .= ' link';
         }
-        switch ($diff = $v['diff']->int()){
+        switch ($v['diff']->int()){
             case \Boolive\data\Entity::DIFF_CHANGE:
                 $class .= ' diff_change';
                 break;

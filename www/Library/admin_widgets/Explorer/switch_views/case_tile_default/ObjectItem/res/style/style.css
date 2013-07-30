@@ -77,7 +77,6 @@
                 margin-right: 4px;
                 text-decoration: none;
                 border-radius: 16px;
-                box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.5);
                 padding: 0 8px;
                 }
             .ObjectItem.tile .view.diff_change .title-group .title:before{

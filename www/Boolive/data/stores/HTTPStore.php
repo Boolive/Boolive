@@ -34,7 +34,7 @@ class HTTPStore extends Entity
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS => 2,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 30,
+            CURLOPT_TIMEOUT => 5,
             CURLOPT_HTTPHEADER => array(
                 'Accept: application/json'
             )
@@ -64,7 +64,15 @@ class HTTPStore extends Entity
             //CURLOPT_COOKIE => 'XDEBUG_SESSION="netbeans-xdebug"'
         ));
         $result = curl_exec($this->curl);
-        if ($result === false) throw new \Exception(curl_error($this->curl), curl_errno($this->curl));
+        if ($result === false){
+            $error = curl_errno($this->curl);
+            if ($error == 28){
+                // timeout
+                // @todo возвратить несуществующие объекты
+            }else{
+                throw new \Exception(curl_error($this->curl), $error);
+            }
+        }
         $httpcode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
         $response = json_decode($result, true);
         if (isset($response['result'])) $response = $response['result'];
