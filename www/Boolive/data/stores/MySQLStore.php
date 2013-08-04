@@ -156,12 +156,22 @@ class MySQLStore extends Entity
                     $group_result[$key] = $this->makeObject($row);
                 }else{
                     if (isset($row['id2'])){
-                        $group_result[$key] = array(
-                            'uri'=>$row['uri'],
-                            'owner'=>$this->_attribs['owner'],
-                            'lang'=>$this->_attribs['lang'],
-                            'class' => '\\Boolive\\data\\Entity',
-                        );
+
+                        if ($this != ($store = Data::getStore($row['uri']))){
+                            $group_result[$key] = $store->read(array(
+                                'from' => $row['uri'],
+                                'select' => array('self'),
+                                'depth'=> array(0,0)
+                                )
+                            );
+                        }else{
+                            $group_result[$key] = array(
+                                'uri'=>$row['uri'],
+                                'owner'=>$this->_attribs['owner'],
+                                'lang'=>$this->_attribs['lang'],
+                                'class' => '\\Boolive\\data\\Entity',
+                            );
+                        }
                     }
                 }
             }
@@ -544,7 +554,7 @@ class MySQLStore extends Entity
                 // Создание отношений если объект новый
                 if (!$entity->isExist()){
                     $this->makeParents($attr['id'], $attr['parent'], 0, false);
-                    $this->makeProtos($attr['id'], $attr['proto'], 0, false, $incomplete);
+                    $this->makeProtos($attr['id'], $attr['proto'], 0, false, $incomplete, $attr['proto']?$entity->proto()->uri():null);
                 }
                 if ($is_write && $attr['diff']!=Entity::DIFF_ADD){
                     // Обновить дату изменения у родителей
@@ -571,7 +581,7 @@ class MySQLStore extends Entity
                     // Обновления наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if ($current['proto'] != $attr['proto']){
-                        $this->makeProtos($attr['id'], $attr['proto'], $dp, true, $incomplete);
+                        $this->makeProtos($attr['id'], $attr['proto'], $dp, true, $incomplete, $attr['proto']?$entity->proto()->uri():null);
                     }
                     // Обновление значения, признака файла, признака наследования значения, класса и кол-во прототипов у наследников
                     // если что-то из этого изменилось у объекта
@@ -685,24 +695,24 @@ class MySQLStore extends Entity
         }
         $id = $this->localId($entity->key(), false);
         // Проверка целосности - поиск наследников объекта и наследников его подчиненных
-//        if ($integrity){
-//            $q = $this->db->prepare('
-//                SELECT ids.uri FROM ids
-//                JOIN parents ON parents.parent_id = :id AND parents.is_delete = 0
-//                JOIN protos ON protos.object_id = ids.id AND protos.proto_id = parents.object_id AND protos.level > 0 AND protos.is_delete = 0
-//                LEFT JOIN parents sub ON sub.object_id=protos.object_id AND sub.parent_id = :id
-//                WHERE sub.object_id IS NULL
-//                LIMIT 0,10
-//            ');
-//            $q->execute(array(':id'=>$id));
-//            $rows = $q->fetchAll(DB::FETCH_COLUMN, 0);
-//            if ($rows){
-//                $uris = implode(', ', $rows);
-//                $error = new Error('Недопустимое действие над объектом', $entity->uri());
-//                $error->integrity = new Error(array('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов (%s)', $uris), 'heirs-exists');
-//                throw $error;
-//            }
-//        }
+        if ($integrity){
+            $q = $this->db->prepare('
+                SELECT ids.uri FROM ids
+                JOIN parents ON parents.parent_id = :id AND parents.is_delete = 0
+                JOIN protos ON protos.object_id = ids.id AND protos.proto_id = parents.object_id AND protos.level > 0 AND protos.is_delete = 0
+                LEFT JOIN parents sub ON sub.object_id=protos.object_id AND sub.parent_id = :id
+                WHERE sub.object_id IS NULL
+                LIMIT 0,10
+            ');
+            $q->execute(array(':id'=>$id));
+            $rows = $q->fetchAll(DB::FETCH_COLUMN, 0);
+            if ($rows){
+                $uris = implode(', ', $rows);
+                $error = new Error('Недопустимое действие над объектом', $entity->uri());
+                $error->integrity = new Error(array('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов (%s)', $uris), 'heirs-exists');
+                throw $error;
+            }
+        }
         // Обновить дату изменения у родителей
         $this->updateDate($id, time());
         // Удалить объект
@@ -1498,7 +1508,7 @@ class MySQLStore extends Entity
                                 unset($c[0]);
                             }
                             if (count($c)>0){
-                                $alias = 'is'.$t_cnt;
+                                $alias = 'in'.$t_cnt;
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
@@ -1628,14 +1638,14 @@ class MySQLStore extends Entity
             ');
             $q->execute(array(':obj'=>$entity));
             // Обновить level оставшихся отношений в соответсвии с изменением level с новым родителем
-            if ($dl != 0){
-                $q = $this->db->prepare('
-                    UPDATE {parents} c, (SELECT object_id FROM {parents} WHERE parent_id = :obj)p
-                    SET c.level = c.level+:dl
-                    WHERE c.object_id!=c.parent_id AND c.is_delete=0 AND p.object_id = c.object_id
-                ');
-                $q->execute(array(':obj'=>$entity, ':dl'=>$dl));
-            }
+//            if ($dl != 0){
+//                $q = $this->db->prepare('
+//                    UPDATE {parents} c, (SELECT object_id FROM {parents} WHERE parent_id = :obj)p
+//                    SET c.level = c.level+:dl
+//                    WHERE c.object_id!=c.parent_id AND c.is_delete=0 AND p.object_id = c.object_id
+//                ');
+//                $q->execute(array(':obj'=>$entity, ':dl'=>$dl));
+//            }
             if ($parent > 0){
                 // Для объекта и всех его подчиненных создать отношения с новыми родителями
                 $q = $this->db->prepare('SELECT object_id, `level` FROM {parents} WHERE parent_id = :obj ORDER BY level');
@@ -1671,44 +1681,76 @@ class MySQLStore extends Entity
      * @param int $dl Разница между новым и старым уровнем вложенности объекта среди прототипов
      * @param bool $remake Признак, отношения обновлять (при смене прототипа) или создавать новые (новый объект)
      * @param bool $incomplete Признак, объект небыл сохранен, но его уже прототипировали?
+     * @param null $proto_uri URI прототипа. Необходим, если прототип внешний
      */
-    private function makeProtos($entity, $proto, $dl, $remake = false, $incomplete = false)
+    private function makeProtos($entity, $proto, $dl, $remake = false, $incomplete = false, $proto_uri = null)
     {
+        if (isset($proto_uri) && Data::getStore($proto_uri)!=$this){
+            $protos = Data::read(array(
+                'from' => $proto_uri,
+                'select' => array('protos'),
+                'depth' => array(0, Entity::MAX_DEPTH),
+                'order' => array('proto_cnt', 'DESC')
+            ));
+            foreach ($protos as $i => $p){
+                $protos[$i] = $this->localId($p->uri());
+            }
+            $remote = true;
+        }else{
+            $remote = false;
+        }
         if ($remake){
             // У наследников удалить отношения с прототипами, которые есть у $entity
             $q = $this->db->prepare('
                 UPDATE {protos} p, (
                     SELECT c.object_id, c.proto_id FROM {protos} p
                     JOIN {protos} c ON c.object_id = p.object_id AND c.proto_id!=:obj AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj)
-                    LEFT JOIN objects ON (c.proto_id = objects.id)
-                    WHERE p.proto_id = :obj AND objects.id IS NOT NULL)p2
+                    WHERE p.proto_id = :obj)p2
                 SET p.is_delete = 1
                 WHERE p.object_id = p2.object_id AND p.proto_id = p2.proto_id
             ');
             $q->execute(array(':obj'=>$entity));
             // Обновить level оставшихся отношений в соответсвии с изменением level с новым прототипом
             // если объект полностью создан и различаются уровни
-            if (!$incomplete && $dl != 0){
-                $q = $this->db->prepare('
-                    UPDATE {protos} c, (SELECT object_id FROM {protos} WHERE proto_id = :obj)p
-                    SET c.level = c.level+:dl
-                    WHERE c.object_id!=c.proto_id AND c.is_delete=0 AND p.object_id = c.object_id
-                ');
-                $q->execute(array(':obj'=>$entity, ':dl'=>$dl));
-            }
+//            if (!$incomplete && $dl != 0){
+//                $q = $this->db->prepare('
+//                    UPDATE {protos} c, (SELECT object_id FROM {protos} WHERE proto_id = :obj)p
+//                    SET c.level = c.level+:dl
+//                    WHERE c.object_id!=c.proto_id AND c.is_delete=0 AND p.object_id = c.object_id
+//                ');
+//                $q->execute(array(':obj'=>$entity, ':dl'=>$dl));
+//            }
             // Для объекта и всех его наследников создать отношения с новыми прототипом
             if ($proto >= 0){
-                $q = $this->db->prepare('SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj AND is_delete = 0 ORDER BY `level`');
-                $make = $this->db->prepare('
-                    INSERT {protos} (object_id, proto_id, `level`)
-                    SELECT :obj, proto_id, `level`+1+:l FROM {protos}
-                    WHERE object_id = :parent
-                    UNION SELECT :obj,:obj,0
-                    ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
-                ');
-                $q->execute(array(':obj'=>$entity));
-                while ($row = $q->fetch(DB::FETCH_ASSOC)){
-                    $make->execute(array(':obj'=>$row['object_id'], ':parent'=>$proto, ':l'=>$row['level']));
+                if ($remote){
+                    // Отношения с внешними прототипами для объекта и его наследников
+                    $values = '';
+                    foreach ($protos as $i => $p){
+                        $values.='(:obj, '.$p.', '.($i+1).'+:level),';
+                    }
+                    $q = $this->db->prepare('
+                        INSERT {protos} (object_id, proto_id, `level`)
+                        VALUES '.rtrim($values,',').'
+                        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                    ');
+                    $h = $this->db->prepare('SELECT object_id as `obj`, `level` FROM protos WHERE proto_id = :obj and is_delete=0');
+                    $h->execute(array(':obj' => $entity));
+                    while ($heir = $h->fetch(DB::FETCH_ASSOC)){
+                        $q->execute($heir);
+                    }
+                }else{
+                    $q = $this->db->prepare('SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj AND is_delete = 0 ORDER BY `level`');
+                    $make = $this->db->prepare('
+                        INSERT {protos} (object_id, proto_id, `level`)
+                        SELECT :obj, proto_id, `level`+1+:l FROM {protos}
+                        WHERE object_id = :proto
+                        UNION SELECT :obj,:obj,0
+                        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                    ');
+                    $q->execute(array(':obj'=>$entity));
+                    while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                        $make->execute(array(':obj'=>$row['object_id'], ':proto'=>$proto, ':l'=>$row['level']));
+                    }
                 }
             }
         }else
@@ -1721,37 +1763,74 @@ class MySQLStore extends Entity
                 ');
                 $make->execute(array(':obj' => $entity));
             }else{
-                $cheack = $this->db->prepare('SELECT 1 FROM {protos} WHERE object_id=? and is_delete=0 LIMIT 0,1');
-                $cheack->execute(array($proto));
-                if ($cheack->fetch()){
+                $check = $this->db->prepare('SELECT 1 FROM {protos} WHERE object_id=? and is_delete=0 LIMIT 0,1');
+                $check->execute(array($proto));
+                if ($check->fetch()){
                     // Если прототип в таблице protos
-                    $sql = '
+                    $make = $this->db->prepare('
                         INSERT {protos} (object_id, proto_id, `level`)
                         SELECT :obj, proto_id, `level`+1 FROM {protos}
-                        WHERE object_id = :parent
+                        WHERE object_id = :proto
                         UNION SELECT :obj,:obj,0
                         ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
-                    ';
+                    ');
+                    $make->execute(array(':obj' => $entity, ':proto'=>$proto));
                 }else{
-                    // Если прототипа нет в таблице protos
-                    $sql = '
-                        INSERT {protos} (object_id, proto_id, `level`)
-                        VALUES (:obj,:parent,1), (:obj,:obj,0)
-                        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
-                    ';
-                    if ($incomplete){
-                        // Объект уже кем-то прототипирован, поэтому для них тоже добавляется отношения с proto
-                        $q = $this->db->prepare('
+                    if ($remote){
+                        // Если прототип внешний
+                        // Если объект уже прототипирован (хотя не был создан)
+                        if ($incomplete){
+                            // Отношения с прототипами для уже существующих наследников объекта
+                            $values = '';
+                            foreach ($protos as $i => $p){
+                                $values.='(:obj, '.$p.', '.($i+1).'+:level),';
+                            }
+                            $q = $this->db->prepare('
+                                INSERT {protos} (object_id, proto_id, `level`)
+                                VALUES '.rtrim($values,',').'
+                                ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                            ');
+                            // Объект уже кем-то прототипирован, поэтому и для них добавляется отношения с proto
+                            // У наследников объекта выбирается запись-отношение с $entity и она же вставляется с новым proto_id и увеличенным level
+                            $h = $this->db->prepare('SELECT object_id as `obj`, `level` FROM protos WHERE proto_id = :obj and is_delete=0');
+                            $h->execute(array(':obj' => $entity));
+                            while ($heir = $h->fetch(DB::FETCH_ASSOC)){
+                                $q->execute($heir);
+                            }
+                        }
+                        // Отношения с прототипами для объекта
+                        $values = '';
+                        foreach ($protos as $i => $p){
+                            $values.='(:obj, '.$p.', '.($i+1).'),';
+                        }
+                        $make = $this->db->prepare('
                             INSERT {protos} (object_id, proto_id, `level`)
-                            SELECT protos.object_id, :parent, objects.proto_cnt+1 FROM protos, objects
-                            WHERE proto_id = :obj AND object_id = objects.id
+                            VALUES '.$values.' (:obj,:obj,0)
                             ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                         ');
-                        $q->execute(array(':obj' => $entity, ':parent'=>$proto));
+                        $make->execute(array(':obj' => $entity));
+                    }else{
+                        if ($incomplete){
+                            // Объект уже кем-то прототипирован, поэтому и для них добавляется отношения с proto
+                            // У наследников объекта выбирается запись-отношение с $entity и она же вставляется с новым proto_id и увеличенным level
+                            $q = $this->db->prepare('
+                                INSERT {protos} (object_id, proto_id, `level`)
+                                SELECT protos.object_id, :proto, objects.proto_cnt+1 FROM protos, objects
+                                WHERE protos.proto_id = :obj AND protos.object_id = objects.id
+                                ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                            ');
+                            $q->execute(array(':obj' => $entity, ':proto'=>$proto));
+                        }
+                        // Считается, что у прототипа нет своего прототипа, поэтому только с ним создаётся отношение
+                        $make = $this->db->prepare('
+                            INSERT {protos} (object_id, proto_id, `level`)
+                            VALUES (:obj,:proto,1), (:obj,:obj,0)
+                            ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                        ');
+                        $make->execute(array(':obj' => $entity, ':proto'=>$proto));
                     }
                 }
-                $make = $this->db->prepare($sql);
-                $make->execute(array(':obj' => $entity, ':parent'=>$proto));
+
             }
         }
     }

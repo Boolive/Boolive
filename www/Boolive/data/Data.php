@@ -398,7 +398,7 @@ class Data
             Buffer::setEntity($result, $cond);
         }
         // Если условие автоматом сгруппировано и выбор был по нему, то выбор из группы запрашиваемого элемента
-        if ($cache==2 && isset($key_from_group) && is_array($result) && isset($result[$key_from_group])){
+        if (/*$cache==2 && */isset($key_from_group) && is_array($result) && isset($result[$key_from_group])){
             $result = $result[$key_from_group];
         }
         return $result;

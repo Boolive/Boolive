@@ -19,7 +19,7 @@ Version 2.0.alpha work in progress
 - enh #123: Search of parents, prototypes and heirs is added. Syntax of the condition for search of children, counts of objects and check of existence of object is changed. Initial and final depth of search is added. (VladimirShestakov)
 - enh #125: Buffering by levels for result of reading a tree of objects is added. (VladimirShestakov)
 - enh #133: Full conditions for SwitchCase (VladimirShestakov)
-
+- enh #134: Check of inheritance of external objects (VladimirShestakov)
 
 Version 2.0.preview-2 April, 27 2013
 ----------------------------

@@ -488,7 +488,11 @@ class Entity implements ITrace
                     if ($p = $proto->isLink(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_link'] = $proto->key();
+                    if ($proto->store() != $this->store()){
+                        $this->_attribs['is_link'] = $proto->uri();
+                    }else{
+                       $this->_attribs['is_link'] = $proto->key();
+                    }
                 }else{
                     $this->_attribs['is_link'] = self::ENTITY_ID;
                 }
@@ -562,7 +566,11 @@ class Entity implements ITrace
                     if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_default_value'] = $proto->key();
+                    if ($proto->store() != $this->store()){
+                        $this->_attribs['is_default_value'] = $proto->uri();
+                    }else{
+                       $this->_attribs['is_default_value'] = $proto->key();
+                    }
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['is_file'] = $proto->isFile();
                 }else{
@@ -620,7 +628,11 @@ class Entity implements ITrace
                     $proto = null;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_default_class'] = $proto->key();
+                    if ($proto->store() != $this->store()){
+                        $this->_attribs['is_default_class'] = $proto->uri();
+                    }else{
+                       $this->_attribs['is_default_class'] = $proto->key();
+                    }
                 }else{
                     $this->_attribs['is_default_class'] = self::ENTITY_ID;
                 }
@@ -842,7 +854,11 @@ class Entity implements ITrace
                     }
                 }
                 // Смена прототипа
-                $this->_attribs['proto'] = $new_proto->key();
+                if ($new_proto->store() != $this->store()){
+                    $this->_attribs['proto'] = $new_proto->uri();
+                }else{
+                   $this->_attribs['proto'] = $new_proto->key();
+                }
                 $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
                 $this->_proto = $new_proto;
 
@@ -870,6 +886,9 @@ class Entity implements ITrace
                     'comment' => 'read proto',
                     'cache' => 2
                 ));
+                if (!$this->_proto instanceof Entity){
+                    throw new Exception('NO PROTO '.$this->_attribs['proto']);
+                }
                 if (!$this->_proto->isExist()){
                     $this->_proto = null;
                 }
@@ -912,7 +931,11 @@ class Entity implements ITrace
                 $this->_attribs['owner'] = null;
                 $this->_owner = null;
             }else{
-                $this->_attribs['owner'] = $new_owner->key();
+                if ($new_owner->store() != $this->store()){
+                    $this->_attribs['owner'] = $new_owner->uri();
+                }else{
+                   $this->_attribs['owner'] = $new_owner->key();
+                }
                 $this->_owner = $new_owner;
             }
             $this->_changed = true;
@@ -951,7 +974,11 @@ class Entity implements ITrace
                 $this->_attribs['lang'] = null;
                 $this->_owner = null;
             }else{
-                $this->_attribs['lang'] = $new_lang->key();
+                if ($new_lang->store() != $this->store()){
+                    $this->_attribs['lang'] = $new_lang->uri();
+                }else{
+                   $this->_attribs['lang'] = $new_lang->key();
+                }
                 $this->_lang = $new_lang;
             }
             $this->_changed = true;
@@ -1065,6 +1092,9 @@ class Entity implements ITrace
                     'lang' => $this->_attribs['lang'],
                     'comment' => 'read property by name'
                 ));
+            }
+            if (!$obj instanceof Entity){
+                throw new Exception($this->uri().'/'.$name);
             }
             if (!$obj->isExist()){
                 $obj->_attribs['name'] = $name;
@@ -1632,22 +1662,24 @@ class Entity implements ITrace
         if ($this->isDelete(null, false)) $export['is_delete'] = true;
         $export['date'] = $this->date();
         $export['order'] = $this->order();
+        // Расширенный импорт
         if ($more_info){
             $export['id'] = $this->id();
             $export['uri'] = $this->uri();
             $export['name'] = $this->name();
+            $export['proto_cnt'] = $this->protoCount();
             if ($this->parent()) $export['parent'] = $this->parent()->uri();
-            if ($this->isLink()) $export['is_link'] = $this->_attribs['is_link'];
             if (!$this->isHidden()) $export['is_hidden'] = false;
             if (!$this->isDelete()) $export['is_delete'] = false;
             $export['is_history'] = $this->isHistory();
-            $export['is_default_value'] = $this->_attribs['is_default_value'];
-            $export['is_default_class'] = $this->_attribs['is_default_class'];
+            if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
+            if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
+            if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
             if (!$this->isAccessible()) $export['is_accessible'] = false;
             if (!$this->isExist()) $export['is_exist'] = false;
         }
+        // Свойства (подчиненные) объекта
         if ($properties){
-            // Свойства
             $export['children'] = array();
             // Названия подчиненных, которые экспортировать вместе с объектом
             $children = $this->exportedProperties();
