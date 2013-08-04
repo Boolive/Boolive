@@ -14,6 +14,7 @@ Version 2.0.alpha work in progress
 - new #127: The caching module in files is created (VladimirShestakov)
 - new #128: Caching of views (widgets) (VladimirShestakov)
 - new #129: Cascade updating of date of editing objects is added (VladimirShestakov)
+- new #137: The possession attribute for objects is added. Possession can be "mandatory", "additional" and "internal" (VladimirShestakov)
 - enh: Data::select() method  is combined with Data::read() (VladimirShestakov)
 - enh: Added style for output of function trace() (VladimirShestakov)
 - enh #123: Search of parents, prototypes and heirs is added. Syntax of the condition for search of children, counts of objects and check of existence of object is changed. Initial and final depth of search is added. (VladimirShestakov)

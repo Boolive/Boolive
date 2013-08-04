@@ -37,6 +37,15 @@ class Entity implements ITrace
     const DIFF_DELETE = 2;
     /** @const int Объект добавлен */
     const DIFF_ADD = 3;
+    /** Типы владения объектом его родителем. Используется при прототипировании родителя */
+    /** @const int Обязатлеьное владение. Автоматически прототипируется в новых наследниках родителя. */
+    const POSSESSION_MANDATORY = 0;
+    /** @const int Дополнительное владение. Вручную прототипируется (устанавливается) в наследниках родителя. */
+    const POSSESSION_ADDITIONAL = 1;
+    /** @const int Внутреннее владение. Не прототипируется в новых наследниках родителя и не видет при их обновлении для ручной установки.
+     * В обычных случаях объект остаётся доступным с учётом прав доступа
+     */
+    const POSSESSION_INTERNAL = 2;
 
     /** @var array Атрибуты */
     protected $_attribs = array(
@@ -59,12 +68,13 @@ class Entity implements ITrace
         'is_link'      => 0,
         'is_default_value' => 0,
         'is_default_class' => 0,
-        'is_accessible' => 1,
-        'is_exist' => 0,
-        'update_step' => 0,
-        'update_time' => 0,
-        'diff' => 0,
-        'diff_from' => 0
+        'is_accessible'    => 1,
+        'is_exist'     => 0,
+        'possession'   => 0,
+        'update_step'  => 0,
+        'update_time'  => 0,
+        'diff'         => 0,
+        'diff_from'    => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
@@ -157,7 +167,8 @@ class Entity implements ITrace
                 'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
-                'diff'         => Rule::int(), // Код обнаруженных обновлений
+                'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
+                'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
                 'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
                 // Сведения о загружаемом файле. Не является атрибутом объекта
                 'file'	=> Rule::arrays(array(
@@ -656,6 +667,21 @@ class Entity implements ITrace
         }else{
             return !empty($this->_attribs['is_default_class']);
         }
+    }
+
+    /**
+     * Тип владения объектом его родителем
+     * @param null|int $possession Новый код владения. Коды определены константами Entity::POSSESSION_*
+     * @return int Установленный код владения или текущий
+     */
+    public function possession($possession = null)
+    {
+        if (isset($possession)){
+            $this->_attribs['possession'] = $possession;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return $this->_attribs['possession'];
     }
 
     /**
@@ -1497,7 +1523,7 @@ class Entity implements ITrace
             case 'not':
                 return !$this->verify($cond[1]);
             case 'attr':
-                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'possession', 'diff', 'diff_from'))){
                     $value = $this->{$cond[1]}();
                 }else
                 if ($cond[1] == 'is_hidden'){
@@ -1663,6 +1689,7 @@ class Entity implements ITrace
         if ($this->isDelete(null, false)) $export['is_delete'] = true;
         $export['date'] = $this->date();
         $export['order'] = $this->order();
+        if ($this->possession() != Entity::POSSESSION_MANDATORY) $export['possession'] = $this->possession();
         // Расширенный импорт
         if ($more_info){
             $export['id'] = $this->id();
@@ -1762,6 +1789,11 @@ class Entity implements ITrace
         if (!empty($info['is_link'])) $this->isLink(true);
         if (!empty($info['is_hidden'])) $this->isHidden(true);
         if (!empty($info['is_delete'])) $this->isDelete(true);
+        if (isset($info['possession'])){
+            $this->possession($info['possession']);
+        }else{
+            $this->possession(Entity::POSSESSION_MANDATORY);
+        }
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);

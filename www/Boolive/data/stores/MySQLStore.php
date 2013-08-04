@@ -490,7 +490,7 @@ class MySQLStore extends Entity
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
                         'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt', 'valuef', 'diff', 'diff_from');
+                        'proto_cnt', 'parent_cnt', 'valuef', 'possession','diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id+owner+lang+date
@@ -786,9 +786,19 @@ class MySQLStore extends Entity
                 }
                 // Поиск обновлений для подчиненных
                 if ($depth > 0){
+                    // С каким diff добавлять подчиенные от прототипа?
+                    $diff = $update_time == 0 && $entity->_attribs['diff'] != Entity::DIFF_ADD ? Entity::DIFF_NO : Entity::DIFF_ADD;
+                    if ($diff == Entity::DIFF_NO){
+                        // Искать только обязательные свойства
+                        $where = array('attr', 'possession', '=', Entity::POSSESSION_MANDATORY);
+                    }else{
+                        // Не искать внутренние свойства
+                        $where = array('attr', 'possession', '!=', Entity::POSSESSION_INTERNAL);
+                    }
                     // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
                     $pchildren = $proto->find(array(
                         'select' => array('children'),
+                        'where' => $where,
                         'limit' => array($entity->_attribs['update_step'], $step_size),
                         'key' => 'uri'
                     ), false, false, false);
@@ -818,11 +828,12 @@ class MySQLStore extends Entity
                         // Из $pchildren удаляем объект, используемый в качесвте прототпа
                         if (($p = $child->proto()) && isset($pchildren[$p->uri()])) unset($pchildren[$p->uri()]);
                     }
-                    $diff = $update_time == 0 && $entity->_attribs['diff'] != Entity::DIFF_ADD ? Entity::DIFF_NO : Entity::DIFF_ADD;
+
                     // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
                     foreach ($pchildren as $proto){
                         /** @var $proto Entity */
                         $child = $proto->birth($entity);
+                        $child->_attribs['possession'] = $proto->possession();
                         $child->_attribs['diff'] = $diff;
                         $child->_attribs['diff_from'] = 1;
                         $this->write($child, false, true);
@@ -888,7 +899,7 @@ class MySQLStore extends Entity
                         }
                         if ($entity->isExist() && $entity->diff()!=Entity::DIFF_ADD){
                             // Проверка различий в атрибутах
-
+                            if (empty($info['possession'])) $info['possession'] = Entity::POSSESSION_MANDATORY;
                             if ((isset($info['proto']) && ($p = $entity->proto()) && $p->uri()!=$info['proto']) ||
                                 (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
                                 (isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
@@ -896,7 +907,8 @@ class MySQLStore extends Entity
                                 (isset($info['is_delete']) && $entity->isDelete()!=$info['is_delete']) ||
                                 (isset($info['is_link']) && $entity->isLink()!=$info['is_link']) ||
                                 (isset($info['is_default_value']) && $entity->isDefaultValue()!=$info['is_default_value']) ||
-                                (isset($info['is_default_class']) && $entity->isDefaultClass()!=$info['is_default_class'])
+                                (isset($info['is_default_class']) && $entity->isDefaultClass()!=$info['is_default_class']) ||
+                                ($info['possession'] != $entity->possession())
                             ){
                                 $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
                                 $osave2->execute(array(
@@ -970,10 +982,12 @@ class MySQLStore extends Entity
                     if ($entity->isDefaultValue()){
                         $entity->_attribs['value'] = $proto->value();
                         $entity->_attribs['is_file'] = $proto->isFile();
-                        $entity->_changed = true;
-                        $entity->_checked = false;
                         $entity->isDelete($proto->isDelete());
                         $entity->isHidden($proto->isHidden());
+                        $entity->possession($proto->possession());
+                        $entity->_changed = true;
+                        $entity->_checked = false;
+
                         // @todo Если внешний, то загрузить файл от прототипа
                     }
                     if ($entity->isDefaultClass()){
@@ -1638,15 +1652,6 @@ class MySQLStore extends Entity
                 WHERE p.object_id = p2.object_id AND p.parent_id = p2.parent_id
             ');
             $q->execute(array(':obj'=>$entity));
-            // Обновить level оставшихся отношений в соответсвии с изменением level с новым родителем
-//            if ($dl != 0){
-//                $q = $this->db->prepare('
-//                    UPDATE {parents} c, (SELECT object_id FROM {parents} WHERE parent_id = :obj)p
-//                    SET c.level = c.level+:dl
-//                    WHERE c.object_id!=c.parent_id AND c.is_delete=0 AND p.object_id = c.object_id
-//                ');
-//                $q->execute(array(':obj'=>$entity, ':dl'=>$dl));
-//            }
             if ($parent > 0){
                 // Для объекта и всех его подчиненных создать отношения с новыми родителями
                 $q = $this->db->prepare('SELECT object_id, `level` FROM {parents} WHERE parent_id = :obj ORDER BY level');
@@ -1711,16 +1716,6 @@ class MySQLStore extends Entity
                 WHERE p.object_id = p2.object_id AND p.proto_id = p2.proto_id
             ');
             $q->execute(array(':obj'=>$entity));
-            // Обновить level оставшихся отношений в соответсвии с изменением level с новым прототипом
-            // если объект полностью создан и различаются уровни
-//            if (!$incomplete && $dl != 0){
-//                $q = $this->db->prepare('
-//                    UPDATE {protos} c, (SELECT object_id FROM {protos} WHERE proto_id = :obj)p
-//                    SET c.level = c.level+:dl
-//                    WHERE c.object_id!=c.proto_id AND c.is_delete=0 AND p.object_id = c.object_id
-//                ');
-//                $q->execute(array(':obj'=>$entity, ':dl'=>$dl));
-//            }
             // Для объекта и всех его наследников создать отношения с новыми прототипом
             if ($proto >= 0){
                 if ($remote){
@@ -1993,6 +1988,7 @@ class MySQLStore extends Entity
         if (empty($attribs['is_history'])) unset($attribs['is_history']); else $attribs['is_history'] = intval($attribs['is_history']);
         if (empty($attribs['is_delete'])) unset($attribs['is_delete']); else $attribs['is_delete'] = intval($attribs['is_delete']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
+        $attribs['possession'] = intval($attribs['possession']);
         $attribs['update_step'] = intval($attribs['update_step']);
         $attribs['update_time'] = intval($attribs['update_time']);
         $attribs['diff'] = intval($attribs['diff']);
@@ -2181,9 +2177,10 @@ class MySQLStore extends Entity
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
+                  `possession` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Тип владения объектом его родителем. Коды владения - Entity:POSSESSION_*:',
                   `update_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг обновления. Если не 0, то обновление не закончено',
                   `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
-                  `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды Entity::DIFF_*',
+                  `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды различиый - Entity::DIFF_*',
                   `diff_from` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'От куда изменения. 1 - от прототипа. 0 и меньше от info файла. Кодируется относительное расположение info файла',
                   PRIMARY KEY (`id`,`owner`,`lang`,`date`),
                   KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
