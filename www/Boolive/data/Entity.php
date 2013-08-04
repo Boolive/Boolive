@@ -744,6 +744,7 @@ class Entity implements ITrace
                 if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
                // $this->updateURI($new_parent->uri().'/'.$this->name());
             }
+            if ($this->isExist()) $this->name(null, true);
             // Обновление зависимых от родителя признаков
             $this->isDelete($is_delete);
             $this->isHidden($is_hidden);
