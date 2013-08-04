@@ -818,7 +818,7 @@ class MySQLStore extends Entity
                         // Из $pchildren удаляем объект, используемый в качесвте прототпа
                         if (($p = $child->proto()) && isset($pchildren[$p->uri()])) unset($pchildren[$p->uri()]);
                     }
-                    $diff = $update_time == 0 ? Entity::DIFF_NO : Entity::DIFF_ADD;
+                    $diff = $update_time == 0 && $entity->_attribs['diff'] != Entity::DIFF_ADD ? Entity::DIFF_NO : Entity::DIFF_ADD;
                     // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
                     foreach ($pchildren as $proto){
                         /** @var $proto Entity */
