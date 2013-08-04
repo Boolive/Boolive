@@ -6,29 +6,22 @@
  * @version 2
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @link http://boolive.ru
+ * @requirement PHP 5.3 или новее
  */
-use Boolive\Boolive,
-    Boolive\data\Data,
-    Boolive\commands\Commands,
-    Boolive\input\Input,
-    Boolive\installer\Installer;
 // Подключение конфигурации путей
 include 'config.php';
 // Подключение движка Boolive
 include DIR_SERVER_ENGINE.'Boolive.php';
 // Активация Boolive
-if (Boolive::activate()){
-    // Исполнение корневого объекта. Передаётся экземпляр команд и все входящие данные.
-    // Вывод результата клиенту
-    echo Data::read()->start(new Commands(), Input::getSource());
+if (Boolive\Boolive::activate()){
+    // Исполнение корневого объекта. Передаётся экземпляр команд и все входящие данные. Вывод результата клиенту
+    echo Boolive\data\Data::read()->start(new Boolive\commands\Commands(), Boolive\input\Input::getSource());
 }else{
-    // Запуск установщика
+    // Запуск установщика, если Boolive не активирован
     include DIR_SERVER_ENGINE.'installer/Installer.php';
-    Installer::start();
+    Boolive\installer\Installer::start();
 }
 //if (GLOBAL_TRACE){
 //    \Boolive\develop\Trace::groups()->group('Benchmark')->set(\Boolive\develop\Benchmark::stop('all', true));
 //    \Boolive\develop\Trace::groups()->out();
-//}
-$obj = Data::read('/Members/registered/admins/admin/rights/Role');
-//Data::findUpdates($obj, 10, 2);
+////}

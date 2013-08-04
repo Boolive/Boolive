@@ -803,8 +803,9 @@ class MySQLStore extends Entity
                     $entity->_attribs['update_time'] = ($update_time || !$entity->_attribs['update_step'])? time() : 0;
 
                     $pids = array();
+                    $use_uri = $this != $proto->store();
                     foreach ($pchildren as $pchild){
-                        $pids[] = $pchild->key();
+                        $pids[] = $use_uri ? $pchild->uri() : $pchild->key();
                     }
                     // У объекта выбрать подчиненные, которые прототипируются от выбранных $step_size подчиненных прототипа.
                     $ochildren = $entity->find(array(
