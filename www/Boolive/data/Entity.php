@@ -66,6 +66,7 @@ class Entity implements ITrace
         'is_delete'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
+        'is_relative'  => 0,
         'is_default_value' => 0,
         'is_default_class' => 0,
         'is_accessible'    => 1,
@@ -165,6 +166,7 @@ class Entity implements ITrace
                 'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя?
                 'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя?
                 'is_link'      => Rule::uri(), // Ссылка или нет?
+                'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
                 'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
@@ -429,7 +431,7 @@ class Entity implements ITrace
      */
     public function isHistory($history = null)
     {
-        if (isset($delete) && (empty($this->_attribs['is_history']) == $history)){
+        if (empty($this->_attribs['is_history']) == $history){
             $this->_attribs['is_history'] = $history;
             $this->_changed = true;
             $this->_checked = false;
@@ -533,6 +535,21 @@ class Entity implements ITrace
         }else{
             return !empty($this->_attribs['is_link']);
         }
+    }
+
+    /**
+     * Признак, прототип относительный или нет?
+     * @param null|bool $is_relative Новое значение, если не null
+     * @return bool
+     */
+    public function isRelative($is_relative = null)
+    {
+        if (isset($is_relative) && (empty($this->_attribs['is_relative']) == $is_relative)){
+            $this->_attribs['is_relative'] = $is_relative;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_relative']);
     }
 
     /**
@@ -1540,6 +1557,9 @@ class Entity implements ITrace
                 }else
                 if ($cond[1] == 'is_history'){
                     $value = $this->isHistory();
+                }else
+                if ($cond[1] == 'is_relative'){
+                    $value = $this->isRelative();
                 }
                 switch ($cond[2]){
                     case '=': return $value == $cond[3];
@@ -1687,6 +1707,7 @@ class Entity implements ITrace
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
         if ($this->isDelete(null, false)) $export['is_delete'] = true;
+        if ($this->isRelative()) $export['is_relative'] = true;
         $export['date'] = $this->date();
         $export['order'] = $this->order();
         if ($this->possession() != Entity::POSSESSION_MANDATORY) $export['possession'] = $this->possession();
@@ -1699,6 +1720,7 @@ class Entity implements ITrace
             if ($this->parent()) $export['parent'] = $this->parent()->uri();
             if (!$this->isHidden()) $export['is_hidden'] = false;
             if (!$this->isDelete()) $export['is_delete'] = false;
+            if (!$this->isRelative()) $export['is_relative'] = false;
             $export['is_history'] = $this->isHistory();
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
             if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
@@ -1789,6 +1811,7 @@ class Entity implements ITrace
         if (!empty($info['is_link'])) $this->isLink(true);
         if (!empty($info['is_hidden'])) $this->isHidden(true);
         if (!empty($info['is_delete'])) $this->isDelete(true);
+        if (!empty($info['is_relative'])) $this->isRelative(true);
         if (isset($info['possession'])){
             $this->possession($info['possession']);
         }else{

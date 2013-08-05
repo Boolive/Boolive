@@ -158,6 +158,8 @@ class RESTful extends View
         if (isset($attribs['is_delete'])) $obj->isDelete(!empty($attribs['is_delete']));
         if (isset($attribs['is_history'])) $obj->isHistory(!empty($attribs['is_history']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
+        if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
+        if (isset($attribs['possession'])) $obj->possession($attribs['possession']);
         $class_changed = (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
         $obj->isDefaultClass(!empty($attribs['is_default_class']));
         // Проверка и сохранение

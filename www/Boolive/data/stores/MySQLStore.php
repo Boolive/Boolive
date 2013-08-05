@@ -95,9 +95,9 @@ class MySQLStore extends Entity
         if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree') && IS_INSTALL){
             foreach ($multy_from as $key => $from){
                 $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
-                // Поиск обновлений, если ещё небыло обновлений, они не завершилась или были больше 5 минут назад
-                if ($multy_from[$key]->_attribs['update_time'] == 0 && $multy_from[$key]->_attribs['diff']!=Entity::DIFF_ADD
-                    /*|| (time()-$multy_from[$key]->_attribs['update_time']) > 300*/){
+                // Досозданние объекта поиском обновлений от прототипа и автоматической их установки
+                // Выполняется только для новых объектов, чтобы унаследовать свойства от прототипа
+                if ($multy_from[$key]->_attribs['update_time'] == 0 && $multy_from[$key]->_attribs['diff']!=Entity::DIFF_ADD){
                     $this->findUpdates($multy_from[$key], 10, 2, false, false);
                 }
             }
@@ -489,7 +489,7 @@ class MySQLStore extends Entity
                     unset($q);
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
-                        'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_default_value', 'is_default_class',
+                        'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt', 'valuef', 'possession','diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
@@ -832,11 +832,29 @@ class MySQLStore extends Entity
                     // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
                     foreach ($pchildren as $proto){
                         /** @var $proto Entity */
-                        $child = $proto->birth($entity);
-                        $child->_attribs['possession'] = $proto->possession();
-                        $child->_attribs['diff'] = $diff;
-                        $child->_attribs['diff_from'] = 1;
-                        $this->write($child, false, true);
+                        // Если прототип относительный, то проверить наличие свойства в объекте с именем этого прототипа
+                        // если есть, то создавать его не надо
+                        if (!$proto->isRelative() || !($c = $entity->{$proto->name()}) || !$c->isExist() || !$c->isRelative()){
+                            $child = $proto->birth($entity);
+                            $child->_attribs['possession'] = $proto->possession();
+                            $child->_attribs['diff'] = $diff;
+                            $child->_attribs['diff_from'] = 1;
+                            $this->write($child, false, true);
+                            // После сохранения, когда получает уникальное имя, меняем прототип, если он должен быть относительным
+                            if ($proto->isRelative() && ($p = $proto->proto())){
+                                $new_proto = Data::getRelativeProto($child->uri(), $proto->uri(), $p->uri());
+                                if ($new_proto!==false){
+                                    $new_proto = Data::read(array(
+                                        'from' => $new_proto,
+                                        'select' => 'self',
+                                        'cache' => 0
+                                    ));
+                                    $child->proto($new_proto);
+                                    $child->isRelative(true);
+                                    $this->write($child, false, true);
+                                }
+                            }
+                        }
                     }
                 }else{
                     // время обновляется если объект ранее был полностью унаследован от прототипа после создания
@@ -854,7 +872,7 @@ class MySQLStore extends Entity
             ');
             $osave->execute(array(
                 ':itime' => $entity->_attribs['update_time'],
-                ':istep' => 0,
+                ':istep' => $entity->_attribs['update_step'],
                 ':diff' => $entity->_attribs['diff'],
                 ':diff_from' => $entity->_attribs['diff_from'],
                 ':id' => $this->localId($entity->id()),
@@ -2175,6 +2193,7 @@ class MySQLStore extends Entity
                   `is_delete` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
+                  `is_relative` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
                   `possession` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Тип владения объектом его родителем. Коды владения - Entity:POSSESSION_*:',

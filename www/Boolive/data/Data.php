@@ -884,6 +884,35 @@ class Data
     }
 
     /**
+     * Определение URI относительного прототипа
+     * @param string $obj_uri URI объекта, для которого определяется относительный прототип
+     * @param string $proto_uri URI обычного прототипа, от которого создаётся объект
+     * @param string $proto_proto_uri URI прототипа у прототипа.
+     * @return string
+     */
+    static function getRelativeProto($obj_uri, $proto_uri, $proto_proto_uri)
+    {
+        $obj_uri = explode('/', $obj_uri);
+        $proto_uri = explode('/', $proto_uri);
+        $proto_proto_uri = explode('/', $proto_proto_uri);
+        $i = 0;
+        // Поиск элемента, с которого прототипы отличаются
+        while (isset($proto_uri[$i]) && isset($proto_proto_uri[$i]) && $proto_uri[$i] == $proto_proto_uri[$i]) $i++;
+        // Начальная часть пути берется от $obj
+        $l = count($obj_uri)-count($proto_uri)+$i;
+        if ($l>0){
+            $new_proto = array_slice($obj_uri, 0, $l);
+        }else{
+            return false;
+        }
+        // Конечная часть пути добавляется от $proto_proto (его конец, отличающийся от $proto)
+        if ($i <= count($proto_proto_uri)){
+            $new_proto = array_merge($new_proto, array_slice($proto_proto_uri, $i));
+        }
+        return implode('/', $new_proto);
+    }
+
+    /**
      * Взвращает экземпляр хранилища
      * @param $uri Путь на объект, для которого определяется хранилище
      * @return \Boolive\data\stores\MySQLStore|null Экземпляр хранилища, если имеется или null, если нет
