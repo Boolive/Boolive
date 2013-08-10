@@ -155,7 +155,7 @@ class Trace
         $style='';
         if (is_string($var)){
             $style.='color:#008100;';
-            $var = '\''.$var.'\'';
+            $var = '\''.htmlspecialchars($var, ENT_COMPAT, 'UTF-8').'\'';
         }else
         if (is_numeric($var)||is_nan($var)){
             $style.='color:#FF0000;';
