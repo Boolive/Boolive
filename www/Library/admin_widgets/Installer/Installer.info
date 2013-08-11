@@ -3,28 +3,24 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1375102998,
     "order": 20,
     "children": {
         "title": {
             "value": "Установить",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1375029765,
             "order": 2
         },
         "description": {
             "value": "Установка новых объектов и обновлений",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1375029819,
             "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1375102998,
             "order": 4,
             "children": {
                 "title": {
@@ -32,7 +28,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "date": 1375029826,
                     "order": 1
                 },
                 "description": {
@@ -40,7 +35,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
-                    "date": 1375029826,
                     "order": 2
                 }
             }
@@ -49,7 +43,6 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
-            "date": 1375029823,
             "order": 5,
             "children": {
                 "title": {
@@ -57,7 +50,6 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
                     "is_hidden": true,
-                    "date": 1375029823,
                     "order": 1
                 },
                 "description": {
@@ -65,7 +57,6 @@
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/views/Widget/cache/description",
                     "is_hidden": true,
-                    "date": 1375029823,
                     "order": 2
                 }
             }

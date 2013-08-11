@@ -3,27 +3,23 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "date": 1372616283,
     "order": 4,
     "children": {
         "title": {
             "value": "Виджет ячейки таблицы",
             "is_hidden": true,
-            "date": 1372616283,
             "order": 1
         },
         "description": {
             "value": "Отображает все ячейки таблицы по отдельности, образуя таблицу",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
-            "date": 1372616283,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
-            "date": 1372616283,
             "order": 5,
             "children": {
                 "title": {
@@ -31,7 +27,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
-                    "date": 1372616283,
                     "order": 1
                 },
                 "description": {
@@ -39,7 +34,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
-                    "date": 1372616283,
                     "order": 2
                 }
             }

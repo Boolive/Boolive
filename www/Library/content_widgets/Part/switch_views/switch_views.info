@@ -3,7 +3,6 @@
     "value": "SwitchViews.tpl",
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList/switch_views",
-    "date": 1372616276,
     "order": 4,
     "children": {
         "title": {
@@ -11,7 +10,6 @@
             "value": "Варианты отображения",
             "proto": "/Library/views/AutoWidgetList/switch_views/title",
             "is_hidden": true,
-            "date": 1372616276,
             "order": 1
         },
         "description": {
@@ -19,14 +17,12 @@
             "value": "Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ",
             "proto": "/Library/views/AutoWidgetList/switch_views/description",
             "is_hidden": true,
-            "date": 1372616276,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/switch_views/res",
-            "date": 1372616276,
             "order": 3,
             "children": {
                 "title": {
@@ -34,7 +30,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/switch_views/res/title",
                     "is_hidden": true,
-                    "date": 1372616276,
                     "order": 1
                 },
                 "description": {
@@ -42,7 +37,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/switch_views/res/description",
                     "is_hidden": true,
-                    "date": 1372616276,
                     "order": 2
                 }
             }
@@ -51,7 +45,6 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/AutoWidgetList/switch_views/cache",
-            "date": 1374861770,
             "order": 8
         }
     }

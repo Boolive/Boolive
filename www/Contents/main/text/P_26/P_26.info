@@ -2,7 +2,6 @@
     "value": "Каждый запускаеkkkаботает исходя из своего условия на входящие данные с учётом своего иерархического",
     "proto": "/Library/content_samples/paragraphs/P",
     "is_delete": true,
-    "date": 1372616195,
     "order": 10,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
-            "date": 1372616195,
             "order": 1
         }
     }

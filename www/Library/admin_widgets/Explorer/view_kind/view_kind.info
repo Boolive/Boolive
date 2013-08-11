@@ -1,12 +1,10 @@
 {
     "value": "",
-    "date": 1374646243,
     "order": 5,
     "children": {
         "title": {
             "value": "Вид (способ отображения)",
             "is_hidden": true,
-            "date": 1372616231,
             "order": 1
         }
     }

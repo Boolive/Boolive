@@ -3,28 +3,24 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "date": 1372616277,
     "order": 18,
     "children": {
         "title": {
             "value": "Виджет форматированного текста",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
-            "date": 1372616278,
             "order": 6
         },
         "description": {
             "value": "Отображает элементы форматированного текста подходящими виджетами из вариантов отображения",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
-            "date": 1372616278,
             "order": 7
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
-            "date": 1372616278,
             "order": 8,
             "children": {
                 "title": {
@@ -32,7 +28,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
-                    "date": 1372616278,
                     "order": 1
                 },
                 "description": {
@@ -40,7 +35,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
-                    "date": 1372616278,
                     "order": 2
                 }
             }
@@ -48,7 +42,6 @@
         "cache": {
             "value": 1,
             "proto": "/Library/views/Widget/cache",
-            "date": 1372616278,
             "order": 11
         }
     }

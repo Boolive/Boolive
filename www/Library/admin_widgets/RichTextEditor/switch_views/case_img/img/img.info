@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/admin_widgets/ImageEditor",
-    "date": 1372616244,
     "order": 6,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Редактор изображения",
             "proto": "/Library/admin_widgets/ImageEditor/title",
             "is_hidden": true,
-            "date": 1372616244,
             "order": 1
         },
         "description": {
@@ -17,14 +15,12 @@
             "value": "",
             "proto": "/Library/admin_widgets/ImageEditor/description",
             "is_hidden": true,
-            "date": 1372616245,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/admin_widgets/ImageEditor/res",
-            "date": 1372616245,
             "order": 3
         }
     }

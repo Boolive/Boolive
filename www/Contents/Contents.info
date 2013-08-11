@@ -1,12 +1,10 @@
 {
     "value": "",
-    "date": 1373824648,
-    "order": 3,
+    "order": 4,
     "children": {
         "title": {
             "value": "Содержимое",
             "is_hidden": true,
-            "date": 1373776090,
             "order": 3
         }
     }

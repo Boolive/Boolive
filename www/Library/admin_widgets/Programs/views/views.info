@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/AutoWidget2/views",
-    "date": 1375035325,
     "order": 7,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Список видов",
             "proto": "/Library/views/AutoWidget2/views/title",
             "is_hidden": true,
-            "date": 1375020213,
             "order": 11
         },
         "description": {
@@ -18,7 +16,6 @@
             "value": "Из этого списка автоматически выбирается один \"вид\" для отображения объекта",
             "proto": "/Library/views/AutoWidget2/views/description",
             "is_hidden": true,
-            "date": 1375020213,
             "order": 12
         }
     }

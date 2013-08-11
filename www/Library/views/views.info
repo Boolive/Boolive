@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "date": 1374580750,
     "order": 9,
     "children": {
         "title": {
             "value": "Представления",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
-            "date": 1372616298,
             "order": 1
         }
     }

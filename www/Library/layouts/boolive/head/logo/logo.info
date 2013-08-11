@@ -3,7 +3,6 @@
     "value": "Logo.tpl",
     "is_file": true,
     "proto": "/Library/views/Logo",
-    "date": 1372616293,
     "order": 2,
     "children": {
         "title": {
@@ -11,7 +10,6 @@
             "value": "Логотип",
             "proto": "/Library/views/Logo/title",
             "is_hidden": true,
-            "date": 1372616293,
             "order": 2
         },
         "object": {
@@ -19,7 +17,6 @@
             "value": "object.png",
             "is_file": true,
             "proto": "/Library/views/Logo/object",
-            "date": 1372616293,
             "order": 3,
             "children": {
                 "title": {
@@ -27,7 +24,6 @@
                     "value": "Изображение",
                     "proto": "/Library/views/Logo/object/title",
                     "is_hidden": true,
-                    "date": 1372616293,
                     "order": 1
                 }
             }
@@ -36,7 +32,6 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Logo/res",
-            "date": 1372616293,
             "order": 4,
             "children": {
                 "title": {
@@ -44,7 +39,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Logo/res/title",
                     "is_hidden": true,
-                    "date": 1372616293,
                     "order": 1
                 },
                 "description": {
@@ -52,7 +46,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Logo/res/description",
                     "is_hidden": true,
-                    "date": 1372616293,
                     "order": 2
                 }
             }
@@ -62,7 +55,6 @@
             "value": "Отображает изображение с ссылкой на главную страницу сайта",
             "proto": "/Library/views/Logo/description",
             "is_hidden": true,
-            "date": 1372616293,
             "order": 5
         }
     }

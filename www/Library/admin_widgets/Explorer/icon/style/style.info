@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Image/style",
-    "date": 1372616230,
     "order": 2,
     "children": {
         "title": {
@@ -10,133 +9,114 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/Image/style/title",
             "is_hidden": true,
-            "date": 1372616230,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/width",
-            "date": 1374428444,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/height",
-            "date": 1374428444,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-top",
-            "date": 1374428444,
             "order": 4
         },
         "margin-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-right",
-            "date": 1374428444,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-bottom",
-            "date": 1374428444,
             "order": 6
         },
         "margin-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-left",
-            "date": 1374428444,
             "order": 7
         },
         "text-align": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/text-align",
-            "date": 1374428444,
             "order": 8
         },
         "padding-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/padding-left",
-            "date": 1374428444,
             "order": 9
         },
         "padding-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/padding-right",
-            "date": 1374428444,
             "order": 10
         },
         "width_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/width",
-            "date": 1374428444,
             "order": 11
         },
         "height_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/height",
-            "date": 1374428444,
             "order": 12
         },
         "margin-top_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-top",
-            "date": 1374428444,
             "order": 13
         },
         "margin-right_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-right",
-            "date": 1374428444,
             "order": 14
         },
         "margin-bottom_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-bottom",
-            "date": 1374428444,
             "order": 15
         },
         "margin-left_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/margin-left",
-            "date": 1374428444,
             "order": 16
         },
         "text-align_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/text-align",
-            "date": 1374428444,
             "order": 17
         },
         "padding-left_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/padding-left",
-            "date": 1374428444,
             "order": 18
         },
         "padding-right_1": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Image/style/padding-right",
-            "date": 1374428444,
             "order": 19
         }
     }

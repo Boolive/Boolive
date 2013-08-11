@@ -1,19 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "date": 1372616225,
     "order": 3,
     "children": {
         "title": {
             "value": "Член",
             "is_hidden": true,
-            "date": 1372616225,
             "order": 1
         },
         "description": {
             "value": "Базовый объект для пользователей и групп",
             "is_hidden": true,
-            "date": 1372616225,
             "order": 2
         }
     }

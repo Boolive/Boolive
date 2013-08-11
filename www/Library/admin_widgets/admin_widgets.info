@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "date": 1374862612,
     "order": 7,
     "children": {
         "title": {
             "value": "Виджеты админки",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
-            "date": 1372616226,
             "order": 1
         }
     }

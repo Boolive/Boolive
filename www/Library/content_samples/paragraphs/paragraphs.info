@@ -2,14 +2,12 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Package",
-    "date": 1372616258,
     "order": 2,
     "children": {
         "title": {
             "value": "Абзацы",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
-            "date": 1372616258,
             "order": 1
         }
     }

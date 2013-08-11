@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page/text",
-    "date": 1374861439,
     "order": 3,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Текст",
             "proto": "/Library/content_samples/Page/text/title",
             "is_hidden": true,
-            "date": 1374861490,
             "order": 1
         }
     }

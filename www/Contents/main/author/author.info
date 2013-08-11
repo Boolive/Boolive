@@ -1,15 +1,13 @@
 {
     "is_default_value": true,
-    "value": "",
+    "value": "2f7ea407b8223a705b7d74a0a91b4a9d8e51aec84f96edd9f6dcadee74bee339",
     "proto": "/Members/registered/admins/admin",
     "is_link": true,
-    "date": 1373276291,
     "order": 5,
     "children": {
         "title": {
             "value": "Автор",
             "is_hidden": true,
-            "date": 1372616186,
             "order": 1
         }
     }

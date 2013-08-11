@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/content_widgets/ListView",
-    "date": 1372616279,
     "order": 5,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Виджет списка в тексте",
             "proto": "/Library/content_widgets/ListView/title",
             "is_hidden": true,
-            "date": 1372616279,
             "order": 1
         },
         "description": {
@@ -17,14 +15,12 @@
             "value": "Отображает списки в форматированном тексте",
             "proto": "/Library/content_widgets/ListView/description",
             "is_hidden": true,
-            "date": 1372616279,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_widgets/ListView/res",
-            "date": 1372616279,
             "order": 8
         }
     }

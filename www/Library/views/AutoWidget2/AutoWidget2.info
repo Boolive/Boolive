@@ -3,35 +3,30 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1374580338,
     "order": 24,
     "children": {
         "title": {
             "value": "Виджет автоотображения объекта",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1374580076,
             "order": 2
         },
         "description": {
             "value": "Отображает объект одним из подчиненных видом. Выбор вида выполняется по условию работы вида. ",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1374580216,
             "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1374514130,
             "order": 4
         },
         "cache": {
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
-            "date": 1374514117,
             "order": 5,
             "children": {
                 "title": {
@@ -39,7 +34,6 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
                     "is_hidden": true,
-                    "date": 1374580345,
                     "order": 1
                 },
                 "description": {
@@ -47,7 +41,6 @@
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/views/Widget/cache/description",
                     "is_hidden": true,
-                    "date": 1374580345,
                     "order": 2
                 }
             }

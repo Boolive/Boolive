@@ -3,7 +3,6 @@
     "is_file": true,
     "proto": "/Library/content_samples/Image",
     "is_hidden": true,
-    "date": 1372616224,
     "order": 6,
     "children": {
         "title": {
@@ -11,7 +10,6 @@
             "value": "Изображение",
             "proto": "/Library/content_samples/Image/title",
             "is_hidden": true,
-            "date": 1372616224,
             "order": 1
         }
     }

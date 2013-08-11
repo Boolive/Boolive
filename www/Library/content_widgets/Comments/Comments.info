@@ -3,13 +3,11 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "date": 1372616266,
     "order": 31,
     "children": {
         "res": {
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1372616266,
             "order": 0,
             "children": {
                 "title": {
@@ -17,7 +15,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
-                    "date": 1372616266,
                     "order": 2
                 },
                 "description": {
@@ -25,7 +22,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
-                    "date": 1372616266,
                     "order": 3
                 }
             }
@@ -34,14 +30,12 @@
             "value": "Виджет списка комментариев",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
-            "date": 1372616266,
             "order": 1
         },
         "description": {
             "value": "Отображает комментарии списком",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
-            "date": 1372616266,
             "order": 2
         }
     }

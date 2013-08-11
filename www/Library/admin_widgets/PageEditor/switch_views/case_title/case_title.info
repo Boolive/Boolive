@@ -1,14 +1,12 @@
 {
     "value": "is(/Library/content_samples/Page/title)",
     "proto": "/Library/views/SwitchCase",
-    "date": 1372616236,
     "order": 4,
     "children": {
         "title": {
             "value": "Вариант для заголовка страницы",
             "proto": "/Library/views/SwitchCase/title",
             "is_hidden": true,
-            "date": 1372616236,
             "order": 1
         },
         "description": {
@@ -16,7 +14,6 @@
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
             "is_hidden": true,
-            "date": 1372616236,
             "order": 2
         }
     }

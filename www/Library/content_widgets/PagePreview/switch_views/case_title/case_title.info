@@ -1,7 +1,6 @@
 {
     "value": "is(/Library/content_samples/Page/title)",
     "proto": "/Library/views/SwitchCase",
-    "date": 1372616275,
     "order": 5,
     "children": {
         "description": {
@@ -9,27 +8,23 @@
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
             "is_hidden": true,
-            "date": 1372616275,
             "order": 2
         },
         "title": {
             "value": "Title.tpl",
             "is_file": true,
-            "date": 1372616275,
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "",
                     "is_hidden": true,
-                    "date": 1372616275,
                     "order": 4
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "",
                     "is_hidden": true,
-                    "date": 1372616275,
                     "order": 5
                 }
             }

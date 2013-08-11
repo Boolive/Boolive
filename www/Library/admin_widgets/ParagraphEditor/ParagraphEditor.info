@@ -3,14 +3,12 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1372616237,
     "order": 12,
     "children": {
         "title": {
             "value": "Редактор абзаца",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1372616237,
             "order": 1
         },
         "description": {
@@ -18,14 +16,12 @@
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1372616237,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1372616237,
             "order": 3,
             "children": {
                 "title": {
@@ -33,7 +29,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "date": 1372616237,
                     "order": 1
                 },
                 "description": {
@@ -41,10 +36,15 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
-                    "date": 1372616237,
                     "order": 2
                 }
             }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "order": 4
         }
     }
 }

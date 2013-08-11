@@ -1,7 +1,6 @@
 {
     "value": "Страница сайта – это HTML документ, формируемый системой управления сайтом (CMS) в соответствии с параметрами запроса или другими условиями. пппппп0gagdfgdfg777длд",
     "proto": "/Library/content_samples/paragraphs/H6",
-    "date": 1372616191,
     "order": 22,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Заголовок 2",
             "proto": "/Library/content_samples/paragraphs/H2/title",
             "is_hidden": true,
-            "date": 1372616191,
             "order": 1
         }
     }

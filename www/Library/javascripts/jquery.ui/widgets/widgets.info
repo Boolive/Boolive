@@ -2,13 +2,12 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Package",
-    "date": 1372616287,
     "order": 4,
     "children": {
         "title": {
             "value": "Виджеты",
             "proto": "/Library/basic/Package/title",
-            "date": 1372616287,
+            "is_hidden": true,
             "order": 1
         }
     }

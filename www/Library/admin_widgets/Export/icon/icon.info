@@ -2,14 +2,12 @@
     "value": "icon.png",
     "is_file": true,
     "proto": "/Library/content_samples/Image",
-    "date": 1372616232,
     "order": 4,
     "children": {
         "title": {
             "value": "Иконка",
             "proto": "/Library/content_samples/Image/title",
             "is_hidden": true,
-            "date": 1372616232,
             "order": 1
         }
     }

@@ -2,21 +2,19 @@
     "value": "",
     "proto": "/Library/content_samples/Page",
     "is_link": true,
-    "date": 1372616304,
     "order": 3,
     "children": {
         "title": {
             "value": "Страницы",
             "proto": "/Library/content_samples/Page/title",
             "is_hidden": true,
-            "date": 1372616304,
             "order": 1,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
-                    "date": 1372616304,
+                    "is_hidden": true,
                     "order": 1
                 }
             }

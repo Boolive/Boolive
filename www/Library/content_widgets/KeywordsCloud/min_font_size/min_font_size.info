@@ -1,14 +1,12 @@
 {
     "value": "9",
     "proto": "/Library/basic/simple/Number",
-    "date": 1372616270,
     "order": 7,
     "children": {
         "title": {
             "value": "Минимальный размер шрифта",
             "proto": "/Library/basic/simple/Number/title",
             "is_hidden": true,
-            "date": 1372616270,
             "order": 1
         }
     }

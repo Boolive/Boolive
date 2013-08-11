@@ -1,7 +1,6 @@
 {
     "value": "Текст новости",
     "proto": "/Library/content_samples/paragraphs/P",
-    "date": 1372616217,
     "order": 4,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
-            "date": 1372616217,
             "order": 1
         }
     }

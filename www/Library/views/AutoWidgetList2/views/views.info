@@ -2,21 +2,18 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/ViewSingle",
-    "date": 1374579691,
     "order": 6,
     "children": {
         "title": {
             "value": "Список видов",
             "proto": "/Library/views/ViewSingle/title",
             "is_hidden": true,
-            "date": 1374579641,
             "order": 1
         },
         "description": {
             "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
             "proto": "/Library/views/ViewSingle/description",
             "is_hidden": true,
-            "date": 1374579691,
             "order": 2
         }
     }

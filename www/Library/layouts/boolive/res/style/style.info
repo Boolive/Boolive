@@ -2,7 +2,6 @@
     "value": "style.css",
     "is_file": true,
     "proto": "/Library/views/Css",
-    "date": 1372616293,
     "order": 3,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "CSS",
             "proto": "/Library/views/Css/title",
             "is_hidden": true,
-            "date": 1372616293,
             "order": 1
         },
         "description": {
@@ -18,7 +16,6 @@
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "proto": "/Library/views/Css/description",
             "is_hidden": true,
-            "date": 1372616293,
             "order": 2
         }
     }

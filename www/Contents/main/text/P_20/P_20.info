@@ -1,7 +1,6 @@
 {
     "value": "В предыдущей статье про обработку запроса рассмотрена иерархическая структура видов. Каждый запускаемый вид работает исходя из своего условия на входящие данные с учётом своего иерархического",
     "proto": "/Library/content_samples/paragraphs/P",
-    "date": 1372616193,
     "order": 9,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
-            "date": 1372616193,
             "order": 1
         }
     }

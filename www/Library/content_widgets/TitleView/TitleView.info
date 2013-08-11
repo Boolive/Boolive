@@ -3,14 +3,12 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1372616284,
     "order": 2,
     "children": {
         "title": {
             "value": "Виджет названия",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1372616284,
             "order": 1
         },
         "description": {
@@ -18,14 +16,12 @@
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1372616284,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1372616284,
             "order": 3,
             "children": {
                 "title": {
@@ -33,14 +29,12 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "date": 1372616284,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "date": 1372616284,
                     "order": 2
                 }
             }
@@ -49,8 +43,23 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
-            "date": 1374861770,
-            "order": 4
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/Widget/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/Widget/cache/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
         }
     }
 }

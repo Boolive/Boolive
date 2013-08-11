@@ -3,28 +3,24 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1372616302,
     "order": 17,
     "children": {
         "description": {
             "value": "Отображает изображение с ссылкой на главную страницу сайта",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1372616302,
             "order": 1
         },
         "title": {
             "value": "Логотип",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1372616302,
             "order": 3
         },
         "object": {
             "value": "object.png",
             "is_file": true,
             "proto": "/Library/content_samples/Image",
-            "date": 1372616302,
             "order": 4,
             "children": {
                 "title": {
@@ -32,7 +28,6 @@
                     "value": "Изображение",
                     "proto": "/Library/content_samples/Image/title",
                     "is_hidden": true,
-                    "date": 1372616302,
                     "order": 1
                 }
             }
@@ -41,7 +36,6 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1372616302,
             "order": 5,
             "children": {
                 "title": {
@@ -49,7 +43,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "date": 1372616302,
                     "order": 1
                 },
                 "description": {
@@ -57,7 +50,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
-                    "date": 1372616302,
                     "order": 2
                 }
             }

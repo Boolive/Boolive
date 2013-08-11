@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/admin_widgets/ParagraphEditor",
-    "date": 1372616245,
     "order": 6,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Редактор абзаца",
             "proto": "/Library/admin_widgets/ParagraphEditor/title",
             "is_hidden": true,
-            "date": 1372616245,
             "order": 1
         },
         "description": {
@@ -17,14 +15,12 @@
             "value": "",
             "proto": "/Library/admin_widgets/ParagraphEditor/description",
             "is_hidden": true,
-            "date": 1372616245,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/admin_widgets/ParagraphEditor/res",
-            "date": 1372616245,
             "order": 3
         }
     }

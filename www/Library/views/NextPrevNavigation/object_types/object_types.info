@@ -1,20 +1,17 @@
 {
     "value": "",
-    "date": 1372616304,
     "order": 2,
     "children": {
         "title": {
             "value": "Список разрешенных объектов",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1372616304,
             "order": 1
         },
         "description": {
             "value": "Список объектов, по которым разрешена навигация",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1372616304,
             "order": 2
         }
     }

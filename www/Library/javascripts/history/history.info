@@ -3,28 +3,24 @@
     "is_file": true,
     "proto": "/Library/javascripts/JavaScript",
     "is_default_class": false,
-    "date": 1372616285,
     "order": 10,
     "children": {
         "title": {
             "value": "HTML5 History API",
             "proto": "/Library/javascripts/JavaScript/title",
             "is_hidden": true,
-            "date": 1372616285,
             "order": 1
         },
         "description": {
             "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
             "proto": "/Library/javascripts/JavaScript/description",
             "is_hidden": true,
-            "date": 1372616285,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
-            "date": 1372616285,
             "order": 7,
             "children": {
                 "title": {
@@ -32,7 +28,6 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/JavaScript/depends/title",
                     "is_hidden": true,
-                    "date": 1372616285,
                     "order": 1
                 },
                 "description": {
@@ -40,7 +35,6 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
                     "is_hidden": true,
-                    "date": 1372616285,
                     "order": 2
                 }
             }

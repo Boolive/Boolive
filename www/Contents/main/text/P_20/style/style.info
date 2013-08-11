@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/paragraphs/P/style",
-    "date": 1372616193,
     "order": 2,
     "children": {
         "title": {
@@ -10,28 +9,24 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/paragraphs/P/style/title",
             "is_hidden": true,
-            "date": 1372616193,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/width",
-            "date": 1372616193,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/height",
-            "date": 1372616193,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-top",
-            "date": 1372616193,
             "order": 4
         },
         "description": {
@@ -39,61 +34,57 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/paragraphs/P/style/description",
             "is_hidden": true,
-            "date": 1372616193,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-bottom",
-            "date": 1372616193,
             "order": 6
         },
         "text-align": {
             "value": "right",
             "proto": "/Library/content_samples/paragraphs/P/style/text-align",
-            "date": 1372616193,
             "order": 8
         },
         "padding-left": {
             "value": "0px",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-left",
-            "date": 1372616193,
             "order": 9
         },
         "padding-right": {
             "value": "0px",
             "proto": "/Library/content_samples/paragraphs/P/style/padding-right",
-            "date": 1372616193,
             "order": 10
         },
         "margin-left": {
             "value": "auto",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-left",
-            "date": 1372616193,
             "order": 13
         },
         "margin-right": {
             "value": "auto",
             "proto": "/Library/content_samples/paragraphs/P/style/margin-right",
-            "date": 1372616193,
             "order": 14
         },
         "text-indent": {
             "value": "50px",
-            "date": 1372616193,
             "order": 15
         },
         "line-height": {
             "value": "1.48",
             "proto": "/Library/content_samples/paragraphs/P/style/line-height",
-            "date": 1372616193,
             "order": 16
         },
         "font-size": {
             "value": "",
-            "date": 1372616193,
             "order": 17
+        },
+        "text-indent_1": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/P/style/text-indent",
+            "order": 18
         }
     }
 }

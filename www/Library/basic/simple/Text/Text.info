@@ -1,19 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "date": 1372616255,
     "order": 5,
     "children": {
         "title": {
             "value": "Текст",
             "is_hidden": true,
-            "date": 1372616255,
             "order": 1
         },
         "description": {
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "is_hidden": true,
-            "date": 1372616255,
             "order": 2
         }
     }

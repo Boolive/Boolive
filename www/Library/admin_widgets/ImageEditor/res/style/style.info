@@ -2,7 +2,6 @@
     "value": "style.css",
     "is_file": true,
     "proto": "/Library/views/Css",
-    "date": 1372616233,
     "order": 6,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "CSS",
             "proto": "/Library/views/Css/title",
             "is_hidden": true,
-            "date": 1372616233,
             "order": 1
         }
     }

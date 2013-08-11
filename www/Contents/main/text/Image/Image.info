@@ -2,15 +2,13 @@
     "value": "Image.jpg",
     "is_file": true,
     "proto": "/Library/content_samples/Image",
-    "date": 1372616191,
-    "order": 54,
+    "order": 55,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Изображение",
             "proto": "/Library/content_samples/Image/title",
             "is_hidden": true,
-            "date": 1372616191,
             "order": 1
         }
     }

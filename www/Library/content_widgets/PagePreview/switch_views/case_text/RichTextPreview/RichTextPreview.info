@@ -3,21 +3,18 @@
     "value": "RichText.tpl",
     "is_file": true,
     "proto": "/Library/content_widgets/RichTextPreview",
-    "date": 1372616274,
     "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Предпросмотр текста страницы",
             "proto": "/Library/content_widgets/RichTextPreview/title",
-            "date": 1372616274,
             "order": 1
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_widgets/RichTextPreview/res",
-            "date": 1372616274,
             "order": 2,
             "children": {
                 "title": {
@@ -25,7 +22,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/content_widgets/RichTextPreview/res/title",
                     "is_hidden": true,
-                    "date": 1372616274,
                     "order": 1
                 },
                 "description": {
@@ -33,7 +29,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/content_widgets/RichTextPreview/res/description",
                     "is_hidden": true,
-                    "date": 1372616274,
                     "order": 2
                 }
             }
@@ -42,7 +37,6 @@
             "is_default_value": true,
             "value": "",
             "is_hidden": true,
-            "date": 1372616274,
             "order": 7
         }
     }

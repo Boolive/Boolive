@@ -1,0 +1,7 @@
+{
+    "is_default_value": true,
+    "value": "Виджет",
+    "proto": "/Library/views/Widget/title",
+    "is_hidden": true,
+    "order": 7
+}

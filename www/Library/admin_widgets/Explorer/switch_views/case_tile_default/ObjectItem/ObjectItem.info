@@ -3,7 +3,6 @@
     "is_file": true,
     "proto": "/Library/admin_widgets/ObjectItem",
     "is_default_class": false,
-    "date": 1372616231,
     "order": 4,
     "children": {
         "title": {
@@ -11,7 +10,6 @@
             "value": "Виджет объекта",
             "proto": "/Library/admin_widgets/ObjectItem/title",
             "is_hidden": true,
-            "date": 1372616231,
             "order": 1
         },
         "description": {
@@ -19,14 +17,12 @@
             "value": "Отображение объекта в виде пункта списка",
             "proto": "/Library/admin_widgets/ObjectItem/description",
             "is_hidden": true,
-            "date": 1372616231,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/admin_widgets/ObjectItem/res",
-            "date": 1372616231,
             "order": 3,
             "children": {
                 "title": {
@@ -34,7 +30,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/admin_widgets/ObjectItem/res/title",
                     "is_hidden": true,
-                    "date": 1372616231,
                     "order": 1
                 },
                 "description": {
@@ -42,7 +37,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/admin_widgets/ObjectItem/res/description",
                     "is_hidden": true,
-                    "date": 1372616231,
                     "order": 2
                 }
             }

@@ -2,28 +2,24 @@
     "value": "jquery.autobind.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/jQueryScript",
-    "date": 1372616286,
     "order": 15,
     "children": {
         "title": {
             "value": "Автоподключение jquery плагинов",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_hidden": true,
-            "date": 1372616286,
             "order": 1
         },
         "description": {
             "value": "Автоматически подключает плагины jquery к тегам с атрибутом data-plugin. Имя плагина берется из атрибута data-plugin",
             "proto": "/Library/javascripts/patterns/jQueryScript/description",
             "is_hidden": true,
-            "date": 1372616286,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
-            "date": 1372616286,
             "order": 3,
             "children": {
                 "title": {
@@ -31,7 +27,6 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/title",
                     "is_hidden": true,
-                    "date": 1372616286,
                     "order": 1
                 },
                 "description": {
@@ -39,7 +34,6 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
                     "is_hidden": true,
-                    "date": 1372616286,
                     "order": 2
                 }
             }

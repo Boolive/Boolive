@@ -3,14 +3,12 @@
     "value": "SelectObject.tpl",
     "is_file": true,
     "proto": "/Library/admin_widgets/SelectObject",
-    "date": 1372616226,
     "order": 6,
     "children": {
         "title": {
             "value": "Добавить",
             "proto": "/Library/admin_widgets/SelectObject/title",
             "is_hidden": true,
-            "date": 1372616226,
             "order": 1
         },
         "description": {
@@ -18,7 +16,6 @@
             "value": "Представляет собой обозреватель объектов с функцией выбора объекта",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_hidden": true,
-            "date": 1372616226,
             "order": 2
         },
         "res": {
@@ -26,7 +23,6 @@
             "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_link": true,
-            "date": 1372616226,
             "order": 5
         }
     }

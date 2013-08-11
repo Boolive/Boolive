@@ -1,28 +1,24 @@
 {
     "value": "",
     "proto": "/Library/javascripts/JavaScript",
-    "date": 1372616288,
     "order": 3,
     "children": {
         "title": {
             "value": "jQuery скрипт",
             "proto": "/Library/javascripts/JavaScript/title",
             "is_hidden": true,
-            "date": 1372616288,
             "order": 1
         },
         "description": {
             "value": "JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery",
             "proto": "/Library/javascripts/JavaScript/description",
             "is_hidden": true,
-            "date": 1372616289,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
-            "date": 1372616289,
             "order": 3,
             "children": {
                 "title": {
@@ -30,7 +26,6 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/JavaScript/depends/title",
                     "is_hidden": true,
-                    "date": 1372616289,
                     "order": 1
                 },
                 "description": {
@@ -38,7 +33,6 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
                     "is_hidden": true,
-                    "date": 1372616289,
                     "order": 2
                 }
             }

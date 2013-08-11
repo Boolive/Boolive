@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "date": 1374862971,
     "order": 4,
     "children": {
         "title": {
             "value": "Макеты",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
-            "date": 1372616289,
             "order": 1
         }
     }

@@ -4,7 +4,6 @@
     "is_file": true,
     "proto": "/Library/admin_widgets/page_widgets/PageAuthorEditor",
     "is_link": true,
-    "date": 1372616234,
     "order": 4,
     "children": {
         "title": {
@@ -12,7 +11,6 @@
             "value": "Редактор автора страницы",
             "proto": "/Library/admin_widgets/page_widgets/PageAuthorEditor/title",
             "is_hidden": true,
-            "date": 1372616234,
             "order": 1
         },
         "description": {
@@ -20,7 +18,6 @@
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/admin_widgets/page_widgets/PageAuthorEditor/description",
             "is_hidden": true,
-            "date": 1372616234,
             "order": 2
         }
     }

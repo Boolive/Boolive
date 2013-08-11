@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/views/ViewGroup",
-    "date": 1372616292,
     "order": 5,
     "children": {
         "title": {
             "value": "Шапка",
             "proto": "/Library/views/ViewGroup/title",
             "is_hidden": true,
-            "date": 1372616292,
             "order": 1
         },
         "description": {
@@ -16,13 +14,11 @@
             "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
             "proto": "/Library/views/ViewGroup/description",
             "is_hidden": true,
-            "date": 1372616292,
             "order": 3
         },
         "cache": {
             "value": 1,
             "proto": "/Library/views/Widget/cache",
-            "date": 1372616293,
             "order": 4
         }
     }

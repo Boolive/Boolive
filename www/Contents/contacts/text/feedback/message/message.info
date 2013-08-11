@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Feedback/message",
-    "date": 1372616183,
     "order": 3,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Сообщение",
             "proto": "/Library/content_samples/Feedback/message/title",
             "is_hidden": true,
-            "date": 1372616183,
             "order": 1
         },
         "description": {
@@ -17,7 +15,6 @@
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/content_samples/Feedback/message/description",
             "is_hidden": true,
-            "date": 1372616183,
             "order": 2
         }
     }

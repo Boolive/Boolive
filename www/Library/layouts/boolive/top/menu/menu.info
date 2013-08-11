@@ -2,7 +2,6 @@
     "value": "menu.tpl",
     "is_file": true,
     "proto": "/Library/views/Menu",
-    "date": 1372616296,
     "order": 2,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Меню",
             "proto": "/Library/views/Menu/title",
             "is_hidden": true,
-            "date": 1372616296,
             "order": 1
         },
         "description": {
@@ -18,14 +16,12 @@
             "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
             "proto": "/Library/views/Menu/description",
             "is_hidden": true,
-            "date": 1372616296,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Menu/res",
-            "date": 1372616296,
             "order": 3,
             "children": {
                 "title": {
@@ -33,7 +29,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Menu/res/title",
                     "is_hidden": true,
-                    "date": 1372616296,
                     "order": 1
                 },
                 "description": {
@@ -41,7 +36,6 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Menu/res/description",
                     "is_hidden": true,
-                    "date": 1372616296,
                     "order": 2
                 }
             }
@@ -50,14 +44,12 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Menu/object",
-            "date": 1372616296,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "",
                     "is_hidden": true,
-                    "date": 1372616296,
                     "order": 2
                 }
             }
@@ -65,21 +57,18 @@
         "cache": {
             "value": 1,
             "proto": "/Library/basic/simple/Boolean",
-            "date": 1372616296,
             "order": 6,
             "children": {
                 "title": {
                     "value": "Кэшировать?",
                     "proto": "/Library/basic/simple/Boolean/title",
                     "is_hidden": true,
-                    "date": 1372616296,
                     "order": 1
                 },
                 "description": {
                     "value": "Признак, кэшировать или нет работу виджета. Кэширование ускоряет работу виджета.",
                     "proto": "/Library/basic/simple/Boolean/description",
                     "is_hidden": true,
-                    "date": 1372616296,
                     "order": 2
                 }
             }

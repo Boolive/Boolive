@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/tables/Cell/style",
-    "date": 1372616204,
     "order": 2,
     "children": {
         "title": {
@@ -10,77 +9,66 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/tables/Cell/style/title",
             "is_hidden": true,
-            "date": 1372616204,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/width",
-            "date": 1372616204,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/height",
-            "date": 1372616204,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-top",
-            "date": 1372616204,
             "order": 4
         },
         "margin-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-right",
-            "date": 1372616204,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-bottom",
-            "date": 1372616204,
             "order": 6
         },
         "margin-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/margin-left",
-            "date": 1372616204,
             "order": 7
         },
         "text-align": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/text-align",
-            "date": 1372616204,
             "order": 8
         },
         "padding-left": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/padding-left",
-            "date": 1372616204,
             "order": 9
         },
         "padding-right": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/padding-right",
-            "date": 1372616204,
             "order": 10
         },
         "text-indent": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/tables/Cell/style/text-indent",
-            "date": 1372616204,
             "order": 11
         },
         "description": {
@@ -88,7 +76,6 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/tables/Cell/style/description",
             "is_hidden": true,
-            "date": 1372616204,
             "order": 12
         }
     }

@@ -1,28 +1,24 @@
 {
     "value": "",
     "proto": "/Library/javascripts/patterns/jQueryUIScript",
-    "date": 1372616288,
     "order": 5,
     "children": {
         "title": {
             "value": "Boolive.Widget заготовка",
-            "proto": "/Library/javascripts/JavaScript/title",
+            "proto": "/Library/javascripts/patterns/jQueryUIScript/title",
             "is_hidden": true,
-            "date": 1372616288,
             "order": 1
         },
         "description": {
             "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
-            "proto": "/Library/javascripts/JavaScript/description",
+            "proto": "/Library/javascripts/patterns/jQueryUIScript/description",
             "is_hidden": true,
-            "date": 1372616288,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryUIScript/depends",
-            "date": 1372616288,
             "order": 3,
             "children": {
                 "title": {
@@ -30,7 +26,6 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/title",
                     "is_hidden": true,
-                    "date": 1372616288,
                     "order": 1
                 },
                 "description": {
@@ -38,7 +33,6 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/description",
                     "is_hidden": true,
-                    "date": 1372616288,
                     "order": 2
                 }
             }

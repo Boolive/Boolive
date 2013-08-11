@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Feedback/email_from",
-    "date": 1372616182,
     "order": 1,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Email адрес",
             "proto": "/Library/content_samples/Feedback/email_from/title",
             "is_hidden": true,
-            "date": 1372616182,
             "order": 1
         },
         "description": {
@@ -17,7 +15,6 @@
             "value": "Адрес электронной почты",
             "proto": "/Library/content_samples/Feedback/email_from/description",
             "is_hidden": true,
-            "date": 1372616182,
             "order": 2
         }
     }

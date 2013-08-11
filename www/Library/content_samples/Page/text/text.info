@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/content_samples/RichText",
-    "date": 1372616257,
     "order": 3,
     "children": {
         "title": {
             "value": "Текст",
             "proto": "/Library/content_samples/RichText/title",
             "is_hidden": true,
-            "date": 1372616257,
             "order": 1
         }
     }

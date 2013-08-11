@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/content_samples/paragraphs/TextBlock/style",
-    "date": 1372616201,
     "order": 2,
     "children": {
         "title": {
@@ -9,79 +8,66 @@
             "value": "Стиль ",
             "proto": "/Library/views/Style/title",
             "is_hidden": true,
-            "date": 1372616201,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/width",
-            "date": 1372616201,
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/height",
-            "date": 1372616201,
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/margin-top",
-            "date": 1372616201,
             "order": 4
         },
         "margin-right": {
             "value": "auto",
-            "date": 1372616201,
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Style/margin-bottom",
-            "date": 1372616201,
             "order": 6
         },
         "margin-left": {
             "value": "auto",
-            "date": 1372616201,
             "order": 7
         },
         "text-align": {
             "value": "left",
             "proto": "/Library/views/Style/text-align",
-            "date": 1372616201,
             "order": 8
         },
         "padding-left": {
             "value": "390px",
             "proto": "/Library/views/Style/padding-left",
-            "date": 1372616201,
             "order": 9
         },
         "padding-right": {
             "value": "0px",
             "proto": "/Library/views/Style/padding-right",
-            "date": 1372616201,
             "order": 10
         },
         "text-indent": {
             "value": "0px",
-            "date": 1372616201,
             "order": 11
         },
         "text-decoration": {
             "value": "",
-            "date": 1372616201,
             "order": 12
         },
         "line-height": {
             "value": "1.48",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/line-height",
-            "date": 1372616201,
             "order": 13
         },
         "description": {
@@ -89,17 +75,14 @@
             "value": "Для оформления одного объекта",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/description",
             "is_hidden": true,
-            "date": 1372616201,
             "order": 14
         },
         "font-size": {
             "value": "",
-            "date": 1372616201,
             "order": 15
         },
         "float": {
             "value": "none",
-            "date": 1372616201,
             "order": 16
         },
         "title_1": {
@@ -107,7 +90,6 @@
             "value": "Стиль ",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/title",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 17
         },
         "width_1": {
@@ -115,7 +97,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/width",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 18
         },
         "height_1": {
@@ -123,7 +104,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/height",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 19
         },
         "margin-top_1": {
@@ -131,7 +111,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/margin-top",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 20
         },
         "margin-right_1": {
@@ -139,7 +118,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/margin-right",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 21
         },
         "margin-bottom_1": {
@@ -147,7 +125,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/margin-bottom",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 22
         },
         "margin-left_1": {
@@ -155,7 +132,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/margin-left",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 23
         },
         "text-align_1": {
@@ -163,7 +139,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/text-align",
             "is_hidden": true,
-            "date": 1374569950,
             "order": 24
         },
         "padding-left_1": {
@@ -171,7 +146,6 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/padding-left",
             "is_hidden": true,
-            "date": 1374569951,
             "order": 25
         },
         "padding-right_1": {
@@ -179,8 +153,14 @@
             "value": "",
             "proto": "/Library/content_samples/paragraphs/TextBlock/style/padding-right",
             "is_hidden": true,
-            "date": 1374569951,
             "order": 26
+        },
+        "text-indent_1": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/content_samples/paragraphs/TextBlock/style/text-indent",
+            "is_hidden": true,
+            "order": 27
         }
     }
 }

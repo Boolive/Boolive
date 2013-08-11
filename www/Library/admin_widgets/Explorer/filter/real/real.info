@@ -1,14 +1,12 @@
 {
     "value": 1,
     "proto": "/Library/basic/simple/Boolean",
-    "date": 1373119212,
     "order": 1,
     "children": {
         "title": {
             "value": "Реальные",
             "proto": "/Library/basic/simple/Boolean/title",
             "is_hidden": true,
-            "date": 1372616229,
             "order": 1
         },
         "description": {
@@ -16,7 +14,6 @@
             "value": "Логическое значение ДА/НЕТ",
             "proto": "/Library/basic/simple/Boolean/description",
             "is_hidden": true,
-            "date": 1372616229,
             "order": 2
         }
     }

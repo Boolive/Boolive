@@ -2,13 +2,11 @@
     "value": "Image.png",
     "is_file": true,
     "is_default_class": false,
-    "date": 1372616256,
     "order": 5,
     "children": {
         "title": {
             "value": "Изображение",
             "is_hidden": true,
-            "date": 1372616256,
             "order": 1
         }
     }

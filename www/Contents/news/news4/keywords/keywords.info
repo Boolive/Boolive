@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page/keywords",
-    "date": 1372616221,
     "order": 4,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Ключевые слова",
             "proto": "/Library/content_samples/Page/keywords/title",
             "is_hidden": true,
-            "date": 1372616221,
             "order": 1
         }
     }

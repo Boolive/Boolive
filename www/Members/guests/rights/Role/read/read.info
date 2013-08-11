@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Role/read",
-    "date": 1372616308,
     "order": 3,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Права на чтение",
             "proto": "/Library/access/Role/read/title",
             "is_hidden": true,
-            "date": 1372616308,
             "order": 1
         }
     }

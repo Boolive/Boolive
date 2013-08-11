@@ -1,15 +1,13 @@
 {
     "value": "is(/Library/content_samples/lists/List)",
     "proto": "/Library/views/SwitchCase",
-    "date": 1372616279,
-    "order": 6,
+    "order": 7,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Вариант переключателя",
             "proto": "/Library/views/SwitchCase/title",
             "is_hidden": true,
-            "date": 1372616279,
             "order": 1
         },
         "description": {
@@ -17,7 +15,6 @@
             "value": "Используется в виджете-переключателе для автоматического выбора варианта по uri отображаемого объекта.",
             "proto": "/Library/views/SwitchCase/description",
             "is_hidden": true,
-            "date": 1372616279,
             "order": 2
         }
     }

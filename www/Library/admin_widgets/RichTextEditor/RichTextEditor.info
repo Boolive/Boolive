@@ -3,14 +3,12 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "date": 1372616241,
     "order": 13,
     "children": {
         "title": {
             "value": "Редактор текста",
             "proto": "/Library/views/AutoWidgetList/title",
             "is_hidden": true,
-            "date": 1372616241,
             "order": 1
         },
         "description": {
@@ -18,14 +16,12 @@
             "value": "Отображает все свойства объекта в соответсвии с установленными вараинтами отображения. Имеет настройки фильтра, какие свойства объекта отображать.",
             "proto": "/Library/views/AutoWidgetList/description",
             "is_hidden": true,
-            "date": 1372616241,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList/res",
-            "date": 1372616241,
             "order": 4,
             "children": {
                 "title": {
@@ -33,7 +29,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList/res/title",
                     "is_hidden": true,
-                    "date": 1372616241,
                     "order": 1
                 },
                 "description": {
@@ -41,7 +36,28 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList/res/description",
                     "is_hidden": true,
-                    "date": 1372616241,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/AutoWidgetList/cache",
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/AutoWidgetList/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/AutoWidgetList/cache/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }

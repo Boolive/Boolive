@@ -1,12 +1,10 @@
 {
     "value": "",
-    "date": 1372616254,
     "order": 6,
     "children": {
         "title": {
             "value": "Пакет",
             "is_hidden": true,
-            "date": 1372616254,
             "order": 1
         }
     }

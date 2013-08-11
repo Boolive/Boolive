@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/content_samples/RichText",
-    "date": 1372616196,
     "order": 1,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "proto": "/Library/content_samples/RichText/title",
             "is_hidden": true,
             "is_delete": true,
-            "date": 1372616197,
             "order": 4
         }
     }

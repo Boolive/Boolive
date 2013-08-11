@@ -1,18 +1,15 @@
 {
     "value": "0",
-    "date": 1372616255,
     "order": 6,
     "children": {
         "title": {
             "value": "Число",
             "is_hidden": true,
-            "date": 1372616255,
             "order": 1
         },
         "description": {
             "value": "Числовое значение любой величены",
             "is_hidden": true,
-            "date": 1372616255,
             "order": 2
         }
     }

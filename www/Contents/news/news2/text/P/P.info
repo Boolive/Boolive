@@ -1,7 +1,6 @@
 {
     "value": "Новость создаётся как страница, то есть новость и есть страница. Она находится в разделе Ленты новостей",
     "proto": "/Library/content_samples/paragraphs/P",
-    "date": 1372616218,
     "order": 2,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/P/title",
             "is_hidden": true,
-            "date": 1372616218,
             "order": 1
         }
     }

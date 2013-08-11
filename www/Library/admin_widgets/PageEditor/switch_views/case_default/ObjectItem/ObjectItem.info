@@ -4,7 +4,6 @@
     "is_file": true,
     "proto": "/Library/admin_widgets/ObjectItem",
     "is_link": true,
-    "date": 1372616235,
     "order": 4,
     "children": {
         "title": {
@@ -12,7 +11,6 @@
             "value": "Виджет объекта",
             "proto": "/Library/admin_widgets/ObjectItem/title",
             "is_hidden": true,
-            "date": 1372616235,
             "order": 1
         },
         "description": {
@@ -20,7 +18,6 @@
             "value": "Отображение объекта в виде пункта списка",
             "proto": "/Library/admin_widgets/ObjectItem/description",
             "is_hidden": true,
-            "date": 1372616235,
             "order": 2
         }
     }

@@ -1,13 +1,11 @@
 {
     "value": "",
     "is_default_class": false,
-    "date": 1372616257,
     "order": 11,
     "children": {
         "title": {
             "value": "Ключевое слово",
             "is_hidden": true,
-            "date": 1372616257,
             "order": 1
         }
     }

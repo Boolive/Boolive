@@ -1,12 +1,10 @@
 {
     "value": "",
-    "date": 1372616258,
     "order": 6,
     "children": {
         "title": {
             "value": "Форматированный текст",
             "is_hidden": true,
-            "date": 1372616258,
             "order": 1
         }
     }

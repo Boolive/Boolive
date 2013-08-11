@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/views/ViewGroup",
-    "date": 1372616296,
     "order": 3,
     "children": {
         "title": {
             "value": "Вверх",
             "proto": "/Library/views/ViewGroup/title",
             "is_hidden": true,
-            "date": 1372616296,
             "order": 1
         },
         "description": {
@@ -16,7 +14,6 @@
             "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
             "proto": "/Library/views/ViewGroup/description",
             "is_hidden": true,
-            "date": 1372616296,
             "order": 3
         }
     }

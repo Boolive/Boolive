@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page/comments",
-    "date": 1372616221,
     "order": 6,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Комментарии",
             "proto": "/Library/content_samples/Page/comments/title",
             "is_hidden": true,
-            "date": 1372616221,
             "order": 1
         }
     }

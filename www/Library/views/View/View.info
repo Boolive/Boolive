@@ -1,19 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "date": 1372616306,
     "order": 2,
     "children": {
         "title": {
             "value": "Вид",
             "is_hidden": true,
-            "date": 1372616306,
             "order": 1
         },
         "description": {
             "value": "Базовый объект для создания элементов интерфейса",
             "is_hidden": true,
-            "date": 1372616306,
             "order": 2
         }
     }

@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "Имеются ошибки",
     "proto": "/Library/content_samples/Feedback/error_message",
-    "date": 1372616183,
     "order": 8,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Текст",
             "proto": "/Library/content_samples/Feedback/error_message/title",
             "is_hidden": true,
-            "date": 1372616183,
             "order": 1
         },
         "description": {
@@ -18,7 +16,6 @@
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/content_samples/Feedback/error_message/description",
             "is_hidden": true,
-            "date": 1372616183,
             "order": 2
         }
     }

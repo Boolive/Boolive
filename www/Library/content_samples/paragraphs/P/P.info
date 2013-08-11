@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/content_samples/paragraphs/TextBlock",
-    "date": 1372616261,
     "order": 5,
     "children": {
         "title": {
             "value": "Обычный абзац",
             "proto": "/Library/content_samples/paragraphs/TextBlock/title",
             "is_hidden": true,
-            "date": 1372616261,
             "order": 1
         }
     }

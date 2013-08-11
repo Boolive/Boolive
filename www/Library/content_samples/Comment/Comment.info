@@ -1,13 +1,11 @@
 {
     "value": "",
     "is_default_class": false,
-    "date": 1372616255,
     "order": 10,
     "children": {
         "title": {
             "value": "Комментарий",
             "is_hidden": true,
-            "date": 1372616255,
             "order": 2
         }
     }

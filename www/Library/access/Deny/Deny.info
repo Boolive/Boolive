@@ -1,19 +1,16 @@
 {
     "value": "",
     "is_default_class": false,
-    "date": 1372616224,
     "order": 8,
     "children": {
         "title": {
             "value": "Запрет",
             "is_hidden": true,
-            "date": 1372616224,
             "order": 1
         },
         "description": {
             "value": "Запрет доступа к объектам",
             "is_hidden": true,
-            "date": 1372616224,
             "order": 2
         }
     }

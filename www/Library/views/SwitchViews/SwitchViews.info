@@ -3,35 +3,24 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "date": 1372616305,
     "order": 9,
     "children": {
         "title": {
             "value": "Переключатель вариантов отображения (исполнения)",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
-            "date": 1372616305,
             "order": 1
         },
         "description": {
             "value": "Содержит варианты, значения которых - условие исполнения. Условие исполнение - это uri отображаемого объекта или uri прототипов отображаемого объекта. Может оказаться несколько вариантов с выполняемым условием, но выбирается только первый вариант. ",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
-            "date": 1372616306,
             "order": 2
-        },
-        "cache": {
-            "is_default_value": true,
-            "value": 0,
-            "proto": "/Library/views/Widget/cache",
-            "date": 1372616307,
-            "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "date": 1372616306,
             "order": 3,
             "children": {
                 "title": {
@@ -39,7 +28,6 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
-                    "date": 1372616306,
                     "order": 1
                 },
                 "description": {
@@ -47,10 +35,15 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
-                    "date": 1372616306,
                     "order": 2
                 }
             }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "order": 4
         }
     }
 }

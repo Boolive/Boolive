@@ -2,7 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/content_widgets/RichTextPreview/switch_views/case_p/res",
-    "date": 1372616275,
     "order": 3,
     "children": {
         "title": {
@@ -10,7 +9,6 @@
             "value": "Ресурсы",
             "proto": "/Library/content_widgets/RichTextPreview/switch_views/case_p/res/title",
             "is_hidden": true,
-            "date": 1372616275,
             "order": 1
         },
         "description": {
@@ -18,7 +16,6 @@
             "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
             "proto": "/Library/content_widgets/RichTextPreview/switch_views/case_p/res/description",
             "is_hidden": true,
-            "date": 1372616275,
             "order": 2
         }
     }

@@ -1,14 +1,12 @@
 {
     "value": "",
     "proto": "/Library/basic/simple/Text",
-    "date": 1372616299,
     "order": 4,
     "children": {
         "title": {
             "value": "Пароль",
             "proto": "/Library/basic/simple/Text/title",
             "is_hidden": true,
-            "date": 1372616299,
             "order": 1
         },
         "description": {
@@ -16,7 +14,6 @@
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/basic/simple/Text/description",
             "is_hidden": true,
-            "date": 1372616300,
             "order": 2
         }
     }

@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Page/text",
-    "date": 1372616216,
     "order": 2,
     "children": {
         "title": {
@@ -9,7 +8,6 @@
             "value": "Текст",
             "proto": "/Library/content_samples/Page/text/title",
             "is_hidden": true,
-            "date": 1372616216,
             "order": 3
         }
     }
