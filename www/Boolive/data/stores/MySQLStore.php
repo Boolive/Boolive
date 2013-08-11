@@ -265,7 +265,7 @@ class MySQLStore extends Entity
             try{
                 // Атрибуты отфильтрованы, так как нет ошибок
                 $attr = $entity->_attribs;
-                // Идентифкатор объекта
+                // Идентификатор объекта
                 // Родитель и урвень вложенности
                 $attr['parent'] = isset($attr['parent']) ? $this->localId($attr['parent']) : 0;
                 $attr['parent_cnt'] = $entity->parentCount();
@@ -580,7 +580,7 @@ class MySQLStore extends Entity
                     unset($u);
                     // Обновления наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
-                    if ($current['proto'] != $attr['proto']){
+                    if (!$incomplete && $current['proto'] != $attr['proto']){
                         $this->makeProtos($attr['id'], $attr['proto'], $dp, true, $incomplete, $attr['proto']?$entity->proto()->uri():null);
                     }
                     // Обновление значения, признака файла, признака наследования значения, класса и кол-во прототипов у наследников
@@ -754,7 +754,6 @@ class MySQLStore extends Entity
             // 1. Поиск обновлений в прототипе
 
             // Выбрать прототип. Если прототип не индексирован, то индексировать его
-
             $proto = $entity->proto();
             // Если у объекта прототип указан, но он не выбран (не существует), то сохранить объект с diff = delete.
             if (!$proto && $entity->_attribs['proto']){
@@ -780,9 +779,11 @@ class MySQLStore extends Entity
                     $q->execute(array($id));
                 }
                 // Сравнить прототип с объектом. Если объект использует значение по умолчанию и оно отличается от прототипа, то сохранить объект с признаком dif = change.
-                if ($entity->isDefaultValue() && $entity->value()!=$proto->value()){
-                    $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
-                    $entity->_attribs['diff_from'] = 1;
+                if ($entity->isDefaultValue() || Data::isAbsoluteUri($proto->uri())){
+                    if ($entity->value()!=$proto->value()){
+                        $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
+                        $entity->_attribs['diff_from'] = 1;
+                    }
                 }
                 // Поиск обновлений для подчиненных
                 if ($depth > 0){
@@ -986,6 +987,8 @@ class MySQLStore extends Entity
         if ($diff == Entity::DIFF_ADD){
             $entity->diff(Entity::DIFF_NO);
             $entity->save(false, false);
+            // @todo Если внешний, то загрузить файл от прототипа
+            // @todo Если внешний, то загрузить файл класса
         }else
         if ($diff == Entity::DIFF_DELETE){
             $entity->diff(Entity::DIFF_NO);
@@ -1789,6 +1792,21 @@ class MySQLStore extends Entity
                         ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                     ');
                     $make->execute(array(':obj' => $entity, ':proto'=>$proto));
+                    if ($incomplete){
+                        // Объект уже кем-то прототипирован, поэтому для них добавляются все прототипы текущего объекта
+                        $q = $this->db->prepare('SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj AND is_delete = 0 ORDER BY `level`');
+                        $make = $this->db->prepare('
+                            INSERT {protos} (object_id, proto_id, `level`)
+                            SELECT :obj, proto_id, `level`+1+:l FROM {protos}
+                            WHERE object_id = :proto
+                            UNION SELECT :obj,:obj,0
+                            ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+                        ');
+                        $q->execute(array(':obj'=>$entity));
+                        while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                            $make->execute(array(':obj'=>$row['object_id'], ':proto'=>$proto, ':l'=>$row['level']));
+                        }
+                    }
                 }else{
                     if ($remote){
                         // Если прототип внешний
@@ -1829,8 +1847,8 @@ class MySQLStore extends Entity
                             // У наследников объекта выбирается запись-отношение с $entity и она же вставляется с новым proto_id и увеличенным level
                             $q = $this->db->prepare('
                                 INSERT {protos} (object_id, proto_id, `level`)
-                                SELECT protos.object_id, :proto, objects.proto_cnt+1 FROM protos, objects
-                                WHERE protos.proto_id = :obj AND protos.object_id = objects.id
+                                SELECT object_id, :proto, `level`+1 FROM {protos}
+                                WHERE proto_id = :obj
                                 ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                             ');
                             $q->execute(array(':obj' => $entity, ':proto'=>$proto));
@@ -1844,13 +1862,12 @@ class MySQLStore extends Entity
                         $make->execute(array(':obj' => $entity, ':proto'=>$proto));
                     }
                 }
-
             }
         }
     }
 
     /**
-     * Полное пересодание дерева родителей
+     * Полное пересоздание дерева родителей
      * @throws \Exception
      */
     public function rebuildParents()
