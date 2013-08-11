@@ -230,13 +230,12 @@ class MySQLStore extends Entity
         if ($cond['select'][0] == 'self'){
             foreach ($group_result as $key => $obj){
                 if (!isset($obj)){
-                    $obj = /*new Entity(*/array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang'], 'class' => '\\Boolive\\data\\Entity'/*)*/);
-//                    $obj->cond($cond);
+                    $obj = array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang'], 'class' => '\\Boolive\\data\\Entity');
                     $uri = ($key===0)? $cond['from'] : $key;
                     if (!Data::isShortUri($uri)){
                         $names = F::splitRight('/', $uri, true);
-                        $obj/*->_attribs*/['name'] = $names[1];
-                        $obj/*->_attribs*/['uri'] = $uri;
+                        $obj['name'] = $names[1];
+                        $obj['uri'] = $uri;
                     }
                     $group_result[$key] = $obj;
                 }
@@ -986,9 +985,16 @@ class MySQLStore extends Entity
         $diff = $entity->diff();
         if ($diff == Entity::DIFF_ADD){
             $entity->diff(Entity::DIFF_NO);
+//            $proto = Data::read($entity->_attribs['proto'].'&files=2&cache=0');
+//            // Если внешний, то загрузить файл и классы от прототипа
+//            if ($proto->isRemote()){
+//                $a = 10;
+//                // 1. Создать файл, установить признак is_file, is_default_value и value.
+//
+//                // 2. Создать файлы классов в соответсвующих директриях
+//                // Что делать если у прототипа нет своих классов?
+//            }
             $entity->save(false, false);
-            // @todo Если внешний, то загрузить файл от прототипа
-            // @todo Если внешний, то загрузить файл класса
         }else
         if ($diff == Entity::DIFF_DELETE){
             $entity->diff(Entity::DIFF_NO);
@@ -1501,10 +1507,10 @@ class MySQLStore extends Entity
                             if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'owner' || $c[1] == 'lang'){
                                 if (is_array($c[3])){
                                     foreach ($c[3] as $ci => $cv){
-                                        $c[3][$ci] = $this->localId($cv, false);
+                                        $c[3][$ci] = $store->localId($cv, false);
                                     }
                                 }else{
-                                    $c[3] = $this->localId($c[3], false);
+                                    $c[3] = $store->localId($c[3], false);
                                 }
                             }
                             // sql услвоие
