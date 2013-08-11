@@ -49,16 +49,9 @@ namespace Boolive
                 // Если ещё не подключен
                 if (!self::isIncluded($class_name)){
                     // Подключение и активация запрашиваемого модуля
-                    // Путь по имени класса
-                    $names = explode('\\', $class_name, 2);
-                    $path = str_replace('\\', '/', $class_name);
-                    if ($names[0] == "Boolive") {
-                        $path = DIR_SERVER_ENGINE . substr($path, 8) . '.php';
-                    }else{
-                         $path = DIR_SERVER_PROJECT . $path . '.php';
-                    }
-                    if (is_file($path)){
-                        include_once($path);
+                    $class_path = self::getClassFile($class_name);
+                    if (is_file($class_path)){
+                        include_once($class_path);
                     }else{
                         throw new ErrorException('Class not found', 2);
                     }
@@ -160,6 +153,22 @@ namespace Boolive
         public static function getIncluded()
         {
             return self::$included;
+        }
+
+        /**
+         * Путь на файл класса
+         * @param string $class_name Имя класса с namespace
+         * @return string Путь к файлу от корня сервера
+         */
+        public static function getClassFile($class_name)
+        {
+            $names = explode('\\', $class_name, 2);
+            $path = str_replace('\\', '/', $class_name);
+            if ($names[0] == "Boolive") {
+                return DIR_SERVER_ENGINE.substr($path, 8).'.php';
+            }else{
+                return DIR_SERVER_PROJECT.$path.'.php';
+            }
         }
 
         /**
