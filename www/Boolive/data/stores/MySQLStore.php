@@ -905,8 +905,9 @@ class MySQLStore extends Entity
                     UPDATE {objects} SET update_time = :itime, `diff` = :diff, `diff_from`=:diff_from
                     WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
                 ');
+                $store = $this;
                 /** @var callback $process_info Сверка сущности с массивом атрибутов */
-                $process_info = function($info, $entity, $level = 0)use(&$process_info, $osave2){
+                $process_info = function($info, $entity, $level = 0)use(&$process_info, $osave2, $store){
                     /** @var Entity $entity */
                     if (is_array($info)){
                         if (isset($info['children'])){
@@ -918,6 +919,7 @@ class MySQLStore extends Entity
                         if ($entity->isExist() && $entity->diff()!=Entity::DIFF_ADD){
                             // Проверка различий в атрибутах
                             if (empty($info['possession'])) $info['possession'] = Entity::POSSESSION_MANDATORY;
+
                             if ((isset($info['proto']) && ($p = $entity->proto()) && $p->uri()!=$info['proto']) ||
                                 (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
                                 (isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
@@ -933,9 +935,9 @@ class MySQLStore extends Entity
                                     ':itime' => $entity->_attribs['update_time']==0 ? 0 : $entity->_attribs['update_time']=time(),
                                     ':diff' => $entity->_attribs['diff'],
                                     ':diff_from' => $level,
-                                    ':id' => $this->localId($entity->id()),
-                                    ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
-                                    ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
+                                    ':id' => $store->localId($entity->id()),
+                                    ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $store->localId($entity->_attribs['owner']),
+                                    ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $store->localId($entity->_attribs['lang'])
                                 ));
                             }
                         }else{
@@ -943,7 +945,7 @@ class MySQLStore extends Entity
                             $entity->diff_from($level);
                             $entity->import($info);
                             $entity->order(Entity::MAX_ORDER);
-                            $this->write($entity, false, true);
+                            $store->write($entity, false, true);
                         }
                         // Проверка подчиненных
                         foreach ($children as $name => $child_info){
