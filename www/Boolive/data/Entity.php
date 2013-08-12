@@ -79,29 +79,29 @@ class Entity implements ITrace
         'diff_from'    => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
-    public $_children = array();
+    protected $_children = array();
     /** @var Rule Правило на атрибуты объекта */
-    public $_rule;
+    protected $_rule;
     /** @var Entity Экземпляр прототипа */
-    public $_proto = false;
+    protected $_proto = false;
     /** @var Entity Экземпляр родителя */
-    public $_parent = false;
+    protected $_parent = false;
     /** @var Entity Экземпляр владельца */
-    public $_owner = false;
+    protected $_owner = false;
     /** @var Entity Экземпляр языка */
-    public $_lang = false;
+    protected $_lang = false;
     /** @var Entity Экземпляр прототипа, на которого ссылается объект */
-    public $_link = false;
+    protected $_link = false;
     /** @var Entity Экземпляр прототипа, от которого берется значение по умолчанию */
-    public $_default_value_proto = false;
+    protected $_default_value_proto = false;
     /** @var bool Принзнак, объект в процессе сохранения? */
-    public $_is_saved = false;
+    protected $_is_saved = false;
     /** @var bool Признак, изменены ли атрибуты объекта */
-    public $_changed = false;
+    protected $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
-    public $_checked = false;
+    protected $_checked = false;
     /** @var array Условие, которым был выбран объект */
-    public $_cond;
+    protected $_cond;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -150,7 +150,7 @@ class Entity implements ITrace
     /**
      * Установка правила на атрибуты
      */
-    public function defineRule()
+    protected function defineRule()
     {
         $this->_rule = Rule::arrays(array(
                 'id'           => Rule::uri(), // Сокращенный или полный URI
@@ -1541,7 +1541,7 @@ class Entity implements ITrace
      * @param \Boolive\errors\Error $error Объект ошибок подчиненного
      * @return bool Признак, корректен объект (true) или нет (false)
      */
-    public function checkChild(Entity $child, Error $error)
+    protected function checkChild(Entity $child, Error $error)
     {
         /** @example
          * if ($child->name() == 'bad_name'){
