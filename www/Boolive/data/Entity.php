@@ -19,7 +19,8 @@ use Exception,
     Boolive\values\Rule,
     Boolive\input\Input,
     Boolive\functions\F,
-    Boolive\auth\Auth;
+    Boolive\auth\Auth,
+    Boolive\Boolive;
 
 class Entity implements ITrace
 {
@@ -48,7 +49,7 @@ class Entity implements ITrace
     const POSSESSION_INTERNAL = 2;
 
     /** @var array Атрибуты */
-    protected $_attribs = array(
+    public $_attribs = array(
         'uri'          => null,
         'id'           => null,
         'name'         => 'entity',
@@ -78,36 +79,36 @@ class Entity implements ITrace
         'diff_from'    => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
-    protected $_children = array();
+    public $_children = array();
     /** @var Rule Правило на атрибуты объекта */
-    protected $_rule;
+    public $_rule;
     /** @var Entity Экземпляр прототипа */
-    protected $_proto = false;
+    public $_proto = false;
     /** @var Entity Экземпляр родителя */
-    protected $_parent = false;
+    public $_parent = false;
     /** @var Entity Экземпляр владельца */
-    protected $_owner = false;
+    public $_owner = false;
     /** @var Entity Экземпляр языка */
-    protected $_lang = false;
+    public $_lang = false;
     /** @var Entity Экземпляр прототипа, на которого ссылается объект */
-    protected $_link = false;
+    public $_link = false;
     /** @var Entity Экземпляр прототипа, от которого берется значение по умолчанию */
-    protected $_default_value_proto = false;
+    public $_default_value_proto = false;
     /** @var bool Принзнак, объект в процессе сохранения? */
-    protected $_is_saved = false;
+    public $_is_saved = false;
     /** @var bool Признак, изменены ли атрибуты объекта */
-    protected $_changed = false;
+    public $_changed = false;
     /** @var bool Признак, проверен ли объект или нет */
-    protected $_checked = false;
+    public $_checked = false;
     /** @var array Условие, которым был выбран объект */
-    protected $_cond;
+    public $_cond;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
      * Если строка, то определяет базовое имя, к кторому будут подбираться числа для уникальности
      * @var bool|string
      */
-    protected $_autoname = false;
+    public $_autoname = false;
 
     /**
      * Конструктор
@@ -149,7 +150,7 @@ class Entity implements ITrace
     /**
      * Установка правила на атрибуты
      */
-    protected function defineRule()
+    public function defineRule()
     {
         $this->_rule = Rule::arrays(array(
                 'id'           => Rule::uri(), // Сокращенный или полный URI
@@ -223,16 +224,8 @@ class Entity implements ITrace
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
             if ($choose_unique){
                 $this->_autoname = $new_name;
-                //$new_name = uniqid($new_name);
             }
             $this->_attribs['name'] = $new_name;
-
-//            if (isset($this->_attribs['uri'])){
-//                $uri = F::splitRight('/',$this->_attribs['uri'], true);
-//                $this->updateURI(is_null($uri[0])? $new_name : $uri[0].'/'.$new_name);
-//            }else{
-//                $this->updateURI(null);
-//            }
             $this->_changed = true;
             $this->_checked = false;
         }
@@ -249,9 +242,9 @@ class Entity implements ITrace
     {
         if (!isset($this->_attribs['uri']) || $remake){
             if ($parent = $this->parent()){
-               $this->_attribs['uri'] = $parent->uri().'/'./*($this->_autoname ? $this->_autoname : */$this->_attribs['name']/*)*/;
+               $this->_attribs['uri'] = $parent->uri().'/'.$this->_attribs['name'];
             }else{
-                $this->_attribs['uri'] = /*$this->_autoname ? $this->_autoname : */$this->_attribs['name'];
+                $this->_attribs['uri'] = $this->_attribs['name'];
             }
         }
         if ($encode){
@@ -280,7 +273,7 @@ class Entity implements ITrace
      * Каскадное обновление URI подчиненных на основании своего uri
      * Обновляются uri только выгруженных/присоединенных на данный момент подчиенных
      */
-    protected function updateURI()
+    public function updateURI()
     {
         foreach ($this->_children as $child_name => $child){
             /* @var Entity $child */
@@ -407,6 +400,64 @@ class Entity implements ITrace
         }else{
             return DIR_WEB_PROJECT.ltrim($dir.'/','/');
         }
+    }
+
+    /**
+     * Содержимое файла и информация о нём.
+     * Если у объекта значение не файл, то возвращается false
+     * @param bool $only_hash Признак, возвращать только hash файла
+     * @param bool $base64 Признак, кодировать содержимое файла в base64
+     * @return array|bool
+     */
+    public function fileContent($only_hash = true, $base64 = true)
+    {
+        if (!isset($this->_attribs['file_content'])){
+            // Для внешних объектов отдельные запросы на получение файлов не делаются.
+            if ($this->isFile() && !$this->isRemote()){
+                $f = $this->file(null, true);
+                $c = file_get_contents($f);
+                $this->_attribs['file_content'] = array(
+                    'name' => $this->value(),
+                    'hash' => md5($c),
+                    'base64' => $base64,
+                    'content' => $only_hash ? null : ($base64 ? base64_encode($c) : $c)
+                );
+            }else{
+                $this->_attribs['file_content'] = false;
+            }
+        }
+        return $this->_attribs['file_content'];
+    }
+
+    /**
+     * Содержимое (код) класса объекта и его наследников с информацией содержимом.
+     * Если у объекта значение не файл, то возвращается false
+     * @param bool $only_hash Признак, возвращать только hash файла классов?
+     * @param bool $base64 Признак, кодировать содержимое файлов в base64
+     * @return array Многомерный массив с информацией о каждом наследуемом классе кроме Entity
+     */
+    public function classesContent($only_hash = true, $base64 = true)
+    {
+        if (!isset($this->_attribs['classes_content'])){
+            if ($this->isRemote()){
+                $this->_attribs['classes_content'] = false;
+            }else{
+                $this->_attribs['classes_content'] = array();
+                $class = get_class($this);
+                while ($class != 'Boolive\data\Entity'){
+                    $f = Boolive::getClassFile($class);
+                    $c = file_get_contents($f);
+                    $this->_attribs['classes_content'][] = array(
+                        'name' => $class,
+                        'hash' => md5($c),
+                        'base64' => $base64,
+                        'content' => $only_hash ? null : ($base64 ? base64_encode($c) : $c)
+                    );
+                    $class = get_parent_class($class);
+                }
+            }
+        }
+        return $this->_attribs['classes_content'];
     }
 
     /**
@@ -866,12 +917,12 @@ class Entity implements ITrace
      * Прототип объекта
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
      * @param bool $load Загрузить прототип из хранилща, если ещё не загружен?
+     * @throws \Exception
      * @return Entity|null|bool
      */
     public function proto($new_proto = null, $load = true)
     {
         if (is_string($new_proto)) $new_proto = Data::read($new_proto);
-//        if ($new_proto instanceof Entity && !$new_proto->isExist()) $new_proto = null;
         // Смена прототипа
         if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->isEqual($this->proto()))){
             if (empty($new_proto)){
@@ -1116,6 +1167,7 @@ class Entity implements ITrace
      * Получение подчиненного объекта по имени с учётом владельца и языка его родителя
      * @example $sub = $obj->sub;
      * @param string $name Имя подчиенного объекта
+     * @throws \Exception
      * @return Entity
      */
     public function __get($name)
@@ -1489,7 +1541,7 @@ class Entity implements ITrace
      * @param \Boolive\errors\Error $error Объект ошибок подчиненного
      * @return bool Признак, корректен объект (true) или нет (false)
      */
-    protected function checkChild(Entity $child, Error $error)
+    public function checkChild(Entity $child, Error $error)
     {
         /** @example
          * if ($child->name() == 'bad_name'){
@@ -1687,14 +1739,24 @@ class Entity implements ITrace
     }
 
     /**
+     * Признак, является ли объект внешним?
+     * @return bool
+     */
+    public function isRemote()
+    {
+        return Data::isAbsoluteUri($this->uri());
+    }
+
+    /**
      * Экпорт объекта в массив и сохранение в файл info в формате JSON
      * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
      * @param bool $save_to_file Признак, сохранять в файл?
      * @param bool $more_info Признак, экспортировать дополнительную информацию об объекте
      * @param bool $properties Признак, экспортирвоать свойсвта или нет?
+     * @param int $export_files Экпортировать или нет файл объекта и его php классы? 0 - нет, 1 - толлько hash файлов, 2 - да
      * @return array
      */
-    public function export($save_to_file = true, $more_info = false, $properties = true)
+    public function export($save_to_file = true, $more_info = false, $properties = true, $export_files = 0)
     {
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
@@ -1708,7 +1770,6 @@ class Entity implements ITrace
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
         if ($this->isDelete(null, false)) $export['is_delete'] = true;
         if ($this->isRelative()) $export['is_relative'] = true;
-        $export['date'] = $this->date();
         $export['order'] = $this->order();
         if ($this->possession() != Entity::POSSESSION_MANDATORY) $export['possession'] = $this->possession();
         // Расширенный импорт
@@ -1716,6 +1777,7 @@ class Entity implements ITrace
             $export['id'] = $this->id();
             $export['uri'] = $this->uri();
             $export['name'] = $this->name();
+            $export['date'] = $this->date();
             $export['proto_cnt'] = $this->protoCount();
             if ($this->parent()) $export['parent'] = $this->parent()->uri();
             if (!$this->isHidden()) $export['is_hidden'] = false;
@@ -1761,6 +1823,12 @@ class Entity implements ITrace
                 }
             }
             if (empty($export['children'])) unset($export['children']);
+        }
+        if ($export_files){
+            // файл
+            $export['file_content'] = $this->fileContent($export_files != 2);
+            // классы
+            $export['classes_content'] = $this->classesContent($export_files != 2);
         }
         // Сохранение в info файл
         if ($save_to_file){
