@@ -1944,7 +1944,7 @@ class MySQLStore extends Entity
      * @param bool $is_new
      * @return int|null
      */
-    private function localId($uri, $create = true, &$is_new = false)
+    public function localId($uri, $create = true, &$is_new = false)
     {
         $is_new = false;
         if ($uri instanceof Entity){
