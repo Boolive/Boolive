@@ -1,1 +1,1 @@
-Hello world!
+<div class="HtmlBlock">Widget HtmlBlock</div>
