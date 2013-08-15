@@ -246,7 +246,7 @@ class HTTPStore extends Entity
     /**
      * Создание объекта из атрибутов
      * @param array $attribs Атриубты объекта
-     * @throws \Exception
+     * @param $base_url
      * @return Entity
      */
     public function makeObject($attribs, $base_url)

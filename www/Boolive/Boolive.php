@@ -52,6 +52,10 @@ namespace Boolive
                     $class_path = self::getClassFile($class_name);
                     if (is_file($class_path)){
                         include_once($class_path);
+                    }else
+                    if (mb_substr($class_name,0,7)=='Remote\\' && self::loadRemoteClass($class_name, $class_path)){
+                        // Если класс из Remote и его получилось загрузить с его сервера
+                        include_once($class_path);
                     }else{
                         throw new ErrorException('Class not found', 2);
                     }
@@ -164,11 +168,59 @@ namespace Boolive
         {
             $names = explode('\\', $class_name, 2);
             $path = str_replace('\\', '/', $class_name);
-            if ($names[0] == "Boolive") {
+            if ($names[0] == 'Boolive') {
                 return DIR_SERVER_ENGINE.substr($path, 8).'.php';
+            }else
+            if ($names[0] == 'Remote'){
+                return  DIR_SERVER_REMOTE.substr($path, 7).'.php';
             }else{
                 return DIR_SERVER_PROJECT.$path.'.php';
             }
+        }
+
+        /**
+         * Загрузка внешнего класса
+         * @param $class_name Полное имя класса
+         * @param $class_path Путь, куда сохранять класс
+         * @return bool
+         */
+        public static function loadRemoteClass($class_name, $class_path)
+        {
+            $names = \Boolive\functions\F::splitRight('\\', $class_name, true);
+            if (preg_match('/^Remote\\\\([^\\\\]+)(.*)$/u', $names[0], $match)){
+                $namespace_pfx = 'Remote\\'.$match[1].'\\';
+                $match[1] = str_replace('__','-',$match[1]);
+                $match[1] = str_replace('_','.',$match[1]);
+                $match[2] = str_replace('\\','/',$match[2]);
+                $uri = 'http://'.$match[1].$match[2].'&class_content=1';
+                $remote = \Boolive\data\Data::read($uri);
+                $class = $remote->classContent();
+                if (isset($class['content'])){
+                    $content = base64_decode($class['content']);
+                    // Название классов и пространств имен не ядра переименовываются - добавляется префикс
+                    $content = preg_replace_callback('/((?:[A-Za-a0-9_]+\\\\)+[A-Za-a0-9_]+)/ui', function($m) use ($namespace_pfx){
+                        if (mb_substr($m[1], 0, 8) == 'Boolive\\'){
+                            return $m[1];
+                        }else{
+                            return $namespace_pfx.$m[1];
+                        }
+                    }, $content);
+                    // Название классов как строковые значения в коде
+                    $content = preg_replace_callback('/(\'|")(?:\\\\\\\\?[\w_]+)+(\'|")/ui', function($m) use ($namespace_pfx){
+                        $x = trim($m[0],'\\\'"');
+                        if (mb_substr($x, 0, 8) == 'Boolive\\'){
+                            return $m[1].$x.$m[2];
+                        }else{
+                            return $m[1].'\\'.$namespace_pfx.$x.$m[2];
+                        }
+                    }, $content);
+                    // Корневые namespace (без \)
+                    $content = preg_replace('/namespace\s+([a-zA-Z_]+)([\s;$]+)/ui', 'namespace '.$namespace_pfx.'\\$1$2', $content);
+                    \Boolive\file\File::create($content, $class_path);
+                    return true;
+                }
+            }
+            return false;
         }
 
         /**
@@ -201,7 +253,10 @@ namespace Boolive
          */
         public static function isExist($class_name)
         {
-            return true;
+            if (class_exists($class_name, false) || interface_exists($class_name)){
+                return true;
+            }
+            return is_file(self::getClassFile($class_name));
         }
 
         /**

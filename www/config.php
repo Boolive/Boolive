@@ -18,6 +18,8 @@ define('DIR_WEB', get_web_dir());
 define('DIR_WEB_ENGINE', DIR_WEB.'Boolive/');
 /** @cont string Директория проекта относительно домена. Слеш в конце обязателен! */
 define('DIR_WEB_PROJECT', DIR_WEB);
+/** @const string Директория внешних объектов относительно домена. Слеш в конце обязателен! */
+define('DIR_WEB_REMOTE', DIR_WEB.'Remote/');
 
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER', DOCUMENT_ROOT.DIR_WEB);
@@ -25,6 +27,8 @@ define('DIR_SERVER', DOCUMENT_ROOT.DIR_WEB);
 define('DIR_SERVER_ENGINE', DOCUMENT_ROOT.DIR_WEB_ENGINE);
 /** @cont string Директория проекта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER_PROJECT', DOCUMENT_ROOT.DIR_WEB_PROJECT);
+/** @const string Директория внешних объектов на сервере. Слеш в конце обязателен! */
+define('DIR_SERVER_REMOTE', DOCUMENT_ROOT.DIR_WEB_REMOTE);
 
 // Адрес сайта, например: boolive.ru. Значение по умолчанию для CLI режима
 define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_HOST']);

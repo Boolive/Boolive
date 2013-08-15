@@ -33,7 +33,9 @@ class RESTful extends View
                     'path' => Rule::string(), // uri изменяемого объекта (PUT) или в который добавлять новый (POST)
                     'method' => Rule::string(), // метод запроса
                     'call' => Rule::string()->default('')->required(), // вызываемый метод объекта
-                    'entity' => Rule::arrays(Rule::string()) // атрибуты изменяемого объекта
+                    'entity' => Rule::arrays(Rule::string()), // атрибуты изменяемого объекта
+                    'file_content' => Rule::bool()->default(false)->required(), // Экпортировать файл объекта или нет?
+                    'class_content' => Rule::bool()->default(false)->required() // Экпортировать класс объекта или нет?
                 )),
                 'FILES' => Rule::arrays(array(
                     'entity' => Rule::arrays(array(
@@ -50,7 +52,7 @@ class RESTful extends View
         switch ($this->_input['REQUEST']['method']){
             // Выбор
             case 'GET':
-                $this->get($this->_input['SERVER']['REQUEST_URI']);
+                $this->get($this->_input['SERVER']['REQUEST_URI'], $this->_input['REQUEST']['file_content'], $this->_input['REQUEST']['class_content']);
                 break;
             // Добавление нового объекта в коллекцию
             case 'POST':
@@ -95,25 +97,27 @@ class RESTful extends View
      * Обработка GET запроса
      * Выбор объекта, списка объекта или дерева объектов по URI
      * @param $uri Условие поиска в URL формате
+     * @param bool $export_file Экспортировать файл или нет
+     * @param bool $export_class Экспортировать класс или нет
      */
-    private function get($uri)
+    private function get($uri, $export_file, $export_class)
     {
         // Если есть условие, то выполняется поиск подчиненных объекта
         $result = Data::read($uri);
         if ($result instanceof Entity){
-            $result = $result->export(false, true, false);
+            $result = $result->export(false, true, false, $export_file, $export_class);
         }else
         if (is_array($result)){
             /** Перебор объектов или групп выборок */
             foreach ($result as $gkey => $gitem){
                 if ($gitem instanceof Entity){
-                    $result[$gkey] = $gitem->export(false, true, false);
+                    $result[$gkey] = $gitem->export(false, true, false, $export_file, $export_class);
                 }else
                 // Если массив, то перебор объектоы в группе выборки
                 if (is_array($result)){
                     foreach ($result as $key => $item){
                         if ($item instanceof Entity){
-                            $result[$gkey][$key] = $item->export(false, true, false);
+                            $result[$gkey][$key] = $item->export(false, true, false, $export_file, $export_class);
                         }
                     }
                 }

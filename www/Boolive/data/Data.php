@@ -638,6 +638,8 @@ class Data
             if (isset($result['group'])) $r['group'] = true;
             if (isset($result['return'])) $r['return'] = $result['return'];
             if (isset($result['cache'])) $r['cache'] = $result['cache'];
+            if (isset($result['file_content'])) $r['file_content'] = $result['file_content'];
+            if (isset($result['class_content'])) $r['class_content'] = $result['class_content'];
             return $r;
         }
         return $result;
@@ -744,7 +746,7 @@ class Data
             if (empty($c)) unset($cond[$key]);
         }
         $url = F::toJSON($cond, false);
-        $url = mb_substr($url, 1, mb_strlen($url)-1, 'UTF-8');
+        $url = mb_substr($url, 1, mb_strlen($url)-2, 'UTF-8');
         $url = strtr($url, array(
                          '[' => '(',
                          ']' => ')',
@@ -761,10 +763,10 @@ class Data
                         $escapers = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
                         return urlencode(str_replace($escapers, $replacements, $m[1]));
                     }, $url);
-        $url = preg_replace('/,([a-z]+):/ui','&$1=',$url);
-        $url = preg_replace('/\(([a-z]+),/ui','$1(',$url);
+        $url = preg_replace('/,([a-z_]+):/ui','&$1=',$url);
+        $url = preg_replace('/\(([a-z_]+),/ui','$1(',$url);
         $url = preg_replace('/\),/ui',')$1',$url);
-        $url = mb_substr($url, 5, mb_strlen($url)-6);
+        $url = mb_substr($url, 5, mb_strlen($url)-5);
         if (isset($base_url)){
             $url = $base_url.'?from='.$url;
         }else{
@@ -818,7 +820,7 @@ class Data
         // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
         $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
         // name(a) => (name,a)
-        $cond = preg_replace('/\s*([a-z]+)\(/ui','($1,', $cond);
+        $cond = preg_replace('/\s*([a-z_]+)\(/ui','($1,', $cond);
         // Все значения в кавычки
         $cond = preg_replace_callback('/(,|\()([^,)(]+)/ui', function($m){
                     $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
@@ -874,7 +876,7 @@ class Data
     }
 
     /**
-     * Проверяет, является ли URI абсолютным, т.е. начиается со схемы
+     * Проверяет, является ли URI абсолютным. Абсолютный, если начинается со схемы
      * @param $uri
      * @return bool
      */
