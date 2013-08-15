@@ -199,7 +199,7 @@ namespace Boolive
                     $content = base64_decode($class['content']);
                     // Название классов и пространств имен не ядра переименовываются - добавляется префикс
                     $content = preg_replace_callback('/((?:[A-Za-a0-9_]+\\\\)+[A-Za-a0-9_]+)/ui', function($m) use ($namespace_pfx){
-                        if (mb_substr($m[1], 0, 8) == 'Boolive\\'){
+                        if (mb_substr($m[1], 0, 8) == 'Boolive\\' || mb_substr($m[1], 0, 7) == 'Remote\\'){
                             return $m[1];
                         }else{
                             return $namespace_pfx.$m[1];
@@ -208,7 +208,7 @@ namespace Boolive
                     // Название классов как строковые значения в коде
                     $content = preg_replace_callback('/(\'|")(?:\\\\\\\\?[\w_]+)+(\'|")/ui', function($m) use ($namespace_pfx){
                         $x = trim($m[0],'\\\'"');
-                        if (mb_substr($x, 0, 8) == 'Boolive\\'){
+                        if (mb_substr($x, 0, 8) == 'Boolive\\' || mb_substr($m[1], 0, 7) == 'Remote\\'){
                             return $m[1].$x.$m[2];
                         }else{
                             return $m[1].'\\'.$namespace_pfx.$x.$m[2];
