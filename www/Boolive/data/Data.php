@@ -886,6 +886,22 @@ class Data
     }
 
     /**
+     * Преобразование абсолютного URI в локальный для доступа к загруженным внешним файлам
+     * @param $absolute_uri
+     * @param bool $add_remote
+     * @return string
+     */
+    static function convertAbsoluteToLocal($absolute_uri, $add_remote = true)
+    {
+        if (preg_match('/^[a-z]+:\/\/([^\/]+)(.*)$/u', $absolute_uri, $match)){
+            $match[1] = str_replace('.','_',$match[1]);
+            $match[1] = str_replace('-','__',$match[1]);
+            return ($add_remote?'Remote/':'').$match[1].$match[2];
+        }
+        return $absolute_uri;
+    }
+
+    /**
      * Определение URI относительного прототипа
      * @param string $obj_uri URI объекта, для которого определяется относительный прототип
      * @param string $proto_uri URI обычного прототипа, от которого создаётся объект

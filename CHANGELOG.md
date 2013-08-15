@@ -14,7 +14,7 @@ Version 2.0.alpha work in progress
 - new #127: The caching module in files is created (VladimirShestakov)
 - new #128: Caching of views (widgets) (VladimirShestakov)
 - new #129: Cascade updating of date of editing objects is added (VladimirShestakov)
-- new #135: Loading class of remote prototype (VladimirShestakov)
+- new #135: Loading class and value file of remote prototype (VladimirShestakov)
 - new #136: The relative prototyping. The attribute "is_relative" is added for objects (VladimirShestakov)
 - new #137: The possession attribute for objects is added. Possession can be "mandatory", "additional" and "internal" (VladimirShestakov)
 - enh: Data::select() method  is combined with Data::read() (VladimirShestakov)

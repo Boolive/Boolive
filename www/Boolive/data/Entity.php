@@ -347,10 +347,11 @@ class Entity implements ITrace
      * Файл, ассоциированный с объектом
      * @param null|array|string $new_file Информация о новом файле. Полный путь к файлу или сведения из $_FILES
      * @param bool $root Возвращать полный путь или от директории сайта
+     * @param bool $cache_remote Если файл внешний, то сохранить его к себе на сервер и возвратить путь на него
      * @return null|string
      * @todo Учесть в пути владельца и язык объекта
      */
-    public function file($new_file = null, $root = false)
+    public function file($new_file = null, $root = false, $cache_remote = true)
     {
         // Установка нового файла
         if (isset($new_file)){
@@ -376,7 +377,25 @@ class Entity implements ITrace
         // Возврат пути к текущему файлу, если есть
         if (!empty($this->_attribs['is_file'])){
             if ($proto = $this->isDefaultValue(null, true)){
-                return $proto->file(null, $root);
+                $file = $proto->file(null, $root);
+                if ($cache_remote && Data::isAbsoluteUri($file)){
+                    $file_path = Data::convertAbsoluteToLocal($file, false);
+                    if (!is_file($f = DIR_SERVER_REMOTE.$file_path)){
+                        // Загрзка файла с сервера
+                        $uri = F::splitRight('/', $file);
+                        $file_content = Data::read($uri[0].'&file_content=1')->fileContent();
+                        if (isset($file_content['content'])){
+                            $content = base64_decode($file_content['content']);
+                            \Boolive\file\File::create($content, $f);
+                        }
+                    }
+                    if ($root){
+                        $file = $f;
+                    }else{
+                        $file = DIR_WEB_REMOTE.$file_path;
+                    }
+                }
+                return $file;
             }else{
                 $file = $this->dir($root);
                 if (!empty($this->_attribs['is_history'])) $file.='_history_/'.$this['date'].'_';

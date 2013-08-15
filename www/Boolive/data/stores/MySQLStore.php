@@ -2082,14 +2082,10 @@ class MySQLStore extends Entity
                 $q->execute(array($this->localId($id, false)));
                 if ($row = $q->fetch(DB::FETCH_ASSOC)){
                     if (Data::isAbsoluteUri($row['uri'])){
-                        if (preg_match('/^[a-z]+:\/\/([^\/]+)(.*)$/u', $row['uri'], $match)){
-                            $match[1] = str_replace('.','_',$match[1]);
-                            $match[1] = str_replace('-','__',$match[1]);
-                            $row['uri'] = '/Remote/'.$match[1].$match[2];
-                        }
+                        $row['uri'] = Data::convertAbsoluteToLocal($row['uri']);
                     }
                     $names = F::splitRight('/', $row['uri'], true);
-                    $this->classes[$id] = str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                    $this->classes[$id] = '\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
                 }else{
                     $this->classes[$id] = '\\Boolive\\data\\Entity';
                 }
