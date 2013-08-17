@@ -17,10 +17,6 @@ class HtmlBlock extends Widget
         $v['text'] = $this->text->value();
         return parent::work($v);
     }
-    public function defineInputRule()
-    {
-        $v['text']='Html блок';
-    }
             
 }
 
