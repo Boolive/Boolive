@@ -19,13 +19,7 @@ class HtmlBlock extends Widget
     }
     public function defineInputRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                    'path' => Rule::string()->regexp('|^/news|'),
-                    )
-                )
-            )
-        );
+        $v['text']='Html блок';
     }
             
 }
