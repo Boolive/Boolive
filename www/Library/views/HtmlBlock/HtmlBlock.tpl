@@ -1,1 +1,1 @@
-<div class="HtmlBlock">Widget HtmlBlock</div>
+<div class="HtmlBlock"> <?php echo $v['text']; ?> </div>
