@@ -60,6 +60,20 @@
                     "order": 2
                 }
             }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Widget/object_rule",
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/Widget/object_rule/title",
+                    "order": 1
+                }
+            }
         }
     }
 }

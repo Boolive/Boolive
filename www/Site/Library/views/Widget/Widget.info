@@ -4,10 +4,22 @@
     "is_default_class": false,
     "order": 5,
     "children": {
+        "title": {
+            "value": "Виджет",
+            "proto": "/Library/views/View/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "order": 2
+        },
         "res": {
             "value": "",
             "proto": "/Library/views/ViewGroup",
-            "order": 0,
+            "order": 4,
             "children": {
                 "title": {
                     "value": "Ресурсы",
@@ -23,23 +35,11 @@
                 }
             }
         },
-        "title": {
-            "value": "Виджет",
-            "proto": "/Library/views/View/title",
-            "is_hidden": true,
-            "order": 1
-        },
-        "description": {
-            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
-            "proto": "/Library/views/View/description",
-            "is_hidden": true,
-            "order": 2
-        },
         "cache": {
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/basic/simple/Boolean",
-            "order": 4,
+            "order": 5,
             "children": {
                 "title": {
                     "value": "Кэшировать?",
@@ -52,6 +52,16 @@
                     "proto": "/Library/basic/simple/Boolean/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "",
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Правило на отображаемый объект",
+                    "order": 1
                 }
             }
         }

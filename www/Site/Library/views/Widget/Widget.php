@@ -45,7 +45,7 @@ class Widget extends View
     {
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required()
+                        'object' => Rule::entity($this->object_rule->value())->required()
                     )
                 )
             )
@@ -64,6 +64,7 @@ class Widget extends View
         $names = parent::exportedProperties();
         $names[] = 'res';
         $names[] = 'object';
+        $names[] = 'object_rule';
         return $names;
     }
 }
