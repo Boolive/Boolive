@@ -1,39 +1,40 @@
 {
-    "value": "Menu.tpl",
+    "is_default_value": true,
+    "value": "item_view.tpl",
     "is_file": true,
-    "proto": "/Library/views/Widget",
-    "is_default_class": false,
-    "order": 14,
+    "proto": "/Library/views/Menu/item_view",
+    "order": 3,
     "children": {
         "title": {
-            "value": "Меню",
-            "proto": "/Library/views/Widget/title",
+            "value": "Виджет пункта на страницу",
+            "proto": "/Library/views/Menu/item_view/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
-            "proto": "/Library/views/Widget/description",
+            "is_default_value": true,
+            "value": "Для отображения свойств объекта соответствующими виджетом из списка",
+            "proto": "/Library/views/Menu/item_view/description",
             "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/Widget/res",
+            "proto": "/Library/views/Menu/item_view/res",
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
+                    "proto": "/Library/views/Menu/item_view/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/Widget/res/description",
+                    "proto": "/Library/views/Menu/item_view/res/description",
                     "is_hidden": true,
                     "order": 2
                 }
@@ -42,45 +43,37 @@
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/views/Widget/cache",
-            "order": 5,
+            "proto": "/Library/views/Menu/item_view/cache",
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
-                    "proto": "/Library/views/Widget/cache/title",
+                    "proto": "/Library/views/Menu/item_view/cache/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
-                    "proto": "/Library/views/Widget/cache/description",
+                    "proto": "/Library/views/Menu/item_view/cache/description",
                     "is_hidden": true,
                     "order": 2
                 }
             }
         },
         "object_rule": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/views/Widget/object_rule",
-            "order": 7,
+            "value": "is(/Library/content_samples/Page)",
+            "proto": "/Library/views/Menu/item_view/object_rule",
+            "order": 6,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на отображаемый объект",
-                    "proto": "/Library/views/Widget/object_rule/title",
+                    "proto": "/Library/views/Menu/item_view/object_rule/title",
                     "order": 1
                 }
             }
-        },
-        "object": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Contents",
-            "is_link": true,
-            "order": 8
         }
     }
 }

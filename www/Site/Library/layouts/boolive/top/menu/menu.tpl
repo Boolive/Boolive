@@ -1,3 +1,3 @@
 <div class="menu-top">
-    <?php echo $v['view']->string();?>
+    <?php echo $v['item_view']->string();?>
 </div>

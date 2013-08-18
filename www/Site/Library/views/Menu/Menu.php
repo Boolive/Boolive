@@ -2,7 +2,7 @@
 /**
  * Меню
  *
- * @version 1.0
+ * @version 2.0
  */
 namespace Library\views\Menu;
 
@@ -23,7 +23,8 @@ class Menu extends Widget
 
     public function work($v = array()){
         $v['title'] = $this->title->value();
-        $v['view'] = $this->startChild('view');
+        //$v['view'] = $this->startChild('view');
+        $v['item_view'] = $this->startChild('item_view');
         return parent::work($v);
     }
 }

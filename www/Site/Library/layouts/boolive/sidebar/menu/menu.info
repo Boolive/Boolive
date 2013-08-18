@@ -3,25 +3,26 @@
     "value": "Menu.tpl",
     "is_file": true,
     "proto": "/Library/views/Menu",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
-            "value": "Содержимое",
+            "value": "Меню содержимого ",
+            "proto": "/Library/views/Menu/title",
             "is_hidden": true,
-            "order": 1
+            "order": 3
         },
         "description": {
             "is_default_value": true,
             "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
             "proto": "/Library/views/Menu/description",
             "is_hidden": true,
-            "order": 2
+            "order": 4
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Menu/res",
-            "order": 3,
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -44,26 +45,40 @@
             "value": "",
             "proto": "/Library/views/Menu/object",
             "is_link": true,
-            "order": 4
+            "order": 6
         },
         "cache": {
-            "value": 1,
-            "proto": "/Library/views/Widget/cache",
-            "order": 6,
+            "value": 0,
+            "proto": "/Library/views/Menu/cache",
+            "order": 15,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
-                    "proto": "/Library/views/Widget/cache/title",
+                    "proto": "/Library/views/Menu/cache/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
-                    "proto": "/Library/views/Widget/cache/description",
+                    "proto": "/Library/views/Menu/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Menu/object_rule",
+            "order": 17,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/Menu/object_rule/title",
+                    "order": 1
                 }
             }
         }

@@ -47,8 +47,7 @@
             "order": 4,
             "children": {
                 "title": {
-                    "is_default_value": true,
-                    "value": "",
+                    "value": "Пункты",
                     "is_hidden": true,
                     "order": 2
                 }
@@ -56,20 +55,20 @@
         },
         "cache": {
             "value": 1,
-            "proto": "/Library/basic/simple/Boolean",
-            "order": 6,
+            "proto": "/Library/views/Menu/cache",
+            "order": 9
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Menu/object_rule",
+            "order": 11,
             "children": {
                 "title": {
-                    "value": "Кэшировать?",
-                    "proto": "/Library/basic/simple/Boolean/title",
-                    "is_hidden": true,
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/Menu/object_rule/title",
                     "order": 1
-                },
-                "description": {
-                    "value": "Признак, кэшировать или нет работу виджета. Кэширование ускоряет работу виджета.",
-                    "proto": "/Library/basic/simple/Boolean/description",
-                    "is_hidden": true,
-                    "order": 2
                 }
             }
         }
