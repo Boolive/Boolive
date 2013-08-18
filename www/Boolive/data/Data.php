@@ -632,14 +632,14 @@ class Data
                 'order' => $result['order'],
                 'limit' => $result['limit'],
                 'access' => $result['access'],
+                'file_content' => isset($result['file_content']) ? intval($result['file_content']) : 0,
+                'class_content' => isset($result['class_content']) ? intval($result['class_content']) : 0,
                 'correct' => true
             );
             if (isset($result['comment'])) $r['comment'] = $result['comment'];
             if (isset($result['group'])) $r['group'] = true;
             if (isset($result['return'])) $r['return'] = $result['return'];
             if (isset($result['cache'])) $r['cache'] = $result['cache'];
-            if (isset($result['file_content'])) $r['file_content'] = $result['file_content'];
-            if (isset($result['class_content'])) $r['class_content'] = $result['class_content'];
             return $r;
         }
         return $result;

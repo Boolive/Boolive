@@ -378,12 +378,12 @@ class Entity implements ITrace
         if (!empty($this->_attribs['is_file'])){
             if ($proto = $this->isDefaultValue(null, true)){
                 $file = $proto->file(null, $root);
-                if ($cache_remote && Data::isAbsoluteUri($file)){
+                if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
                     $file_path = Data::convertAbsoluteToLocal($file, false);
                     if (!is_file($f = DIR_SERVER_REMOTE.$file_path)){
                         // Загрзка файла с сервера
                         $uri = F::splitRight('/', $file);
-                        $file_content = Data::read($uri[0].'&file_content=1')->fileContent();
+                        $file_content = Data::read($uri[0].'&file_content=1')->fileContent(false, true);
                         if (isset($file_content['content'])){
                             $content = base64_decode($file_content['content']);
                             \Boolive\file\File::create($content, $f);
@@ -424,10 +424,11 @@ class Entity implements ITrace
     /**
      * Содержимое файла и информация о нём.
      * Если у объекта значение не файл, то возвращается false
+     * @param bool $only_hash Возвращать hash файла без его содержимого?
      * @param bool $base64 Признак, кодировать содержимое файла в base64
      * @return array|bool
      */
-    public function fileContent($base64 = true)
+    public function fileContent($only_hash = false, $base64 = true)
     {
         if (!isset($this->_attribs['file_content'])){
             // Для внешних объектов отдельные запросы на получение файлов не делаются.
@@ -438,7 +439,7 @@ class Entity implements ITrace
                     'name' => $this->value(),
                     'hash' => md5($c),
                     'base64' => $base64,
-                    'content' => $base64 ? base64_encode($c) : $c
+                    'content' => $only_hash? null : ($base64 ? base64_encode($c) : $c)
                 );
             }else{
                 $this->_attribs['file_content'] = false;
@@ -450,9 +451,10 @@ class Entity implements ITrace
     /**
      * Содержимое (код) класса объекта с hash значением
      * @param bool $base64 Признак, кодировать содержимое файла в base64
+     * @param bool $only_hash Возвращать hash файла без его содержимого?
      * @return array
      */
-    public function classContent($base64 = true)
+    public function classContent($only_hash = false, $base64 = true)
     {
         if (!isset($this->_attribs['class_content'])){
             if ($this->isRemote()){
@@ -466,7 +468,7 @@ class Entity implements ITrace
                         'name' => $class,
                         'hash' => md5($c),
                         'base64' => $base64,
-                        'content' => $base64 ? base64_encode($c) : $c
+                        'content' => $only_hash? null : ($base64 ? base64_encode($c) : $c)
                     );
                 }
             }
@@ -1767,11 +1769,11 @@ class Entity implements ITrace
      * @param bool $save_to_file Признак, сохранять в файл?
      * @param bool $more_info Признак, экспортировать дополнительную информацию об объекте
      * @param bool $export_properties Признак, экспортирвоать свойсвта или нет?
-     * @param bool $export_file Экпортировать или нет файл объекта?
-     * @param bool $export_class Экпортировать или нет класс объекта (его php код)?
+     * @param int $export_file Экпортировать или нет файл объекта? 0 - нет, 1 - hash файла, 2 - hash и содержимое в base64
+     * @param int $export_class Экпортировать или нет класс объекта (его php код)? 0 - нет, 1 - hash файла, 2 - hash и содержимое в base64
      * @return array
      */
-    public function export($save_to_file = true, $more_info = false, $export_properties = true, $export_file = false, $export_class = false)
+    public function export($save_to_file = true, $more_info = false, $export_properties = true, $export_file = 0, $export_class = 0)
     {
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
@@ -1840,9 +1842,9 @@ class Entity implements ITrace
             if (empty($export['children'])) unset($export['children']);
         }
         // файл
-        if ($export_file && !$this->isDefaultValue()) $export['file_content'] = $this->fileContent();
+        if ($export_file) $export['file_content'] = $this->fileContent($export_file!=2);
         // класс
-        if ($export_class && !$this->isDefaultClass()) $export['class_content'] = $this->classContent();
+        if ($export_class) $export['class_content'] = $this->classContent($export_class!=2);
 
         // Сохранение в info файл
         if ($save_to_file){

@@ -156,7 +156,6 @@ class MySQLStore extends Entity
                     $group_result[$key] = $this->makeObject($row);
                 }else{
                     if (isset($row['id2'])){
-
                         if ($this != ($store = Data::getStore($row['uri']))){
                             $group_result[$key] = $store->read(array(
                                 'from' => $row['uri'],
@@ -753,6 +752,9 @@ class MySQLStore extends Entity
             // 1. Поиск обновлений в прототипе
             // Выбрать прототип. Если прототип не индексирован, то индексировать его
             $proto = $entity->proto();
+//            if ($proto && $proto->isRemote()){
+//                $proto = Data::read($proto->uri());
+//            }
             // Если у объекта прототип указан, но он не выбран (не существует), то сохранить объект с diff = delete.
             if (!$proto && $entity->_attribs['proto']){
                 $entity->_attribs['diff'] = Entity::DIFF_DELETE;
@@ -782,7 +784,14 @@ class MySQLStore extends Entity
                         $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
                         $entity->_attribs['diff_from'] = 1;
                     }
-                    // @todo Если значения-файлы и прототип внешний, то сверить hash файлов.
+                    // Если значения-файлы и прототип внешний, то сверить hash файлов.
+                    if ($entity->isFile() && $proto->isRemote()){
+                        $file_info = $proto->fileContent(true, true);
+                        if (!empty($file_info['hash']) && (md5_file($entity->file(null, true)) != $file_info['hash'])){
+                            $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
+                            $entity->_attribs['diff_from'] = 1;
+                        }
+                    }
                 }
                 if ($entity->isDefaultClass() && $proto->isRemote()){
                     // @todo Сверить hash классов
@@ -803,7 +812,9 @@ class MySQLStore extends Entity
                         'select' => array('children'),
                         'where' => $where,
                         'limit' => array($entity->_attribs['update_step'], $step_size),
-                        'key' => 'uri'
+                        'key' => 'uri',
+                        'file_content' => 1,
+                        'cache' => 2
                     ), false, false, false);
                     if (count($pchildren) < $step_size){
                         // В следующий раз обновление по новой
@@ -859,6 +870,8 @@ class MySQLStore extends Entity
                             }
                         }
                     }
+                    // @todo Проверить обновления для подчиненных, у которых нет прототипов в прототипе родителя. (Они добавлялись в ручную или их прототип уничтожен)
+
                 }else{
                     // время обновляется если объект ранее был полностью унаследован от прототипа после создания
                     $entity->_attribs['update_time'] = $update_time ? time() : 0;
@@ -2013,11 +2026,11 @@ class MySQLStore extends Entity
         $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->key.'//'.$attribs['parent'];
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->key.'//'.$attribs['proto'];
         if ($attribs['is_default_value'] == 0) unset($attribs['is_default_value']); else $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
-        if ($attribs['diff'] == Entity::DIFF_ADD){
-            $attribs['is_default_value'] = Entity::ENTITY_ID;
-        }else{
+//        if ($attribs['diff'] == Entity::DIFF_ADD){
+//            $attribs['is_default_value'] = Entity::ENTITY_ID;
+//        }else{
             $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_default_class'] : $attribs['is_default_class'];
-        }
+//        }
         $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_link'] : $attribs['is_link'];
         $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
         $attribs['is_exist'] = 1;
@@ -2036,13 +2049,14 @@ class MySQLStore extends Entity
         $attribs['diff_from'] = intval($attribs['diff_from']);
         unset($attribs['valuef']);
         // Свой класс
-        if (empty($attribs['is_default_class'])){
-            $attribs['class'] = $this->getClassById($attribs['id']);
-        }else
-        if ($attribs['is_default_class'] != Entity::ENTITY_ID){
-            $attribs['class'] = $this->getClassById($attribs['is_default_class']);
-        }else{
-            $attribs['class'] = '\\Boolive\\data\\Entity';
+        $attribs['class'] = '\\Boolive\\data\\Entity';
+        if ($attribs['diff'] != Entity::DIFF_ADD){
+            if (empty($attribs['is_default_class'])){
+                $attribs['class'] = $this->getClassById($attribs['id']);
+            }else
+            if ($attribs['is_default_class'] != Entity::ENTITY_ID){
+                $attribs['class'] = $this->getClassById($attribs['is_default_class']);
+            }
         }
         return $attribs;
     }
