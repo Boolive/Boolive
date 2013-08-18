@@ -7,7 +7,7 @@
  * @used jQueryUI (http://jqueryui.com/)
  * @used Underscore.js (http://underscorejs.org)
  */
-(function($, _, undefined){
+(function($, _, window, undefined){
     /**
      * Виджет на основе JQuery UI Widget
      */
@@ -172,6 +172,33 @@
         },
 
         /**
+         * Вызов метода объекта на сервере по AJAX
+         * @param call Название действия (функции) для вызова на сервере.
+         * @param object URI объекта
+         * @param data POST данные
+         * @param settings Дополнительные парметры ajax запроса или функция обратного вызова как в $.ajax()
+         */
+        call_: function(call, object, data, settings){
+            if (_.isFunction(settings)){
+                settings = {success:settings};
+            }else
+            if (!_.isObject(settings)){
+                settings = {};
+            }
+            var success = _.isFunction(settings.success)? settings.success : null;
+            settings.owner = this.widgetName;
+            settings.context = this.element;
+            settings.type = 'POST';
+            settings.dataType = 'json';
+            settings.accepts = {json: 'application/json'};
+            settings.url = /^[a-z]+:\/\//i.test(object) ? object : window.location.protocol + '//' + window.location.host + object;
+            settings.data = settings.data? _.extend(settings.data, data) : data;
+            settings.data.method = 'CALL';
+            settings.data.call = call;
+            $.ajax(settings);
+        },
+
+        /**
          * Обновление html виджета с сервера
          * @param data POST данные запроса
          * @param settings Дополнительные парметры ajax запроса и функции обратного вызова как в $.ajax()
@@ -309,4 +336,4 @@
             return changes;
         }
     });
-})(jQuery, _);
+})(jQuery, _, window);

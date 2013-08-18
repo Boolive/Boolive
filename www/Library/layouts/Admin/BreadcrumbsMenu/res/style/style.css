@@ -6,7 +6,7 @@
 	-webkit-box-shadow: inset 0 -1px 0 0 #E5E5E5, inset 0 -3px 3px -2px #E5E5E5;
     /*border-bottom: 1px solid #e6e6e6;*/
     background-color: #F5F5F5;
-
+    cursor: text;
 	}
 .BreadcrumbsMenu ul{
 	list-style-type: none;
@@ -143,6 +143,30 @@
 				border-left: 15px solid #007FFF;
 				}
 
+    .BreadcrumbsMenu ul li.active.remote{
+		border-bottom: 1px solid #6f00c2;
+		}
+		.BreadcrumbsMenu ul li.active.remote a{
+			background-color: #9000ff;
+			}
+		.BreadcrumbsMenu ul li.active.remote:after{
+			border-left: 16px solid #6f00c2;
+			}
+			.BreadcrumbsMenu ul li.active.remote a:after{
+				border-left: 15px solid #9000ff;
+				}
+
         .BreadcrumbsMenu ul li.active a > span{
             max-width: none;
             }
+    .BreadcrumbsMenu .inline{
+
+        }
+        .BreadcrumbsMenu .inline input{
+            width: 90%;
+            height: 28px;
+            border: none;
+            background: transparent;
+            font-family: Verdana;
+            padding: 2px 10px;
+        }

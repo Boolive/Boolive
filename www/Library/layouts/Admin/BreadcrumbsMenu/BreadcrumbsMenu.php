@@ -6,7 +6,11 @@
  */
 namespace Library\layouts\Admin\BreadcrumbsMenu;
 
-use Library\views\Widget\Widget,
+use Boolive\data\Data,
+    Boolive\data\Entity,
+    Boolive\values\Check,
+    Boolive\values\Rule,
+    Library\views\Widget\Widget,
     Boolive\input\Input;
 
 class BreadcrumbsMenu extends Widget{
@@ -15,7 +19,19 @@ class BreadcrumbsMenu extends Widget{
     {
         /** @var $obj \Boolive\data\Entity */
 		$obj = $this->_input['REQUEST']['object'];
-		$parents = $obj->find(array(
+        $v['current'] = $obj->uri();
+        $v['items'] = $this->getItems($obj);
+		return parent::work($v);
+	}
+
+    /**
+     * Получения списка пунктов меню
+     * @param Entity $object
+     * @return array
+     */
+    private function getItems($object)
+    {
+        $parents = $object->find(array(
             'select' => 'parents',
             'depth' => array(0,'max'),
             'order' => array('parent_cnt', 'desc'),
@@ -24,15 +40,45 @@ class BreadcrumbsMenu extends Widget{
                 array('attr', 'is_delete', '>=', 0)
             )
         ));
-        $v['items'] = array();
+        if ($object->isRemote()){
+            $parents[] = Data::read();
+        }
+        $items = array();
         foreach ($parents as $p){
-            $v['items'][] = array(
-                'title' => ($p->title->isExist()) ? $p->title->value() : $p->name(),
+            $item = array(
                 'url' => '/admin'.$p->uri(),
                 'uri' => $p->uri(),
-                'active' => empty($v['items']) // активный первый элемент
+                'class' => empty($items) ? 'active' : '' // активный первый элемент
             );
+            if ($p->isRemote()){
+                $item['class'].=' remote';
+            }
+            if ($p->name() == '' && $p->isRemote()){
+                $item['title'] = $p->uri();
+            }else{
+                $item['title'] = ($p->title->isExist()) ? $p->title->value() : $p->name();
+            }
+            $items[] = $item;
         }
-		return parent::work($v);
-	}
+
+        return $items;
+    }
+
+    /**
+     * @param $input
+     * @return array|null
+     */
+    public function call_getBreadcrumbs($input)
+    {
+        $input = Check::filter($input, Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity()->required()
+            ))
+        )), $error);
+        if (!$error){
+            return $this->getItems($input['REQUEST']['object']);
+        }else{
+            return null;
+        }
+    }
 }
