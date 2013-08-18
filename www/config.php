@@ -17,7 +17,7 @@ define('DIR_WEB', get_web_dir());
 /** @cont string Директория ядра (движка) относительно домена. Слеш в конце обязателен! */
 define('DIR_WEB_ENGINE', DIR_WEB.'Boolive/');
 /** @cont string Директория проекта относительно домена. Слеш в конце обязателен! */
-define('DIR_WEB_PROJECT', DIR_WEB);
+define('DIR_WEB_PROJECT', DIR_WEB.'Site/');
 /** @const string Директория внешних объектов относительно домена. Слеш в конце обязателен! */
 define('DIR_WEB_REMOTE', DIR_WEB.'Remote/');
 
