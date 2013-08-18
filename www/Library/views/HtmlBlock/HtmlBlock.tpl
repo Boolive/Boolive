@@ -1,0 +1,1 @@
+<div class="HtmlBlock"> <?php echo $v['text']->html(); ?> </div>
