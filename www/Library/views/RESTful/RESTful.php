@@ -34,8 +34,8 @@ class RESTful extends View
                     'method' => Rule::string(), // метод запроса
                     'call' => Rule::string()->default('')->required(), // вызываемый метод объекта
                     'entity' => Rule::arrays(Rule::string()), // атрибуты изменяемого объекта
-                    'file_content' => Rule::bool()->default(false)->required(), // Экпортировать файл объекта или нет?
-                    'class_content' => Rule::bool()->default(false)->required() // Экпортировать класс объекта или нет?
+                    'file_content' => Rule::int()->default(0)->required(), // Экпортировать файл объекта или нет?
+                    'class_content' => Rule::int()->default(0)->required() // Экпортировать класс объекта или нет?
                 )),
                 'FILES' => Rule::arrays(array(
                     'entity' => Rule::arrays(array(
@@ -86,7 +86,7 @@ class RESTful extends View
                 }
                 break;
             case 'CALL':
-
+                $this->call(Data::read($this->_input['REQUEST']['path']), $this->_input['REQUEST']['call'], $this->_input_child);
                 break;
             default:
                 header("HTTP/1.1 501 Not Implemented");
@@ -97,8 +97,8 @@ class RESTful extends View
      * Обработка GET запроса
      * Выбор объекта, списка объекта или дерева объектов по URI
      * @param $uri Условие поиска в URL формате
-     * @param bool $export_file Экспортировать файл или нет
-     * @param bool $export_class Экспортировать класс или нет
+     * @param int $export_file Экспортировать файл или нет
+     * @param int $export_class Экспортировать класс или нет
      */
     private function get($uri, $export_file, $export_class)
     {
@@ -236,5 +236,23 @@ class RESTful extends View
             header('Content-Type: application/json; charset=UTF-8');
             echo F::toJSON(array('error'=>$error->__toArray(true), 'result'=>$obj->export(false, true, false)));
         }
+    }
+
+    /**
+     * Вызов метода объекта
+     * @param Entity $object Объект, чей метод вызывается
+     * @param string $call Название метода
+     * @param array $input Входящие данные
+     */
+    private function call($object, $call, $input)
+    {
+        if ($object->isExist()){
+            $call = 'call_'.$call;
+            $result = $object->$call($input);
+        }else{
+            $result = null;
+        }
+        header('Content-Type: application/json; charset=UTF-8');
+        echo F::toJSON(array('result'=>$result));
     }
 }
