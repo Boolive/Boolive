@@ -156,7 +156,8 @@
             })
 
             .on('change-attrib:value', function(value){
-                form.find('textarea[name="attrib[value]"]:first').val(value);
+                var input = form.find('textarea[name="attrib[value]"]:first');
+                if (!input.is(":focus")) input.val(value);
             })
             .on('change-attrib:is_null', function(value){
                 if (value){
