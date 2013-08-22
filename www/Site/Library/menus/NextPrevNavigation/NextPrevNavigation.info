@@ -1,0 +1,20 @@
+{
+    "value": "NextPrevNavigation.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Widget",
+    "is_default_class": false,
+    "order": 16,
+    "children": {
+        "title": {
+            "value": "Следующая/предыдущая страница",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает ссылки на предыдущую и следующую страницу с учётом иерархии.",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

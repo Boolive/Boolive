@@ -6,7 +6,7 @@
  * @author Azat Galiev <AzatXaker@gmail.com>
  */
 
-namespace Library\views\NextPrevNavigation;
+namespace Library\menus\NextPrevNavigation;
 
 use Library\views\Widget\Widget,
     Boolive\values\Rule,

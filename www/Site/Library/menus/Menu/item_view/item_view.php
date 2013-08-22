@@ -4,7 +4,7 @@
  *
  * @version 2.0
  */
-namespace Library\views\Menu\item_view;
+namespace Library\menus\Menu\item_view;
 
 use Boolive\values\Rule,
     Library\views\AutoWidgetList2\AutoWidgetList2;

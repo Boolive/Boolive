@@ -4,7 +4,7 @@
  * Используется при отображении списков с постраничным разделением вывода
  * @version 1.0
  */
-namespace Library\views\PageNavigation;
+namespace Library\menus\PageNavigation;
 
 use Library\views\Widget\Widget,
     Boolive\values\Rule;

@@ -4,7 +4,7 @@
  *
  * @version 2.0
  */
-namespace Library\views\Menu;
+namespace Library\menus\Menu;
 
 use Library\views\Widget\Widget;
 
