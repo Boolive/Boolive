@@ -1,10 +1,10 @@
 {
     "value": "",
     "proto": "/Library/views/ViewGroup",
-    "order": 3,
+    "order": 4,
     "children": {
         "title": {
-            "value": "Вверх",
+            "value": "Верх",
             "proto": "/Library/views/ViewGroup/title",
             "is_hidden": true,
             "order": 1

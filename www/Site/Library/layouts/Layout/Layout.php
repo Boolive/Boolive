@@ -1,19 +1,19 @@
 <?php
 /**
- * Фокусировщик
+ * Макет
  *
+ * Виджет для создания макетов (разметок).
  * По URL запроса определяет объект и номер страницы для последующего оперирования ими подчиненными виджетами.
  * Найденный объект и номер страницы помещаются во входящие данные для подчиненных виджетов.
- * Может использоваться для макета сайта.
  * @version 1.0
  */
-namespace Library\views\Focuser;
+namespace Library\layouts\Layout;
 
 use Library\views\Widget\Widget,
     Boolive\data\Data,
     Boolive\values\Rule;
 
-class Focuser extends Widget
+class Layout extends Widget
 {
     public function defineInputRule()
     {
@@ -21,8 +21,9 @@ class Focuser extends Widget
             'REQUEST' => Rule::arrays(array(
                 'path' => Rule::string(),
                 )
-            ))
-        );
+            ),
+            'previous' => Rule::eq(false)
+        ));
     }
 
     protected function initInputChild($input){

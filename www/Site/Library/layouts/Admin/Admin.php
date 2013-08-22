@@ -6,12 +6,12 @@
  */
 namespace Library\layouts\Admin;
 
-use Library\views\Focuser\Focuser,
+use Library\layouts\Layout\Layout,
     Boolive\values\Rule,
     Boolive\data\Data,
     Boolive\input\Input;
 
-class Admin extends Focuser
+class Admin extends Layout
 {
     public function defineInputRule()
     {

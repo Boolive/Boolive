@@ -1,13 +1,19 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "value": "Макеты",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
             "order": 1
+        },
+        "description": {
+            "value": "Коллекция макетов html и полноценных разделов для сайта",
+            "proto": "/Library/basic/Package/description",
+            "is_hidden": true,
+            "order": 2
         }
     }
 }
