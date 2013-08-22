@@ -1003,6 +1003,7 @@ class MySQLStore extends Entity
         $diff = $entity->diff();
         if ($diff == Entity::DIFF_ADD){
             $entity->diff(Entity::DIFF_NO);
+            $entity->_attribs['update_time'] = 0;
             $entity->save(false, false);
         }else
         if ($diff == Entity::DIFF_DELETE){
@@ -1682,7 +1683,7 @@ class MySQLStore extends Entity
             $q = $this->db->prepare('
                 UPDATE {parents} p, (
                     SELECT c.object_id, c.parent_id FROM {parents} p
-                    JOIN {parents} c ON c.object_id = p.object_id AND c.object_id!=c.parent_id AND c.parent_id IN (SELECT parent_id FROM {parents} WHERE object_id = :obj)
+                    JOIN {parents} c ON c.object_id = p.object_id AND c.object_id!=c.parent_id AND c.parent_id IN (SELECT parent_id FROM {parents} WHERE object_id = :obj AND object_id!=parent_id)
                     WHERE p.parent_id = :obj)p2
                 SET p.is_delete = 1
                 WHERE p.object_id = p2.object_id AND p.parent_id = p2.parent_id
@@ -1746,7 +1747,7 @@ class MySQLStore extends Entity
             $q = $this->db->prepare('
                 UPDATE {protos} p, (
                     SELECT c.object_id, c.proto_id FROM {protos} p
-                    JOIN {protos} c ON c.object_id = p.object_id AND c.proto_id!=:obj AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj)
+                    JOIN {protos} c ON c.object_id = p.object_id AND c.proto_id!=:obj AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj  AND object_id!=proto_id)
                     WHERE p.proto_id = :obj)p2
                 SET p.is_delete = 1
                 WHERE p.object_id = p2.object_id AND p.proto_id = p2.proto_id
