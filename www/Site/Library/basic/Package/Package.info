@@ -1,11 +1,16 @@
 {
     "value": "",
-    "order": 6,
+    "order": 9,
     "children": {
         "title": {
             "value": "Пакет",
             "is_hidden": true,
             "order": 1
+        },
+        "description": {
+            "value": "Коллекция объектов",
+            "is_hidden": true,
+            "order": 2
         }
     }
 }

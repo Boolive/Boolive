@@ -19,7 +19,7 @@
         background-color: #f2f2f2;
         border: 1px solid #EAEAEA;
         text-overflow: ellipsis;
-        height: 75px;
+        height: 93px;
         border-radius: 3px;
         line-height: normal;
         overflow: visible;
@@ -68,7 +68,7 @@
 
             .ObjectItem.tile .view.diff_add .title-group .title:before{
                 content: '+';
-                vertical-align: middle;
+                vertical-align: baseline;
                 font-family: "Times New Roman";
                 background-color: #85cc29;;
                 font-weight: bold;
@@ -81,7 +81,7 @@
                 }
             .ObjectItem.tile .view.diff_change .title-group .title:before{
                 content: '!';
-                vertical-align: middle;
+                vertical-align: baseline;
                 font-family: "Times New Roman";
                 background-color: #9352cc;
                 font-weight: bold;
@@ -94,7 +94,7 @@
                 }
             .ObjectItem.tile .view.diff_delete .title-group .title:before{
                 content: '×';
-                vertical-align: middle;
+                vertical-align: baseline;
                 font-family: "Times New Roman";
                 background-color: #e67573;
                 font-weight: bold;
@@ -133,6 +133,14 @@
                 display: block;
                 color: #333;
                 }
+            .ObjectItem.tile .view .title-group .description{
+                font-size: 8pt;
+                display: block;
+                max-width: 200px;
+                max-height: 30px;
+                overflow: hidden;
+                color: #555;
+            }
         /* Выделение */
 		.ObjectItem.tile .view .select{
 			display: block;
@@ -163,12 +171,13 @@
             margin: 0;
             padding: 0 0 8px 10px;
             height: 25px;
+            line-height: 25px;
             text-align: left;
             white-space: nowrap;
             }
             .ObjectItem.tile .view .info > *{
                 display: inline-block;
-                vertical-align: top;
+                vertical-align: bottom;
                 float: none;
                 margin: 0;
                 padding: 0;
@@ -190,6 +199,7 @@
                 opacity: 0.5;
                 padding: 0;
                 cursor: pointer;
+
                 }
                 .ObjectItem.tile .view .info .prop:hover{
                     opacity: 1;
@@ -197,6 +207,10 @@
                 .ObjectItem.tile .view.link .info .prop{
                     display: block;
                 }
+            .ObjectItem.tile .view .info .value{
+                font-weight: bold;
+                line-height: 1.48;
+            }
 
 .ObjectItem.selected.tile .view{
     background-color: rgba(97, 176, 255, 0.9);

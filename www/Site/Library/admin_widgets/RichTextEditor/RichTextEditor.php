@@ -52,7 +52,7 @@ class RichTextEditor extends AutoWidgetList
             $filters = $this->filter->find(array('key'=>'name'), true);
             $v['filter'] = array();
             foreach ($filters as $name => $f) {
-                if ($f instanceof \Library\basic\simple\Boolean\Boolean) {
+                if ($f instanceof \Library\basic\Boolean\Boolean) {
                     $v['filter'][$name] = $f->value();
                 }
             }

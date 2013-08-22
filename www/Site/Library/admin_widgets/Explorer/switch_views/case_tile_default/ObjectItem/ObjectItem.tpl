@@ -34,8 +34,10 @@
             $width = max(118, round((mb_strlen($s)*18+18)/50)*50+18);
             echo '<a class="title" href="'.ltrim($v['link'],'/').'" style="min-width:'.$width.'px;"><span>'.$s.'</span></a>';
             if (!empty($s2)) echo '<span class="mini">'.$s2.'</span>';
+            echo '<div class="description">'.$v['description'].'</div>';
             ?>
         </div>
+
         <div class="info">
             <a class="prop" title="Свойства ссылки" href="<?php echo ltrim($v['uri'],'/');?>"></a>
             <?php if ($v['is_file']->bool()):?>

@@ -39,7 +39,7 @@ class Add extends AutoWidgetList
                 foreach ($protos as $proto){
                     /** @var $proto \Boolive\data\Entity */
                     $obj = $proto->birth($parent);
-                    if ($proto->uri() == '/Library/basic/simple/Object'){
+                    if ($proto->uri() == '/Library/basic/Object'){
                         $obj->proto(false);
                     }
                     // @todo Обрабатывать ошибки
@@ -60,7 +60,7 @@ class Add extends AutoWidgetList
 
     protected function getList($cond = array()){
         // @todo Сделать выбор часто используемых объектов
-        $obj = \Boolive\data\Data::read('/Library/basic/simple/Object');
+        $obj = \Boolive\data\Data::read('/Library/basic/Object');
         return array($obj);
     }
 }

@@ -6,7 +6,7 @@
  * @date 24.04.2013
  * @author Polina Shestakova <paulinep@yandex.ru>
  */
-namespace Library\basic\simple\Password;
+namespace Library\basic\Password;
 
 use Boolive\auth\Auth,
     Boolive\data\Entity;

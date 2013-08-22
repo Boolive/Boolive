@@ -1,7 +1,7 @@
 {
     "value": "name@mail.com",
     "is_default_class": false,
-    "order": 4,
+    "order": 7,
     "children": {
         "title": {
             "value": "Email",

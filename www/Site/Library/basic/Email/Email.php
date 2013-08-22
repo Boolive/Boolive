@@ -4,7 +4,7 @@
  *
  * @version 1.0
  */
-namespace Library\basic\simple\Email;
+namespace Library\basic\Email;
 
 use Boolive\data\Entity,
     Boolive\values\Rule;

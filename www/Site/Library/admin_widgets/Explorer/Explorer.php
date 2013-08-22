@@ -51,7 +51,7 @@ class Explorer extends AutoWidgetList
             // Текущий фильтр для отображения меню фильтра
             $v['filters'] = array();
             foreach ($filters as $name => $f) {
-                if ($f instanceof \Library\basic\simple\Boolean\Boolean) {
+                if ($f instanceof \Library\basic\Boolean\Boolean) {
                     $v['filters'][$name] = array('title' => $f->title->value(), 'value' => $f->value());
                 }
             }
@@ -60,7 +60,7 @@ class Explorer extends AutoWidgetList
             $kind_set = empty($this->_input['REQUEST']['view_kind']) ? null : $this->_input['REQUEST']['view_kind'];
             $v['view-kinds'] = array();
             foreach ($kinds as $name => $k) {
-                if ($k instanceof \Library\basic\simple\Boolean\Boolean) {
+                if ($k instanceof \Library\basic\Boolean\Boolean) {
                     if ($name == $kind_set) {
                         $this->view_kind->{$name}->value(true);
                     } else if ($kind_set) {
