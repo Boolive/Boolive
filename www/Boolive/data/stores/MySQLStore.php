@@ -92,16 +92,16 @@ class MySQLStore extends Entity
             $group_result = array($fill);
         }
         // Обновление. Для новых объектов автоматом прототипируются подчиненные объекты
-        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree') && IS_INSTALL){
-            foreach ($multy_from as $key => $from){
-                $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
-                // Досозданние объекта поиском обновлений от прототипа и автоматической их установки
-                // Выполняется только для новых объектов, чтобы унаследовать свойства от прототипа
-                if ($multy_from[$key]->_attribs['update_time'] == 0 && $multy_from[$key]->_attribs['diff']!=Entity::DIFF_ADD){
-                    $this->findUpdates($multy_from[$key], 10, 2, false, false);
-                }
-            }
-        }
+//        if ($index && $cond['depth'][1] > 0 && ($what == 'children' || $what == 'tree') && IS_INSTALL){
+//            foreach ($multy_from as $key => $from){
+//                $multy_from[$key] = Data::read($from.'&comment=read "from" for indexation', !empty($cond['access']));
+//                // Досозданние объекта поиском обновлений от прототипа и автоматической их установки
+//                // Выполняется только для новых объектов, чтобы унаследовать свойства от прототипа
+//                if ($multy_from[$key]->_attribs['update_time'] == 0 && $multy_from[$key]->_attribs['diff']!=Entity::DIFF_ADD){
+//                    $this->findUpdates($multy_from[$key], 10, 2, false, false);
+//                }
+//            }
+//        }
         $q = $this->db->prepare($sql['sql']);
         foreach ($sql['binds'] as $i => $v){
             if (is_array($v)){
@@ -638,6 +638,7 @@ class MySQLStore extends Entity
                         $u->execute($params);
                     }
                 }
+                $prototype_children = !$entity->isExist() && $entity->diff()!=Entity::DIFF_ADD;
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->key.'//'.$attr['id'];
                 $entity->_attribs['date'] = $attr['date'];
@@ -651,6 +652,10 @@ class MySQLStore extends Entity
                     $entity->updateURI();
                 }
                 $this->db->commit();
+
+                if ($prototype_children){
+                    $this->findUpdates($entity, 100, Entity::MAX_DEPTH, false, false);
+                }
 
                 $this->afterWrite($attr, empty($current)?array():$current);
 
