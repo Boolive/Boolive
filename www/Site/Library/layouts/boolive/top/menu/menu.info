@@ -1,40 +1,40 @@
 {
     "value": "menu.tpl",
     "is_file": true,
-    "proto": "/Library/views/Menu",
+    "proto": "/Library/menus/Menu",
     "order": 2,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Меню",
-            "proto": "/Library/views/Menu/title",
+            "proto": "/Library/menus/Menu/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
-            "value": "Навигационное меню по сайту. Пункт меню может указывать на любой объект, если есть соответсвующий виджет для отображения пукта",
-            "proto": "/Library/views/Menu/description",
+            "value": "Навигационное меню по содержимому сайта.",
+            "proto": "/Library/menus/Menu/description",
             "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/Menu/res",
+            "proto": "/Library/menus/Menu/res",
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/views/Menu/res/title",
+                    "proto": "/Library/menus/Menu/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/Menu/res/description",
+                    "proto": "/Library/menus/Menu/res/description",
                     "is_hidden": true,
                     "order": 2
                 }
@@ -43,7 +43,7 @@
         "object": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/Menu/object",
+            "proto": "/Library/menus/Menu/object",
             "order": 4,
             "children": {
                 "title": {
@@ -55,19 +55,19 @@
         },
         "cache": {
             "value": 1,
-            "proto": "/Library/views/Menu/cache",
+            "proto": "/Library/menus/Menu/cache",
             "order": 9
         },
         "object_rule": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/Menu/object_rule",
+            "proto": "/Library/menus/Menu/object_rule",
             "order": 11,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на отображаемый объект",
-                    "proto": "/Library/views/Menu/object_rule/title",
+                    "proto": "/Library/menus/Menu/object_rule/title",
                     "order": 1
                 }
             }

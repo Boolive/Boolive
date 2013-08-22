@@ -1,13 +1,20 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "order": 5,
+    "order": 8,
     "children": {
         "title": {
             "value": "Образцы содержимого",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
             "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Коллекция объектов",
+            "proto": "/Library/basic/Package/description",
+            "is_hidden": true,
+            "order": 12
         }
     }
 }

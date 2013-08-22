@@ -38,6 +38,18 @@
                     "order": 2
                 }
             }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "order": 4
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Widget/object_rule",
+            "order": 5
         }
     }
 }

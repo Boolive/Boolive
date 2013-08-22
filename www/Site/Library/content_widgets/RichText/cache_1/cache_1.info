@@ -2,5 +2,21 @@
     "is_default_value": true,
     "value": 0,
     "proto": "/Library/views/AutoWidgetList/cache",
-    "order": 12
+    "order": 12,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Кэшировать?",
+            "proto": "/Library/views/AutoWidgetList/cache/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Признак, кэшировать или нет работу виджета?",
+            "proto": "/Library/views/AutoWidgetList/cache/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

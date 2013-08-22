@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "PageNavigation.tpl",
     "is_file": true,
-    "proto": "/Library/views/PageNavigation",
+    "proto": "/Library/menus/PageNavigation",
     "is_link": true,
     "order": 12
 }

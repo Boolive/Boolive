@@ -6,6 +6,11 @@
             "value": "Библиотека",
             "is_hidden": true,
             "order": 1
+        },
+        "description": {
+            "value": "Готовые для использования объекты",
+            "is_hidden": true,
+            "order": 2
         }
     }
 }

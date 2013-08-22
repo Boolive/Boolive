@@ -1,19 +1,19 @@
 {
     "value": "Спасибо, сообщение успешно отправлено",
-    "proto": "/Library/basic/simple/Text",
+    "proto": "/Library/basic/Text",
     "order": 6,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Текст",
-            "proto": "/Library/basic/simple/Text/title",
+            "proto": "/Library/basic/Text/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
-            "proto": "/Library/basic/simple/Text/description",
+            "proto": "/Library/basic/Text/description",
             "is_hidden": true,
             "order": 2
         }

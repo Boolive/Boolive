@@ -1,18 +1,18 @@
 {
     "value": 1,
-    "proto": "/Library/basic/simple/Boolean",
+    "proto": "/Library/basic/Boolean",
     "order": 1,
     "children": {
         "title": {
             "value": "Реальные",
-            "proto": "/Library/basic/simple/Boolean/title",
+            "proto": "/Library/basic/Boolean/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
-            "value": "Логическое значение ДА/НЕТ",
-            "proto": "/Library/basic/simple/Boolean/description",
+            "value": "Логическое значение ДА или НЕТ",
+            "proto": "/Library/basic/Boolean/description",
             "is_hidden": true,
             "order": 2
         }

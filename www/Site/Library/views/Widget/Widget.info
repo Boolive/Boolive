@@ -38,18 +38,18 @@
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/basic/simple/Boolean",
+            "proto": "/Library/basic/Boolean",
             "order": 5,
             "children": {
                 "title": {
                     "value": "Кэшировать?",
-                    "proto": "/Library/basic/simple/Boolean/title",
+                    "proto": "/Library/basic/Boolean/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Признак, кэшировать или нет работу виджета?",
-                    "proto": "/Library/basic/simple/Boolean/description",
+                    "proto": "/Library/basic/Boolean/description",
                     "is_hidden": true,
                     "order": 2
                 }

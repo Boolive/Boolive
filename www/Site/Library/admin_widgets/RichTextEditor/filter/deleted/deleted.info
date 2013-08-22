@@ -1,11 +1,11 @@
 {
     "value": 0,
-    "proto": "/Library/basic/simple/Boolean",
+    "proto": "/Library/basic/Boolean",
     "order": 3,
     "children": {
         "title": {
             "value": "Удаленные",
-            "proto": "/Library/basic/simple/Boolean/title",
+            "proto": "/Library/basic/Boolean/title",
             "order": 1
         }
     }

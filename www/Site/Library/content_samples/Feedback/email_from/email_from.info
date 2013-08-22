@@ -1,18 +1,18 @@
 {
     "value": "",
-    "proto": "/Library/basic/simple/Email",
+    "proto": "/Library/basic/Email",
     "order": 1,
     "children": {
         "title": {
             "value": "Email адрес",
-            "proto": "/Library/basic/simple/Email/title",
+            "proto": "/Library/basic/Email/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Адрес электронной почты",
-            "proto": "/Library/basic/simple/Email/description",
+            "proto": "/Library/basic/Email/description",
             "is_hidden": true,
             "order": 2
         }

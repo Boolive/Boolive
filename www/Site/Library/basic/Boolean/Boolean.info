@@ -1,7 +1,7 @@
 {
     "value": 0,
     "is_default_class": false,
-    "order": 11,
+    "order": 12,
     "children": {
         "title": {
             "value": "Булево",
@@ -9,7 +9,7 @@
             "order": 1
         },
         "description": {
-            "value": "Логическое значение ДА/НЕТ",
+            "value": "Логическое значение ДА или НЕТ",
             "is_hidden": true,
             "order": 2
         }

@@ -1,6 +1,6 @@
 {
     "value": "",
-    "order": 3,
+    "order": 7,
     "children": {
         "title": {
             "value": "Объект",
@@ -8,7 +8,7 @@
             "order": 1
         },
         "description": {
-            "value": "Базовый объект для создания любых новых объектов",
+            "value": "Простейший объект без свойств и логики",
             "is_hidden": true,
             "order": 2
         }

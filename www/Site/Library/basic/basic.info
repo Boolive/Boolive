@@ -1,10 +1,10 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
-            "value": "Базовые",
+            "value": "Простые",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
             "order": 5
