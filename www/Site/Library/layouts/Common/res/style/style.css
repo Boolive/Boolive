@@ -1,0 +1,48 @@
+html, body {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    }
+    body::before, body::after {
+        content: "";
+        display: table;
+    }
+
+.Common {
+    margin: 0 auto;
+    overflow: hidden;
+    width: 960px;
+    }
+    .Common > .header {
+        display: inline;
+        float: left;
+        margin: 0 10px 20px 10px;
+        width: 940px;
+        background: #EEE;
+        min-height: 50px;
+        }
+    .Common > .main {
+        display: inline;
+        float: left;
+        margin: 0 10px;
+        width: 700px;
+        min-height: 50px;
+        background: #EEE;
+        }
+    .Common > .sidebar {
+        display: inline;
+        float: left;
+        margin: 0 10px;
+        width: 220px;
+        min-height: 50px;
+        background: #EEE;
+        }
+    .Common > .footer {
+        display: inline;
+        float: left;
+        margin: 20px 10px 0 10px;
+        width: 940px;
+        background: #EEE;
+        min-height: 50px;
+    }

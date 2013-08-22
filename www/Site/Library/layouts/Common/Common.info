@@ -1,0 +1,54 @@
+{
+    "value": "Common.tpl",
+    "is_file": true,
+    "proto": "/Library/layouts/Layout",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Обычный",
+            "proto": "/Library/layouts/Layout/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Шапка, Центральная часть, Боковая панель и Подвал",
+            "proto": "/Library/layouts/Layout/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/layouts/Layout/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/layouts/Layout/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/layouts/Layout/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/layouts/Layout/cache",
+            "order": 4
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/layouts/Layout/object_rule",
+            "order": 5
+        }
+    }
+}
