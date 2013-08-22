@@ -2,6 +2,7 @@
     "value": "Menu.tpl",
     "is_file": true,
     "proto": "/Library/views/Widget",
+    "is_default_class": false,
     "order": 14,
     "children": {
         "title": {

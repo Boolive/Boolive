@@ -63,7 +63,7 @@
             }
         },
         "object_rule": {
-            "value": "is(/Library/cjontent_samples/Page)",
+            "value": "is(/Library/content_samples/Page)",
             "proto": "/Library/menus/Menu/item_view/object_rule",
             "order": 6,
             "children": {
