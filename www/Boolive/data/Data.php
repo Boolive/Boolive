@@ -621,6 +621,10 @@ class Data
                 $result['access'] = false;
             }
             if (empty($result['where'])) $result['where'] = false;
+            // Если ограничение результата то не кэшировать сущности
+            if (!empty($result['cache']) && $result['cache']==2 && !empty($result['return'])){
+                $result['cache'] = 1;
+            }
             $r = array(
                 'from' => $result['from'],
                 'select' => $result['select'],
