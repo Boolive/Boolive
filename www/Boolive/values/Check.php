@@ -128,7 +128,11 @@ class Check
             $value = str_replace(' ', '', $value);
         }
         if (is_bool($value) || (is_scalar($value) && preg_match('/^[-\+]?[0-9]+$/', strval($value)) == 1)){
-            return doubleval($value);
+            $result = doubleval($value);
+            if (-PHP_INT_MAX < $value && $value < PHP_INT_MAX ){
+                $result = intval($value);
+            }
+            return $result;
         }else{
             $error = new Error('Не целое число.', 'int');
             return is_object($value)?1:intval($value);
