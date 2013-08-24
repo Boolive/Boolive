@@ -25,6 +25,7 @@ Version 2.0.alpha work in progress
 - enh #125 Buffering by levels for result of reading a tree of objects is added. (VladimirShestakov)
 - enh #133 Full conditions for SwitchCase (VladimirShestakov)
 - enh #134 Check of inheritance of external objects (VladimirShestakov)
+- enh #143 Copying file from a prototype in case of is_defult_value setting to false (VladimirShestakov)
 
 Version 2.0.preview-2 April, 27 2013
 ----------------------------

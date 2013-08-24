@@ -73,7 +73,9 @@ class Attribs extends Widget
 
             // Значение
             if (empty($attribs['is_null'])){
-                if (isset($attribs['value'])) $obj->value($attribs['value']);
+                $obj->isDefaultValue(false);
+                if (isset($attribs['value']) && $obj->value()!=$attribs['value']) $obj->value($attribs['value']);
+
             }else{
                 // Обнуление значения
                 $obj->isDefaultValue(true);

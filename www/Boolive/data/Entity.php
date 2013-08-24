@@ -674,6 +674,9 @@ class Entity implements ITrace
                     $this->_attribs['is_file'] = 0;
                 }
             }else{
+                if ($this->_attribs['is_default_value'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
+                    $this->file($proto->file(null, true));
+                }
                 $this->_attribs['is_default_value'] = 0;
             }
             if ($curr !== $this->_attribs['is_default_value']){
