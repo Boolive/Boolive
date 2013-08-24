@@ -638,7 +638,8 @@ class MySQLStore extends Entity
                         $u->execute($params);
                     }
                 }
-                $prototype_children = !$entity->isExist() && $entity->diff()!=Entity::DIFF_ADD;
+                $prototype_children = (!$entity->isExist() || (isset($current['diff']) && $current['diff'] == Entity::DIFF_ADD)) && $entity->diff()!=Entity::DIFF_ADD;
+
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->key.'//'.$attr['id'];
                 $entity->_attribs['date'] = $attr['date'];
@@ -654,7 +655,7 @@ class MySQLStore extends Entity
                 $this->db->commit();
 
                 if ($prototype_children){
-                    $this->findUpdates($entity, 100, Entity::MAX_DEPTH, false, false);
+                    $this->findUpdates($entity, 100, 1, false, false);
                 }
 
                 $this->afterWrite($attr, empty($current)?array():$current);
