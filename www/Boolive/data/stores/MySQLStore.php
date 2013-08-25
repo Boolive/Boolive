@@ -168,7 +168,7 @@ class MySQLStore extends Entity
                                 'uri'=>$row['uri'],
                                 'owner'=>$this->_attribs['owner'],
                                 'lang'=>$this->_attribs['lang'],
-                                'class' => '\\Boolive\\data\\Entity',
+                                'class_name' => '\\Boolive\\data\\Entity',
                             );
                         }
                     }
@@ -229,7 +229,7 @@ class MySQLStore extends Entity
         if ($cond['select'][0] == 'self'){
             foreach ($group_result as $key => $obj){
                 if (!isset($obj)){
-                    $obj = array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang'], 'class' => '\\Boolive\\data\\Entity');
+                    $obj = array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang'], 'class_name' => '\\Boolive\\data\\Entity');
                     $uri = ($key===0)? $cond['from'] : $key;
                     if (!Data::isShortUri($uri)){
                         $names = F::splitRight('/', $uri, true);
@@ -310,7 +310,7 @@ class MySQLStore extends Entity
                 // Значения превращаем в файл, если больше 255
                 if (isset($attr['value']) && mb_strlen($attr['value']) > 255){
                     $attr['file'] = array(
-                        'data' => $attr['value'],
+                        'content' => $attr['value'],
                         'name' => $entity->name().'.value'
                     );
                 }
@@ -330,7 +330,7 @@ class MySQLStore extends Entity
                             $f = File::fileInfo($attr['file']['name']);
                             if ($f['ext']) $attr['value'].='.'.$f['ext'];
                         }
-                        unset($attr['file']['data']);
+                        unset($attr['file']['content']);
                     }
                     if ($attr['lang'] != Entity::ENTITY_ID || $attr['owner'] != Entity::ENTITY_ID){
                         $attr['value'] = $attr['owner'].'@'.$attr['lang'].'@'.$attr['value'];
@@ -459,8 +459,8 @@ class MySQLStore extends Entity
                     }else{
                         $path = $entity->dir(true).$fname_pf.$attr['value'];
                     }
-                    if (isset($attr['file']['data'])){
-                        if (!File::create($attr['file']['data'], $path)){
+                    if (isset($attr['file']['content'])){
+                        if (!File::create($attr['file']['content'], $path)){
                             $attr['is_file'] = 0;
                             $attr['value'] = '';
                         }
@@ -477,6 +477,22 @@ class MySQLStore extends Entity
                         }
                     }
                     unset($attr['file']);
+                }
+                // Загрузка/обновление класса
+                if (isset($attr['class'])){
+                    $path = $entity->dir(true).$attr['name'].'.php';
+                    if (isset($attr['class']['content'])){
+                        File::create($attr['class']['content'], $path);
+                    }else{
+                        if ($attr['class']['tmp_name']!=$path){
+                            if (!File::upload($attr['class']['tmp_name'], $path)){
+                                // @todo Проверить безопасность.
+                                // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
+                                File::copy($attr['class']['tmp_name'], $path);
+                            }
+                        }
+                    }
+                    unset($attr['class']);
                 }
                 // Текущую акуальную запись в историю
                 // Если добавление новой актуальной записи или востановление из истории
@@ -2056,13 +2072,13 @@ class MySQLStore extends Entity
         $attribs['diff_from'] = intval($attribs['diff_from']);
         unset($attribs['valuef']);
         // Свой класс
-        $attribs['class'] = '\\Boolive\\data\\Entity';
+        $attribs['class_name'] = '\\Boolive\\data\\Entity';
         if ($attribs['diff'] != Entity::DIFF_ADD){
             if (empty($attribs['is_default_class'])){
-                $attribs['class'] = $this->getClassById($attribs['id']);
+                $attribs['class_name'] = $this->getClassById($attribs['id']);
             }else
             if ($attribs['is_default_class'] != Entity::ENTITY_ID){
-                $attribs['class'] = $this->getClassById($attribs['is_default_class']);
+                $attribs['class_name'] = $this->getClassById($attribs['is_default_class']);
             }
         }
         return $attribs;

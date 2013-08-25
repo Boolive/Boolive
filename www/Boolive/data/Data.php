@@ -189,7 +189,7 @@ class Data
                             $makefrom = function(&$group_cond, $list, $name) use (&$makefrom){
                                 foreach ($list as $from){
                                     if (is_array($from)){
-                                        if (isset($from['class'])){
+                                        if (isset($from['class_name'])){
                                             if (isset($from['id']) || isset($from['uri'])){
                                                 $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
                                             }
@@ -221,7 +221,7 @@ class Data
                         $makefrom = function(&$group_cond, $list) use (&$makefrom){
                             foreach ($list as $from){
                                 if (is_array($from)){
-                                    if (isset($from['class'])){
+                                    if (isset($from['class_name'])){
                                         if (!empty($from['is_link']) /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_link'];
                                     }else{
                                         $makefrom($group_cond, $from);
@@ -253,7 +253,7 @@ class Data
                         $makefrom = function(&$group_cond, $list) use (&$makefrom){
                             foreach ($list as $from){
                                 if (is_array($from)){
-                                    if (isset($from['class'])){
+                                    if (isset($from['class_name'])){
                                         if (!empty($from['is_default_value']) /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_default_value'];
                                     }else{
                                         $makefrom($group_cond, $from);
@@ -284,7 +284,7 @@ class Data
                         $makefrom = function(&$group_cond, $list) use (&$makefrom){
                             foreach ($list as $from){
                                 if (is_array($from)){
-                                    if (isset($from['class'])){
+                                    if (isset($from['class_name'])){
                                         if (isset($from['id'])) $group_cond['from'][] = $from['id'];
                                     }else{
                                         $makefrom($group_cond, $from);
@@ -362,10 +362,10 @@ class Data
                 $children_depth = false;
             }
             foreach ($result as $gi => $gitem){
-                if (isset($gitem['class'])){
+                if (isset($gitem['class_name'])){
                     $gitem['cond'] = $group_cond;
                     try{
-                        $result[$gi] = new $gitem['class']($gitem, $children_depth);
+                        $result[$gi] = new $gitem['class_name']($gitem, $children_depth);
                     }catch (\Exception $e){
                         $result[$gi] = new Entity($gitem, $children_depth);
                     }
@@ -373,10 +373,10 @@ class Data
                     $list = array();
                     if ($children_depth===false || $children_depth > 0){
                         foreach ($result[$gi] as $item){
-                            if (isset($item['class'])){
+                            if (isset($item['class_name'])){
                                 $item['cond'] = $cond;
                                 try{
-                                    $obj = new $item['class']($item, $children_depth);
+                                    $obj = new $item['class_name']($item, $children_depth);
                                 }catch (\Exception $e){
                                     $obj = new Entity($item, $children_depth);
                                 }

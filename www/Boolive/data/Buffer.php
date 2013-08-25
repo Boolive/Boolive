@@ -48,7 +48,7 @@ class Buffer
 //            $key = json_encode($ocond);
 //            if (isset(self::$list_plain[$key]) || array_key_exists($key, self::$list_plain)){
 //                if (!isset(self::$list_plain[$key][$names[1]])){
-//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang'], 'class' => '\\Boolive\\data\\Entity');
+//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang'], 'class_name' => '\\Boolive\\data\\Entity');
 //                }else{
 //                    return self::$list_plain[$key][$names[1]];
 //                }
@@ -85,7 +85,7 @@ class Buffer
             self::setTreePlain($result, $cond, $key, Data::read($cond['from'].'&comment=buffer tree', !empty($cond['access']))->attributes(), json_encode($list_key));
         }else
         // один объект
-        if (isset($result['class'])){
+        if (isset($result['class_name'])){
             // Ключ uri
             //if ($result->isExist()){
             if (isset($result['uri'])){
@@ -152,7 +152,7 @@ class Buffer
     {
         $id = $from['id'];
         $uri = $from['uri'];
-        if (isset($objects['class'])){
+        if (isset($objects['class_name'])){
             // буфер всего дерева в виде списка
             if ($listkey) self::$list_plain[$listkey][] = $objects;
             // бефер дерева с глубиной от 0

@@ -3,7 +3,7 @@ Boolive Change Log
 
 Version 2.0.alpha work in progress
 ----------------------------
-- new Was added the rule for check a conditions for reading or verifying objects (VladimirShestakov)
+- new Added the rule for check a conditions for reading or verifying objects (VladimirShestakov)
 - new Added support of conditions of string type (VladimirShestakov)
 - new Converting Error to the array and array to the Error is added (VladimirShestakov)
 - new #67 Searching updates for objects in .info files. Program "Installer" for applying updates of the selected objects in the admin panel is added (VladimirShestakov)
@@ -26,6 +26,7 @@ Version 2.0.alpha work in progress
 - enh #133 Full conditions for SwitchCase (VladimirShestakov)
 - enh #134 Check of inheritance of external objects (VladimirShestakov)
 - enh #143 Copying file from a prototype in case of is_defult_value setting to false (VladimirShestakov)
+- enh #144 Automatic class creation if the object attribute of "is_default_class" is set to false and a class doesn't exist (VladimirShestakov)
 
 Version 2.0.preview-2 April, 27 2013
 ----------------------------

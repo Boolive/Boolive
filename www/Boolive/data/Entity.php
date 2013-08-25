@@ -127,7 +127,7 @@ class Entity implements ITrace
                 $attribs['parent'] = $names[0];
             }
         }
-        if (isset($attribs['class'])) unset($attribs['class']);
+        if (isset($attribs['class_name'])) unset($attribs['class_name']);
         if (isset($attribs['cond'])){
             $this->_cond = $attribs['cond'];
             unset($attribs['cond']);
@@ -136,7 +136,7 @@ class Entity implements ITrace
             if ($children_depth > 0){
                 if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
                 foreach ($attribs['children'] as $name => $child){
-                    $class = isset($child['class'])? $child['class'] : '\Boolive\data\Entity';
+                    $class = isset($child['class_name'])? $child['class_name'] : '\Boolive\data\Entity';
                     $child['cond'] = $this->_cond;
                     $this->_children[$name] = new $class($child, $children_depth);
                 }
@@ -182,6 +182,14 @@ class Entity implements ITrace
                         'type'      => Rule::string() // MIME тип файла
                     )
                 ),
+                // Сведения о классе объекта (загружаемый файл или программный код). Не является атрибутом объекта
+                'class' => Rule::arrays(array(
+                    'content'   => Rule::string(), // Программный код класса
+                    'tmp_name'	=> Rule::string(), // Путь на файл, если класс загржается в виде файла
+                    'size'		=> Rule::int(), // Размер в байтах
+                    'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
+                    'type'      => Rule::string() // MIME тип файла
+                ))
             )
         );
     }
@@ -403,6 +411,38 @@ class Entity implements ITrace
             }
         }
         return null;
+    }
+
+    /**
+     * Путь на файл используемого класса (логики)
+     * @param null $new_logic Установка своего класса. Сведения о загружаемом файле или его программный код
+     * @param bool $root Возвращать полный путь или от директории сайта?
+     * @return string @todo При соответствующих опциях возвращать название и программный код класса вместо пути на файл
+     */
+    public function logic($new_logic = null, $root = false)
+    {
+        if (isset($new_logic)){
+            if (is_string($new_logic)){
+                $new_logic = array(
+                    'tmp_name'	=> $new_logic,
+                    'size' => @filesize($new_logic),
+                    'error'	=> is_file($new_logic)? 0 : true
+                );
+            }
+            $this->_attribs['class'] = $new_logic;
+            $this->_attribs['is_default_class'] = 0;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        if ($this->_attribs['is_default_class'] == Entity::ENTITY_ID){
+            $path = ($root ? DIR_SERVER_ENGINE : DIR_WEB_ENGINE).'data/Entity.php';
+        }else
+        if ($proto = $this->isDefaultClass(null, true)){
+            $path = $proto->logic(null, $root);
+        }else{
+            $path = $this->dir($root).$this->name().'.php';
+        }
+        return $path;
     }
 
     /**
@@ -712,7 +752,7 @@ class Entity implements ITrace
      * Признак, используется класс прототипа или свой?
      * @param null $is_default
      * @param bool $return_proto
-     * @return bool
+     * @return bool | Entity
      */
     public function isDefaultClass($is_default = null, $return_proto = false)
     {
@@ -736,6 +776,12 @@ class Entity implements ITrace
                 }
             }else{
                 $this->_attribs['is_default_class'] = 0;
+                // Если файла класса нет, то создаём его программный код
+                if (!is_file($this->dir(true).$this->name().'.php')){
+                    $this->logic(array(
+                        'content' => $this->classTemplate()
+                    ));
+                }
             }
             if ($curr !== $this->_attribs['is_default_class']){
                 $this->_changed = true;
@@ -1922,6 +1968,53 @@ class Entity implements ITrace
                 $this->{$name}->import($child);
             }
         }
+    }
+
+    /**
+     * Шаблон своего класса
+     * @param array $methods Код предопределяемых методов
+     * @param array $use Используемые дополнительные классы (может понадобиться, если определяются методы)
+     * @return string Программный код класса
+     */
+    public function classTemplate($methods = array(), $use = array())
+    {
+        // phpDoc
+        $title = $this->title->value();
+        $description = $this->description->value();
+        // Название
+        $name = $this->name();
+        if (empty($name)) $name = 'Site';
+        $namespace = str_replace('/','\\', trim($this->dir(false),'/'));
+        if (mb_substr($namespace, 0, 5) == 'Site\\') $namespace = mb_substr($namespace, 5);
+        // Наследуемый класс
+        if ($proto = $this->proto()){
+            $extends = get_class($proto);
+        }else{
+            $extends = 'Boolive\\data\\Entity';
+        }
+        $extends_short = F::splitRight('\\', $extends);
+        // Используемые классы
+        $use_plain = $extends;
+        $use = array_unique($use);
+        foreach ($use as $u){
+            $use_plain.=",\n    ".$u;
+        }
+        // Методы
+        $methods = implode("\n", $methods);
+        return "<?php
+/**
+ * $title
+ * $description
+ * @version 1.0
+ */
+namespace $namespace;
+
+use $use_plain;
+
+class $name extends $extends_short[1]
+{
+$methods
+}";
     }
 
     /**

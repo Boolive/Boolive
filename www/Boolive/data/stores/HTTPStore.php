@@ -265,7 +265,7 @@ class HTTPStore extends Entity
         if (!empty($attribs['is_default_value']) && $attribs['is_default_value']!=Entity::ENTITY_ID) $attribs['is_default_value'] = $this->absoluteURI($attribs['is_default_value'], $base_url);
         if (!empty($attribs['is_default_class']) && $attribs['is_default_class']!=Entity::ENTITY_ID) $attribs['is_default_class'] = $this->absoluteURI($attribs['is_default_class'], $base_url);
         //$attribs['is_default_class'] = Entity::ENTITY_ID;
-        $attribs['class'] = '\Boolive\data\Entity';
+        $attribs['class_name'] = '\Boolive\data\Entity';
         return $attribs;
     }
 
