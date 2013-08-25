@@ -1,0 +1,7 @@
+{
+    "is_default_value": true,
+    "value": "Английский",
+    "proto": "/Languages/English/title",
+    "is_relative": true,
+    "order": 4
+}

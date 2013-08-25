@@ -14,21 +14,21 @@
         },
         "height": {
             "value": "100",
-            "proto": "/Library/basic/simple/Number",
+            "proto": "/Library/basic/Number",
             "is_delete": true,
             "order": 15,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Число",
-                    "proto": "/Library/basic/simple/Number/title",
+                    "proto": "/Library/basic/Number/title",
                     "is_hidden": true,
                     "order": 3
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Числовое значение любой величены",
-                    "proto": "/Library/basic/simple/Number/description",
+                    "proto": "/Library/basic/Number/description",
                     "is_hidden": true,
                     "order": 4
                 }
@@ -100,21 +100,21 @@
         },
         "width": {
             "value": "200",
-            "proto": "/Library/basic/simple/Number",
+            "proto": "/Library/basic/Number",
             "is_delete": true,
             "order": 25,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Число",
-                    "proto": "/Library/basic/simple/Number/title",
+                    "proto": "/Library/basic/Number/title",
                     "is_hidden": true,
                     "order": 3
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Числовое значение любой величены",
-                    "proto": "/Library/basic/simple/Number/description",
+                    "proto": "/Library/basic/Number/description",
                     "is_hidden": true,
                     "order": 4
                 }

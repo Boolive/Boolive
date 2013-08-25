@@ -10,8 +10,7 @@
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
+            "value": "Вид сайта, сервисы, API",
             "proto": "/Library/views/ViewGroup/description",
             "is_hidden": true,
             "order": 2

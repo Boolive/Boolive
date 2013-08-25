@@ -67,4 +67,30 @@ class Widget extends View
         $names[] = 'object_rule';
         return $names;
     }
+
+    public function classTemplate($methods = array(), $use = array())
+    {
+//        $use[] = 'Boolive\values\Rule';
+//        $methods['defineInputRule'] = '
+//    /**
+//     * Возвращает правило на входящие данные
+//     * @return null|\Boolive\values\Rule
+//     */
+//    public function defineInputRule()
+//    {
+//        $this->_input_rule = Rule::arrays(array(
+//                \'REQUEST\' => Rule::arrays(array(
+//                        \'object\' => Rule::entity($this->object_rule->value())->required()
+//                    )
+//                )
+//            )
+//        );
+//    }';
+        $methods['work'] = '
+    public function work($v = array())
+    {
+        return parent::work($v);
+    }';
+        return parent::classTemplate($methods, $use);
+    }
 }

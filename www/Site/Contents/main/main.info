@@ -1,7 +1,7 @@
 {
     "value": "0009",
     "proto": "/Library/content_samples/Page",
-    "order": 6,
+    "order": 7,
     "children": {
         "title": {
             "value": "Главная",

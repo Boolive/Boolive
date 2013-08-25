@@ -6,6 +6,11 @@
             "value": "Содержимое",
             "is_hidden": true,
             "order": 3
+        },
+        "description": {
+            "value": "Структура сайта, страницы, разделы...",
+            "is_hidden": true,
+            "order": 6
         }
     }
 }

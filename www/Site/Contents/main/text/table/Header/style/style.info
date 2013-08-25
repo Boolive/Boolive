@@ -6,20 +6,20 @@
     "children": {
         "width": {
             "value": "234",
-            "proto": "/Library/basic/simple/Number",
+            "proto": "/Library/basic/Number",
             "order": 1,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Число",
-                    "proto": "/Library/basic/simple/Number/title",
+                    "proto": "/Library/basic/Number/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Числовое значение любой величены",
-                    "proto": "/Library/basic/simple/Number/description",
+                    "proto": "/Library/basic/Number/description",
                     "is_hidden": true,
                     "order": 2
                 }

@@ -5,13 +5,13 @@
     "order": 1,
     "children": {
         "title": {
-            "value": "Сайт",
+            "value": "Мой сайт",
             "proto": "/Library/views/View/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "Корневой объект сайта",
+            "value": "Содержит абсолютно все данные о сайте, а также логику его работы",
             "proto": "/Library/views/View/description",
             "is_hidden": true,
             "order": 2

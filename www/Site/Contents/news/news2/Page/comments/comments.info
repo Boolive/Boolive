@@ -1,13 +1,13 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/content_samples/paragraphs/P",
-    "order": 3,
+    "proto": "/Library/content_samples/Page/comments",
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Обычный абзац",
-            "proto": "/Library/content_samples/paragraphs/P/title",
+            "value": "Комментарии",
+            "proto": "/Library/content_samples/Page/comments/title",
             "is_hidden": true,
             "order": 1
         }

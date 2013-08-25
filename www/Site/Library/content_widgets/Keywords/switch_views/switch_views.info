@@ -39,6 +39,12 @@
                     "order": 2
                 }
             }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/SwitchViews/cache",
+            "order": 5
         }
     }
 }

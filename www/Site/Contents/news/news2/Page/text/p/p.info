@@ -1,6 +1,5 @@
 {
-    "is_default_value": true,
-    "value": "",
+    "value": "Текст подстраницы",
     "proto": "/Library/content_samples/paragraphs/P",
     "order": 3,
     "children": {
