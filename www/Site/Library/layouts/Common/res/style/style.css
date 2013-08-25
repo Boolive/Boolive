@@ -1,25 +1,26 @@
 html, body {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    border: 0;
+    min-height: 100%;
     }
-    body::before, body::after {
-        content: "";
-        display: table;
-    }
-
 .Common {
     margin: 0 auto;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    display: block;
     width: 960px;
+    /*min-height: 100%;*/
     }
+    .Common::before, .Common::after {
+        content: "";
+        display: table;
+        }
+    .Common::after {
+        clear: both;
+        }
     .Common > .header {
         display: inline;
         float: left;
         margin: 0 10px 20px 10px;
         width: 940px;
-        background: #EEE;
+        outline: 1px dotted #DDD;
         min-height: 50px;
         }
     .Common > .main {
@@ -28,7 +29,7 @@ html, body {
         margin: 0 10px;
         width: 700px;
         min-height: 50px;
-        background: #EEE;
+        outline: 1px dotted #DDD;
         }
     .Common > .sidebar {
         display: inline;
@@ -36,13 +37,13 @@ html, body {
         margin: 0 10px;
         width: 220px;
         min-height: 50px;
-        background: #EEE;
+        outline: 1px dotted #DDD;
         }
     .Common > .footer {
         display: inline;
         float: left;
         margin: 20px 10px 0 10px;
         width: 940px;
-        background: #EEE;
+        outline: 1px dotted #DDD;
         min-height: 50px;
-    }
+        }

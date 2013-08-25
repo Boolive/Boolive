@@ -33,7 +33,7 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "is(/Library/cjontent_samples/Page)",
+            "value": "is(/Library/content_samples/Page)",
             "proto": "/Library/menus/Menu/item_view/views/page_item/object_rule",
             "order": 7
         }
