@@ -654,7 +654,7 @@ class MySQLStore extends Entity
                         $u->execute($params);
                     }
                 }
-                $prototype_children = (!$entity->isExist() || (isset($current['diff']) && $current['diff'] == Entity::DIFF_ADD)) && $entity->diff()!=Entity::DIFF_ADD;
+                $prototype_children = IS_INSTALL && (!$entity->isExist() || (isset($current['diff']) && $current['diff'] == Entity::DIFF_ADD)) && $entity->diff()!=Entity::DIFF_ADD;
 
                 // Обновление экземпляра
                 $entity->_attribs['id'] = $this->key.'//'.$attr['id'];

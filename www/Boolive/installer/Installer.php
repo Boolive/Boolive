@@ -122,7 +122,7 @@ class Installer
                     if ($error = json_last_error()){
                         throw new \Exception('Ошибка в "'.$dir.$d.'"');
                     }
-                    $info['uri'] = trim(preg_replace('#\\\\#u','/', mb_substr($dir, mb_strlen(DIR_SERVER))), '/\\');
+                    $info['uri'] = trim(preg_replace('#\\\\#u','/', mb_substr($dir, mb_strlen(DIR_SERVER_PROJECT))), '/\\');
                     if (!empty($info['uri'])) $info['uri'] = '/'.$info['uri'];
                     array_unshift($objects, $info);
                 }
