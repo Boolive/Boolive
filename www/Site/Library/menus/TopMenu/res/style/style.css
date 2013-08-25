@@ -1,0 +1,74 @@
+.TopMenu{
+	/*height: 40px;*/
+	border-radius: 3px;
+	}
+	.TopMenu > ul {
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		position: relative;
+		}
+		.TopMenu > ul > li {
+			float: left;
+			max-width: 140px;
+			text-align: center;
+			/*height: 40px;*/
+			display: block;
+			}
+			.TopMenu > ul > li:hover{
+                background-color: #EEE;
+				}
+            .TopMenu > ul > li:first-child a{
+                /*padding-left: 20px;*/
+            }
+			.TopMenu > ul > li > a{
+				display: table-cell;
+			    vertical-align: middle;
+				height: 40px;
+                padding: 0px 10px 0px 10px;
+				text-decoration: none;
+				}
+				.TopMenu > ul > li:hover > a{
+					}
+				.TopMenu > ul > li > a span {
+					}
+			.TopMenu > ul li:hover > ul{
+				display: block;
+				}
+			/* Подменю вертикальное */
+			.TopMenu > ul > li ul {
+				list-style: none;
+				display: none;
+				position: absolute;
+				margin: 0 0 0 0px;
+				padding: 0;
+				background-color: #FFF;
+                box-shadow: 0px 1px 3px #999;
+				z-index: 15;
+				}
+				.TopMenu > ul > li ul > li {
+					width: 200px;
+                    margin: 1px;
+					text-align: left;
+					height: 38px;
+					padding: 0;
+					display: block;
+					}
+					.TopMenu > ul > li ul > li > a {
+						opacity: 1;
+						text-decoration: none;
+						display: block;
+                        padding: 10px 10px 10px 20px;
+                        overflow: hidden;
+						text-overflow: ellipsis;
+						white-space:nowrap;
+						height: 18px;
+						}
+					.TopMenu > ul > li ul > li:hover > a {
+						background-color: #E5E5E5;
+						}
+					.TopMenu > ul > li ul li > ul{
+						margin: -39px 0 0 200px;
+						}

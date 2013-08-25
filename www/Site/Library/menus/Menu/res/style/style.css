@@ -1,0 +1,24 @@
+.Menu{
+    padding: 0 20px 20px;
+    }
+    .Menu .title{
+        /*font-size: 16pt;*/
+        }
+    .Menu ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+        .Menu ul li{
+            margin: 6px 5px 7px 0;
+	        padding: 0 0 0 19px;
+            }
+            .Menu ul li a{
+
+                }
+            .Menu ul li:hover a{
+
+                }
+            .Menu ul li ul{
+
+            }

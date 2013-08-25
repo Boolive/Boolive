@@ -72,7 +72,7 @@ class item_view extends AutoWidgetList2
     public function getList($cond = array())
     {
         $cond['select'] = 'tree';
-        $cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
+        $cond['depth'] = array(1, 1); // выбрать из хранилища всё дерево меню
         //$cond['order'] = array(array('order', 'asc'));
         $cond['group'] = true; // Для выбранных объектов однорвеменной выполнять подвыборки
         $cond['return'] = array('depth'=>1); // получить только первый уровень дерева
