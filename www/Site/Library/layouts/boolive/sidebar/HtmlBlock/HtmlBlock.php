@@ -1,0 +1,18 @@
+<?php
+/**
+ * Виджет HTML блока
+ * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
+ * @version 1.0
+ */
+namespace Library\layouts\boolive\sidebar\HtmlBlock;
+
+use Library\views\Widget\Widget;
+
+class HtmlBlock extends Widget
+{
+
+    public function work($v = array())
+    {
+        return parent::work($v);
+    }
+}

@@ -1,5 +1,5 @@
-<div class="Widget">
-    <textarea name="ckeditor" id="ckeditor" class="ckeditor" style="width: 60%; min-height: 500px; ">
+<div class="HTMLEditor" style=" padding:30px  30px 0 0">
+    <textarea name="ckeditor" id="ckeditor" class="ckeditor" >
         <?php echo $v['text'];?>
-    </textarea>вавпа
+    </textarea>
 </div>
