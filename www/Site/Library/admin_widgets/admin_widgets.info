@@ -4,7 +4,7 @@
     "order": 10,
     "children": {
         "title": {
-            "value": "Виджеты админки",
+            "value": "Модули админки",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
             "order": 1

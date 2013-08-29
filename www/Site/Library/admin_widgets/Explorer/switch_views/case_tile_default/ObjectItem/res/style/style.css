@@ -19,7 +19,7 @@
         background-color: #f2f2f2;
         border: 1px solid #EAEAEA;
         text-overflow: ellipsis;
-        height: 93px;
+        height: 95px;
         border-radius: 3px;
         line-height: normal;
         overflow: visible;
@@ -129,7 +129,8 @@
                         /*color: #9352cc;*/
                     }
             .ObjectItem.tile .view .title-group .mini{
-                font-size: 12pt;
+                font-size: 14pt;
+                margin-bottom: 2px;
                 display: block;
                 color: #333;
                 }

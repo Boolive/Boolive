@@ -26,10 +26,14 @@
 		<div class="title-group">
             <?php
             $s = $v['title']->escape();
-            if ($pos = mb_strpos($s, ' ')){
+            $l = mb_strlen($s);
+            $pos = mb_strpos($s, ' ', min(8, $l));
+            if ($l>15 && ($pos > 15 || !$pos)){
+                $pos = mb_strpos($s, ' ');
+            }
+            if ($pos){
                 $s2 = mb_substr($s, $pos);
                 $s = mb_substr($s, 0, $pos);
-
             }
             $width = max(118, round((mb_strlen($s)*18+18)/50)*50+18);
             echo '<a class="title" href="'.ltrim($v['link'],'/').'" style="min-width:'.$width.'px;"><span>'.$s.'</span></a>';
@@ -37,7 +41,6 @@
             echo '<div class="description">'.$v['description'].'</div>';
             ?>
         </div>
-
         <div class="info">
             <a class="prop" title="Свойства ссылки" href="<?php echo ltrim($v['uri'],'/');?>"></a>
             <?php if ($v['is_file']->bool()):?>
