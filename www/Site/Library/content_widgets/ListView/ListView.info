@@ -2,7 +2,7 @@
     "value": "ListView.tpl",
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
-    "order": 17,
+    "order": 25,
     "children": {
         "title": {
             "value": "Виджет списка в тексте",

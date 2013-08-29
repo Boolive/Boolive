@@ -179,21 +179,23 @@ class View extends Entity
     /**
      * Запуск всех подчиненных объектов
      * @param bool $all Признак, запускать все подчиенные (true), или пока не возвратится результат от одного из запущенных (false)
+     * @param array $result Значения-заглушки для подчиненных видов. Если в массиве есть ключ с именем вида, то этот вид не исполняется, а испольщуется указанное в элементе значение.
      * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
      */
-    public function startChildren($all = true)
+    public function startChildren($all = true, $result = array())
     {
-        $result = array();
         $list = $this->linked(false)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $child = $child->linked(true);
             if ($child instanceof View){
-                $out = $child->start($this->_commands, $this->_input_child);
-                if ($out!==false){
-                    $result[$key] = $out;
-                    $this->_input_child['previous'] = true;
-                    if (!$all) return $result;
+                if (!isset($result[$key])){
+                    $out = $child->start($this->_commands, $this->_input_child);
+                    if ($out!==false){
+                        $result[$key] = $out;
+                        $this->_input_child['previous'] = true;
+                        if (!$all) return $result;
+                    }
                 }
             }
         }

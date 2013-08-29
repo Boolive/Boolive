@@ -1,7 +1,7 @@
 {
     "value": "",
     "proto": "/Library/basic/Package",
-    "order": 4,
+    "order": 10,
     "children": {
         "title": {
             "value": "Таблицы",

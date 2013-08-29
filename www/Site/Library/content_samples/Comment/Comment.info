@@ -1,7 +1,7 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 10,
+    "order": 16,
     "children": {
         "title": {
             "value": "Комментарий",

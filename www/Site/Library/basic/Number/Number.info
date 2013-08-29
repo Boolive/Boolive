@@ -1,7 +1,7 @@
 {
     "value": "0",
     "is_default_class": false,
-    "order": 10,
+    "order": 11,
     "children": {
         "title": {
             "value": "Число",

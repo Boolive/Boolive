@@ -1,7 +1,7 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 9,
+    "order": 5,
     "children": {
         "title": {
             "value": "Обратная связь",

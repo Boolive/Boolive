@@ -3,12 +3,24 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "order": 31,
+    "order": 39,
     "children": {
+        "title": {
+            "value": "Дерево комментариев",
+            "proto": "/Library/views/AutoWidgetList/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Виджет для отображения всех комментариев, например, страницы",
+            "proto": "/Library/views/AutoWidgetList/description",
+            "is_hidden": true,
+            "order": 2
+        },
         "res": {
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 0,
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -25,18 +37,6 @@
                     "order": 3
                 }
             }
-        },
-        "title": {
-            "value": "Виджет списка комментариев",
-            "proto": "/Library/views/AutoWidgetList/title",
-            "is_hidden": true,
-            "order": 1
-        },
-        "description": {
-            "value": "Отображает комментарии списком",
-            "proto": "/Library/views/AutoWidgetList/description",
-            "is_hidden": true,
-            "order": 2
         }
     }
 }

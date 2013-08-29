@@ -10,11 +10,10 @@
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Коллекция объектов",
+            "value": "Образцы содержимого. Страницы, разделы, каталоги, товар...",
             "proto": "/Library/basic/Package/description",
             "is_hidden": true,
-            "order": 12
+            "order": 2
         }
     }
 }

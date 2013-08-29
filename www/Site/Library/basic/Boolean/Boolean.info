@@ -1,7 +1,7 @@
 {
     "value": 0,
     "is_default_class": false,
-    "order": 12,
+    "order": 14,
     "children": {
         "title": {
             "value": "Булево",

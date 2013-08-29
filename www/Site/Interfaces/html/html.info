@@ -23,7 +23,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Html/res",
-            "order": 4,
+            "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,

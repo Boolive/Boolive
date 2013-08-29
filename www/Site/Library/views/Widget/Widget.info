@@ -1,5 +1,6 @@
 {
-    "value": "",
+    "value": "Widget.tpl",
+    "is_file": true,
     "proto": "/Library/views/View",
     "is_default_class": false,
     "order": 5,
@@ -19,7 +20,7 @@
         "res": {
             "value": "",
             "proto": "/Library/views/ViewGroup",
-            "order": 4,
+            "order": 5,
             "children": {
                 "title": {
                     "value": "Ресурсы",
@@ -39,7 +40,7 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/basic/Boolean",
-            "order": 5,
+            "order": 6,
             "children": {
                 "title": {
                     "value": "Кэшировать?",
@@ -57,7 +58,7 @@
         },
         "object_rule": {
             "value": "",
-            "order": 6,
+            "order": 7,
             "children": {
                 "title": {
                     "value": "Правило на отображаемый объект",

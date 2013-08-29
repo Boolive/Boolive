@@ -2,7 +2,7 @@
     "value": "Image.png",
     "is_file": true,
     "is_default_class": false,
-    "order": 5,
+    "order": 7,
     "children": {
         "title": {
             "value": "Изображение",

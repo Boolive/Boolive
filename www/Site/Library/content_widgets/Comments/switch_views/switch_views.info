@@ -3,7 +3,7 @@
     "value": "SwitchViews.tpl",
     "is_file": true,
     "proto": "/Library/views/SwitchViews",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,

@@ -3,16 +3,16 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 9,
+    "order": 16,
     "children": {
         "title": {
-            "value": "Виджет изображения",
+            "value": "Изображение",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 3
         },
         "description": {
-            "value": "Отображает изображения в форматированном тексте или макете сайта",
+            "value": "Виджет для отображения изображения",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
             "order": 4

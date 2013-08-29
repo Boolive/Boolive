@@ -3,16 +3,16 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 4,
+    "order": 11,
     "children": {
         "title": {
-            "value": "Виджет комментария",
+            "value": "Комментарий",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 3
         },
         "description": {
-            "value": "Отображает один комментарий",
+            "value": "Виджет для отображения одного комментария",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
             "order": 5
