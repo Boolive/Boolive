@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Используется при отображении списков с постраничным разделением вывода",
+            "value": "Отображает номера страниц в виде ссылок",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
             "order": 2

@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "order": 18,
+    "order": 20,
     "children": {
         "title": {
             "value": "Страница",

@@ -13,7 +13,7 @@
         },
         "title": {
             "is_default_value": true,
-            "value": "Виджет",
+            "value": "Виджет HTML блока",
             "proto": "/Library/views/HtmlBlock/title",
             "is_hidden": true,
             "order": 12

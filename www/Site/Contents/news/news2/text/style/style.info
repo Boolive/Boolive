@@ -1,79 +1,79 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/content_samples/Page/text/style",
+    "proto": "/Library/content_samples/Page/rich_text/style",
     "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Стиль ",
-            "proto": "/Library/content_samples/Page/text/style/title",
+            "proto": "/Library/content_samples/Page/rich_text/style/title",
             "is_hidden": true,
             "order": 1
         },
         "width": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/width",
+            "proto": "/Library/content_samples/Page/rich_text/style/width",
             "order": 2
         },
         "height": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/height",
+            "proto": "/Library/content_samples/Page/rich_text/style/height",
             "order": 3
         },
         "margin-top": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/margin-top",
+            "proto": "/Library/content_samples/Page/rich_text/style/margin-top",
             "order": 4
         },
         "margin-right": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/margin-right",
+            "proto": "/Library/content_samples/Page/rich_text/style/margin-right",
             "order": 5
         },
         "margin-bottom": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/margin-bottom",
+            "proto": "/Library/content_samples/Page/rich_text/style/margin-bottom",
             "order": 6
         },
         "margin-left": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/margin-left",
+            "proto": "/Library/content_samples/Page/rich_text/style/margin-left",
             "order": 7
         },
         "text-align": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/text-align",
+            "proto": "/Library/content_samples/Page/rich_text/style/text-align",
             "order": 8
         },
         "padding-left": {
             "value": "30px",
-            "proto": "/Library/content_samples/Page/text/style/padding-left",
+            "proto": "/Library/content_samples/Page/rich_text/style/padding-left",
             "order": 9
         },
         "padding-right": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/padding-right",
+            "proto": "/Library/content_samples/Page/rich_text/style/padding-right",
             "order": 10
         },
         "text-indent": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/text/style/text-indent",
+            "proto": "/Library/content_samples/Page/rich_text/style/text-indent",
             "order": 11
         },
         "description": {
             "is_default_value": true,
             "value": "Для оформления одного объекта",
-            "proto": "/Library/content_samples/Page/text/style/description",
+            "proto": "/Library/content_samples/Page/rich_text/style/description",
             "is_hidden": true,
             "order": 12
         }

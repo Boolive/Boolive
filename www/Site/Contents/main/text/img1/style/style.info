@@ -81,7 +81,19 @@
         "float": {
             "value": "none",
             "is_default_class": false,
-            "order": 14
+            "order": 14,
+            "children": {
+                "title": {
+                    "value": "",
+                    "is_default_class": false,
+                    "order": 1
+                },
+                "description": {
+                    "value": "",
+                    "is_default_class": false,
+                    "order": 2
+                }
+            }
         }
     }
 }

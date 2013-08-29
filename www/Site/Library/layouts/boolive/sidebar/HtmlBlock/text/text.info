@@ -1,6 +1,6 @@
 {
     "is_default_value": true,
-    "value": "<div align='center' style='padding-left=15px;'> Html блок </div>",
+    "value": "Html блок",
     "proto": "/Library/views/HtmlBlock/text",
     "order": 16
 }

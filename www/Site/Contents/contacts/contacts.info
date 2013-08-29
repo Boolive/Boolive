@@ -6,7 +6,7 @@
         "title": {
             "value": "Контакты",
             "proto": "/Library/content_samples/Page/title",
-            "order": 0,
+            "order": 1,
             "children": {
                 "title": {
                     "is_default_value": true,

@@ -1,12 +1,12 @@
 {
     "value": "",
-    "proto": "/Library/content_samples/Page/text",
+    "proto": "/Library/content_samples/Page/rich_text",
     "order": 1,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Текст",
-            "proto": "/Library/content_samples/Page/text/title",
+            "value": "Форматированный текст",
+            "proto": "/Library/content_samples/Page/rich_text/title",
             "is_hidden": true,
             "order": 3
         }
