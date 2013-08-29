@@ -230,9 +230,9 @@ class Entity implements ITrace
         if (!isset($new_name) && $choose_unique) $new_name = $this->_attribs['name'];
         // Смена имени
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
-            if ($choose_unique){
+            //if ($choose_unique){
                 $this->_autoname = $new_name;
-            }
+            //}
             $this->_attribs['name'] = $new_name;
             $this->_changed = true;
             $this->_checked = false;
@@ -326,7 +326,7 @@ class Entity implements ITrace
     public function value($new_value = null)
     {
         // Установка значения
-        if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!=$new_value)){
+        if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!==$new_value)){
             $this->_attribs['value'] = $new_value;
             $this->_attribs['is_file'] = false;
             $this->_attribs['is_default_value'] = 0;
