@@ -4,7 +4,7 @@
     "is_file": true,
     "proto": "/Library/content_widgets/RichText",
     "is_default_class": false,
-    "order": 33,
+    "order": 41,
     "children": {
         "title": {
             "value": "Предпросмотр текста страницы",

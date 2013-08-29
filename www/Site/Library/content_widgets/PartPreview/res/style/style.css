@@ -1,0 +1,8 @@
+.PartPreview{
+    border-radius: 5px;
+	box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;
+	clear: both;
+	margin: 10px 0px 15px 0;
+	background: #FFF;
+	padding: 15px 25px 15px 45px;
+    }

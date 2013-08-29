@@ -6,16 +6,16 @@
  */
 namespace Library\content_widgets\Part;
 
-use Library\views\AutoWidgetList\AutoWidgetList,
+use Library\content_widgets\Page\Page,
     Boolive\values\Rule;
 
-class Part extends AutoWidgetList
+class Part extends Page
 {
     public function defineInputRule()
     {
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required(),
+                        'object' => Rule::entity($this->object_rule->value())->required(),
                         'page'=> Rule::int()->default(1)->required() // номер страницы
                     )
                 )

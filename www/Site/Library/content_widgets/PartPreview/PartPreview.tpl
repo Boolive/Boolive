@@ -1,8 +1,9 @@
-<div class="PartPreview">PartPreview
+<div class="PartPreview">
 <?php
-    $list = $v['view']->arrays(\Boolive\values\Rule::string());
+    $list = $v['views']->arrays(\Boolive\values\Rule::string());
     foreach ($list as $item) {
         echo $item;
     }
 ?>
+    <a href="<?php echo $v['href']?>">Далее</a>
 </div>

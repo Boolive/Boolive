@@ -1,27 +1,27 @@
 {
     "value": "Part.tpl",
     "is_file": true,
-    "proto": "/Library/views/AutoWidgetList",
+    "proto": "/Library/content_widgets/Page",
     "is_default_class": false,
-    "order": 13,
+    "order": 5,
     "children": {
         "title": {
-            "value": "Виджет раздела",
-            "proto": "/Library/views/AutoWidgetList/title",
+            "value": "Раздел",
+            "proto": "/Library/content_widgets/Page/title",
             "is_hidden": true,
             "order": 2
         },
         "description": {
-            "value": "Отображает содержимое раздела в виде списка. Используется для лент, галерей, каталогов.",
-            "proto": "/Library/views/AutoWidgetList/description",
+            "value": "Виджета для отображения элементов раздела в виде списка. Используется для лент, галерей, каталогов. ",
+            "proto": "/Library/content_widgets/Page/description",
             "is_hidden": true,
             "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/AutoWidgetList/res",
-            "order": 5,
+            "proto": "/Library/content_widgets/Page/res",
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -42,8 +42,8 @@
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/views/AutoWidgetList/cache",
-            "order": 13,
+            "proto": "/Library/content_widgets/Page/cache",
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -58,6 +58,19 @@
                     "proto": "/Library/views/AutoWidgetList/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "is(/Library/content_samples/Part)",
+            "proto": "/Library/content_widgets/Page/object_rule",
+            "order": 13,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/content_widgets/Page/object_rule/title",
+                    "order": 1
                 }
             }
         }

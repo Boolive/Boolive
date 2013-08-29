@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "order": 18,
+    "order": 26,
     "children": {
         "title": {
             "value": "Виджет форматированного текста",

@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "TitleView.tpl",
     "is_file": true,
-    "proto": "/Library/content_widgets/TitleView",
+    "proto": "/Library/content_widgets/Page/views/TitleView",
     "is_link": true,
-    "order": 4
+    "order": 3
 }
