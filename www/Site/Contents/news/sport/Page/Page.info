@@ -1,10 +1,12 @@
 {
+    "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page",
-    "order": 14,
+    "order": 2,
     "children": {
         "title": {
-            "value": "Подстраница",
+            "is_default_value": true,
+            "value": "Страница",
             "proto": "/Library/content_samples/Page/title",
             "order": 1,
             "children": {
@@ -18,9 +20,10 @@
             }
         },
         "description": {
-            "value": "Подчиненная страница. Это её короткое описание для SEO",
+            "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Page/description",
-            "order": 2,
+            "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,

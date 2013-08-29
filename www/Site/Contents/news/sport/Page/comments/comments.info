@@ -1,14 +1,15 @@
 {
+    "is_default_value": true,
     "value": "",
     "proto": "/Library/content_samples/Page/comments",
-    "order": 12,
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Комментарии",
             "proto": "/Library/content_samples/Page/comments/title",
             "is_hidden": true,
-            "order": 3
+            "order": 1
         }
     }
 }

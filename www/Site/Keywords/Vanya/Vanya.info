@@ -1,12 +1,10 @@
 {
     "value": "0",
-    "proto": "/Contents/main/keywords/cms",
-    "is_link": true,
-    "order": 4,
+    "proto": "/Library/content_samples/Keyword",
+    "order": 10,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Ключевое слово",
+            "value": "Ваня",
             "proto": "/Library/content_samples/Keyword/title",
             "is_hidden": true,
             "order": 1

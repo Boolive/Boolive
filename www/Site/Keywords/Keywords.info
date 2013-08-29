@@ -1,11 +1,12 @@
 {
     "value": "",
+    "is_hidden": true,
     "order": 9,
     "children": {
         "title": {
             "value": "Ключевые слова",
             "is_hidden": true,
-            "order": 4
+            "order": 1
         }
     }
 }

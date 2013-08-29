@@ -1,11 +1,10 @@
 {
     "value": "1",
     "proto": "/Library/content_samples/Keyword",
-    "order": 1,
+    "order": 3,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Ключевое слово",
+            "value": "PHP",
             "proto": "/Library/content_samples/Keyword/title",
             "is_hidden": true,
             "order": 1

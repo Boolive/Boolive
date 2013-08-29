@@ -1,11 +1,10 @@
 {
-    "value": "2",
+    "value": "0",
     "proto": "/Library/content_samples/Keyword",
-    "order": 3,
+    "order": 6,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Ключевое слово",
+            "value": "CMS",
             "proto": "/Library/content_samples/Keyword/title",
             "is_hidden": true,
             "order": 1
