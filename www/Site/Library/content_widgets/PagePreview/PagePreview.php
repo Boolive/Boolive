@@ -7,17 +7,15 @@
  */
 namespace Library\content_widgets\PagePreview;
 
-use Library\views\AutoWidgetList\AutoWidgetList;
+use Library\views\AutoWidgetList2\AutoWidgetList2;
 
-class PagePreview extends AutoWidgetList{
+class PagePreview extends AutoWidgetList2{
 
     public function work($v = array())
     {
-        $v['object'] = $this->_input['REQUEST']['object']->uri();
-        if (substr($v['object'], 0, 10) == '/Contents/'){
-            $v['object_uri'] = substr($v['object'], 10);
-        }else{
-            $v['object_uri'] = $v['object'];
+        $v['href'] = $this->_input['REQUEST']['object']->uri();
+        if (substr($v['href'], 0, 10) == '/Contents/'){
+            $v['href'] = substr($v['href'], 10);
         }
         return parent::work($v);
     }
