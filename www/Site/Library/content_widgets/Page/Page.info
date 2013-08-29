@@ -1,27 +1,27 @@
 {
     "value": "Page.tpl",
     "is_file": true,
-    "proto": "/Library/views/AutoWidgetList",
+    "proto": "/Library/views/AutoWidgetList2",
     "is_default_class": false,
-    "order": 12,
+    "order": 4,
     "children": {
         "title": {
-            "value": "Виджет страницы",
-            "proto": "/Library/views/AutoWidgetList/title",
+            "value": "Страница",
+            "proto": "/Library/views/AutoWidgetList2/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "Отображает элементы страницы подходящими виджетами из вариантов отображения",
-            "proto": "/Library/views/AutoWidgetList/description",
+            "value": "Виджет для отображения страницы. Свойства страницы отображаются подходящими виджетами из списка видов.",
+            "proto": "/Library/views/AutoWidgetList2/description",
             "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/AutoWidgetList/res",
-            "order": 6,
+            "proto": "/Library/views/AutoWidgetList2/res",
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -42,8 +42,8 @@
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/views/AutoWidgetList/cache",
-            "order": 8,
+            "proto": "/Library/views/AutoWidgetList2/cache",
+            "order": 6,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -58,6 +58,19 @@
                     "proto": "/Library/views/AutoWidgetList/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "is(/Library/content_samples/Page)",
+            "proto": "/Library/views/AutoWidgetList2/object_rule",
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/AutoWidgetList2/object_rule/title",
+                    "order": 1
                 }
             }
         }

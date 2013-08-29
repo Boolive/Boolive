@@ -1,3 +1,11 @@
+.Page{
+
+    }
+    /*.Page > *{*/
+        /*display: inline-block;*/
+        /*width: 100%;*/
+    /*}*/
+
 .post {
 	border-radius: 5px;
 	box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;
