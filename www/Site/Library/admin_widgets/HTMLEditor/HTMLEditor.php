@@ -13,7 +13,8 @@ class HTMLEditor extends Widget
 
     public function work($v = array())
     {
-      //  trace($this->_input);
+      //trace($this->_input);
+        $v['uri'] = $this->_input['REQUEST']['object']->uri();
         $v['text'] = $this->_input['REQUEST']['object']->value();
         return parent::work($v);
     }
