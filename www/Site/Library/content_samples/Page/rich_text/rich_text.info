@@ -1,0 +1,13 @@
+{
+    "value": "",
+    "proto": "/Library/content_samples/RichText",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Форматированный текст",
+            "proto": "/Library/content_samples/RichText/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

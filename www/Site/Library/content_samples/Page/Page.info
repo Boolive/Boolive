@@ -16,7 +16,7 @@
         },
         "description": {
             "value": "",
-            "order": 3,
+            "order": 4,
             "children": {
                 "title": {
                     "value": "Описание ",
