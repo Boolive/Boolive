@@ -30,12 +30,12 @@ class Layout extends Widget
         parent::initInputChild($input);
         // По URL определяем объект и номер страницы
         $uri = $this->_input['REQUEST']['path'];
-        if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){
-            $uri = $match[1];
-            $this->_input_child['REQUEST']['page'] = $match[2];
-        }else{
-            $this->_input_child['REQUEST']['page'] = 1;
-        }
+//        if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){
+//            $uri = $match[1];
+//            $this->_input_child['REQUEST']['page'] = $match[2];
+//        }else{
+//            $this->_input_child['REQUEST']['page'] = 1;
+//        }
         $object = null;
         // объект по умолчанию
         if (empty($uri) && ($object = Data::read(array(

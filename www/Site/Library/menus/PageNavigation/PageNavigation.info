@@ -17,28 +17,6 @@
             "is_hidden": true,
             "order": 2
         },
-        "res": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/views/Widget/res",
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
-                    "is_hidden": true,
-                    "order": 2
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/Widget/res/description",
-                    "is_hidden": true,
-                    "order": 3
-                }
-            }
-        },
         "cache": {
             "is_default_value": true,
             "value": 0,
@@ -58,6 +36,28 @@
                     "proto": "/Library/views/Widget/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Widget/res/title",
+                    "is_hidden": true,
+                    "order": 4
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
+                    "order": 5
                 }
             }
         }

@@ -11,24 +11,24 @@
 	if ($page_end > ($count - $show)) $page_end = $count;
 ?>
 <div class="PageNavigation">
-    <ul>
+    <ul class="cf">
         <li class="pageinfo">Страницы 1 до <?php echo $count?></li>
         <?php
-        if ($current > 1) echo '<li><a href="'.$uri.'/page-'.($current-1).'">←</a></li>';
+        if ($current > 1) echo '<li><a href="'.$uri.'&page='.($current-1).'">←</a></li>';
 
         if ($page_first > $show){
-			echo '<li><a href="'.$uri.'/page-1">1</a></li>';
+			echo '<li><a href="'.$uri.'&page=1">1</a></li>';
 			echo '<li>...</li>';
 		}
 		for ($i = $page_first; $i <= $page_end; $i++){
-			echo '<li'.($i==$current?' class="active"':'').'><a href="'.$uri.'/page-'.$i.'">'.$i.'</a></li>';
+			echo '<li'.($i==$current?' class="active"':'').'><a href="'.$uri.'&page='.$i.'">'.$i.'</a></li>';
 		}
 		if ($page_end <= ($count - $show)){
 			echo '<li>...</li>';
-			echo '<li><a href="'.$uri.'/page-'.$count.'">'.$count.'</a></li>';
+			echo '<li><a href="'.$uri.'&page='.$count.'">'.$count.'</a></li>';
 		}
 
-        if ($current < $count) echo '<li><a href="'.$uri.'/page-'.($current+1).'">→</a></li>';
+        if ($current < $count) echo '<li><a href="'.$uri.'&page='.($current+1).'">→</a></li>';
         ?>
     </ul>
 </div>
