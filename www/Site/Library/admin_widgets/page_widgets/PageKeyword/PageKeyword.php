@@ -31,10 +31,14 @@ class PageKeyword extends Widget
         if ($this->_input['REQUEST']['call'] == 'Delete'){
             $this->_input['REQUEST']['object']->isDelete(true);
             $this->_input['REQUEST']['object']->save();
+            // Счётчик использования слова
+            $key = $this->_input['REQUEST']['object']->linked();
+            $key->value($key->value()-1);
+            $key->save();
             return true;
         }
          $v['object'] = $this->_input['REQUEST']['object']->uri();
-         $v['name'] = $this->_input['REQUEST']['object']->name();
+         $v['name'] = $this->_input['REQUEST']['object']->linked()->title->value();
          return parent::work($v);
      }
 }

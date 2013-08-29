@@ -7,6 +7,7 @@
 namespace Library\admin_widgets\page_widgets\PageKeywordsEditor;
 
 use Boolive\data\Data;
+use Boolive\functions\F;
 use Library\views\AutoWidgetList\AutoWidgetList,
     Boolive\values\Rule;
 
@@ -54,40 +55,41 @@ class PageKeywordsEditor extends AutoWidgetList
     {
         $v = array();
         $obj = $this->_input['REQUEST']['object'];
-        $new_keyword = $this->_input['REQUEST']['Keyword']['value'];
-        $key = Data::read('/Keywords/' . $new_keyword);
-        if ($key->isExist()){
-            //Есть ли это слово у страницы уже
-            $existing = $obj->find(array(
-                'where' => array(
-                    array("attr", "name", '=', $key->name()),
-                    array("attr", "is_delete", '>=', 0)
-                ),
-                'key' => 'name'
-            ));
-            if (empty($existing)){
-                $obj->add($key);
-                $obj->save();
-                return $obj->{$key->name()}->uri();
-            } else{
-                if ($existing[$key->name()]->isDelete()){
-                    $existing[$key->name()]->isDelete(false);
-                    $existing[$key->name()]->save();
-                    return $existing[$key->name()]->uri();
-                } else{
-                    return false;
-                }
-            }
-        } else{
-            $key = Data::read('/Library/content_samples/Keyword');
-            $keywords = Data::read('/Keywords');
-            $keywords->{$new_keyword} = $key->birth();
-            $keywords->save();
-            $obj->{$new_keyword} = $keywords->{$new_keyword}->birth();
-            $obj->save();
-            return $obj->{$new_keyword}->uri();
+        $key_title = $this->_input['REQUEST']['Keyword']['value'];
+        $key_name = F::translit($key_title);
+        $keywords = Data::read('/Keywords');
+        $key = $keywords->{$key_name};
+        // Создание слова в общей коллекции ключевых слов
+        if (!$key->isExist()){
+            $proto = Data::read('/Library/content_samples/Keyword');
+            $key = $proto->birth($keywords);
+            $key->name($key_name);
+            $key->value(0);
+            $key->save();
+            $key->title->value($key_title);
+            $key->title->save();
         }
-
+        // Ключевое слово в локальном списке (например, в странице)
+        $key_local = $obj->{$key_name};
+        // Добавление слова по ссылке
+        if (!$key_local->isExist()){
+            $key_local = $key->birth($obj);
+            $key_local->isLink(true);
+            $key_local->save();
+            // Счётчик использования слова
+            $key->value($key->value()+1);
+            $key->save();
+        }else
+        if ($key_local->isDelete()){
+            $key_local->isDelete(false);
+            $key_local->save();
+            // Счётчик использования слова
+            $key->value($key->value()+1);
+            $key->save();
+        }else{
+            return false;
+        }
+        return $key_local->uri();
     }
 
     /**
