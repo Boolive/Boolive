@@ -22,9 +22,9 @@ class Css extends View
     {
         // Если прототип тоже CSS, то исполняем его, чтобы подключился его файл стиля.
         // Таким образом реализуется наследование файлов стилей
-        if (($proto = $this->proto()) && ($proto instanceof self)){
-            $proto->start($this->_commands, $this->_input);
-        }
+//        if (($proto = $this->proto()) && ($proto instanceof self) && ($proto != $this)){
+//            $proto->start($this->_commands, $this->_input);
+//        }
         // Подключение CSS файла
         if ($file = $this->file()){
             $this->_commands->addHtml('link', array('rel'=>"stylesheet", 'type'=>"text/css", 'href'=>$file));

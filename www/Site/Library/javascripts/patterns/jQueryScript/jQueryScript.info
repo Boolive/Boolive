@@ -1,5 +1,6 @@
 {
-    "value": "",
+    "value": "jQueryScript.js",
+    "is_file": true,
     "proto": "/Library/javascripts/JavaScript",
     "order": 3,
     "children": {

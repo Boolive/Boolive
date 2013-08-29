@@ -1,5 +1,6 @@
 {
-    "value": "",
+    "value": "jQueryUIScript.js",
+    "is_file": true,
     "proto": "/Library/javascripts/patterns/jQueryScript",
     "order": 4,
     "children": {

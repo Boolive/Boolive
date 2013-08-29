@@ -12,6 +12,7 @@
         },
         "description": {
             "value": "Заготовки для написания собственных скриптов с использованием различных библиотек. ",
+            "proto": "/Library/basic/Package/description",
             "is_hidden": true,
             "order": 2
         }

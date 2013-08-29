@@ -12,6 +12,7 @@
         },
         "description": {
             "value": "Пакет с JavaScript-библиотеками, плагинами и заготовками для написания собственных скриптов",
+            "proto": "/Library/basic/Package/description",
             "is_hidden": true,
             "order": 2
         }
