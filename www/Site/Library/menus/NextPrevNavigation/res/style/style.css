@@ -1,0 +1,9 @@
+.NextPrevNavigation{
+
+    }
+    .NextPrevNavigation .next{
+        float: right;
+        }
+    .NextPrevNavigation .prev{
+        float: left;
+        }

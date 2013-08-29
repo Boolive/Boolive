@@ -7,6 +7,7 @@
     "children": {
         "title": {
             "value": "Следующая/предыдущая страница",
+            "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 1
         },
@@ -20,7 +21,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 5,
+            "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -42,7 +43,7 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
-            "order": 7,
+            "order": 8,
             "children": {
                 "title": {
                     "is_default_value": true,
