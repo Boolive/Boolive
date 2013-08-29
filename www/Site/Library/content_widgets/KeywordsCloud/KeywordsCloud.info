@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 32,
+    "order": 40,
     "children": {
         "title": {
             "value": "Облако тегов",

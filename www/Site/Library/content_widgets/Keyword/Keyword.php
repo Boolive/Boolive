@@ -14,7 +14,9 @@ class Keyword extends Widget
 {
     public function work($v = array())
     {
-        $v['keyword'] = $this->_input['REQUEST']['object']->name();
+        $keyword = $this->_input['REQUEST']['object']->linked();
+        $v['title'] = $keyword->title->value();
+        $v['href'] = $keyword->uri();
         return parent::work($v);
     }
 }

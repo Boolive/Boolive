@@ -3,16 +3,16 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 23,
+    "order": 8,
     "children": {
         "title": {
-            "value": "Виджет ключевого слова",
+            "value": "Ключевое слово",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "Отображает одно ключевое слово",
+            "value": "Виджет для отображения одного ключевого слова",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
             "order": 2
@@ -58,6 +58,19 @@
                     "proto": "/Library/views/Widget/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "is(/Library/content_samples/Keyword)",
+            "proto": "/Library/views/Widget/object_rule",
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/Widget/object_rule/title",
+                    "order": 1
                 }
             }
         }

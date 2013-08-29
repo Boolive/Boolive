@@ -1,9 +1,21 @@
-.keyword
-{
-    padding: 5px;
-    background: white;
-    border-radius: 5px;
-    box-shadow: -1px 1px 3px 0px gainsboro, inset -10px -5px 10px 0px #FEFEFE;
-    color: grey;
-    font-style: italic;
-}
+.Keywords{
+
+    }
+    .Keywords .list{
+        margin: 10px 0;
+        list-style: none;
+        padding: 0;
+        }
+        .Keywords .list li{
+            /*padding: 5px;*/
+            margin: 0 2px;
+            font-size: 10pt;
+            display: inline-block;
+            }
+            .Keywords .list li a{
+                text-decoration: none;
+                color: grey;
+                }
+            .Keywords .list li a:hover{
+                text-decoration: underline;
+                }

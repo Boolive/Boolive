@@ -1,14 +1,25 @@
 {
     "value": "Keywords.tpl",
     "is_file": true,
-    "proto": "/Library/views/AutoWidgetList",
-    "is_default_class": false,
-    "order": 24,
+    "proto": "/Library/views/AutoWidgetList2",
+    "order": 9,
     "children": {
+        "title": {
+            "value": "Список ключевых слов",
+            "proto": "/Library/views/AutoWidgetList2/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Виджет для отображения всех ключевых слов страницы или другого содержимого",
+            "proto": "/Library/views/AutoWidgetList2/description",
+            "is_hidden": true,
+            "order": 2
+        },
         "res": {
             "value": "",
-            "proto": "/Library/views/Widget/res",
-            "order": 0,
+            "proto": "/Library/views/AutoWidgetList2/res",
+            "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -26,23 +37,11 @@
                 }
             }
         },
-        "title": {
-            "value": "Виджет списка ключевых слов",
-            "proto": "/Library/views/AutoWidgetList/title",
-            "is_hidden": true,
-            "order": 1
-        },
-        "description": {
-            "value": "Отображает ключевые слова страницы или другого содержимого",
-            "proto": "/Library/views/AutoWidgetList/description",
-            "is_hidden": true,
-            "order": 2
-        },
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/views/AutoWidgetList/cache",
-            "order": 5,
+            "proto": "/Library/views/AutoWidgetList2/cache",
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -57,6 +56,19 @@
                     "proto": "/Library/views/AutoWidgetList/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "is(/Library/content_samples/Page/keywords)",
+            "proto": "/Library/views/AutoWidgetList2/object_rule",
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/AutoWidgetList2/object_rule/title",
+                    "order": 1
                 }
             }
         }

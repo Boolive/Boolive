@@ -1,11 +1,10 @@
-<div class="keywords_wrapper">
-    <h3>Ключевые слова</h3>
-    <div class="keywords">
+<div class="Keywords">
+    <ul class="list">
         <?php
-        $keywords = $v['view']->arrays(\Boolive\values\Rule::string());
+        $keywords = $v['views']->arrays(\Boolive\values\Rule::string());
         foreach ($keywords as $keyword) {
-        echo $keyword;
+            echo '<li>'.$keyword.'</li>';
         }
         ?>
-    </div>
+    </ul>
 </div>

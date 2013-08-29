@@ -1,1 +1,1 @@
-<span class="keyword"><?= $v['keyword']->string() ?></span>
+<a class="Keyword" href="<?php echo $v['href'];?>"><?php echo $v['title'];?></a>
