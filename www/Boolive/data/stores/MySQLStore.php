@@ -282,6 +282,8 @@ class MySQLStore extends Entity
                 $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
                 // Ссылка
                 $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
+                // Если движок не установлен, то определение времени обновления
+                if (!IS_INSTALL) $attr['update_time'] = time();
                 // URI до сохранения объекта
                 $curr_uri = $attr['uri'];
                 // Подбор уникального имени, если указана необходимость в этом
