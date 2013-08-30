@@ -151,7 +151,7 @@ class RESTful extends View
         if (isset($attribs['file'])){
             $obj->file($attribs['file']);
         }else{
-            $obj->isFile(!empty($attribs['is_file']));
+            if (isset($attribs['is_file'])) $obj->isFile(!empty($attribs['is_file']));
         }
         if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
         if (isset($attribs['lang'])) $obj['lang'] = $attribs['lang'];
@@ -164,8 +164,10 @@ class RESTful extends View
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
         if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
         if (isset($attribs['possession'])) $obj->possession($attribs['possession']);
-        $class_changed = (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
-        $obj->isDefaultClass(!empty($attribs['is_default_class']));
+        $class_changed = isset($attribs['is_default_class']) && (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
+        if (isset($attribs['is_default_class'])){
+            $obj->isDefaultClass(!empty($attribs['is_default_class']));
+        }
         // Проверка и сохранение
         try{
             $obj->save(false, false);
@@ -179,11 +181,11 @@ class RESTful extends View
                 ), true);
             }
             $create? header("HTTP/1.1 201 Created") : header("HTTP/1.1 200 OK");
-            header('Content-Type: application/json; charset=UTF-8');
+            header('Content-Type: application/json; charset=utf-8');
             echo F::toJSON(array('result'=>$obj->export(false, true, false)));
         }catch (Error $error){
             header("HTTP/1.1 400 Bad Request");
-            header('Content-Type: application/json; charset=UTF-8');
+            header('Content-Type: application/json; charset=utf-8');
             echo F::toJSON(array('error'=>$error->__toArray(true), 'result'=>$obj->export(false, true, false)));
         }
     }
@@ -223,8 +225,9 @@ class RESTful extends View
         if (isset($attribs['is_delete'])) $obj->isDelete(!empty($attribs['is_delete']));
         if (isset($attribs['is_history'])) $obj->isHistory(!empty($attribs['is_history']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
-        $obj->isDefaultClass(!empty($attribs['is_default_class']));
-
+        if (isset($attribs['is_default_class'])){
+            $obj->isDefaultClass(!empty($attribs['is_default_class']));
+        }
         // Проверка и сохранение
         try{
             $obj->save(false, false);
