@@ -55,7 +55,8 @@ class Widget extends View
     public function work($v = array())
     {
         $this->startChild('res');
-        $v['view_uri'] = $this->id();
+        $v['view_id'] = $this->key();
+        $v['view_uri'] = $this->uri();
         return Template::render($this, $v);
     }
 
