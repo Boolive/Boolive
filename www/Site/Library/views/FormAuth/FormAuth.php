@@ -20,12 +20,12 @@ class FormAuth extends AutoWidgetList
                         // Модель формы
                         'object' => Rule::entity()->required(),
                         // Признак, submit запрос данной формы?
-                        $this->id() => Rule::arrays(array(
+                        $this->uri() => Rule::arrays(array(
                                 'submit' => Rule::string()
                             )
                         ),
                         // Признак успешности обработки формы
-                        'ok' => Rule::eq(md5($this->id()))->default(false)->required()
+                        'ok' => Rule::eq(md5($this->uri()))->default(false)->required()
                     )
                 ),
                 'PATH' => Rule::arrays(array(
@@ -51,10 +51,10 @@ class FormAuth extends AutoWidgetList
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
 
         // Если у формы нажата кнопка SUBMIT
-        if (isset($this->_input['REQUEST'][$this->id()]['submit'])){
+        if (isset($this->_input['REQUEST'][$this->uri()]['submit'])){
             //Выполнение действия (отправка)
             if ($this->_input['REQUEST']['object']->auth()){
-                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->id())), true, true));
+                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri())), true, true));
             }else{
                 $v['error'] = $this->_input_child['REQUEST']['object']->error_message->value();
             }
