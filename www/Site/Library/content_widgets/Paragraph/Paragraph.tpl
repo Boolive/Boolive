@@ -1,1 +1,0 @@
-<p<?php if ($s = $v['style']->string()) echo ' style="'.$s.'"';?>><?php echo $v['value']->string();?></p>
