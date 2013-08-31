@@ -1,12 +1,11 @@
 {
-    "value": "MessageField.tpl",
+    "value": "EmailField.tpl",
     "is_file": true,
     "proto": "/Library/views/FormField",
-    "order": 4,
+    "order": 3,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Поле формы",
+            "value": "Поле email",
             "proto": "/Library/views/FormField/title",
             "is_hidden": true,
             "order": 1
@@ -37,6 +36,19 @@
                     "proto": "/Library/views/FormField/res/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "is(/Library/content_samples/Feedback/email_from)",
+            "proto": "/Library/views/FormField/object_rule",
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/FormField/object_rule/title",
+                    "order": 1
                 }
             }
         }

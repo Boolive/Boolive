@@ -1,5 +1,4 @@
 <div class="Feedback">
-    <h3>Обратная связь</h3>
     <?php  if ($v['ok']->bool()):?>
     <div class="form_ok">
         <?php echo $v['result_message']->string(); ?>
@@ -14,7 +13,7 @@
         <input type="hidden" name="0" value="">
         <input type="hidden" name="1" value="">
         <?php
-        $list = $v['view']->arrays(\Boolive\values\Rule::string());
+        $list = $v['views']->arrays(\Boolive\values\Rule::string());
         foreach ($list as $item){
             echo $item;
         }
