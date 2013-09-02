@@ -7,7 +7,7 @@
 define('START_TIME', microtime(true));
 
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', false);
+define('IS_INSTALL', true);
 
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
