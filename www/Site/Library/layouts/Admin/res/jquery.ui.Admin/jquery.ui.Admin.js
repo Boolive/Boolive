@@ -156,7 +156,7 @@
          * @param call Название действия (функции)
          * @param args Аргументы
          * @param target Объект, иницировавший вызов действия. По умолчанию this
-         * @param all Вызыв всех подчиенных или только внеокнных
+         * @param all Вызыв всех подчиненных или только внеоконных
          * @extends $.boolive.Widget.callChildren
          */
         callChildren: function(call, args, target, all){
@@ -206,6 +206,8 @@
                     if ($.isFunction(this['call_'+call])){
                         var a = [{target: target, direct: 'parents'}].concat(args);
                         stop = this['call_'+call].apply(this, a);
+                    }else{
+                        this.callChildren(call, args, target);
                     }
                 }
                 if (stop !== undefined){

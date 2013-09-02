@@ -165,9 +165,10 @@
             settings.context = this.element;
             settings.type = 'POST';
             settings.dataType = 'json';
-            settings.data = settings.data? _.extend(settings.data, data) : data;
-            settings.data.direct = this.options.view;
+            if (!settings.data) settings.data = {};
+            settings.data.direct = this.options.view,
             settings.data.call = call;
+            settings.data = _.extend(settings.data, data);
             $.ajax(settings);
         },
 

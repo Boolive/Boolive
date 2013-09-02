@@ -50,6 +50,7 @@
                         var element = this.element;
                         _.each(state.selected, function(s){
                             element.find('.content [data-o="'+s+'"]').addClass('selected');
+                            // @todo Если объект не найден, то загрузить его с сервера. Сервер должен сообщеить после какого объекта тот отображается
                         });
                     }
                 }
@@ -76,6 +77,12 @@
                     url: '/'
                 }
             );
+        },
+
+        call_object_update: function(caller, info){
+            if (_.indexOf(info.objects, this.options.object)!=-1){
+                console.log('Object of explorer');
+            }
         }
     })
 })(jQuery, _);

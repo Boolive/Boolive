@@ -52,6 +52,12 @@
                     self.callParents('setState', [{selected: self.options.object}]);
                 }
             });
+        },
+
+        call_object_update: function(caller, info){
+            if (_.indexOf(info.objects, this.options.object)!=-1){
+                console.log('Object of ObjectItem');
+            }
         }
     });
 })(jQuery);

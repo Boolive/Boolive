@@ -158,8 +158,15 @@
                 top: -10px;
             }
 
+    .ProgramsMenu ul li.toggle a{
+        display: inline-block;
+        }
+        .ProgramsMenu ul li.toggle:hover a{
+            border: 1px;
+            }
+        .ProgramsMenu ul li.toggle.checked a{
 
-
+            }
 
 
     .maximize-right .ProgramsMenu ul li a{

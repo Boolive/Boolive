@@ -12,14 +12,7 @@
         _create: function() {
 			$.boolive.Widget.prototype._create.call(this);
             var self = this;
-            self.element.on('click', 'li a', function(e){
-                e.preventDefault();
-                var s = self.callParents('getState');
-                self.callParents('setState', [{
-                    object:  (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected,
-                    view_name: $(this).attr('data-program')
-                }]);
-            });
+
             self.reload = _.throttle(self.reload, 500);
             this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {view_name: true});
         },
@@ -32,15 +25,17 @@
          * @param change Какие изменения в state
          */
         call_setState: function(caller, state, change){ //after
-            var self = this;
-            if ('selected' in change){
-                var obj = (state.selected.length == 1)? _.first(state.selected) : state.selected;
-                self.reload({object:obj}, function(){
+            if (caller.direct == 'children'){
+                var self = this;
+                if ('selected' in change){
+                    var obj = (state.selected.length == 1)? _.first(state.selected) : state.selected;
+                    self.reload({object:obj}, function(){
+                        self._select(state);
+                    });
+                }else
+                if ('view_name' in change){
                     self._select(state);
-                });
-            }else
-            if ('view_name' in change){
-                self._select(state);
+                }
             }
         },
 

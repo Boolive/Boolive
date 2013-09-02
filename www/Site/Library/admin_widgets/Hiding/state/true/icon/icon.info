@@ -1,0 +1,14 @@
+{
+    "value": "icon.png",
+    "is_file": true,
+    "proto": "/Library/content_samples/Image",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Иконка",
+            "proto": "/Library/content_samples/Image/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}
