@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "value": "Добавить",

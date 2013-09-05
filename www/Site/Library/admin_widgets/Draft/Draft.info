@@ -1,0 +1,21 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/admin_widgets/ToggleAction",
+    "is_default_class": false,
+    "order": 25,
+    "children": {
+        "title": {
+            "value": "Черновик",
+            "proto": "/Library/admin_widgets/ToggleAction/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Установка признака \"Черновик\" или его отмена для выделенных объектов",
+            "proto": "/Library/admin_widgets/ToggleAction/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

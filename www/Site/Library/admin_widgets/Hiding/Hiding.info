@@ -1,12 +1,12 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/views/View",
+    "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 23,
+    "order": 24,
     "children": {
         "title": {
-            "value": "Скрыть/Показать",
+            "value": "Скрытый",
             "proto": "/Library/views/View/title",
             "is_hidden": true,
             "order": 1
@@ -16,6 +16,11 @@
             "proto": "/Library/views/View/description",
             "is_hidden": true,
             "order": 2
+        },
+        "cache": {
+            "value": "",
+            "is_default_class": false,
+            "order": 3
         }
     }
 }

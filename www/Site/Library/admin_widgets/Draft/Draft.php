@@ -1,19 +1,20 @@
 <?php
 /**
- * Действие скрытия/отмена скрытия объектов
+ * Действие-переключатель признака is_draft
+ * Действие, которое отменяется повторным вызовом. Например, смена признака у объекта
  * @version 1.0
  */
-namespace Library\admin_widgets\Hiding;
+namespace Library\admin_widgets\Draft;
 
 use Library\admin_widgets\ToggleAction\ToggleAction;
 
-class Hiding extends ToggleAction
+class Draft extends ToggleAction
 {
     protected function initState()
     {
         /** @var \Boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
-        $this->_state = $object->isHidden(null, false);
+        $this->_state = $object->isDelete(null, false);
     }
 
     public function toggle()
@@ -23,17 +24,17 @@ class Hiding extends ToggleAction
         $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
         if ($first = reset($objects)){
             $result['changes'] = array();
-            $hide = !$first->isHidden(null, false);
+            $draft = !$first->isDelete(null, false);
             foreach ($objects as $o){
                 /** @var \Boolive\data\Entity $o */
-                $o->isHidden($hide);
+                $o->isDelete($draft);
                 // @todo Обрабатывать ошибки
                 $o->save();
                 $result['changes'][$o->uri()] = array(
-                    'is_hidden' => $o->isHidden(null, false)
+                    'is_delete' => $o->isDelete(null, false)
                 );
             }
-            $result['state'] = $first->isHidden(null, false);
+            $result['state'] = $first->isDelete(null, false);
         }
         return $result;
     }

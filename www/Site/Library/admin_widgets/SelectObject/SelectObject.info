@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 9,
+    "order": 10,
     "children": {
         "title": {
             "value": "Виджет выбора объекта",

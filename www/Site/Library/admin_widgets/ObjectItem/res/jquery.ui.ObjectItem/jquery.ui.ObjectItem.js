@@ -55,8 +55,33 @@
         },
 
         call_object_update: function(caller, info){
-            if (_.indexOf(info.objects, this.options.object)!=-1){
-                console.log('Object of ObjectItem');
+            if (!_.isUndefined(info[this.options.object])){
+                var view = this.element.find('.view:first');
+                var changes = info[this.options.object];
+                // Скрытие
+                if (!_.isUndefined(changes['is_hidden'])){
+                    if (changes['is_hidden']){
+                        view.addClass('hidden');
+                    }else{
+                        view.removeClass('hidden');
+                    }
+                }
+                // Черновик
+                if (!_.isUndefined(changes['is_delete'])){
+                    if (changes['is_delete']){
+                        view.addClass('deleted');
+                    }else{
+                        view.removeClass('deleted');
+                    }
+                }
+                // Ссылка
+                if (!_.isUndefined(changes['is_link'])){
+                    if (changes['is_link']){
+                        view.addClass('link');
+                    }else{
+                        view.removeClass('link');
+                    }
+                }
             }
         }
     });

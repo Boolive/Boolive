@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 16,
+    "order": 17,
     "children": {
         "title": {
             "value": "Редактор HTML",

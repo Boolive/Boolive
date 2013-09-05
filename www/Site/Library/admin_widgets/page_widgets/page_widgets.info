@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Package",
-    "order": 19,
+    "order": 20,
     "children": {
         "title": {
             "value": "Виджеты страницы",

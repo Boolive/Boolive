@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidget2",
     "is_default_class": false,
-    "order": 8,
+    "order": 9,
     "children": {
         "title": {
             "value": "Программы для работы с объектами",

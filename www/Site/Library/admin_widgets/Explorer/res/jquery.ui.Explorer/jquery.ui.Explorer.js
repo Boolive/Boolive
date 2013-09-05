@@ -80,8 +80,8 @@
         },
 
         call_object_update: function(caller, info){
-            if (_.indexOf(info.objects, this.options.object)!=-1){
-                console.log('Object of explorer');
+            if (!_.isUndefined(info[this.options.object])){
+                console.log(info[this.options.object]);
             }
         }
     })

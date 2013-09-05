@@ -1,12 +1,12 @@
 {
-    "is_default_value": true,
-    "value": "Image.png",
+    "value": "icon.png",
     "is_file": true,
     "proto": "/Library/content_samples/Image",
-    "order": 2,
+    "order": 6,
     "children": {
         "title": {
-            "value": "Иконка",
+            "is_default_value": true,
+            "value": "Изображение",
             "proto": "/Library/content_samples/Image/title",
             "is_hidden": true,
             "order": 1

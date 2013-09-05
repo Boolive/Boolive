@@ -3,7 +3,7 @@
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList",
     "is_default_class": false,
-    "order": 3,
+    "order": 4,
     "children": {
         "title": {
             "value": "Обозреватель",

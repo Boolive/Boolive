@@ -54,8 +54,9 @@
     .Admin > .center{
         /*position: absolute;*/
         margin: 0 auto;
-        max-width: 920px;
-        padding-top: 32px;
+        /*max-width: 920px;*/
+
+        padding: 32px 30px;
         /*top: 32px;
         left: 150px;
 		right: 200px;

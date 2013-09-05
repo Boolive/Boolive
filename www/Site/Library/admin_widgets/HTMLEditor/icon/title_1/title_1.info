@@ -1,0 +1,7 @@
+{
+    "is_default_value": true,
+    "value": "Изображение",
+    "proto": "/Library/content_samples/Image/title",
+    "is_hidden": true,
+    "order": 4
+}
