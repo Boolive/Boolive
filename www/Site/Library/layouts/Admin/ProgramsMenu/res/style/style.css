@@ -37,7 +37,7 @@
                 }
                 .ProgramsMenu ul li a:hover span, .ProgramsMenu ul li a.star:hover span{
                     color: #000;
-                    text-shadow: 0 0 1px #CCC;
+                    text-decoration: underline;
                     }
             .ProgramsMenu ul li a img{
                 max-width: 16px;
@@ -47,12 +47,13 @@
             }
 
 	.ProgramsMenu ul li.active{
+
 		}
 		.ProgramsMenu ul li.active a span{
 			color: #000;
-            text-shadow: 0 0 1px #CCC;
+            text-decoration: underline;
 			}
-			.ProgramsMenu ul li.active a:hover{
+			.ProgramsMenu ul li.active a:hover span{
 
 				}
 
