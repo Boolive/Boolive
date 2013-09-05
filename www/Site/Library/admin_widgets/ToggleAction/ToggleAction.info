@@ -1,0 +1,21 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/View",
+    "is_default_class": false,
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Действие-переключатель",
+            "proto": "/Library/views/View/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Действие, которое отменяется повторным вызовом. Например, смена признака у объекта",
+            "proto": "/Library/views/View/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
