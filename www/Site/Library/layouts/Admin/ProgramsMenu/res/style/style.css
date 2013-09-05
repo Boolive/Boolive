@@ -5,7 +5,7 @@
 	}
 .ProgramsMenu ul{
 	list-style-type: none;
-	padding: 0;/*26px 0 25px 0;*/
+	padding: 0;
 	margin: 0;
     position: relative;
 	}
@@ -17,139 +17,58 @@
 		padding: 0;
 		z-index:3;
 		clear: both;
-        margin: 20px 0 5px 0;
-		/*text-align: right;*/
+        margin: 15px 0 0px 0;
+        text-align: right;
+        line-height: 13px;
 		}
-		.ProgramsMenu ul li:first-child{
-			padding-top:0;
-			}
 		.ProgramsMenu ul li a{
-			display: block;
-			height: 20px;
-			color: #888;
+			display: inline-block;
 			text-decoration:none;
-			padding: 0 45px 0 0;
-			/*border-top-right-radius: 16px;*/
-			/*border-bottom-right-radius: 16px;*/
-			/*-moz-border-radius-topright: 16px;*/
-			/*-moz-border-radius-bottomright: 16px;*/
-			background: /*#FDFDFD*/ url(img/icon_program_disable.png) no-repeat 130px /*9px*/ center;
-
-			/*padding-left: 30px;*/
-            text-align: right;
+            margin: 0 10px 0 0;
+			padding: 4px 5px 5px 10px;
 			overflow: hidden;
 			white-space: nowrap;
-			text-overflow: ellipsis;
-			-moz-text-overflow: ellipsis;
-			/*box-shadow:
-				inset -15px 0 15px -15px #F5F5F5,
-				inset 1px 0 0 0 #D8D8D8,
-				inset 0 0 0 1px #E8E8E8,
-				inset -18px 0 15px -15px #FFF,
-				inset 3px 0 4px -3px #D0D0D0;
-			-webkit-box-shadow:
-				inset -15px 0 15px -15px #F5F5F5,
-				inset 1px 0 0 0 #D8D8D8,
-				inset 0 0 0 1px #E8E8E8,
-				inset -18px 0 15px -15px #FFF,
-				inset 3px 0 4px -3px #D0D0D0;*/
+            border-radius: 10px;
 			}
-			.ProgramsMenu ul li a:hover, .ProgramsMenu ul li a.star:hover{
-				/*color: #0065c9;*/
-				color: #000;
-                text-shadow: 0 0 1px #CCC;
-				/*box-shadow:
-					inset 1px 0 0 0 #CCCCCC,
-					inset 0 0 0 1px #E0E0E0,
-					0 0 3px 0 #E8E8E8,
-					inset 2px 0 3px -1px #EEEEEE;
-				-webkit-box-shadow:
-					inset 1px 0 0 0 #CCCCCC,
-					inset 0 0 0 1px #E0E0E0,
-					0 0 3px 0 #E8E8E8,
-					inset 2px 0 3px -1px #EEEEEE;*/
-				/*-moz-box-shadow:
-					inset 1px 0 0 0 #CCCCCC,
-					inset 0 0 0 1px #5DABEC,
-					0 0 5px 0 #5DABEC,
-					inset 3px 0 3px -1px #E5E5E5;*/
-				}
-	.ProgramsMenu ul li.active{
-		margin-right: 0px;
-		}
+            .ProgramsMenu ul li a span{
+                display: inline-block;
+                vertical-align: middle;
+                color: #888;
+                }
+                .ProgramsMenu ul li a:hover span, .ProgramsMenu ul li a.star:hover span{
+                    color: #000;
+                    text-shadow: 0 0 1px #CCC;
+                    }
+            .ProgramsMenu ul li a img{
+                max-width: 16px;
+                max-height: 16px;
+                margin: 0 0 0 5px;
+                vertical-align: middle;
+            }
 
-		.ProgramsMenu ul li.active a{
-			background-image: url(img/icon_program.png);
-			/*color: #0065c9;*/
+	.ProgramsMenu ul li.active{
+		}
+		.ProgramsMenu ul li.active a span{
 			color: #000;
             text-shadow: 0 0 1px #CCC;
-			/*box-shadow:
-                inset 0 1px 0 0px #D8D8D8,
-				inset 0 -1px 0 0px #D8D8D8;*/
-				/*inset 0 2px 0 -1px #D8D8D8,
-				inset -15px 0 15px -15px #e6e6e6,
-				0 0 3px 0 #E0E0E0,*/
-				/*0 3px 3px -3px #888;*/
-			/*-webkit-box-shadow:
-				inset 0 1px 0 0px #D8D8D8,
-				inset 0 -1px 0 0px #D8D8D8*//*,
-				inset -15px 0 15px -15px #e6e6e6,
-				0 0 3px 0 #E0E0E0,*/
-				/*0 3px 3px -3px #888*/;
 			}
 			.ProgramsMenu ul li.active a:hover{
 
 				}
 
-        .ProgramsMenu ul li.active:after{
-			display: block;
-			position: absolute;
-			top: 0px;
-			left: -20px;
-			content: '';
-			width: 0;
-			height: 0;
-			/*border-top: 20px solid transparent;
-			border-top: 20px solid rgba(255,255,255,0);
-			border-right: 20px solid #D5D5D5;
-			border-bottom: 20px solid transparent;
-			border-bottom: 20px solid rgba(250,250,250,0);*/
-			z-index: 100;
-			}
-		.ProgramsMenu ul li.active a:after{
-			display: block;
-			position: absolute;
-			top: 0px;
-			left: -19px;
-			content: '';
-			width: 0;
-			height: 0;
-			/*border-top: 20px solid transparent;
-			border-top: 20px solid rgba(250,250,250,0);
-			border-right: 19px solid #FFF;
-			border-bottom: 20px solid transparent;
-			border-bottom: 20px solid rgba(250,250,250,0);*/
-			z-index: 101;
-			}
-
-
     .ProgramsMenu ul li.group{
         font-size: 8pt;
-        /*border-left: 1px solid #d9d9d9;*/
-        /*border-bottom: 1px solid #d9d9d9;*/
-        margin: 30px 0 0 0;
-        padding: 0 0 20px 0;
+        margin: 25px 0;
         }
         .ProgramsMenu ul li.group .group-title{
             height: 1px;
-            margin: 0 0 30px 0;
+            margin: 0 0 25px 0;
             padding: 0 10px;
             background-color: #d9d9d9;
             text-align: center;
             position: relative;
             }
             .ProgramsMenu ul li.group .group-title > span{
-                /*text-transform: uppercase;*/
                 line-height: 20px;
                 color: #d5d5d5;
                 margin: auto;
@@ -158,14 +77,22 @@
                 top: -10px;
             }
 
-    .ProgramsMenu ul li.toggle a{
+    .ProgramsMenu ul li.view_action{
+        text-align: right;
+    }
+    .ProgramsMenu ul li.view_action a{
         display: inline-block;
         }
-        .ProgramsMenu ul li.toggle:hover a{
-            border: 1px;
+        .ProgramsMenu ul li.view_action a:hover{
+            background-color: #f2f2f2;
             }
-        .ProgramsMenu ul li.toggle.checked a{
-
+        .ProgramsMenu ul li.view_action.checked a,
+        .ProgramsMenu ul li.view_action.checked a:hover{
+            background-color: #e0e0e0;
+            }
+            .ProgramsMenu ul li.view_action.checked a span,
+            .ProgramsMenu ul li.view_action.checked a:hover span{
+                color: #333;
             }
 
 

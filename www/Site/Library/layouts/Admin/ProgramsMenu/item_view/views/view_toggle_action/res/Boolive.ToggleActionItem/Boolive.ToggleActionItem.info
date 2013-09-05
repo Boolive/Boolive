@@ -1,11 +1,11 @@
 {
-    "value": "Boolive.ActionItem.js",
+    "value": "Boolive.ToggleActionItem.js",
     "is_file": true,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "order": 3,
     "children": {
         "title": {
-            "value": "Boolive.ActionItem",
+            "value": "Boolive.ToggleActionItem",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_hidden": true,
             "order": 1
