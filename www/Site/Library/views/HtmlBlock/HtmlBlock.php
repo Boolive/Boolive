@@ -14,7 +14,7 @@ class HtmlBlock extends Widget
 {
     public function work($v = array())
     {
-        $v['text'] = $this->text->value();
+        $v['object'] = $this->_input['REQUEST']['object']->value();
         return parent::work($v);
     }
             

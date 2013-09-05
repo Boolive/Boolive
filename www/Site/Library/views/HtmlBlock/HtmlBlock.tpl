@@ -1,1 +1,1 @@
-<div class="HtmlBlock"> <?php echo $v['text']->html(); ?> </div>
+<div class="HtmlBlock"> <?php echo $v['object']->html(); ?> </div>
