@@ -42,7 +42,7 @@ class Layout extends Widget
                 'select' => 'children',
                 'from' => '/Contents',
                 'where' => array(
-                    array('is', '/Library/content_samples/Page')
+                    array('attr', 'is_hidden', '=', 0)
                 ),
                 'order' => array(
                     array('order', 'ASC')
