@@ -1127,6 +1127,7 @@ class MySQLStore extends Entity
         );
         // Информация о слияниях
         $joins = array('obj' => null);
+        $joins_link = array();
         $binds2 = array();
         // количество услой IS
         $t_cnt = 1;
@@ -1507,7 +1508,7 @@ class MySQLStore extends Entity
              * @param array $attr_exists Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
              * @return string SQL условия в WHERE
              */
-            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, $t_cnt, $store){
+            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, $t_cnt, $store, &$joins_link){
                 $level++;
                 // Нормализация групп условий
                 if ($cond[0] == 'any' || $cond[0] == 'all'){
@@ -1566,14 +1567,27 @@ class MySQLStore extends Entity
                                 $attr_exists[$c[1]] = true;
                             }
                         }else
-                        // Условия на подчиенного
+                        // Проверка подчиненного
                         if ($c[0]=='child'){
                             $joins[$table.'.'.$c[1]] = array($table, $c[1]);
                             // Если условий на подчиненного нет, то проверяется его наличие
                             if (empty($c[2])){
                                 $cond[$i] = '(`'.$table.'.'.$c[1].'`.id IS NOT NULL)';
                             }else{
+                                // Условия на подчиненного
                                 $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1], $level).')';
+                            }
+                        }else
+                        // Проверка ссылки
+                        if ($c[0]=='link'){
+                            $alias = uniqid('link');
+                            $joins_link[$alias] = array($table);
+                            // Если условий на ссылки нет, то проверяется его наличие
+                            if (empty($c[1])){
+                                $cond[$i] = '(`'.$alias.'`.id IS NOT NULL)';
+                            }else{
+                                // Условия на ссылку
+                                $cond[$i] = '('.$convert($c[1], ' AND ', $alias, $level).')';
                             }
                         }else
                         // Условие на наличие родителя
@@ -1622,6 +1636,22 @@ class MySQLStore extends Entity
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c, $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие наследника.
+                        if ($c[0]=='heirs'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (count($c)>0){
+                                $alias = 'heirs'.$t_cnt;
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
                             }
@@ -1675,6 +1705,11 @@ class MySQLStore extends Entity
         foreach ($joins as $alias => $info){
             $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ? AND (`'.$alias.'`.id, `'.$alias.'`.owner, `'.$alias.'`.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=`'.$alias.'`.id AND '.$owner_lang.' GROUP BY id))';
             $binds2[] = $info[1];
+            $binds2[] = $cond['owner'];
+            $binds2[] = $cond['lang'];
+        }
+        foreach ($joins_link as $alias => $info){
+            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link AND (`'.$alias.'`.id, `'.$alias.'`.owner, `'.$alias.'`.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=`'.$alias.'`.id AND '.$owner_lang.' GROUP BY id))';
             $binds2[] = $cond['owner'];
             $binds2[] = $cond['lang'];
         }
