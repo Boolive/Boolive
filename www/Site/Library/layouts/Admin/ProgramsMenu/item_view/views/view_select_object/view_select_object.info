@@ -1,12 +1,12 @@
 {
-    "value": "view_toggle_action.tpl",
+    "value": "view_select_object.tpl",
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 8,
+    "order": 7,
     "children": {
         "title": {
-            "value": "Пункт действия-переключателя",
+            "value": "Пункт выбора объекта",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 1

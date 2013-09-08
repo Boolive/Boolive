@@ -404,10 +404,12 @@
             // Удаление тега окна
             var window = this._windows.find('> :last');
             var dh = 0;
+            var callback;
             if (window.length){
                 dh = window.data('state').history_o - window.data('state').history_i;
                 if (typeof window.data('close_callback') == 'function'){
-                    window.data('close_callback')(result, params);
+                    callback = window.data('close_callback');
+
                 }
                 window.remove();
                 this.review_windows();
@@ -420,6 +422,9 @@
             if (dh!=0) history.go(dh);
             // Сообщаем всем о смене состояния
             this.refresh_state(false);
+            if (callback){
+                callback(result, params);
+            }
         },
 
         review_windows: function(){
@@ -430,10 +435,6 @@
                left+=dl;
             });
         },
-
-
-
-
 
         /**
          * Сообщимть всем о состоянии

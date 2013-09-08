@@ -11,7 +11,7 @@
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
-            self.element.on('click', 'a', function(e){
+            self.element.on('click', '.item', function(e){
                 e.preventDefault();
                 e.stopPropagation();
                 var s = self.callParents('getState');
@@ -21,7 +21,6 @@
                     object: object
                 },{
                     success: function(result, textStatus, jqXHR){
-                        console.log(result);
                         if (_.isObject(result.out) && !_.isEmpty(result.out.changes)){
                             // Сообщаем родительским виджетам (а корнеь подчиненным) об изменении объекта
                             self.callParents('object_update', [result.out.changes]);

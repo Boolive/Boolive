@@ -1,6 +1,6 @@
 <?php if ($v['show-item']->bool()):?>
 <li class="group">
-    <div class="group-title"><span class="common_background"><?php echo $v['title'];?></span></div>
+    <div class="group-title"><span class="title common_background"><?php echo $v['title'];?></span></div>
 <?php endif; ?>
 <?php
     $list = $v['views']->arrays(\Boolive\values\Rule::string());

@@ -62,7 +62,7 @@
         _destroy: function(){
             // Сообщаем родителю о своём удалении
             this.element.trigger('_destroy', [this]);
-            this._parent = undefined;
+            //this._parent = undefined;
         },
 
         /**
