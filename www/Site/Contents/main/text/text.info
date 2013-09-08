@@ -1,1 +1,21 @@
-{"value":"<p>bfdcbfg<sup>hfg</sup></p>\n","proto":"/Library/content_samples/Page/text","order":5,"children":{"title":{"is_default_value":true,"value":"Tекст","proto":"/Library/content_samples/Page/text/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"HTML текст длиной до 65535 символов (64Кбайт)","proto":"/Library/content_samples/Page/text/description","is_hidden":true,"order":2}}}
+{
+    "value": "<h2>Привет!</h2>\n\n<p>Система управления сайтом Boolive 2 успешно установлена.<br />\nРаздел администрирования находится по адресу <a href=\"/admin\">/admin</a> Логин: <strong>admin</strong> Пароль: <strong>padmin</strong></p>\n",
+    "proto": "/Library/content_samples/Page/text",
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Tекст",
+            "proto": "/Library/content_samples/Page/text/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "HTML текст длиной до 65535 символов (64Кбайт)",
+            "proto": "/Library/content_samples/Page/text/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

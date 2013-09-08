@@ -1,1 +1,83 @@
-{"value":"HtmlBlock.tpl","is_file":true,"proto":"/Library/views/Widget","is_default_class":false,"order":26,"children":{"res":{"is_default_value":true,"value":"","proto":"/Library/views/Widget/res","order":5,"children":{"title":{"is_default_value":true,"value":"Ресурсы","proto":"/Library/views/Widget/res/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Автоматически подключаемые ресурсы, например CSS, JavaScript","proto":"/Library/views/Widget/res/description","is_hidden":true,"order":2}}},"title":{"value":"Виджет HTML блока","proto":"/Library/views/Widget/title","is_hidden":true,"order":6},"description":{"is_default_value":true,"value":"Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета","proto":"/Library/views/Widget/description","is_hidden":true,"order":7},"cache":{"is_default_value":true,"value":0,"proto":"/Library/views/Widget/cache","order":8},"object":{"value":"<p>эталон&nbsp;</p>\n","proto":"/Library/basic/HTMLText","order":9,"children":{"title":{"value":"Объект отображения","proto":"/Library/basic/HTMLText/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"HTML текст длиной до 65535 символов (64Кбайт)","proto":"/Library/basic/HTMLText/description","is_hidden":true,"order":2}}},"object_rule":{"value":"is(/Library/basic/HTMLText)","proto":"/Library/views/Widget/object_rule","order":10,"children":{"title":{"is_default_value":true,"value":"Правило на отображаемый объект","proto":"/Library/views/Widget/object_rule/title","order":1}}}}}
+{
+    "value": "HtmlBlock.tpl",
+    "is_file": true,
+    "proto": "/Library/views/Widget",
+    "is_default_class": false,
+    "order": 26,
+    "children": {
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/Widget/res",
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/Widget/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/Widget/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "title": {
+            "value": "Виджет HTML блока",
+            "proto": "/Library/views/Widget/title",
+            "is_hidden": true,
+            "order": 6
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
+            "proto": "/Library/views/Widget/description",
+            "is_hidden": true,
+            "order": 7
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/Widget/cache",
+            "order": 8
+        },
+        "object": {
+            "value": "<p>эталон&nbsp;</p>\n",
+            "proto": "/Library/basic/HTMLText",
+            "order": 10,
+            "children": {
+                "title": {
+                    "value": "Объект отображения",
+                    "proto": "/Library/basic/HTMLText/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "HTML текст длиной до 65535 символов (64Кбайт)",
+                    "proto": "/Library/basic/HTMLText/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "is(/Library/basic/HTMLText)",
+            "proto": "/Library/views/Widget/object_rule",
+            "order": 11,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/Widget/object_rule/title",
+                    "order": 1
+                }
+            }
+        }
+    }
+}

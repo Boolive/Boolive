@@ -1,9 +1,9 @@
 {
     "is_default_value": true,
-    "value": "5b69a49b68f7949d5646ee06114350d8726835cd73f8a46f08662e7df9c76dca",
+    "value": "786c2845446e88c798d51ab73017474f0b4548f4a98adf0a7f9465b71405e4c2",
     "proto": "/Members/registered/admins/admin",
     "is_link": true,
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "value": "Автор",

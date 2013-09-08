@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": " ",
     "proto": "/Library/basic/HTMLText",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
             "value": "Tекст",
