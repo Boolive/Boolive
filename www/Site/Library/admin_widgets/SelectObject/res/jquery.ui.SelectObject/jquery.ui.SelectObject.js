@@ -4,7 +4,7 @@
  * Query UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($) {
+(function($, window) {
     $.widget("boolive.SelectObject", $.boolive.Widget, {
         // Выделенный объект
         _select: null,
@@ -25,6 +25,14 @@
                 e.preventDefault();
                 self.callParents('closeWindow', ['cancel']);
             });
+
+            $(document).on('load-html' + this.eventNamespace, function() {
+                self.fixed_buttons();
+            });
+            $(document).on('resize' + this.eventNamespace, function() {
+                self.fixed_buttons();
+            });
+            self.fixed_buttons();
         },
         /**
          * При выделении объекта фиксируем его URI во внутреннем свойстве
@@ -35,6 +43,24 @@
             if (caller.direct == 'children'){
                 this._select = state.selected.slice(0);
             }
+        },
+
+        fixed_buttons: function(){
+            var wh = $(window).height();
+            var sh = this.element.outerHeight(true);
+            var el = this.element.find('> .buttons');
+            if ( wh < sh) {
+                el.css({
+                    position: 'fixed',
+                    bottom: 0
+                });
+            }else{
+                el.css({
+                    position: 'relative',
+                    bottom: 'auto'
+                });
+            }
+            el.width(this.element.innerWidth());
         }
     })
-})(jQuery);
+})(jQuery, window);

@@ -4,7 +4,7 @@
     "order": 3,
     "children": {
         "title": {
-            "value": "Удаленные",
+            "value": "Черновики",
             "proto": "/Library/basic/Boolean/title",
             "is_hidden": true,
             "order": 1

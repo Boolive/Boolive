@@ -13,7 +13,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Представляет собой обозреватель объектов с функцией выбора объекта",
+            "value": "Виджет выбора объектов из всех существующих",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_hidden": true,
             "order": 2

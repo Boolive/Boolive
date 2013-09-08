@@ -1,63 +1,42 @@
 {
-    "value": "Add.tpl",
+    "is_default_value": true,
+    "value": "SelectObject.tpl",
     "is_file": true,
-    "proto": "/Library/views/Widget",
+    "proto": "/Library/admin_widgets/SelectObject",
     "is_default_class": false,
-    "order": 6,
+    "order": 29,
     "children": {
         "title": {
-            "value": "Добавить",
-            "proto": "/Library/views/Widget/title",
+            "value": "Добавить…",
+            "proto": "/Library/admin_widgets/SelectObject/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "Предоставляет выбор объекта для добавления его в отображаемый объект",
-            "proto": "/Library/views/Widget/description",
+            "value": "Выберите объекты, которые хотите добавить",
+            "proto": "/Library/admin_widgets/SelectObject/description",
             "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/Widget/res",
+            "proto": "/Library/admin_widgets/SelectObject/res",
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
+                    "proto": "/Library/admin_widgets/SelectObject/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/Widget/res/description",
+                    "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_hidden": true,
-                    "order": 2
-                }
-            }
-        },
-        "cache": {
-            "is_default_value": true,
-            "value": 0,
-            "proto": "/Library/views/Widget/cache",
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Кэшировать?",
-                    "proto": "/Library/views/Widget/cache/title",
-                    "is_hidden": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
-                    "proto": "/Library/views/Widget/cache/description",
-                    "is_hidden": true,
-                    "order": 2
+                    "order": 4
                 }
             }
         }

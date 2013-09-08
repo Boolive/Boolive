@@ -1,66 +1,35 @@
 <?php
 /**
- * Добавить
- * Предоставляет выбор объекта для добавления его в отображаемый объект
+ * Добавить2
+ * Выберите объекты, которые хотите добавить
  * @version 1.0
  */
 namespace Library\admin_widgets\Add;
 
-use Library\views\AutoWidgetList\AutoWidgetList,
-    Boolive\values\Rule;
+use Library\admin_widgets\SelectObject\SelectObject;
 
-class Add extends AutoWidgetList
+class Add extends SelectObject
 {
-    public function defineInputRule()
+    protected function selected()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required(),
-                        'call' => Rule::string()->default('')->required(),
-                        'proto' => Rule::any( // Сколько прототипов, столько объектов создаётся
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        )
-                    )
-                )
-            )
-        );
-    }
-
-
-    public function work($v = array())
-    {
-        // Добавление
-        if ($this->_input['REQUEST']['call'] == 'add'){
-            if (isset($this->_input['REQUEST']['proto']) && isset($this->_input['REQUEST']['object'])){
-                /** @var $parent \Boolive\data\Entity */
-                $parent = $this->_input['REQUEST']['object'];
-                $protos = is_array($this->_input['REQUEST']['proto']) ? $this->_input['REQUEST']['proto'] : array($this->_input['REQUEST']['proto']);
-                foreach ($protos as $proto){
-                    /** @var $proto \Boolive\data\Entity */
-                    $obj = $proto->birth($parent);
-                    if ($proto->uri() == '/Library/basic/Object'){
-                        $obj->proto(false);
-                    }
-                    // @todo Обрабатывать ошибки
-                    $obj->save(false, false);
-                    $v['result'][] = $obj->uri();
+        $result = array();
+        /** @var $parent \Boolive\data\Entity */
+        $parent = $this->_input['REQUEST']['object'];
+        $protos = is_array($this->_input['REQUEST']['selected'])? $this->_input['REQUEST']['selected'] : array($this->_input['REQUEST']['selected']);
+        if ($protos){
+            foreach ($protos as $proto){
+                /** @var $proto \Boolive\data\Entity */
+                $obj = $proto->birth($parent);
+                if ($proto->uri() == '/Library/basic/Object'){
+                    $obj->proto(false);
                 }
+                // @todo Обрабатывать ошибки
+                $obj->save(false, false);
+                $result['changes'][$obj->uri()] = array(
+                    'uri' => $obj->uri()
+                );
             }
-            return $v;
-        }else{
-            $v['title'] = $this->title->value();
-            if (!$v['object']['title'] = $this->_input['REQUEST']['object']->title->value()){
-                $v['object']['title'] = $this->_input['REQUEST']['object']->name();
-            }
-            $v['object']['uri'] = $this->_input['REQUEST']['object']->uri();
-            return parent::work($v);
         }
-    }
-
-    protected function getList($cond = array()){
-        // @todo Сделать выбор часто используемых объектов
-        $obj = \Boolive\data\Data::read('/Library/basic/Object');
-        return array($obj);
+        return $result;
     }
 }

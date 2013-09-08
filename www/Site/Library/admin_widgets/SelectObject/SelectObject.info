@@ -3,16 +3,16 @@
     "is_file": true,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 10,
+    "order": 11,
     "children": {
         "title": {
-            "value": "Виджет выбора объекта",
+            "value": "Выбор объекта",
             "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "Представляет собой обозреватель объектов с функцией выбора объекта",
+            "value": "Виджет выбора объектов из всех существующих",
             "proto": "/Library/views/Widget/description",
             "is_hidden": true,
             "order": 2

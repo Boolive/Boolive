@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 24,
+    "order": 26,
     "children": {
         "title": {
             "value": "Скрытый",
@@ -15,12 +15,12 @@
             "value": "Скрытие выбранных объектов",
             "proto": "/Library/views/View/description",
             "is_hidden": true,
-            "order": 2
+            "order": 3
         },
         "cache": {
             "value": "",
             "is_default_class": false,
-            "order": 3
+            "order": 4
         }
     }
 }

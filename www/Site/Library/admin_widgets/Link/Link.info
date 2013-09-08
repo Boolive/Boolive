@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 26,
+    "order": 28,
     "children": {
         "title": {
             "value": "Ссылка",

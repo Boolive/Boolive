@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 25,
+    "order": 27,
     "children": {
         "title": {
             "value": "Черновик",
