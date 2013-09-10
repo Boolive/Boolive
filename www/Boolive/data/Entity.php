@@ -1246,6 +1246,8 @@ class Entity implements ITrace
                 }else{
                     $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
                 }
+                // Не подбирать уникальное имя, так как при сохранении родителя он проиндексируется и его свойства нужно будет обновить текущим, а не создавать новое
+                $obj->_autoname = false;
             }else{
                 $obj = Data::read(array(
                     'from' => array($this, $name),
@@ -1260,6 +1262,7 @@ class Entity implements ITrace
             if (!$obj->isExist()){
                 $obj->_attribs['name'] = $name;
                 $obj->_attribs['uri'] = $this->uri().'/'.$name;
+
             }else{
 
             }

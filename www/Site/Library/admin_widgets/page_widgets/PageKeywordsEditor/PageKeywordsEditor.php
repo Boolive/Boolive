@@ -65,9 +65,8 @@ class PageKeywordsEditor extends AutoWidgetList
             $key = $proto->birth($keywords);
             $key->name($key_name);
             $key->value(0);
-            $key->save();
             $key->title->value($key_title);
-            $key->title->save();
+            $key->save();
         }
         // Ключевое слово в локальном списке (например, в странице)
         $key_local = $obj->{$key_name};
