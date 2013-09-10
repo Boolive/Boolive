@@ -1,0 +1,14 @@
+{
+    "value": "",
+    "order": 16,
+    "children": {
+        "title": {
+            "value": "Цвет",
+            "order": 1
+        },
+        "description": {
+            "value": "Код цвета в HEX формате. Например #FF0099",
+            "order": 2
+        }
+    }
+}
