@@ -70,23 +70,19 @@ h4{
     font-size: 14pt;
 }
 
-        .Delete .info > .name{
-            font-size: 17pt;
-            display: inline-block;
-            color: #1e7fff;
-            padding: 5px 0px;
-            border-radius: 3px;
-            }
-        .Delete .info > .uri{
-            font-size: 9pt;
-            margin: 0 15px;
-            display: inline-block;
-            background-color: #F5F5F5;
-            color: #999;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-family: verdana;
-        }
+.layout-main{
+    padding: 30px;
+    }
+    .layout-top{
+
+    }
+    .layout-middle{
+        margin: 24px 0;
+    }
+    .layout-bottom{
+
+    }
+
 /* Общий фон */
 .common_background{
     background: #FFF;
@@ -417,7 +413,7 @@ label{
 }
 
 .progress{
-	text-align: center;
+	/*text-align: center;*/
 	}
 	.progress .prgressbar{
 		/*margin: 0 auto;*/
@@ -453,6 +449,7 @@ label{
     color: #999;
     margin: 15px 0;
     padding: 0;
+    list-style-position: inside;
     }
     .entity-list li{
         margin: 1px 0;

@@ -4,7 +4,7 @@
     "order": 6,
     "children": {
         "title": {
-            "value": "Не установленные",
+            "value": "Дополнения",
             "proto": "/Library/basic/Boolean/title",
             "is_hidden": true,
             "order": 1

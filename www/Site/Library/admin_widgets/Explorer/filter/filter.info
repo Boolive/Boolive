@@ -5,7 +5,7 @@
         "title": {
             "value": "Фильтр",
             "is_hidden": true,
-            "order": 5
+            "order": 7
         }
     }
 }

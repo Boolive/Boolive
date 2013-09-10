@@ -17,7 +17,7 @@
             </ul>
         </div>
     </div>
-	<div class="content">
+	<div class="layout-main list">
         <?php
             $list = $v['view']->arrays(\Boolive\values\Rule::string());
             if(!empty($list)){

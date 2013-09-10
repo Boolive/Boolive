@@ -79,8 +79,9 @@
         stop: function(close){
             this.process = false;
             if (close){
-                this.element.find('.progress').hide();
-                this.element.find('.confirm').show();
+//                this.element.find('.progress').hide();
+//                this.element.find('.confirm').show();
+                history.back();
             }else{
                 this.message.text('Завершено');
                 this.element.find('.progress .cancel').text('Ok');

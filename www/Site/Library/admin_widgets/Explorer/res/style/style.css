@@ -1,16 +1,16 @@
 .Explorer{
 
     }
-    .Explorer .content{
+    .Explorer .layout-main{
         padding-top: 0;
         }
-        .Explorer .content .empty{
+        .Explorer .layout-main .empty{
             text-align: center;
             font-size: 24px;
             font-weight: bolder;
             color: #cccccc;
             }
-            .Explorer .content .empty .explain{
+            .Explorer .layout-main .empty .explain{
             text-align: center;
             font-size: 12px;
             font-weight: normal;

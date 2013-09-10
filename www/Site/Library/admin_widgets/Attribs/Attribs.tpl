@@ -1,5 +1,5 @@
 <div class="Attribs" data-v="<?php echo $v['view_uri'];?>" data-p="Attribs">
-    <div class="content">
+    <div class="layout-main">
         <h2><?php echo $v['head'];?></h2>
         <form action="" enctype="multipart/form-data" type="POST">
             <div style="display: none;">

@@ -1,0 +1,11 @@
+{
+    "value": "Выполнить",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Название действия",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

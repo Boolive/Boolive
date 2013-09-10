@@ -16,7 +16,7 @@
 
         init_sortable: function(){
             var self = this;
-            this.element.find('.content:first').sortable({
+            this.element.find('.list:first').sortable({
                 distance: 15,
                 update: function(event, ui) {
                     var object_uri = {};
@@ -45,11 +45,11 @@
 
             if (caller.direct == 'children'){
                 if ($.isPlainObject(changes) && ('selected' in changes)){
-                    this.element.find('.content .selected').removeClass('selected');
+                    this.element.find('.list .selected').removeClass('selected');
                     if (state.selected){
                         var element = this.element;
                         _.each(state.selected, function(s){
-                            element.find('.content [data-o="'+s+'"]').addClass('selected');
+                            element.find('.list [data-o="'+s+'"]').addClass('selected');
                             // @todo Если объект не найден, то загрузить его с сервера. Сервер должен сообщеить после какого объекта тот отображается
                         });
                     }
@@ -86,7 +86,7 @@
             }else{
                 var uri;
                 for (uri in info){
-                    if (this.element.find('.content [data-o="'+uri+'"]').size()==0){
+                    if (this.element.find('.list [data-o="'+uri+'"]').size()==0){
                         console.log('reload');
                         this.reload({object: this.options.object});
                         break;

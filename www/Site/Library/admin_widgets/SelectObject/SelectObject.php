@@ -44,8 +44,8 @@ class SelectObject extends Widget
         $v['title'] = $this->title->value();
         $v['submit_title'] = $this->submit_title->value();
         $v['cancel_title'] = $this->cancel_title->value();
-        $v['message'] = 'Выделите объект или откройте его и нажмите "'.$v['submit_title'].'" для подтверждения выбора';
-        $v['message2'] = 'Для закрытия диалога выбора нажмите "'.$v['cancel_title'].'"';
+        $v['message'] = 'Выделите объект или откройте его и нажмите "'.$v['submit_title'].'" для подтверждения выбора.';
+        $v['message2'] = 'Для закрытия диалога нажмите "'.$v['cancel_title'].'".';
         return parent::work($v);
     }
 

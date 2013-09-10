@@ -1,5 +1,5 @@
-<div class="Export" data-v="<?php echo $v['view_uri'];?>" data-o="<?php echo $v['data-o'];?>" data-p="Export"">
-    <div class="content">
+<div class="Export" data-v="<?php echo $v['view_uri'];?>" data-o="<?php echo $v['data-o'];?>" data-p="Export">
+    <div class="layout-main">
         <h2><?php echo $v['title'];?></h2>
         <div class="confirm">
             <ul class="entity-list">

@@ -1,14 +1,14 @@
 .Admin{
 	/*position: absolute;*/
 	min-height: 100%;
-	padding: 0 160px;
+	padding: 0 180px;
 	overflow: hidden;
     background-color: #FFF;
     position: relative;
 	}
 	.Admin > .left{
 		height: 100%;
-		width: 160px;
+		width: 180px;
 		left: 0;
 		top: 32px;
 		position: fixed;
@@ -29,7 +29,7 @@
 			width: 48px;
 			}
     .Admin > .right{
-		width: 160px;
+		width: 180px;
 		right: 0;
 		bottom: 0;
 		position: fixed;

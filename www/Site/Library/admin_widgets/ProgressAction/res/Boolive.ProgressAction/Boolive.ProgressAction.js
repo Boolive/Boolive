@@ -1,11 +1,13 @@
 /**
- * Виджет установки выбранного объекта
+ * Заготовка jQueryUI виджета с наследованием boolive.Widget
+ * Переименуйте WidgetName на своё имя виджета.
+ *
  * Query UI widget
  * Copyright 2012 (C) Boolive
  */
-(function($, _) {
-    $.widget("boolive.Installer", $.boolive.Widget, {
-        // Удаляемый объект
+(function($, _, undefined) {
+    $.widget("boolive.ProgressAction", $.boolive.Widget, {
+        objects: null,
         process: false,
         bar: null,
         message: null,
@@ -40,37 +42,39 @@
             this.element.find('.progress .cancel').text('Отмена');
             this.element.find('.confirm').hide();
             this.element.find('.progress').show();
-
-
-            var objects = _.isArray(this.options.object) ? this.options.object : [this.options.object];
-            this.progress(0, objects);
+            this.callServer('progress_start', {
+                object: this.options.object
+            }, function(result, textStatus, jqXHR){
+                if (result.out && result.out.progress_id){
+                    self.progress(result.out.progress_id);
+                }
+            });
         },
 
-        progress: function(index, objects){
+        progress: function(progress_id){
             var self = this;
-            if (objects.length > index){
-                this.callServer('install', {object: objects[index]},
-                    function(result, textStatus, jqXHR){
-                        if (result.out){
-                            if (self.process){
-                                index++;
-                                self.bar.css('width', Math.round(index/objects.length*100)+'%');
-                                if (!_.isUndefined(result.out.message)){
-                                    self.message.text(result.out.message);
-                                }
-                                self.progress(index, objects);
-                            }else{
-                                self.stop(true);
-                            }
-                        }else{
-                            console.log('Error');
-                            console.log(result);
+            this.callServer('progress', {
+                object: this.options.object,
+                id: progress_id
+            }, function(result, textStatus, jqXHR){
+                if (result.out){
+                    if (self.process){
+                        self.bar.css('width', result.out.progress+'%');
+                        if (!_.isUndefined(result.out.message)){
+                            self.message.text(result.out.message);
                         }
+                        if (!result.out.complete){
+                            self.progress(progress_id);
+                        }else{
+                            self.stop(false);
+                        }
+                    }else{
+                        self.stop(true);
                     }
-                );
-            }else{
-                self.stop(false);
-            }
+                }else{
+                    console.log('Error');
+                }
+            });
         },
 
         stop: function(close){
@@ -80,7 +84,7 @@
 //                this.element.find('.confirm').show();
                 history.back();
             }else{
-                this.message.text('Завершено');
+                //this.message.text('Завершено');
                 this.element.find('.progress .cancel').text('Ok');
             }
         }
