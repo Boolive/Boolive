@@ -506,7 +506,7 @@ class MySQLStore extends Entity
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
                         'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt', 'valuef', 'possession','diff', 'diff_from');
+                        'proto_cnt', 'parent_cnt', 'valuef', 'possession', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id+owner+lang+date
