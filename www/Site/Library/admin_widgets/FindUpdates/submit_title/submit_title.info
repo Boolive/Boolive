@@ -1,0 +1,14 @@
+{
+    "value": "Искать",
+    "proto": "/Library/admin_widgets/ProgressAction/submit_title",
+    "order": 7,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Название действия",
+            "proto": "/Library/admin_widgets/ProgressAction/submit_title/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

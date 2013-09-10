@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "jquery.js",
+    "is_file": true,
+    "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction/depends/jquery",
+    "is_link": true,
+    "order": 3
+}
