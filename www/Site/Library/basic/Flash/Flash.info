@@ -1,0 +1,19 @@
+{
+    "value": "",
+    "proto": "/Library/basic/File",
+    "order": 19,
+    "children": {
+        "title": {
+            "value": "Flash файл",
+            "proto": "/Library/basic/File/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Flash файл в формате .swf",
+            "proto": "/Library/basic/File/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
