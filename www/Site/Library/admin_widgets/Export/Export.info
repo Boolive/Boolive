@@ -21,7 +21,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
-            "order": 3,
+            "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -43,7 +43,7 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
-            "order": 5,
+            "order": 6,
             "children": {
                 "title": {
                     "is_default_value": true,

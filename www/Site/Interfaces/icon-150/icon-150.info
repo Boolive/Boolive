@@ -1,14 +1,13 @@
 {
     "value": "icon-150.png",
     "is_file": true,
-    "proto": "/Library/content_samples/Image",
+    "proto": "/Library/basic/Image",
     "is_hidden": true,
     "order": 3,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Изображение",
-            "proto": "/Library/content_samples/Image/title",
+            "value": "Иконка",
+            "proto": "/Library/basic/Image/title",
             "is_hidden": true,
             "order": 1
         }
