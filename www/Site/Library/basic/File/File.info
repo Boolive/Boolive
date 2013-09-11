@@ -1,0 +1,17 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 17,
+    "children": {
+        "title": {
+            "value": "Файл",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Объект ассоциируемый с файлом. ",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
