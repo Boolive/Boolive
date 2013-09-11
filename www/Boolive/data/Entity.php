@@ -1241,7 +1241,7 @@ class Entity implements ITrace
             return $this->_children[$name];
         }else{
             if (!$this->isExist()){
-                if (($p = $this->proto()) && $p->{$name}->isExist()){
+                if (($p = $this->proto())/* && $p->{$name}->isExist()*/){
                     $obj = $p->{$name}->birth($this);
                 }else{
                     $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
@@ -1333,7 +1333,7 @@ class Entity implements ITrace
 
     /**
      * Добавление подчиненного с автоматическим именованием
-     * @param $value
+     * @param Entity|mixed $value
      * @return Entity
      */
     public function add($value){
