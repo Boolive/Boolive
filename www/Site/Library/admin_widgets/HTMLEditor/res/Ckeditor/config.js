@@ -14,19 +14,19 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'undo'},
         { name: 'clipboard'},
         { name: 'others' },
-        { name: 'insert' },
         { name: 'about' },
+        { name: 'tools' },
 		'/',
         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
         { name: 'paragraph',   groups: [ 'align', 'list', 'indent', 'blocks', 'bidi' ] },
         { name: 'colors' },
         '/',
-		{ name: 'styles' },
+        { name: 'styles' },
         { name: 'forms' },
         { name: 'links' },
-        { name: 'tools' }
-	];
+        { name: 'insert' }
 
+	];
 
 
 	// Remove some buttons, provided by the standard plugins, which we don't
@@ -34,8 +34,11 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = '';
 
 	// Se the most common block elements.
-	config.format_tags = 'p;h1;h2;h3;pre';
+	config.format_tags = 'p;h1;h2;h3;h4;h5;pre';
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+    config.filebrowserImageUploadUrl = '/?proto=Image';
+    config.filebrowserFlashUploadUrl = '/?proto=Flash';
 };
