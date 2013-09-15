@@ -71,7 +71,7 @@
                         self.stop(true);
                     }
                 }else{
-                    console.log('Error');
+                    console.log('Export Error');
                 }
             });
         },

@@ -231,11 +231,13 @@
             })
             .on('change-attrib', function(change){
                 if (change){
-                    form.find('.submit').text('Сохранить').removeClass('btn-disable');
-                    form.find('.reset').removeClass('hide');
+                    self.callParents('change', [self.model.object]);
+//                    form.find('.submit').text('Сохранить').removeClass('btn-disable');
+//                    form.find('.reset').removeClass('hide');
                 }else{
-                    form.find('.submit').text('Сохранено').addClass('btn-disable');
-                    form.find('.reset').addClass('hide');
+                    self.callParents('nochange', [self.model.object]);
+//                    form.find('.submit').text('Сохранено').addClass('btn-disable');
+//                    form.find('.reset').addClass('hide');
                 }
             });
 
@@ -244,8 +246,9 @@
                 form.find('.submit-message').text(value);
             }).
             on('change-error', function(error){
-                form.find('.submit').text('Сохранить ещё раз').removeClass('btn-disable');
-                form.find('.reset').removeClass('hide');
+                self.callParents('change', [self.model.object]);
+//                form.find('.submit').text('Сохранить ещё раз').removeClass('btn-disable');
+//                form.find('.reset').removeClass('hide');
                 form.find('.item-'+error.name).addClass('error').find('.error-message').text(error.value);
             }).
             on('change-error:_other_', function(value){
@@ -257,16 +260,16 @@
             }).
             on('change-process:start', function(value){
                 //self.element.find('.submit-message').text(value);
-                if (value){
-                    form.find('.submit').text('Сохраняется...').removeClass('btn-disable');
-                    form.find('.reset').addClass('hide');
-                }else{
-                    form.find('.submit').text('Сохранено').addClass('btn-disable');
-                    form.find('.submit-message').text('');
-                }
+//                if (value){
+//                    form.find('.submit').text('Сохраняется...').removeClass('btn-disable');
+//                    form.find('.reset').addClass('hide');
+//                }else{
+//                    form.find('.submit').text('Сохранено').addClass('btn-disable');
+//                    form.find('.submit-message').text('');
+//                }
             }).
             on('change-process:percent', function(value){
-                form.find('.submit-message').text(value + '%');
+//                form.find('.submit-message').text(value + '%');
             });
 
             //
@@ -309,72 +312,6 @@
                 e.preventDefault();
                 self.model.set_attrib('is_null', false);
                 self.model.set_attrib('is_file', !self.model.attrib['is_file']);
-            })
-            .on('click', '.cancel', function(e){
-                e.preventDefault();
-                history.back();
-            })
-            .on('click', '.reset', function(e){
-                e.preventDefault();
-                self.model.init(self.model.attrib_start);
-                self.model.clear_errors();
-            })
-            .on('click', '.submit', function(e){
-                e.preventDefault();
-                if (!$(this).hasClass('btn-disable')){
-                    // Ошибка при обработки запроса
-                    form.ajaxError(function(e, jqxhr, settings, exception) {
-                        if (settings.owner == self.eventNamespace){
-                            self.model.set_process('start', false);
-                            self.model.set_error('fatal', 'Не удалось сохранить');
-                        }
-                    });
-                    form.ajaxSubmit({
-                        url: "&direct="+self.options.view+'&call=save',
-                        owner: self.eventNamespace,
-                        type: 'post',
-                        dataType: 'json',
-                        beforeSubmit: function(arr, form, options){
-                            self.model.set_process('start', true);
-                            self.model.clear_errors();
-                        },
-                        uploadProgress: function(e, position, total, percent){
-                            self.model.set_process('percent', percent);
-                            //self.submit_msg.text(percent+'%');
-                        },
-                        success: function(responseText, statusText, xhr, $form){
-                            if (responseText.out.error){
-                                self.model.set_process('start', false);
-
-                                if (_.isObject(responseText.out.error.list._attribs) && _.isObject(responseText.out.error.list._attribs.list)){
-                                    var list = responseText.out.error.list._attribs.list;
-                                    for(var e in list){
-                                        if (e == 'file'){
-                                            self.model.set_error('value', self.errorMessage(list[e], true));
-                                        }else{
-                                            self.model.set_error(e, self.errorMessage(list[e], true));
-                                        }
-                                    }
-                                }
-                                self.submit_msg.text(self.errorMessage(responseText.out.error, false));
-//                                for(var e in responseText.out.error){
-//                                    if (e == 'file'){
-//                                        self.model.set_error('value', responseText.out.error[e]);
-//                                    }else{
-//                                        self.model.set_error(e, responseText.out.error[e]);
-//                                    }
-//                                }
-                            }else{
-                                if (self.model.is_change_attrib('name') || self.model.is_change_attrib('parent')){
-                                    self.callParents('setState', [{object: responseText.out.attrib.uri}, true]);
-                                }
-                                self.model.set_process('start', false);
-                                self.model.init(responseText.out.attrib);
-
-                            }
-                        }
-                    });
-                }
             }).
             // Выбор прототипа
             on('click', '.item-proto [data-name="proto-uri"]', function(e){
@@ -472,6 +409,64 @@
             // Кнопка сохранения
             this.submit_btn = this.element.find('.submit');
             this.submit_msg = this.element.find('.submit-message');
+        },
+
+        call_save: function(e){
+            var self = this;
+            // Элемент формы
+            var form = this.form = self.element.find('form');
+            // Ошибка при обработки запроса
+            form.ajaxError(function(e, jqxhr, settings, exception) {
+                if (settings.owner == self.eventNamespace){
+                    self.model.set_process('start', false);
+                    self.model.set_error('fatal', 'Не удалось сохранить');
+                }
+            });
+            form.ajaxSubmit({
+                url: "&direct="+self.options.view+'&call=save',
+                owner: self.eventNamespace,
+                type: 'post',
+                dataType: 'json',
+                beforeSubmit: function(arr, form, options){
+                    self.model.set_process('start', true);
+                    self.model.clear_errors();
+                },
+                uploadProgress: function(e, position, total, percent){
+                    self.model.set_process('percent', percent);
+                    //self.submit_msg.text(percent+'%');
+                },
+                success: function(responseText, statusText, xhr, $form){
+                    if (responseText.out.error){
+                        self.model.set_process('start', false);
+
+                        if (_.isObject(responseText.out.error.list._attribs) && _.isObject(responseText.out.error.list._attribs.list)){
+                            var list = responseText.out.error.list._attribs.list;
+                            for(var e in list){
+                                if (e == 'file'){
+                                    self.model.set_error('value', self.errorMessage(list[e], true));
+                                }else{
+                                    self.model.set_error(e, self.errorMessage(list[e], true));
+                                }
+                            }
+                        }
+                        self.submit_msg.text(self.errorMessage(responseText.out.error, false));
+//                                for(var e in responseText.out.error){
+//                                    if (e == 'file'){
+//                                        self.model.set_error('value', responseText.out.error[e]);
+//                                    }else{
+//                                        self.model.set_error(e, responseText.out.error[e]);
+//                                    }
+//                                }
+                    }else{
+                        if (self.model.is_change_attrib('name') || self.model.is_change_attrib('parent')){
+                            self.callParents('setState', [{object: responseText.out.attrib.uri}, true]);
+                        }
+                        self.model.set_process('start', false);
+                        self.model.init(responseText.out.attrib);
+
+                    }
+                }
+            });
         },
 
         clearFileInputField: function(){

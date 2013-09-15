@@ -63,8 +63,8 @@
                                 self.stop(true);
                             }
                         }else{
-                            console.log('Error');
-                            console.log(result);
+                            console.log('Install Error');
+                            //console.log(result);
                         }
                     }
                 );

@@ -80,14 +80,12 @@
         },
 
         call_object_update: function(caller, info){
-            console.log('explore');
             if (!_.isUndefined(info[this.options.object])){
-                console.log(info[this.options.object]);
+                //console.log(info[this.options.object]);
             }else{
                 var uri;
                 for (uri in info){
                     if (this.element.find('.list [data-o="'+uri+'"]').size()==0){
-                        console.log('reload');
                         this.reload({object: this.options.object});
                         break;
                     }

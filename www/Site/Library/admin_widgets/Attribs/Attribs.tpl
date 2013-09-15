@@ -164,9 +164,9 @@
             <div class="item submits">
                 <div class="col1"></div>
                 <div class="col2">
-                    <a class="btn btn-success btn-disable submit" href="#">Сохранено</a>
-                    <a class="btn hide reset">Восстановить</a>
-                    <a class="btn cancel" href="#">Отмена</a>
+<!--                    <a class="btn btn-success btn-disable submit" href="#">Сохранено</a>-->
+<!--                    <a class="btn hide reset">Восстановить</a>-->
+<!--                    <a class="btn cancel" href="#">Отмена</a>-->
                     <p class="submit-message"></p>
                 </div>
             </div>
