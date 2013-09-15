@@ -1,7 +1,8 @@
 {
     "is_default_value": true,
-    "value": "0",
+    "value": "1",
     "proto": "/Keywords/cms",
     "is_link": true,
-    "order": 2
+    "is_hidden": true,
+    "order": 4
 }

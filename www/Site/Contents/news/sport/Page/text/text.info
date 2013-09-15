@@ -1,0 +1,21 @@
+{
+    "value": "\n",
+    "proto": "/Library/content_samples/Page/text",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Tекст",
+            "proto": "/Library/content_samples/Page/text/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "HTML текст длиной до 65535 символов (64Кбайт)",
+            "proto": "/Library/content_samples/Page/text/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
