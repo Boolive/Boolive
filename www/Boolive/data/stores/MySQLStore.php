@@ -302,6 +302,8 @@ class MySQLStore extends Entity
                     $temp_name = $attr['name'];
                     $attr['name'] = $entity->_attribs['name'] = $entity->_autoname;
                     $attr['uri'] = $entity->uri(true);
+                }else{
+                    $attr['uri'] = $entity->uri(true);
                 }
                 // Локальный идентификатор объекта
                 if (empty($attr['id'])){
@@ -857,7 +859,10 @@ class MySQLStore extends Entity
                     }
                     // У объекта выбрать подчиненные, которые прототипируются от выбранных $step_size подчиненных прототипа.
                     $ochildren = $entity->find(array(
-                        'where' => array('attr', 'proto', 'in', $pids),
+                        'where' => array(
+                                array('attr', 'proto', 'in', $pids),
+                                array('attr', 'diff', '!=', Entity::DIFF_DELETE)
+                        )
                     ), false, false, false);
                     // Для выбранных по прототипам подчиненных выполнить findUpdate с $depth-1
                     foreach ($ochildren as $child){
@@ -1027,8 +1032,18 @@ class MySQLStore extends Entity
         $diff = $entity->diff();
         if ($diff == Entity::DIFF_ADD){
             $entity->diff(Entity::DIFF_NO);
-            $entity->_attribs['update_time'] = 0;
+            //$entity->_attribs['update_time'] = 0;
             $entity->save(false, false);
+            // Выбрать все подчиенные с DIFF_ADD и POSSESSION_MANDATORY и установить им DIFF_NO
+            $new_children = $entity->find(array(
+                'where' => array(
+                    array('attr', 'diff', '=', Entity::DIFF_ADD),
+                    array('attr', 'possession', '=', Entity::POSSESSION_MANDATORY)
+                )
+            ));
+            foreach ($new_children as $child){
+                $this->applyUpdates($child);
+            }
         }else
         if ($diff == Entity::DIFF_DELETE){
             $entity->diff(Entity::DIFF_NO);
