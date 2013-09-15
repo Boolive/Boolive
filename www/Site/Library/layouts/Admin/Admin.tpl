@@ -3,9 +3,11 @@
         <div class="window"><?php echo $v->Programs->string();?></div>
     </div>
     <div class="top">
-        <?php echo $v->MenuAuth->string();?>
+        <div class="top-right"><?php
+            echo $v->SaveTool->string();
+            echo $v->MenuAuth->string();
+        ?></div>
         <?php echo $v->BreadcrumbsMenu->string();?>
-
     </div>
     <div class="left">
         <!--<div class="shadow"></div>-->
@@ -13,5 +15,8 @@
     <div class="right">
         <!--<div class="shadow"></div>-->
         <?php echo $v->ProgramsMenu->string();?>
+    </div>
+    <div class="bottom">
+
     </div>
 </div>

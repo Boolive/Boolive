@@ -1,0 +1,25 @@
+.SaveTool{
+    /*text-align: right;*/
+    /*padding: 15px 30px;*/
+    /*position: absolute;*/
+    /*right: 300px;*/
+    /*z-index: 100;*/
+    display: inline-block;
+
+    }
+    .SaveTool .btn{
+        border-bottom: none;
+        height: 23px;
+        margin: 0 10px;
+        /*box-shadow: 3px -1px 4px -3px #E5E5E5, -3px -1px 4px -3px #E5E5E5;*/
+
+    }
+    .SaveTool .btn-disable{
+        box-shadow: inset 0 -3px 3px -2px #E5E5E5;
+    }
+    .SaveTool > *{
+        display: none;
+    }
+    .SaveTool > .active{
+        display: block;
+    }

@@ -162,9 +162,9 @@ h4{
         }
 /* Неактивная кнопка*/
 .btn-disable, .btn-disable:hover, .btn-disable:active {
-    background-color: rgba(200,200,200,0.1);
-    border: 1px solid rgba(200,200,200,0.15);
-    color: rgba(150,150,150,0.3);
+    background-color: #F5F5F5;
+    border: #ebebeb 1px solid;
+    color: #cccccc;
     cursor: default;
     padding: 6px 14px 2px 14px;
     }
@@ -341,6 +341,7 @@ h4{
     display: inline-block;
     position: relative;
     outline: none;
+    box-sizing: border-box;
     }
     .inpt *{
         outline: none;

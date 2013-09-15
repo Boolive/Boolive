@@ -91,7 +91,27 @@
         top: 0;
         z-index: 5;
         }
-
+        .Admin .top-right{
+            position: absolute;
+            right: 0;
+            display: block;
+            height: 32px;
+            /*width: 270px;*/
+            padding: 0;
+            margin: 0;
+            z-index: 110;
+            white-space: nowrap;
+            text-align: right;
+            vertical-align: top;
+        }
+    .Admin .bottom{
+        position: fixed;
+        /*height: 40px;*/
+        left: 180px;
+        right: 180px;
+        bottom: 0;
+        z-index: 100;
+    }
     .Admin .window{
         background-color: #ffffff;
         border-top: 0px solid #CCC;
