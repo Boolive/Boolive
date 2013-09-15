@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "PageDescriptionEditor.tpl",
-    "is_file": true,
-    "proto": "/Library/admin_widgets/page_widgets/PageDescriptionEditor",
-    "is_link": true,
-    "order": 4
-}

@@ -1,24 +1,14 @@
 .PageKeywordsEditor{
 
     }
-    .PageKeywordsEditor .col1{
-        float: left;
-        width: 150px;
-        display: block;
-        padding: 5px 15px 5px 0;
-        }
-    .PageKeywordsEditor .col2{
-        margin: 0 0 0 165px;
-        border-radius: 3px;
-        padding: 5px;
-        }
     .PageKeywordsEditor .keywords{
-        width: 98%;
         height: auto;
         border: 1px solid;
         border-color: #E0E0E0;
         border-radius: 3px;
-        padding: 5px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
         }
         .PageKeywordsEditor label{
             font-size: 11pt;
@@ -30,7 +20,7 @@
             }
         .PageKeywordsEditor .keywords .value{
             border: 0px;
-            margin-top: 4px;
+            margin: 4px;
             height: 20px;
             }
     .PageKeywordsEditor ul.ui-autocomplete{

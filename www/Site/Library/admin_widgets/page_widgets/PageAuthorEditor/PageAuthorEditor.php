@@ -14,7 +14,7 @@ class PageAuthorEditor extends Widget {
            {
                $this->_input_rule = Rule::arrays(array(
                       'REQUEST' => Rule::arrays(array(
-                              'object' => Rule::entity()->required(),
+                              'object' => Rule::entity(array('is', '/Library/access/User'))->required(),
                               'call' => Rule::string()->default('')->required(),
                               'user' => Rule::arrays(Rule::string()),
                               )

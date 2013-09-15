@@ -12,18 +12,19 @@
 		height: 38px;
 		min-width: 100px;
 		position: relative;
-		border-bottom: 1px solid #E6F1FA;
+		border-bottom: 1px solid #F0F0F0;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
+        border-radius: 5px;
 		}
 		.ObjectItem.list .view:hover{
 			background-color: #EBF5FF;
-			border-top: 1px solid #E6F1FA;
-			border-bottom: 1px solid #E6F1FA;
+			border: 1px solid #E6F1FA;
 			margin: -1px 0 0 0px;
 			}
             .ObjectItem.list .view:active{
                 background-color: #EBF5FF;
-			    border-top: 1px solid #d2e8fa;
-			    border-bottom: 1px solid #d2e8fa;
+			    border: 1px solid #d2e8fa;
                 }
         /* Главный блок*/
         .ObjectItem.list .main {
@@ -126,6 +127,7 @@
 			font-size: 10pt;
 			height: 38px;
             background-color: #FFF;
+            border-radius: 5px;
 			}
             .ObjectItem.list .view:hover .info{
                 background-color: #EBF5FF;
@@ -196,8 +198,7 @@
     }
     .ObjectItem.list.selected .view, .ObjectItem.list.selected .view:hover{
         background-color: #61B0FF;
-        border-top: 1px solid #FFF;
-        border-bottom: 1px solid #FFF;
+        border: 1px solid #FFF;
         }
     .ObjectItem.list.selected .info,
     .ObjectItem.list.selected .view:hover .info{

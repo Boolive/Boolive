@@ -1,40 +1,41 @@
 {
     "value": "PageKeywordsEditor.tpl",
     "is_file": true,
-    "proto": "/Library/views/AutoWidgetList",
+    "proto": "/Library/views/AutoWidgetList2",
     "is_default_class": false,
     "order": 4,
     "children": {
         "title": {
-            "value": "Редактор ключевых слов",
-            "proto": "/Library/views/AutoWidgetList/title",
+            "value": "Поле списка ключевых слов",
+            "proto": "/Library/views/AutoWidgetList2/title",
             "is_hidden": true,
-            "order": 1
+            "order": 5
         },
         "description": {
             "is_default_value": true,
-            "value": "Отображает все свойства объекта в соответсвии с установленными вараинтами отображения. Имеет настройки фильтра, какие свойства объекта отображать.",
-            "proto": "/Library/views/AutoWidgetList/description",
+            "value": "Для отображения свойств объекта соответствующими виджетом из списка",
+            "proto": "/Library/views/AutoWidgetList2/description",
             "is_hidden": true,
-            "order": 2
+            "order": 6
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/AutoWidgetList/res",
-            "order": 4,
+            "proto": "/Library/views/AutoWidgetList2/res",
+            "order": 7,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/views/AutoWidgetList/res/title",
+                    "proto": "/Library/views/AutoWidgetList2/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/AutoWidgetList/res/description",
+                    "proto": "/Library/views/AutoWidgetList2/res/description",
+                    "is_hidden": true,
                     "order": 2
                 }
             }
@@ -42,22 +43,36 @@
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/views/AutoWidgetList/cache",
-            "order": 5,
+            "proto": "/Library/views/AutoWidgetList2/cache",
+            "order": 8,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
-                    "proto": "/Library/views/AutoWidgetList/cache/title",
+                    "proto": "/Library/views/AutoWidgetList2/cache/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
-                    "proto": "/Library/views/AutoWidgetList/cache/description",
+                    "proto": "/Library/views/AutoWidgetList2/cache/description",
                     "is_hidden": true,
                     "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/AutoWidgetList2/object_rule",
+            "order": 10,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/AutoWidgetList2/object_rule/title",
+                    "order": 1
                 }
             }
         }

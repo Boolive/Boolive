@@ -8,22 +8,11 @@
 namespace Library\admin_widgets\PageEditor;
 
 use Boolive\data\Entity,
-    Library\views\AutoWidgetList\AutoWidgetList,
+    Library\views\AutoWidgetList2\AutoWidgetList2,
     Boolive\values\Rule;
 
-class PageEditor extends AutoWidgetList
+class PageEditor extends AutoWidgetList2
 {
-    public function defineInputRule()
-    {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity(array('is','/Library/content_samples/Page'))->required(),
-                    )
-                )
-            )
-        );
-    }
-
     public function work($v = array())
     {
         $v['object'] = $this->_input['REQUEST']['object']->uri();

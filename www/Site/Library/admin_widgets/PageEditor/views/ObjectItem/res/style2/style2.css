@@ -1,0 +1,33 @@
+.PageEditor .ObjectItem{
+
+    }
+    .PageEditor .ObjectItem.list .view{
+    background-color: #F0F0F0;
+    border: 1px solid #E0E0E0;
+    }
+    .PageEditor .ObjectItem.list .view:hover{
+        background-color: #EBF5FF;
+        border: 1px solid #d2e8fa;
+        margin: 0;
+        }
+        .PageEditor .ObjectItem.list .view:active{
+            background-color: #EBF5FF;
+            border: 1px solid #d2e8fa;
+            }
+    /* Блок информации об объекте */
+    .PageEditor .ObjectItem.list .info {
+        background-color: #F0F0F0;
+        }
+/*Если выделен */
+.PageEditor .ObjectItem.list.selected{
+    margin: 0;
+    }
+    .PageEditor .ObjectItem.list.selected .view,
+    .PageEditor .ObjectItem.list.selected .view:hover{
+        border: 1px solid #FFF;
+        background-color: #61B0FF;
+        }
+    .PageEditor .ObjectItem.list.selected .info,
+    .PageEditor .ObjectItem.list.selected .view:hover .info{
+        background-color: #61B0FF;
+        }

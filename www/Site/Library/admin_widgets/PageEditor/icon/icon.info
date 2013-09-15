@@ -2,11 +2,10 @@
     "value": "icon.png",
     "is_file": true,
     "proto": "/Library/basic/Image",
-    "order": 6,
+    "order": 9,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Изображение",
+            "value": "Иконка",
             "proto": "/Library/basic/Image/title",
             "is_hidden": true,
             "order": 1

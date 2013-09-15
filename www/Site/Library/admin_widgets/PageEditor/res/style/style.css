@@ -1,4 +1,5 @@
 .PageEditor{
+    margin: 5px;
     }
     .PageEditor .buttons{
         margin: 10px;
@@ -8,13 +9,11 @@
     .PageEditor .item{
         display: block;
         overflow: hidden;
-        width: 100%;
+        /*width: 100%;*/
         padding: 0 0;
-        margin: 5px;
+        margin: 5px 0;
         color: #111;
-        min-height: 38px;
         height: auto;
-
-
+        vertical-align: middle;
         }
 

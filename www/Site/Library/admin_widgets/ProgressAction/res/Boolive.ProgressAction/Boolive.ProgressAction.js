@@ -72,7 +72,7 @@
                         self.stop(true);
                     }
                 }else{
-                    console.log('Error');
+                    console.log('ProgressAction Error');
                 }
             });
         },

@@ -8,16 +8,16 @@ namespace Library\admin_widgets\page_widgets\PageKeywordsEditor;
 
 use Boolive\data\Data;
 use Boolive\functions\F;
-use Library\views\AutoWidgetList\AutoWidgetList,
+use Library\views\AutoWidgetList2\AutoWidgetList2,
     Boolive\values\Rule;
 
-class PageKeywordsEditor extends AutoWidgetList
+class PageKeywordsEditor extends AutoWidgetList2
 {
     public function defineInputRule()
     {
         $this->_input_rule = Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
-                'object' => Rule::entity()->required(),
+                'object' => Rule::entity(array('is','/Library/content_samples/Page/keywords'))->required(),
                 'call' => Rule::string()->default('')->required(),
                 'request' => Rule::string()->default('')->required(),
                 'Keyword' => Rule::arrays(Rule::string()),
@@ -56,7 +56,7 @@ class PageKeywordsEditor extends AutoWidgetList
         $v = array();
         $obj = $this->_input['REQUEST']['object'];
         $key_title = $this->_input['REQUEST']['Keyword']['value'];
-        $key_name = F::translit($key_title);
+        $key_name = mb_strtolower(F::translit($key_title));
         $keywords = Data::read('/Keywords');
         $key = $keywords->{$key_name};
         // Создание слова в общей коллекции ключевых слов

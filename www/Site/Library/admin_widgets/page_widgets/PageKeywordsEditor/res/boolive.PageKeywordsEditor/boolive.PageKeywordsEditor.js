@@ -6,11 +6,9 @@
     $.widget("boolive.PageKeywordsEditor", $.boolive.Widget, {
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
-
             this.init_sortable();
             var self = this;
-            var form = self.element.find('form.add');
-            var input = form.find('.value[type=text]');
+            var input = self.element.find('input[type=text]');
             input.autocomplete({
                 appendTo: ".PageKeywordsEditor",
                 source: function( request, response ) {
@@ -32,7 +30,7 @@
                 }
             });
             //Нужно, для фокусирования на поле в случае, если клик по форме или диву
-            form.on('click',function(e) {
+            this.element.on('click',function(e) {
                 input.focus();
             });
 
@@ -51,15 +49,14 @@
                         success: function(responseText, statusText, xhr){
                             if (responseText.out.error){
                                 for(var e in responseText.out.error){
-                                    form.find('div.error').text(responseText.out.error[e]);
+                                    self.element.find('div.error').text(responseText.out.error[e]);
                                 }
                             }else{
-                                form.find('div.error').text('');
+                                self.element.find('div.error').text('');
                                 input.val('');
                                 if(responseText.out!==false){
-                                    self.load(self.element.find('.old'), 'append',  self.options.view+'/switch_views',{object: responseText.out}, {url:'/'});
+                                    self.load(self.element.find('.old'), 'append',  self.options.view+'/views',{object: responseText.out}, {url:'/'});
                                 }
-
                             }
                         }
                     });
@@ -89,9 +86,6 @@
                     });
                 }
             });
-
         }
-
-
     });
 })(jQuery);

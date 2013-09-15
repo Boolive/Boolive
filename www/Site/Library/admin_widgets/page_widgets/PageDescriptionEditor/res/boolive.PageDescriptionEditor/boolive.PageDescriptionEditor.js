@@ -5,53 +5,61 @@
  */
 (function($) {
     $.widget("boolive.PageDescriptionEditor", $.boolive.Widget, {
-        _form: null,
-        _value: '',
-        _is_change: false,
-
+        _input: null,
+        _value:'',
+        _changed: false,
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
-            self._form = self.element.find('.form_description');
-            self._value = self._form.find('.description').text();
-            self._form.on('keyup', '.description', function(e) {
-                if(self._form.find('.description').val()!=''){
-                    self._change(e);
-                }
-
-            })
-        },
+            self._error =
+            self._input = self.element.find('textarea');
+            self._value = self._input.val();
+            self._input.on('input propertychange', function(e) {
+                self._change(e);
+            });
+         },
         _change: function(e){
-            if (this._value != this.element.html()){
-                this._is_change = true;
+            if (this._value != this._input.val()){
                 this.callParents('change', [this.options.object]);
             }else{
-                this._is_change = false;
-               this.callParents('nochange', [this.options.object]);
+                this.callParents('nochange', [this.options.object]);
             }
         },
+        _isChanged: function(){
+            return this._value != this._input.val();
+        },
+
         call_save: function(e){
-            var self=this;
-            $.ajax({
-                url: "&direct="+self.options.view+'&call=save',
-                owner: self.eventNamespace,
-                type: 'post',
-                data: {Page:{description: self._form.find('.description').val()} , object: self.options.object},
-                dataType: 'json',
-                success: function(responseText, statusText, xhr){
-                    if (responseText.out.error){
-                        for(var e in responseText.out.error){
-                            self._form.find('div.error').text(responseText.out.error[e]);
+            if (this._isChanged()){
+                var self = this;
+                var url = /^[a-z]+:\/\//i.test(self.options.object) ? self.options.object : window.location.protocol + '//' + window.location.host + self.options.object;
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    accepts: {json: 'application/json'},
+                    url: url,
+                    data: {
+                        method: 'PUT',
+                        entity:{
+                            value: self._input.val()
                         }
-                    }else{
-                        self._form.find('div.error').text('');
-                        self.element.find('description').val(responseText.out.description);
+                    },
+                    success: function(result, textStatus, jqXHR){
+    //                    if (result.error){
+    //                        for(var e in result.error){
+    //                            self.element.find('.error').text(result.error[e]);
+    //                        }
+    //                    }else{
+                            self.element.find('.error').text('');
+                            self._value = self._input.val();
+    //                    }
+                        self._change();
                     }
-                }
-            });
+                });
+            }
         },
         call_cancel: function(e){
-            this._form.find('.description').val(this._value);
+            this._input.val(this._value);
         }
     });
 })(jQuery);
