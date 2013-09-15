@@ -26,7 +26,7 @@ class RESTful extends View
     {
         $this->_input_rule = Rule::arrays(array(
                 'SERVER' => Rule::arrays(array(
-                    'HTTP_ACCEPT' => Rule::ospatterns('*application/json*'),
+                    'HTTP_ACCEPT' => Rule::ospatterns('*application/json*')->required(),
                     'REQUEST_URI' => Rule::string() // Поисковый запрос для GET/DELETE
                 )),
                 'REQUEST' => Rule::arrays(array(

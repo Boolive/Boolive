@@ -56,7 +56,7 @@ class Member extends Entity
             $obj = reset($parents);
             // Выбор ролей члена и всех его групп (родителей)
             do{
-                if ($obj->isExist()){
+                if ($obj && $obj->isExist()){
                     // Выбор ролей со всей информацией в них
                     $roles = $obj->rights->find(array(
                         'select' => 'tree',
