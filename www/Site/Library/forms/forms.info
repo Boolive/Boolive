@@ -1,0 +1,20 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/basic/Package",
+    "order": 15,
+    "children": {
+        "title": {
+            "value": "Формы",
+            "proto": "/Library/basic/Package/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Коллекция объектов для создания веб-форм",
+            "proto": "/Library/basic/Package/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
