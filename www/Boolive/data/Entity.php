@@ -1241,7 +1241,7 @@ class Entity implements ITrace
             return $this->_children[$name];
         }else{
             if (!$this->isExist()){
-                if (($p = $this->proto())/* && $p->{$name}->isExist()*/){
+                if (($p = $this->proto()) && $p->{$name}->isExist()){
                     $obj = $p->{$name}->birth($this);
                 }else{
                     $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
@@ -1725,6 +1725,8 @@ class Entity implements ITrace
                     if ($this->of($obj)) return true;
                 }
                 return false;
+            case 'access':
+                return $this->isAccessible($cond[1]);
             default: return false;
         }
     }
@@ -1742,6 +1744,8 @@ class Entity implements ITrace
         if (Data::isShortUri($parent)){
             $parent = Data::read($parent.'&cache=2')->uri();
         }
+        $uri = $this->uri();
+        if ($parent == $uri) return true;
         return $parent.'/' == mb_substr($this->uri(),0,mb_strlen($parent)+1);
     }
 

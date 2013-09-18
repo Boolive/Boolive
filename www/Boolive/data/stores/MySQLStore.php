@@ -1143,9 +1143,8 @@ class MySQLStore extends Entity
         // Информация о слияниях
         $joins = array('obj' => null);
         $joins_link = array();
+        $joins_plain = array();
         $binds2 = array();
-        // количество услой IS
-        $t_cnt = 1;
         // Условия для локализации и персонализации
         $owner_lang = '1';
         if (isset($cond['owner'])){
@@ -1523,7 +1522,7 @@ class MySQLStore extends Entity
              * @param array $attr_exists Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
              * @return string SQL условия в WHERE
              */
-            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$convert, &$result, &$joins, $t_cnt, $store, &$joins_link){
+            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$store, &$convert, &$result, &$joins, &$joins_link, &$joins_plain){
                 $level++;
                 // Нормализация групп условий
                 if ($cond[0] == 'any' || $cond[0] == 'all'){
@@ -1613,7 +1612,7 @@ class MySQLStore extends Entity
                                 unset($c[0]);
                             }
                             if (count($c)>0){
-                                $alias = 'in'.$t_cnt;
+                                $alias = uniqid('in');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
@@ -1629,7 +1628,7 @@ class MySQLStore extends Entity
                                 unset($c[0]);
                             }
                             if (count($c)>0){
-                                $alias = 'is'.$t_cnt;
+                                $alias = uniqid('is');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
@@ -1663,17 +1662,28 @@ class MySQLStore extends Entity
                                 unset($c[0]);
                             }
                             if (count($c)>0){
-                                $alias = 'heirs'.$t_cnt;
+                                $alias = uniqid('heirs');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
                             }
+                        }else
+                        if ($c[0] == 'access'){
+                            if (IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond($c[1]))){
+                                $acond = $store->getCondSQL(array('where'=>$acond), true);
+
+                                $cond[$i] = $acond['where'];
+                                $result['joins'].= $acond['joins'];
+                                $result['binds'] = array_merge($result['binds'], $acond['binds']);
+                            }else{
+                                $cond[$i] = '1';
+                            }
                         }
-                        // Не поддерживаемые услвоия игнорируем
+                        // Не поддерживаемые условия игнорируем
                         else{
-                            unset($cond[$i]);
+                            $cond[$i] = '0';
                         }
                     }else{
                         unset($cond[$i]);
@@ -1716,7 +1726,6 @@ class MySQLStore extends Entity
 
         // Слияния для условий по подчиненным и сортировке по ним
         unset($joins['obj']);
-
         foreach ($joins as $alias => $info){
             $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ? AND (`'.$alias.'`.id, `'.$alias.'`.owner, `'.$alias.'`.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=`'.$alias.'`.id AND '.$owner_lang.' GROUP BY id))';
             $binds2[] = $info[1];
@@ -1728,6 +1737,12 @@ class MySQLStore extends Entity
             $binds2[] = $cond['owner'];
             $binds2[] = $cond['lang'];
         }
+//        foreach ($joins_plain as $info){
+//            $result['joins'].= $info[0];
+//            if (!empty($info[1])){
+//                $binds2 = array_merge($binds2, $info[1]);
+//            }
+//        }
         if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
         // Полноценный SQL
         if (!$only_where){
