@@ -26,6 +26,9 @@
                 background-color: #EBF5FF;
 			    border: 1px solid #d2e8fa;
                 }
+        .ObjectItem.list .view.hidden{
+            opacity: 0.4;
+            }
         /* Главный блок*/
         .ObjectItem.list .main {
 			display: block;
@@ -41,7 +44,7 @@
 				font-size: 9pt;
 				}
                 .ObjectItem.list .hidden .main .title{
-                    opacity: 0.5;
+                    /*opacity: 0.5;*/
                     }
                 .ObjectItem.list .deleted .main .title{
                     color: #ff4a52;
