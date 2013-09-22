@@ -14,17 +14,18 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'undo'},
         { name: 'clipboard'},
         { name: 'others' },
-        { name: 'about' },
         { name: 'tools' },
+        { name: 'insert' },
 		'/',
         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-        { name: 'paragraph',   groups: [ 'align', 'list', 'indent', 'blocks', 'bidi' ] },
+        { name: 'paragraph',   groups: [ 'align', 'indent'] },
+        { name: 'lists' , groups: ['bidi', 'list','Code', 'blocks']},
         { name: 'colors' },
         '/',
         { name: 'styles' },
         { name: 'forms' },
         { name: 'links' },
-        { name: 'insert' }
+        { name: 'about' }
 
 	];
 
@@ -41,4 +42,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.filebrowserImageUploadUrl = '/?proto=Image';
     config.filebrowserFlashUploadUrl = '/?proto=Flash';
+
+    config.extraPlugins = 'syntaxhighlight,more';
+
 };
