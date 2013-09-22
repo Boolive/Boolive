@@ -1,6 +1,5 @@
 {
-    "is_default_value": true,
-    "value": "",
+    "value": "access(write/change)",
     "proto": "/Library/views/ViewSingle",
     "order": 13,
     "children": {

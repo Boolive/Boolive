@@ -1,6 +1,7 @@
 {
     "is_default_value": true,
-    "value": "",
+    "value": "Widget.tpl",
+    "is_file": true,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
     "order": 27,
@@ -16,6 +17,19 @@
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_hidden": true,
             "order": 2
+        },
+        "object_rule": {
+            "value": "access(write/change/is_draft)",
+            "proto": "/Library/admin_widgets/ToggleAction/object_rule",
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
+                    "order": 1
+                }
+            }
         }
     }
 }

@@ -25,7 +25,7 @@
                 self.callServer('destroy', {object: self.options.object}, function(result, textStatus, jqXHR){
                     //@todo Обработать ошибки (контроль доступа и целостности)
                     if (result.out.error){
-                        alert('Невозможно уничтожить. Нет доступа или объект используется');
+                        alert(result.out.error);
                     }else{
                        history.back();
                     }

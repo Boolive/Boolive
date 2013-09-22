@@ -6,10 +6,10 @@
  */
 namespace Library\admin_widgets\ToggleAction;
 
-use Library\views\View\View,
+use Library\views\Widget\Widget,
     Boolive\values\Rule;
 
-class ToggleAction extends View
+class ToggleAction extends Widget
 {
     /**
      * @var bool Текущее состояние действия (для текущего отображаемого объекта)
@@ -21,8 +21,8 @@ class ToggleAction extends View
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
+                            Rule::arrays(Rule::entity($this->object_rule->value())),
+                            Rule::entity($this->object_rule->value())
                         )->required(),
                         'call' => Rule::string()->default('')->required(),
                     )
@@ -70,6 +70,6 @@ class ToggleAction extends View
         if ($this->_input['REQUEST']['call'] == 'toggle'){
             return $this->toggle();
         }
-        return parent::work($v);
+        return null;
     }
 }

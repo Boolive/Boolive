@@ -9,19 +9,19 @@
             "value": "Страница",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_hidden": true,
-            "order": 7
+            "order": 8
         },
         "description": {
             "value": "Редактор страницы",
             "proto": "/Library/views/AutoWidgetList2/description",
             "is_hidden": true,
-            "order": 8
+            "order": 13
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
-            "order": 10,
+            "order": 15,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -43,7 +43,7 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
-            "order": 11,
+            "order": 18,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -64,7 +64,7 @@
         "object_rule": {
             "value": "is(/Library/content_samples/Page)",
             "proto": "/Library/views/AutoWidgetList2/object_rule",
-            "order": 13,
+            "order": 20,
             "children": {
                 "title": {
                     "is_default_value": true,

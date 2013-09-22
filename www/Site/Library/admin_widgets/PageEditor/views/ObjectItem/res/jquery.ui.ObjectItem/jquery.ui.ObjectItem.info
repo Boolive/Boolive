@@ -14,7 +14,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
+            "value": "",
             "proto": "/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem/description",
             "is_hidden": true,
             "order": 2

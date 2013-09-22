@@ -9,20 +9,20 @@
             "value": "Поле списка ключевых слов",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_hidden": true,
-            "order": 5
+            "order": 6
         },
         "description": {
             "is_default_value": true,
             "value": "Для отображения свойств объекта соответствующими виджетом из списка",
             "proto": "/Library/views/AutoWidgetList2/description",
             "is_hidden": true,
-            "order": 6
+            "order": 10
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
-            "order": 7,
+            "order": 12,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -44,7 +44,7 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
-            "order": 8,
+            "order": 15,
             "children": {
                 "title": {
                     "is_default_value": true,
@@ -66,7 +66,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/object_rule",
-            "order": 10,
+            "order": 17,
             "children": {
                 "title": {
                     "is_default_value": true,

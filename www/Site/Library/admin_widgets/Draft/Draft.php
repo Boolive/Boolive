@@ -6,6 +6,7 @@
  */
 namespace Library\admin_widgets\Draft;
 
+use Boolive\errors\Error;
 use Library\admin_widgets\ToggleAction\ToggleAction;
 
 class Draft extends ToggleAction
@@ -26,13 +27,17 @@ class Draft extends ToggleAction
             $result['changes'] = array();
             $draft = !$first->isDelete(null, false);
             foreach ($objects as $o){
-                /** @var \Boolive\data\Entity $o */
-                $o->isDelete($draft);
-                // @todo Обрабатывать ошибки
-                $o->save();
-                $result['changes'][$o->uri()] = array(
-                    'is_delete' => $o->isDelete(null, false)
-                );
+                try{
+                    /** @var \Boolive\data\Entity $o */
+                    $o->isDelete($draft);
+                    // @todo Обрабатывать ошибки
+                    $o->save();
+                    $result['changes'][$o->uri()] = array(
+                        'is_delete' => $o->isDelete(null, false)
+                    );
+                }catch (Error $e){
+                    $result['errors'][$o->uri()] = $e->getUserMessage(true);
+                }
             }
             $result['state'] = $first->isDelete(null, false);
         }

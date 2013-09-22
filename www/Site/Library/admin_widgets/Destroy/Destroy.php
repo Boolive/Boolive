@@ -20,8 +20,8 @@ class Destroy extends Widget
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(/*array('attr','is_delete','=',1)*/)),
-                            Rule::entity(/*array('attr','is_delete','=',1)*/)
+                            Rule::arrays(Rule::entity(array('access', 'destroy')/*array('attr','is_delete','=',1)*/)),
+                            Rule::entity(array('access', 'destroy')/*array('attr','is_delete','=',1)*/)
                         )->required(),
 //                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),
@@ -44,7 +44,7 @@ class Destroy extends Widget
                     $o->destroy(true, true);
                 }
             }catch (Error $e){
-                $v['error'] = $e->__toArray();
+                $v['error'] = $e->getUserMessage(true);
             }
             $v['result'] = true;
             return $v;

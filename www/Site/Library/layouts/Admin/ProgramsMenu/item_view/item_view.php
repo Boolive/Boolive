@@ -51,7 +51,7 @@ class item_view extends AutoWidgetList2
             $v['icon'] = $real->icon->file();
             // Активность пункта
 //            $active = $this->_input['REQUEST']['active'];
-//            if ($real->isEqual($active)){
+//            if ($real->eq($active)){
 //                $v['item_class'] = 'active';
 //            }else
 //            if ($active && $active->in($real)){

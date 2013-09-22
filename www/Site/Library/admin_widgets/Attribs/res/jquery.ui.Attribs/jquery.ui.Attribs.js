@@ -246,7 +246,7 @@
                 form.find('.submit-message').text(value);
             }).
             on('change-error', function(error){
-                self.callParents('change', [self.model.object]);
+//                self.callParents('change', [self.model.object]);
 //                form.find('.submit').text('Сохранить ещё раз').removeClass('btn-disable');
 //                form.find('.reset').removeClass('hide');
                 form.find('.item-'+error.name).addClass('error').find('.error-message').text(error.value);
@@ -450,6 +450,7 @@
                             }
                         }
                         self.submit_msg.text(self.errorMessage(responseText.out.error, false));
+                        self.callParents('change', [self.model.object]);
 //                                for(var e in responseText.out.error){
 //                                    if (e == 'file'){
 //                                        self.model.set_error('value', responseText.out.error[e]);

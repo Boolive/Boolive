@@ -2,7 +2,7 @@
     "value": "icon.png",
     "is_file": true,
     "proto": "/Library/basic/Image",
-    "order": 9,
+    "order": 10,
     "children": {
         "title": {
             "value": "Иконка",
