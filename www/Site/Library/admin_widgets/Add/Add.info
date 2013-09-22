@@ -39,6 +39,42 @@
                     "order": 4
                 }
             }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/admin_widgets/SelectObject/cache",
+            "order": 9,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/admin_widgets/SelectObject/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/admin_widgets/SelectObject/cache/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/SelectObject/object_rule",
+            "order": 10,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/admin_widgets/SelectObject/object_rule/title",
+                    "order": 1
+                }
+            }
         }
     }
 }
