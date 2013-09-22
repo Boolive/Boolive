@@ -14,7 +14,7 @@ use Boolive\data\Entity;
 
 class Allow extends Entity
 {
-    public function getAccessCond($action_kind, $parent = '', $depth = null)
+    public function getAccessCond($action_kind, $object = null)
     {
         $ids = array();
         $objects = $this->find(array(
@@ -27,8 +27,12 @@ class Allow extends Entity
             /** @var $o Entity */
             $ids[] = $o->proto()->id();
         }
+        $kind = $this->value();
+        if (!in_array($kind, array('is', 'in', 'of', 'eq', 'childOf', 'heirOf'))){
+            $kind = 'eq';
+        }
         if ($ids){
-            return array('of', $ids);
+            return array($kind, $ids);
         }
         return null;
     }

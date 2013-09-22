@@ -23,6 +23,7 @@ Version 2.0.alpha work in progress
 - enh The remote calls of methods in RESTful API is added (VladimirShestakov)
 - enh #123 Search of parents, prototypes and heirs is added. Syntax of the condition for search of children, counts of objects and check of existence of object is changed. Initial and final depth of search is added. (VladimirShestakov)
 - enh #125 Buffering by levels for result of reading a tree of objects is added. (VladimirShestakov)
+- enh #132 Detailing of actions for access control (VladimirShestakov)
 - enh #133 Full conditions for SwitchCase (VladimirShestakov)
 - enh #134 Check of inheritance of external objects (VladimirShestakov)
 - enh #143 Copying file from a prototype in case of is_defult_value setting to false (VladimirShestakov)

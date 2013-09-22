@@ -12,7 +12,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Базовый объект для пользователей и групп",
+            "value": "Эталон для создания пользователей",
             "proto": "/Library/access/User/description",
             "is_hidden": true,
             "order": 2

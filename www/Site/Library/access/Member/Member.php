@@ -27,18 +27,17 @@ class Member extends Entity
      */
     public function checkAccess($action_kind, $object)
     {
-        return $object->verify($this->getAccessCond($action_kind/*, $object->parentUri(), 1*/));
+        return $object->verify($this->getAccessCond($action_kind, $object));
     }
 
     /**
      * Условие доступа к объектам
      * Родитель и глубина указывается для оптимизации условия
      * @param string $action_kind Вид действия
-     * @param string $parent URI объекта, для подчиненных которого необходимо условие доступа
-     * @param int $depth Глубина затрагиваемых объектов относительно родительского
+     * @param $object Объект, к которому проверяется доступ
      * @return array
      */
-    public function getAccessCond($action_kind, $parent = '', $depth = null)
+    public function getAccessCond($action_kind, $object = null)
     {
         if (!isset($this->_rights[$action_kind])){
             //Trace::groups('Data')->group('START getAccess');
@@ -46,10 +45,10 @@ class Member extends Entity
             $cond = null;
             $curr = null;
             if ($this->isExist()){
-                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true), false, true, false);
+                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
             }
             else{
-                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 1), 'order' => array('parent_cnt', 'desc'), 'group'=>true), false, true, false);
+                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
                 //array_unshift($parents, $this);
             }
 
@@ -68,7 +67,7 @@ class Member extends Entity
                     //$roles = $rights->find(array('comment'=>'read all roles of Member'));
                     // Объединяем права в общий список
                     foreach ($roles as $r){
-                        if ($r instanceof Role && ($c = $r->getAccessCond($action_kind, $parent, $depth)) && is_array($c)){
+                        if ($r instanceof Role && ($c = $r->linked()->getAccessCond($action_kind, $object)) && is_array($c)){
                             $need = ($c[0] == 'not')?'all':'any';
                             if (is_null($cond)){
                                 $cond = array($need, array($c));

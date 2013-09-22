@@ -1,0 +1,21 @@
+{
+    "value": "eq",
+    "proto": "/Library/access/Deny",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Запрет",
+            "proto": "/Library/access/Deny/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Правило, запрещающее доступ к объектам. В правило добавляются ссылки на объекты",
+            "proto": "/Library/access/Deny/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

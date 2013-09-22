@@ -1,7 +1,7 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "value": "Допуск",
@@ -9,7 +9,7 @@
             "order": 1
         },
         "description": {
-            "value": "Право доступа к объектам",
+            "value": "Правило, разрешающее доступ к объектам. В правило добавляются ссылки на объекты",
             "is_hidden": true,
             "order": 2
         }

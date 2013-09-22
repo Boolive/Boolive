@@ -1,0 +1,19 @@
+{
+    "value": "",
+    "proto": "/Library/access/Action",
+    "order": 13,
+    "children": {
+        "title": {
+            "value": "Черновик и публикация",
+            "proto": "/Library/access/Action/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Смена признака \"Черновик\"",
+            "proto": "/Library/access/Action/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

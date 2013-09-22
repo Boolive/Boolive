@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change",
+    "order": 11,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Изменение",
+            "proto": "/Library/access/Role/write/change/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Изменение атрибутов объекта и его подчиненных",
+            "proto": "/Library/access/Role/write/change/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

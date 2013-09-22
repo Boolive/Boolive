@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/create",
+    "order": 10,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Создание",
+            "proto": "/Library/access/Role/write/create/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Использование объекта в качестве прототипа для создания новых",
+            "proto": "/Library/access/Role/write/create/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

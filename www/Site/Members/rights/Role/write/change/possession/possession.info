@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/possession",
+    "order": 13,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Принадлежность",
+            "proto": "/Library/access/Role/write/change/possession/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Изменение принадлежности объекта к его родителю (обязательный/дополнительный/внутренний)",
+            "proto": "/Library/access/Role/write/change/possession/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

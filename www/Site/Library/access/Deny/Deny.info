@@ -1,7 +1,7 @@
 {
     "value": "",
     "is_default_class": false,
-    "order": 8,
+    "order": 9,
     "children": {
         "title": {
             "value": "Запрет",
@@ -9,7 +9,7 @@
             "order": 1
         },
         "description": {
-            "value": "Запрет доступа к объектам",
+            "value": "Правило, запрещающее доступ к объектам. В правило добавляются ссылки на объекты",
             "is_hidden": true,
             "order": 2
         }

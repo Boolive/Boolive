@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/name",
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Имя",
+            "proto": "/Library/access/Role/write/change/name/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Изменение имени объекта (последняя часть URI)",
+            "proto": "/Library/access/Role/write/change/name/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

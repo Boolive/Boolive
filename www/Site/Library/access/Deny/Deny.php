@@ -13,7 +13,7 @@ use Boolive\data\Entity;
 
 class Deny extends Entity
 {
-    public function getAccessCond($action_kind, $parent = '', $depth = null)
+    public function getAccessCond($action_kind, $object = null)
     {
         $ids = array();
         $objects = $this->find(array(
@@ -25,8 +25,12 @@ class Deny extends Entity
         foreach ($objects as $o){
             $ids[] = $o->proto()->id();
         }
+        $kind = $this->value();
+        if (!in_array($kind, array('is', 'in', 'of', 'eq', 'childOf', 'heirOf'))){
+            $kind = 'eq';
+        }
         if ($ids){
-            return array('not', array('of', $ids));
+            return array('not', array($kind, $ids));
         }
         return null;
     }

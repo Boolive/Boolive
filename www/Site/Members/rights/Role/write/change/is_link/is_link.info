@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/is_link",
+    "order": 11,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Связать и отвязать",
+            "proto": "/Library/access/Role/write/change/is_link/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Изменение признака \"Ссылка\"",
+            "proto": "/Library/access/Role/write/change/is_link/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

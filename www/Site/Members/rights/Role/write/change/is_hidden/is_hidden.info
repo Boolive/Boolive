@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/is_hidden",
+    "order": 10,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Скрыть и показать",
+            "proto": "/Library/access/Role/write/change/is_hidden/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Изменение признака \"Скрытый\"",
+            "proto": "/Library/access/Role/write/change/is_hidden/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/is_default_class",
+    "order": 12,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Логика",
+            "proto": "/Library/access/Role/write/change/is_default_class/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Изменение признака \"Своя логика\" и редактирование логики через админку",
+            "proto": "/Library/access/Role/write/change/is_default_class/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

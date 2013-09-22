@@ -254,7 +254,7 @@ class MySQLStore extends Entity
      */
     public function write($entity, $access, $force_add = false)
     {
-        if ($access && IS_INSTALL && !($entity->isAccessible() && Auth::getUser()->checkAccess('write', $entity))){
+        if ($access && IS_INSTALL && !$entity->isAccessible('write')){
             $error = new Error('Запрещенное действие над объектом', $entity->uri());
             $error->access = new Error('Нет доступа на запись', 'write');
             throw $error;
@@ -368,6 +368,67 @@ class MySQLStore extends Entity
                     }
                     unset($q);
                 }
+                // Проверка доступов
+                if ($access && IS_INSTALL){
+                    $error = new Error('Запрещенное действие над объектом', $entity->uri());
+                    if ((empty($current) || $current['parent']!=$attr['parent']) && !$entity->isAccessible('write/change/add_child')){
+                        $error->access = new Error('Нет доступа на добавление подчиненных', 'write/change/add_child');
+                    }else
+                    if ((empty($current) || $current['proto']!=$attr['proto']) && !$entity->isAccessible('write/create')){
+                        $error->access = new Error('Нет доступа на использование выбранного прототипа (создания объекта)', 'write/create');
+                    }else
+                    if (!empty($current)){
+                        if ($current['is_hidden'] != $attr['is_hidden'] && !$entity->isAccessible('write/change/is_hidden')){
+                            $error->access = new Error('Нет доступа на смену признака "скрытый"', 'write/change/is_hidden');
+                        }else
+                        if ($current['is_delete'] != $attr['is_delete'] && !$entity->isAccessible('write/change/is_draft')){
+                            $error->access = new Error('Нет доступа на смену признака "черновик"', 'write/change/is_draft');
+                        }else
+                        if ($current['is_link'] != $attr['is_link'] && !$entity->isAccessible('write/change/is_link')){
+                            $error->access = new Error('Нет доступа на смену признака "ссылка"', 'write/change/is_link');
+                        }else
+                        if ($current['is_relative'] != $attr['is_relative'] && !$entity->isAccessible('write/change/proto')){
+                            $error->access = new Error('Нет доступа на смену признака "относительный прототип"', 'write/change/proto');
+                        }else
+                        if (($current['value'] != $attr['value'] ||
+                             $current['is_file'] != $attr['is_file'] ||
+                             $current['is_default_value'] != $attr['value'] ||
+                             !empty($attr['file'])) &&
+                             !$entity->isAccessible('write/change/value')){
+                            $error->access = new Error('Нет доступа на изменение значения', 'write/change/value');
+                        }else
+                        if ($current['name'] != $attr['name'] && !$entity->isAccessible('write/change/name')){
+                            $error->access = new Error('Нет доступа на смену имени', 'write/change/name');
+                        }else
+                        if ($current['parent'] != $attr['parent'] && !$entity->isAccessible('write/change/parent')){
+                            $error->access = new Error('Нет доступа на смену родителя (перемещения)', 'write/change/parent');
+                        }else
+                        if ($current['proto'] != $attr['proto'] && !$entity->isAccessible('write/change/proto')){
+                            $error->access = new Error('Нет доступа на смену прототипа', 'write/change/proto');
+                        }else
+                        if ($current['owner'] != $attr['owner'] && !$entity->isAccessible('write/change/owner')){
+                            $error->access = new Error('Нет доступа на смену владельца', 'write/change/owner');
+                        }else
+                        if ($current['lang'] != $attr['lang'] && !$entity->isAccessible('write/change/lang')){
+                            $error->access = new Error('Нет доступа на смену языка', 'write/change/lang');
+                        }else
+                        if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
+                            $error->access = new Error('Нет доступа на смену признака "своя логика"', 'write/change/is_default_class');
+                        }else
+                        if ($current['possession'] != $attr['possession'] && !$entity->isAccessible('write/change/possession')){
+                            $error->access = new Error('Нет доступа на смену принадлежности', 'write/change/possession');
+                        }else
+                        if ($current['diff'] != $attr['diff'] && $attr['diff'] == Entity::DIFF_NO && !$entity->isAccessible('write/change/diff')){
+                            $error->access = new Error('Нет доступа на установку обновлений', 'write/change/diff');
+                        }
+    //                    else
+    //                    if ($current['order'] != $attr['order'] && ($p = $entity->parent()) && !$p->isAccessible('order')){
+    //                        $error->access = new Error('Нет доступа на упорядочивание подчиненных', 'order');
+    //                    }
+                    }
+                    if ($error->isExist()) throw $error;
+                }
+
                 $this->db->beginTransaction();
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных
                 if (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent'])){
@@ -702,18 +763,18 @@ class MySQLStore extends Entity
     public function delete($entity, $access, $integrity)
     {
         // Проверка доступа на уничтожение объекта и его подчиненных
-        if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $entity->id(), null))){
-            $not_access = $this->read(array(
+        if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $entity))){
+            $not_access = $this->read(Data::normalizeCond(array(
                     'select' => array('exists', 'children'),
                     'from' => $entity->id(),
                     'depth' => array(0, 'max'),
                     'where' => array('not', $acond),
                     'access' => false
-                ), false
+                ),array(), true), false
             );
             if ($not_access){
                 $error = new Error('Запрещенное действие над объектом', $entity->uri());
-                $error->access = new Error('Нет доступа на уничтожение объекта или любого из его подчиненных', 'delete');
+                $error->access = new Error('Нет доступа на уничтожение объекта или его подчиненных', 'delete');
                 throw $error;
             }
         }
@@ -1488,6 +1549,9 @@ class MySQLStore extends Entity
                 }
                 // Условие на владельца и язык
                 $result['where'].="(obj.id, obj.owner, obj.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=obj.id AND $owner_lang GROUP BY id)\n  ";
+                if (!isset($cond['owner'])){
+                    $a = 10;
+                }
                 $result['binds'][] = array($cond['owner'], DB::PARAM_INT);
                 $result['binds'][] = array($cond['lang'], DB::PARAM_INT);
             }
@@ -1535,6 +1599,7 @@ class MySQLStore extends Entity
                 }
                 foreach ($cond as $i => $c){
                     if (is_array($c) && !empty($c)){
+                        $c[0] = strtolower($c[0]);
                         // AND
                         if ($c[0]=='all'){
                             $cond[$i] = '('.$convert($c[1], ' AND ', $table, $level, $attr_exists).')';
@@ -1553,7 +1618,7 @@ class MySQLStore extends Entity
                             if ($c[1] == 'value'){
                                 $c[1] = is_numeric($c[3]) ? 'valuef': 'value';
                             }
-                            if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'owner' || $c[1] == 'lang'){
+                            if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'owner' || $c[1] == 'lang' || $c[1] == 'uri'){
                                 if (is_array($c[3])){
                                     foreach ($c[3] as $ci => $cv){
                                         $c[3][$ci] = $store->localId($cv, false);
@@ -1604,7 +1669,22 @@ class MySQLStore extends Entity
                                 $cond[$i] = '('.$convert($c[1], ' AND ', $alias, $level).')';
                             }
                         }else
-                        // Условие на наличие родителя
+                        // Сверка объекта по URI
+                        if ($c[0]=='eq'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (count($c)>0){
+                                $cond[$i] = '`'.$table.'`.`id` IN ('.str_repeat('?,', count($c)-1).'?)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '0';
+                            }
+                        }else
+                        // Условие на наличие родителя или эквивалентности.
                         if ($c[0]=='in'){
                             if (is_array($c[1])){
                                 $c = $c[1];
@@ -1620,7 +1700,7 @@ class MySQLStore extends Entity
                                 $cond[$i] = '1';
                             }
                         }else
-                        // Условие на наличие прототипа.
+                        // Условие на наличие прототипа или эквивалентности.
                         if ($c[0]=='is'){
                             if (is_array($c[1])){
                                 $c = $c[1];
@@ -1654,6 +1734,39 @@ class MySQLStore extends Entity
                                 $cond[$i] = '1';
                             }
                         }else
+                        // Условие на наличие родителя
+                        if ($c[0]=='childof'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (count($c)>0){
+                                $alias = uniqid('in');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0 AND level>0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие прототипа.
+                        if ($c[0]=='heirof'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (count($c)>0){
+                                $alias = uniqid('is');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0 AND level > 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+
                         // Условие на наличие наследника.
                         if ($c[0]=='heirs'){
                             if (is_array($c[1])){

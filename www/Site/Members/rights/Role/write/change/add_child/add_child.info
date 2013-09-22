@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/add_child",
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Добавление подчиненных",
+            "proto": "/Library/access/Role/write/change/add_child/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Добавление к объекту подчиненных объектов (свойств)",
+            "proto": "/Library/access/Role/write/change/add_child/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

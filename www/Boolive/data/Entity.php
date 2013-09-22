@@ -678,7 +678,7 @@ class Entity implements ITrace
     {
         if (!empty($this->_attribs['is_accessible'])){
             if ($action != 'read'){
-                return !IS_INSTALL || $this->verify(Auth::getUser()->getAccessCond($action));
+                return !IS_INSTALL || $this->verify(Auth::getUser()->getAccessCond($action, $this));
             }
             return true;
         }
@@ -883,7 +883,7 @@ class Entity implements ITrace
     {
         if (is_string($new_parent)) $new_parent = Data::read($new_parent);
         // Смена родителя
-        if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->isEqual($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1)){
+        if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->eq($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1)){
             $is_delete = $this->isDelete(null, false);
             $is_hidden = $this->isHidden(null, false);
             if (empty($new_parent)){
@@ -989,7 +989,7 @@ class Entity implements ITrace
     {
         if (is_string($new_proto)) $new_proto = Data::read($new_proto);
         // Смена прототипа
-        if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->isEqual($this->proto()))){
+        if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->eq($this->proto()))){
             if (empty($new_proto)){
                 // Удаление прототипа
                 $this->_attribs['proto'] = null;
@@ -1085,7 +1085,7 @@ class Entity implements ITrace
     {
         if (is_string($new_owner)) $new_owner = Data::read($new_owner);
         // Смена владельца
-        if (isset($new_owner) && (empty($new_owner)&&!empty($this->_attribs['owner']) || !$new_owner->isEqual($this->owner()))){
+        if (isset($new_owner) && (empty($new_owner)&&!empty($this->_attribs['owner']) || !$new_owner->eq($this->owner()))){
             if (empty($new_owner)){
                 // Удаление языка
                 $this->_attribs['owner'] = null;
@@ -1128,7 +1128,7 @@ class Entity implements ITrace
     {
         if (is_string($new_lang)) $new_lang = Data::read($new_lang);
         // Смена языка
-        if (isset($new_lang) && (empty($new_lang)&&!empty($this->_attribs['lang']) || !$new_lang->isEqual($this->lang()))){
+        if (isset($new_lang) && (empty($new_lang)&&!empty($this->_attribs['lang']) || !$new_lang->eq($this->lang()))){
             if (empty($new_lang)){
                 // Удаление языка
                 $this->_attribs['lang'] = null;
@@ -1646,7 +1646,7 @@ class Entity implements ITrace
         if (empty($cond)) return true;
         if (is_string($cond)) $cond = Data::parseCond($cond);
         if (is_array($cond[0])) $cond = array('all', $cond);
-        switch ($cond[0]){
+        switch (strtolower($cond[0])){
             case 'all':
                 foreach ($cond[1] as $c){
                     if (!$this->verify($c)) return false;
@@ -1706,6 +1706,21 @@ class Entity implements ITrace
                     return true;
                 }
                 return false;
+            case 'heir':
+                $heir = $this->{$cond[1]};
+                if ($heir->isExist()){
+                    if (isset($cond[2])){
+                        return $heir->verify($cond[2]);
+                    }
+                    return true;
+                }
+                return false;
+            case 'eq':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $proto){
+                    if ($this->eq($proto)) return true;
+                }
+                return false;
             case 'in':
                 if (!is_array($cond[1])) $cond[1] = array($cond[1]);
                 foreach ($cond[1] as $parent){
@@ -1725,6 +1740,19 @@ class Entity implements ITrace
                     if ($this->of($obj)) return true;
                 }
                 return false;
+            case 'childof':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $parent){
+                    if ($this->childOf($parent)) return true;
+                }
+                return false;
+                break;
+            case 'heirof':
+                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
+                foreach ($cond[1] as $proto){
+                    if ($this->heirOf($proto)) return true;
+                }
+                return false;
             case 'access':
                 return $this->isAccessible($cond[1]);
             default: return false;
@@ -1738,15 +1766,8 @@ class Entity implements ITrace
      */
     public function in($parent)
     {
-        if ($parent instanceof Entity){
-            $parent = $parent->uri();
-        }else
-        if (Data::isShortUri($parent)){
-            $parent = Data::read($parent.'&cache=2')->uri();
-        }
-        $uri = $this->uri();
-        if ($parent == $uri) return true;
-        return $parent.'/' == mb_substr($this->uri(),0,mb_strlen($parent)+1);
+        if ($this->eq($parent)) return true;
+        return $this->childOf($parent);
     }
 
     /**
@@ -1757,8 +1778,8 @@ class Entity implements ITrace
     public function is($proto)
     {
         if ($proto == 'all') return true;
-        if ($this->isEqual($proto)) return true;
-        return ($p = $this->proto()) ? $p->is($proto) : false;
+        if ($this->eq($proto)) return true;
+        return $this->heirOf($proto);
     }
 
     /**
@@ -1772,19 +1793,45 @@ class Entity implements ITrace
     }
 
     /**
-     * Сравнение объектов по uri
-     * @param Entity $entity
+     * Сравнение объекта по uri
+     * @param Entity $object
      * @return bool
      */
-    public function isEqual($entity)
+    public function eq($object)
     {
-        if ($entity instanceof Entity){
-            return $this->key() === $entity->key() &&
-               $this->_attribs['owner'] == $entity->_attribs['owner'] &&
-               $this->_attribs['lang'] == $entity->_attribs['lang']/* &&
+        if ($object instanceof Entity){
+            return $this->key() === $object->key() &&
+               $this->_attribs['owner'] == $object->_attribs['owner'] &&
+               $this->_attribs['lang'] == $object->_attribs['lang']/* &&
                $this->date() == $entity->date()**/;
         }
-        return isset($entity) && ($this->_attribs['id'] === $entity || $this->uri() === $entity);
+        return isset($object) && ($this->_attribs['id'] === $object || $this->uri() === $object);
+    }
+
+    /**
+     * Провкра, является ли подчиненным для указанного объекта?
+     * @param $object
+     * @return bool
+     */
+    public function childOf($object)
+    {
+        if ($object instanceof Entity){
+            $object = $object->uri();
+        }else
+        if (Data::isShortUri($object)){
+            $object = Data::read($object.'&cache=2')->uri();
+        }
+        return $object.'/' == mb_substr($this->uri(),0,mb_strlen($object)+1);
+    }
+
+    /**
+     * Провкра, является ли наследником для указанного объекта?
+     * @param $object
+     * @return bool
+     */
+    public function heirOf($object)
+    {
+        return ($p = $this->proto()) ? $p->is($object) : false;
     }
 
     /**

@@ -1,0 +1,17 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Действие",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Действие, на которое устанавливается правило доступа или запрета. Имя объекта соответствует названию действия.",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

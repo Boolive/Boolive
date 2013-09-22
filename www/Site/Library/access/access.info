@@ -4,13 +4,13 @@
     "order": 14,
     "children": {
         "title": {
-            "value": "Пользователи и доступ",
+            "value": "Доступ и пользователи",
             "proto": "/Library/basic/Package/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "value": "",
+            "value": "Пакет правил доступа, ролей, пользователей и групп",
             "is_hidden": true,
             "order": 2
         }

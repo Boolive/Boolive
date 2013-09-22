@@ -11,8 +11,7 @@
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Базовый объект для пользователей и групп",
+            "value": "Эталон для создания групп",
             "proto": "/Library/access/Member/description",
             "is_hidden": true,
             "order": 2

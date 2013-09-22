@@ -1,6 +1,5 @@
 {
-    "is_default_value": true,
-    "value": "",
+    "value": "of",
     "proto": "/Library/access/Deny",
     "order": 2,
     "children": {
@@ -13,7 +12,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Запрет доступа к объектам",
+            "value": "Правило, запрещающее доступ к объектам. В правило добавляются ссылки на объекты",
             "proto": "/Library/access/Deny/description",
             "is_hidden": true,
             "order": 2

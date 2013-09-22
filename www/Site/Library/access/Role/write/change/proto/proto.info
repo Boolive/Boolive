@@ -1,0 +1,20 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Action",
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Прототип",
+            "proto": "/Library/access/Action/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Смена прототипа объекта (наследования)",
+            "proto": "/Library/access/Action/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

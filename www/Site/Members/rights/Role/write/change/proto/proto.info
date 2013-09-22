@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role/write/change/proto",
+    "order": 8,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Прототип",
+            "proto": "/Library/access/Role/write/change/proto/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Смена прототипа объекта (наследования)",
+            "proto": "/Library/access/Role/write/change/proto/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
