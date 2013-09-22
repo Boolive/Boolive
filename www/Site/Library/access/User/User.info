@@ -7,7 +7,6 @@
         "title": {
             "value": "Пользователь",
             "proto": "/Library/access/Member/title",
-            "is_hidden": true,
             "order": 1
         },
         "description": {
@@ -15,10 +14,6 @@
             "proto": "/Library/access/Member/description",
             "is_hidden": true,
             "order": 2
-        },
-        "name": {
-            "value": "",
-            "order": 4
         },
         "email": {
             "value": "",

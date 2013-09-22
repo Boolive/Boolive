@@ -35,8 +35,8 @@ class PageAuthorEditor extends Widget {
                return null;
              }
            $v['object'] = $this->_input['REQUEST']['object']->uri();
-           $v['value'] = $this->_input['REQUEST']['object']->linked()->name->value();
-           $v['title'] = $this->_input['REQUEST']['object']->title->value();
+           $v['value'] = $this->_input['REQUEST']['object']->linked()->title->value();
+           $v['title'] = $this->_input['REQUEST']['object']->linked()->proto()->title->value();
            return parent::work($v);
        }
 
@@ -46,6 +46,6 @@ class PageAuthorEditor extends Widget {
            $obj->proto($user['user']);
            $obj->isLink(true);
            $obj->save();
-           return $obj->name->value();
+           return $obj->title->value();
        }
 }

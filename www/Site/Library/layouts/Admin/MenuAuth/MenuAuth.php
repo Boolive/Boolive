@@ -18,7 +18,7 @@ class MenuAuth extends Widget{
         $v['logout'] = Input::url(null,0,array('logout'=>true));
         $user = Auth::getUser();
         if($user->isExist()){
-            $v['name'] = $user->name->value();
+            $v['name'] = $user->title->value();
         }
         $v['userlink'] = $user->uri();
         return parent::work($v);

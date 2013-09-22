@@ -4,10 +4,8 @@
     "order": 4,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Пользователь",
+            "value": "Админ",
             "proto": "/Library/access/User/title",
-            "is_hidden": true,
             "order": 1
         },
         "description": {
@@ -16,11 +14,6 @@
             "proto": "/Library/access/User/description",
             "is_hidden": true,
             "order": 2
-        },
-        "name": {
-            "value": "Администратор",
-            "proto": "/Library/access/User/name",
-            "order": 4
         },
         "email": {
             "value": "boolive@yandex.com",
