@@ -27,9 +27,9 @@ $stores = array(
                 'port' => '3306'
             ),
             // Имя пользователя для подключения к базе данных
-            'user' => 'boolive',
+            'user' => 'root',
             // Пароль
-            'password' => 'boolive',
+            'password' => '',
             // Опции подключения
             'options' => array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'

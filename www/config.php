@@ -7,7 +7,10 @@
 define('START_TIME', microtime(true));
 
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', true);
+define('IS_INSTALL', false);
+
+/** @const Версия системы Boolive */
+define('VERSION', '2.0.alpha.2013.09.17');
 
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
@@ -36,7 +39,7 @@ define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_H
 define('TIMESTAMP', '1');
 
 /* Признак, выводить всю трассировку?*/
-define('GLOBAL_TRACE', true);
+define('GLOBAL_TRACE', false);
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
 /**
