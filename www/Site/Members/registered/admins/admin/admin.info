@@ -6,6 +6,7 @@
         "title": {
             "value": "Админ",
             "proto": "/Library/access/User/title",
+            "is_hidden": true,
             "order": 1
         },
         "description": {

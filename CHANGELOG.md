@@ -28,6 +28,7 @@ Version 2.0.alpha work in progress
 - enh #134 Check of inheritance of external objects (VladimirShestakov)
 - enh #143 Copying file from a prototype in case of is_defult_value setting to false (VladimirShestakov)
 - enh #144 Automatic class creation if the object attribute of "is_default_class" is set to false and a class doesn't exist (VladimirShestakov)
+- enh #148 Separate form of authentication (VladimirShestakov)
 
 Version 2.0.preview-2 April, 27 2013
 ----------------------------

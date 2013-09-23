@@ -1,11 +1,12 @@
 {
-    "value": "EmailField.tpl",
+    "value": "RememberField.tpl",
     "is_file": true,
     "proto": "/Library/forms/FormField",
-    "order": 3,
+    "order": 5,
     "children": {
         "title": {
-            "value": "Поле email",
+            "is_default_value": true,
+            "value": "Поле формы",
             "proto": "/Library/forms/FormField/title",
             "is_hidden": true,
             "order": 1
@@ -40,12 +41,14 @@
             }
         },
         "object_rule": {
-            "value": "is(/Library/content_samples/Feedback/email_from)",
-            "order": 4,
+            "value": "attr(name,=,remember)",
+            "proto": "/Library/forms/FormField/object_rule",
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "",
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/forms/FormField/object_rule/title",
                     "order": 1
                 }
             }

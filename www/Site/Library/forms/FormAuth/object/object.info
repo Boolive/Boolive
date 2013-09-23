@@ -1,0 +1,12 @@
+{
+    "value": "",
+    "is_default_class": false,
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Модель авторизации",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

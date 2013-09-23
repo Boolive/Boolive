@@ -1,0 +1,100 @@
+body{
+    background-color: #F5F5F5;
+}
+.FormAuth{
+    font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	color: #000;
+	/*border-radius: 5px;*/
+	/*box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;*/
+	/*clear: both;*/
+	/*margin: 10px 0px 15px 0;*/
+	padding: 30px;
+    width: 300px;
+    margin: 50px auto;
+	/*background: #FFF;*/
+    background-color: #ffffff;
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    border-left: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    box-shadow: 0px 2px 4px rgba(50, 50, 50, 0.15);
+	}
+    .FormAuth h1 {
+        font-size: 30pt;
+        font-weight: normal;
+        margin: 0px 0 25px 0;
+        }
+
+    .FormAuth > h3{
+        padding: 0;
+        margin: 0;
+    }
+    .FormAuth label{
+        width: 100px;
+        margin: 2px 0;
+        display: inline-block;
+        }
+    .FormAuth input[type=text],
+    .FormAuth input[type=password]{
+        border: 1px #E0E0E0 solid;
+        background-color: #FFF;
+        width: 195px;
+        color: #333;
+        font-size: 11pt;
+        padding: 3px;
+        margin: 0;
+        box-shadow: inset -1px 1px 3px 0 #f5f5f5;
+        border-radius: 3px;
+        display: inline-block;
+        position: relative;
+        outline: none;
+        box-sizing: border-box;
+    }
+    .FormAuth textarea{
+        height: 200px;
+        width: 95%;
+        }
+    .FormAuth .form_ok{
+        border: 1px solid #31baf5;
+        background: #f0f9fc;
+        color: #1d6d8f;
+        padding: 25px;
+        margin: 25px 0;
+    }
+    .FormAuth .form_error{
+        border: 1px solid #ff663a;
+        background: #fff5f2;
+        color: #80260d;
+        padding: 25px;
+        margin: 25px 0;
+    }
+    .FormAuth .error_message{
+        font-size: 10pt;
+        margin: 5px 0;
+        color: #ff663a;
+    }
+    .FormAuth .buttons{
+        text-align: right;
+    }
+    .FormAuth input[type=submit]{
+        display: inline-block;
+
+        /*height: 22px;*/
+        margin: 25px 0 0 0;
+        padding: 6px 14px 6px 14px;
+        min-width: 51px;
+        font-size: 11pt;
+        cursor: pointer;
+        overflow: hidden;
+        text-decoration: none;
+        text-align: center;
+        color: #FFF;
+        background-color: #499df2;
+        border: 1px solid #499aeb;
+        }
+    .FormAuth input[type=submit]:hover{
+        color: #FFF;
+        background-color: #418dd9;
+        border: 1px solid #3f8ad4;
+        }

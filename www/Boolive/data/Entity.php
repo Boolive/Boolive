@@ -897,6 +897,7 @@ class Entity implements ITrace
                 $this->_parent = $new_parent;
                 $this->_attribs['parent'] = $new_parent->key();
                 $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
+                $this->_attribs['order'] = Entity::MAX_ORDER;
                 // Установка атрибутов, зависимых от прототипа
                 //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
                 // Обновление доступа

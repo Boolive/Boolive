@@ -1,39 +1,39 @@
 {
     "value": "MessageField.tpl",
     "is_file": true,
-    "proto": "/Library/views/FormField",
+    "proto": "/Library/forms/FormField",
     "order": 4,
     "children": {
         "title": {
             "value": "Поле сообщения",
-            "proto": "/Library/views/FormField/title",
+            "proto": "/Library/forms/FormField/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
-            "proto": "/Library/views/FormField/description",
+            "proto": "/Library/forms/FormField/description",
             "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/views/FormField/res",
+            "proto": "/Library/forms/FormField/res",
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/views/FormField/res/title",
+                    "proto": "/Library/forms/FormField/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/views/FormField/res/description",
+                    "proto": "/Library/forms/FormField/res/description",
                     "is_hidden": true,
                     "order": 2
                 }
