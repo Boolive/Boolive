@@ -6,10 +6,11 @@
  */
 namespace Library\admin_widgets\Explorer;
 
-use Boolive\data\Entity;
-use Library\views\AutoWidgetList\AutoWidgetList, Boolive\values\Rule;;
+use Boolive\data\Entity,
+    Library\views\AutoWidgetList2\AutoWidgetList2,
+    Boolive\values\Rule;
 
-class Explorer extends AutoWidgetList
+class Explorer extends AutoWidgetList2
 {
     public function defineInputRule()
     {

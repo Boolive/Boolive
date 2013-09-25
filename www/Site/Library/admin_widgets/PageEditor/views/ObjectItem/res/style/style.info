@@ -2,20 +2,20 @@
     "is_default_value": true,
     "value": "style.css",
     "is_file": true,
-    "proto": "/Library/admin_widgets/ObjectItem/res/style",
+    "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/style",
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/admin_widgets/ObjectItem/res/style/title",
+            "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/style/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/admin_widgets/ObjectItem/res/style/description",
+            "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/style/description",
             "is_hidden": true,
             "order": 2
         }

@@ -2,27 +2,27 @@
     "is_default_value": true,
     "value": "jquery.ui.ObjectItem.js",
     "is_file": true,
-    "proto": "/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem",
+    "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem",
     "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Boolive.ObjectItem",
-            "proto": "/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem/title",
+            "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem/description",
+            "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem/description",
             "is_hidden": true,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/admin_widgets/ObjectItem/res/jquery.ui.ObjectItem/depends",
+            "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem/depends",
             "is_link": true,
             "order": 3
         }

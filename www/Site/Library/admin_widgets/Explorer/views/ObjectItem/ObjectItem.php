@@ -4,12 +4,25 @@
  *
  * @version 1.0
  */
-namespace Library\admin_widgets\ObjectItem;
+namespace Library\admin_widgets\Explorer\views\ObjectItem;
 
-use Library\views\Widget\Widget;
+use Library\views\Widget\Widget,
+    Boolive\values\Rule;
 
 class ObjectItem extends Widget
 {
+    public function defineInputRule()
+    {
+        $this->_input_rule = Rule::arrays(array(
+                'REQUEST' => Rule::arrays(array(
+                        'object' => Rule::entity($this->object_rule->value())->required(),
+                        'view_kind' => Rule::eq('list')
+                    )
+                )
+            )
+        );
+    }
+
     public function work($v = array())
     {
         /** @var $obj \Boolive\data\Entity */

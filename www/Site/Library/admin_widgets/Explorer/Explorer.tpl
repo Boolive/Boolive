@@ -19,7 +19,7 @@
     </div>
 	<div class="layout-main list">
         <?php
-            $list = $v['view']->arrays(\Boolive\values\Rule::string());
+            $list = $v['views']->arrays(\Boolive\values\Rule::string());
             if(!empty($list)){
                 foreach ($list as $item){
                     echo $item;
