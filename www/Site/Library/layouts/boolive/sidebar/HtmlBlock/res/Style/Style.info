@@ -3,5 +3,21 @@
     "value": "Style.css",
     "is_file": true,
     "proto": "/Library/views/HtmlBlock/res/Style",
-    "order": 3
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "CSS",
+            "proto": "/Library/views/HtmlBlock/res/Style/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Каскадная таблица стилей для оформления HTML-документа",
+            "proto": "/Library/views/HtmlBlock/res/Style/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

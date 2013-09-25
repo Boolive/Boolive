@@ -1,1 +1,81 @@
-{"is_default_value":true,"value":"HtmlBlock.tpl","is_file":true,"proto":"/Library/views/HtmlBlock","order":6,"children":{"res":{"is_default_value":true,"value":"","proto":"/Library/views/HtmlBlock/res","order":1,"children":{"title":{"is_default_value":true,"value":"Ресурсы","proto":"/Library/views/HtmlBlock/res/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Автоматически подключаемые ресурсы, например CSS, JavaScript","proto":"/Library/views/HtmlBlock/res/description","is_hidden":true,"order":2}}},"title":{"is_default_value":true,"value":"Виджет HTML блока","proto":"/Library/views/HtmlBlock/title","is_hidden":true,"order":2},"description":{"is_default_value":true,"value":"Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета","proto":"/Library/views/HtmlBlock/description","is_hidden":true,"order":3},"cache":{"is_default_value":true,"value":0,"proto":"/Library/views/HtmlBlock/cache","order":4},"object_rule":{"is_default_value":true,"value":"is(/Library/basic/HTMLText)","proto":"/Library/views/HtmlBlock/object_rule","order":6,"children":{"title":{"is_default_value":true,"value":"Правило на отображаемый объект","proto":"/Library/views/HtmlBlock/object_rule/title","order":1}}}}}
+{
+    "is_default_value": true,
+    "value": "HtmlBlock.tpl",
+    "is_file": true,
+    "proto": "/Library/views/HtmlBlock",
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Виджет HTML блока",
+            "proto": "/Library/views/HtmlBlock/title",
+            "is_hidden": true,
+            "order": 2
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
+            "proto": "/Library/views/HtmlBlock/description",
+            "is_hidden": true,
+            "order": 3
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "is(/Library/basic/HTMLText)",
+            "proto": "/Library/views/HtmlBlock/object_rule",
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/views/HtmlBlock/object_rule/title",
+                    "order": 1
+                }
+            }
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/HtmlBlock/res",
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/HtmlBlock/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/views/HtmlBlock/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/views/HtmlBlock/cache",
+            "order": 9,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/views/HtmlBlock/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/views/HtmlBlock/cache/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

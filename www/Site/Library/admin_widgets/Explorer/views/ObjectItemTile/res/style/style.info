@@ -6,14 +6,14 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "CSS",
+            "value": "",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/style/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
-            "value": "Каскадная таблица стилей для оформления HTML-документа",
+            "value": "",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/style/description",
             "is_hidden": true,
             "order": 2

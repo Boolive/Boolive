@@ -1,1 +1,6 @@
-{"is_default_value":true,"value":"Выбрать","proto":"/Library/admin_widgets/SelectObject/submit_title","order":3}
+{
+    "is_default_value": true,
+    "value": "Выбрать",
+    "proto": "/Library/admin_widgets/SelectObject/submit_title",
+    "order": 3
+}
