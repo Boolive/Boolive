@@ -295,9 +295,9 @@ namespace Boolive
             if (ini_get('magic_quotes_runtime')){
                 $requirements[] = 'В настройках PHP отключите "магические кавычки для функций" <code>magic_quotes_runtime Off</code>';
             }
-            if (ini_get('magic_quotes_gpc')){
-                $requirements[] = 'В настройках PHP отключите "магические кавычки для входящих данных" <code>magic_quotes_gpc Off</code>';
-            }
+//            if (ini_get('magic_quotes_gpc')){
+//                $requirements[] = 'В настройках PHP отключите "магические кавычки для входящих данных" <code>magic_quotes_gpc Off</code>';
+//            }
             // Проверка наличия модуля mod_rewrite
             if (function_exists('apache_get_modules') && !in_array('mod_rewrite', apache_get_modules())){
                 $requirements[] = 'Требуется модуль <code>mod_rewrite</code> для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
