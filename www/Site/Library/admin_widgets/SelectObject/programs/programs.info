@@ -3,6 +3,64 @@
     "value": "Programs.tpl",
     "is_file": true,
     "proto": "/Library/admin_widgets/Programs",
-    "is_link": true,
-    "order": 6
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Программы для работы с объектами",
+            "proto": "/Library/admin_widgets/Programs/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты",
+            "proto": "/Library/admin_widgets/Programs/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/Programs/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "",
+                    "proto": "/Library/admin_widgets/Programs/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/admin_widgets/Programs/res/description",
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/admin_widgets/Programs/cache",
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/admin_widgets/Programs/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/admin_widgets/Programs/cache/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        }
+    }
 }

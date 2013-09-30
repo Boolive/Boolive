@@ -6,7 +6,7 @@
     "order": 4,
     "children": {
         "title": {
-            "value": "Обозреватель",
+            "value": "Структура",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_hidden": true,
             "order": 1
