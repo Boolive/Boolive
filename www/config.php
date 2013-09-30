@@ -7,10 +7,10 @@
 define('START_TIME', microtime(true));
 
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', false);
+define('IS_INSTALL', true);
 
 /** @const Версия системы Boolive */
-define('VERSION', '2.0.alpha.2013.09.17');
+define('VERSION', '2.0.alpha.2013.09.30');
 
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());

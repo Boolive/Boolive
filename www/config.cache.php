@@ -9,7 +9,7 @@ $stores = array(
     '' => array(
         'class' => '\Boolive\cache\stores\FileCache',
         'connect' => array(
-            'dir' => DIR_SERVER.'../cache/'
+            'dir' => DIR_SERVER.'_cache_/'
         )
     )
 );
