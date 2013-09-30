@@ -5,5 +5,5 @@
         echo $item;
     }
 ?>
-    <a href="<?php echo $v['href']?>">Далее</a>
+    <a class="more" href="<?php echo $v['href']?>">Далее</a>
 </div>

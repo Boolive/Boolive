@@ -18,7 +18,7 @@
 			display: block;
 			}
 			.TopMenu > ul > li:hover{
-                background-color: #EEE;
+                background-color: #cce0ff;
 				}
             .TopMenu > ul > li:first-child a{
                 /*padding-left: 20px;*/
@@ -45,7 +45,7 @@
 				margin: 0 0 0 0px;
 				padding: 0;
 				background-color: #FFF;
-                box-shadow: 0px 1px 3px #999;
+                box-shadow: 0px 0px 3px #999;
 				z-index: 15;
 				}
 				.TopMenu > ul > li ul > li {
@@ -67,7 +67,7 @@
 						height: 18px;
 						}
 					.TopMenu > ul > li ul > li:hover > a {
-						background-color: #E5E5E5;
+						background-color: #cce0ff;
 						}
 					.TopMenu > ul > li ul li > ul{
 						margin: -39px 0 0 200px;

@@ -1,10 +1,19 @@
 .PagePreview{
-    border-radius: 5px;
-	box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;
+    box-shadow: -1px 1px 3px 0px #DCDCDC, inset -10px -5px 10px 0px #FEFEFE;
 	clear: both;
-	margin: 10px 0px 15px 0;
+	margin: 10px 0 0;
 	background: #FFF;
-	padding: 15px 25px 15px 45px;
+	padding: 10px;
     display: inline-block;
-    width: 25%;
-}
+    width: 100%;
+    box-sizing: border-box;
+    }
+    .PagePreview h1{
+        font-size: 16pt;
+        font-weight: normal;
+        margin: 0;
+        }
+        .PagePreview .more{
+            display: inline-block;
+            float: right;
+        }
