@@ -1,0 +1,7 @@
+{
+    "is_default_value": true,
+    "value": "Допустимые расширения",
+    "proto": "/Library/basic/Image/extentions/title",
+    "is_hidden": true,
+    "order": 2
+}

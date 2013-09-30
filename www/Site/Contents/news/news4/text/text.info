@@ -1,7 +1,8 @@
 {
-    "value": "<p>Напишите нам письмицо :)</p>\n",
+    "is_default_value": true,
+    "value": " ",
     "proto": "/Library/content_samples/Page/text",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
             "is_default_value": true,

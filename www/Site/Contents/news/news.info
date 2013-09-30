@@ -4,7 +4,7 @@
     "order": 9,
     "children": {
         "title": {
-            "value": "Лента новостей",
+            "value": "Новости",
             "proto": "/Library/content_samples/Part/title",
             "is_hidden": true,
             "order": 1

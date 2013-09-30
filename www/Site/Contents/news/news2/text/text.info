@@ -1,8 +1,7 @@
 {
-    "is_default_value": true,
-    "value": " ",
+    "value": "<p>Текст <strong>второй</strong> новости как у любой страницы может содержать картинки, таблицы, иметь всяческое <strong>форматирование</strong> и другие.</p>\n\n<p><img alt=\"\" src=\"/Site/Contents/news/news2/text/Image/Image.jpg\" style=\"height:346px; width:500px\" /></p>\n\n<p> </p>\n",
     "proto": "/Library/content_samples/Page/text",
-    "order": 2,
+    "order": 3,
     "children": {
         "title": {
             "is_default_value": true,

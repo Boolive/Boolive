@@ -4,7 +4,7 @@
     "order": 8,
     "children": {
         "title": {
-            "value": "Контакты",
+            "value": "Обратная связь",
             "proto": "/Library/content_samples/Page/title",
             "order": 1,
             "children": {
