@@ -1,0 +1,88 @@
+{
+    "is_default_value": true,
+    "value": "TopMenu.tpl",
+    "is_file": true,
+    "proto": "/Library/menus/TopMenu",
+    "order": 7,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Горизонтальное меню",
+            "proto": "/Library/menus/TopMenu/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Навигационное меню с выпадающими подменю",
+            "proto": "/Library/menus/TopMenu/description",
+            "is_hidden": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/menus/TopMenu/res",
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/menus/TopMenu/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/menus/TopMenu/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/menus/TopMenu/cache",
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/menus/TopMenu/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/menus/TopMenu/cache/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/menus/TopMenu/object_rule",
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект",
+                    "proto": "/Library/menus/TopMenu/object_rule/title",
+                    "order": 1
+                }
+            }
+        },
+        "object": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/menus/TopMenu/object",
+            "is_link": true,
+            "order": 7
+        }
+    }
+}
