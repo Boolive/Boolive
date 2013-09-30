@@ -101,3 +101,21 @@ pre
 .marker {
     background-color: Yellow;
 }
+
+.more:after{
+}
+.more {
+    content: 'Разделение краткого от полного содержания.';
+   /* background: url("images/pagebreak.gif?t=D6IE") 50% 50% no-repeat transparent !important;*/
+    border-bottom: 1px dotted #999999 !important;
+    border-top: 1px dotted #999999 !important;
+    clear: both !important;
+    cursor: default !important;
+    height: 20px !important;
+    padding: 0px 0px 0px 0px !important;
+    margin: 10px 0px 10px 0px;
+    width: 100% !important;
+    text-align: center;
+    font-weight: bold;
+    display: block;
+}
