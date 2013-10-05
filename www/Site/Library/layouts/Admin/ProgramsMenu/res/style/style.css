@@ -173,7 +173,7 @@
 
         .ProgramsMenu ul li.view_select .item .popup-left > ul li a{
             display: block;
-            padding: 5px 15px 5px 15px;
+            padding: 5px 25px 5px 15px;
             clear: both;
             font-weight: normal;
             line-height: 20px;
@@ -191,18 +191,31 @@
                 background-color: #499df2;
             }
             .ProgramsMenu ul li.view_select .item .popup-left > ul li.view_all{
-                text-align: right;
+                /*text-align: right;*/
             }
             .ProgramsMenu ul li.view_select .item .popup-left > ul li.view_all a:hover,
             .ProgramsMenu ul li.view_select .item .popup-left > ul li.view_all a:focus{
                 color: #111;
-                text-decoration: underline;
+                /*text-decoration: underline;*/
                 background-color: #E0E0E0;
             }
             .ProgramsMenu ul li.view_select .item .popup-left > ul li.hsplit{
                 height: 1px;
                 background: #CCC;
                 margin: 1px 0;
+                }
+                .ProgramsMenu ul li.view_select .item .popup-left > ul li.hsplit.gray{
+                    background: #EEE;
+                }
+            .ProgramsMenu ul li.view_select .item .link a:after{
+                color: #fff;
+                content: "↝";
+                font: 400 15px/16px "Times New Roman";
+                background: #2691FB;
+                padding: 0 2px;
+                margin: 0 2px;
+                display: inline-block;
+                border-radius: 16px;
             }
     .maximize-right .ProgramsMenu ul li .item{
 			background-position: 19px center;

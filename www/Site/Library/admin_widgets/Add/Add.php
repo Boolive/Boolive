@@ -23,6 +23,9 @@ class Add extends SelectObject
                 if ($proto->uri() == '/Library/basic/Object'){
                     $obj->proto(false);
                 }
+                if ($this->_input['REQUEST']['is_link']){
+                    $obj->isLink(true);
+                }
                 // @todo Обрабатывать ошибки
                 $obj->save(false, false);
                 $result['changes'][$obj->uri()] = array(

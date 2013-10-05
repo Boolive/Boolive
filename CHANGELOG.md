@@ -4,6 +4,7 @@ Boolive Change Log
 Version 2.0.beta work in progress
 ----------------------------
 - new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
+- new #107 Added convenient method of adding link to the object (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

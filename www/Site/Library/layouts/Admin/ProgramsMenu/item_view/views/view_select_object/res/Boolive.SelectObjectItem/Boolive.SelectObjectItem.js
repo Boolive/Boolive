@@ -13,6 +13,7 @@
             this.element.on('click', '.view_all', function(e){
                 e.preventDefault();
                 e.stopPropagation();
+                var is_link = $(this).hasClass('link');
                 var s = self.callParents('getState');
                 var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
                 self.callParents('openWindow', [null,
@@ -25,7 +26,7 @@
                     },
                     function(result, params){
                         if (result == 'submit' && 'selected' in params){
-                            self.selected(params.selected, object);
+                            self.selected(params.selected, object, is_link);
                         }
                     }
                 ]);
@@ -39,12 +40,13 @@
             });
         },
 
-        selected: function(selected, object){
+        selected: function(selected, object, is_link){
             var self = this;
             self.callServer('selected',{
                 direct: self.options.object,
                 object: object,
-                selected: selected
+                selected: selected,
+                is_link: is_link
             },{
                 success: function(result, textStatus, jqXHR){
                     if (_.isObject(result.out) && !_.isEmpty(result.out.changes)){

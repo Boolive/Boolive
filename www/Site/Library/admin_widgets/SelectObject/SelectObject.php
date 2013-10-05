@@ -24,7 +24,8 @@ class SelectObject extends Widget
                         'selected' => Rule::any(
                             Rule::arrays(Rule::entity()),
                             Rule::entity()
-                        )
+                        ),
+                        'is_link' => Rule::bool()->default(false)->required()
                     )
                 )
             )
