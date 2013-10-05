@@ -1717,40 +1717,64 @@ class Entity implements ITrace
                 }
                 return false;
             case 'eq':
-                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
-                foreach ($cond[1] as $proto){
+                if (is_array($cond[1])){
+                    $cond = $cond[1];
+                }else{
+                    unset($cond[0]);
+                }
+                foreach ($cond as $proto){
                     if ($this->eq($proto)) return true;
                 }
                 return false;
             case 'in':
-                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
-                foreach ($cond[1] as $parent){
+                if (is_array($cond[1])){
+                    $cond = $cond[1];
+                }else{
+                    unset($cond[0]);
+                }
+                foreach ($cond as $parent){
                     if ($this->in($parent)) return true;
                 }
                 return false;
                 break;
             case 'is':
-                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
-                foreach ($cond[1] as $proto){
+                if (is_array($cond[1])){
+                    $cond = $cond[1];
+                }else{
+                    unset($cond[0]);
+                }
+                foreach ($cond as $proto){
                     if ($this->is($proto)) return true;
                 }
                 return false;
             case 'of':
-                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
-                foreach ($cond[1] as $obj){
+                if (is_array($cond[1])){
+                    $cond = $cond[1];
+                }else{
+                    unset($cond[0]);
+                }
+                foreach ($cond as $obj){
                     if ($this->of($obj)) return true;
                 }
                 return false;
             case 'childof':
-                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
-                foreach ($cond[1] as $parent){
+                if (is_array($cond[1])){
+                    $cond = $cond[1];
+                }else{
+                    unset($cond[0]);
+                }
+                foreach ($cond as $parent){
                     if ($this->childOf($parent)) return true;
                 }
                 return false;
                 break;
             case 'heirof':
-                if (!is_array($cond[1])) $cond[1] = array($cond[1]);
-                foreach ($cond[1] as $proto){
+                if (is_array($cond[1])){
+                    $cond = $cond[1];
+                }else{
+                    unset($cond[0]);
+                }
+                foreach ($cond as $proto){
                     if ($this->heirOf($proto)) return true;
                 }
                 return false;
