@@ -1,7 +1,11 @@
 Boolive Change Log
 ==================
 
-Version 2.0.alpha work in progress
+Version 2.0.beta work in progress
+----------------------------
+- new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
+
+Version 2.0.alpha September, 30 2013
 ----------------------------
 - new Added the rule for check a conditions for reading or verifying objects (VladimirShestakov)
 - new Added support of conditions of string type (VladimirShestakov)
