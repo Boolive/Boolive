@@ -63,8 +63,8 @@ class Image extends File
      */
     public function resize($width, $height, $fit = Image::FIT_OUTSIDE_LEFT_TOP, $scale = Image::SCALE_ANY, $do = false)
     {
-        $width = max(1, min($width, 1500));
-        $height = max(1, min($height, 1500));
+        $width = max(0, min($width, 1500));
+        $height = max(0, min($height, 1500));
         $fit = intval($fit);
         $scale = intval($scale);
         if (!$do){
@@ -91,49 +91,66 @@ class Image extends File
                     }
                     return $d;
                 };
-                // Максимальное изменение
-                if ($fit === self::FIT_INSIDE){
-                    $ratio = $src['w'] / $src['h'];
-                    if ($dw > $dh && ($do_scale = $can_scale($dw))){
-                        $new['h'] = round($new['w'] / $ratio);
-                    }else
-                    if ($dw < $dh && ($do_scale = $can_scale($dh))){
-                        $new['w'] = round($new['h'] * $ratio);
-                    }
-                }else
-                // Минимальное изменение
-                if ($fit & (self::FIT_OUTSIDE_LEFT_TOP | self::FIT_OUTSIDE_LEFT_BOTTOM | self::FIT_OUTSIDE_RIGHT_TOP | self::FIT_OUTSIDE_RIGHT_BOTTOM | self::FIT_OUTSIDE_CENTER)){
-                    $ratio = $new['w'] / $new['h'];
-                    if ($dw < $dh && ($do_scale = $can_scale($dw))){
-                        $last = $src['h'];
-                        $src['h'] = round($src['w'] / $ratio);
-                        if ($fit & (self::FIT_OUTSIDE_LEFT_BOTTOM | self::FIT_OUTSIDE_RIGHT_BOTTOM)){
-                            $src['y'] = $last - $src['h'];
-                        }else
-                        if ($fit == self::FIT_OUTSIDE_CENTER){
-                            $src['y'] = round(($last - $src['h']) / 2);
+                if ($new['w'] != 0 && $new['h'] != 0 || $new['h']!=$new['w']){
+                    // Автоматически ширена или высота
+                    if (($new['w'] == 0 || $new['h'] == 0) && ($do_scale = $can_scale($dw))){
+                        $ratio = $src['w'] / $src['h'];
+                        if ($new['w'] == 0){
+                            $new['w'] = round($new['h'] * $ratio);
+                        }else{
+                            $new['h'] = round($new['w'] / $ratio);
                         }
                     }else
-                    if ($dw > $dh && ($do_scale = $can_scale($dh))){
-                        $last = $src['w'];
-                        $src['w'] = round($src['h'] * $ratio);
-                        if ($fit & (self::FIT_OUTSIDE_RIGHT_TOP | self::FIT_OUTSIDE_RIGHT_BOTTOM)){
-                            $src['x'] = $last - $src['w'];
+                    // Максимальное изменение
+                    if ($fit === self::FIT_INSIDE){
+                        $ratio = $src['w'] / $src['h'];
+                        if ($dw > $dh && ($do_scale = $can_scale($dw))){
+                            $new['h'] = round($new['w'] / $ratio);
                         }else
-                        if ($fit & self::FIT_OUTSIDE_CENTER){
-                            $src['x'] = round(($last - $src['w']) / 2);
+                        if ($dw < $dh && ($do_scale = $can_scale($dh))){
+                            $new['w'] = round($new['h'] * $ratio);
+                        }else
+                        if ($dw == $dh){
+                            $do_scale = $can_scale($dw);
+                        }
+                    }else
+                    // Минимальное изменение
+                    if ($fit & (self::FIT_OUTSIDE_LEFT_TOP | self::FIT_OUTSIDE_LEFT_BOTTOM | self::FIT_OUTSIDE_RIGHT_TOP | self::FIT_OUTSIDE_RIGHT_BOTTOM | self::FIT_OUTSIDE_CENTER)){
+                        $ratio = $new['w'] / $new['h'];
+                        if ($dw < $dh && ($do_scale = $can_scale($dw))){
+                            $last = $src['h'];
+                            $src['h'] = round($src['w'] / $ratio);
+                            if ($fit & (self::FIT_OUTSIDE_LEFT_BOTTOM | self::FIT_OUTSIDE_RIGHT_BOTTOM)){
+                                $src['y'] = $last - $src['h'];
+                            }else
+                            if ($fit == self::FIT_OUTSIDE_CENTER){
+                                $src['y'] = round(($last - $src['h']) / 2);
+                            }
+                        }else
+                        if ($dw > $dh && ($do_scale = $can_scale($dh))){
+                            $last = $src['w'];
+                            $src['w'] = round($src['h'] * $ratio);
+                            if ($fit & (self::FIT_OUTSIDE_RIGHT_TOP | self::FIT_OUTSIDE_RIGHT_BOTTOM)){
+                                $src['x'] = $last - $src['w'];
+                            }else
+                            if ($fit & self::FIT_OUTSIDE_CENTER){
+                                $src['x'] = round(($last - $src['w']) / 2);
+                            }
+                        }else
+                        if ($dw == $dh){
+                            $do_scale = $can_scale($dw);
                         }
                     }
-                }
-                if ($do_scale){
-                    $img = imagecreatetruecolor($new['w'], $new['h']);
-                    imagealphablending($img, false);
-                    imagesavealpha($img, true);
-                    imagecopyresampled($img, $handler, $new['x'], $new['y'], $src['x'], $src['y'], $new['w'], $new['h'], $src['w'], $src['h']);
-                    imagedestroy($this->_handler);
-                    $this->_handler = $img;
-                    $this->_info['width'] = $new['w'];
-                    $this->_info['height'] = $new['h'];
+                    if ($do_scale){
+                        $img = imagecreatetruecolor($new['w'], $new['h']);
+                        imagealphablending($img, false);
+                        imagesavealpha($img, true);
+                        imagecopyresampled($img, $handler, $new['x'], $new['y'], $src['x'], $src['y'], $new['w'], $new['h'], $src['w'], $src['h']);
+                        imagedestroy($this->_handler);
+                        $this->_handler = $img;
+                        $this->_info['width'] = $new['w'];
+                        $this->_info['height'] = $new['h'];
+                    }
                 }
             }
         }
@@ -303,6 +320,7 @@ class Image extends File
         $file = parent::file($new_file, $root, $cache_remote);
         if ($transformed && !empty($this->_transforms_str)){
             $names = F::splitRight('.',$file);
+            if (empty($this->_convert)) $this->_convert = $names[1];
             $file = $names[0].'.'.$this->_transforms_str.'.'.$this->_convert;
             $root_file = $root?$file:DIR_SERVER.ltrim($file, '/\\');
             if (!is_file($root_file)){
