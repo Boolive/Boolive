@@ -55,9 +55,9 @@ class Layout extends Widget
         // ищем в /Contents
         if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri.'&comment=read default page');
         // точное соответсвие uri
-        if (!$object) $object = Data::read($uri);
+        if (!$object->isExist()) $object = Data::read($uri);
         // корнеь
-        if (!$object && $uri == '/Site/') $object = Data::read('');
+        if (!$object->isExist() && $uri == '/Site/') $object = Data::read('');
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = $object;
     }
