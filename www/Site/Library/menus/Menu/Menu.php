@@ -6,10 +6,16 @@
  */
 namespace Library\menus\Menu;
 
+use Library\views\View\View;
 use Library\views\Widget\Widget;
 
 class Menu extends Widget
 {
+    protected function initInput($input)
+    {
+        View::initInput($input);
+    }
+
     protected function initInputChild($input){
         parent::initInputChild($input);
         // Подчиенным нужно передать активный пункт меню и отображаемый объект меню

@@ -43,7 +43,7 @@ class item_view extends AutoWidgetList2
             $real = $obj->linked();
             //if ($real){
                 if (substr($real->uri(), 0, 10) == '/Contents/'){
-                    $v['item_href'] = substr($real->uri(), 10);
+                    $v['item_href'] = substr($real->uri(), 9);
                 }else{
                     $v['item_href'] = $real->uri();
                 }
@@ -54,6 +54,7 @@ class item_view extends AutoWidgetList2
             $v['item_title'] = $v['item_text'];
             // Активность пункта
             $active = $this->_input['REQUEST']['active'];
+
             if ($real->eq($active)){
                 $v['item_class'] = 'active';
             }else
