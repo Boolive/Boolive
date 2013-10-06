@@ -990,7 +990,7 @@ class Entity implements ITrace
     {
         if (is_string($new_proto)) $new_proto = Data::read($new_proto);
         // Смена прототипа
-        if (isset($new_proto) && (empty($new_proto)&&!empty($this->_attribs['proto']) || !$new_proto->eq($this->proto()))){
+        if (isset($new_proto) && ((empty($new_proto)&&!empty($this->_attribs['proto'])) || !$new_proto->eq($this->proto()))){
             if (empty($new_proto)){
                 // Удаление прототипа
                 $this->_attribs['proto'] = null;
@@ -2010,6 +2010,7 @@ class Entity implements ITrace
         // Значение
         if (!empty($info['is_default_value'])){
             $this->isDefaultValue(true);
+            if (isset($info['value']) && empty($this->_attribs['value'])) $this->_attribs['value'] = $info['value'];
         }else
         if (isset($info['value'])){
             $this->value($info['value']);
@@ -2020,7 +2021,7 @@ class Entity implements ITrace
         if (isset($info['lang'])) $this->lang($info['lang']);
         if (isset($info['proto'])) $this->proto($info['proto']);
         // Признаки
-        if (!empty($info['is_link'])) $this->isLink(true);
+        $this->isLink(!empty($info['is_link']));
         if (!empty($info['is_hidden'])) $this->isHidden(true);
         if (!empty($info['is_delete'])) $this->isDelete(true);
         if (!empty($info['is_relative'])) $this->isRelative(true);

@@ -82,11 +82,11 @@ class Image extends File
                 // Коррекция масштабирования
                 $can_scale = function($d) use($scale){
                     // Только увеличивать
-                    if ($scale == self::SCALE_UP){
+                    if ($scale == Image::SCALE_UP){
                         return min($d, 0);
                     }else
                     // Только уменьшать
-                    if ($scale == self::SCALE_DOWN){
+                    if ($scale == Image::SCALE_DOWN){
                         return max($d, 0);
                     }
                     return $d;
