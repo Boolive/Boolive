@@ -7,7 +7,8 @@
 namespace Library\menus\Menu\item_view;
 
 use Boolive\values\Rule,
-    Library\views\AutoWidgetList2\AutoWidgetList2;
+    Library\views\AutoWidgetList2\AutoWidgetList2,
+    Library\basic\Image\Image;
 
 class item_view extends AutoWidgetList2
 {
@@ -36,22 +37,24 @@ class item_view extends AutoWidgetList2
         if ($this->_input['REQUEST']['show']){
             /** @var \Boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['object'];//->linked();
-            // Название пункта
-//            $v['item_text'] = '';//$obj->title->value();
-//            $v['item_title'] = $v['item_text'];
+
+
             // Ссылка
             $real = $obj->linked();
-            //if ($real){
-                if (substr($real->uri(), 0, 10) == '/Contents/'){
-                    $v['item_href'] = substr($real->uri(), 9);
-                }else{
-                    $v['item_href'] = $real->uri();
-                }
-                if (empty($v['item_text'])) $v['item_text'] = $real->title->value();
-//            }else{
-//                $v['item_href'] = '';
-//            }
+            if (substr($real->uri(), 0, 10) == '/Contents/'){
+                $v['item_href'] = substr($real->uri(), 9);
+            }else{
+                $v['item_href'] = $real->uri();
+            }
+            // Название пункта
+            $v['item_text'] = $real->title->value();
             $v['item_title'] = $v['item_text'];
+            // Иконка
+            if ($real->icon->isExist()){
+                $v['item_icon'] = $real->icon->resize(0,30,Image::FIT_OUTSIDE_LEFT_TOP)->file();
+            }
+
+
             // Активность пункта
             $active = $this->_input['REQUEST']['active'];
 
