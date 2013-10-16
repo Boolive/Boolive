@@ -9,9 +9,8 @@
                 <?php foreach ($v['shorts'] as $item):?>
                     <li><a class="object" href="<?php echo $item['uri']->uri();?>"><?php echo $item['title'];?></a></li>
                 <?php endforeach; ?>
-                <li class="hsplit gray"></li>
-                <li class="view_all link"><a href="">Ссылку...</a></li>
                 <li class="hsplit"></li>
+                <li class="view_all link"><a href="">Ссылку...</a></li>
                 <li class="view_all"><a href="">Показать все...</a></li>
             </ul>
         </div>

@@ -53,9 +53,9 @@ class ObjectItem extends Widget
         $v['is_default_value'] = $obj->isDefaultValue();
         $v['link'] = $obj->linked()->uri(false, true);
         if ($v['is_link']){
-            $v['alt'] = 'Ссылка: '.$v['link'];
+            $v['alt'] = 'Ссылка: '.$obj->linked()->uri();
         }else{
-            $v['alt'] = 'Объект: '.$v['link'];
+            $v['alt'] = 'Объект: '.$obj->linked()->uri();
         }
         $v['value_full'] = $obj->value();
         $v['value'] = mb_substr($v['value_full'], 0, 50);

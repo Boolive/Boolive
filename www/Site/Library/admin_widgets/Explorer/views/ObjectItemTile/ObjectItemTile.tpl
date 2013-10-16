@@ -22,7 +22,7 @@
                 break;
         }
     ?>
-    <div class="view<?php echo $class;?>" <?php echo $v['style']->string();?> title="<?php echo $v['alt']->escape();?>">
+    <div class="view<?php echo $class;?>" <?php echo $v['style']->string();?> title="<?php echo $v['alt'];?>">
 		<div class="title-group">
             <?php
             $s = $v['title']->escape();
