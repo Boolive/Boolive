@@ -81,12 +81,17 @@ class F
     static function splitRight($delim, $str, $single = false)
     {
         if ($single){
-            preg_match_all('/'.preg_quote($delim,'/').'+/ui', $str, $m, PREG_OFFSET_CAPTURE);
-            $i=count($m[0])-1;
+            $all_pos = array();
+            mb_regex_encoding("UTF-32");
+            mb_ereg_search_init(mb_convert_encoding($str, "UTF-32", "UTF-8"), mb_convert_encoding($delim.'+', "UTF-32", "UTF-8"));
+            while ($r = mb_ereg_search_pos()) $all_pos[] = array($r[0]/4, $r[1]/4);
+            mb_regex_encoding("UTF-8");
+
+            $i = count($all_pos)-1;
             $pos = false;
-            while ($i>=0){
-                if ($m[0][$i][0] === $delim){
-                    $pos = $m[0][$i][1];
+            while ($i >= 0){
+                if (mb_substr($str, $all_pos[$i][0], $all_pos[$i][1]) === $delim){
+                    $pos = $all_pos[$i][0];
                     $i = -1;
                 }else{
                     $i--;
