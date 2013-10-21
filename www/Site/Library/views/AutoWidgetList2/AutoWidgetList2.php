@@ -15,12 +15,16 @@ class AutoWidgetList2 extends Widget
     public function work($v = array())
     {
         $list = $this->getList();
+        $i = 1;
         $v['views'] = array();
         if (is_array($list)){
             foreach ($list as $object){
                 $this->_input_child['REQUEST']['object'] = $object;
-                if ($result = $this->startChild('views')){
+                $this->_input_child['REQUEST']['number'] = $i;
+                $result = $this->startChild('views');
+                if ($result !== false){
                     $v['views'][$object->name()] = $result;
+                    $i++;
                 }
             }
         }

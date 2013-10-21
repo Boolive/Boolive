@@ -56,9 +56,9 @@ class ViewSingle extends View
         $view = reset($views);
         while ($view){
             /** @var View $view */
-            if ($v['view'] = $view->start($this->_commands, $this->_input_child)){
-                $this->_input_child['previous'] = true;
-                return $v['view'];
+            $out = $view->start($this->_commands, $this->_input_child);
+            if ($out !== false){
+                return $out;
             }
             $view = next($views);
         }
