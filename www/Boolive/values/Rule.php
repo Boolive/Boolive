@@ -30,7 +30,7 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule not() Не равен указанному значению
  * @method static \Boolive\values\Rule in() Допустимые значения. Через запятую или массив
  * @method static \Boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
- * @method static \Boolive\values\Rule escape($all) Экранирование html символов
+ * @method static \Boolive\values\Rule escape() Экранирование html символов
  * @method static \Boolive\values\Rule striptags() Вырезание html тегов
  * @method static \Boolive\values\Rule email() Email адрес
  * @method static \Boolive\values\Rule url() URL
@@ -56,7 +56,7 @@ use Boolive\develop\ITrace;
  * @method \Boolive\values\Rule default($value) Значение по умолчанию, если есть ошибки. Ошибка удаляется
  * @method \Boolive\values\Rule ignore() Коды игнорируемых ошибок
  * @method \Boolive\values\Rule trim() Обрезание строки
- * @method \Boolive\values\Rule escape($all) Экранирование html символов
+ * @method \Boolive\values\Rule escape() Экранирование html символов
  * @method \Boolive\values\Rule striptags() Вырезание html тегов
  * @method \Boolive\values\Rule email() Email адрес
  * @method \Boolive\values\Rule url() URL

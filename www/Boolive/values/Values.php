@@ -439,6 +439,21 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     }
 
     /**
+     * Вырезать и получить объект значения
+     * @param $name Ключ значения
+     * @return Values
+     */
+    public function cut($name)
+    {
+        $result = $this->offsetGet($name);
+        $value = $result->getValue();
+        $result->_maker = null;
+        $result->set($value);
+        $this->offsetUnset($name);
+        return $result;
+    }
+
+    /**
      * Перегрузка метода получения элемента как свойства
      * Всегда возвращется Values, даже если нет запрашиваемого элемента (Values будет пустым тогда)
      * @example $v = $values->v1;

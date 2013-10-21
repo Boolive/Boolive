@@ -40,24 +40,6 @@ class PHPTemplateValues extends Values
         $this->_rule = Rule::arrays(Rule::any(Rule::string()->escape()->ignore('escape'), Rule::null()), true);
     }
 
-    /**
-     * Получение элемента массива в виде объекта Values
-     * Если элемента с указанным именем нет, то будет исполнены одноименный подчиенный $this->_entity и
-     * элементу установится результат его работы
-     * @param mixed $name Ключ элемента
-     * @return \Boolive\template\php\PHPTemplateValues
-     */
-//    public function offsetGet($name)
-//    {
-//        $start = (!$this->offsetExists($name) && isset($this->_entity));
-//        $sub = parent::offsetGet($name);
-//        if ($start){
-//            $sub->_entity = $this->_entity->{$name};
-//            $sub->set($this->_entity->startChild($name));
-//        }
-//        return $sub;
-//    }
-
     public function __get($name)
     {
         $start = (!$this->offsetExists($name) && isset($this->_entity));
