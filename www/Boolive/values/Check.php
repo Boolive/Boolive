@@ -577,7 +577,7 @@ class Check
     static function escape($value, &$error, Rule $rule)
     {
         if (is_scalar($value)){
-            if (empty($rule->escape)){
+            if (empty($rule->escape[1])){
                 $result = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
             }else{
                 $result = htmlentities($value, ENT_QUOTES, 'UTF-8');
