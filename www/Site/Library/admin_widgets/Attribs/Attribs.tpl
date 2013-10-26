@@ -9,7 +9,7 @@
             </div>
             <div class="item">
                 <div class="col1">
-                    <label title="URI - идентфиикатор объекта">Название с путём</label>
+                    <label title="URI - идентфиикатор объекта">Адрес (URI)</label>
                 </div>
                 <div class="col2 item-parent item-name">
                     <!--<span class="name" data-name="name"></span><span data-name="uri" class="txt-tag"></span>

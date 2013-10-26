@@ -85,28 +85,32 @@ class Explorer extends AutoWidgetList2
 
     protected function getList($cond = array())
     {
+        $obj = array(
+            'is_hidden' => $this->_input['REQUEST']['object']->attr('is_hidden'),
+            'is_delete' => $this->_input['REQUEST']['object']->attr('is_delete'),
+        );
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
         $filters = $this->filter->find(array('key'=>'name', 'cache'=>2));
         $any = array();
         // Реальные объекты. У которых все признаки false
         if ($filters['real']->value()) {
             $any[] = array('all', array(
-                array('attr', 'is_hidden', '=', 0),
-                array('attr', 'is_delete', '=', 0),
+                array('attr', 'is_hidden', '=', $obj['is_hidden']),
+                array('attr', 'is_delete', '=', $obj['is_delete']),
                 array('attr', 'diff', '!=', Entity::DIFF_ADD)
             ));
         }
         // Скрытые объекты
         if ($filters['hidden']->value()) {
-            $any[] = array('attr', 'is_hidden', '!=', 0);
+            $any[] = array('attr', 'is_hidden', '!=', $obj['is_hidden']);
         }else{
-            $cond['where'][] = array('attr', 'is_hidden', '=', 0);
+            $cond['where'][] = array('attr', 'is_hidden', '=', $obj['is_hidden']);
         }
         // Удаленные объекты
         if ($filters['deleted']->value()) {
-            $any[] = array('attr', 'is_delete', '!=', 0 );
+            $any[] = array('attr', 'is_delete', '!=', $obj['is_delete']);
         }else{
-            $cond['where'][] = array('attr', 'is_delete', '=', 0);
+            $cond['where'][] = array('attr', 'is_delete', '=', $obj['is_delete']);
         }
         // Обновления
         if ($filters['updates']->value()) {

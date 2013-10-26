@@ -6,6 +6,7 @@
  */
 namespace Library\menus\Menu\item_view;
 
+use Boolive\data\Entity;
 use Boolive\values\Rule,
     Library\views\AutoWidgetList2\AutoWidgetList2,
     Library\basic\Image\Image;
@@ -77,6 +78,11 @@ class item_view extends AutoWidgetList2
     {
         $cond['select'] = 'tree';
         $cond['depth'] = array(1, 1); // выбрать из хранилища всё дерево меню
+        $cond['where'] = array('all', array(
+                array('attr', 'is_hidden', '=', 0),
+                array('attr', 'is_delete', '=', 0),
+                array('attr', 'diff', '!=', Entity::DIFF_ADD)
+            ));
         //$cond['order'] = array(array('order', 'asc'));
         $cond['group'] = true; // Для выбранных объектов однорвеменной выполнять подвыборки
         $cond['return'] = array('depth'=>1); // получить только первый уровень дерева

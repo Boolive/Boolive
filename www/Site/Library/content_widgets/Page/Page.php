@@ -20,7 +20,7 @@ class Page extends AutoWidgetList2
     protected function getList($cond = array())
     {
         $cond['where'] = array('all', array(
-                array('attr', 'is_hidden', '=', 0),
+                array('attr', 'is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
                 array('attr', 'is_delete', '=', 0),
                 array('attr', 'diff', '!=', Entity::DIFF_ADD)
             ));
