@@ -286,4 +286,17 @@ class F
         }
         return array();
     }
+
+    /**
+     * Экранирование строки для сравнения оператором LIKE
+     * @param $value
+     * @return string
+     */
+    static public function escapeLike($value)
+    {
+        return strtr($value, array(
+            '%' => '\%',
+            '_' => '\_'
+        ));
+    }
 }
