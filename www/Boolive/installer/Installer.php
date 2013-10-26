@@ -8,12 +8,10 @@
  */
 namespace Boolive\installer;
 
-use Boolive\Boolive;
-use Boolive\data\Entity;
-use Boolive\errors\Error;
-use Boolive\file\File;
-use Boolive\functions\F;
-use Boolive\session\Session;
+use Boolive\Boolive,
+    Boolive\data\Entity,
+    Boolive\errors\Error,
+    Boolive\session\Session;
 
 class Installer
 {

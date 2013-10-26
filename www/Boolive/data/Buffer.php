@@ -8,8 +8,6 @@
  */
 namespace Boolive\data;
 
-use Boolive\functions\F;
-
 class Buffer
 {
     /** @var array Атрибуты объектов или другие значения */

@@ -13,8 +13,6 @@
  */
 namespace Boolive\develop;
 
-use Boolive\develop\ITrace;
-
 class Trace
 {
     /** @var \Boolive\develop\Trace Список всех объектов трассировки */

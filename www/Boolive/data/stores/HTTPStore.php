@@ -8,11 +8,10 @@
  */
 namespace Boolive\data\stores;
 
-use Boolive\data\Data;
-use Boolive\data\Entity;
-use Boolive\errors\Error;
-use Boolive\file\File;
-use Boolive\functions\F;
+use Boolive\data\Data,
+    Boolive\data\Entity,
+    Boolive\errors\Error,
+    Boolive\file\File;
 
 class HTTPStore extends Entity
 {

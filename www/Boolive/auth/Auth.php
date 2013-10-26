@@ -9,8 +9,7 @@
 namespace Boolive\auth;
 
 use Boolive\data\Data,
-    Boolive\input\Input,
-    Boolive\events\Events;
+    Boolive\input\Input;
 
 class Auth
 {

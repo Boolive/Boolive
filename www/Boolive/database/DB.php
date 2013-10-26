@@ -20,8 +20,6 @@ namespace Boolive\database;
 
 use PDO,
     PDOStatement,
-    PDOException,
-    Boolive\functions\F,
     Boolive\errors\Error,
     Boolive\develop\Trace,
     Boolive\develop\Benchmark;

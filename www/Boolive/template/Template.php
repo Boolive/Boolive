@@ -9,7 +9,6 @@
 namespace Boolive\template;
 
 use Boolive\errors\Error,
-    Boolive\data\Data,
     Boolive\functions\F;
 
 class Template

@@ -13,7 +13,10 @@
  */
 namespace Boolive\values;
 
-use ArrayAccess, IteratorAggregate, ArrayIterator, Countable,
+use ArrayAccess,
+    IteratorAggregate,
+    ArrayIterator,
+    Countable,
     Boolive\errors\Error,
     Boolive\develop\ITrace;
 

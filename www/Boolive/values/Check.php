@@ -32,8 +32,7 @@ namespace Boolive\values;
 use Boolive\events\Events,
     Boolive\data\Entity,
     Boolive\data\Data,
-    Boolive\errors\Error,
-    Boolive\values\Rule;
+    Boolive\errors\Error;
 
 class Check
 {

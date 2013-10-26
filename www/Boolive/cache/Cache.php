@@ -8,8 +8,8 @@
  */
 namespace Boolive\cache;
 
-use Boolive\data\Entity;
-use Boolive\functions\F;
+use Boolive\data\Entity,
+    Boolive\functions\F;
 
 class Cache
 {
