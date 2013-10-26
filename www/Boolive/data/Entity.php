@@ -10,14 +10,10 @@ namespace Boolive\data;
 
 use Exception,
     Boolive\values\Values,
-    Boolive\values\Check,
     Boolive\errors\Error,
-    Boolive\data\Data,
     Boolive\file\File,
     Boolive\develop\ITrace,
-    Boolive\develop\Trace,
     Boolive\values\Rule,
-    Boolive\input\Input,
     Boolive\functions\F,
     Boolive\auth\Auth,
     Boolive\Boolive;
@@ -154,10 +150,10 @@ class Entity implements ITrace
     {
         $this->_rule = Rule::arrays(array(
                 'id'           => Rule::uri(), // Сокращенный или полный URI
-                'name'         => Rule::string()->regexp('|^[^/@]*$|')->max(50)->required(), // Имя объекта
+                'name'         => Rule::string()->regexp('|^[^/@:#]*$|')->max(50)->required(), // Имя объекта
                 'owner'		   => Rule::uri(), // Владелец (идентификатор объекта-пользователя)
                 'lang'		   => Rule::uri(), // Язык (идентификатор объекта-языка)
-                'order'		   => Rule::int()->max(4294967295), // Порядковый номер. Уникален в рамках родителя
+                'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
                 'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
                 'parent'       => Rule::uri(), // URI родителя
                 'proto'        => Rule::uri(), // URI прототипа
