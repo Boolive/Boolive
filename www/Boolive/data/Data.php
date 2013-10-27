@@ -8,9 +8,7 @@
  */
 namespace Boolive\data;
 
-use Boolive\Boolive,
-    Boolive\functions\F,
-    Boolive\auth\Auth,
+use Boolive\functions\F,
     Boolive\errors\Error,
     Boolive\develop\Trace;
 
@@ -330,7 +328,7 @@ class Data
             // Определение хранилища по URI
             if ($store = self::getStore($group_cond['from'])){
                 $result = $store->read($group_cond, $index);
-                // @todo Если выбран объект, но он не существует, хотя имеется  его uri, но uri не соответсвует хранилищу, то выбрать объект повторно по uri
+                // @todo Если выбран объект, но он не существует, хотя имеется  его uri и uri не соответсвует хранилищу, то выбрать объект повторно по uri
                 if ($group_cond['select'][0] == 'self' && empty($result['is_exists']) && isset($result['uri']) && Data::isAbsoluteUri($result['uri'])){
                     $group_cond2 = $group_cond;
                     $group_cond2['from'] = $result['uri'];
@@ -804,7 +802,7 @@ class Data
                 'uri' => $match[0],
                 'store' => $match[1],
                 'dslash' => $match[2],
-                'id' => intval($match[3]),
+                'id' => empty($match[3])&&$match[3]!=='0'?null:intval($match[3]),
                 'path' => $match[4]
             );
         }
@@ -874,7 +872,7 @@ class Data
     static function isShortUri($uri, $only_id = false)
     {
         $info = self::parseUri($uri);
-        $short = !empty($info['id'])? $info : false;
+        $short = isset($info['id'])? $info : false;
         if ($short && $only_id && !empty($info['path'])) $short = false;
         return $short;
     }
