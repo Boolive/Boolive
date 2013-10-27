@@ -152,8 +152,6 @@ class RESTful extends View
             if (isset($attribs['is_file'])) $obj->isFile(!empty($attribs['is_file']));
         }
         if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
-        if (isset($attribs['lang'])) $obj['lang'] = $attribs['lang'];
-        if (isset($attribs['owner'])) $obj['owner'] = $attribs['owner'];
         if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
@@ -172,8 +170,6 @@ class RESTful extends View
             if ($class_changed){
                 $this->_input['REQUEST']['object'] = Data::read(array(
                     'from' => $obj->id(),
-                    'owner' => $obj->owner(),
-                    'lang' => $obj->lang(),
                     'cache' => 0
                 ), true);
             }
@@ -215,8 +211,6 @@ class RESTful extends View
         }else{
             $obj->isFile(!empty($attribs['is_file']));
         }
-        if (isset($attribs['lang'])) $obj['lang'] = $attribs['lang'];
-        if (isset($attribs['owner'])) $obj['owner'] = $attribs['owner'];
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
         if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));

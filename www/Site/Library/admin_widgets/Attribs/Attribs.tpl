@@ -62,46 +62,6 @@
                     <span class="description">Используется для ручного упорядочивания объектов</span>
                 </div>
             </div>
-            <!--<div class="item">
-                <div class="col1">
-                    <label>Родитель</label>
-                </div>
-                <div class="col2 item-parent">
-                    <span class="txt-tag" data-name="uri"></span>
-                    <!--<a class="internal" href="" data-name="name" title="Внтури чего находится редактируемый объект."> </a>-->
-
-                   <!-- <input type="hidden" name="attrib[parent]" value="">
-                    <span class="error-message"></span>
-                    <span class="description"></span>
-                </div>
-            </div>-->
-
-            <!--<div class="item">
-                <div class="col1">
-                    <label>Владелец</label>
-                </div>
-                <div class="col2 item-owner">
-                    <a class="internal" href="owner" data-name="owner-show" title="Чей объект? Объект доступен только владельцу, если не является общим."></a>
-                    <a href="" data-name="owner-delete" class="btn-icon-delete" title="Сделать общим"></a>
-                    <span data-name="owner-uri" class="txt-tag"></span>
-                    <input type="hidden" name="attrib[owner]" value="">
-                    <span class="error-message"></span>
-                    <span class="description"></span>
-                </div>
-            </div>
-            <div class="item">
-                <div class="col1">
-                    <label>Язык</label>
-                </div>
-                <div class="col2 item-lang">
-                    <a class="internal" href="lang" data-name="lang-show" title="Если не общий, то объект доступен только на выбранном языке сайта."></a>
-                    <a href="" data-name="lang-delete" class="btn-icon-delete" title="Сделать общим"></a>
-                    <span data-name="lang-uri" class="txt-tag"></span>
-                    <input type="hidden" name="attrib[lang]" value="">
-                    <span class="error-message"></span>
-                    <span class="description"></span>
-                </div>
-            </div>-->
             <div class="item">
                 <div class="col1">
                     <label>Признаки</label>

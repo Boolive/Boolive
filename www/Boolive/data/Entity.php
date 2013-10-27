@@ -49,8 +49,6 @@ class Entity implements ITrace
         'uri'          => null,
         'id'           => null,
         'name'         => 'entity',
-        'owner'		   => null,
-        'lang'		   => null,
         'order'		   => 0,
         'date'		   => 0,
         'parent'       => null,
@@ -68,6 +66,7 @@ class Entity implements ITrace
         'is_accessible'    => 1,
         'is_exist'     => 0,
         'possession'   => 0,
+        'author'	   => null,
         'update_step'  => 0,
         'update_time'  => 0,
         'diff'         => 0,
@@ -81,10 +80,8 @@ class Entity implements ITrace
     protected $_proto = false;
     /** @var Entity Экземпляр родителя */
     protected $_parent = false;
-    /** @var Entity Экземпляр владельца */
-    protected $_owner = false;
-    /** @var Entity Экземпляр языка */
-    protected $_lang = false;
+    /** @var Entity Экземпляр автора */
+    protected $_author = false;
     /** @var Entity Экземпляр прототипа, на которого ссылается объект */
     protected $_link = false;
     /** @var Entity Экземпляр прототипа, от которого берется значение по умолчанию */
@@ -150,8 +147,6 @@ class Entity implements ITrace
         $this->_rule = Rule::arrays(array(
                 'id'           => Rule::uri(), // Сокращенный или полный URI
                 'name'         => Rule::string()->regexp('|^[^/@:#]*$|')->max(50)->required(), // Имя объекта
-                'owner'		   => Rule::uri(), // Владелец (идентификатор объекта-пользователя)
-                'lang'		   => Rule::uri(), // Язык (идентификатор объекта-языка)
                 'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
                 'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
                 'parent'       => Rule::uri(), // URI родителя
@@ -165,6 +160,7 @@ class Entity implements ITrace
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
                 'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
+                'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
                 'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
                 'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
                 // Сведения о загружаемом файле. Не является атрибутом объекта
@@ -351,7 +347,6 @@ class Entity implements ITrace
      * @param bool $root Возвращать полный путь или от директории сайта
      * @param bool $cache_remote Если файл внешний, то сохранить его к себе на сервер и возвратить путь на него
      * @return null|string
-     * @todo Учесть в пути владельца и язык объекта
      */
     public function file($new_file = null, $root = false, $cache_remote = true)
     {
@@ -610,8 +605,6 @@ class Entity implements ITrace
                     'from' => $this,
                     'select' => 'link',
                     'depth' => array(0,0),
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
                     'comment' => 'read link',
                     'cache' => 2
                 ));
@@ -709,13 +702,9 @@ class Entity implements ITrace
                     'from' => $this,
                     'select' => 'default_value_proto',
                     'depth' => array(0,0),
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
                     'comment' => 'read default value',
                     'cache' => 2
 //                    'from'=>$this->_attribs['is_default_value'],
-//                    'owner'=>$this->_attribs['owner'],
-//                    'lang'=>$this->_attribs['lang'],
 //                    'comment'=>'read default value',
 //                    'cache' => 2
                 ));
@@ -770,8 +759,6 @@ class Entity implements ITrace
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
             return Data::read(array(
                 'from' => $this->_attribs['is_default_class'],
-                'owner' => $this->_attribs['owner'],
-                'lang' => $this->_attribs['lang'],
                 'comment' => 'read default class',
                 'cache' => 2
             ));
@@ -894,8 +881,6 @@ class Entity implements ITrace
             if (isset($this->_attribs['parent'])){
                 $this->_parent = Data::read(array(
                     'from' => $this->_attribs['parent'],
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
                     'comment' => 'read parent',
                     'cache' => 2
                 ));
@@ -1020,8 +1005,6 @@ class Entity implements ITrace
             if (isset($this->_attribs['proto'])){
                 $this->_proto = Data::read(array(
                     'from' => $this->_attribs['proto'],
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
                     'comment' => 'read proto',
                     'cache' => 2
                 ));
@@ -1055,91 +1038,45 @@ class Entity implements ITrace
     }
 
     /**
-     * Владелец объекта
-     * @param null|Entity $new_owner Новый владелец. Чтобы сделать общим, указывается false
-     * @param bool $load Загрузить владельца из хранилща, если ещё не загружен?
+     * Автор объекта
+     * @param null|Entity $new_author Новый автор. Чтобы сделать без автора, указывается false
+     * @param bool $load Загрузить автора из хранилща, если ещё не загружен?
      * @return Entity|null
      */
-    public function owner($new_owner = null, $load = true)
+    public function author($new_author = null, $load = true)
     {
-        if (is_string($new_owner)) $new_owner = Data::read($new_owner);
-        // Смена владельца
-        if (isset($new_owner) && (empty($new_owner)&&!empty($this->_attribs['owner']) || !$new_owner->eq($this->owner()))){
-            if (empty($new_owner)){
-                // Удаление языка
-                $this->_attribs['owner'] = null;
-                $this->_owner = null;
+        if (is_string($new_author)) $new_author = Data::read($new_author);
+        // Смена автора
+        if (isset($new_author) && (empty($new_author)&&!empty($this->_attribs['author']) || !$new_author->eq($this->author()))){
+            if (empty($new_author)){
+                // Удаление автора
+                $this->_attribs['author'] = null;
+                $this->_author = null;
             }else{
-                if ($new_owner->store() != $this->store()){
-                    $this->_attribs['owner'] = $new_owner->uri();
+                if ($new_author->store() != $this->store()){
+                    $this->_attribs['author'] = $new_author->uri();
                 }else{
-                   $this->_attribs['owner'] = $new_owner->key();
+                   $this->_attribs['author'] = $new_author->key();
                 }
-                $this->_owner = $new_owner;
+                $this->_author = $new_author;
             }
             $this->_changed = true;
             $this->_checked = false;
         }
-        // Возврат объекта-владельца
-        if ($this->_owner === false && $load){
-            if (isset($this->_attribs['owner'])){
-                $this->_owner = Data::read(array(
-                    'from' => $this->_attribs['owner'],
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
-                    'comment' => 'read owner',
+        // Возврат объекта-автора
+        if ($this->_author === false && $load){
+            if (isset($this->_attribs['author'])){
+                $this->_author = Data::read(array(
+                    'from' => $this->_attribs['author'],
+                    'author' => $this->_attribs['author'],
+                    'comment' => 'read author',
                     'cache' => 2
                 ));
             }else{
-                $this->_owner = null;
+                $this->_author = null;
             }
         }
-        return $this->_owner;
-    }
-
-    /**
-     * Язык объекта
-     * @param null|Entity $new_lang Новый язык. Чтобы сделать общим, указывается false
-     * @param bool $load Загрузить язык из хранилща, если ещё не загружен?
-     * @return Entity|null
-     */
-    public function lang($new_lang = null, $load = true)
-    {
-        if (is_string($new_lang)) $new_lang = Data::read($new_lang);
-        // Смена языка
-        if (isset($new_lang) && (empty($new_lang)&&!empty($this->_attribs['lang']) || !$new_lang->eq($this->lang()))){
-            if (empty($new_lang)){
-                // Удаление языка
-                $this->_attribs['lang'] = null;
-                $this->_owner = null;
-            }else{
-                if ($new_lang->store() != $this->store()){
-                    $this->_attribs['lang'] = $new_lang->uri();
-                }else{
-                   $this->_attribs['lang'] = $new_lang->key();
-                }
-                $this->_lang = $new_lang;
-            }
-            $this->_changed = true;
-            $this->_checked = false;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        // Возврат объекта-языка
-        if ($this->_lang === false && $load){
-            if (isset($this->_attribs['lang'])){
-                $this->_lang = Data::read(array(
-                    'from' => $this->_attribs['lang'],
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
-                    'comment' => 'read lang',
-                    'cache' => 2
-                ));
-            }else{
-                $this->_lang = null;
-            }
-        }
-        return $this->_lang;
+        return $this->_author;
     }
 
     /**
@@ -1208,7 +1145,7 @@ class Entity implements ITrace
     #################################################
 
     /**
-     * Получение подчиненного объекта по имени с учётом владельца и языка его родителя
+     * Получение подчиненного объекта по имени
      * @example $sub = $obj->sub;
      * @param string $name Имя подчиенного объекта
      * @throws \Exception
@@ -1223,15 +1160,13 @@ class Entity implements ITrace
                 if (($p = $this->proto()) && $p->{$name}->isExist()){
                     $obj = $p->{$name}->birth($this);
                 }else{
-                    $obj = new Entity(array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang']));
+                    $obj = new Entity();
                 }
                 // Не подбирать уникальное имя, так как при сохранении родителя он проиндексируется и его свойства нужно будет обновить текущим, а не создавать новое
                 $obj->_autoname = false;
             }else{
                 $obj = Data::read(array(
                     'from' => array($this, $name),
-                    'owner' => $this->_attribs['owner'],
-                    'lang' => $this->_attribs['lang'],
                     'comment' => 'read property by name'
                 ));
             }
@@ -1450,13 +1385,7 @@ class Entity implements ITrace
                 if ($this->_proto){
                     $this->_attribs['proto'] = $this->_proto->key();
                 }
-                if ($this->_owner){
-                    $this->_attribs['owner'] = $this->_owner->key();
-                }
-                if ($this->_lang){
-                    $this->_attribs['lang'] = $this->_lang->key();
-                }
-                // Если создаётся история, то нужна новая дата
+                 // Если создаётся история, то нужна новая дата
                 if (empty($this->_attribs['date']) && !$this->isExist()) $this->_attribs['date'] = time();
                 // Сохранение себя
                 if ($this->_changed && Data::write($this, $access)){
@@ -1519,8 +1448,6 @@ class Entity implements ITrace
         $obj = new $class($attr);
         $obj->name(null, true); // Уникальность имени
         $obj->proto($this);
-        $obj->owner($this->owner());
-        $obj->lang($this->lang());
         $obj->isHidden($this->isHidden());
         $obj->isDraft(true);
         $obj->isDefaultValue(true);
@@ -1799,10 +1726,7 @@ class Entity implements ITrace
     public function eq($object)
     {
         if ($object instanceof Entity){
-            return $this->key() === $object->key() &&
-               $this->_attribs['owner'] == $object->_attribs['owner'] &&
-               $this->_attribs['lang'] == $object->_attribs['lang']/* &&
-               $this->date() == $entity->date()**/;
+            return $this->key() === $object->key();
         }
         return isset($object) && ($this->_attribs['id'] === $object || $this->uri() === $object);
     }
@@ -1881,8 +1805,6 @@ class Entity implements ITrace
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
         $export['value'] = $this->value();
         if ($this->isFile()) $export['is_file'] = true;
-        if ($this->owner()) $export['owner'] = $this->owner()->uri();
-        if ($this->lang()) $export['lang'] = $this->lang()->uri();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
         if ($this->isLink()) $export['is_link'] = true;
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
@@ -1989,9 +1911,7 @@ class Entity implements ITrace
             $this->value($info['value']);
         }
         if (!empty($info['is_file'])) $this->isFile(true);
-        // Владец, язык, прототип
-        if (isset($info['owner'])) $this->owner($info['owner']);
-        if (isset($info['lang'])) $this->lang($info['lang']);
+        // Прототип
         if (isset($info['proto'])) $this->proto($info['proto']);
         // Признаки
         $this->isLink(!empty($info['is_link']));

@@ -55,8 +55,6 @@ class Data
      *         array('childname', 'value', 'ASC')      // по атрибуту value подчиненного с имененм childname
      *     ),
      *     'limit' => array(10, 15),                    // Ограничение - выбирать с 10-го не более 15 объектов
-     *     'owner' => '//user',                         // Владелец искомых объектов
-     *     'lang' => '//lang',                          // Язык (локаль) искомых объектов
      *     'key' => 'name',                             // Атрибут, который использовать для ключей массива результата
      * );
      * </code>
@@ -506,12 +504,12 @@ class Data
             return $cond;
         }
         $result = array();
-        // Услвоие - строка (uri + cond + lang + owner)
+        // Услвоие - строка (uri + cond)
         if (is_string($cond)){
             $uri = $cond;
         }else
         if (is_array($cond)){
-            // массив из объекта и строки. строка может состоять из uri, cond, lang, owner
+            // массив из объекта и строки. строка может состоять из uri, cond,
             if (count($cond) == 2 && isset($cond[0]) && $cond[0] instanceof Entity && isset($cond[1]) && is_string($cond[1])){
                 $uri = $cond[1];
                 $entity = $cond[0];
@@ -575,9 +573,6 @@ class Data
                     $result['depth'][$i] = (int)$d;
                 }
             }
-            // Общий владелец и язык, если не указаны конкретные
-            if (!isset($result['owner'])) $result['owner'] = Entity::ENTITY_ID;
-            if (!isset($result['lang'])) $result['lang'] = Entity::ENTITY_ID;
             // Нормализация from
             $result['from'] = self::normalizeFrom(isset($result['from'])?$result['from']:null, $entity_in_from);
             if ($result['select'][0] == 'self' && is_string($result['from']) && ($f = rtrim($result['from'],'/'))!=$result['from']){
@@ -610,7 +605,7 @@ class Data
                 $result['limit'] = false;
                 $result['order'] = false;
             }
-            if (!isset($result['key']) || !in_array($result['key'], array('uri', 'id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'parent_cnt', 'proto_cnt'))){
+            if (!isset($result['key']) || !in_array($result['key'], array('uri', 'id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'parent_cnt', 'proto_cnt'))){
                 $result['key'] = false;
             }
             if (isset($result['access'])){
@@ -629,8 +624,6 @@ class Data
                 'depth' => $result['depth'],
                 'key' => $result['key'],
                 'where' => $result['where'],
-                'owner' => $result['owner'],
-                'lang' => $result['lang'],
                 'order' => $result['order'],
                 'limit' => $result['limit'],
                 'access' => $result['access'],

@@ -181,33 +181,6 @@
             .on('change-attrib:order', function(value){
                 form.find('input[name="attrib[order]"]:first').val(value);
             })
-            .on('change-attrib:lang', function(value){
-                form.find('input[name="attrib[lang]"]:first').val(value);
-                if (value){
-                    form.find('[data-name="lang-uri"]:first').text(value).attr('href', value).show();
-                    form.find('[data-name="lang-show"]:first').text(self.getLastParam(value));
-                    form.find('[data-name="lang-delete"]:first').show();
-                }else{
-                    form.find('[data-name="lang-delete"]:first').hide();
-                    form.find('[data-name="lang-uri"]:first').hide();
-                    form.find('[data-name="lang-show"]:first').text('нет');
-                }
-//                form.find('[data-name="lang-uri"]:first').text(value).attr('href', value);
-//                value = value ? self.getLastParam(value) : 'нет';
-//                form.find('[data-name="lang-show"]:first').text(value);
-            })
-            .on('change-attrib:owner', function(value){
-                form.find('input[name="attrib[owner]"]:first').val(value);
-                if (value){
-                    form.find('[data-name="owner-uri"]:first').text(value).attr('href', value).show();
-                    form.find('[data-name="owner-show"]:first').text(self.getLastParam(value));
-                    form.find('[data-name="owner-delete"]:first').show();
-                }else{
-                    form.find('[data-name="owner-delete"]:first').hide();
-                    form.find('[data-name="owner-uri"]:first').hide();
-                    form.find('[data-name="owner-show"]:first').text('нет');
-                }
-            })
             .on('change-attrib:date', function(value){
                 form.find('[data-name="date"]:first').text(value);
             })

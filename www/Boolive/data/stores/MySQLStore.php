@@ -165,8 +165,6 @@ class MySQLStore extends Entity
                         }else{
                             $group_result[$key] = array(
                                 'uri'=>$row['uri'],
-                                'owner'=>$this->_attribs['owner'],
-                                'lang'=>$this->_attribs['lang'],
                                 'class_name' => '\\Boolive\\data\\Entity',
                             );
                         }
@@ -228,7 +226,7 @@ class MySQLStore extends Entity
         if ($cond['select'][0] == 'self'){
             foreach ($group_result as $key => $obj){
                 if (!isset($obj)){
-                    $obj = array('owner'=>$this->_attribs['owner'], 'lang'=>$this->_attribs['lang'], 'class_name' => '\\Boolive\\data\\Entity');
+                    $obj = array('class_name' => '\\Boolive\\data\\Entity');
                     $uri = ($key===0)? $cond['from'] : $key;
                     if (!Data::isShortUri($uri)){
                         $names = F::splitRight('/', $uri, true);
@@ -268,10 +266,6 @@ class MySQLStore extends Entity
                 // Прототип и уровень наследования
                 $attr['proto'] = isset($attr['proto']) ? $this->localId($attr['proto']) : 0;
                 $attr['proto_cnt'] = $entity->protoCount();
-                // Владелец
-                $attr['owner'] = isset($attr['owner']) ? $this->localId($attr['owner']) : Entity::ENTITY_ID;
-                // Язык
-                $attr['lang'] = isset($attr['lang']) ? $this->localId($attr['lang']) : Entity::ENTITY_ID;
                 // Числовое значение
                 $attr['valuef'] = floatval($attr['value']);
                 // Переопределено ли значение и кем
@@ -336,14 +330,11 @@ class MySQLStore extends Entity
                         }
                         unset($attr['file']['content']);
                     }
-                    if ($attr['lang'] != Entity::ENTITY_ID || $attr['owner'] != Entity::ENTITY_ID){
-                        $attr['value'] = $attr['owner'].'@'.$attr['lang'].'@'.$attr['value'];
-                    }
                 }
                 // Текущая запись
                 if (!$new_id){
-                    $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND owner=? AND lang=? AND {objects}.id={ids}.id LIMIT 0,1');
-                    $q->execute(array($attr['id'], $attr['owner'], $attr['lang']));
+                    $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND {objects}.id={ids}.id LIMIT 0,1');
+                    $q->execute(array($attr['id']));
                     $current = $q->fetch(DB::FETCH_ASSOC);
                     unset($q);
                 }else{
@@ -386,12 +377,6 @@ class MySQLStore extends Entity
                         }else
                         if ($current['proto'] != $attr['proto'] && !$entity->isAccessible('write/change/proto')){
                             $error->access = new Error('Нет доступа на смену прототипа', 'write/change/proto');
-                        }else
-                        if ($current['owner'] != $attr['owner'] && !$entity->isAccessible('write/change/owner')){
-                            $error->access = new Error('Нет доступа на смену владельца', 'write/change/owner');
-                        }else
-                        if ($current['lang'] != $attr['lang'] && !$entity->isAccessible('write/change/lang')){
-                            $error->access = new Error('Нет доступа на смену языка', 'write/change/lang');
                         }else
                         if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
                             $error->access = new Error('Нет доступа на смену признака "своя логика"', 'write/change/is_default_class');
@@ -442,23 +427,23 @@ class MySQLStore extends Entity
                 // Если запись в историю, то вычисляем только если не указан order
                 if ($attr['order']!= Entity::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
                     // Проверка, занят или нет новый order
-                    $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE owner=? AND lang=? AND `parent`=? AND `order`=?');
-                    $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
+                    $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE `parent`=? AND `order`=?');
+                    $q->execute(array($attr['parent'], $attr['order']));
                     if ($q->fetch()){
                         // Сдвиг order существующих записей, чтоб освободить значение для новой
                         $q = $this->db->prepare('
                             UPDATE {objects} SET `order` = `order`+1
-                            WHERE owner=? AND lang=? AND `parent`=? AND `order`>=?'
+                            WHERE `parent`=? AND `order`>=?'
                         );
-                        $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
+                        $q->execute(array($attr['parent'], $attr['order']));
                     }
                     unset($q);
                 }else
                 // Новое максимальное значение для order, если объект новый или явно указано order=null
                 if (!$entity->isExist() || /*(array_key_exists('order', $attr) && is_null($attr['order']))*/ $attr['order']==self::MAX_ORDER){
                     // Порядковое значение вычисляется от максимального существующего
-                    $q = $this->db->prepare('SELECT MAX(`order`) m FROM {objects} WHERE owner=? AND lang=? AND parent=?');
-                    $q->execute(array($attr['owner'], $attr['lang'], $attr['parent']));
+                    $q = $this->db->prepare('SELECT MAX(`order`) m FROM {objects} WHERE parent=?');
+                    $q->execute(array($attr['parent']));
                     if ($row = $q->fetch(DB::FETCH_ASSOC)){
                         $attr['order'] = $row['m']+1;
                     }
@@ -466,19 +451,13 @@ class MySQLStore extends Entity
                 }else{
                     if (isset($current['order'])) $attr['order'] = $current['order'];
                 }
-                // Префикс к имени файла для учёта владельца и языка
-                if ($attr['lang'] != Entity::ENTITY_ID || $attr['owner'] != Entity::ENTITY_ID){
-                    $fname_pf = $attr['owner'].'@'.$attr['lang'].'@';
-                }else{
-                    $fname_pf = '';
-                }
                 // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
                 if (!empty($current) && isset($attr['file']) && $current['is_file']==1){
-                    File::delete($entity->dir(true).$fname_pf.$current['value']);
+                    File::delete($entity->dir(true).$current['value']);
                 }
                 // Связывание с новым файлом
                 if (isset($attr['file'])){
-                    $path = $entity->dir(true).$fname_pf.$attr['value'];
+                    $path = $entity->dir(true).$attr['value'];
                     if (isset($attr['file']['content'])){
                         if (!File::create($attr['file']['content'], $path)){
                             $attr['is_file'] = 0;
@@ -514,12 +493,12 @@ class MySQLStore extends Entity
                     }
                     unset($attr['class']);
                 }
-                $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
+                $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
                         'is_draft', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt', 'valuef', 'possession', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
-                // Объект идентифицируется по id+owner+lang
+                // Объект идентифицируется по id
                 if (empty($current)){
                     $q = $this->db->prepare('
                         INSERT INTO {objects} (`'.implode('`, `', $attr_names).'`)
@@ -538,7 +517,7 @@ class MySQLStore extends Entity
                 }else{
                     $attr['date'] = time();
                     $q = $this->db->prepare('
-                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ? AND owner=? AND lang=?
+                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ?
                     ');
                     $i = 0;
                     foreach ($attr_names as $name){
@@ -548,8 +527,6 @@ class MySQLStore extends Entity
                         $q->bindValue($i, $value, $type);
                     }
                     $q->bindValue(++$i, $attr['id']);
-                    $q->bindValue(++$i, $current['owner']);
-                    $q->bindValue(++$i, $current['lang']);
                     $q->execute();
                 }
                 $is_write = $q->rowCount()>0;
@@ -616,8 +593,8 @@ class MySQLStore extends Entity
                         $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
                         $u = $this->db->prepare('
                             UPDATE {objects}, {protos} SET
-                                `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang), :value, value),
-                                `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang), :is_file, is_file),
+                                `value` = IF(is_default_value=:vproto, :value, value),
+                                `is_file` = IF(is_default_value=:vproto, :is_file, is_file),
                                 `is_default_value` = IF((is_default_value=:vproto  || is_default_value=:max_id), :proto, is_default_value),
                                 `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
                                 `proto_cnt` = `proto_cnt`+:dp
@@ -633,8 +610,6 @@ class MySQLStore extends Entity
                             ':proto' => $p,
                             ':is_link' => $attr['is_link'] > 0 ? 1: 0,
                             ':dp' => $dp,
-                            ':owner' => $attr['owner'],
-                            ':lang' => $attr['lang'],
                             ':obj' => $attr['id'],
                             ':max_id' => Entity::ENTITY_ID
                         ));
@@ -921,7 +896,7 @@ class MySQLStore extends Entity
             // Подготовка запроса для сохранения времени индексации объекта
             $osave = $this->db->prepare('
                 UPDATE {objects} SET update_time = :itime, update_step = :istep, `diff` = :diff, `diff_from`= :diff_from
-                WHERE id = :id AND owner = :owner AND lang = :lang
+                WHERE id = :id
             ');
             $osave->execute(array(
                 ':itime' => $entity->_attribs['update_time'],
@@ -929,8 +904,6 @@ class MySQLStore extends Entity
                 ':diff' => $entity->_attribs['diff'],
                 ':diff_from' => $entity->_attribs['diff_from'],
                 ':id' => $this->localId($entity->id()),
-                ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['owner']),
-                ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $this->localId($entity->_attribs['lang'])
             ));
 
             // 2. Поиск изменений в info файлах
@@ -956,7 +929,7 @@ class MySQLStore extends Entity
                 // Подготовка запроса для сохранения времени индексации объекта
                 $osave2 = $this->db->prepare('
                     UPDATE {objects} SET update_time = :itime, `diff` = :diff, `diff_from`=:diff_from
-                    WHERE id = :id AND owner = :owner AND lang = :lang
+                    WHERE id = :id
                 ');
                 $store = $this;
                 /** @var callback $process_info Сверка сущности с массивом атрибутов */
@@ -989,8 +962,6 @@ class MySQLStore extends Entity
                                     ':diff' => $entity->_attribs['diff'],
                                     ':diff_from' => $level,
                                     ':id' => $store->localId($entity->id()),
-                                    ':owner' => empty($entity->_attribs['owner']) ? Entity::ENTITY_ID : $store->localId($entity->_attribs['owner']),
-                                    ':lang' => empty($entity->_attribs['lang']) ? Entity::ENTITY_ID : $store->localId($entity->_attribs['lang'])
                                 ));
                             }
                         }else{
@@ -1153,19 +1124,6 @@ class MySQLStore extends Entity
         $joins_link = array();
         $joins_plain = array();
         $binds2 = array();
-        // Условия для локализации и персонализации
-        $owner_lang = '1';
-        if (isset($cond['owner'])){
-            $owner_lang = ($cond['owner'] == Entity::ENTITY_ID)? '`owner` = ?' : '`owner` IN (?, 4294967295)';
-        }
-        if (isset($cond['lang'])){
-            if ($owner_lang == '1'){
-                $owner_lang = '';
-            }else{
-                $owner_lang.=' AND ';
-            }
-            $owner_lang.= ($cond['lang'] == Entity::ENTITY_ID)? '`lang` = ?' : '`lang` IN (?, 4294967295)';
-        }
 
         if (!$only_where){
             // Что?
@@ -1202,18 +1160,13 @@ class MySQLStore extends Entity
                 // Выбор from
                 // Контроль доступа
                 if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
-                    $acond = $this->getCondSQL(array('where'=>$acond, 'owner'=>$cond['owner'], 'lang'=>$cond['lang']), true);
+                    $acond = $this->getCondSQL(array('where'=>$acond), true);
                     $result['select'].= ', IF('.$acond['where'].',1,0) is_accessible';
                     $result['joins'].=$acond['joins'];
                     $result['binds'] = array_merge($acond['binds'], $result['binds']);
                 }
                 $result['select'].= ', u.id `id2`';
-                $result['from'] = 'FROM {ids} u LEFT JOIN {objects} obj ON obj.id = u.id AND ';
-                // Условие на владельца и язык
-                $result['from'].= ($cond['owner'] == Entity::ENTITY_ID)? 'obj.`owner` = ?' : 'obj.`owner` IN (?, 4294967295)';
-                $result['from'].= ($cond['lang'] == Entity::ENTITY_ID)? ' AND obj.`lang` = ?' : ' AND obj.`lang` IN (?, 4294967295)';
-                $result['binds'][] = array($cond['owner'], DB::PARAM_INT);
-                $result['binds'][] = array($cond['lang'], DB::PARAM_INT);
+                $result['from'] = 'FROM {ids} u LEFT JOIN {objects} obj ON obj.id = u.id ';
                 // Идентификация
                 // Если from множественный, то формат запроса определяется по первому from!
                 $from_info = Data::parseUri($cond['from']);
@@ -1314,14 +1267,14 @@ class MySQLStore extends Entity
                         $result['from'] = ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
                         if ($multy){
                             $result['select'].= ', CONCAT("//",obj.parent) as `from`';
-                            $result['where'].= 'obj.parent IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') AND ';
+                            $result['where'].= 'obj.parent IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
                             for ($i=0; $i<$multy_cnt; $i++){
                                 $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY obj.parent';
                         }else{
                             // Сверка parent
-                            $result['where'].= 'obj.parent = ? AND ';
+                            $result['where'].= 'obj.parent = ? ';
                             $result['binds'][] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                         // Оптимизация сортировки по атрибуту order
@@ -1459,14 +1412,14 @@ class MySQLStore extends Entity
                         $result['from'] = ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
                         if ($multy){
                             $result['select'].= ', CONCAT("//",obj.proto) as `from`';
-                            $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') AND ';
+                            $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
                             for ($i=0; $i<$multy_cnt; $i++){
                                 $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY obj.proto';
                         }else{
                             // Сверка proto
-                            $result['where'].= "obj.proto = ? AND ";
+                            $result['where'].= "obj.proto = ? ";
                             $result['binds'][] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                     }else{
@@ -1494,13 +1447,6 @@ class MySQLStore extends Entity
                 }else{
                     throw new \Exception('Incorrect selection in condition: ("'.$cond['select'][0].'","'.$cond['select'][1].'")');
                 }
-                // Условие на владельца и язык
-                $result['where'].="(obj.id, obj.owner, obj.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=obj.id AND $owner_lang GROUP BY id)\n  ";
-                if (!isset($cond['owner'])){
-                    $a = 10;
-                }
-                $result['binds'][] = array($cond['owner'], DB::PARAM_INT);
-                $result['binds'][] = array($cond['lang'], DB::PARAM_INT);
             }
             // Сортировка
             if (!$calc && !empty($cond['order'])){
@@ -1565,7 +1511,7 @@ class MySQLStore extends Entity
                             if ($c[1] == 'value'){
                                 $c[1] = is_numeric($c[3]) ? 'valuef': 'value';
                             }
-                            if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'owner' || $c[1] == 'lang' || $c[1] == 'uri'){
+                            if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'uri'){
                                 if (is_array($c[3])){
                                     foreach ($c[3] as $ci => $cv){
                                         $c[3][$ci] = $store->localId($cv, false);
@@ -1784,22 +1730,12 @@ class MySQLStore extends Entity
         // Слияния для условий по подчиненным и сортировке по ним
         unset($joins['obj']);
         foreach ($joins as $alias => $info){
-            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ? AND (`'.$alias.'`.id, `'.$alias.'`.owner, `'.$alias.'`.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=`'.$alias.'`.id AND '.$owner_lang.' GROUP BY id))';
+            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ?)';
             $binds2[] = $info[1];
-            $binds2[] = $cond['owner'];
-            $binds2[] = $cond['lang'];
         }
         foreach ($joins_link as $alias => $info){
-            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link AND (`'.$alias.'`.id, `'.$alias.'`.owner, `'.$alias.'`.lang) IN (SELECT id, `owner`, lang FROM {objects} WHERE id=`'.$alias.'`.id AND '.$owner_lang.' GROUP BY id))';
-            $binds2[] = $cond['owner'];
-            $binds2[] = $cond['lang'];
+            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
         }
-//        foreach ($joins_plain as $info){
-//            $result['joins'].= $info[0];
-//            if (!empty($info[1])){
-//                $binds2 = array_merge($binds2, $info[1]);
-//            }
-//        }
         if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
         // Полноценный SQL
         if (!$only_where){
@@ -2168,8 +2104,6 @@ class MySQLStore extends Entity
     private function makeObject($attribs)
     {
         $attribs['id'] = $this->key.'//'.$attribs['id'];
-        $attribs['owner'] = $attribs['owner'] == Entity::ENTITY_ID ? null : $this->key.'//'.$attribs['owner'];
-        $attribs['lang'] = $attribs['lang'] == Entity::ENTITY_ID ? null : $this->key.'//'.$attribs['lang'];
         $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->key.'//'.$attribs['parent'];
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->key.'//'.$attribs['proto'];
         if ($attribs['is_default_value'] == 0) unset($attribs['is_default_value']); else $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
@@ -2377,8 +2311,6 @@ class MySQLStore extends Entity
             $db->exec("
                 CREATE TABLE {objects} (
                   `id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор по таблице ids',
-                  `owner` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Идентификатор объекта-владельца',
-                  `lang` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Идентификатор объекта-языка',
                   `date` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Дата создания и версия',
                   `name` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'Имя',
                   `order` INT(11) NOT NULL DEFAULT '0' COMMENT 'Порядковый номер. Уникален в рамках родителя',
@@ -2400,7 +2332,7 @@ class MySQLStore extends Entity
                   `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
                   `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды различиый - Entity::DIFF_*',
                   `diff_from` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'От куда изменения. 1 - от прототипа. 0 и меньше от info файла. Кодируется относительное расположение info файла',
-                  PRIMARY KEY (`id`,`owner`,`lang`),
+                  PRIMARY KEY (`id`),
                   KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
                   KEY `indexation` (`parent`,`id`)
                 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'

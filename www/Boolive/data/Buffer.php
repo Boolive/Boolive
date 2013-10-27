@@ -46,7 +46,7 @@ class Buffer
 //            $key = json_encode($ocond);
 //            if (isset(self::$list_plain[$key]) || array_key_exists($key, self::$list_plain)){
 //                if (!isset(self::$list_plain[$key][$names[1]])){
-//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang'], 'class_name' => '\\Boolive\\data\\Entity');
+//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'class_name' => '\\Boolive\\data\\Entity');
 //                }else{
 //                    return self::$list_plain[$key][$names[1]];
 //                }
@@ -250,7 +250,7 @@ class Buffer
 //            $key = json_encode($ocond);
 //            if (isset(self::$list_entity[$key]) || array_key_exists($key, self::$list_entity)){
 //                if (!isset(self::$list_entity[$key][$names[1]])){
-//                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from'], 'owner'=>$cond['owner'], 'lang'=>$cond['lang']));
+//                    return new Entity(array('name'=>$names[1], 'uri'=>$cond['from']));
 //                }else{
 //                    return self::$list_entity[$key][$names[1]];
 //                }

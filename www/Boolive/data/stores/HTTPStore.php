@@ -145,8 +145,6 @@ class HTTPStore extends Entity
                 if (!empty($attr['is_link'])) $attr['is_link'] = true;
                 $attr['is_default_class'] = !empty($attr['is_default_class']);
                 $attr['is_default_value'] = !empty($attr['is_default_value']);
-                if (isset($attr['owner'])) $attr['owner'] = $this->localURI($attr['owner'], $base_url);
-                if (isset($attr['lang'])) $attr['lang'] = $this->localURI($attr['lang'], $base_url);
 
                 curl_setopt_array($this->curl, array(
                     CURLOPT_URL => $url,

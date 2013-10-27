@@ -89,10 +89,6 @@ class Attribs extends Widget
 
             // Прототип
             if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
-            // Язык
-            //if (isset($attribs['lang'])) $obj['lang'] = $attribs['lang'];
-            // Владелец
-            //if (isset($attribs['owner'])) $obj['owner'] = $attribs['owner'];
 
             // Родитель
             if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
@@ -114,8 +110,6 @@ class Attribs extends Widget
                 if ($class_changed){
                     $this->_input['REQUEST']['object'] = Data::read(array(
                         'from' => $obj->id(),
-                        'owner' => $obj->owner(),
-                        'lang' => $obj->lang(),
                         'cache' => 0
                     ), true);
                 }
@@ -150,15 +144,11 @@ class Attribs extends Widget
             'name' => $obj->name(),
             'proto' => ($p = $obj->proto()) ? $p->uri() : 'null',
             'parent' => ($p = $obj->parent()) ? $p->uri() : 'null',
-            'owner' => ($p = $obj->owner()) ? $p->uri() : 'null',
-            'lang' => ($p = $obj->lang()) ? $p->uri() : 'null',
             'value' => $obj->value(),
             'is_null' => $obj->isDefaultValue(),
             'value_null' => $obj->proto() ? (string)$obj->proto()->value() : '',
             'is_file' => $obj->isFile(),
             'is_file_null' => $obj->proto() ? $obj->proto()->isFile() : false,
-//            'lang' => $obj->_attribs['lang'],
-//            'owner' => $obj->_attribs['owner'],
             'date' => date('j.m.Y, G:i', $obj->date()),
             'order' => $obj->order(),
             'is_logic' => (bool)$obj->isDefaultClass() != self::ENTITY_ID,//['is_logic'],
