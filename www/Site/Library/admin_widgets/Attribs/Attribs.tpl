@@ -26,7 +26,7 @@
                 </div>
                 <div class="col2 item-proto">
                     <span class="input-pfx tag-link" data-name="proto-uri" title="Сменить прототип...">&nbsp;</span>
-                    <a class="btn-icon-delete" title="Удалить прототип у объекта" href="" data-name="proto-delete" style="display: none;"></a>
+<!--                    <a class="btn-icon-delete" title="Удалить прототип у объекта" href="" data-name="proto-delete" style="display: none;"></a>-->
                     <input type="hidden" name="attrib[proto]" value="">
                     <span class="error-message"></span>
                     <span class="description">Наследуемый объект или на кого ссылаться.</span>
@@ -70,7 +70,7 @@
                     <input class="attrib" type="checkbox" id="is_hidden" name="attrib[is_hidden]" data-name="is_hidden" value="1"/>
                     <label for="is_hidden">Скрытый</label>
                     <span class="error-message"></span><br>
-                    <span class="description">Скрытый объект невиден, но доступен.</span>
+                    <span class="description">Скрытый объект доступен, но невиден.</span>
                 </div>
             </div>
             <div class="item">
@@ -95,7 +95,6 @@
                     <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой класс</label>
                     <span class="error-message"></span><br>
                     <span class="description">Своим классом дополняется базовая логика объекта.<br>
-                    Свой класс <span class="txt-tag class_name_self"></span> должен быть в директории объекта.<br>
                     Используется класс: <span class="txt-tag class_name"></span><br>
                     </span>
                 </div>
