@@ -27,7 +27,7 @@
         .ObjectItem.tile .view.hidden{
             opacity: 0.4;
             }
-        .ObjectItem.tile .view.deleted{
+        .ObjectItem.tile .view.draft{
 
             /*background-color: rgba(255, 184, 181, 0.3);*/
             /*border-color: rgba(255, 184, 181, 0.305);*/
@@ -61,7 +61,7 @@
                 margin-left: 2px;
                 text-decoration: none;
                 }
-            .ObjectItem.tile .view.deleted .title-group .title{
+            .ObjectItem.tile .view.draft .title-group .title{
                 color: #ff4a52;
                 text-decoration: line-through;
             }

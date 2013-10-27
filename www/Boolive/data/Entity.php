@@ -60,7 +60,7 @@ class Entity implements ITrace
         'value'	 	   => '',
         'is_file'	   => 0,
         'is_history'   => 0,
-        'is_delete'	   => 0,
+        'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
         'is_relative'  => 0,
@@ -160,7 +160,7 @@ class Entity implements ITrace
                 'value'	 	   => Rule::string(), // Значение любой длины
                 'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (value = имя файла, uri = директория)
                 'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет?
-                'is_delete'	   => Rule::int(), // Удаленный или нет с учётом признака родителя?
+                'is_draft'	   => Rule::int(), // Удаленный или нет с учётом признака родителя?
                 'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя?
                 'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
@@ -544,25 +544,25 @@ class Entity implements ITrace
 
     /**
      * Признак, объект удален или нет?
-     * @param null|bool $delete Новое значение, если не null
+     * @param null|bool $draft Новое значение, если не null
      * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то удаление родителя не влияет на данный объект
      * @return bool
      */
-    public function isDelete($delete = null, $inherit_parent = true)
+    public function isDraft($draft = null, $inherit_parent = true)
     {
         // Какой признак у родителя (чтобы его вычесть из своего)
-        if ((!$inherit_parent || isset($delete)) && ($parent = $this->parent())){
-            $p = $parent->_attribs['is_delete'];
+        if ((!$inherit_parent || isset($draft)) && ($parent = $this->parent())){
+            $p = $parent->_attribs['is_draft'];
         }else{
             $p = 0;
         }
         // Смена своего признака
-        if (isset($delete) && ($this->_attribs['is_delete']-$p != ($delete = intval((bool)$delete)))){
-            $this->_attribs['is_delete'] = $delete + $p;
+        if (isset($draft) && ($this->_attribs['is_draft']-$p != ($draft = intval((bool)$draft)))){
+            $this->_attribs['is_draft'] = $draft + $p;
             $this->_changed = true;
             $this->_checked = false;
         }
-        return $inherit_parent ? !empty($this->_attribs['is_delete']) : ($this->_attribs['is_delete']-$p != 0);
+        return $inherit_parent ? !empty($this->_attribs['is_draft']) : ($this->_attribs['is_draft']-$p != 0);
     }
 
     /**
@@ -880,7 +880,7 @@ class Entity implements ITrace
         if (is_string($new_parent)) $new_parent = Data::read($new_parent);
         // Смена родителя
         if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->eq($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1)){
-            $is_delete = $this->isDelete(null, false);
+            $is_draft = $this->isDraft(null, false);
             $is_hidden = $this->isHidden(null, false);
             if (empty($new_parent)){
                 // Удаление родителя
@@ -902,7 +902,7 @@ class Entity implements ITrace
             }
             if ($this->isExist()) $this->name(null, true);
             // Обновление зависимых от родителя признаков
-            $this->isDelete($is_delete);
+            $this->isDraft($is_draft);
             $this->isHidden($is_hidden);
             $this->_changed = true;
             $this->_checked = false;
@@ -1541,7 +1541,7 @@ class Entity implements ITrace
         $obj->owner($this->owner());
         $obj->lang($this->lang());
         $obj->isHidden($this->isHidden());
-        $obj->isDelete($this->isDelete());
+        $obj->isDraft($this->isDraft());
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;
@@ -1663,8 +1663,8 @@ class Entity implements ITrace
                 if ($cond[1] == 'is_hidden'){
                     $value = $this->isHidden(null, empty($cond[4]));
                 }else
-                if ($cond[1] == 'is_delete'){
-                    $value = $this->isDelete(null, empty($cond[4]));
+                if ($cond[1] == 'is_draft'){
+                    $value = $this->isDraft(null, empty($cond[4]));
                 }else
                 if ($cond[1] == 'is_file'){
                     $value = $this->isFile();
@@ -1909,7 +1909,7 @@ class Entity implements ITrace
         if ($this->isLink()) $export['is_link'] = true;
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
-        if ($this->isDelete(null, false)) $export['is_delete'] = true;
+        if ($this->isDraft(null, false)) $export['is_draft'] = true;
         if ($this->isRelative()) $export['is_relative'] = true;
         $export['order'] = $this->order();
         if ($this->possession() != Entity::POSSESSION_MANDATORY) $export['possession'] = $this->possession();
@@ -1922,7 +1922,7 @@ class Entity implements ITrace
             $export['proto_cnt'] = $this->protoCount();
             if ($this->parent()) $export['parent'] = $this->parent()->uri();
             if (!$this->isHidden()) $export['is_hidden'] = false;
-            if (!$this->isDelete()) $export['is_delete'] = false;
+            if (!$this->isDraft()) $export['is_draft'] = false;
             if (!$this->isRelative()) $export['is_relative'] = false;
             $export['is_history'] = $this->isHistory();
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
@@ -1940,7 +1940,7 @@ class Entity implements ITrace
             if ($children === true){
                 $children = $this->find(array(
                     'where' => array(
-                        array('attr', 'is_delete', '>=', 0)
+                        array('attr', 'is_draft', '>=', 0)
                     ),
                     'comment' => 'read children for export'
                 ), false, false);
@@ -1949,7 +1949,7 @@ class Entity implements ITrace
                 $children = $this->find(array(
                     'where' => array(
                         array('attr', 'name', 'in',  $children),
-                        array('attr', 'is_delete', '>=', 0)
+                        array('attr', 'is_draft', '>=', 0)
                     ),
                     'comment' => 'read children by names for export'
                 ), false, false);
@@ -2019,7 +2019,7 @@ class Entity implements ITrace
         // Признаки
         $this->isLink(!empty($info['is_link']));
         if (!empty($info['is_hidden'])) $this->isHidden(true);
-        if (!empty($info['is_delete'])) $this->isDelete(true);
+        if (!empty($info['is_draft'])) $this->isDraft(true);
         if (!empty($info['is_relative'])) $this->isRelative(true);
         if (isset($info['possession'])){
             $this->possession($info['possession']);

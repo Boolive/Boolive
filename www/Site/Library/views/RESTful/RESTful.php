@@ -159,7 +159,7 @@ class RESTful extends View
         if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
-        if (isset($attribs['is_delete'])) $obj->isDelete(!empty($attribs['is_delete']));
+        if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));
         if (isset($attribs['is_history'])) $obj->isHistory(!empty($attribs['is_history']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
         if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
@@ -222,7 +222,7 @@ class RESTful extends View
         if (isset($attribs['owner'])) $obj['owner'] = $attribs['owner'];
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
-        if (isset($attribs['is_delete'])) $obj->isDelete(!empty($attribs['is_delete']));
+        if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));
         if (isset($attribs['is_history'])) $obj->isHistory(!empty($attribs['is_history']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
         if (isset($attribs['is_default_class'])){

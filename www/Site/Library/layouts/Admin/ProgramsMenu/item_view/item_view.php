@@ -86,7 +86,7 @@ class item_view extends AutoWidgetList2
         $cond['depth'] = array(1, 1); // выбрать из хранилища всё дерево меню
         $cond['group'] = true; // Для выбранных объектов однорвеменной выполнять подвыборки
         $cond['cache'] = 2; // Кэшировать сущности
-        $cond['where'] = array('attr', 'is_delete', '>=', 0);
+        $cond['where'] = array('attr', 'is_draft', '>=', 0);
         return $this->_input['REQUEST']['program']->find($cond, true);
     }
 }

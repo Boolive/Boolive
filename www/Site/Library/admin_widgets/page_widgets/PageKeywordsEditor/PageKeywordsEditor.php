@@ -79,8 +79,8 @@ class PageKeywordsEditor extends AutoWidgetList2
             $key->value($key->value()+1);
             $key->save();
         }else
-        if ($key_local->isDelete()){
-            $key_local->isDelete(false);
+        if ($key_local->isDraft()){
+            $key_local->isDraft(false);
             $key_local->save();
             // Счётчик использования слова
             $key->value($key->value()+1);

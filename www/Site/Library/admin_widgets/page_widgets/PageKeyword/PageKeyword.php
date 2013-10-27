@@ -29,7 +29,7 @@ class PageKeyword extends Widget
      {
          // Удаление ключевого слова
         if ($this->_input['REQUEST']['call'] == 'Delete'){
-            $this->_input['REQUEST']['object']->isDelete(true);
+            $this->_input['REQUEST']['object']->isDraft(true);
             $this->_input['REQUEST']['object']->save();
             // Счётчик использования слова
             $key = $this->_input['REQUEST']['object']->linked();

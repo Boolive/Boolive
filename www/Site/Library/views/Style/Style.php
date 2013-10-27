@@ -24,7 +24,7 @@ class Style  extends Entity
         $str = '';
         foreach($style as $name => $st){
             /** @var Entity $st */
-            if (!$st->isDelete(null, false) && $st->value()!==''){
+            if (!$st->isDraft(null, false) && $st->value()!==''){
                 $str.= $name.': '.$st->value().';';
             }
         }

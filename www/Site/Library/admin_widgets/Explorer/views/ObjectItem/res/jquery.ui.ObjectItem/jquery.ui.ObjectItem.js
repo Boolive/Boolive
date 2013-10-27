@@ -67,11 +67,11 @@
                     }
                 }
                 // Черновик
-                if (!_.isUndefined(changes['is_delete'])){
-                    if (changes['is_delete']){
-                        view.addClass('deleted');
+                if (!_.isUndefined(changes['is_draft'])){
+                    if (changes['is_draft']){
+                        view.addClass('draft');
                     }else{
-                        view.removeClass('deleted');
+                        view.removeClass('draft');
                     }
                 }
                 // Ссылка

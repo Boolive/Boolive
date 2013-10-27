@@ -5,6 +5,8 @@ Version 2.0.beta work in progress
 ----------------------------
 - new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
 - new #107 Added convenient method of adding link to the object (VladimirShestakov)
+- enh #151 Attribute is_delete is renamed to is_draft, Entity->isDelete() to Entity->isDragt() (VladimirShestakov)
+
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

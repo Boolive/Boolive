@@ -20,8 +20,8 @@ class Destroy extends Widget
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
                         'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('access', 'destroy')/*array('attr','is_delete','=',1)*/)),
-                            Rule::entity(array('access', 'destroy')/*array('attr','is_delete','=',1)*/)
+                            Rule::arrays(Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)),
+                            Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)
                         )->required(),
 //                        'prev' => Rule::entity(),
                         'call' => Rule::string()->default('')->required(),

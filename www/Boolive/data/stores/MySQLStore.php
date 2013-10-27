@@ -380,7 +380,7 @@ class MySQLStore extends Entity
                         if ($current['is_hidden'] != $attr['is_hidden'] && !$entity->isAccessible('write/change/is_hidden')){
                             $error->access = new Error('Нет доступа на смену признака "скрытый"', 'write/change/is_hidden');
                         }else
-                        if ($current['is_delete'] != $attr['is_delete'] && !$entity->isAccessible('write/change/is_draft')){
+                        if ($current['is_draft'] != $attr['is_draft'] && !$entity->isAccessible('write/change/is_draft')){
                             $error->access = new Error('Нет доступа на смену признака "черновик"', 'write/change/is_draft');
                         }else
                         if ($current['is_link'] != $attr['is_link'] && !$entity->isAccessible('write/change/is_link')){
@@ -565,7 +565,7 @@ class MySQLStore extends Entity
                     unset($q);
                 }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
-                        'is_history', 'is_delete', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
+                        'is_history', 'is_draft', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt', 'valuef', 'possession', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
@@ -617,7 +617,7 @@ class MySQLStore extends Entity
                         'proto_cnt'    => 0,
                         'value'	 	   => '',
                         'is_file'	   => 0,
-                        'is_delete'	   => 0,
+                        'is_draft'	   => 0,
                         'is_hidden'	   => 0,
                         'is_link'      => 0,
                         'is_default_value' => 0,
@@ -642,7 +642,7 @@ class MySQLStore extends Entity
                         'sql' => '',
                         'binds' => array(':obj'=>$attr['id'])
                     );
-                    foreach (array('is_delete', 'is_hidden') as $key){
+                    foreach (array('is_draft', 'is_hidden') as $key){
                         $d = $attr[$key] - $current[$key];
                         if ($d != 0){
                             $u['sql'].=' {objects}.'.$key.' = {objects}.'.$key.' + :d'.$key.',';
@@ -1027,7 +1027,7 @@ class MySQLStore extends Entity
                                 (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
                                 (isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
                                 (isset($info['is_hidden']) && $entity->isHidden()!=$info['is_hidden']) ||
-                                (isset($info['is_delete']) && $entity->isDelete()!=$info['is_delete']) ||
+                                (isset($info['is_draft']) && $entity->isDraft()!=$info['is_draft']) ||
                                 (isset($info['is_link']) && $entity->isLink()!=$info['is_link']) ||
                                 (isset($info['is_default_value']) && $entity->isDefaultValue()!=$info['is_default_value']) ||
                                 (isset($info['is_default_class']) && $entity->isDefaultClass()!=$info['is_default_class']) ||
@@ -1105,7 +1105,7 @@ class MySQLStore extends Entity
         }else
         if ($diff == Entity::DIFF_DELETE){
             $entity->diff(Entity::DIFF_NO);
-            $entity->isDelete(true);
+            $entity->isDraft(true);
             $entity->save(false, false);
         }else
         if ($diff == Entity::DIFF_CHANGE){
@@ -1116,7 +1116,7 @@ class MySQLStore extends Entity
                     if ($entity->isDefaultValue()){
                         $entity->_attribs['value'] = $proto->value();
                         $entity->_attribs['is_file'] = $proto->isFile();
-                        $entity->isDelete($proto->isDelete());
+                        $entity->isDraft($proto->isDraft());
                         $entity->isHidden($proto->isHidden());
                         $entity->possession($proto->possession());
                         $entity->_changed = true;
@@ -1639,7 +1639,7 @@ class MySQLStore extends Entity
                                 $cond[$i].= '?';
                                 $result['binds'][] = $c[3];
                             }
-                            if ($c[1] == 'is_history' || $c[1] == 'is_delete' || $c[1] == 'diff'){
+                            if ($c[1] == 'is_history' || $c[1] == 'is_draft' || $c[1] == 'diff'){
                                 $attr_exists[$c[1]] = true;
                             }
                         }else
@@ -1803,9 +1803,9 @@ class MySQLStore extends Entity
                 if ($level == 1){
                     $more_cond = array();
                     if (empty($attr_exists['is_history'])) $more_cond[] = '`'.$table.'`.is_history = 0';
-                    if (empty($attr_exists['is_delete'])) $more_cond[]  = '`'.$table.'`.is_delete = 0';
+                    if (empty($attr_exists['is_draft'])) $more_cond[]  = '`'.$table.'`.is_draft = 0';
                     if (empty($attr_exists['diff'])) $more_cond[]  = '`'.$table.'`.diff != '.Entity::DIFF_ADD;
-                    $attr_exists = array('is_history' => true, 'is_delete' => true, 'diff' => true);
+                    $attr_exists = array('is_history' => true, 'is_draft' => true, 'diff' => true);
                     if ($glue == ' AND '){
                         $cond = array_merge($cond, $more_cond);
                     }else
@@ -1816,7 +1816,7 @@ class MySQLStore extends Entity
                 }
                 return implode($glue, $cond);
             };
-            $attr_exists = $only_where ? array('is_history' => true, 'is_delete' => true, 'diff' => true) : array();
+            $attr_exists = $only_where ? array('is_history' => true, 'is_draft' => true, 'diff' => true) : array();
             // Если услвоия есть, то добавляем их в SQL
             if ($w = $convert($cond['where'], ' AND ', 'obj', 0, $attr_exists)){
                 if (empty($result['where'])){
@@ -1830,7 +1830,7 @@ class MySQLStore extends Entity
                 $result['from'].= ' AND obj.is_history = 0';
             }else{
                 if (!empty($result['where'])) $result['where'].=' AND ';
-                $result['where'].= 'obj.is_history = 0 AND obj.is_delete = 0 AND obj.diff != '.Entity::DIFF_ADD;
+                $result['where'].= 'obj.is_history = 0 AND obj.is_draft = 0 AND obj.diff != '.Entity::DIFF_ADD;
             }
         }
 
@@ -2240,7 +2240,7 @@ class MySQLStore extends Entity
         $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
         if (empty($attribs['is_file'])) unset($attribs['is_file']); else $attribs['is_file'] = intval($attribs['is_file']);
         if (empty($attribs['is_history'])) unset($attribs['is_history']); else $attribs['is_history'] = intval($attribs['is_history']);
-        if (empty($attribs['is_delete'])) unset($attribs['is_delete']); else $attribs['is_delete'] = intval($attribs['is_delete']);
+        if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
         $attribs['possession'] = intval($attribs['possession']);
         $attribs['update_step'] = intval($attribs['update_step']);
@@ -2444,7 +2444,7 @@ class MySQLStore extends Entity
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
                   `is_file` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Значение - файл или нет?',
                   `is_history` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'В истории или нет?',
-                  `is_delete` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
+                  `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
                   `is_relative` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',

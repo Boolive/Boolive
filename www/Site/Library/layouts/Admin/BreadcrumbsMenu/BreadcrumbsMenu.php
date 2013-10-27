@@ -37,7 +37,7 @@ class BreadcrumbsMenu extends Widget{
             'order' => array('parent_cnt', 'desc'),
             'where' => array(
                 array('attr', 'diff', '>=', 0),
-                array('attr', 'is_delete', '>=', 0)
+                array('attr', 'is_draft', '>=', 0)
             )
         ));
         if ($object->isRemote()){

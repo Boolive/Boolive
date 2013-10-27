@@ -15,7 +15,7 @@ class Draft extends ToggleAction
     {
         /** @var \Boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
-        $this->_state = $object->isDelete(null, false);
+        $this->_state = $object->isDraft(null, false);
     }
 
     public function toggle()
@@ -25,21 +25,21 @@ class Draft extends ToggleAction
         $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
         if ($first = reset($objects)){
             $result['changes'] = array();
-            $draft = !$first->isDelete(null, false);
+            $draft = !$first->isDraft(null, false);
             foreach ($objects as $o){
                 try{
                     /** @var \Boolive\data\Entity $o */
-                    $o->isDelete($draft);
+                    $o->isDraft($draft);
                     // @todo Обрабатывать ошибки
                     $o->save();
                     $result['changes'][$o->uri()] = array(
-                        'is_delete' => $o->isDelete(null, false)
+                        'is_draft' => $o->isDraft(null, false)
                     );
                 }catch (Error $e){
                     $result['errors'][$o->uri()] = $e->getUserMessage(true);
                 }
             }
-            $result['state'] = $first->isDelete(null, false);
+            $result['state'] = $first->isDraft(null, false);
         }
         return $result;
     }

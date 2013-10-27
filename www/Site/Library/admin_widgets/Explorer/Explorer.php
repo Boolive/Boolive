@@ -45,7 +45,7 @@ class Explorer extends AutoWidgetList2
             if (!empty($this->_input['REQUEST']['filter'])) {
                 $this->filter->real->value($this->_input['REQUEST']['filter']['real']);
                 $this->filter->hidden->value(!empty($this->_input['REQUEST']['filter']['hidden']));
-                $this->filter->deleted->value(!empty($this->_input['REQUEST']['filter']['deleted']));
+                $this->filter->draft->value(!empty($this->_input['REQUEST']['filter']['draft']));
                 $this->filter->updates->value(!empty($this->_input['REQUEST']['filter']['updates']));
                 $this->filter->save();
             }
@@ -87,7 +87,7 @@ class Explorer extends AutoWidgetList2
     {
         $obj = array(
             'is_hidden' => $this->_input['REQUEST']['object']->attr('is_hidden'),
-            'is_delete' => $this->_input['REQUEST']['object']->attr('is_delete'),
+            'is_draft' => $this->_input['REQUEST']['object']->attr('is_draft'),
         );
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
         $filters = $this->filter->find(array('key'=>'name', 'cache'=>2));
@@ -96,7 +96,7 @@ class Explorer extends AutoWidgetList2
         if ($filters['real']->value()) {
             $any[] = array('all', array(
                 array('attr', 'is_hidden', '=', $obj['is_hidden']),
-                array('attr', 'is_delete', '=', $obj['is_delete']),
+                array('attr', 'is_draft', '=', $obj['is_draft']),
                 array('attr', 'diff', '!=', Entity::DIFF_ADD)
             ));
         }
@@ -107,10 +107,10 @@ class Explorer extends AutoWidgetList2
             $cond['where'][] = array('attr', 'is_hidden', '=', $obj['is_hidden']);
         }
         // Удаленные объекты
-        if ($filters['deleted']->value()) {
-            $any[] = array('attr', 'is_delete', '!=', $obj['is_delete']);
+        if ($filters['draft']->value()) {
+            $any[] = array('attr', 'is_draft', '!=', $obj['is_draft']);
         }else{
-            $cond['where'][] = array('attr', 'is_delete', '=', $obj['is_delete']);
+            $cond['where'][] = array('attr', 'is_draft', '=', $obj['is_draft']);
         }
         // Обновления
         if ($filters['updates']->value()) {

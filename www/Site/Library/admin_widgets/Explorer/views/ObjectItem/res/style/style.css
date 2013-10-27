@@ -46,7 +46,7 @@
                 .ObjectItem.list .hidden .main .title{
                     /*opacity: 0.5;*/
                     }
-                .ObjectItem.list .deleted .main .title{
+                .ObjectItem.list .draft .main .title{
                     color: #ff4a52;
                     text-decoration: line-through;
                     }

@@ -4,8 +4,8 @@
         if($v['is_hidden']->bool()){
             $class .= ' hidden';
         }
-        if($v['is_delete']->bool()){
-            $class .= ' deleted';
+        if($v['is_draft']->bool()){
+            $class .= ' draft';
         }
         if($v['is_link']->bool()){
             $class .= ' link';
