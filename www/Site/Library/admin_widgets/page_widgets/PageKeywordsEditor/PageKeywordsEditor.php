@@ -62,7 +62,7 @@ class PageKeywordsEditor extends AutoWidgetList2
         // Создание слова в общей коллекции ключевых слов
         if (!$key->isExist()){
             $proto = Data::read('/Library/content_samples/Keyword');
-            $key = $proto->birth($keywords);
+            $key = $proto->birth($keywords, false);
             $key->name($key_name);
             $key->value(0);
             $key->title->value($key_title);
@@ -72,7 +72,7 @@ class PageKeywordsEditor extends AutoWidgetList2
         $key_local = $obj->{$key_name};
         // Добавление слова по ссылке
         if (!$key_local->isExist()){
-            $key_local = $key->birth($obj);
+            $key_local = $key->birth($obj, false);
             $key_local->isLink(true);
             $key_local->save();
             // Счётчик использования слова

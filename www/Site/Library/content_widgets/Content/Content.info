@@ -3,7 +3,7 @@
     "value": "AutoWidget2.tpl",
     "is_file": true,
     "proto": "/Library/views/AutoWidget2",
-    "order": 10,
+    "order": 11,
     "children": {
         "title": {
             "value": "Содержимое",

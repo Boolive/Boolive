@@ -191,7 +191,7 @@ class RESTful extends View
     private function post($parent, $attribs)
     {
         if (isset($attribs['proto']) && ($proto = Data::read($attribs['proto'])) && $proto->isExist()){
-            $obj = $proto->birth($parent);
+            $obj = $proto->birth($parent, false);
         }else{
             $obj = new Entity();
             $obj->parent($parent);

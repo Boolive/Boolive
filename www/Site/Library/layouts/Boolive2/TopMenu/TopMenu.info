@@ -27,14 +27,14 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Ресурсы",
+                    "value": "",
                     "proto": "/Library/menus/TopMenu/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value": "",
                     "proto": "/Library/menus/TopMenu/res/description",
                     "is_hidden": true,
                     "order": 2
@@ -49,14 +49,14 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
+                    "value": "",
                     "proto": "/Library/menus/TopMenu/cache/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "value": "",
                     "proto": "/Library/menus/TopMenu/cache/description",
                     "is_hidden": true,
                     "order": 2
@@ -71,7 +71,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на отображаемый объект",
+                    "value": "",
                     "proto": "/Library/menus/TopMenu/object_rule/title",
                     "order": 1
                 }

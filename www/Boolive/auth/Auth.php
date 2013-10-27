@@ -90,7 +90,7 @@ class Auth
         }
         // Новый гость
         if (!self::$user){
-            self::$user = Data::read(self::USER, false)->birth(Data::read(self::GROUP_GUEST, false));
+            self::$user = Data::read(self::USER, false)->birth(Data::read(self::GROUP_GUEST, false), false);
             self::$user->value($hash);
             $duration = 0;
         }

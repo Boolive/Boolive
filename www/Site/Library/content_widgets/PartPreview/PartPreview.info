@@ -2,7 +2,7 @@
     "value": "PartPreview.tpl",
     "is_file": true,
     "proto": "/Library/content_widgets/PagePreview",
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "value": "Предпросмотр раздела",

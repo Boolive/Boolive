@@ -860,8 +860,7 @@ class MySQLStore extends Entity
                         // Если прототип относительный, то проверить наличие свойства в объекте с именем этого прототипа
                         // если есть, то создавать его не надо
                         if (!$proto->isRelative() || !($c = $entity->{$proto->name()}) || !$c->isExist() || !$c->isRelative()){
-                            $child = $proto->birth($entity);
-                            $child->isDraft(false);
+                            $child = $proto->birth($entity, false);
                             $child->_attribs['possession'] = $proto->possession();
                             $child->_attribs['diff'] = $diff;
                             $child->_attribs['diff_from'] = 1;

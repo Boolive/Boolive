@@ -1,1 +1,23 @@
-{"is_default_value":true,"value":"Css.css","is_file":true,"proto":"/Library/views/HtmlBlock/res/Css","order":5,"children":{"title":{"is_default_value":true,"value":"CSS подсветки кода","proto":"/Library/views/HtmlBlock/res/Css/title","is_hidden":true,"order":1},"description":{"is_default_value":true,"value":"Каскадная таблица стилей для оформления HTML-документа","proto":"/Library/views/HtmlBlock/res/Css/description","is_hidden":true,"order":2}}}
+{
+    "is_default_value": true,
+    "value": "Css.css",
+    "is_file": true,
+    "proto": "/Library/views/HtmlBlock/res/Css",
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "CSS подсветки кода",
+            "proto": "/Library/views/HtmlBlock/res/Css/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Каскадная таблица стилей для оформления HTML-документа",
+            "proto": "/Library/views/HtmlBlock/res/Css/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

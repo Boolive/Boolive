@@ -2,7 +2,7 @@
     "value": "Keywords.tpl",
     "is_file": true,
     "proto": "/Library/views/AutoWidgetList2",
-    "order": 9,
+    "order": 10,
     "children": {
         "title": {
             "value": "Список ключевых слов",

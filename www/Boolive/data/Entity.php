@@ -1435,9 +1435,10 @@ class Entity implements ITrace
     /**
      * Создание нового объекта прототипированием от себя
      * @param null|Entity $for Для кого создаётся новый объект?
+     * @param bool $draft Признак, создавать черновик?
      * @return Entity
      */
-    public function birth($for = null)
+    public function birth($for = null, $draft = true)
     {
         $class = get_class($this);
         $attr = array(
@@ -1449,7 +1450,7 @@ class Entity implements ITrace
         $obj->name(null, true); // Уникальность имени
         $obj->proto($this);
         $obj->isHidden($this->isHidden());
-        $obj->isDraft(true);
+        $obj->isDraft($draft);
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;
@@ -1939,6 +1940,7 @@ class Entity implements ITrace
                 if ($this->diff() == Entity::DIFF_ADD) $this->{$name}->diff(Entity::DIFF_ADD);
                 if ($this->diff_from() < 1) $this->{$name}->diff_from($this->diff_from()-1);
                 $this->{$name}->import($child);
+                $this->{$name}->isDraft(!empty($child['is_draft']));
             }
         }
     }
