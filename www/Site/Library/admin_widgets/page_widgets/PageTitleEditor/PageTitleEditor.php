@@ -6,9 +6,7 @@
  */
 namespace Library\admin_widgets\page_widgets\PageTitleEditor;
 
-use Boolive\errors\Error,
-    Library\views\Widget\Widget,
-    Boolive\values\Rule;
+use Library\views\Widget\Widget;
 
 class PageTitleEditor extends Widget
 {

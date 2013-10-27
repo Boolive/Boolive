@@ -29,9 +29,9 @@
             }
         .ObjectItem.tile .view.draft{
 
-            /*background-color: rgba(255, 184, 181, 0.3);*/
-            /*border-color: rgba(255, 184, 181, 0.305);*/
-            /*color: #FF4A52*/
+            background-color: transparent;
+            border: dashed 1px #888;
+            /*color: #FFF*/
             }
         /*.ObjectItem.tile .view.diff_add{*/
                 /*border-color: #9ce62e;*/
@@ -39,9 +39,13 @@
 
         .ObjectItem.tile .view:hover{
             background-color: rgba(128, 200, 255, 0.3);
-            border-color: rgba(128, 200, 255, 0.31);
+            border-color: rgba(128, 200, 255, 0.3);
             /*border: solid 1px #E3F1FF;*/
-        }
+            }
+        .ObjectItem.tile .view.draft:hover{
+            border-color: #888;
+            /*background-color: rgba(0, 0, 0, 0.1);*/
+            }
         /* Название */
         .ObjectItem.tile .view .title-group{
             font-size: 22pt;
@@ -61,9 +65,11 @@
                 margin-left: 2px;
                 text-decoration: none;
                 }
-            .ObjectItem.tile .view.draft .title-group .title{
-                color: #ff4a52;
-                text-decoration: line-through;
+            .ObjectItem.tile .view.draft .title-group/* .title*/{
+                /*color: #ff4a52;*/
+                /*color: #fff;*/
+                /*text-decoration: line-through;*/
+                font-style: italic;
             }
 
             .ObjectItem.tile .view.diff_add .title-group .title:before{
@@ -121,6 +127,9 @@
                     }
                     .ObjectItem.tile .view.link .title-group .title > *{
                         color: #0073bf;
+                    }
+                    .ObjectItem.tile .view.draft .title-group .title > *{
+                        color: #808080;
                     }
                     .ObjectItem.tile .view.diff_add .title-group .title > *{
                         /*color: #75b324;*/
@@ -217,15 +226,21 @@
     background-color: rgba(97, 176, 255, 0.9);
     border-color: rgba(97, 176, 255, 0.91);
     }
-
+    .ObjectItem.selected.tile .view.draft{
+        /*background-color: rgba(153, 153, 153, 0.90);*/
+        border-color: rgb(51, 89, 128);
+        }
     .ObjectItem.selected.tile .view .title-group *,
     .ObjectItem.selected.tile .view.link .title-group .title > *{
         color: #FFF;
-        text-shadow: 0px 0 10px rgb(51, 160, 255);
+        /*text-shadow: 0px 0 10px rgb(51, 160, 255);*/
         }
         .ObjectItem.selected.tile .view.link .title-group .title:after{
             color: #FFF;
             }
+    .ObjectItem.selected.tile .view.draft .title-group *{
+        color: #fff;
+    }
     .ObjectItem.selected.tile .view .select{
         background: url(img/select-invert.png) no-repeat center center;
         opacity: 0.9;

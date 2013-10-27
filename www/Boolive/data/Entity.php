@@ -160,8 +160,8 @@ class Entity implements ITrace
                 'value'	 	   => Rule::string(), // Значение любой длины
                 'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (value = имя файла, uri = директория)
                 'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет?
-                'is_draft'	   => Rule::int(), // Удаленный или нет с учётом признака родителя?
-                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя?
+                'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
+                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
                 'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
                 'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
@@ -543,9 +543,9 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, объект удален или нет?
+     * Признак, объект в черновике или нет?
      * @param null|bool $draft Новое значение, если не null
-     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то удаление родителя не влияет на данный объект
+     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то черновик родителя не влияет на данный объект
      * @return bool
      */
     public function isDraft($draft = null, $inherit_parent = true)
@@ -1541,7 +1541,7 @@ class Entity implements ITrace
         $obj->owner($this->owner());
         $obj->lang($this->lang());
         $obj->isHidden($this->isHidden());
-        $obj->isDraft($this->isDraft());
+        $obj->isDraft(true);
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;

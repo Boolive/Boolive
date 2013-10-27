@@ -27,8 +27,12 @@
 			    border: 1px solid #d2e8fa;
                 }
         .ObjectItem.list .view.hidden{
-            opacity: 0.4;
+            opacity: 0.25;
             }
+        .ObjectItem.list .view.draft{
+            border-bottom: 1px dashed #E0E0E0;
+            font-style: italic;
+        }
         /* Главный блок*/
         .ObjectItem.list .main {
 			display: block;
@@ -47,8 +51,8 @@
                     /*opacity: 0.5;*/
                     }
                 .ObjectItem.list .draft .main .title{
-                    color: #ff4a52;
-                    text-decoration: line-through;
+                    /*color: #ff4a52;*/
+                    /*text-decoration: line-through;*/
                     }
 				.ObjectItem.list .main .title{
 					padding: 9px 0 9px 10px;
@@ -109,6 +113,9 @@
 
                     .ObjectItem.list .main .title > *{
                         color: #000;
+                        }
+                    .ObjectItem.list .draft .main .title > *{
+                        color: #555;
                         }
                     .ObjectItem.list .main .title:hover > *{
                         text-decoration: underline;
