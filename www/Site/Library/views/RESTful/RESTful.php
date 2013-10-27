@@ -8,17 +8,15 @@
  */
 namespace Library\views\RESTful;
 
-use Boolive\data\Data;
-use Boolive\data\Entity;
-use Boolive\errors\Error;
-use Boolive\functions\F;
-use Boolive\input\Input;
-use Library\views\View\View,
+use Boolive\data\Data,
+    Boolive\data\Entity,
+    Boolive\errors\Error,
+    Boolive\functions\F,
+    Library\views\View\View,
     Boolive\values\Rule;
 
 class RESTful extends View
 {
-
     /**
      * Правило на входящие данные - услоdие работы restful
      */
@@ -160,7 +158,6 @@ class RESTful extends View
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
         if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));
-        if (isset($attribs['is_history'])) $obj->isHistory(!empty($attribs['is_history']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
         if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
         if (isset($attribs['possession'])) $obj->possession($attribs['possession']);
@@ -170,7 +167,7 @@ class RESTful extends View
         }
         // Проверка и сохранение
         try{
-            $obj->save(false, false);
+            $obj->save(false);
             // Если изменился класс, то повторно выбрать объект из хранилища, чтобы обновилась его логика
             if ($class_changed){
                 $this->_input['REQUEST']['object'] = Data::read(array(
@@ -223,14 +220,13 @@ class RESTful extends View
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
         if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));
-        if (isset($attribs['is_history'])) $obj->isHistory(!empty($attribs['is_history']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
         if (isset($attribs['is_default_class'])){
             $obj->isDefaultClass(!empty($attribs['is_default_class']));
         }
         // Проверка и сохранение
         try{
-            $obj->save(false, false);
+            $obj->save(false);
             header("HTTP/1.1 201 Created");
             header('Content-Type: application/json; charset=UTF-8');
             echo F::toJSON(array('result'=>$obj->export(false, true, false)));

@@ -110,7 +110,7 @@ class Attribs extends Widget
 
             // Сохранение
             try{
-                $obj->save(false, false);
+                $obj->save(false);
                 if ($class_changed){
                     $this->_input['REQUEST']['object'] = Data::read(array(
                         'from' => $obj->id(),

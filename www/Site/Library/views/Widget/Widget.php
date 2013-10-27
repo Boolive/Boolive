@@ -31,7 +31,7 @@ class Widget extends View
      */
     protected function initInput($input)
     {
-        if ($this->object->isExist() && !$this->object->isDraft(null, false) && !$this->object->isHistory()){
+        if ($this->object->isExist() && !$this->object->isDraft(null, false)){
             $input['REQUEST']['object'] = $this->object;
         }
         parent::initInput($input);

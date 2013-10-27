@@ -246,12 +246,11 @@ class MySQLStore extends Entity
      * Сохранение объекта
      * @param \Boolive\data\Entity $entity Сохраняемый объект
      * @param bool $access Признак, проверять доступ или нет?
-     * @param bool $force_add Принудительное добавление объекта. Используется для внутренних быстрых добалений
      * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
      * @throws
      * @throws \Exception Системные ошибки
      */
-    public function write($entity, $access, $force_add = false)
+    public function write($entity, $access)
     {
         if ($access && IS_INSTALL && !$entity->isAccessible('write')){
             $error = new Error('Запрещенное действие над объектом', $entity->uri());
@@ -285,6 +284,7 @@ class MySQLStore extends Entity
                 if (!IS_INSTALL) $attr['update_time'] = time();
                 // URI до сохранения объекта
                 $curr_uri = $attr['uri'];
+
                 // Подбор уникального имени, если указана необходимость в этом
                 if ($entity->_autoname){
                     $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE parent=? AND `name`=? LIMIT 0,1');
@@ -304,6 +304,7 @@ class MySQLStore extends Entity
                 }else{
                     $attr['uri'] = $entity->uri(true);
                 }
+
                 // Локальный идентификатор объекта
                 if (empty($attr['id'])){
                     $attr['id'] = $this->localId($attr['uri'], true, $new_id);
@@ -339,33 +340,14 @@ class MySQLStore extends Entity
                         $attr['value'] = $attr['owner'].'@'.$attr['lang'].'@'.$attr['value'];
                     }
                 }
-                // По умолчанию считаем, что запись добавляется (учёт истории)
-                $add = true;
-                // Проверяем, может запись с указанной датой существует и её тогда редактировать?
-                if (!$force_add && isset($attr['date'])){
-                    // Поиск записи по полному ключю id+lang+owner+date
-                    $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND owner=? AND lang=? AND {objects}.id={ids}.id AND date=? LIMIT 0,1');
-                    $q->execute(array($attr['id'], $attr['owner'], $attr['lang'], $attr['date']));
-                    // Если объект есть в БД
-                    if ($current = $q->fetch(DB::FETCH_ASSOC)){
-                        $add = false;
-                    }
+                // Текущая запись
+                if (!$new_id){
+                    $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND owner=? AND lang=? AND {objects}.id={ids}.id LIMIT 0,1');
+                    $q->execute(array($attr['id'], $attr['owner'], $attr['lang']));
+                    $current = $q->fetch(DB::FETCH_ASSOC);
                     unset($q);
                 }else{
                     $attr['date'] = time();
-                }
-                // Если добавляется новая версия объекта, то добавление возможно, если у объекта новое значение (или файл)
-                if (!$force_add && $add){
-                    // Поиск самой свежей записи с учётом is_histrory
-                    $q = $this->db->prepare('SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND owner=? AND lang=? AND {objects}.id={ids}.id AND is_history=? ORDER BY `date` DESC LIMIT 0,1');
-                    $q->execute(array($attr['id'], $attr['owner'], $attr['lang'], $attr['is_history']));
-                    if ($current = $q->fetch(DB::FETCH_ASSOC)){
-                        if (empty($attr['file']) && $current['value']==$attr['value'] && (!isset($attr['is_file']) || $current['is_file']==$attr['is_file'])){
-                            $add = false;
-                            $attr['date'] = $current['date'];
-                        }
-                    }
-                    unset($q);
                 }
                 // Проверка доступов
                 if ($access && IS_INSTALL){
@@ -458,15 +440,15 @@ class MySQLStore extends Entity
                 }
                 // Уникальность order, если задано значение и записываемый объект не в истории
                 // Если запись в историю, то вычисляем только если не указан order
-                if (!$attr['is_history'] && $attr['order']!= Entity::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
+                if ($attr['order']!= Entity::MAX_ORDER && (!isset($current) || $current['order']!=$attr['order'])){
                     // Проверка, занят или нет новый order
-                    $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`=?');
+                    $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE owner=? AND lang=? AND `parent`=? AND `order`=?');
                     $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
                     if ($q->fetch()){
                         // Сдвиг order существующих записей, чтоб освободить значение для новой
                         $q = $this->db->prepare('
                             UPDATE {objects} SET `order` = `order`+1
-                            WHERE owner=? AND lang=? AND `parent`=? AND is_history=0 AND `order`>=?'
+                            WHERE owner=? AND lang=? AND `parent`=? AND `order`>=?'
                         );
                         $q->execute(array($attr['owner'], $attr['lang'], $attr['parent'], $attr['order']));
                     }
@@ -490,37 +472,13 @@ class MySQLStore extends Entity
                 }else{
                     $fname_pf = '';
                 }
-                // Если редактирование записи, при этом старая запись имеет файл, а новая нет или загружаетс новый файл, то удаляем файл
-                if (!$add && $attr['is_history'] == $current['is_history']){
-                    if (isset($attr['is_file']) && ($attr['is_file']==0 && $current['is_file']==1 || isset($attr['file']))){
-                        // Удаление файла
-                        if ($current['is_history']){
-                            $path = $entity->dir(true).'_history_/'.$fname_pf.$current['date'].'_'.$current['value'];
-                        }else{
-                            $path = $entity->dir(true).$fname_pf.$current['value'];
-                        }
-                        File::delete($path);
-                    }
-                }else
-                // Если старое значение является файлом и выполняется редактирование со сменой is_history или
-                // добавляется новая актуальная запись, то перемещаем старый файл либо в историю, либо из неё
-                if (!$force_add && (!$add || ($add && $attr['is_history']==0)) && $current['is_file']==1){
-                    if ($current['is_history']==0){
-                        $to = $entity->dir(true).'_history_/'.$fname_pf.$current['date'].'_'.$current['value'];
-                        $from = $entity->dir(true).$fname_pf.$current['value'];
-                    }else{
-                        $to = $entity->dir(true).$fname_pf.$current['value'];
-                        $from = $entity->dir(true).'_history_/'.$fname_pf.$current['date'].'_'.$current['value'];
-                    }
-                    File::rename($from, $to);
+                // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
+                if (!empty($current) && isset($attr['file']) && $current['is_file']==1){
+                    File::delete($entity->dir(true).$fname_pf.$current['value']);
                 }
                 // Связывание с новым файлом
                 if (isset($attr['file'])){
-                    if ($attr['is_history']){
-                        $path = $entity->dir(true).'_history_/'.$fname_pf.$attr['date'].'_'.$attr['value'];
-                    }else{
-                        $path = $entity->dir(true).$fname_pf.$attr['value'];
-                    }
+                    $path = $entity->dir(true).$fname_pf.$attr['value'];
                     if (isset($attr['file']['content'])){
                         if (!File::create($attr['file']['content'], $path)){
                             $attr['is_file'] = 0;
@@ -556,21 +514,13 @@ class MySQLStore extends Entity
                     }
                     unset($attr['class']);
                 }
-                // Текущую акуальную запись в историю
-                // Если добавление новой актуальной записи или востановление из истории
-                if (!$force_add && (($add && $entity->isExist()) || (!$add && $current['is_history'])) && (isset($attr['is_history']) && $attr['is_history']==0)){
-                    // Смена истории, если есть уже записи.
-                    $q = $this->db->prepare('UPDATE {objects} SET `is_history`=1 WHERE `id`=? AND owner=? AND lang=? AND is_history=0');
-                    $q->execute(array($attr['owner'], $attr['lang'], $attr['id']));
-                    unset($q);
-                }
                 $attr_names = array('id', 'name', 'owner', 'lang', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
-                        'is_history', 'is_draft', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
+                        'is_draft', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt', 'valuef', 'possession', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
-                // Объект идентифицируется по id+owner+lang+date
-                if ($add){
+                // Объект идентифицируется по id+owner+lang
+                if (empty($current)){
                     $q = $this->db->prepare('
                         INSERT INTO {objects} (`'.implode('`, `', $attr_names).'`)
                         VALUES ('.str_repeat('?,', $cnt-1).'?)
@@ -588,7 +538,7 @@ class MySQLStore extends Entity
                 }else{
                     $attr['date'] = time();
                     $q = $this->db->prepare('
-                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ? AND owner=? AND lang=? AND date=?
+                        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ? AND owner=? AND lang=?
                     ');
                     $i = 0;
                     foreach ($attr_names as $name){
@@ -600,7 +550,6 @@ class MySQLStore extends Entity
                     $q->bindValue(++$i, $attr['id']);
                     $q->bindValue(++$i, $current['owner']);
                     $q->bindValue(++$i, $current['lang']);
-                    $q->bindValue(++$i, $current['date']);
                     $q->execute();
                 }
                 $is_write = $q->rowCount()>0;
@@ -667,8 +616,8 @@ class MySQLStore extends Entity
                         $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
                         $u = $this->db->prepare('
                             UPDATE {objects}, {protos} SET
-                                `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :value, value),
-                                `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang AND is_history = 0), :is_file, is_file),
+                                `value` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang), :value, value),
+                                `is_file` = IF((is_default_value=:vproto AND owner = :owner AND lang = :lang), :is_file, is_file),
                                 `is_default_value` = IF((is_default_value=:vproto  || is_default_value=:max_id), :proto, is_default_value),
                                 `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
                                 `proto_cnt` = `proto_cnt`+:dp
@@ -941,7 +890,7 @@ class MySQLStore extends Entity
                             $child->_attribs['possession'] = $proto->possession();
                             $child->_attribs['diff'] = $diff;
                             $child->_attribs['diff_from'] = 1;
-                            $this->write($child, false, true);
+                            $this->write($child, false);
                             // После сохранения, когда получает уникальное имя, меняем прототип, если он должен быть относительным
                             if ($proto->isRelative() && ($p = $proto->proto())){
                                 $new_proto = Data::getRelativeProto($child->uri(), $proto->uri(), $p->uri());
@@ -953,7 +902,7 @@ class MySQLStore extends Entity
                                     ));
                                     $child->proto($new_proto);
                                     $child->isRelative(true);
-                                    $this->write($child, false, true);
+                                    $this->write($child, false);
                                 }
                             }
                         }
@@ -972,7 +921,7 @@ class MySQLStore extends Entity
             // Подготовка запроса для сохранения времени индексации объекта
             $osave = $this->db->prepare('
                 UPDATE {objects} SET update_time = :itime, update_step = :istep, `diff` = :diff, `diff_from`= :diff_from
-                WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
+                WHERE id = :id AND owner = :owner AND lang = :lang
             ');
             $osave->execute(array(
                 ':itime' => $entity->_attribs['update_time'],
@@ -1007,7 +956,7 @@ class MySQLStore extends Entity
                 // Подготовка запроса для сохранения времени индексации объекта
                 $osave2 = $this->db->prepare('
                     UPDATE {objects} SET update_time = :itime, `diff` = :diff, `diff_from`=:diff_from
-                    WHERE id = :id AND owner = :owner AND lang = :lang AND is_history = 0
+                    WHERE id = :id AND owner = :owner AND lang = :lang
                 ');
                 $store = $this;
                 /** @var callback $process_info Сверка сущности с массивом атрибутов */
@@ -1049,7 +998,7 @@ class MySQLStore extends Entity
                             $entity->diff_from($level);
                             $entity->import($info);
                             $entity->order(Entity::MAX_ORDER);
-                            $store->write($entity, false, true);
+                            $store->write($entity, false);
                         }
                         // Проверка подчиненных
                         foreach ($children as $name => $child_info){
@@ -1092,7 +1041,7 @@ class MySQLStore extends Entity
         if ($diff == Entity::DIFF_ADD){
             $entity->diff(Entity::DIFF_NO);
             //$entity->_attribs['update_time'] = 0;
-            $entity->save(false, false);
+            $entity->save(false);
             // Выбрать все подчиенные с DIFF_ADD и POSSESSION_MANDATORY и установить им DIFF_NO
             $new_children = $entity->find(array(
                 'where' => array(
@@ -1107,7 +1056,7 @@ class MySQLStore extends Entity
         if ($diff == Entity::DIFF_DELETE){
             $entity->diff(Entity::DIFF_NO);
             $entity->isDraft(true);
-            $entity->save(false, false);
+            $entity->save(false);
         }else
         if ($diff == Entity::DIFF_CHANGE){
             $diff_from = $entity->diff_from();
@@ -1128,7 +1077,7 @@ class MySQLStore extends Entity
                     if ($entity->isDefaultClass()){
                         // @todo Если внешний, то обновить класс от прототипа (или просто удалить свой кэш?)
                     }
-                    $entity->save(false, false);
+                    $entity->save(false);
                 }
             }else{
                 // info файл (в зависимости от diff_from)
@@ -1157,7 +1106,7 @@ class MySQLStore extends Entity
                             if (isset($info['order'])) unset($info['order']);
                             $entity->import($info);
                             $entity->diff(Entity::DIFF_NO);
-                            $entity->save(false, false);
+                            $entity->save(false);
                         }
                     }
                 }
@@ -1174,7 +1123,7 @@ class MySQLStore extends Entity
     protected function updateDate($local_id, $date)
     {
         $q = $this->db->prepare('
-            UPDATE {objects}, {parents} SET {objects}.date=? WHERE {parents}.object_id = ? AND {parents}.parent_id = {objects}.id AND {objects}.is_history=0
+            UPDATE {objects}, {parents} SET {objects}.date=? WHERE {parents}.object_id = ? AND {parents}.parent_id = {objects}.id
         ');
         $q->execute(array($date, $local_id));
         return $q->rowCount()>0;
@@ -1640,7 +1589,7 @@ class MySQLStore extends Entity
                                 $cond[$i].= '?';
                                 $result['binds'][] = $c[3];
                             }
-                            if ($c[1] == 'is_history' || $c[1] == 'is_draft' || $c[1] == 'diff'){
+                            if ($c[1] == 'is_draft' || $c[1] == 'diff'){
                                 $attr_exists[$c[1]] = true;
                             }
                         }else
@@ -1803,10 +1752,9 @@ class MySQLStore extends Entity
                 // Дополнительные услвоия по умолчанию
                 if ($level == 1){
                     $more_cond = array();
-                    if (empty($attr_exists['is_history'])) $more_cond[] = '`'.$table.'`.is_history = 0';
                     if (empty($attr_exists['is_draft'])) $more_cond[]  = '`'.$table.'`.is_draft = 0';
                     if (empty($attr_exists['diff'])) $more_cond[]  = '`'.$table.'`.diff != '.Entity::DIFF_ADD;
-                    $attr_exists = array('is_history' => true, 'is_draft' => true, 'diff' => true);
+                    $attr_exists = array('is_draft' => true, 'diff' => true);
                     if ($glue == ' AND '){
                         $cond = array_merge($cond, $more_cond);
                     }else
@@ -1817,7 +1765,7 @@ class MySQLStore extends Entity
                 }
                 return implode($glue, $cond);
             };
-            $attr_exists = $only_where ? array('is_history' => true, 'is_draft' => true, 'diff' => true) : array();
+            $attr_exists = $only_where ? array('is_draft' => true, 'diff' => true) : array();
             // Если услвоия есть, то добавляем их в SQL
             if ($w = $convert($cond['where'], ' AND ', 'obj', 0, $attr_exists)){
                 if (empty($result['where'])){
@@ -1827,11 +1775,9 @@ class MySQLStore extends Entity
                 }
             }
         }else{
-            if ($cond['select'][0] == 'self'){
-                $result['from'].= ' AND obj.is_history = 0';
-            }else{
+            if ($cond['select'][0] != 'self'){
                 if (!empty($result['where'])) $result['where'].=' AND ';
-                $result['where'].= 'obj.is_history = 0 AND obj.is_draft = 0 AND obj.diff != '.Entity::DIFF_ADD;
+                $result['where'].= 'obj.is_draft = 0 AND obj.diff != '.Entity::DIFF_ADD;
             }
         }
 
@@ -2240,7 +2186,6 @@ class MySQLStore extends Entity
         $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
         $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
         if (empty($attribs['is_file'])) unset($attribs['is_file']); else $attribs['is_file'] = intval($attribs['is_file']);
-        if (empty($attribs['is_history'])) unset($attribs['is_history']); else $attribs['is_history'] = intval($attribs['is_history']);
         if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
         $attribs['possession'] = intval($attribs['possession']);
@@ -2444,7 +2389,6 @@ class MySQLStore extends Entity
                   `value` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Строковое значение',
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
                   `is_file` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Значение - файл или нет?',
-                  `is_history` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'В истории или нет?',
                   `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
@@ -2456,9 +2400,9 @@ class MySQLStore extends Entity
                   `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
                   `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды различиый - Entity::DIFF_*',
                   `diff_from` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'От куда изменения. 1 - от прототипа. 0 и меньше от info файла. Кодируется относительное расположение info файла',
-                  PRIMARY KEY (`id`,`owner`,`lang`,`date`),
+                  PRIMARY KEY (`id`,`owner`,`lang`),
                   KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
-                  KEY `indexation` (`parent`,`is_history`,`id`)
+                  KEY `indexation` (`parent`,`id`)
                 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'
             ");
             $db->exec("

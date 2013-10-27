@@ -428,7 +428,7 @@ class Installer
                     // Устанока объекта проекта
                     $entity = new Entity();
                     $entity->import($m);
-                    $entity->save(false, true, false);
+                    $entity->save(true, false);
                     $install['step']++;
                 }else{
                     $install['step']++;

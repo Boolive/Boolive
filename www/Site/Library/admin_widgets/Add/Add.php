@@ -27,7 +27,7 @@ class Add extends SelectObject
                     $obj->isLink(true);
                 }
                 // @todo Обрабатывать ошибки
-                $obj->save(false, false);
+                $obj->save(false);
                 $result['changes'][$obj->uri()] = array(
                     'uri' => $obj->uri()
                 );

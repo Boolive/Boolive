@@ -59,7 +59,6 @@ class Entity implements ITrace
         'proto_cnt'    => 0,
         'value'	 	   => '',
         'is_file'	   => 0,
-        'is_history'   => 0,
         'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
@@ -159,7 +158,6 @@ class Entity implements ITrace
                 'proto'        => Rule::uri(), // URI прототипа
                 'value'	 	   => Rule::string(), // Значение любой длины
                 'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (value = имя файла, uri = директория)
-                'is_history'   => Rule::bool()->int()->default(0)->required(), // В истории или нет?
                 'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
                 'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
                 'is_link'      => Rule::uri(), // Ссылка или нет?
@@ -402,7 +400,6 @@ class Entity implements ITrace
                 return $file;
             }else{
                 $file = $this->dir($root);
-                if (!empty($this->_attribs['is_history'])) $file.='_history_/'.$this['date'].'_';
                 return $file.$this->_attribs['value'];
             }
         }
@@ -525,21 +522,6 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         return !empty($this->_attribs['is_file']);
-    }
-
-    /**
-     * Признак, объект в истории или нет?
-     * @param null|bool $history Новое значение, если не null
-     * @return bool
-     */
-    public function isHistory($history = null)
-    {
-        if (empty($this->_attribs['is_history']) == $history){
-            $this->_attribs['is_history'] = $history;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return !empty($this->_attribs['is_history']);
     }
 
     /**
@@ -1448,13 +1430,12 @@ class Entity implements ITrace
 
     /**
      * Сохранение объекта в секции
-     * @param bool $history Признак, создавать историю изменения объекта или нет?
      * @param bool $children Признак, сохранять подчиенных или нет?
      * @param bool $access Признак, проверять доступ на запись или нет?
      * @throws \Exception
      * @return bool
      */
-    public function save($history = false, $children = true, $access = true)
+    public function save($children = true, $access = true)
     {
         if (!$this->_is_saved){
             try{
@@ -1462,7 +1443,7 @@ class Entity implements ITrace
                 // Сохранение родителя, если не сохранен или требует переименования
                 if ($this->_parent){
                     if (!$this->_parent->isExist() || $this->_parent->_autoname){
-                        $this->_parent->save(false, false);
+                        $this->_parent->save(false, $access);
                     }
                     $this->_attribs['parent'] = $this->_parent->key();
                 }
@@ -1476,7 +1457,7 @@ class Entity implements ITrace
                     $this->_attribs['lang'] = $this->_lang->key();
                 }
                 // Если создаётся история, то нужна новая дата
-                if ($history || (empty($this->_attribs['date']) && !$this->isExist())) $this->_attribs['date'] = time();
+                if (empty($this->_attribs['date']) && !$this->isExist()) $this->_attribs['date'] = time();
                 // Сохранение себя
                 if ($this->_changed && Data::write($this, $access)){
                     $this->_changed = false;
@@ -1489,7 +1470,7 @@ class Entity implements ITrace
                     foreach ($children as $child){
                         /** @var Entity $child */
                         try{
-                            $child->save($history, true, $access);
+                            $child->save(true, $access);
                         }catch (Error $e){
                             $errors->_children->add($e);
                         }
@@ -1671,9 +1652,6 @@ class Entity implements ITrace
                 }else
                 if ($cond[1] == 'is_link'){
                     $value = $this->isLink();
-                }else
-                if ($cond[1] == 'is_history'){
-                    $value = $this->isHistory();
                 }else
                 if ($cond[1] == 'is_relative'){
                     $value = $this->isRelative();
@@ -1924,7 +1902,6 @@ class Entity implements ITrace
             if (!$this->isHidden()) $export['is_hidden'] = false;
             if (!$this->isDraft()) $export['is_draft'] = false;
             if (!$this->isRelative()) $export['is_relative'] = false;
-            $export['is_history'] = $this->isHistory();
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
             if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
             if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
