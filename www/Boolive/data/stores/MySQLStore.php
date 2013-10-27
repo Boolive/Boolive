@@ -14,10 +14,9 @@ use Boolive\auth\Auth,
     Boolive\data\Data,
     Boolive\functions\F,
     Boolive\file\File,
-    Boolive\data\Buffer,
-    Boolive\develop\Trace,
     Boolive\errors\Error,
-    Boolive\events\Events;
+    Boolive\events\Events,
+    Boolive\develop\Trace;
 
 class MySQLStore extends Entity
 {
@@ -432,8 +431,6 @@ class MySQLStore extends Entity
                 $this->db->beginTransaction();
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных
                 if (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent'])){
-                    // Обновление URI в ids
-                    $attr['uri'] = $entity->uri(true);
                     // Текущий URI
                     $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
                     $uri = (isset($names[0])?$names[0].'/':'').(empty($current)? $temp_name : $current['name']);
@@ -1270,7 +1267,7 @@ class MySQLStore extends Entity
                 // Идентификация
                 // Если from множественный, то формат запроса определяется по первому from!
                 $from_info = Data::parseUri($cond['from']);
-                if (!empty($from_info['id'])){
+                if (isset($from_info['id'])){
                     if (empty($from_info['path'])){
                         if ($multy){
                             // Множественный выбор по идентификатору
@@ -1349,12 +1346,12 @@ class MySQLStore extends Entity
                             $result['select'].= ', CONCAT("//",t.parent_id) as `from`';
                             $result['from'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
                             for ($i=0; $i<$multy_cnt; $i++){
-                                $binds2[] = array($this->localId($cond['from'][$i]), DB::PARAM_INT);
+                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
                             }
                             if ($calc) $result['group'] = ' GROUP BY t.parent_id';
                         }else{
                             $result['from'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                         // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
                         if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
@@ -1369,13 +1366,13 @@ class MySQLStore extends Entity
                             $result['select'].= ', CONCAT("//",obj.parent) as `from`';
                             $result['where'].= 'obj.parent IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') AND ';
                             for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
+                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY obj.parent';
                         }else{
                             // Сверка parent
                             $result['where'].= 'obj.parent = ? AND ';
-                            $result['binds'][] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $result['binds'][] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                         // Оптимизация сортировки по атрибуту order
                         if (!empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
@@ -1390,7 +1387,7 @@ class MySQLStore extends Entity
                             for ($i=0; $i<$multy_cnt; $i++){
                                 if (!empty($w)) $w.=' OR ';
                                 $w.= "(f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i]), DB::PARAM_INT);
+                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             }
@@ -1398,7 +1395,7 @@ class MySQLStore extends Entity
                             if ($calc) $result['group'] = ' GROUP BY f.parent_id';
                         }else{
                             $result['from'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
@@ -1419,12 +1416,12 @@ class MySQLStore extends Entity
                             $result['select'].= ', CONCAT("//",t.object_id) as `from`';
                             $result['from'].= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
                             for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
+                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY t.object_id';
                         }else{
                             $result['from'].= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                     }else{
                         // Поиск ограниченной глубиной (кол-ва родителей)
@@ -1435,7 +1432,7 @@ class MySQLStore extends Entity
                             for ($i=0; $i<$multy_cnt; $i++){
                                 if (!empty($w)) $w.=' OR ';
                                 $w.= "(f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i]), DB::PARAM_INT);
+                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             }
@@ -1443,7 +1440,7 @@ class MySQLStore extends Entity
                             if ($calc) $result['group'] = ' GROUP BY f.object_id';
                         }else{
                             $result['from'].= "\n  JOIN {parents} f ON (f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                         }
@@ -1459,12 +1456,12 @@ class MySQLStore extends Entity
                             $result['select'].= ', CONCAT("//",t.object_id) as `from`';
                             $result['from'].= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
                             for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
+                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY t.object_id';
                         }else{
                             $result['from'].= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                     }else{
                         // Поиск ограниченной глубиной (кол-ва прототипов)
@@ -1475,7 +1472,7 @@ class MySQLStore extends Entity
                             for ($i=0; $i<$multy_cnt; $i++){
                                 if (!empty($w)) $w.=' OR ';
                                 $w.= "(f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i]), DB::PARAM_INT);
+                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             }
@@ -1483,7 +1480,7 @@ class MySQLStore extends Entity
                             if ($calc) $result['group'] = ' GROUP BY f.object_id';
                         }else{
                             $result['from'].= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                         }
@@ -1499,12 +1496,12 @@ class MySQLStore extends Entity
                             $result['select'].= ', CONCAT("//",t.proto_id) as `from`';
                             $result['from'].= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.proto_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
                             for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
+                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY t.proto_id';
                         }else{
                             $result['from'].= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.proto_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
@@ -1514,13 +1511,13 @@ class MySQLStore extends Entity
                             $result['select'].= ', CONCAT("//",obj.proto) as `from`';
                             $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') AND ';
                             for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i]), DB::PARAM_STR);
+                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
                             }
                             if ($calc) $result['group'] = ' GROUP BY obj.proto';
                         }else{
                             // Сверка proto
                             $result['where'].= "obj.proto = ? AND ";
-                            $result['binds'][] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $result['binds'][] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                         }
                     }else{
                         // Поиск по ветке наследования с ограниченной глубиной
@@ -1531,7 +1528,7 @@ class MySQLStore extends Entity
                             for ($i=0; $i<$multy_cnt; $i++){
                                 if (!empty($w)) $w.=' OR ';
                                 $w.= "(f.object_id = obj.id AND f.proto_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i]), DB::PARAM_INT);
+                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                                 $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             }
@@ -1539,7 +1536,7 @@ class MySQLStore extends Entity
                             if ($calc) $result['group'] = ' GROUP BY f.proto_id';
                         }else{
                             $result['from'].= "\n  JOIN {protos} f ON (f.object_id = obj.id AND f.proto_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
-                            $binds2[] = array($this->localId($cond['from']), DB::PARAM_INT);
+                            $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                         }
@@ -1678,7 +1675,7 @@ class MySQLStore extends Entity
                             }
                             if (count($c)>0){
                                 $cond[$i] = '`'.$table.'`.`id` IN ('.str_repeat('?,', count($c)-1).'?)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '0';
@@ -1694,7 +1691,7 @@ class MySQLStore extends Entity
                             if (count($c)>0){
                                 $alias = uniqid('in');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -1710,7 +1707,7 @@ class MySQLStore extends Entity
                             if (count($c)>0){
                                 $alias = uniqid('is');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -1728,7 +1725,7 @@ class MySQLStore extends Entity
                             if (count($c)>0){
                                 $of = rtrim(str_repeat('?,', count($c)), ',');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c, $c);
                             }else{
                                 $cond[$i] = '1';
@@ -1744,7 +1741,7 @@ class MySQLStore extends Entity
                             if (count($c)>0){
                                 $alias = uniqid('in');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0 AND level>0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -1760,7 +1757,7 @@ class MySQLStore extends Entity
                             if (count($c)>0){
                                 $alias = uniqid('is');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0 AND level > 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -1777,7 +1774,7 @@ class MySQLStore extends Entity
                             if (count($c)>0){
                                 $alias = uniqid('heirs');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key);
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -2153,7 +2150,7 @@ class MySQLStore extends Entity
      * Если объект с указанным URI существует, то будет возвращен его идентификатор
      * @param string $uri URI для которого нужно получить идентификатор
      * @param bool $create Создать идентификатор, если отсутствует?
-     * @param bool $is_new
+     * @param bool $is_new Возвращаемый прзнак, был ли создан новый идентификатор?
      * @return int|null
      */
     public function localId($uri, $create = true, &$is_new = false)
@@ -2163,7 +2160,7 @@ class MySQLStore extends Entity
             $uri = $uri->key();
         }
         if (!is_string($uri)){
-            return null;
+            return 0;
         }
         if ($uri == Entity::ENTITY_ID) return $uri;
         if ($info = Data::isShortUri($uri)){
@@ -2180,7 +2177,7 @@ class MySQLStore extends Entity
                 if ($uri->isExist()){
                     $uri = $uri->uri();
                 }else{
-                    return null;
+                    return 0;
                 }
             }
         }
@@ -2209,7 +2206,7 @@ class MySQLStore extends Entity
             $id = $this->db->lastInsertId('id');
             $is_new = true;
         }else{
-            return null;
+            return 0;
         }
         unset($q);
         return intval($id);
@@ -2471,7 +2468,7 @@ class MySQLStore extends Entity
                   `is_delete` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Удалено отношение или нет',
                   PRIMARY KEY (`object_id`,`parent_id`),
                   UNIQUE KEY `children` (`parent_id`,`object_id`)
-                ) ENGINE=INNODB DEFAULT CHARSET=utf8
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Отношения объектов с родителями'
             ");
             $db->exec("
                 CREATE TABLE {protos} (
@@ -2481,7 +2478,7 @@ class MySQLStore extends Entity
                   `is_delete` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Признак, удалено отношение или нет',
                   PRIMARY KEY (`object_id`,`proto_id`),
                   UNIQUE KEY `heirs` (`proto_id`,`object_id`)
-                ) ENGINE=INNODB DEFAULT CHARSET=utf8
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Отношения объектов с прототипами'
             ");
         }catch (\PDOException $e){
 			// Ошибки подключения к СУБД
