@@ -68,7 +68,6 @@ class Entity implements ITrace
         'proto_cnt'    => 0,
         'value'	 	   => '',
         'value_type'   => Entity::VALUE_AUTO,
-        'is_file'	   => 0,
         'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
@@ -165,7 +164,6 @@ class Entity implements ITrace
                 'proto'        => Rule::uri(), // URI прототипа
                 'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
                 'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения (0=авто, 1=простое, 2=текст, 3=файл)
-                'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (value = имя файла, uri = директория)
                 'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
                 'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
                 'is_link'      => Rule::uri(), // Ссылка или нет?
@@ -331,28 +329,12 @@ class Entity implements ITrace
         // Установка значения
         if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!==$new_value)){
             $this->_attribs['value'] = $new_value;
-            $this->_attribs['is_file'] = false;
             $this->_attribs['value_type'] = Entity::VALUE_AUTO;
             $this->_attribs['is_default_value'] = $this->_attribs['id'];
             $this->_changed = true;
             $this->_checked = false;
         }
         // Возврат значения
-//        if (!isset($this->_attribs['value'])){
-//            return null;
-//        }
-//        else
-//        if ($this->isFile()){
-//            // Значение в файле
-//            if (mb_substr($this->_attribs['value'], mb_strlen($this->_attribs['value'])-6) == '.value'){
-//                try{
-//                    $this->_attribs['value'] = file_get_contents($this->file(null, true));
-//                }catch(Exception $e){
-//                    $this->_attribs['value'] = '';
-//                }
-//                $this->_attribs['is_file'] = false;
-//            }
-//        }
         return $this->_attribs['value'];
     }
 
@@ -384,7 +366,6 @@ class Entity implements ITrace
         if (isset($new_file)){
             if (empty($new_file)){
                 unset($this->_attribs['file']);
-                $this->_attribs['is_file'] = 0;
                 $this->_attribs['value_type'] = Entity::VALUE_AUTO;
             }else{
                 if (is_string($new_file)){
@@ -396,7 +377,6 @@ class Entity implements ITrace
                     );
                 }
                 $this->_attribs['file'] = $new_file;
-                $this->_attribs['is_file'] = 1;
                 $this->_attribs['value_type'] = Entity::VALUE_FILE;
             }
             $this->_attribs['is_default_value'] = $this->_attribs['id'];
@@ -404,8 +384,7 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         // Возврат пути к текущему файлу, если есть
-        // @todo if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
-        if (!empty($this->_attribs['is_file'])){
+        if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
             if ($proto = $this->isDefaultValue(null, true)){
                 $file = $proto->file(null, $root);
                 if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
@@ -545,15 +524,12 @@ class Entity implements ITrace
     public function isFile($is_file = null)
     {
         $new_type = $is_file ? Entity::VALUE_FILE : Entity::VALUE_AUTO;
-        // @todo if (isset($is_file) && (empty($this->_attribs['value_type']) == $new_type)){
-        if (isset($is_file) && (empty($this->_attribs['is_file']) == $is_file)){
-            $this->_attribs['is_file'] = $is_file;
+        if (isset($is_file) && (empty($this->_attribs['value_type']) == $new_type)){
             $this->_attribs['value_type'] = $new_type;
             $this->_changed = true;
             $this->_checked = false;
         }
-        return !empty($this->_attribs['is_file']);
-        // @todo return $this->_attribs['value_type'] == Entity::VALUE_FILE;
+        return $this->_attribs['value_type'] == Entity::VALUE_FILE;
     }
 
     /**
@@ -716,12 +692,10 @@ class Entity implements ITrace
                     }
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['value_type'] = $proto->valueType();
-                    $this->_attribs['is_file'] = $proto->isFile();
                 }else{
                     $this->_attribs['is_default_value'] = Entity::ENTITY_ID;
                     $this->_attribs['value'] = '';
                     $this->_attribs['value_type'] = Entity::VALUE_AUTO;
-                    $this->_attribs['is_file'] = 0;
                 }
             }else{
                 if (IS_INSTALL && $this->_attribs['is_default_value']!=$this->_attribs['id'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
@@ -1010,7 +984,6 @@ class Entity implements ITrace
                 if ($this->isDefaultValue()){
                     $this->_attribs['value'] = $new_proto->value();
                     $this->_attribs['value_type'] = $new_proto->valueType();
-                    $this->_attribs['is_file'] = $new_proto->isFile();
                     if ($vp = $new_proto->isDefaultValue(null, true)){
                         $this->_attribs['is_default_value'] = $vp->key();
                     }else{
@@ -1848,7 +1821,6 @@ class Entity implements ITrace
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
         $export['value'] = $this->value();
-        if ($this->isFile()) $export['is_file'] = true;
         if ($this->valueType() > Entity::VALUE_SIMPLE) $export['value_type'] = $this->valueType();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
         if ($this->isLink()) $export['is_link'] = true;
@@ -1955,7 +1927,6 @@ class Entity implements ITrace
         if (isset($info['value'])){
             $this->value($info['value']);
         }
-        if (!empty($info['is_file'])) $this->isFile(true);
         if (!empty($info['value_type'])) $this->valueType($info['value_type']);
         // Прототип
         if (isset($info['proto'])) $this->proto($info['proto']);

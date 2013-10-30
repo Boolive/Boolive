@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "jquery.slides.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/content_widgets/Slider/res/jquery.slides",
     "order": 3,
     "children": {
@@ -30,6 +30,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/content_widgets/Slider/res/jquery.slides/depends/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +38,7 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/content_widgets/Slider/res/jquery.slides/depends/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

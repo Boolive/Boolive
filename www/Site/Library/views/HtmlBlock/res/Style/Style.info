@@ -1,6 +1,6 @@
 {
     "value": "Style.css",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/views/Css",
     "order": 5,
     "children": {

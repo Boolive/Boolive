@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "HtmlBlock.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/views/HtmlBlock",
     "order": 6,
     "children": {

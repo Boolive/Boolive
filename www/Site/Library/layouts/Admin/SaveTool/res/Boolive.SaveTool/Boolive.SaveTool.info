@@ -1,6 +1,6 @@
 {
     "value": "Boolive.SaveTool.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "order": 4,
     "children": {
@@ -28,6 +28,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +36,7 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

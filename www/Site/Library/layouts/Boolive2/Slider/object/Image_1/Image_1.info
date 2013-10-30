@@ -1,6 +1,6 @@
 {
     "value": "Image_1.jpg",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/basic/Image",
     "order": 3,
     "children": {

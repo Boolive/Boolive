@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "SelectObject.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_default_class": false,
     "order": 29,

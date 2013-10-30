@@ -1,6 +1,6 @@
 {
     "value": "ObjectItemTile.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem",
     "is_default_class": false,
     "order": 4,
@@ -30,6 +30,7 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +38,7 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

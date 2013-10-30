@@ -1,6 +1,6 @@
 {
     "value": "jquery.ui.ProgramsMenu.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "order": 2,
     "children": {

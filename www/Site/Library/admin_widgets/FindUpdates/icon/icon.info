@@ -1,6 +1,6 @@
 {
     "value": "icon.png",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/basic/Image",
     "order": 6,
     "children": {

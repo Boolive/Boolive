@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "NextPrevNavigation.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/menus/NextPrevNavigation",
     "is_link": true,
     "order": 11

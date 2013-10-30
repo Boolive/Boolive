@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "Programs.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/admin_widgets/Programs",
     "order": 6,
     "children": {
@@ -30,12 +30,14 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/Programs/res/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/admin_widgets/Programs/res/description",
+                    "is_draft": true,
                     "order": 2
                 }
             }
@@ -51,6 +53,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/admin_widgets/Programs/cache/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -58,6 +61,7 @@
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/admin_widgets/Programs/cache/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

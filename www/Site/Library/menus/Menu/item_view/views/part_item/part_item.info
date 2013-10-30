@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "item_view.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/menus/Menu/item_view",
     "order": 4,
     "children": {
@@ -29,6 +29,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/menus/Menu/item_view/res/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +37,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/menus/Menu/item_view/res/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }
@@ -51,6 +53,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/menus/Menu/item_view/cache/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -58,6 +61,7 @@
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/menus/Menu/item_view/cache/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }
@@ -71,6 +75,7 @@
                     "is_default_value": true,
                     "value": "Правило на отображаемый объект",
                     "proto": "/Library/menus/Menu/item_view/object_rule/title",
+                    "is_draft": true,
                     "order": 1
                 }
             }

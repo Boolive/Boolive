@@ -1,6 +1,6 @@
 {
     "value": "Keywords.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/views/AutoWidgetList2",
     "order": 10,
     "children": {

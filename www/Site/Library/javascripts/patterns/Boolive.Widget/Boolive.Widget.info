@@ -1,6 +1,6 @@
 {
     "value": "Boolive.Widget.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/patterns/jQueryUIScript",
     "order": 5,
     "children": {

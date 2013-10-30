@@ -1,6 +1,6 @@
 {
     "value": "jQueryScript.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/JavaScript",
     "order": 3,
     "children": {
@@ -27,6 +27,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/JavaScript/depends/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -34,6 +35,7 @@
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

@@ -1,6 +1,6 @@
 {
     "value": "Admin.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/layouts/Layout",
     "is_default_class": false,
     "order": 6,

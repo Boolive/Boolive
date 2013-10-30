@@ -1,5 +1,6 @@
 {
-    "value": "<p>Текст <strong>второй</strong> новости как у любой страницы может содержать картинки, таблицы, иметь всяческое <strong>форматирование</strong> и другие.</p>\n\n<p><img alt=\"\" src=\"/Site/Contents/news/news2/text/Image/Image.jpg\" style=\"height:346px; width:500px\" /></p>\n\n<p> </p>\n",
+    "value": "<p>Текст <strong>второй</strong> новости как у любой страницы может содержать картинки, таблицы, иметь всяческое <strong>форматирование</strong> и другие.<a class=\"more\"> </a><img alt=\"\" src=\"/Site/Contents/news/news2/text/Image/Image.jpg\" style=\"height:346px; width:500px\" /> Приветмой </p>\nBODY\n<p> </p>\n",
+    "value_type": 2,
     "proto": "/Library/content_samples/Page/text",
     "order": 3,
     "children": {

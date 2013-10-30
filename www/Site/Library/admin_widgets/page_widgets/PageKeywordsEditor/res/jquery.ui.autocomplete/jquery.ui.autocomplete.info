@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "jquery.ui.autocomplete.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete",
     "is_link": true,
     "order": 4,

@@ -168,7 +168,6 @@ class HTTPStore extends Entity
                     $entity->_attribs['name'] = $response['result']['name'];
                     $entity->_attribs['value'] = $response['result']['value'];
                     $entity->_attribs['value_type'] = !empty($response['result']['value_type'])? $response['result']['value_type'] : Entity::VALUE_AUTO;
-                    $entity->_attribs['is_file'] = !empty($response['result']['is_file']);
                     $entity->_attribs['is_exist'] = 1;
                     $entity->_changed = false;
                     $entity->_autoname = false;

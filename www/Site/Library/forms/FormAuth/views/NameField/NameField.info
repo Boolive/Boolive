@@ -1,6 +1,6 @@
 {
     "value": "NameField.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/forms/FormField",
     "order": 3,
     "children": {

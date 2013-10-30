@@ -1,6 +1,6 @@
 {
     "value": "boolive.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/layouts/Layout",
     "order": 5,
     "children": {
@@ -27,6 +27,7 @@
                     "value": "",
                     "proto": "/Library/layouts/Layout/res/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -34,6 +35,7 @@
                     "value": "",
                     "proto": "/Library/layouts/Layout/res/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

@@ -1,6 +1,6 @@
 {
     "value": "jquery.include.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/patterns/jQueryScript",
     "order": 14,
     "children": {

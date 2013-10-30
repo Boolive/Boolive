@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "Programs.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/admin_widgets/Programs",
     "is_link": true,
     "order": 9

@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "Boolive.ProgressAction.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction",
     "order": 3,
     "children": {

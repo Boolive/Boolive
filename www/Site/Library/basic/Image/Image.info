@@ -1,6 +1,6 @@
 {
     "value": "Image.png",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/basic/File",
     "is_default_class": false,
     "order": 18,

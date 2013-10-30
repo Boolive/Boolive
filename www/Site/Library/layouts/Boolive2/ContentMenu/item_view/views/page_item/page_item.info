@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "item_view.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/menus/Menu/item_view/views/page_item",
     "order": 3,
     "children": {

@@ -26,6 +26,7 @@
                     "value": "Email",
                     "proto": "/Library/access/User/email/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -33,6 +34,7 @@
                     "value": "Адрес электронной почты",
                     "proto": "/Library/access/User/email/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }

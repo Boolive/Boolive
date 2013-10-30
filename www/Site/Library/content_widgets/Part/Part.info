@@ -1,6 +1,6 @@
 {
     "value": "Part.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/content_widgets/Page",
     "is_default_class": false,
     "order": 5,
@@ -28,6 +28,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/content_widgets/Page/res/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -35,6 +36,7 @@
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/content_widgets/Page/res/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }
@@ -50,6 +52,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/content_widgets/Page/cache/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -57,6 +60,7 @@
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/content_widgets/Page/cache/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 2
                 }
             }
@@ -70,6 +74,7 @@
                     "is_default_value": true,
                     "value": "Правило на отображаемый объект",
                     "proto": "/Library/content_widgets/Page/object_rule/title",
+                    "is_draft": true,
                     "order": 1
                 }
             }

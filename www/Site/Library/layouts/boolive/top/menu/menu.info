@@ -1,6 +1,6 @@
 {
     "value": "menu.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/menus/Menu",
     "order": 2,
     "children": {

@@ -1,6 +1,6 @@
 {
     "value": "ckeditor.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/JavaScript",
     "order": 4,
     "children": {

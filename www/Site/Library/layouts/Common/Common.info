@@ -1,6 +1,6 @@
 {
     "value": "Common.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/layouts/Layout",
     "order": 4,
     "children": {

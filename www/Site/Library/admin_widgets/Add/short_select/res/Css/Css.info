@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "Css.css",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/views/Css",
     "is_link": true,
     "order": 2

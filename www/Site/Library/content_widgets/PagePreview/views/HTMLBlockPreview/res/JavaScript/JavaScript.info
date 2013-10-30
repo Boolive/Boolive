@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "JavaScript.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/views/HtmlBlock/res/JavaScript",
     "order": 4,
     "children": {

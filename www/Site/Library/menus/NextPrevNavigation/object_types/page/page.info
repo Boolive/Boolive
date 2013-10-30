@@ -15,6 +15,7 @@
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 }
             }

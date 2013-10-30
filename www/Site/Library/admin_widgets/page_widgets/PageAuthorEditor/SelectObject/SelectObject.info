@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "SelectObject.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "order": 3,
     "children": {
@@ -29,6 +29,7 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/SelectObject/res/title",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +37,7 @@
                     "value": "",
                     "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_hidden": true,
+                    "is_draft": true,
                     "order": 6
                 }
             }

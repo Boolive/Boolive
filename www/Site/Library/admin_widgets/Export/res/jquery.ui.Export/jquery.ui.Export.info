@@ -1,6 +1,6 @@
 {
     "value": "jquery.ui.Export.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "order": 3,
     "children": {

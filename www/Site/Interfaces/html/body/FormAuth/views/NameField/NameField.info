@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "NameField.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/forms/FormAuth/views/NameField",
     "order": 3,
     "children": {

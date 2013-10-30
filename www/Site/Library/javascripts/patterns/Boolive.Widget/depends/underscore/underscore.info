@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "underscore.js",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/javascripts/underscore",
     "is_link": true,
     "order": 6

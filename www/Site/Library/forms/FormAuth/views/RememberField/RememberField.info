@@ -1,6 +1,6 @@
 {
     "value": "RememberField.tpl",
-    "is_file": true,
+    "value_type": 3,
     "proto": "/Library/forms/FormField",
     "order": 5,
     "children": {
