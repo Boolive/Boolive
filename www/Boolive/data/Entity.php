@@ -1558,6 +1558,7 @@ class Entity implements ITrace
      *     array('is', '/Library/object')          // кем объект является? проверка наследования
      * )
      * @param array $cond Условие как для поиска
+     * @throws \Exception
      * @return bool
      */
     public function verify($cond)
@@ -1616,6 +1617,9 @@ class Entity implements ITrace
                         return in_array($value, $cond[3]);
                 }
                 return false;
+            case 'match':
+                throw new Exception('Expression "match" for fulltext search is not supported in function verify()');
+                break;
             case 'child':
                 $child = $this->{$cond[1]};
                 if ($child->isExist()){

@@ -1154,6 +1154,7 @@ class MySQLStore extends Entity
         $joins = array('obj' => null);
         $joins_link = array();
         $joins_plain = array();
+        $joins_text = array();
         $binds2 = array();
 
         if (!$only_where){
@@ -1510,7 +1511,7 @@ class MySQLStore extends Entity
              * @param array $attr_exists Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
              * @return string SQL условия в WHERE
              */
-            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$store, &$convert, &$result, &$joins, &$joins_link, &$joins_plain){
+            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$store, &$convert, &$result, &$joins, &$joins_link, &$joins_plain, &$joins_text){
                 $level++;
                 // Нормализация групп условий
                 if ($cond[0] == 'any' || $cond[0] == 'all'){
@@ -1569,6 +1570,13 @@ class MySQLStore extends Entity
                             if ($c[1] == 'is_draft' || $c[1] == 'diff'){
                                 $attr_exists[$c[1]] = true;
                             }
+                        }else
+                        if ($c[0]=='match'){
+                            $alias = uniqid('text');
+                            $joins_text[$alias] = array($table);
+                            $mode = empty($c[2])?'': ' IN BOOLEAN MODE';
+                            $cond[$i] = 'MATCH('.$alias.'.value) AGAINST (? '.$mode.')';
+                            $result['binds'][] = empty($c[1])?'':strval($c[1]);
                         }else
                         // Проверка подчиненного
                         if ($c[0]=='child'){
@@ -1763,6 +1771,9 @@ class MySQLStore extends Entity
         foreach ($joins as $alias => $info){
             $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ?)';
             $binds2[] = $info[1];
+        }
+        foreach ($joins_text as $alias => $info){
+            $result['joins'].= "\n  JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
         }
         foreach ($joins_link as $alias => $info){
             $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';

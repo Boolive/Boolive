@@ -8,6 +8,7 @@ Version 2.0.beta work in progress
 - enh #151 Attribute is_delete is renamed to is_draft, Entity->isDelete() to Entity->isDragt() (VladimirShestakov)
 - enh #152 By default all new objects are drafts (VladimirShestakov)
 - new #154 The table "text" is used for values with a length more than 255 characters (VladimirShestakov)
+- new #155 Added fulltext search of objects (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------
