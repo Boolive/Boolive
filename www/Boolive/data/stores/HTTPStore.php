@@ -167,6 +167,7 @@ class HTTPStore extends Entity
                     $entity->_attribs['date'] = intval($response['result']['date']);
                     $entity->_attribs['name'] = $response['result']['name'];
                     $entity->_attribs['value'] = $response['result']['value'];
+                    $entity->_attribs['value_type'] = !empty($response['result']['value_type'])? $response['result']['value_type'] : Entity::VALUE_AUTO;
                     $entity->_attribs['is_file'] = !empty($response['result']['is_file']);
                     $entity->_attribs['is_exist'] = 1;
                     $entity->_changed = false;
@@ -259,7 +260,11 @@ class HTTPStore extends Entity
         if (!empty($attribs['proto'])) $attribs['proto'] = $this->absoluteURI($attribs['proto'], $base_url);
         if (!empty($attribs['parent'])) $attribs['parent'] = $this->absoluteURI($attribs['parent'], $base_url);
         if (!empty($attribs['is_link']) && $attribs['is_link']!=Entity::ENTITY_ID) $attribs['is_link'] = $this->absoluteURI($attribs['is_link'], $base_url);
-        if (!empty($attribs['is_default_value']) && $attribs['is_default_value']!=Entity::ENTITY_ID) $attribs['is_default_value'] = $this->absoluteURI($attribs['is_default_value'], $base_url);
+        if (!empty($attribs['is_default_value']) && $attribs['is_default_value']!=Entity::ENTITY_ID){
+            $attribs['is_default_value'] = $this->absoluteURI($attribs['is_default_value'], $base_url);
+        }else{
+            $attribs['is_default_value'] = $attribs['id'];
+        }
         if (!empty($attribs['is_default_class']) && $attribs['is_default_class']!=Entity::ENTITY_ID) $attribs['is_default_class'] = $this->absoluteURI($attribs['is_default_class'], $base_url);
         //$attribs['is_default_class'] = Entity::ENTITY_ID;
         $attribs['class_name'] = '\Boolive\data\Entity';

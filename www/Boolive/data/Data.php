@@ -250,7 +250,7 @@ class Data
                             foreach ($list as $from){
                                 if (is_array($from)){
                                     if (isset($from['class_name'])){
-                                        if (!empty($from['is_default_value']) /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_default_value'];
+                                        if ($from['is_default_value']!=$from['id'] /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_default_value'];
                                     }else{
                                         $makefrom($group_cond, $from);
                                     }

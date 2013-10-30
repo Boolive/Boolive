@@ -26,6 +26,7 @@ class Entity implements ITrace
     const ENTITY_ID = 4294967295;
     /** @const int Максимальная глубина для поиска */
     const MAX_DEPTH = 4294967295;
+
     /** @const int У объекта нет отличий */
     const DIFF_NO = 0;
     /** @const int Объекты отличаются атрибутами */
@@ -34,6 +35,16 @@ class Entity implements ITrace
     const DIFF_DELETE = 2;
     /** @const int Объект добавлен */
     const DIFF_ADD = 3;
+
+    /** @const int Автоматический выбор типа значения */
+    const VALUE_AUTO = 0;
+    /** @const int Простой тип. Строка до 255 символов */
+    const VALUE_SIMPLE = 1;
+    /** @const int Текстовый тип длиной до 64Кб с возможностью полнотекстового поиска */
+    const VALUE_TEXT = 2;
+    /** @const int Объект связан с файлом. Значением объекта является имя файла. */
+    const VALUE_FILE = 3;
+
     /** Типы владения объектом его родителем. Используется при прототипировании родителя */
     /** @const int Обязатлеьное владение. Автоматически прототипируется в новых наследниках родителя. */
     const POSSESSION_MANDATORY = 0;
@@ -56,20 +67,21 @@ class Entity implements ITrace
         'proto'        => null,
         'proto_cnt'    => 0,
         'value'	 	   => '',
+        'value_type'   => Entity::VALUE_AUTO,
         'is_file'	   => 0,
         'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
         'is_relative'  => 0,
-        'is_default_value' => 0,
+        'is_default_value' => null, // по умолчанию равен id
         'is_default_class' => 0,
         'is_accessible'    => 1,
         'is_exist'     => 0,
-        'possession'   => 0,
+        'possession'   => Entity::POSSESSION_MANDATORY,
         'author'	   => null,
         'update_step'  => 0,
         'update_time'  => 0,
-        'diff'         => 0,
+        'diff'         => Entity::DIFF_NO,
         'diff_from'    => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
@@ -151,13 +163,14 @@ class Entity implements ITrace
                 'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
                 'parent'       => Rule::uri(), // URI родителя
                 'proto'        => Rule::uri(), // URI прототипа
-                'value'	 	   => Rule::string(), // Значение любой длины
+                'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
+                'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения (0=авто, 1=простое, 2=текст, 3=файл)
                 'is_file'	   => Rule::bool()->int(), // Связан ли с файлом (value = имя файла, uri = директория)
                 'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
                 'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
                 'is_link'      => Rule::uri(), // Ссылка или нет?
                 'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
-                'is_default_value' => Rule::uri(), // Используется значение прототипа или оно переопределено?
+                'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или оно переопределено?
                 'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
                 'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
                 'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
@@ -319,26 +332,43 @@ class Entity implements ITrace
         if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!==$new_value)){
             $this->_attribs['value'] = $new_value;
             $this->_attribs['is_file'] = false;
-            $this->_attribs['is_default_value'] = 0;
+            $this->_attribs['value_type'] = Entity::VALUE_AUTO;
+            $this->_attribs['is_default_value'] = $this->_attribs['id'];
             $this->_changed = true;
             $this->_checked = false;
         }
         // Возврат значения
-        if (!isset($this->_attribs['value'])){
-            return null;
-        }else
-        if ($this->isFile()){
-            // Значение в файле
-            if (mb_substr($this->_attribs['value'], mb_strlen($this->_attribs['value'])-6) == '.value'){
-                try{
-                    $this->_attribs['value'] = file_get_contents($this->file(null, true));
-                }catch(Exception $e){
-                    $this->_attribs['value'] = '';
-                }
-                $this->_attribs['is_file'] = false;
-            }
-        }
+//        if (!isset($this->_attribs['value'])){
+//            return null;
+//        }
+//        else
+//        if ($this->isFile()){
+//            // Значение в файле
+//            if (mb_substr($this->_attribs['value'], mb_strlen($this->_attribs['value'])-6) == '.value'){
+//                try{
+//                    $this->_attribs['value'] = file_get_contents($this->file(null, true));
+//                }catch(Exception $e){
+//                    $this->_attribs['value'] = '';
+//                }
+//                $this->_attribs['is_file'] = false;
+//            }
+//        }
         return $this->_attribs['value'];
+    }
+
+    /**
+     * Тип значения (коды типов определены константами Entity::VALUE_*)
+     * @param null|integer $new_type Новые тип значения, если не null
+     * @return integer Текущий тип значения
+     */
+    public function valueType($new_type = null)
+    {
+        if (isset($new_type) && $this->_attribs['value_type']!=$new_type){
+            $this->_attribs['value_type'] = $new_type;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return $this->_attribs['value_type'];
     }
 
     /**
@@ -355,6 +385,7 @@ class Entity implements ITrace
             if (empty($new_file)){
                 unset($this->_attribs['file']);
                 $this->_attribs['is_file'] = 0;
+                $this->_attribs['value_type'] = Entity::VALUE_AUTO;
             }else{
                 if (is_string($new_file)){
                     $new_file = array(
@@ -366,12 +397,14 @@ class Entity implements ITrace
                 }
                 $this->_attribs['file'] = $new_file;
                 $this->_attribs['is_file'] = 1;
+                $this->_attribs['value_type'] = Entity::VALUE_FILE;
             }
-            $this->_attribs['is_default_value'] = 0;
+            $this->_attribs['is_default_value'] = $this->_attribs['id'];
             $this->_changed = true;
             $this->_checked = false;
         }
         // Возврат пути к текущему файлу, если есть
+        // @todo if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
         if (!empty($this->_attribs['is_file'])){
             if ($proto = $this->isDefaultValue(null, true)){
                 $file = $proto->file(null, $root);
@@ -511,12 +544,16 @@ class Entity implements ITrace
      */
     public function isFile($is_file = null)
     {
+        $new_type = $is_file ? Entity::VALUE_FILE : Entity::VALUE_AUTO;
+        // @todo if (isset($is_file) && (empty($this->_attribs['value_type']) == $new_type)){
         if (isset($is_file) && (empty($this->_attribs['is_file']) == $is_file)){
             $this->_attribs['is_file'] = $is_file;
+            $this->_attribs['value_type'] = $new_type;
             $this->_changed = true;
             $this->_checked = false;
         }
         return !empty($this->_attribs['is_file']);
+        // @todo return $this->_attribs['value_type'] == Entity::VALUE_FILE;
     }
 
     /**
@@ -675,27 +712,29 @@ class Entity implements ITrace
                     if ($proto->store() != $this->store()){
                         $this->_attribs['is_default_value'] = $proto->uri();
                     }else{
-                       $this->_attribs['is_default_value'] = $proto->key();
+                        $this->_attribs['is_default_value'] = $proto->key();
                     }
                     $this->_attribs['value'] = $proto->value();
+                    $this->_attribs['value_type'] = $proto->valueType();
                     $this->_attribs['is_file'] = $proto->isFile();
                 }else{
-                    $this->_attribs['is_default_value'] = self::ENTITY_ID;
+                    $this->_attribs['is_default_value'] = Entity::ENTITY_ID;
                     $this->_attribs['value'] = '';
+                    $this->_attribs['value_type'] = Entity::VALUE_AUTO;
                     $this->_attribs['is_file'] = 0;
                 }
             }else{
-                if (IS_INSTALL && $this->_attribs['is_default_value'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
+                if (IS_INSTALL && $this->_attribs['is_default_value']!=$this->_attribs['id'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
                     $this->file($proto->file(null, true));
                 }
-                $this->_attribs['is_default_value'] = 0;
+                $this->_attribs['is_default_value'] = $this->_attribs['id'];
             }
             if ($curr !== $this->_attribs['is_default_value']){
                 $this->_changed = true;
                 $this->_checked = false;
             }
         }
-        if (!empty($this->_attribs['is_default_value']) && $return_proto){
+        if ($this->_attribs['is_default_value'] != $this->_attribs['id'] && $return_proto){
             if ($this->_default_value_proto === false){
                 // Поиск прототипа, от которого наследуется значение, чтобы возратить его
                 $this->_default_value_proto = Data::read(array(
@@ -711,7 +750,7 @@ class Entity implements ITrace
             }
             return $this->_default_value_proto;
         }else{
-            return !empty($this->_attribs['is_default_value']);
+            return $this->_attribs['is_default_value'] != $this->_attribs['id'];
         }
     }
 
@@ -958,7 +997,7 @@ class Entity implements ITrace
                 // Удаление прототипа
                 $this->_attribs['proto'] = null;
                 $this->_attribs['proto_cnt'] = 0;
-                $this->_attribs['is_default_value'] = 0;
+                $this->_attribs['is_default_value'] = $this->_attribs['id'];
                 if ($this->_attribs['is_default_class'] != 0){
                     $this->_attribs['is_default_class'] = self::ENTITY_ID;
                 }
@@ -970,6 +1009,7 @@ class Entity implements ITrace
                 // Наследование значения
                 if ($this->isDefaultValue()){
                     $this->_attribs['value'] = $new_proto->value();
+                    $this->_attribs['value_type'] = $new_proto->valueType();
                     $this->_attribs['is_file'] = $new_proto->isFile();
                     if ($vp = $new_proto->isDefaultValue(null, true)){
                         $this->_attribs['is_default_value'] = $vp->key();
@@ -1578,6 +1618,9 @@ class Entity implements ITrace
                 if ($cond[1] == 'is_file'){
                     $value = $this->isFile();
                 }else
+                if ($cond[1] == 'value_type'){
+                    $value = $this->valueType();
+                }else
                 if ($cond[1] == 'is_link'){
                     $value = $this->isLink();
                 }else
@@ -1806,6 +1849,7 @@ class Entity implements ITrace
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
         $export['value'] = $this->value();
         if ($this->isFile()) $export['is_file'] = true;
+        if ($this->valueType() > Entity::VALUE_SIMPLE) $export['value_type'] = $this->valueType();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
         if ($this->isLink()) $export['is_link'] = true;
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
@@ -1912,6 +1956,7 @@ class Entity implements ITrace
             $this->value($info['value']);
         }
         if (!empty($info['is_file'])) $this->isFile(true);
+        if (!empty($info['value_type'])) $this->valueType($info['value_type']);
         // Прототип
         if (isset($info['proto'])) $this->proto($info['proto']);
         // Признаки

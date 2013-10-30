@@ -129,9 +129,11 @@ class MySQLStore extends Entity
                 }
             }
         }
+        $need_text = array();
         // Обработка выбранных строк
         while ($row){
             $key = isset($row['from'])?$row['from']:0;
+
             // Выбор значения функции
             if ($cond['select'][0] == 'count'){
                 // Первая строка результата. Возможно, вычисляемое значение
@@ -153,6 +155,9 @@ class MySQLStore extends Entity
                 if (isset($row['id'])){
                     unset($row['id2']);
                     $group_result[$key] = $this->makeObject($row);
+                    if (isset($row['value_type']) && $row['value_type'] == Entity::VALUE_TEXT){
+                        $need_text[$row['is_default_value']][] = &$group_result[$key];
+                    }
                 }else{
                     if (isset($row['id2'])){
                         if ($this != ($store = Data::getStore($row['uri']))){
@@ -192,11 +197,23 @@ class MySQLStore extends Entity
                     if (isset($tree_list[$key])){
                         $tree_list[$key][$obj['id']] = &$obj;
                     }
+                    if (isset($row['value_type']) && $row['value_type'] == Entity::VALUE_TEXT){
+                        $need_text[$row['is_default_value']][] = &$obj;
+                    }
                     unset($obj);
                 }
             }
             $row = $q->fetch(DB::FETCH_ASSOC);
         }
+        // Выборка текстов
+        if (!empty($need_text)){
+            $q = $this->db->query('SELECT id, value FROM {text} WHERE id IN ('.implode(',', array_keys($need_text)).')');
+            while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                $cnt = count($need_text[$row['id']]);
+                for ($i=0; $i<$cnt; $i++) $need_text[$row['id']][$i]['value'] = $row['value'];
+            }
+        }
+
         // Формирование дерева результата (найденные объекты добавляются к найденным родителям)
         if (isset($tree_list)){
             foreach ($tree_list as $key => $tree){
@@ -269,13 +286,15 @@ class MySQLStore extends Entity
                 // Числовое значение
                 $attr['valuef'] = floatval($attr['value']);
                 // Переопределено ли значение и кем
-                $attr['is_default_value'] = (strval($attr['is_default_value']) !== '0' && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_value']) : $attr['is_default_value'];
+                $attr['is_default_value'] = (!is_null($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_value']) : $attr['is_default_value'];
                 // Чей класс
                 $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
                 // Ссылка
                 $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
                 // Если движок не установлен, то определение времени обновления
                 if (!IS_INSTALL) $attr['update_time'] = time();
+                // Тип по умолчанию
+                if ($attr['value_type'] == Entity::VALUE_AUTO) $attr['value_type'] = Entity::VALUE_SIMPLE;
                 // URI до сохранения объекта
                 $curr_uri = $attr['uri'];
 
@@ -305,16 +324,25 @@ class MySQLStore extends Entity
                 }else{
                     $attr['id'] = $this->localId($attr['id'], true, $new_id);
                 }
-                // Значения превращаем в файл, если больше 255
-                if (isset($attr['value']) && mb_strlen($attr['value']) > 255){
-                    $attr['file'] = array(
-                        'content' => $attr['value'],
-                        'name' => $entity->name().'.value'
-                    );
+                // Своё значение
+                if (is_null($attr['is_default_value'])){
+                    $attr['is_default_value'] = $attr['id'];
+                }
+
+                // Если больше 255, то тип текстовый
+                $value_src = $attr['value'];
+                if (mb_strlen($attr['value']) > 255){
+//                    $attr['file'] = array(
+//                        'content' => $attr['value'],
+//                        'name' => $entity->name().'.value'
+//                    );
+                    $attr['value'] = mb_substr($attr['value'],0,255);
+                    $attr['value_type'] = Entity::VALUE_TEXT;
                 }
                 // Если значение файл, то подготовливаем для него имя
                 if (isset($attr['file'])){
-                    $attr['is_file'] = 1;
+//                    $attr['is_file'] = 1;
+                    $attr['value_type'] = Entity::VALUE_FILE;
                     // Если нет временного имени, значит создаётся из значения
                     if (empty($attr['file']['tmp_name'])){
                         $attr['value'] = $attr['file']['name'];
@@ -363,8 +391,9 @@ class MySQLStore extends Entity
                             $error->access = new Error('Нет доступа на смену признака "относительный прототип"', 'write/change/proto');
                         }else
                         if (($current['value'] != $attr['value'] ||
-                             $current['is_file'] != $attr['is_file'] ||
-                             $current['is_default_value'] != $attr['value'] ||
+//                             $current['is_file'] != $attr['is_file'] ||
+                             $current['value_type'] != $attr['value_type'] ||
+                             $current['is_default_value'] != $attr['is_default_value'] ||
                              !empty($attr['file'])) &&
                              !$entity->isAccessible('write/change/value')){
                             $error->access = new Error('Нет доступа на изменение значения', 'write/change/value');
@@ -452,29 +481,30 @@ class MySQLStore extends Entity
                     if (isset($current['order'])) $attr['order'] = $current['order'];
                 }
                 // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
-                if (!empty($current) && isset($attr['file']) && $current['is_file']==1){
+                if (!empty($current) && isset($attr['file']) && /*$current['is_file']==1*/ $current['value_type'] == Entity::VALUE_FILE){
                     File::delete($entity->dir(true).$current['value']);
                 }
                 // Связывание с новым файлом
                 if (isset($attr['file'])){
                     $path = $entity->dir(true).$attr['value'];
-                    if (isset($attr['file']['content'])){
-                        if (!File::create($attr['file']['content'], $path)){
-                            $attr['is_file'] = 0;
-                            $attr['value'] = '';
-                        }
-                    }else{
+//                    if (isset($attr['file']['content'])){
+//                        if (!File::create($attr['file']['content'], $path)){
+//                            $attr['is_file'] = 0;
+//                            $attr['value'] = '';
+//                        }
+//                    }else{
                         if ($attr['file']['tmp_name']!=$path){
                             if (!File::upload($attr['file']['tmp_name'], $path)){
                                 // @todo Проверить безопасность.
                                 // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
                                 if (!File::copy($attr['file']['tmp_name'], $path)){
-                                    $attr['is_file'] = 0;
+//                                    $attr['is_file'] = 0;
+                                    $attr['value_type'] = Entity::VALUE_SIMPLE;
                                     $attr['value'] = '';
                                 }
                             }
                         }
-                    }
+//                    }
                     unset($attr['file']);
                 }
                 // Загрузка/обновление класса
@@ -493,9 +523,9 @@ class MySQLStore extends Entity
                     }
                     unset($attr['class']);
                 }
-                $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'is_file',
-                        'is_draft', 'is_hidden', 'is_link', 'is_relative','is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt', 'valuef', 'possession', 'update_time', 'diff', 'diff_from');
+                $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type',
+                        'is_draft', 'is_hidden', 'is_link', 'is_relative', 'is_default_value', 'is_default_class',
+                        'proto_cnt', 'parent_cnt', 'possession', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id
@@ -533,6 +563,16 @@ class MySQLStore extends Entity
                 $this->db->commit();
                 $this->db->beginTransaction();
 
+                // Текстовые значения
+                if ($attr['value_type'] == Entity::VALUE_TEXT && $attr['is_default_value'] == $attr['id']){
+                    $q = $this->db->prepare('
+                        INSERT INTO {text} (`id`, `value`)
+                        VALUES (:id, :value)
+                        ON DUPLICATE KEY UPDATE `value` = :value
+                    ');
+                    $q->execute(array(':id'=>$attr['id'], ':value'=>$value_src));
+                }
+
                 if (!$new_id && empty($current)){
                     // Если объект еще не был создан, но его уже прототипировали другие
                     // Для этого был создан только идентификатор объекта, а записи в objects, parents, protos нет
@@ -542,11 +582,12 @@ class MySQLStore extends Entity
                         'proto'        => 0,
                         'proto_cnt'    => 0,
                         'value'	 	   => '',
-                        'is_file'	   => 0,
+                        'value_type'   => Entity::VALUE_SIMPLE,
+                        //'is_file'	   => 0,
                         'is_draft'	   => 0,
                         'is_hidden'	   => 0,
                         'is_link'      => 0,
-                        'is_default_value' => 0,
+                        'is_default_value' => $attr['id'],
                         'is_default_class' => Entity::ENTITY_ID,
                     );
                     $incomplete = true;
@@ -580,21 +621,21 @@ class MySQLStore extends Entity
                         $q->execute($u['binds']);
                     }
                     unset($u);
-                    // Обновления наследников
+                    // Обновление наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if (!$incomplete && $current['proto'] != $attr['proto']){
                         $this->makeProtos($attr['id'], $attr['proto'], $dp, true, $incomplete, $attr['proto']?$entity->proto()->uri():null);
                     }
-                    // Обновление значения, признака файла, признака наследования значения, класса и кол-во прототипов у наследников
+                    // Обновление значения, типа значения, признака наследования значения, класса и кол-во прототипов у наследников
                     // если что-то из этого изменилось у объекта
-                    if ($incomplete || $current['value']!=$attr['value'] || $current['is_file']!=$attr['is_file'] ||
+                    if ($incomplete || $current['value']!=$attr['value'] || $current['value_type']!=$attr['value_type'] ||
                         $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto']) || $dp!=0){
-                        // id прототипа, значание которого берется по умолчанию для объекта
-                        $p = $attr['is_default_value'] ? $attr['is_default_value'] : $attr['id'];
+                        // id прототипа, значание которого берётся по умолчанию для объекта
+                        $p = $attr['is_default_value']/* ? $attr['is_default_value'] : $attr['id']*/;
                         $u = $this->db->prepare('
                             UPDATE {objects}, {protos} SET
                                 `value` = IF(is_default_value=:vproto, :value, value),
-                                `is_file` = IF(is_default_value=:vproto, :is_file, is_file),
+                                `value_type` = IF(is_default_value=:vproto, :value_type, value_type),
                                 `is_default_value` = IF((is_default_value=:vproto  || is_default_value=:max_id), :proto, is_default_value),
                                 `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
                                 `proto_cnt` = `proto_cnt`+:dp
@@ -603,8 +644,8 @@ class MySQLStore extends Entity
                         ');
                         $u->execute(array(
                             ':value' => $attr['value'],
-                            ':is_file' => $attr['is_file'],
-                            ':vproto' => $current['is_default_value'] ? $current['is_default_value'] : $current['id'],
+                            ':value_type' => $attr['value_type'],
+                            ':vproto' => $current['is_default_value']/* ? $current['is_default_value'] : $current['id']*/,
                             ':cclass' => $current['is_default_class'] ? $current['is_default_class'] : $current['id'],
                             ':cproto' => $attr['is_default_class'] ? $attr['is_default_class'] : $attr['id'],
                             ':proto' => $p,
@@ -646,8 +687,9 @@ class MySQLStore extends Entity
                 $entity->_attribs['id'] = $this->key.'//'.$attr['id'];
                 $entity->_attribs['date'] = $attr['date'];
                 $entity->_attribs['name'] = $attr['name'];
-                $entity->_attribs['value'] = $attr['value'];
-                $entity->_attribs['is_file'] = $attr['is_file'];
+                $entity->_attribs['value'] = $value_src;
+                $entity->_attribs['value_type'] = $attr['value_type'];
+//                $entity->_attribs['is_file'] = $attr['is_file'];
                 $entity->_attribs['is_exist'] = 1;
                 $entity->_changed = false;
                 $entity->_autoname = false;
@@ -721,7 +763,7 @@ class MySQLStore extends Entity
         }
         // Обновить дату изменения у родителей
         $this->updateDate($id, time());
-        // Удалить объект
+        // Удалить объект и его подчиненных
         $q = $this->db->prepare('
             DELETE ids, objects, parents, protos FROM parents p, ids, objects, parents, protos
             WHERE p.parent_id = ?
@@ -732,6 +774,12 @@ class MySQLStore extends Entity
             AND p.is_delete = 0
         ');
         $q->execute(array($id));
+        // Удаление неиспользуемых текстов
+        $this->db->exec('
+            DELETE `text` FROM `text`
+            LEFT JOIN objects ON text.id = objects.is_default_value
+            WHERE objects.id IS NULL
+        ');
         // Удалении директории со всеми файлами
         File::clearDir($entity->dir(true), true);
         Cache::delete('mysqlstore/localids');
@@ -947,7 +995,8 @@ class MySQLStore extends Entity
 
                             if ((isset($info['proto']) && ($p = $entity->proto()) && $p->uri()!=$info['proto']) ||
                                 (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
-                                (isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
+                                (isset($info['value_type']) && $entity->_attribs['value_type']!=$info['value_type']) ||
+                                //(isset($info['is_file']) && $entity->_attribs['is_file']!=$info['is_file']) ||
                                 (isset($info['is_hidden']) && $entity->isHidden()!=$info['is_hidden']) ||
                                 (isset($info['is_draft']) && $entity->isDraft()!=$info['is_draft']) ||
                                 (isset($info['is_link']) && $entity->isLink()!=$info['is_link']) ||
@@ -1035,7 +1084,8 @@ class MySQLStore extends Entity
                 if (($proto = $entity->proto()) && $entity->isLink() == $proto->isLink()){
                     if ($entity->isDefaultValue()){
                         $entity->_attribs['value'] = $proto->value();
-                        $entity->_attribs['is_file'] = $proto->isFile();
+                        //$entity->_attribs['is_file'] = $proto->isFile();
+                        $entity->_attribs['value_type'] = $proto->valueType();
                         $entity->isDraft($proto->isDraft());
                         $entity->isHidden($proto->isHidden());
                         $entity->possession($proto->possession());
@@ -2105,7 +2155,7 @@ class MySQLStore extends Entity
         $attribs['id'] = $this->key.'//'.$attribs['id'];
         $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->key.'//'.$attribs['parent'];
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->key.'//'.$attribs['proto'];
-        if ($attribs['is_default_value'] == 0) unset($attribs['is_default_value']); else $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
+        $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
 //        if ($attribs['diff'] == Entity::DIFF_ADD){
 //            $attribs['is_default_value'] = Entity::ENTITY_ID;
 //        }else{
@@ -2118,7 +2168,8 @@ class MySQLStore extends Entity
         $attribs['date'] = intval($attribs['date']);
         $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
         $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
-        if (empty($attribs['is_file'])) unset($attribs['is_file']); else $attribs['is_file'] = intval($attribs['is_file']);
+        $attribs['value_type'] = intval($attribs['value_type']);
+        //if (empty($attribs['is_file'])) unset($attribs['is_file']); else $attribs['is_file'] = intval($attribs['is_file']);
         if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
         $attribs['possession'] = intval($attribs['possession']);
@@ -2319,12 +2370,12 @@ class MySQLStore extends Entity
                   `proto_cnt` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Уровень наследования (кол-во прототипов)',
                   `value` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Строковое значение',
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
-                  `is_file` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Значение - файл или нет?',
+                  `value_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'Тип значения. 1 - строка, 2 - текст, 3 - файл',
                   `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
                   `is_relative` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',
-                  `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используется значение прототипа или оно переопределено? Если больше 0, то определяет идентификатор прототипа, чьё значение наследуется',
+                  `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор прототипа, чьё значение наследуется (если не наследуется, то свой id)',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
                   `possession` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Тип владения объектом его родителем. Коды владения - Entity:POSSESSION_*:',
                   `update_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг обновления. Если не 0, то обновление не закончено',
@@ -2355,6 +2406,14 @@ class MySQLStore extends Entity
                   PRIMARY KEY (`object_id`,`proto_id`),
                   UNIQUE KEY `heirs` (`proto_id`,`object_id`)
                 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Отношения объектов с прототипами'
+            ");
+            $db->exec("
+                CREATE TABLE `text` (
+                  `id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор объекта',
+                  `value` TEXT NOT NULL COMMENT 'Текстовое значение',
+                  PRIMARY KEY (`id`),
+                  FULLTEXT KEY `fulltext` (`value`)
+                ) ENGINE=MYISAM DEFAULT CHARSET=utf8 COMMENT='Текстовые значения объектов'
             ");
         }catch (\PDOException $e){
 			// Ошибки подключения к СУБД
