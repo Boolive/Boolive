@@ -1987,12 +1987,22 @@ class Entity implements ITrace
         }else{
             $extends = 'Boolive\\data\\Entity';
         }
-        $extends_short = F::splitRight('\\', $extends);
-        // Используемые классы
-        $use_plain = $extends;
+        array_unshift($use, $extends);
         $use = array_unique($use);
+        // Используемые классы
+        $use_plain = '';
+        $shorts = array($name);
         foreach ($use as $u){
-            $use_plain.=",\n    ".$u;
+            if (!empty($use_plain)) $use_plain.=",\n    ";
+            $use_plain.=$u;
+            $short = F::splitRight('\\', $u);
+            if (in_array($short[1], $shorts)){
+                $short = $short[1].'_'.count($shorts);
+                $use_plain.=' as '.$short;
+            }else{
+                $short = $short[1];
+            }
+            $shorts[] = $short;
         }
         // Методы
         $methods = implode("\n", $methods);
@@ -2006,7 +2016,7 @@ namespace $namespace;
 
 use $use_plain;
 
-class $name extends $extends_short[1]
+class $name extends $shorts[1]
 {
 $methods
 }";
