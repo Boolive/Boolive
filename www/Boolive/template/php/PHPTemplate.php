@@ -24,7 +24,11 @@ class PHPTemplate
         $v = new PHPTemplateValues($v, null, $entity);
         try{
             ob_start();
-            include($entity->file(null, true));
+            if ($entity->isFile()){
+                include($entity->file(null, true));
+            }else{
+                echo $entity->value();
+            }
             $result = ob_get_contents();
             ob_end_clean();
         }catch (\Exception $e){
