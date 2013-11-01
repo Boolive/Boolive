@@ -37,15 +37,15 @@ class Input extends Values
      */
     static function activate()
     {
-        if (get_magic_quotes_gpc()) {
+        if (get_magic_quotes_gpc()){
             $process = array(&$_GET, &$_POST, &$_COOKIE, &$_REQUEST);
-            while (list($key, $val) = each($process)) {
-                foreach ($val as $k => $v) {
+            while (list($key, $val) = each($process)){
+                foreach ($val as $k => $v){
                     unset($process[$key][$k]);
-                    if (is_array($v)) {
+                    if (is_array($v)){
                         $process[$key][stripslashes($k)] = $v;
                         $process[] = &$process[$key][stripslashes($k)];
-                    } else {
+                    }else{
                         $process[$key][stripslashes($k)] = stripslashes($v);
                     }
                 }
@@ -62,7 +62,7 @@ class Input extends Values
         if (isset($_SERVER['REQUEST_URI'])){
             $_SERVER['REQUEST_URI'] = preg_replace('#\?{1}#u', '&', $_SERVER['REQUEST_URI'], 1);
             $request_uri = preg_replace('#^'.preg_quote(DIR_WEB).'#u', '/', $_SERVER['REQUEST_URI'], 1);
-            parse_str('path='.urldecode($request_uri), $values['REQUEST']);
+            parse_str('path='.$request_uri, $values['REQUEST']);
             $values['SERVER']['argv'] = $values['REQUEST'];
             $values['SERVER']['argc'] = count($values['REQUEST']);
         }
