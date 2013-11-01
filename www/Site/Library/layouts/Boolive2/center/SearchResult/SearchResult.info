@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "SearchResult.tpl",
+    "value_type": 3,
+    "proto": "/Library/content_widgets/SearchResult",
+    "is_link": true,
+    "order": 7
+}

@@ -1,0 +1,15 @@
+{
+    "is_default_value": true,
+    "value": "8",
+    "proto": "/Library/content_widgets/Part/count_per_page",
+    "order": 7,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Количество объектов содержимого на странице.",
+            "proto": "/Library/content_widgets/Part/count_per_page/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

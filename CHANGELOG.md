@@ -9,6 +9,7 @@ Version 2.0.beta work in progress
 - enh #152 By default all new objects are drafts (VladimirShestakov)
 - new #154 The table "text" is used for values with a length more than 255 characters (VladimirShestakov)
 - new #155 Added fulltext search of objects (VladimirShestakov)
+- new #156 Added widgets for searching in the contents of the site (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

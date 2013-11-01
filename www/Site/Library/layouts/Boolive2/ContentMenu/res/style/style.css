@@ -1,8 +1,8 @@
 .Menu{
-    padding: 10px;
-    background: #f3f3f3;
+    padding: 10px 10px 15px;
+    background: #efefef;
     margin: 10px 0;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #e8e8e8;
     }
     .Menu .title{
         font-size: 12pt;
@@ -14,7 +14,7 @@
         padding: 0;
         }
         .Menu ul li{
-            margin: 6px 5px 7px 0;
+            margin: 10px 5px 10px 0;
 	        padding: 0 0 0 19px;
             }
             .Menu ul li a{

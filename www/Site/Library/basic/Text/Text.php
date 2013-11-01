@@ -16,4 +16,12 @@ class Text extends Entity
         parent::defineRule();
         $this->_rule->arrays[0]['value']->min(0)->max(65535);
     }
+
+    public function save($children = true, $access = true)
+    {
+        if ($this->_attribs['value_type'] != Entity::VALUE_FILE){
+            $this->_attribs['value_type'] = Entity::VALUE_TEXT;
+        }
+        return parent::save($children, $access);
+    }
 }

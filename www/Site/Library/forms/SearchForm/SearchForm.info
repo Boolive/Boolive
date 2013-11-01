@@ -1,40 +1,39 @@
 {
-    "value": "Boolive2.tpl",
+    "value": "SearchForm.tpl",
     "value_type": 3,
-    "proto": "/Library/layouts/Layout",
+    "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 7,
+    "order": 21,
     "children": {
         "title": {
-            "value": "Boolive2",
-            "proto": "/Library/layouts/Layout/title",
+            "value": "Форма поиска",
+            "proto": "/Library/views/Widget/title",
             "is_hidden": true,
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Виджет для создания макетов (разметки html страницы).",
-            "proto": "/Library/layouts/Layout/description",
+            "value": "Отображает поле для ввода поисковой строки",
+            "proto": "/Library/views/Widget/description",
             "is_hidden": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/layouts/Layout/res",
+            "proto": "/Library/views/Widget/res",
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/layouts/Layout/res/title",
+                    "proto": "/Library/views/Widget/res/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "proto": "/Library/layouts/Layout/res/description",
+                    "proto": "/Library/views/Widget/res/description",
                     "is_hidden": true,
                     "order": 2
                 }
@@ -43,20 +42,20 @@
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/layouts/Layout/cache",
+            "proto": "/Library/views/Widget/cache",
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
-                    "proto": "/Library/layouts/Layout/cache/title",
+                    "proto": "/Library/views/Widget/cache/title",
                     "is_hidden": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
-                    "proto": "/Library/layouts/Layout/cache/description",
+                    "proto": "/Library/views/Widget/cache/description",
                     "is_hidden": true,
                     "order": 2
                 }
@@ -65,14 +64,13 @@
         "object_rule": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/layouts/Layout/object_rule",
+            "proto": "/Library/views/Widget/object_rule",
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на отображаемый объект",
-                    "proto": "/Library/layouts/Layout/object_rule/title",
-                    "is_hidden": true,
+                    "proto": "/Library/views/Widget/object_rule/title",
                     "order": 1
                 }
             }
