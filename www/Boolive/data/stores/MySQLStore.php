@@ -1575,8 +1575,12 @@ class MySQLStore extends Entity
                             $alias = uniqid('text');
                             $joins_text[$alias] = array($table);
                             $mode = empty($c[2])?'': ' IN BOOLEAN MODE';
-                            $cond[$i] = 'MATCH('.$alias.'.value) AGAINST (? '.$mode.')';
-                            $result['binds'][] = empty($c[1])?'':strval($c[1]);
+                            if (empty($c[2])){
+                                $cond[$i] = '(`'.$alias.'`.id IS NOT NULL)';
+                            }else{
+                                $cond[$i] = 'MATCH('.$alias.'.value) AGAINST (? '.$mode.')';
+                                $result['binds'][] = empty($c[1])?'':strval($c[1]);
+                            }
                         }else
                         // Проверка подчиненного
                         if ($c[0]=='child'){
@@ -1773,7 +1777,7 @@ class MySQLStore extends Entity
             $binds2[] = $info[1];
         }
         foreach ($joins_text as $alias => $info){
-            $result['joins'].= "\n  JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
+            $result['joins'].= "\n  LEFT JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
         }
         foreach ($joins_link as $alias => $info){
             $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
