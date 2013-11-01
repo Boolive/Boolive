@@ -65,8 +65,8 @@
                 return e(this).css({zIndex: 10})
             });
             if (this.options.navigation.active){
-                o = e("<a>", {"class": "slidesjs-previous slidesjs-navigation", href: "#", title: "Previous", text: "Previous"}).appendTo(c);
-                r = e("<a>", {"class": "slidesjs-next slidesjs-navigation", href: "#", title: "Next", text: "Next"}).appendTo(c)
+                o = e("<a>", {"class": "slidesjs-previous slidesjs-navigation", href: "#", title: "Previous", text: "<"}).appendTo(c);
+                r = e("<a>", {"class": "slidesjs-next slidesjs-navigation", href: "#", title: "Next", text: ">"}).appendTo(c)
             }
             e(".slidesjs-next", c).click(function(e){
                 e.preventDefault();
