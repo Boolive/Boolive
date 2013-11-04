@@ -45,7 +45,8 @@ class Widget extends View
     {
         $this->_input_rule = Rule::arrays(array(
                 'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity($this->object_rule->value())->required()
+                        'object' => Rule::entity($this->object_rule->value())->required(),
+                        'path' => Rule::regexp($this->path_rule->value())->required()
                     )
                 )
             )
