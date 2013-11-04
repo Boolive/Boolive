@@ -524,7 +524,7 @@ class Entity implements ITrace
     public function isFile($is_file = null)
     {
         $new_type = $is_file ? Entity::VALUE_FILE : Entity::VALUE_AUTO;
-        if (isset($is_file) && (empty($this->_attribs['value_type']) == $new_type)){
+        if (isset($is_file) && $this->_attribs['value_type'] != $new_type){
             $this->_attribs['value_type'] = $new_type;
             $this->_changed = true;
             $this->_checked = false;
