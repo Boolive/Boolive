@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/Widget/path_rule",
+    "order": 8,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Правило на URL (http)",
+            "proto": "/Library/views/Widget/path_rule/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Регулярное выражение на адрес запроса, например ^news(/|$)",
+            "proto": "/Library/views/Widget/path_rule/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}
