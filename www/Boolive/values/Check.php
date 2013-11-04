@@ -177,6 +177,24 @@ class Check
     }
 
     /**
+     * Проверка и фильтр скалярного значения
+     * Нескалярные значения превращаются в 0
+     * @param $value Значение для проверки и фильтра
+     * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
+     * @param \Boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
+     * @return string
+     */
+    static function scalar($value, &$error, Rule $rule)
+    {
+        if (isset($value) && is_scalar($value)){
+            return $value;
+        }else{
+            $error = new Error('Не является скалярным.', 'scalar');
+            return 0;
+        }
+    }
+
+    /**
      * Проверка и фильтр NULL
      * @param $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
@@ -217,8 +235,8 @@ class Check
                 if ($arg instanceof Rule){
                     $rule_default = $arg;
                 }else
-                if (is_bool($arg)){
-                    $args[2] = $arg;
+                if ($arg === true){
+                    $tree = true;
                 }
             }
             // Перебор и проверка с фильтром всех элементов
@@ -683,6 +701,7 @@ class Check
             $patterns = $rule->regexp;
             if (count($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
             foreach ($patterns as $pattern){
+                if (empty($pattern)) return $value;
                 if (preg_match($pattern, $value)) return $value;
             }
         }

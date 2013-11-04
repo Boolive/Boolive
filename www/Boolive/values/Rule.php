@@ -19,6 +19,7 @@ use Boolive\develop\ITrace;
  * @method static \Boolive\values\Rule int() Целое число в диапазоне от -2147483648 до 2147483647
  * @method static \Boolive\values\Rule double() Действительное число в диапазоне от -1.7976931348623157E+308 до 1.7976931348623157E+308
  * @method static \Boolive\values\Rule string() Строка любой длины
+ * @method static \Boolive\values\Rule scalar() Строка, число, булево
  * @method static \Boolive\values\Rule null() Неопределенное значение. При этом проверяемый элемент должен существовать!
  * @method static \Boolive\values\Rule arrays() Массив
  * @method static \Boolive\values\Rule object() Объект указываемого класса
