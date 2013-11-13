@@ -10,8 +10,7 @@
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Эталон для создания групп",
+            "value": "Пользователи, управляющие сайтом",
             "proto": "/Library/access/Group/description",
             "is_hidden": true,
             "order": 2

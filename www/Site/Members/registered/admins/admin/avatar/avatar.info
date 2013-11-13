@@ -1,0 +1,23 @@
+{
+    "is_default_value": true,
+    "value": "avatar.png",
+    "value_type": 3,
+    "proto": "/Library/access/User/avatar",
+    "order": 8,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Аватарка",
+            "proto": "/Library/access/User/avatar/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Фото пользователя",
+            "proto": "/Library/access/User/avatar/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

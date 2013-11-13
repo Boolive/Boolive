@@ -1,0 +1,21 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/access/Role",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Роль гостя",
+            "proto": "/Library/access/Role/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Сгруппированные права доступа по действиям над объектами.",
+            "proto": "/Library/access/Role/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

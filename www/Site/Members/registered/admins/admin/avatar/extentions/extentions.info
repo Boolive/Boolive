@@ -1,0 +1,15 @@
+{
+    "is_default_value": true,
+    "value": "*.png *.jpg *.gif",
+    "proto": "/Library/access/User/avatar/extentions",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Допустимые расширения",
+            "proto": "/Library/access/User/avatar/extentions/title",
+            "is_hidden": true,
+            "order": 1
+        }
+    }
+}

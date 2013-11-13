@@ -10,6 +10,10 @@
             "proto": "/Library/access/Group/rights/title",
             "is_hidden": true,
             "order": 1
+        },
+        "description": {
+            "value": "Базовые права для всех",
+            "order": 2
         }
     }
 }

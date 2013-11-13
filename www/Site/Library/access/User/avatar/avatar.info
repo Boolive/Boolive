@@ -1,0 +1,20 @@
+{
+    "value": "avatar.png",
+    "value_type": 3,
+    "proto": "/Library/basic/Image",
+    "order": 8,
+    "children": {
+        "title": {
+            "value": "Аватарка",
+            "proto": "/Library/basic/Image/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Фото пользователя",
+            "proto": "/Library/basic/Image/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
+}

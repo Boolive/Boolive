@@ -17,7 +17,7 @@
             "order": 2
         },
         "email": {
-            "value": "",
+            "value": "none@none.none",
             "proto": "/Library/basic/Email",
             "order": 6,
             "children": {
