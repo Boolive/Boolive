@@ -1,0 +1,87 @@
+{
+    "value": "FormAuth2.tpl",
+    "value_type": 3,
+    "proto": "/Library/forms/SimpleForm",
+    "is_default_class": false,
+    "order": 23,
+    "children": {
+        "title": {
+            "value": "Вход",
+            "proto": "/Library/forms/SimpleForm/title",
+            "is_hidden": true,
+            "order": 4
+        },
+        "description": {
+            "value": "Форма авторизации пользователя",
+            "proto": "/Library/forms/SimpleForm/description",
+            "is_hidden": true,
+            "order": 5
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/forms/SimpleForm/res",
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/forms/SimpleForm/res/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/forms/SimpleForm/res/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/forms/SimpleForm/cache",
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/forms/SimpleForm/cache/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/forms/SimpleForm/cache/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/forms/SimpleForm/object_rule",
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на объект",
+                    "proto": "/Library/forms/SimpleForm/object_rule/title",
+                    "is_hidden": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Правило на отображаемый объект. Если объект не соответствует правилу, то виджет не работает.",
+                    "proto": "/Library/forms/SimpleForm/object_rule/description",
+                    "is_hidden": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}
