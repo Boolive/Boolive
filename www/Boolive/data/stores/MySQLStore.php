@@ -35,7 +35,7 @@ class MySQLStore extends Entity
      * @param array $key Ключ хранилища. Используется для формирования и распознования сокращенных URI
      * @param $config Параметры подключения к базе данных
      */
-    public function __construct($key, $config)
+    function __construct($key, $config)
     {
         $this->key = $key;
         $this->db = DB::connect($config);
@@ -45,7 +45,7 @@ class MySQLStore extends Entity
     /**
      * Обработчик системного события deactivate (завершение работы системы)
      */
-    public function deactivate()
+    function deactivate()
     {
         if ($this->_local_ids_change) Cache::set('mysqlstore/localids', F::toJSON($this->_local_ids, false));
     }
@@ -57,7 +57,7 @@ class MySQLStore extends Entity
      * @return array|\Boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
      * @throws \Exception
      */
-    public function read($cond, $index = false)
+    function read($cond, $index = false)
     {
         // SQL условия выбокри
         $sql = $this->getCondSQL($cond);
@@ -265,7 +265,7 @@ class MySQLStore extends Entity
      * @throws
      * @throws \Exception Системные ошибки
      */
-    public function write($entity, $access)
+    function write($entity, $access)
     {
         if ($access && IS_INSTALL && !$entity->isAccessible('write')){
             $error = new Error('Запрещенное действие над объектом', $entity->uri());
@@ -707,7 +707,7 @@ class MySQLStore extends Entity
      * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
      * @return bool
      */
-    public function delete($entity, $access, $integrity)
+    function delete($entity, $access, $integrity)
     {
         // Проверка доступа на уничтожение объекта и его подчиненных
         if ($access && IS_INSTALL && ($acond = Auth::getUser()->getAccessCond('destroy', $entity))){
@@ -783,7 +783,7 @@ class MySQLStore extends Entity
      * @param bool $from_file Признак, проверять или нет изменения в .info файлах
      * @param bool $clear_last_updates Признак, удалять или нет найденные изменения в предыдущем посике?
      */
-    public function findUpdates($entity, $step_size = 50, $depth = 1, $from_file = true, $clear_last_updates = true)
+    function findUpdates($entity, $step_size = 50, $depth = 1, $from_file = true, $clear_last_updates = true)
     {
         // Поиск обновлений если ранее не были найдены изменения в info файлах родителей
         if ($entity->_attribs['diff_from'] >= 0 || $entity->_attribs['diff'] == Entity::DIFF_NO){
@@ -875,6 +875,7 @@ class MySQLStore extends Entity
                     $ochildren = $entity->find(array(
                         'where' => array(
                                 array('attr', 'proto', 'in', $pids),
+                                array('attr', 'is_draft', '>=', 0), // учитываьт черновики
                                 array('attr', 'diff', '!=', Entity::DIFF_DELETE)
                         )
                     ), false, false, false);
@@ -1037,7 +1038,7 @@ class MySQLStore extends Entity
      * @param Entity $entity Объект, для которого применяются обновления
      * @throws \Boolive\errors\Error
      */
-    public function applyUpdates($entity)
+    function applyUpdates($entity)
     {
         $diff = $entity->diff();
         if ($diff == Entity::DIFF_ADD){
@@ -1823,7 +1824,7 @@ class MySQLStore extends Entity
                 $make = $this->db->prepare('
                     INSERT {parents} (object_id, parent_id, `level`)
                     SELECT :obj, parent_id, `level`+1+:l FROM {parents}
-                    WHERE object_id = :parent
+                    WHERE object_id = :parent AND is_delete = 0
                     UNION SELECT :obj,:obj,0
                     ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                 ');
@@ -1837,7 +1838,7 @@ class MySQLStore extends Entity
             $make = $this->db->prepare('
                 INSERT {parents} (object_id, parent_id, `level`)
                 SELECT :obj, parent_id, `level`+1 FROM {parents}
-                WHERE object_id = :parent
+                WHERE object_id = :parent AND is_delete = 0
                 UNION SELECT :obj,:obj,0
                 ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
             ');
@@ -1904,7 +1905,7 @@ class MySQLStore extends Entity
                     $make = $this->db->prepare('
                         INSERT {protos} (object_id, proto_id, `level`)
                         SELECT :obj, proto_id, `level`+1+:l FROM {protos}
-                        WHERE object_id = :proto
+                        WHERE object_id = :proto AND is_delete = 0
                         UNION SELECT :obj,:obj,0
                         ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                     ');
@@ -1931,7 +1932,7 @@ class MySQLStore extends Entity
                     $make = $this->db->prepare('
                         INSERT {protos} (object_id, proto_id, `level`)
                         SELECT :obj, proto_id, `level`+1 FROM {protos}
-                        WHERE object_id = :proto
+                        WHERE object_id = :proto AND is_delete = 0
                         UNION SELECT :obj,:obj,0
                         ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                     ');
@@ -1942,7 +1943,7 @@ class MySQLStore extends Entity
                         $make = $this->db->prepare('
                             INSERT {protos} (object_id, proto_id, `level`)
                             SELECT :obj, proto_id, `level`+1+:l FROM {protos}
-                            WHERE object_id = :proto
+                            WHERE object_id = :proto AND is_delete = 0
                             UNION SELECT :obj,:obj,0
                             ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                         ');
@@ -1992,7 +1993,7 @@ class MySQLStore extends Entity
                             $q = $this->db->prepare('
                                 INSERT {protos} (object_id, proto_id, `level`)
                                 SELECT object_id, :proto, `level`+1 FROM {protos}
-                                WHERE proto_id = :obj
+                                WHERE proto_id = :obj AND is_delete = 0
                                 ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
                             ');
                             $q->execute(array(':obj' => $entity, ':proto'=>$proto));
@@ -2014,7 +2015,7 @@ class MySQLStore extends Entity
      * Полное пересоздание дерева родителей
      * @throws \Exception
      */
-    public function rebuildParents()
+    function rebuildParents()
     {
         try{
             $this->db->beginTransaction();
@@ -2049,7 +2050,7 @@ class MySQLStore extends Entity
      * Полное пересоздание дерева прототипов
      * @throws \Exception
      */
-    public function rebuildProtos()
+    function rebuildProtos()
     {
         try{
             $this->db->beginTransaction();
@@ -2082,7 +2083,7 @@ class MySQLStore extends Entity
      * @param bool $is_new Возвращаемый прзнак, был ли создан новый идентификатор?
      * @return int|null
      */
-    public function localId($uri, $create = true, &$is_new = false)
+    function localId($uri, $create = true, &$is_new = false)
     {
         $is_new = false;
         if ($uri instanceof Entity){
@@ -2310,7 +2311,7 @@ class MySQLStore extends Entity
                     $info = $db->errorInfo();
                     // Нет прав на указанную бд (и нет прав для создания бд)?
                     if ($info[1] == '1044'){
-                        $errors->dbname = 'no_access';
+                        $errors->dbname->no_access = "No access";
                         throw $errors;
                     }else
                     // Отсутсвует указанная бд?
@@ -2331,7 +2332,7 @@ class MySQLStore extends Entity
             if (!$support){
                 // Удаляем автоматически созданную БД
                 if ($db_auto_create) $db->exec('DROP DATABASE IF EXISTS `'.$connect['dbname'].'`');
-                $errors->common = 'no_innodb';
+                $errors->common->no_innodb = "No InnoDB";
                 throw $errors;
             }
             // Есть ли таблицы в БД?
@@ -2341,7 +2342,7 @@ class MySQLStore extends Entity
             while ($row = $q->fetch(DB::FETCH_NUM)/* && empty($config['prefix'])*/){
                 if (in_array($row[0], $tables)){
                     // Иначе ошибка
-                    $errors->dbname = 'db_not_empty';
+                    $errors->dbname->db_not_empty = "Database is not empty";
                     throw $errors;
                 }
             }
@@ -2415,13 +2416,13 @@ class MySQLStore extends Entity
         }catch (\PDOException $e){
 			// Ошибки подключения к СУБД
 			if ($e->getCode() == '1045'){
-				$errors->user = 'no_acces';
-				$errors->password = 'no_access';
+				$errors->user->no_access = "No accecss";
+				$errors->password->no_access = "No accecss";
 			}else
 			if ($e->getCode() == '2002'){
-				$errors->host = 'not_found';
+				$errors->host->not_found = "Host not found";
                 if ($connect['port']!=3306){
-                    $errors->port = 'not_found';
+                    $errors->port->not_found = "Port no found";
                 }
 			}else{
 				$errors->common = $e->getMessage();
