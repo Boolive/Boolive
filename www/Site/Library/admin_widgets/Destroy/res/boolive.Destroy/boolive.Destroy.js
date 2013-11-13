@@ -27,7 +27,9 @@
                     if (result.out.error){
                         alert(result.out.error);
                     }else{
-                       history.back();
+                        history.back();
+                        // @todo Выделение родительского объекта
+                        history.back();
                     }
                     // Вход в родительский объект
 

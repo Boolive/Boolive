@@ -14,7 +14,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
+            "value": "Эталон поля ввода строки",
             "proto": "/Library/forms/FormAuth/views/NameField/description",
             "is_hidden": true,
             "order": 2
@@ -49,7 +49,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на отображаемый объект",
+                    "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/views/NameField/object_rule/title",
                     "order": 1
                 }

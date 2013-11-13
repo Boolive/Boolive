@@ -6,7 +6,7 @@
     "order": 19,
     "children": {
         "title": {
-            "value": "Форма аутентификации",
+            "value": "Аутентификация",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_hidden": true,
             "order": 1
@@ -81,7 +81,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на отображаемый объект",
+                    "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "order": 1
                 }

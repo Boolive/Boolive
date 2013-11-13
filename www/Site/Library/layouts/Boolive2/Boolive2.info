@@ -70,7 +70,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на отображаемый объект",
+                    "value": "Правило на объект",
                     "proto": "/Library/layouts/Layout/object_rule/title",
                     "is_hidden": true,
                     "order": 1

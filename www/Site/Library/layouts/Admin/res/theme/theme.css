@@ -409,6 +409,9 @@ label{
 .hide{
     display: none;
     }
+.left{
+    float: left;
+}
 .right{
     float: right;
 }

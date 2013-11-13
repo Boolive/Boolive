@@ -71,7 +71,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на отображаемый объект",
+                    "value": "Правило на объект",
                     "proto": "/Library/menus/TopMenu/item_view/views/page_item/object_rule/title",
                     "order": 1
                 }

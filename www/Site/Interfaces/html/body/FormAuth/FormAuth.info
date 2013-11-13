@@ -7,7 +7,7 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Форма аутентификации",
+            "value": "Аутентификация",
             "proto": "/Library/forms/FormAuth/title",
             "is_hidden": true,
             "order": 5
@@ -86,7 +86,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на отображаемый объект",
+                    "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/object_rule/title",
                     "order": 1
                 }

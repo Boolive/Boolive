@@ -412,13 +412,13 @@
                     if (responseText.out.error){
                         self.model.set_process('start', false);
 
-                        if (_.isObject(responseText.out.error.list._attribs) && _.isObject(responseText.out.error.list._attribs.list)){
-                            var list = responseText.out.error.list._attribs.list;
-                            for(var e in list){
+                        if (_.isObject(responseText.out.error.children._attribs) && _.isObject(responseText.out.error.children._attribs.children)){
+                            var children = responseText.out.error.children._attribs.children;
+                            for(var e in children){
                                 if (e == 'file'){
-                                    self.model.set_error('value', self.errorMessage(list[e], true));
+                                    self.model.set_error('value', self.errorMessage(children[e], true));
                                 }else{
-                                    self.model.set_error(e, self.errorMessage(list[e], true));
+                                    self.model.set_error(e, self.errorMessage(children[e], true));
                                 }
                             }
                         }
@@ -478,14 +478,14 @@
         },
 
         errorMessage: function(error, sub, glue){
-            if (!error.list || _.isEmpty(error.list) || _.isUndefined(sub)){
+            if (!error.children || _.isEmpty(error.children) || _.isUndefined(sub)){
                 return error.message;
             }else{
                 var result = '';
                 if (!glue) glue = '';
-                for (var i in error.list){
+                for (var i in error.children){
                     if (!result) result+=glue;
-                    result+= this.errorMessage(error.list[i], sub, glue);
+                    result+= this.errorMessage(error.children[i], sub, glue);
                 }
                 return result;
             }
