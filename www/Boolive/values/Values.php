@@ -40,7 +40,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param null|mixed $value Значение
      * @param null|\Boolive\values\Rule $rule Правило проверки значений по умолчанию
      */
-    public function __construct($value = null, $rule = null)
+    function __construct($value = null, $rule = null)
     {
         $this->_value = $value;
         $this->_rule = $rule;
@@ -77,7 +77,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param null $name Ключ элемента, для которого требуется правило. Если не указан, то возвращается общее правило
      * @return \Boolive\values\Rule
      */
-    public function getRule($name = null)
+    function getRule($name = null)
     {
         // Если правила нет по умолчанию, то пробуем его установить
         if (!isset($this->_rule)) $this->defineRule();
@@ -126,7 +126,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Установка значения
      * @param mixed $value
      */
-    public function set($value)
+    function set($value)
     {
         if (isset($this->_maker, $this->_name)){
             $parent = $this->_maker->getValue(); // Берется значение родителя
@@ -145,7 +145,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param null $error
      * @return mixed
      */
-    public function get($rule = null, &$error = null)
+    function get($rule = null, &$error = null)
     {
         // Если не указано правило и значение уже отфильтровано, то повторно фильтровать не нужно
         if (!$rule && $this->_filtered) return $this->getValue();
@@ -167,7 +167,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param null $errors Ошибки после проверки
      * @return bool
      */
-    public function filter(&$errors = null)
+    function filter(&$errors = null)
     {
         $values = $this->get(null, $errors);
         if (!isset($errors)){
@@ -185,7 +185,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param \Boolive\errors\Error | null $error Ошибки после проверки
      * @return bool
      */
-    public function check($rule = null, &$error = null)
+    function check($rule = null, &$error = null)
     {
         $this->get($rule, $error);
         return !isset($error);
@@ -200,7 +200,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * 2. choose('name1', 'name2', 'name3');
      * @return \Boolive\values\Values Ссылка на себя
      */
-    public function choose()
+    function choose()
     {
         $value = $this->getValue();
         if (!is_array($value)) $value= array();
@@ -219,7 +219,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Если текущее значение не массив, то оно будет возвращено в качестве нулевого элемента массива
      * @return array Массив объектов Values
      */
-    public function getValues()
+    function getValues()
     {
         $values = $this->getValue();
         $v = is_array($values)? $values : array($values);
@@ -234,7 +234,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Возвращает массив ключей
      * @return array
      */
-    public function getKeys()
+    function getKeys()
     {
         return array_keys((array)$this->getValue());
     }
@@ -244,7 +244,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param null|\Boolive\values\Rule $rule
      * @return \Boolive\values\Values
      */
-    public function getCopy($rule = null)
+    function getCopy($rule = null)
     {
         return new static($this->getValue(), $rule);
     }
@@ -255,7 +255,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Если ключ присутствует только у себя, то элемент с таким ключом сохранится как есть.
      * @param array $list Новые значения
      */
-    public function replaceArray($list)
+    function replaceArray($list)
     {
         if ((is_array($list)||$list instanceof \ArrayAccess) &&!empty($list)){
             $value = $this->getValue();
@@ -272,7 +272,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Числовие ключи уменьшаются на $shift. Для увеличения ключей $shift должен быть отрицательным
      * @param int $shift Размер смещения
      */
-    public function shiftKeys($shift = 0)
+    function shiftKeys($shift = 0)
     {
         $value = $this->getValue();
         if (is_array($value)){
@@ -294,7 +294,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Признак, отфильтрованы значения или нет
      * @return bool
      */
-    public function isFiltered()
+    function isFiltered()
     {
         return $this->_filtered;
     }
@@ -304,7 +304,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Если значение не массив, то всегда возвращается 1
      * @return int
      */
-    public function count()
+    function count()
     {
         $value = $this->getValue();
         return is_array($value) ? count($value) : 1;
@@ -317,7 +317,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param mixed $name Ключ элемента
      * @return \Boolive\values\Values
      */
-    public function offsetGet($name)
+    function offsetGet($name)
     {
         if (is_null($name)) return $this;
         if (!isset($this->_interfaces[$name])){
@@ -337,7 +337,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param mixed $name Ключ элемента
      * @param mixed $value Новое значения элемента
      */
-    public function offsetSet($name, $value)
+    function offsetSet($name, $value)
     {
         $v = $this->getValue();
         if (!is_array($v)) $v = array();
@@ -355,7 +355,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param mixed $name
      * @return bool
      */
-    public function offsetExists($name)
+    function offsetExists($name)
     {
         $v = $this->getValue();
         return is_array($v) && (isset($v[$name]) || array_key_exists($name, $v));
@@ -367,7 +367,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param bool $number Признак, проверять как число или строку. Если $number==true, то '0' будет считаться пустым значенеим
      * @return bool
      */
-    public function offsetEmpty($name, $number = false)
+    function offsetEmpty($name, $number = false)
     {
         $v = $this->getValue();
         if (is_array($v) && $this->offsetExists($name)){
@@ -387,7 +387,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Удаление элемента
      * @param mixed $name
      */
-    public function offsetUnset($name)
+    function offsetUnset($name)
     {
         $v = $this->getValue();
         if (is_array($v) && $this->offsetExists($name)){
@@ -402,7 +402,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Удаление всех элементов.
      * Обнуление значения.
      */
-    public function offsetUnsetAll()
+    function offsetUnsetAll()
     {
 //        foreach ($this->_interfaces as $i) $i->_maker = null;
         $this->set(null);
@@ -415,7 +415,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * 1. offsetUnsetList(array('name1', 'name2'));
      * 2. offsetUnsetList('name1', 'name2', 'name3');
      */
-    public function offsetUnsetList()
+    function offsetUnsetList()
     {
         $v = $this->getValue();
         if (is_array($v)){
@@ -436,7 +436,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Возвращается итератор на массив объектов Values.
      * @return \ArrayIterator|\Traversable
      */
-    public function getIterator()
+    function getIterator()
     {
         return new ArrayIterator($this->getValues());
     }
@@ -446,7 +446,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param $name Ключ значения
      * @return Values
      */
-    public function cut($name)
+    function cut($name)
     {
         $result = $this->offsetGet($name);
         $value = $result->getValue();
@@ -463,7 +463,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param string $name Ключ элемента
      * @return array|\Boolive\values\Values
      */
-    public function __get($name)
+    function __get($name)
     {
         return $this->offsetGet($name);
     }
@@ -474,7 +474,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param string $name Ключ элемента
      * @param mixed $value Значение
      */
-    public function __set($name, $value)
+    function __set($name, $value)
     {
         $this->offsetSet($name, $value);
     }
@@ -485,7 +485,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param string $name Ключ элемента
      * @return bool
      */
-    public function __isset($name)
+    function __isset($name)
     {
         $v = $this->getValue();
         return is_array($v) && isset($v['values']);
@@ -497,7 +497,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param string $name Ключ элемента
      * @return bool
      */
-    public function __unset($name)
+    function __unset($name)
     {
         $this->offsetUnset($name);
     }
@@ -510,7 +510,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * $s = (string)$values->v1;
      * @return string
      */
-    public function __toString()
+    function __toString()
     {
         return (string)$this->get();
     }
@@ -518,7 +518,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     /**
      * Клонирование объекта
      */
-    public function __clone()
+    function __clone()
     {
         $this->_value = $this->getValue();
         if (is_array($this->_value)){
@@ -544,7 +544,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @param array $args Аргументы
      * @return null
      */
-    public function __call($name, $args)
+    function __call($name, $args)
     {
         $rule = new Rule();
         $rule->__set($name, $args);
@@ -555,7 +555,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Возвращает свойства объекта для трассировки
      * @return array
      */
-    public function trace()
+    function trace()
     {
         return $this->_value;
     }

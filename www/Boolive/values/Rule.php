@@ -101,7 +101,7 @@ class Rule implements ITrace
      * @param $args Аргументы фильтра
      * @return \Boolive\values\Rule
      */
-    public function __call($name, $args)
+    function __call($name, $args)
     {
         $this->filters[$name] = $args;
         return $this;
@@ -113,7 +113,7 @@ class Rule implements ITrace
      * @param $name Название фильтра
      * @return array Аргументы фильтра
      */
-    public function &__get($name)
+    function &__get($name)
     {
         return $this->filters[$name];
     }
@@ -124,7 +124,7 @@ class Rule implements ITrace
      * @param $name Название фильтра
      * @param mixed $args Массив аргументов. Если не является массивом, то значение будет помещено в массив
      */
-    public function __set($name, $args)
+    function __set($name, $args)
     {
         if (!is_array($args)) $args = array($args);
         $this->filters[$name] = $args;
@@ -136,7 +136,7 @@ class Rule implements ITrace
      * @param $name Название фильтра
      * @return bool
      */
-    public function __isset($name)
+    function __isset($name)
     {
         return isset($this->filters[$name]);
     }
@@ -146,7 +146,7 @@ class Rule implements ITrace
      * @example unset($rule->max);
      * @param $name Название фильтра
      */
-    public function __unset($name)
+    function __unset($name)
     {
         unset($this->filters[$name]);
     }
@@ -155,12 +155,12 @@ class Rule implements ITrace
      * Выбор всех фильтров
      * @return array Ассоциативный массив фильтров, где ключ элемента - название фильтра, а значение - аргументы фильтра
      */
-    public function getFilters()
+    function getFilters()
     {
         return $this->filters;
     }
 
-    public function trace()
+    function trace()
     {
         return $this->filters;
     }

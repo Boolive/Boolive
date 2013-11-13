@@ -13,5 +13,5 @@ interface ITrace
      * Возвращает значения для трассировки
      * @return array
      */
-    public function trace();
+    function trace();
 }

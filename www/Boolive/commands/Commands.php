@@ -33,7 +33,7 @@ class Commands
      * @param array $args аргументы команды
      * @return void
      */
-    public function __call($name, $args)
+    function __call($name, $args)
     {
         $this->set($name, $args);
     }
@@ -45,7 +45,7 @@ class Commands
      * @param bool $push Признак, добавлять команду в конец очереди (true) или в начало (false)
      * @return void
      */
-    public function set($name, $args, $push = true)
+    function set($name, $args, $push = true)
     {
         if (!isset($this->commands[$name])){
             $this->commands[$name] = array();
@@ -65,7 +65,7 @@ class Commands
      * Добавление списка команд
      * @param array $list Массив команд
      */
-    public function setList($list)
+    function setList($list)
     {
         foreach ($list as $com) $this->set($com[0], $com[1], $com[2]);
     }
@@ -77,7 +77,7 @@ class Commands
      * @param bool $unique
      * @return array Аргументы команд. Первое измерение (числовое) соответсвует командам, второе - аргументам
      */
-    public function get($name, $unique = true)
+    function get($name, $unique = true)
     {
         if (!isset($this->commands[$name])){
             $this->commands[$name] = array();
@@ -103,7 +103,7 @@ class Commands
      * @return array Команды и их аргументы.
      * Первое измерение (ассоциативное) - название команд, второе (числовое) - команды, третье - аргументы команд
      */
-    public function getAll()
+    function getAll()
     {
         return $this->commands;
     }
@@ -113,7 +113,7 @@ class Commands
      * @param $name Название команды
      * @return void
      */
-    public function clear($name)
+    function clear($name)
     {
         unset($this->commands[$name]);
     }
@@ -122,7 +122,7 @@ class Commands
      * Удаление всех команд
      * @return void
      */
-    public function clearAll()
+    function clearAll()
     {
         $this->commands = array();
     }
@@ -132,7 +132,7 @@ class Commands
      * @param string $name Название команды
      * @return bool
      */
-    public function isExist($name = null)
+    function isExist($name = null)
     {
         if (empty($name)){
             return !empty($this->commands);
@@ -140,17 +140,17 @@ class Commands
         return !empty($this->commands[$name]);
     }
 
-    public function group($name)
+    function group($name)
     {
         $this->groups[$name] = array();
     }
 
-    public function ungroup($name)
+    function ungroup($name)
     {
         unset($this->groups[$name]);
     }
 
-    public function getGroup($name)
+    function getGroup($name)
     {
         return $this->groups[$name];
     }

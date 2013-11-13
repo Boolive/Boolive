@@ -13,7 +13,7 @@ use Boolive\data\Entity,
 
 class Feedback extends Entity
 {
-    public function send()
+    function send()
     {
         if ($this->check()){
             try{

@@ -20,7 +20,7 @@ class TextTemplate
      * @throws \Exception
      * @return string
      */
-    public function render($entity, $v)
+    function render($entity, $v)
     {
         $text = file_get_contents($entity->file(null, true));
         $vars = filter_var_array($v, FILTER_SANITIZE_SPECIAL_CHARS);

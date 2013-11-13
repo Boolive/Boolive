@@ -25,7 +25,7 @@ class Member extends Entity
      * @param \Boolive\data\Entity $object Объект, к которому проверяется доступ
      * @return bool
      */
-    public function checkAccess($action_kind, $object)
+    function checkAccess($action_kind, $object)
     {
         return $object->verify($this->getAccessCond($action_kind, $object));
     }
@@ -37,7 +37,7 @@ class Member extends Entity
      * @param $object Объект, к которому проверяется доступ
      * @return array
      */
-    public function getAccessCond($action_kind, $object = null)
+    function getAccessCond($action_kind, $object = null)
     {
         if (!isset($this->_rights[$action_kind])){
             //Trace::groups('Data')->group('START getAccess');

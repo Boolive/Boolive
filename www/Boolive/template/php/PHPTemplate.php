@@ -13,12 +13,12 @@ class PHPTemplate
      * Создание текста из шаблона
      * В шаблон вставляются переданные значения
      * При обработки шаблона могут довыбираться значения из $entity и создаваться команды в $commands
-     * @param \Boolive\data\Entity $entity
-     * @param array $v
+     * @param \Boolive\data\Entity $entity Виджет, чей вывод формируется
+     * @param array $v Значения для шаблона
      * @throws \Exception
      * @return string
      */
-    public function render($entity, $v)
+    function render($entity, $v)
     {
         // Массив $v достпуен в php-файле шаблона, подключамом ниже
         $v = new PHPTemplateValues($v, null, $entity);

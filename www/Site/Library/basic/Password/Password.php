@@ -13,7 +13,7 @@ use Boolive\auth\Auth,
 
 class Password extends Entity
 {
-    public function value($new_value = null)
+    function value($new_value = null)
     {
         if(isset($new_value) && mb_strlen($new_value)!=64){
             $new_value = Auth::getHash($new_value);

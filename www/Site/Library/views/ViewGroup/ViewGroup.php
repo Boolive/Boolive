@@ -16,7 +16,7 @@ class ViewGroup extends View
 //        parent::initInputChild($this->_input);
 //    }
 
-    public function work()
+    function work()
     {
         // Исполнение всех подчиенных и возврат их результата одной строкой
         return implode('', $this->startChildren());

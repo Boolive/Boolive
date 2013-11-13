@@ -40,7 +40,7 @@ class PHPTemplateValues extends Values
         $this->_rule = Rule::arrays(Rule::any(Rule::string()->escape()->ignore('escape'), Rule::null()), true);
     }
 
-    public function __get($name)
+    function __get($name)
     {
         $start = (!$this->offsetExists($name) && isset($this->_entity));
         $sub = $this->offsetGet($name);

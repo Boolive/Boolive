@@ -10,7 +10,7 @@ use Library\javascripts\JavaScript\JavaScript;
 
 class history extends JavaScript
 {
-    public function work()
+    function work()
     {
         // Исполнение зависимых объектов
         $this->depends->start($this->_commands, $this->_input);

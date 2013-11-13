@@ -17,7 +17,7 @@ class Style  extends Entity
     * Makes the "style" attribute string for html
     * @return string
     */
-    public function getStyle()
+    function getStyle()
     {
         $style = $this->find(array('key'=>'name', 'comment' => 'read style'));
         unset($style['title'], $style['description']);
@@ -35,7 +35,7 @@ class Style  extends Entity
      * Экпортировать все свойства совместно с объектом стиля
      * @return array|bool
      */
-    public function exportedProperties()
+    function exportedProperties()
     {
         return true;
     }

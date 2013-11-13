@@ -22,7 +22,7 @@ class Trace
     /** @var mixed Ключ трассировки (именование) */
     private $key;
     /** @var array Список вложенных трассировок */
-    private $list = array();
+    private $children = array();
     /** @var string Форматированное значение (кэш) */
     private $format;
 
@@ -32,7 +32,7 @@ class Trace
      * @param $value Значения для трассировки
      * @param bool $clone Признак, клонировать значение, если является объектом?
      */
-    public function __construct($key = null, $value = null, $clone = true)
+    function __construct($key = null, $value = null, $clone = true)
     {
         $this->key = $key;
         $this->set($value, $clone);
@@ -44,7 +44,7 @@ class Trace
      * @param bool $clone Признак, клонировать значение, если является объектом?
      * @return \Boolive\develop\Trace
      */
-    public function set($value, $clone = true)
+    function set($value, $clone = true)
     {
         if ($clone && is_object($value) && !$value instanceof \Exception){
             $this->value = clone $value;
@@ -59,7 +59,7 @@ class Trace
      * Возвращение трассируемого значения
      * @return mixed
      */
-    public function get()
+    function get()
     {
         return $this->value;
     }
@@ -68,7 +68,7 @@ class Trace
      * Возвращение ключа трассировки
      * @return string
      */
-    public function key()
+    function key()
     {
         return $this->key;
     }
@@ -77,7 +77,7 @@ class Trace
      * Запись форматированного значения в лог файл
      * @return \Boolive\develop\Trace
      */
-    public function log()
+    function log()
     {
         error_log(self::Format($this));
         return $this;
@@ -87,7 +87,7 @@ class Trace
      * Вывод форматированного значения в HTML
      * @return \Boolive\develop\Trace $this
      */
-    public function out()
+    function out()
     {
         echo '<pre>'.self::Format($this).'</pre>';
         return $this;
@@ -98,13 +98,13 @@ class Trace
      * @param string|null $key Ключ трассировки. Если не существует, то создаётся новый объект трассировки.
      * @return \Boolive\develop\Trace Объект трассировки
      */
-    public function group($key = null)
+    function group($key = null)
     {
-        if (empty($key)) $key = count($this->list);
-        if (!isset($this->list[$key])){
-            $this->list[$key] = new Trace($key, null);
+        if (empty($key)) $key = count($this->children);
+        if (!isset($this->children[$key])){
+            $this->children[$key] = new Trace($key, null);
         }
-        return $this->list[$key];
+        return $this->children[$key];
     }
 
     /**
@@ -112,7 +112,7 @@ class Trace
      * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
      * @return \Boolive\develop\Trace Объект трассировки
      */
-    public function __get($key = null)
+    function __get($key = null)
     {
         return $this->group($key);
     }
@@ -121,10 +121,10 @@ class Trace
      * Удаление вложенного объекта трассировки
      * @param $key Ключ трассировки
      */
-    public function __unset($key)
+    function __unset($key)
     {
-        if (!isset($this->list[$key])){
-            unset($this->list[$key]);
+        if (!isset($this->children[$key])){
+            unset($this->children[$key]);
         }
     }
 
@@ -176,7 +176,7 @@ class Trace
      * @param string $pfx Префикс для строки вывода. Для имитации иерархии
      * @return string
      */
-    static public function format($var, &$trace_buf = array(), $pfx = '  ', $html = true)
+    static function format($var, &$trace_buf = array(), $pfx = '  ', $html = true)
     {
         $sp = '| ';
         $sp2 = '. ';
@@ -184,14 +184,14 @@ class Trace
         $out = '';
         if ($var instanceof Trace){
             /*if (is_string($var->key))*/ $out.= '# '.$var->key."\n";
-            if (empty($var->list)){
+            if (empty($var->children)){
                 $out.= $pfx.self::format($var->value, $trace_buf, $pfx.$sp3, $html);
             }else{
                 if (isset($var->value)){
                     $out.= $pfx.self::format($var->value, $trace_buf, $pfx, $html)."\n";
                 }
-                $cnt = count($var->list);
-                foreach ($var->list as $var){
+                $cnt = count($var->children);
+                foreach ($var->children as $var){
                     $cnt--;
                     $out.= $pfx.self::format($var, $trace_buf, ($cnt?$pfx.$sp:$pfx.$sp3), $html)."\n";
                 }

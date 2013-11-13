@@ -47,7 +47,7 @@ class Image extends File
     /** @var string Расширение, в котором сохранить */
     private $_convert;
 
-    public function __destruct()
+    function __destruct()
     {
         $this->reset();
     }
@@ -61,7 +61,7 @@ class Image extends File
      * @param bool $do Признак, выполнять трансформацию (true) или отложить до результата (пути на файл)
      * @return $this
      */
-    public function resize($width, $height, $fit = Image::FIT_OUTSIDE_LEFT_TOP, $scale = Image::SCALE_ANY, $do = false)
+    function resize($width, $height, $fit = Image::FIT_OUTSIDE_LEFT_TOP, $scale = Image::SCALE_ANY, $do = false)
     {
         $width = max(0, min($width, 1500));
         $height = max(0, min($height, 1500));
@@ -166,7 +166,7 @@ class Image extends File
      * @param bool $do Признак, выполнять трансформацию (true) или отложить до результата (пути на файл)
      * @return $this
      */
-    public function crop($left, $top, $right, $bottom, $do = false)
+    function crop($left, $top, $right, $bottom, $do = false)
     {
         $left = intval($left);
         $top = intval($top);
@@ -203,7 +203,7 @@ class Image extends File
      * @param bool $do Признак, выполнять трансформацию (true) или отложить до результата (пути на файл)
      * @return $this
      */
-    public function rotate($angle, $do = false) {
+    function rotate($angle, $do = false) {
 		$angle = min(max(floatval($angle), -360), 360);
         if (!$do){
             $this->_transforms[] = array('rotate', array($angle, true));
@@ -229,7 +229,7 @@ class Image extends File
      * @param bool $do Признак, выполнять трансформацию (true) или отложить до результата (пути на файл)
      * @return $this
      */
-    public function flip($dir = self::FLIP_X, $do = false) {
+    function flip($dir = self::FLIP_X, $do = false) {
 		$dir = intval($dir);
         if (!$do){
             $this->_transforms[] = array('flip', array($dir, true));
@@ -257,7 +257,7 @@ class Image extends File
      * @param bool $do Признак, выполнять трансформацию (true) или отложить до результата (пути на файл)
      * @return $this
      */
-    public function gray($do = false)
+    function gray($do = false)
     {
 		if (!$do){
             $this->_transforms[] = array('gray', array(true));
@@ -273,7 +273,7 @@ class Image extends File
      * @param int $percent от 0 до 100
      * @return $this
      */
-    public function quality($percent)
+    function quality($percent)
     {
         $this->info();
         $this->_info['quality'] = intval($percent);
@@ -288,7 +288,7 @@ class Image extends File
      * @param string $type Новое расширение (gif, png, jpg)
      * @return $this
      */
-    public function convert($type)
+    function convert($type)
     {
         if (in_array($type, array('gif','png','jpg'))){
             $this->_transforms_str.='convert('.$type.')';
@@ -301,7 +301,7 @@ class Image extends File
      * Сброс трансформаций
      * @return $this
      */
-    public function reset()
+    function reset()
     {
         $this->_transforms = array();
         $this->_transforms_str = '';
@@ -315,7 +315,7 @@ class Image extends File
      * Файл, ассоциированный с объектом.
      * Если были выполнены трансформации, то возвращается путь на трансформированное изображение
      */
-    public function file($new_file = null, $root = false, $cache_remote = true, $transformed = true)
+    function file($new_file = null, $root = false, $cache_remote = true, $transformed = true)
     {
         $file = parent::file($new_file, $root, $cache_remote);
         if ($transformed && !empty($this->_transforms_str)){
@@ -356,7 +356,7 @@ class Image extends File
      * @return resource
      * @throws \Exception
      */
-    public function handler()
+    function handler()
     {
         if (!isset($this->_handler)){
             $file = $this->file(null, true, true, false);
@@ -381,7 +381,7 @@ class Image extends File
      * Информация об изображении
      * @return array
      */
-    public function info()
+    function info()
     {
         if (empty($this->_info)){
             $file = $this->file(null, true, true, false);
@@ -405,7 +405,7 @@ class Image extends File
      * Ширина
      * @return int|bool
      */
-    public function width()
+    function width()
     {
         if ($info = $this->info()){
             return $info['width'];
@@ -418,7 +418,7 @@ class Image extends File
      * Высота
      * @return int|bool
      */
-    public function height()
+    function height()
     {
         if ($info = $this->info()){
             return $info['height'];
@@ -431,7 +431,7 @@ class Image extends File
      * Расширение (тип) изображения
      * @return string|bool
      */
-    public function ext()
+    function ext()
     {
         if ($info = $this->info()){
             return $info['ext'];

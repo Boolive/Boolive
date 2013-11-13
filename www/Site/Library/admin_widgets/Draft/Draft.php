@@ -18,7 +18,7 @@ class Draft extends ToggleAction
         $this->_state = $object->isDraft(null, false);
     }
 
-    public function toggle()
+    function toggle()
     {
         $result = array();
         // Изменение признака is_hidden

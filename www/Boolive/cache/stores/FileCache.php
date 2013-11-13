@@ -29,7 +29,7 @@ class FileCache
      * @param int $time Количество секунд валидности значения с момента последнего его изменения
      * @return null|string Если значения нет, то null.
      */
-    public function get($key, $time = 0)
+    function get($key, $time = 0)
     {
         try{
             $file = $this->dir.$key.'.cache';
@@ -48,7 +48,7 @@ class FileCache
      * @param string $value Значение для записи
      * @return bool Признак, было ли значение записано в кэш?
      */
-    public function set($key, $value)
+    function set($key, $value)
     {
         try{
 			$file = $this->dir.$key.'.cache';
@@ -80,7 +80,7 @@ class FileCache
      * @param string $key Ключ значения.
      * @return bool Признак, было ли значение удалено?
      */
-    public function delete($key)
+    function delete($key)
     {
         try{
 			return unlink($this->dir.$key.'.cache');
@@ -93,7 +93,7 @@ class FileCache
      * Очистка старых кэш значений
      * @param $key
      */
-    public function clear($key, $ext = '.cache')
+    function clear($key, $ext = '.cache')
     {
         if (is_file($file = $this->dir.$key.$ext)){
             if (time()-fileatime($file) > $this->clear_period) unlink($file);

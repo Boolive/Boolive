@@ -84,7 +84,7 @@ class DB extends PDO
         return null;
     }
 
-    public function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false, $count = false)
+    function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false, $count = false)
     {
         parent::__construct($dsn, $username, $passwd, $options);
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -98,7 +98,7 @@ class DB extends PDO
      * @link http://www.php.net/manual/en/pdo.begintransaction.php
      * @return bool
      */
-    public function beginTransaction()
+    function beginTransaction()
     {
         if ($this->transaction_level++ == 0){
             return parent::beginTransaction();
@@ -112,7 +112,7 @@ class DB extends PDO
      * @link http://www.php.net/manual/en/pdo.commit.php
      * @return bool
      */
-    public function commit()
+    function commit()
     {
         if ($this->transaction_level > 0){
             $this->transaction_level--;
@@ -145,7 +145,7 @@ class DB extends PDO
      * Проверка, открыта ли транзакция?
      * @return bool
      */
-    public function isTransaction()
+    function isTransaction()
     {
         return $this->transaction_level > 0;
     }
@@ -156,7 +156,7 @@ class DB extends PDO
      * @param string $sql Строка SQL запроса
      * @return int Количество затронутых запросом строк
      */
-    public function exec($sql)
+    function exec($sql)
     {
         if ($this->trace_count){
             Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
@@ -183,7 +183,7 @@ class DB extends PDO
      * @throws Error
      * @return DBStatementDebug|PDOStatement
      */
-    public function prepare($sql, $driver_options = array())
+    function prepare($sql, $driver_options = array())
     {
 //        if (isset($this->statements[$sql])){
 //            return $this->statements[$sql];
@@ -205,7 +205,7 @@ class DB extends PDO
      * @param string $sql Строка SQL запроса
      * @return \PDOStatement
      */
-    public function query($sql)
+    function query($sql)
     {
         if ($this->trace_count){
             Trace::groups('DB')->group('count')->set(Trace::groups('DB')->group('count')->get()+1);
@@ -231,7 +231,7 @@ class DB extends PDO
      * @param string $sql Строка запроса
      * @return string Отформатированная строка запроса
      */
-    public function addPrefixes($sql)
+    function addPrefixes($sql)
     {
         return strtr($sql, array(
             '{' => '`'.$this->prefix,
@@ -247,7 +247,7 @@ class DB extends PDO
      * @param $multisql Строка с множеством запросов. Дамп базы данных
      * @return array Массив запросов
      */
-    static public function getQueryList($multisql)
+    static function getQueryList($multisql)
     {
         $queries = array();
         $strlen = strlen($multisql);

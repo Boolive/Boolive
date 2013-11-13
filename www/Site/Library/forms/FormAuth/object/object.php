@@ -13,7 +13,7 @@ use Boolive\data\Entity,
 
 class object extends Entity
 {
-    public function auth()
+    function auth()
     {
         if ($this->check()){
 

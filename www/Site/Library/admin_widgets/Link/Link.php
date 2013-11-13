@@ -16,7 +16,7 @@ class Link extends ToggleAction
         $this->_state = $object->isLink();
     }
 
-    public function toggle()
+    function toggle()
     {
         $result = array();
         // Изменение признака is_hidden

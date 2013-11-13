@@ -13,7 +13,7 @@ use Boolive\data\Entity;
 
 class Deny extends Entity
 {
-    public function getAccessCond($action_kind, $object = null)
+    function getAccessCond($action_kind, $object = null)
     {
         $ids = array();
         $objects = $this->find(array(

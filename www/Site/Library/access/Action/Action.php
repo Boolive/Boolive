@@ -11,7 +11,7 @@ use Boolive\data\Entity;
 class Action extends Entity
 {
 
-    public function getAccessCond($action_kind, $object = null)
+    function getAccessCond($action_kind, $object = null)
     {
         $action = explode('/', $action_kind, 2);
         if (!isset($action[1])) $action[1] = '';

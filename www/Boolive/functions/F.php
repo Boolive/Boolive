@@ -86,7 +86,6 @@ class F
             mb_ereg_search_init(mb_convert_encoding($str, "UTF-32", "UTF-8"), mb_convert_encoding($delim.'+', "UTF-32", "UTF-8"));
             while ($r = mb_ereg_search_pos()) $all_pos[] = array($r[0]/4, $r[1]/4);
             mb_regex_encoding("UTF-8");
-
             $i = count($all_pos)-1;
             $pos = false;
             while ($i >= 0){
@@ -292,7 +291,7 @@ class F
      * @param $value
      * @return string
      */
-    static public function escapeLike($value)
+    static function escapeLike($value)
     {
         return strtr($value, array(
             '%' => '\%',
