@@ -467,7 +467,7 @@ class Installer
 		}
 		// Обработка ошибки
 		if ($e){
-			$errors = $e->getAll();
+			$errors = $e->children();
 			foreach ($errors as $name => $error){
 				/** @var Error $error */
                 if (isset($info['fields'][$name])){

@@ -24,7 +24,7 @@ class HTTPStore extends Entity
      * @param array $key Ключ хранилища. Используется для формирования и распознования сокращенных URI
      * @param $config Параметры подключения к базе данных
      */
-    public function __construct($key, $config)
+    function __construct($key, $config)
     {
         $this->key = $key;
         $this->curl = curl_init();
@@ -40,7 +40,7 @@ class HTTPStore extends Entity
         ));
     }
 
-    public function __destruct()
+    function __destruct()
     {
         curl_close($this->curl);
     }
@@ -52,7 +52,7 @@ class HTTPStore extends Entity
      * @return array|\Boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
      * @throws \Exception Ошибки curl
      */
-    public function read($cond, $index = false)
+    function read($cond, $index = false)
     {
         $url = Data::urlencodeCond($cond);
         $base_url = parse_url($url);
@@ -109,7 +109,7 @@ class HTTPStore extends Entity
      * @throws \Exception Ошибки curl
      * @return bool Признак, сохранен объект или нет?
      */
-    public function write($entity, $access)
+    function write($entity, $access)
     {
         if ($entity->check($error)){
             try{
@@ -179,7 +179,7 @@ class HTTPStore extends Entity
                     File::delete($path);
                 }
                 if (isset($response['error'])){
-                    throw Error::__fromArray($response['error']);
+                    throw Error::createFromArray($response['error']);
                 }
             }catch (\Exception $e){
                 throw $e;
@@ -199,7 +199,7 @@ class HTTPStore extends Entity
      * @throws \Exception Ошибки curl
      * @return bool
      */
-    public function delete($entity, $access, $integrity)
+    function delete($entity, $access, $integrity)
     {
         curl_setopt_array($this->curl, array(
             CURLOPT_URL => $entity->uri(),
@@ -215,7 +215,7 @@ class HTTPStore extends Entity
         $httpcode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
         $response = json_decode($result, true);
         if (isset($response['error'])){
-            throw Error::__fromArray($response['error']);
+            throw Error::createFromArray($response['error']);
         }
         return $httpcode == '204';
     }
@@ -227,7 +227,7 @@ class HTTPStore extends Entity
      * @param null $prefix Используется функцией при рекурсивоном вызове. Префикс к ключам массива
      * @return array
      */
-    public function buildQuery($arrays, &$new = array(), $prefix = null)
+    function buildQuery($arrays, &$new = array(), $prefix = null)
     {
         foreach ($arrays as $key => $value) {
             $k = isset($prefix) ? $prefix.'['.$key.']' : $key;
@@ -246,7 +246,7 @@ class HTTPStore extends Entity
      * @param $base_url
      * @return Entity
      */
-    public function makeObject($attribs, $base_url)
+    function makeObject($attribs, $base_url)
     {
         if (!empty($attribs['children']) && is_array($attribs['children'])){
             foreach ($attribs['children'] as $name => $child){

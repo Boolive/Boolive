@@ -1050,7 +1050,7 @@ class Data
 		$new_config['prefix'] = '';
 		// Если ошибочные данные от юзера
 		if ($sub_errors){
-            $errors->add($sub_errors->getAll());
+            $errors->add($sub_errors->children());
             throw $errors;
         }
 		// Создание MySQL хранилища
