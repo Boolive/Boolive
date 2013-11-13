@@ -13,28 +13,24 @@ use Library\content_widgets\Part\Part,
 
 class SearchResult extends Part
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'search' => Rule::string()->default('')->required(),
-                        'page'=> Rule::int()->default(1)->required(), // номер страницы
-//                        'path'=> Rule::ospatterns('/search*')->required()
-                    )
-                ),
-                'PATH' => Rule::arrays(array(
-                    0 => Rule::eq('search')->required()
-                    )
-                ),
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'search' => Rule::string()->default('')->required(),
+                'page'=> Rule::int()->default(1)->required(), // номер страницы
+            )),
+            'PATH' => Rule::arrays(array(
+                0 => Rule::eq('search')->required()
+            )),
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $this->_input['REQUEST']['object'] = $this->object;
         $v['search'] = $this->_input['REQUEST']['search'];
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     protected function getList($cond = array())

@@ -11,23 +11,21 @@ use Library\views\Widget\Widget,
 
 class ProgressAction extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        )->required(),
-                        'call' => Rule::string()->default('')->required(),
-                        'id' => Rule::string()->default(0)->required() // Идентификатор действия для прогресса
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity()),
+                    Rule::entity()
+                )->required(),
+                'call' => Rule::string()->default('')->required(),
+                'id' => Rule::string()->default(0)->required() // Идентификатор действия для прогресса
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Экспорт
         if ($this->_input['REQUEST']['call'] == 'progress_start'){
@@ -56,7 +54,7 @@ class ProgressAction extends Widget
             $v['description'] = mb_split('\n', $this->description->value());
             if (sizeof($v['description'])<2) $v['description'][] = '';
             $v['submit_title'] = $this->submit_title->value();
-            return parent::work($v);
+            return parent::show($v, $commands, $input);
         }
     }
 

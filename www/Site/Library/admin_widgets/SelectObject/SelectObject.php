@@ -15,29 +15,27 @@ class SelectObject extends Widget
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
      */
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity($this->object_rule->value())->required(),
-                        'call' => Rule::string()->default('')->required(),
-                        'selected' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        ),
-                        'is_link' => Rule::bool()->default(false)->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity($this->object_rule->value())->required(),
+                'call' => Rule::string()->default('')->required(),
+                'selected' => Rule::any(
+                    Rule::arrays(Rule::entity()),
+                    Rule::entity()
+                ),
+                'is_link' => Rule::bool()->default(false)->required()
+            ))
+        ));
     }
 
-    protected function initInputChild($input)
+    function startInitChild($input)
     {
-        parent::initInputChild($input);
+        parent::startInitChild($input);
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['call'] == 'selected' && isset($this->_input['REQUEST']['selected'])){
             return $this->selected();
@@ -47,7 +45,7 @@ class SelectObject extends Widget
         $v['cancel_title'] = $this->cancel_title->value();
         $v['message'] = 'Выделите объект или откройте его и нажмите "'.$v['submit_title'].'" для подтверждения выбора.';
         $v['message2'] = 'Для закрытия диалога нажмите "'.$v['cancel_title'].'".';
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     /**

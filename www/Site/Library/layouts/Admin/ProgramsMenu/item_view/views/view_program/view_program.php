@@ -14,20 +14,19 @@ use Library\views\Widget\Widget,
 
 class view_program extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'program' => Rule::entity(array('is', '/Library/views/Widget'))->required(), // Объект для пункта меню
                 //'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
                 'show' => Rule::bool()->default(true)->required(), // Показывать пункт или только его подчиенных?
                 'base_uri' => Rule::string()->required()
-                )
             ))
-        );
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
             /** @var \Boolive\data\Entity $obj */
@@ -42,6 +41,6 @@ class view_program extends Widget
         }else{
             $v['show-item'] = false;
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

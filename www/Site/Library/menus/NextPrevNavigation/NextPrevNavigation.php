@@ -22,7 +22,7 @@ class NextPrevNavigation extends Widget
      * Типы объектов, на которые возможен переход
      * @return array
      */
-    public function getTypes()
+    function getTypes()
     {
         if (!isset($this->types)){
             $types = $this->object_types->find(array('key'=>'name', 'comment' => 'read type of NextPrev content'));
@@ -40,18 +40,16 @@ class NextPrevNavigation extends Widget
      * Возвращает правило на входящие данные
      * @return null|\Boolive\values\Rule
      */
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity(array('is', $this->getTypes()))->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity(array('is', $this->getTypes()))->required()
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $object = $this->_input['REQUEST']['object'];
         // Типы объектов, на которые возможен переход
@@ -104,7 +102,7 @@ class NextPrevNavigation extends Widget
                     $v['prev']['href'] = $prev[0]->uri();
                 }
             }
-            return parent::work($v);
+            return parent::show($v, $commands, $input);
         }
         return false;
     }

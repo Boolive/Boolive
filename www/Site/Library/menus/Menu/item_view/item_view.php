@@ -13,27 +13,26 @@ use Boolive\values\Rule,
 
 class item_view extends AutoWidgetList2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity($this->object_rule->value())->required(), // Объект для пункта меню
                 'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
                 'show' => Rule::bool()->default(true)->required() // Показывать пункт или только его подчиенных?
-                )
             ))
-        );
+        ));
     }
 
-    protected function initInputChild($input)
+    function startInitChild($input)
     {
-        parent::initInputChild($input);
+        parent::startInitChild($input);
         $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['active'];
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
         $this->_input_child['REQUEST']['show'] = true;
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
             /** @var \Boolive\data\Entity $obj */
@@ -71,10 +70,10 @@ class item_view extends AutoWidgetList2
         }else{
             $v['show-item'] = false;
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
-    public function getList($cond = array())
+    function getList($cond = array())
     {
         $cond['select'] = 'tree';
         $cond['depth'] = array(1, 1); // выбрать из хранилища всё дерево меню

@@ -10,7 +10,7 @@ use Library\views\Widget\Widget;
 
 class TitleView extends Widget
 {
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['value'] = $this->_input['REQUEST']['object']->value();
         if ($parent = $this->_input['REQUEST']['object']->parent()){
@@ -21,6 +21,6 @@ class TitleView extends Widget
         }else{
             $v['parent_uri'] = '';
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

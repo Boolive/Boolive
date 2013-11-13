@@ -12,23 +12,21 @@ use Boolive\data\Entity,
 
 class Explorer extends AutoWidgetList2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required(),
-                        'filter' => Rule::arrays(Rule::string()),
-                        'call' => Rule::string(),
-                        // Аргументы вызываемых методов (call)
-                        'saveOrder' => Rule::arrays(Rule::arrays(Rule::string())),
-                        'view_kind' => Rule::string(),
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity()->required(),
+                'filter' => Rule::arrays(Rule::string()),
+                'call' => Rule::string(),
+                // Аргументы вызываемых методов (call)
+                'saveOrder' => Rule::arrays(Rule::arrays(Rule::string())),
+                'view_kind' => Rule::string(),
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
 		if (!empty($this->_input['REQUEST']['call'])){
             //Изменение порядка элемента при сортировке drag-and-drop
@@ -79,7 +77,7 @@ class Explorer extends AutoWidgetList2
             $v['head'] = $this->_input['REQUEST']['object']->title->value();
             if (empty($v['head']))
                 $v['head'] = $this->_input['REQUEST']['object']->name();
-            return parent::work($v);
+            return parent::show($v, $commands, $input);
         }
     }
 

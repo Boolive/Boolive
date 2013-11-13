@@ -12,7 +12,7 @@ use Boolive\data\Data,
 
 class AutoWidgetList2 extends Widget
 {
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $list = $this->getList();
         $i = 1;
@@ -29,7 +29,7 @@ class AutoWidgetList2 extends Widget
             }
         }
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     protected function getList($cond = array())

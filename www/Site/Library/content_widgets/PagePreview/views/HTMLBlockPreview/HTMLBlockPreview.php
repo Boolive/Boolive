@@ -12,7 +12,7 @@ use Library\views\HtmlBlock\HtmlBlock;
 class HTMLBlockPreview extends HtmlBlock
 {
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['object'] = $this->_input['REQUEST']['object']->value();
 
@@ -188,6 +188,6 @@ class HTMLBlockPreview extends HtmlBlock
 
         $v['object'] = $output;
 
-        return Widget::work($v);
+        return Widget::show($v, $commands, $input);
     }
 }

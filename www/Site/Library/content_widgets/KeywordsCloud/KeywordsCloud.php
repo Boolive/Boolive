@@ -11,7 +11,7 @@ use \Library\views\Widget\Widget;
 
 class KeywordsCloud extends Widget
 {
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $list = $this->object->linked()->find(array(
             'where' => array(
@@ -46,6 +46,6 @@ class KeywordsCloud extends Widget
             $v['font_start'] = 10;
             $v['value_start'] = 0;
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

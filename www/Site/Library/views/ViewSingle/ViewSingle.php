@@ -16,24 +16,22 @@ class ViewSingle extends View
 {
    protected $_views;
 
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity($this->value())),
-                            Rule::entity($this->value())
-                        )->required(),
-                        'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity($this->value())),
+                    Rule::entity($this->value())
+                )->required(),
+                'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
+            ))
+        ));
     }
 
-    public function canWork(Commands $commands, $input)
+    function startCheck(Commands $commands, $input)
     {
-        if ($result = parent::canWork($commands, $input)){
+        if ($result = parent::startCheck($commands, $input)){
             if (!empty($this->_input['REQUEST']['view_name'])){
                 // Если указано, каким отображать, то только его пробуем запустить
                 $result = $this->{$this->_input['REQUEST']['view_name']}->isExist();
@@ -42,7 +40,7 @@ class ViewSingle extends View
         return $result;
     }
 
-    public function work($v = array())
+    function work()
     {
         // Запускаем по очереди подчиненных, пока один из них не сработает
         if ($this->_input['REQUEST']['view_name']){

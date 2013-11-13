@@ -9,25 +9,38 @@ use Library\views\View\View,
 
 class Site extends View
 {
-
-    public function defineInputRule()
+    protected function rule()
     {
-        $this->_input_rule = Rule::arrays(array(
-            'REQUEST' => Rule::arrays(array(
-                'path' => Rule::string(),
-                )
-            ))
-        );
+        $rule = parent::rule();
+        $rule->arrays[0]['name']->min(0);
+        return $rule;
     }
 
-    public function name($new_name = null, $choose_unique = false)
+    function startRule()
     {
-        return parent::name(null, false);
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'path' => Rule::string(),
+            ))
+        ));
+    }
+
+    function name($new_name = null, $choose_unique = false)
+    {
+        return parent::name($this->uri()==='/' ? null: $new_name, false);
     }
 
 
     function work()
     {
-        return $this->startChild('Interfaces');
+        return $this->Interfaces->start($this->_commands, $this->_input_child);
+        //return $this->startChild('Interfaces');
+    }
+
+    function birth($for = null, $draft = true)
+    {
+        $obj = parent::birth($for, $draft);
+        $obj->name('site', true);
+        return $obj;
     }
 }

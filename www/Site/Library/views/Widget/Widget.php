@@ -29,31 +29,41 @@ class Widget extends View
      * @param $input
      * @return mixed|void
      */
-    protected function initInput($input)
+    function startInit($input)
     {
         if ($this->object->isExist() && !$this->object->isDraft(null, false)){
             $input['REQUEST']['object'] = $this->object;
         }
-        parent::initInput($input);
+        parent::startInit($input);
     }
 
     /**
-     * Возвращает правило на входящие данные
+     * Правило на входящие данные - условие работы виджета
      * @return null|\Boolive\values\Rule
      */
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity($this->object_rule->value())->required(),
-                        'path' => Rule::regexp($this->path_rule->value())->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity($this->object_rule->value())->required(),
+                'path' => Rule::regexp($this->path_rule->value())->required(),
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function work()
+    {
+        return $this->show(array(), $this->_commands, $this->_input);
+    }
+
+    /**
+     * Формирование отображения с помощью шаблонизации
+     * @param array $v
+     * @param $commands
+     * @param $input
+     * @return string
+     */
+    function show($v = array(), $commands, $input)
     {
         $this->startChild('res');
         $v['view_id'] = $this->key();
@@ -61,7 +71,7 @@ class Widget extends View
         return Template::render($this, $v);
     }
 
-    public function exportedProperties()
+    function exportedProperties()
     {
         $names = parent::exportedProperties();
         $names[] = 'res';
@@ -70,29 +80,34 @@ class Widget extends View
         return $names;
     }
 
-    public function classTemplate($methods = array(), $use = array())
+    function classTemplate($methods = array(), $use = array())
     {
 //        $use[] = 'Boolive\values\Rule';
-//        $methods['defineInputRule'] = '
+//        $methods['startRule'] =
+//<<<code
 //    /**
-//     * Возвращает правило на входящие данные
+//     * Правило на входящие данные - условие работы виджета
 //     * @return null|\Boolive\values\Rule
 //     */
-//    public function defineInputRule()
+//    function startRule()
 //    {
-//        $this->_input_rule = Rule::arrays(array(
-//                \'REQUEST\' => Rule::arrays(array(
-//                        \'object\' => Rule::entity($this->object_rule->value())->required()
-//                    )
-//                )
-//            )
-//        );
+//        return Rule::arrays(array(
+//            'REQUEST' => Rule::arrays(array(
+//                'object' => Rule::entity(\$this->object_rule->value())->required(),
+//                'path' => Rule::regexp(\$this->path_rule->value())->required(),
+//            ))
+//        ));
 //    }';
-        $methods['work'] = '
-    public function work($v = array())
+//code;
+        if (!isset($methods['show'])){
+            $methods['show'] =
+<<<code
+    function show(\$v = array(), \$commands, \$input)
     {
-        return parent::work($v);
-    }';
+        return parent::show(\$v,\$commands, \$input);
+    }
+code;
+        }
         return parent::classTemplate($methods, $use);
     }
 }

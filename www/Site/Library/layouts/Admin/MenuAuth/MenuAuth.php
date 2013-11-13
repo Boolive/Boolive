@@ -13,7 +13,7 @@ use Library\views\Widget\Widget,
 
 class MenuAuth extends Widget{
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['logout'] = Input::url(null,0,array('logout'=>true));
         $user = Auth::getUser();
@@ -21,6 +21,6 @@ class MenuAuth extends Widget{
             $v['name'] = $user->title->value();
         }
         $v['userlink'] = $user->uri();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

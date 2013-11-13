@@ -20,32 +20,31 @@ class RESTful extends View
     /**
      * Правило на входящие данные - услоdие работы restful
      */
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'SERVER' => Rule::arrays(array(
-                    'HTTP_ACCEPT' => Rule::ospatterns('*application/json*')->required(),
-                    'REQUEST_URI' => Rule::string() // Поисковый запрос для GET/DELETE
-                )),
-                'REQUEST' => Rule::arrays(array(
-                    'path' => Rule::string(), // uri изменяемого объекта (PUT) или в который добавлять новый (POST)
-                    'method' => Rule::string(), // метод запроса
-                    'call' => Rule::string()->default('')->required(), // вызываемый метод объекта
-                    'entity' => Rule::arrays(Rule::string()), // атрибуты изменяемого объекта
-                    'file_content' => Rule::int()->default(0)->required(), // Экпортировать файл объекта или нет?
-                    'class_content' => Rule::int()->default(0)->required() // Экпортировать класс объекта или нет?
-                )),
-                'FILES' => Rule::arrays(array(
-                    'entity' => Rule::arrays(array(
-                        'file' => Rule::arrays(Rule::string()) // файл, загружаемый в объект
-                    ))
-                )),
-                'previous' => Rule::not(true)
-            )
-        );
+        return Rule::arrays(array(
+            'SERVER' => Rule::arrays(array(
+                'HTTP_ACCEPT' => Rule::ospatterns('*application/json*')->required(),
+                'REQUEST_URI' => Rule::string() // Поисковый запрос для GET/DELETE
+            )),
+            'REQUEST' => Rule::arrays(array(
+                'path' => Rule::string(), // uri изменяемого объекта (PUT) или в который добавлять новый (POST)
+                'method' => Rule::string(), // метод запроса
+                'call' => Rule::string()->default('')->required(), // вызываемый метод объекта
+                'entity' => Rule::arrays(Rule::string()), // атрибуты изменяемого объекта
+                'file_content' => Rule::int()->default(0)->required(), // Экпортировать файл объекта или нет?
+                'class_content' => Rule::int()->default(0)->required() // Экпортировать класс объекта или нет?
+            )),
+            'FILES' => Rule::arrays(array(
+                'entity' => Rule::arrays(array(
+                    'file' => Rule::arrays(Rule::string()) // файл, загружаемый в объект
+                ))
+            )),
+            'previous' => Rule::not(true)
+        ));
     }
 
-    public function work()
+    function work()
     {
         switch ($this->_input['REQUEST']['method']){
             // Выбор
@@ -77,7 +76,7 @@ class RESTful extends View
                         header("HTTP/1.1 204 No Content");
                     }catch (Error $e){
                         header("HTTP/1.1 403 Forbidden");
-                        echo F::toJSON(array('error' => $e->__toArray()));
+                        echo F::toJSON(array('error' => $e->toArray()));
                     }
                 }else{
                     header("HTTP/1.1 404 Not Found");
@@ -179,7 +178,7 @@ class RESTful extends View
         }catch (Error $error){
             header("HTTP/1.1 400 Bad Request");
             header('Content-Type: application/json; charset=utf-8');
-            echo F::toJSON(array('error'=>$error->__toArray(true), 'result'=>$obj->export(false, true, false)));
+            echo F::toJSON(array('error'=>$error->toArray(true), 'result'=>$obj->export(false, true, false)));
         }
     }
 
@@ -227,7 +226,7 @@ class RESTful extends View
         }catch (Error $error){
             header("HTTP/1.1 400 Bad Request");
             header('Content-Type: application/json; charset=UTF-8');
-            echo F::toJSON(array('error'=>$error->__toArray(true), 'result'=>$obj->export(false, true, false)));
+            echo F::toJSON(array('error'=>$error->toArray(true), 'result'=>$obj->export(false, true, false)));
         }
     }
 

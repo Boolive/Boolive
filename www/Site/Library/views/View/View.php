@@ -7,18 +7,17 @@
  */
 namespace Library\views\View;
 
-use Boolive\cache\Cache;
-use Boolive\data\Entity,
+use Boolive\cache\Cache,
+    Boolive\data\Entity,
     Boolive\commands\Commands,
     Boolive\values\Check,
-    Boolive\values\Rule,
-    Boolive\input\Input;
-use Boolive\develop\Benchmark;
-use Boolive\develop\Trace;
+    Boolive\values\Rule;
 
 class View extends Entity
 {
     protected $_is_init = false;
+    /** @var  array Все входящие неотфильтрованные! данные. Используются для запуска подчиненных видов */
+    protected $_input_all;
     /** @var mixed Отфильтрованные входящих данных по правилу на входящие данные */
     protected $_input;
     /** @var Rule Правило на входящие данные */
@@ -38,19 +37,9 @@ class View extends Entity
 
     }
 
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::null()->ignore('null');
-    }
-
-    /**
-     * Возвращает правило на входящие данные
-     * @return null|\Boolive\values\Rule
-     */
-    public function getInputRule()
-    {
-        if (!isset($this->_input_rule)) $this->defineInputRule();
-        return $this->_input_rule;
+        return Rule::null()->ignore('null');
     }
 
     /**
@@ -58,9 +47,11 @@ class View extends Entity
      * @param $input Неотфильтрованные данные
      * @return mixed Отфильтрованные данные
      */
-    protected function initInput($input)
+    function startInit($input)
     {
-        $this->_input = Check::filter($input, $this->getInputRule(), $this->_input_error);
+        $this->_input_all = $input;
+        if (!$this->_input_rule) $this->_input_rule = $this->startRule();
+        $this->_input = Check::filter($input, $this->_input_rule, $this->_input_error);
     }
 
     /**
@@ -68,7 +59,7 @@ class View extends Entity
      * @param $input Неотфильтрованные данные
      * @return mixed
      */
-    protected function initInputChild($input)
+    function startInitChild($input)
     {
         $this->_input_child = $input;
         $this->_input_child['previous'] = false;
@@ -80,13 +71,10 @@ class View extends Entity
      * @param mixed $input Входящие данные
      * @return null|string Результат выполнения контроллера
      */
-    public function start(Commands $commands, $input)
+    function start(Commands $commands, $input)
     {
-//        $key = $this->uri().':'.microtime().rand();
-//        Trace::groups('VIEWS')->group($key)->set(0);
-//        Benchmark::start($key);
         //Проверка возможности работы
-        if ($this->canWork($commands, $input)){
+        if ($this->startCheck($commands, $input)){
 
             if ($this->cache->value()){
                 $key = 'views'.$this->uri().'/'.$this->date().'&'.md5(Cache::getId($this->_input));
@@ -98,8 +86,7 @@ class View extends Entity
                 $commands->group($key);
             }
 
-            $this->initInputChild($input);
-            //Выполнение подчиненных
+            $this->startInitChild($input);
             ob_start();
                 // Выполнение своей работы
                 $result = $this->work();
@@ -115,16 +102,6 @@ class View extends Entity
         }else{
             $result = false;
         }
-
-//        $this->_children = array();
-        //$this->_commands = null;
-//        $this->_input = null;
-//        $this->_input_child = null;
-//        $this->_is_init = false;
-//        $this->_rule = null;
-//        $this->_parent = null;
-//        $this->_proto = null;
-//        Trace::groups('VIEWS')->group($key)->set(Benchmark::stop($key, true));
         return $result;
     }
 
@@ -135,7 +112,7 @@ class View extends Entity
      * @param \Boolive\input\Input $input Входящие данные
      * @return bool Признак, может ли работать вид или нет
      */
-    public function canWork(Commands $commands, $input)
+    function startCheck(Commands $commands, $input)
     {
         // Инициализация
         if (!$this->_is_init){
@@ -144,7 +121,7 @@ class View extends Entity
         }
         // Команды и входящие данные запоминаем, чтобы использовать их и передавать подчиненным по требованию
         $this->_commands = $commands;
-        $this->initInput($input);
+        $this->startInit($input);
         // Может работать, если нет ошибок во входящих данных
         return !isset($this->_input_error);
     }
@@ -155,16 +132,16 @@ class View extends Entity
      * Результат выводится функциями echo, print или возвращается через return
      * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
      */
-    public function work(){}
+    function work(){}
 
     /**
      * Запуск подчиненного по имени
      * @param $name Имя подчиненного
      * @return null|string
      */
-    public function startChild($name)
+    function startChild($name)
     {
-        $child = $this->linked(false)->{$name}->linked(true);
+        $child = $this->{$name}->linked(true);
         if ($child instanceof View){
             $result = $child->start($this->_commands, $this->_input_child);
             if ($result!==false){
@@ -182,9 +159,9 @@ class View extends Entity
      * @param array $result Значения-заглушки для подчиненных видов. Если в массиве есть ключ с именем вида, то этот вид не исполняется, а испольщуется указанное в элементе значение.
      * @return array Результаты подчиненных объектов. Ключи массива - названия объектов.
      */
-    public function startChildren($all = true, $result = array())
+    function startChildren($all = true, $result = array())
     {
-        $list = $this->linked(false)->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
+        $list = $this->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
         foreach ($list as $key => $child){
             /** @var $child \Boolive\data\Entity */
             $child = $child->linked(true);
@@ -202,7 +179,7 @@ class View extends Entity
         return $result;
     }
 
-    public function exportedProperties()
+    function exportedProperties()
     {
         $names = parent::exportedProperties();
         $names[] = 'cache';

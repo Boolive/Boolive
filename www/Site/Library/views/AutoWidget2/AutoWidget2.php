@@ -10,15 +10,15 @@ use Library\views\Widget\Widget;
 
 class AutoWidget2 extends Widget
 {
-    protected function initInputChild($input)
+    function startInitChild($input)
     {
-        parent::initInputChild($input);
+        parent::startInitChild($input);
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['views'] = $this->startChild('views');
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

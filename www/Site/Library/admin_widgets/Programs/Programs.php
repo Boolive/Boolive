@@ -13,21 +13,19 @@ use Library\views\AutoWidget2\AutoWidget2,
 
 class Programs extends AutoWidget2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        )->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity()),
+                    Rule::entity()
+                )->required()
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Проверка обновлений для объекта
         if ($this->_input['REQUEST']['object'] instanceof Entity){
@@ -37,6 +35,6 @@ class Programs extends AutoWidget2
                 //Data::findUpdates($obj, 50, 1, true);
             //}
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

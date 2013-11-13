@@ -13,9 +13,9 @@ use Library\views\AutoWidgetList2\AutoWidgetList2,
 
 class PageKeywordsEditor extends AutoWidgetList2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity(array('is','/Library/content_samples/Page/keywords'))->required(),
                 'call' => Rule::string()->default('')->required(),
@@ -25,7 +25,8 @@ class PageKeywordsEditor extends AutoWidgetList2
             ))
         ));
     }
-    public function work($v = array())
+
+    function show($v = array(), $commands, $input)
     {
         // Сохранение атрибутов
         if ($this->_input['REQUEST']['call'] == 'save'){
@@ -44,7 +45,7 @@ class PageKeywordsEditor extends AutoWidgetList2
         $v['object'] = $this->_input['REQUEST']['object']->uri();
         $v['value'] = $this->_input['REQUEST']['object']->value();
         $v['title'] = $this->_input['REQUEST']['object']->title->value();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     /**

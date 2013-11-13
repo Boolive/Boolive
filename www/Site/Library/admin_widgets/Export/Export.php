@@ -16,23 +16,21 @@ use Library\views\Widget\Widget,
 
 class Export extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        )->required(),
-                        'call' => Rule::string()->default('')->required(),
-                        'id' => Rule::string()->default(0)->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity()),
+                    Rule::entity()
+                )->required(),
+                'call' => Rule::string()->default('')->required(),
+                'id' => Rule::string()->default(0)->required()
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Экспорт
         if ($this->_input['REQUEST']['call'] == 'export_init'){
@@ -65,7 +63,7 @@ class Export extends Widget
                 $v['question'] = 'Вы действительно желаете экспортировать этот объект?';
                 $v['message'] = 'Объект и его подчинённые будут сохранены в формате JSON в файлах с расширением .info';
             }
-            return parent::work($v);
+            return parent::show($v, $commands, $input);
         }
     }
 

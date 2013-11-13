@@ -14,25 +14,24 @@ use Boolive\data\Data,
 class CKEditorUploader extends View
 {
     /**
-     * Правило на входящие данные - услоdие работы restful
+     * Правило на входящие данные - условие работы restful
      */
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                    'CKEditor' => Rule::string()->required(), // uri текста в который добавить объект-файл
-                    'CKEditorFuncNum' => Rule::int()->required(),
-                    'proto' => Rule::ospatterns('Image', 'Flash')->required()
-                )),
-                'FILES' => Rule::arrays(array(
-                    'upload' => Rule::arrays(Rule::string())->required() // файл, загружаемый в объект
-                )),
-                'previous' => Rule::not(true)
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'CKEditor' => Rule::string()->required(), // uri текста в который добавить объект-файл
+                'CKEditorFuncNum' => Rule::int()->required(),
+                'proto' => Rule::ospatterns('Image', 'Flash')->required()
+            )),
+            'FILES' => Rule::arrays(array(
+                'upload' => Rule::arrays(Rule::string())->required() // файл, загружаемый в объект
+            )),
+            'previous' => Rule::not(true)
+        ));
     }
 
-    public function work()
+    function work()
     {
         $callback = $this->_input['REQUEST']['CKEditorFuncNum'];
         $file_url = '';

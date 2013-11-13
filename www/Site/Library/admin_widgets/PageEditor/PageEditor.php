@@ -12,10 +12,10 @@ use Boolive\data\Entity,
 
 class PageEditor extends AutoWidgetList2
 {
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['object'] = $this->_input['REQUEST']['object']->uri();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     protected function getList($cond = array())

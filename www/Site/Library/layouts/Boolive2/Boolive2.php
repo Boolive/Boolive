@@ -11,8 +11,8 @@ use Library\layouts\Layout\Layout;
 class Boolive2 extends Layout
 {
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

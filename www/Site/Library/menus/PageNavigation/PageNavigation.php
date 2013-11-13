@@ -11,9 +11,9 @@ use Library\views\Widget\Widget,
 
 class PageNavigation extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // объект, который отображается постранично
                 'page' => Rule::int()->default(1)->required(),
@@ -22,13 +22,13 @@ class PageNavigation extends Widget
         ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $obj = $this->_input['REQUEST']['object'];
         $v['uri'] = $obj->uri();
         if (substr($v['uri'],0,10)=='/Contents/') $v['uri'] = mb_substr($v['uri'],9);
         $v['count'] = $this->_input['REQUEST']['page_count'];
         $v['current'] = min($v['count'], $this->_input['REQUEST']['page']);
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

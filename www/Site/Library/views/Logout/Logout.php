@@ -15,21 +15,19 @@ use Library\views\View\View,
 
 class Logout extends View
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'logout' => Rule::bool()->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'logout' => Rule::bool()->required()
+            ))
+        ));
     }
 
-    public function work()
+    function work()
     {
         Auth::setUser(null);
         $this->_commands->redirect(Input::url(null, 0, array(), false, true));
-        return false;
+        return false;//какбы не работали, чтобы продолжился запуск следующих предствлений
     }
 }

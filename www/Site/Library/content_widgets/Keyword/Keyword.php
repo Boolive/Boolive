@@ -12,11 +12,11 @@ use \Library\views\Widget\Widget;
 
 class Keyword extends Widget
 {
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $keyword = $this->_input['REQUEST']['object']->linked();
         $v['title'] = $keyword->title->value();
         $v['href'] = $keyword->uri();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

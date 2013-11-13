@@ -12,9 +12,9 @@ use Library\views\AutoWidgetList2\AutoWidgetList2;
 class Page extends AutoWidgetList2
 {
 
-    public function work($v = array()){
+    function show($v = array(), $commands, $input){
 
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     protected function getList($cond = array())

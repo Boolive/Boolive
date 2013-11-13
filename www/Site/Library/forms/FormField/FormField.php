@@ -10,9 +10,9 @@ use Library\views\Widget\Widget;
 
 class FormField extends Widget
 {
-    protected function initInput($input)
+    function startInit($input)
     {
-        parent::initInput($input);
+        parent::startInit($input);
         if (isset($this->_input['REQUEST']['object']) &&
             isset($input['REQUEST'][$this->_input['REQUEST']['object']->uri()]))
         {
@@ -20,7 +20,7 @@ class FormField extends Widget
         }
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['error'] = '';
         if (isset($this->_input['REQUEST']['input'])){
@@ -35,6 +35,6 @@ class FormField extends Widget
         $v['title'] = $this->_input['REQUEST']['object']->title->value();
         $v['value'] = $this->_input['REQUEST']['object']->value();
         $v['id'] = md5($this->uri());
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

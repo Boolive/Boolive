@@ -15,24 +15,21 @@ use Boolive\data\Data,
 
 class Destroy extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)),
-                            Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)
-                        )->required(),
-//                        'prev' => Rule::entity(),
-                        'call' => Rule::string()->default('')->required(),
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)),
+                    Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)
+                )->required(),
+                'call' => Rule::string()->default('')->required(),
+            ))
+        ));
     }
 
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Удаление
         if ($this->_input['REQUEST']['call'] == 'destroy'){
@@ -80,7 +77,7 @@ class Destroy extends Widget
             // Конфликты для уничтожения
 
 
-            return parent::work($v);
+            return parent::show($v, $commands, $input);
         }
     }
 }

@@ -11,22 +11,20 @@ use Library\views\Widget\Widget,
 
 class ProgramsMenu extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        )->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity()),
+                    Rule::entity()
+                )->required()
+            ))
+        ));
     }
 
-    protected function initInputChild($input){
-        parent::initInputChild($input);
+    function startInitChild($input){
+        parent::startInitChild($input);
         // Отображется список видов
         $this->_input_child['REQUEST']['program'] = $this->programs->linked()->views;
         // Начальная чаcть uri, которая будет отрезаться для получения относительного пути на вид
@@ -39,8 +37,8 @@ class ProgramsMenu extends Widget
         }
     }
 
-    public function work($v = array()){
+    function show($v = array(), $commands, $input){
         $v['item_view'] = $this->startChild('item_view');
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

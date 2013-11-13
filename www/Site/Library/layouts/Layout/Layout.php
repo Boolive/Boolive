@@ -15,19 +15,18 @@ use Library\views\Widget\Widget,
 
 class Layout extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'path' => Rule::string(),
-                )
-            ),
+            )),
             'previous' => Rule::eq(false)
         ));
     }
 
-    protected function initInputChild($input){
-        parent::initInputChild($input);
+    function startInitChild($input){
+        parent::startInitChild($input);
         // По URL определяем объект и номер страницы
         $uri = $this->_input['REQUEST']['path'];
 //        if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){

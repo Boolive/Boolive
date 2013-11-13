@@ -13,26 +13,23 @@ use Library\views\AutoWidgetList2\AutoWidgetList2,
 
 class Feedback extends AutoWidgetList2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        // Модель формы
-                        'object' => Rule::entity($this->object_rule->value())->required(),
-                        // Признак, submit запрос данной формы?
-                        $this->uri() => Rule::arrays(array(
-                                'submit' => Rule::string()
-                            )
-                        ),
-                        // Признак успешности обработки формы
-                        'ok' => Rule::eq(md5($this->uri()))->default(false)->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                // Модель формы
+                'object' => Rule::entity($this->object_rule->value())->required(),
+                // Признак, submit запрос данной формы?
+                $this->uri() => Rule::arrays(array(
+                    'submit' => Rule::string()
+                )),
+                // Признак успешности обработки формы
+                'ok' => Rule::eq(md5($this->uri()))->default(false)->required()
+            ))
+        ));
     }
 
-    public function work($v = array()){
+    function show($v = array(), $commands, $input){
         // Обработка объекта - формирование полей формы с проверкой введенных значений
         $list = $this->getList();
         $v['views'] = array();
@@ -62,6 +59,6 @@ class Feedback extends AutoWidgetList2
         }
         // Отображение формы
         $v['uri'] = $object->uri();
-        return Widget::work($v);
+        return Widget::show($v, $commands, $input);
     }
 }

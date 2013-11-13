@@ -13,20 +13,18 @@ use Library\views\View\View,
 
 class DirectHandler extends View
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                    'method' => Rule::eq('POST'),
-                    'direct' => Rule::entity()->required()
-                    )
-                ),
-                'previous' => Rule::not(true)
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'method' => Rule::eq('POST'),
+                'direct' => Rule::entity()->required()
+            )),
+            'previous' => Rule::not(true)
+        ));
     }
 
-    public function work()
+    function work()
     {
         $v = array();
         $v['out'] = $this->_input['REQUEST']['direct']->start($this->_commands, $this->_input_child);

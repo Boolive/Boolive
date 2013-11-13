@@ -11,18 +11,16 @@ use Library\admin_widgets\Explorer\views\ObjectItem\ObjectItem,
 
 class ObjectItemTile extends ObjectItem
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity($this->object_rule->value())->required(),
-                        'view_kind' => Rule::eq('tile')
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity($this->object_rule->value())->required(),
+                'view_kind' => Rule::eq('tile')
+            ))
+        ));
     }
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         /** @var $obj \Boolive\data\Entity */
         $obj = $this->_input['REQUEST']['object'];
@@ -37,6 +35,6 @@ class ObjectItemTile extends ObjectItem
             $v['style'] = 'style="'.$v['style'].'"';
         }
 
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

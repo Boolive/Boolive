@@ -15,13 +15,13 @@ use Boolive\data\Data,
 
 class BreadcrumbsMenu extends Widget{
 
-	public function work($v = array())
+	function show($v = array(), $commands, $input)
     {
         /** @var $obj \Boolive\data\Entity */
 		$obj = $this->_input['REQUEST']['object'];
         $v['current'] = $obj->uri();
         $v['items'] = $this->getItems($obj);
-		return parent::work($v);
+		return parent::show($v, $commands, $input);
 	}
 
     /**
@@ -68,7 +68,7 @@ class BreadcrumbsMenu extends Widget{
      * @param $input
      * @return array|null
      */
-    public function call_getBreadcrumbs($input)
+    function call_getBreadcrumbs($input)
     {
         $input = Check::filter($input, Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(

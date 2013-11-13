@@ -11,13 +11,13 @@ use Library\views\Widget\Widget;
 
 class Menu extends Widget
 {
-    protected function initInput($input)
+    function startInit($input)
     {
-        View::initInput($input);
+        View::startInit($input);
     }
 
-    protected function initInputChild($input){
-        parent::initInputChild($input);
+    function startInitChild($input){
+        parent::startInitChild($input);
         // Подчиенным нужно передать активный пункт меню и отображаемый объект меню
         // Входящий объект используется как активный пункт меню
         $this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['object']->linked();
@@ -27,10 +27,10 @@ class Menu extends Widget
         $this->_input_child['REQUEST']['show'] = false;
     }
 
-    public function work($v = array()){
+    function show($v = array(), $commands, $input){
         $v['title'] = $this->title->value();
         //$v['view'] = $this->startChild('view');
         $v['item_view'] = $this->startChild('item_view');
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

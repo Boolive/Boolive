@@ -11,16 +11,14 @@ use Library\content_widgets\Page\Page,
 
 class Part extends Page
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity($this->object_rule->value())->required(),
-                        'page'=> Rule::int()->default(1)->required() // номер страницы
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity($this->object_rule->value())->required(),
+                'page'=> Rule::int()->default(1)->required() // номер страницы
+            ))
+        ));
     }
 
     protected function getList($cond = array())

@@ -11,19 +11,18 @@ use Library\views\Widget\Widget,
 
 class SearchForm extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'search' => Rule::string()->default('')->required(),
-                ))
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'search' => Rule::string()->default('')->required(),
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['search'] = $this->_input['REQUEST']['search'];
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

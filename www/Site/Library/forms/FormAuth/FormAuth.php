@@ -13,31 +13,25 @@ use Library\views\AutoWidgetList2\AutoWidgetList2,
 
 class FormAuth extends AutoWidgetList2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        // Модель формы
-                        'object' => Rule::entity()->required(),
-                        // Признак, submit запрос данной формы?
-                        $this->uri() => Rule::arrays(array(
-                                'submit' => Rule::string()
-                            )
-                        ),
-                        // Признак успешности обработки формы
-                        'ok' => Rule::eq(md5($this->uri()))->default(false)->required()
-                    )
-                ),
-                'PATH' => Rule::arrays(array(
-                    0 => Rule::any(Rule::eq('admin'), Rule::eq('login'))->required()
-                    )
-                ),
-                'previous' => Rule::eq(false)
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                // Модель формы
+                'object' => Rule::entity()->required(),
+                // Признак, submit запрос данной формы?
+                $this->uri() => Rule::arrays(array(
+                    'submit' => Rule::string()
+                )),
+                // Признак успешности обработки формы
+                'ok' => Rule::eq(md5($this->uri()))->default(false)->required(),
+                'path' => Rule::regexp($this->path_rule->value())->required(),
+            )),
+            'previous' => Rule::eq(false)
+        ));
     }
 
-    public function work($v = array()){
+    function show($v = array(), $commands, $input){
 //        trace($this->_input['REQUEST']['object']);
 //        $this->_input['REQUEST']['object'] = $this->object;
         // Обработка объекта - формирование полей формы с проверкой введенных значений
@@ -66,6 +60,6 @@ class FormAuth extends AutoWidgetList2
         }
         // Отображение формы
         $v['uri'] = $this->_input['REQUEST']['object']->id();
-        return Widget::work($v);
+        return Widget::show($v, $commands, $input);
     }
 }

@@ -15,32 +15,31 @@ use Library\views\Widget\Widget;
 
 class item_view extends AutoWidgetList2
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::any(
-                            Rule::arrays(Rule::entity()),
-                            Rule::entity()
-                        )->required(),
+                    Rule::arrays(Rule::entity()),
+                    Rule::entity()
+                )->required(),
                 'program' => Rule::entity(array('is', '/Library/views/ViewSingle'))->required(), // Объект для пункта меню
                 //'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
                 'show' => Rule::bool()->default(true)->required() // Показывать пункт или только его подчиенных?
-                )
             ))
-        );
+        ));
     }
 
-    protected function initInputChild($input)
+    function startInitChild($input)
     {
-        parent::initInputChild($input);
+        parent::startInitChild($input);
         //$this->_input_child['REQUEST']['active'] = $this->_input['REQUEST']['active'];
         $this->_input_child['REQUEST']['program'] = $this->_input['REQUEST']['program'];
 
         $this->_input_child['REQUEST']['show'] = true;
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
             /** @var \Boolive\data\Entity $obj */
@@ -69,7 +68,7 @@ class item_view extends AutoWidgetList2
             $c = new \Boolive\commands\Commands();
             foreach ($list as $obj){
                 $this->_input_child['REQUEST']['program'] = $obj;
-                if ($obj->linked() instanceof View && $obj->linked()->canWork($c, $this->_input_child)){
+                if ($obj->linked() instanceof View && $obj->linked()->startCheck($c, $this->_input_child)){
                     if ($result = $this->startChild('views')){
                         $v['views'][$obj->name()] = $result;
                     }
@@ -77,10 +76,10 @@ class item_view extends AutoWidgetList2
             }
         }
         $this->_input_child['REQUEST']['program'] = $this->_input['REQUEST']['program'];
-        return Widget::work($v);
+        return Widget::show($v, $commands, $input);
     }
 
-    public function getList($cond = array())
+    function getList($cond = array())
     {
         $cond['select'] = 'children';
         $cond['depth'] = array(1, 1); // выбрать из хранилища всё дерево меню

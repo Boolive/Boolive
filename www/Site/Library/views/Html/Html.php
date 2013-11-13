@@ -13,12 +13,12 @@ use Boolive\values\Rule,
 
 class Html extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array('previous' => Rule::not(true)));
+        return Rule::arrays(array('previous' => Rule::not(true)));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Вызов всех подчиенных, чтобы исполнить после их команды добавления тегов
         $v = $this->startChildren();
@@ -60,6 +60,6 @@ class Html extends Widget
                 }
             }
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

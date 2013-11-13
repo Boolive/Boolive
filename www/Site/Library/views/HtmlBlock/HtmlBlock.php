@@ -12,10 +12,10 @@ use \Library\views\Widget\Widget,
 
 class HtmlBlock extends Widget
 {
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['object'] = $this->_input['REQUEST']['object']->value();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
             
 }

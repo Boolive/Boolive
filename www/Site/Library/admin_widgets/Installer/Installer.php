@@ -13,22 +13,20 @@ use Boolive\data\Data,
 
 class Installer extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))),
-                            Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))
-                        )->required(),
-                        'call' => Rule::string()->default('')->required(),
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))),
+                    Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))
+                )->required(),
+                'call' => Rule::string()->default('')->required(),
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Установка объекта
         if ($this->_input['REQUEST']['call'] == 'install'){
@@ -77,6 +75,6 @@ class Installer extends Widget
             $v['question'] = 'Вы действительно желаете установить этот объект?';
             $v['message'] = '';
         }
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

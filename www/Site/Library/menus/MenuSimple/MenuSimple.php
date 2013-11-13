@@ -15,9 +15,9 @@ use Library\views\Widget\Widget;
 
 class MenuSimple extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
+        return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->default(null)->required(),// Активный пункт меню (объект, на которого ссылка)
                 'path' => Rule::regexp($this->path_rule->value())->required()
@@ -25,16 +25,16 @@ class MenuSimple extends Widget
         ));
     }
 
-    protected function initInput($input)
+    function startInit($input)
     {
-        return View::initInput($input);
+        return View::startInit($input);
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $v['title'] = $this->title->value();
         $v['items'] = $this->itemsToArray($this->getItems(), $this->_input['REQUEST']['object']);
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     /**
@@ -89,7 +89,7 @@ class MenuSimple extends Widget
      * @param array $cond Услвоие выборки
      * @return array|Entity|mixed|null
      */
-    public function getItems($cond = array())
+    function getItems($cond = array())
     {
         $is_list = $this->is->find(array('where'=>array('attr','is_link','!=',0), 'group'=>true));
         foreach ($is_list as $key => $is){

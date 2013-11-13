@@ -15,27 +15,23 @@ use Boolive\errors\Error,
 
 class Attribs extends Widget
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::entity()->required(),
-                        'call' => Rule::string()->default('')->required(),
-                        'attrib' => Rule::arrays(Rule::string())
-                    )
-                ),
-                'FILES' => Rule::arrays(array(
-                        'attrib' => Rule::arrays(array(
-                                'file' => Rule::arrays(Rule::string())
-                            )
-                        )
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::entity()->required(),
+                'call' => Rule::string()->default('')->required(),
+                'attrib' => Rule::arrays(Rule::string())
+            )),
+            'FILES' => Rule::arrays(array(
+                'attrib' => Rule::arrays(array(
+                    'file' => Rule::arrays(Rule::string())
+                ))
+            ))
+        ));
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         // Отправка атрибутов
         if ($this->_input['REQUEST']['call'] == 'load'){
@@ -49,7 +45,7 @@ class Attribs extends Widget
         $v['object_uri'] = $this->_input['REQUEST']['object']->uri();
         $v['head'] = $this->title->value();
         $v['object_id'] = $this->_input['REQUEST']['object']->id();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 
     /**
@@ -115,7 +111,7 @@ class Attribs extends Widget
                 }
                 $v['attrib'] = $this->callLoad();
             }catch (Error $error){
-                $v['error'] = $error->__toArray();
+                $v['error'] = $error->toArray();
 //                $v['error'] = array();
 //                if ($error->isExist('_attribs')){
 //                    foreach ($error->_attribs as $key => $e){

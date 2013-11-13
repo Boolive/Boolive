@@ -16,19 +16,17 @@ class ToggleAction extends Widget
      */
     protected $_state;
 
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                        'object' => Rule::any(
-                            Rule::arrays(Rule::entity($this->object_rule->value())),
-                            Rule::entity($this->object_rule->value())
-                        )->required(),
-                        'call' => Rule::string()->default('')->required(),
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'object' => Rule::any(
+                    Rule::arrays(Rule::entity($this->object_rule->value())),
+                    Rule::entity($this->object_rule->value())
+                )->required(),
+                'call' => Rule::string()->default('')->required(),
+            ))
+        ));
     }
 
     /**
@@ -44,7 +42,7 @@ class ToggleAction extends Widget
      * Текущее состояние действия
      * @return bool
      */
-    public function state()
+    function state()
     {
         return $this->_state;
     }
@@ -52,20 +50,20 @@ class ToggleAction extends Widget
     /**
      * Выполнение действия
      */
-    public function toggle()
+    function toggle()
     {
         return false;
     }
 
-    protected function initInput($input)
+    function startInit($input)
     {
-        parent::initInput($input);
+        parent::startInit($input);
         if (!isset($this->_input_error)){
             $this->initState();
         }
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['call'] == 'toggle'){
             return $this->toggle();

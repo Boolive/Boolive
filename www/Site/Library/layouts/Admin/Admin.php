@@ -13,23 +13,20 @@ use Library\layouts\Layout\Layout,
 
 class Admin extends Layout
 {
-    public function defineInputRule()
+    function startRule()
     {
-        $this->_input_rule = Rule::arrays(array(
-                'REQUEST' => Rule::arrays(array(
-                    'path' => Rule::string(),//regexp('|^/admin|'),
-                    )
-                ),
-                'PATH' => Rule::arrays(array(
-                    0 => Rule::eq('admin')->required()
-                    )
-                )
-            )
-        );
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'path' => Rule::string(),//regexp('|^/admin|'),
+            )),
+            'PATH' => Rule::arrays(array(
+                0 => Rule::eq('admin')->required()
+            ))
+        ));
     }
 
-    protected function initInputChild($input){
-        parent::initInputChild($input);
+    function startInitChild($input){
+        parent::startInitChild($input);
         // По URL определяем объект и номер страницы
         $uri = $this->_input['REQUEST']['path'];
         if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){
@@ -47,10 +44,10 @@ class Admin extends Layout
         $this->_input_child['REQUEST']['object'] = Data::read($uri);
     }
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
         $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB.'admin/'));
         $v['basepath'] = DIR_WEB.'admin';
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }

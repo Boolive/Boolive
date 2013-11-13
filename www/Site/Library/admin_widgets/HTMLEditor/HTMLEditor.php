@@ -11,11 +11,11 @@ use Library\views\Widget\Widget;
 class HTMLEditor extends Widget
 {
 
-    public function work($v = array())
+    function show($v = array(), $commands, $input)
     {
       //trace($this->_input);
         $v['object'] = $this->_input['REQUEST']['object']->uri();
         $v['value'] = $this->_input['REQUEST']['object']->value();
-        return parent::work($v);
+        return parent::show($v, $commands, $input);
     }
 }
