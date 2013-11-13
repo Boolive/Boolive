@@ -15,13 +15,14 @@ class Boolean extends Entity
     /**
      * Установка правила на атрибуты
      */
-    protected function defineRule()
+    protected function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['value'] = Rule::bool();
+        $rule = parent::rule();
+        $rule->arrays[0]['value'] = Rule::bool();
+        return $rule;
     }
 
-    public function value($new_value = null)
+    function value($new_value = null)
     {
         return intval(parent::value($new_value));
     }

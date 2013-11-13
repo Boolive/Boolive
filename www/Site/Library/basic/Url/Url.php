@@ -11,9 +11,10 @@ use Boolive\data\Entity,
 
 class Url extends Entity
 {
-    protected function defineRule()
+    protected function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['value'] = Rule::url();
+        $rule = parent::rule();
+        $rule->arrays[0]['value'] = Rule::url();
+        return $rule;
     }
 }

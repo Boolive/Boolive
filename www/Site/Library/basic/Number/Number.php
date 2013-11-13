@@ -14,9 +14,10 @@ class Number extends Entity
     /**
      * Установка правила на атрибуты
      */
-    protected function defineRule()
+    protected function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['value'] = Rule::double();
+        $rule = parent::rule();
+        $rule->arrays[0]['value'] = Rule::double();
+        return $rule;
     }
 }

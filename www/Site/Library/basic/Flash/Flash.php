@@ -10,10 +10,11 @@ use Boolive\data\Entity;
 
 class Flash extends Entity
 {
-    public function defineRule()
+    function rule()
     {
-        parent::defineRule();
+        $rule = parent::rule();
         // Ассоциация с файлами с расширением css
-        $this->_rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.swf')->required();
+        $rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.swf')->required();
+        return $rule;
     }
 }

@@ -11,13 +11,14 @@ use Library\views\View\View;
 
 class JavaScript extends View
 {
-    public function defineRule()
+    function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.js');
+        $rule = parent::rule();
+        $rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.js');
+        return $rule;
     }
 
-    public function work()
+    function work()
     {
         // Исполнение зависимых объектов
         $this->depends->linked()->start($this->_commands, $this->_input);
@@ -31,7 +32,7 @@ class JavaScript extends View
         }
     }
 
-    public function exportedProperties()
+    function exportedProperties()
     {
         $names = parent::exportedProperties();
         $names[] = 'depends';

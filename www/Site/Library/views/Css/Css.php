@@ -11,14 +11,15 @@ use Library\views\View\View;
 
 class Css extends View
 {
-    public function defineRule()
+    function rule()
     {
-        parent::defineRule();
+        $rule = parent::rule();
         // Ассоциация с файлами с расширением css
-        $this->_rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.css');
+        $rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.css');
+        return $rule;
     }
 
-    public function work()
+    function work()
     {
         // Если прототип тоже CSS, то исполняем его, чтобы подключился его файл стиля.
         // Таким образом реализуется наследование файлов стилей

@@ -14,9 +14,10 @@ class Email extends Entity
     /**
      * Установка правила на атрибуты
      */
-    protected function defineRule()
+    protected function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['value'] = Rule::email();
+        $rule = parent::rule();
+        $rule->arrays[0]['value'] = Rule::email();
+        return $rule;
     }
 }

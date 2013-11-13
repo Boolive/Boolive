@@ -85,8 +85,6 @@ class Entity implements ITrace
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
-    /** @var Rule Правило на атрибуты объекта */
-    protected $_rule;
     /** @var Entity Экземпляр прототипа */
     protected $_proto = false;
     /** @var Entity Экземпляр родителя */
@@ -118,7 +116,7 @@ class Entity implements ITrace
      * @param array $attribs Атрибуты объекта, а также атрибуты подчиенных объектов
      * @param int $children_depth До какой глубины (вложенности) создавать экземпляры подчиненных объектов
      */
-    public function __construct($attribs = array(), $children_depth = 0)
+    function __construct($attribs = array(), $children_depth = 0)
     {
         if (!empty($attribs['id'])){
             $attribs['is_exist'] = true;
@@ -151,58 +149,47 @@ class Entity implements ITrace
     }
 
     /**
-     * Установка правила на атрибуты
-     */
-    protected function defineRule()
-    {
-        $this->_rule = Rule::arrays(array(
-                'id'           => Rule::uri(), // Сокращенный или полный URI
-                'name'         => Rule::string()->regexp('|^[^/@:#]*$|')->max(50)->required(), // Имя объекта
-                'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
-                'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
-                'parent'       => Rule::uri(), // URI родителя
-                'proto'        => Rule::uri(), // URI прототипа
-                'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
-                'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения (0=авто, 1=простое, 2=текст, 3=файл)
-                'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
-                'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
-                'is_link'      => Rule::uri(), // Ссылка или нет?
-                'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
-                'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или оно переопределено?
-                'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
-                'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
-                'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
-                'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
-                'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
-                // Сведения о загружаемом файле. Не является атрибутом объекта
-                'file'	=> Rule::arrays(array(
-                        'tmp_name'	=> Rule::string(), // Путь на связываемый файл
-                        'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
-                        'size'		=> Rule::int(), // Размер в байтах
-                        'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
-                        'type'      => Rule::string() // MIME тип файла
-                    )
-                ),
-                // Сведения о классе объекта (загружаемый файл или программный код). Не является атрибутом объекта
-                'class' => Rule::arrays(array(
-                    'content'   => Rule::string(), // Программный код класса
-                    'tmp_name'	=> Rule::string(), // Путь на файл, если класс загржается в виде файла
-                    'size'		=> Rule::int(), // Размер в байтах
-                    'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
-                    'type'      => Rule::string() // MIME тип файла
-                ))
-            )
-        );
-    }
-
-    /**
-     * Возвращает правило на атрибуты
+     * Правило на атрибуты
      * @return Rule
      */
-    public function getRule()
+    protected function rule()
     {
-        if (!isset($this->_rule)) $this->defineRule();
-        return $this->_rule;
+        return Rule::arrays(array(
+            'id'           => Rule::uri(), // Сокращенный или полный URI
+            'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(50)->required(), // Имя объекта без символов /@:#\
+            'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
+            'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
+            'parent'       => Rule::uri(), // URI родителя
+            'proto'        => Rule::uri(), // URI прототипа
+            'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
+            'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения (0=авто, 1=простое, 2=текст, 3=файл)
+            'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
+            'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
+            'is_link'      => Rule::uri(), // Ссылка или нет?
+            'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
+            'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или оно переопределено?
+            'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
+            'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
+            'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
+            'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
+            'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
+            // Сведения о загружаемом файле. Не является атрибутом объекта
+            'file'	=> Rule::arrays(array(
+                'tmp_name'	=> Rule::string(), // Путь на связываемый файл
+                'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
+                'size'		=> Rule::int(), // Размер в байтах
+                'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
+                'type'      => Rule::string() // MIME тип файла
+            )),
+            // Сведения о классе объекта (загружаемый файл или программный код). Не является атрибутом объекта
+            'class' => Rule::arrays(array(
+                'content'   => Rule::string(), // Программный код класса
+                'tmp_name'	=> Rule::string(), // Путь на файл, если класс загржается в виде файла
+                'size'		=> Rule::int(), // Размер в байтах
+                'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
+                'type'      => Rule::string() // MIME тип файла
+            ))
+        ));
     }
 
     #################################################
@@ -215,7 +202,7 @@ class Entity implements ITrace
      * Идентификатор объекта. Сокращенный URI
      * @return null
      */
-    public function id()
+    function id()
     {
         return isset($this->_attribs['id'])? $this->_attribs['id'] : null;
     }
@@ -226,7 +213,7 @@ class Entity implements ITrace
      * @param bool $choose_unique Выбирать уникальное, если уже занято указанное?
      * @return string Имя объекта
      */
-    public function name($new_name = null, $choose_unique = false)
+    function name($new_name = null, $choose_unique = false)
     {
         if (!isset($new_name) && $choose_unique) $new_name = $this->_attribs['name'];
         // Смена имени
@@ -247,7 +234,7 @@ class Entity implements ITrace
      * @param bool $encode Признак, кодировать спецсимволы в URI?
      * @return string
      */
-    public function uri($remake = false, $encode = false)
+    function uri($remake = false, $encode = false)
     {
         if (!isset($this->_attribs['uri']) || $remake){
             if ($parent = $this->parent()){
@@ -273,7 +260,7 @@ class Entity implements ITrace
      * Полный или сокращенный URI в зависимости от их наличия
      * @return mixed|string
      */
-    public function key()
+    function key()
     {
         return isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
     }
@@ -282,7 +269,7 @@ class Entity implements ITrace
      * Каскадное обновление URI подчиненных на основании своего uri
      * Обновляются uri только выгруженных/присоединенных на данный момент подчиенных
      */
-    public function updateURI()
+    function updateURI()
     {
         foreach ($this->_children as $child_name => $child){
             /* @var Entity $child */
@@ -296,7 +283,7 @@ class Entity implements ITrace
      * Если история изменения объекта не ведется, то является датой создания объекта
      * @return mixed
      */
-    public function date()
+    function date()
     {
         if (!isset($this->_attribs['date'])){
             $this->_attribs['date'] = time();
@@ -309,7 +296,7 @@ class Entity implements ITrace
      * @param null $new_order Новое значение. Если с указыннм порядковым номером имеется объект, то он будет смещен
      * @return mixed
      */
-    public function order($new_order = null)
+    function order($new_order = null)
     {
         if (isset($new_order) && (!isset($this->_attribs['order']) || $this->_attribs['order']!=$new_order)){
             $this->_attribs['order'] = $new_order;
@@ -324,7 +311,7 @@ class Entity implements ITrace
      * @param null|string $new_value Новое значение. Устнавливается если не null
      * @return string
      */
-    public function value($new_value = null)
+    function value($new_value = null)
     {
         // Установка значения
         if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!==$new_value)){
@@ -343,7 +330,7 @@ class Entity implements ITrace
      * @param null|integer $new_type Новые тип значения, если не null
      * @return integer Текущий тип значения
      */
-    public function valueType($new_type = null)
+    function valueType($new_type = null)
     {
         if (isset($new_type) && $this->_attribs['value_type']!=$new_type){
             $this->_attribs['value_type'] = $new_type;
@@ -360,7 +347,7 @@ class Entity implements ITrace
      * @param bool $cache_remote Если файл внешний, то сохранить его к себе на сервер и возвратить путь на него
      * @return null|string
      */
-    public function file($new_file = null, $root = false, $cache_remote = true)
+    function file($new_file = null, $root = false, $cache_remote = true)
     {
         // Установка нового файла
         if (isset($new_file)){
@@ -419,7 +406,7 @@ class Entity implements ITrace
      * @param bool $root Возвращать полный путь или от директории сайта?
      * @return string @todo При соответствующих опциях возвращать название и программный код класса вместо пути на файл
      */
-    public function logic($new_logic = null, $root = false)
+    function logic($new_logic = null, $root = false)
     {
         if (isset($new_logic)){
             if (is_string($new_logic)){
@@ -450,7 +437,7 @@ class Entity implements ITrace
      * @param bool $root Признак, возвращать путь от корня сервера или от web директории (www)
      * @return string
      */
-    public function dir($root = false)
+    function dir($root = false)
     {
         $dir = $this->uri();
         if (Data::isAbsoluteUri($dir)) return $dir.'/';
@@ -468,7 +455,7 @@ class Entity implements ITrace
      * @param bool $base64 Признак, кодировать содержимое файла в base64
      * @return array|bool
      */
-    public function fileContent($only_hash = false, $base64 = true)
+    function fileContent($only_hash = false, $base64 = true)
     {
         if (!isset($this->_attribs['file_content'])){
             // Для внешних объектов отдельные запросы на получение файлов не делаются.
@@ -494,7 +481,7 @@ class Entity implements ITrace
      * @param bool $only_hash Возвращать hash файла без его содержимого?
      * @return array
      */
-    public function classContent($only_hash = false, $base64 = true)
+    function classContent($only_hash = false, $base64 = true)
     {
         if (!isset($this->_attribs['class_content'])){
             if ($this->isRemote()){
@@ -521,7 +508,7 @@ class Entity implements ITrace
      * @param null|bool $is_file Новое значение, если не null
      * @return bool
      */
-    public function isFile($is_file = null)
+    function isFile($is_file = null)
     {
         $new_type = $is_file ? Entity::VALUE_FILE : Entity::VALUE_AUTO;
         if (isset($is_file) && $this->_attribs['value_type'] != $new_type){
@@ -538,7 +525,7 @@ class Entity implements ITrace
      * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то черновик родителя не влияет на данный объект
      * @return bool
      */
-    public function isDraft($draft = null, $inherit_parent = true)
+    function isDraft($draft = null, $inherit_parent = true)
     {
         // Какой признак у родителя (чтобы его вычесть из своего)
         if ((!$inherit_parent || isset($draft)) && ($parent = $this->parent())){
@@ -561,7 +548,7 @@ class Entity implements ITrace
      * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то скрытие родителя не влияет на данный объект
      * @return bool
      */
-    public function isHidden($hide = null, $inherit_parent = true)
+    function isHidden($hide = null, $inherit_parent = true)
     {
         // Какой признак у родителя (чтобы его вычесть из своего)
         if ((!$inherit_parent || isset($hide)) && ($parent = $this->parent())){
@@ -584,7 +571,7 @@ class Entity implements ITrace
      * @param bool $return_link Признак, возвращать или нет объект, на которого ссылается данный
      * @return bool|Entity
      */
-    public function isLink($is_link = null, $return_link = false)
+    function isLink($is_link = null, $return_link = false)
     {
         if (isset($is_link)){
             $curr = $this->_attribs['is_link'];
@@ -633,7 +620,7 @@ class Entity implements ITrace
      * @param null|bool $is_relative Новое значение, если не null
      * @return bool
      */
-    public function isRelative($is_relative = null)
+    function isRelative($is_relative = null)
     {
         if (isset($is_relative) && (empty($this->_attribs['is_relative']) == $is_relative)){
             $this->_attribs['is_relative'] = $is_relative;
@@ -647,7 +634,7 @@ class Entity implements ITrace
      * Признак, сущесвтует объект или нет?
      * @return bool
      */
-    public function isExist()
+    function isExist()
     {
         return !empty($this->_attribs['is_exist']);
     }
@@ -658,7 +645,7 @@ class Entity implements ITrace
      * @param string $action Название действия. По умолчанию дейсвте чтения объекта.
      * @return bool
      */
-    public function isAccessible($action = 'read')
+    function isAccessible($action = 'read')
     {
         if (!empty($this->_attribs['is_accessible'])){
             if ($action != 'read'){
@@ -675,7 +662,7 @@ class Entity implements ITrace
      * @param $return_proto Если значение по умолчанию, то возвращать прототип, чьё значение наследуется или true?
      * @return bool|Entity
      */
-    public function isDefaultValue($is_default = null, $return_proto = false)
+    function isDefaultValue($is_default = null, $return_proto = false)
     {
         if (isset($is_default)){
             $curr = $this->_attribs['is_default_value'];
@@ -734,7 +721,7 @@ class Entity implements ITrace
      * @param bool $return_proto
      * @return bool | Entity
      */
-    public function isDefaultClass($is_default = null, $return_proto = false)
+    function isDefaultClass($is_default = null, $return_proto = false)
     {
         if (isset($is_default)){
             $curr = $this->_attribs['is_default_class'];
@@ -785,7 +772,7 @@ class Entity implements ITrace
      * @param null|int $possession Новый код владения. Коды определены константами Entity::POSSESSION_*
      * @return int Установленный код владения или текущий
      */
-    public function possession($possession = null)
+    function possession($possession = null)
     {
         if (isset($possession)){
             $this->_attribs['possession'] = $possession;
@@ -800,7 +787,7 @@ class Entity implements ITrace
      * @param null|int $diff
      * @return int Код отличия
      */
-    public function diff($diff = null)
+    function diff($diff = null)
     {
         if (isset($diff)){
             $this->_attribs['diff'] = $diff;
@@ -815,7 +802,7 @@ class Entity implements ITrace
      * @param null|int $diff_from
      * @return int Код отличия
      */
-    public function diff_from($diff_from = null)
+    function diff_from($diff_from = null)
     {
         if (isset($diff_from)){
             $this->_attribs['diff_from'] = $diff_from;
@@ -829,7 +816,7 @@ class Entity implements ITrace
      * Все атрибуты объекта
      * @return array
      */
-    public function attributes()
+    function attributes()
     {
         return $this->_attribs;
     }
@@ -840,7 +827,7 @@ class Entity implements ITrace
      * @param $name Назавние возвращаемого атрибута
      * @return mixed Значение атрибута
      */
-    public function attr($name)
+    function attr($name)
     {
         return $this->_attribs[$name];
     }
@@ -857,7 +844,7 @@ class Entity implements ITrace
      * @param bool $load Загрузить родителя из хранилща, если ещё не загружен?
      * @return Entity|null
      */
-    public function parent($new_parent = null, $load = true)
+    function parent($new_parent = null, $load = true)
     {
         if (is_string($new_parent)) $new_parent = Data::read($new_parent);
         // Смена родителя
@@ -911,7 +898,7 @@ class Entity implements ITrace
      * Количество родителей у объекта. Уровень вложенности
      * @return int
      */
-    public function parentCount()
+    function parentCount()
     {
         if (!isset($this->_attribs['parent_cnt'])){
             if (isset($this->_attribs['uri'])){
@@ -931,7 +918,7 @@ class Entity implements ITrace
      * Если известен свой URI, то URI родителя определяется без обращения к родителю
      * @return string|null Если родителя нет, то null. Пустая строка является корректным uri
      */
-    public function parentUri()
+    function parentUri()
     {
         if (!isset($this->_attribs['parent_uri'])){
             $uri = $this->uri();
@@ -946,7 +933,7 @@ class Entity implements ITrace
      * Если известен свой URI, то имя родителя определяется без обращения к родителю
      * @return string
      */
-    public function parentName()
+    function parentName()
     {
         if ($parent_uri = $this->parentUri()){
             $names = F::splitRight('/', $parent_uri, true);
@@ -962,7 +949,7 @@ class Entity implements ITrace
      * @throws \Exception
      * @return Entity|null|bool
      */
-    public function proto($new_proto = null, $load = true)
+    function proto($new_proto = null, $load = true)
     {
         if (is_string($new_proto)) $new_proto = Data::read($new_proto);
         // Смена прототипа
@@ -1038,7 +1025,7 @@ class Entity implements ITrace
      * Количество прототипов у объекта. Уровень наследования.
      * @return int
      */
-    public function protoCount()
+    function protoCount()
     {
         if (!isset($this->_attribs['proto_cnt'])){
             if ($proto = $this->proto()){
@@ -1056,7 +1043,7 @@ class Entity implements ITrace
      * @param bool $load Загрузить автора из хранилща, если ещё не загружен?
      * @return Entity|null
      */
-    public function author($new_author = null, $load = true)
+    function author($new_author = null, $load = true)
     {
         if (is_string($new_author)) $new_author = Data::read($new_author);
         // Смена автора
@@ -1099,7 +1086,7 @@ class Entity implements ITrace
      * @param bool $clone Клонировать, если объект является ссылкой?
      * @return Entity
      */
-    public function linked($clone = false)
+    function linked($clone = false)
     {
         if (empty($this->_attribs['is_link'])) return $this;
         if ($link = $this->isLink(null, true)){
@@ -1112,7 +1099,7 @@ class Entity implements ITrace
     /**
      * Следующий объект
      */
-    public function next()
+    function next()
     {
         if ($next = $this->parent()->find(array(
                 'where' => array(
@@ -1133,7 +1120,7 @@ class Entity implements ITrace
     /**
      * Предыдущий объект
      */
-    public function prev()
+    function prev()
     {
         if ($prev = $this->parent()->find(array(
                 'where' => array(
@@ -1164,7 +1151,7 @@ class Entity implements ITrace
      * @throws \Exception
      * @return Entity
      */
-    public function __get($name)
+    function __get($name)
     {
         if (isset($this->_children[$name])){
             return $this->_children[$name];
@@ -1172,6 +1159,7 @@ class Entity implements ITrace
             if (!$this->isExist()){
                 if (($p = $this->proto()) && $p->{$name}->isExist()){
                     $obj = $p->{$name}->birth($this);
+                    $obj->isDraft(false);
                 }else{
                     $obj = new Entity();
                 }
@@ -1210,7 +1198,7 @@ class Entity implements ITrace
      * @param Entity $value
      * @return Entity
      */
-    public function __set($name, $value)
+    function __set($name, $value)
     {
         if ($value instanceof Entity){
             // Именование
@@ -1243,7 +1231,7 @@ class Entity implements ITrace
      * @param $name Имя подчиненного объекта
      * @return bool
      */
-    public function __isset($name)
+    function __isset($name)
     {
         return isset($this->_children[$name]);
     }
@@ -1253,7 +1241,7 @@ class Entity implements ITrace
      * @example unset($object->sub);
      * @param $name Имя подчиненного объекта
      */
-    public function __unset($name)
+    function __unset($name)
     {
         unset($this->_children[$name]);
     }
@@ -1263,7 +1251,7 @@ class Entity implements ITrace
      * @param Entity|mixed $value
      * @return Entity
      */
-    public function add($value){
+    function add($value){
         $obj = $this->__set(null, $value);
         $obj->_changed = true;
         return $obj;
@@ -1300,7 +1288,7 @@ class Entity implements ITrace
      * @see https://github.com/Boolive/Boolive/issues/7
      * @return array
      */
-    public function find($cond = array(), $load = false, $index = true, $access = true)
+    function find($cond = array(), $load = false, $index = true, $access = true)
     {
         $cond = Data::normalizeCond($cond, array('select' => array('children'), 'depth' => array(1,1)));
         if ($this->isExist()){
@@ -1342,7 +1330,7 @@ class Entity implements ITrace
      * @param array $depth Глубина подчиенных. По умолчанию
      * @return array Массив подчененных
      */
-    public function children($key = 'name', $depth = array(1,1))
+    function children($key = 'name', $depth = array(1,1))
     {
         $result = array();
         if ($depth[0] == 1){
@@ -1383,7 +1371,7 @@ class Entity implements ITrace
      * @throws \Exception
      * @return bool
      */
-    public function save($children = true, $access = true)
+    function save($children = true, $access = true)
     {
         if (!$this->_is_saved){
             try{
@@ -1436,7 +1424,7 @@ class Entity implements ITrace
      * @param bool $integrity Признак, проверять целостность данных?
      * @return bool Были ли объекты уничтожены?
      */
-    public function destroy($access = true, $integrity = true)
+    function destroy($access = true, $integrity = true)
     {
         if ($this->isExist()){
             return Data::delete($this, $access, $integrity);
@@ -1451,7 +1439,7 @@ class Entity implements ITrace
      * @param bool $draft Признак, создавать черновик?
      * @return Entity
      */
-    public function birth($for = null, $draft = true)
+    function birth($for = null, $draft = true)
     {
         $class = get_class($this);
         $attr = array(
@@ -1475,7 +1463,7 @@ class Entity implements ITrace
      * Хранилище объекта
      * @return stores\MySQLStore|null
      */
-    public function store()
+    function store()
     {
         $key = isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
         return Data::getStore($key);
@@ -1488,7 +1476,7 @@ class Entity implements ITrace
      * @param bool $children Признак, проверять или нет подчиненных
      * @return bool Признак, корректен объект (true) или нет (false)
      */
-    public function check(&$errors = null, $children = true)
+    function check(&$errors = null, $children = true)
     {
         // "Контейнер" для ошибок по атрибутам и подчиненным объектам
         $errors = new Error('Неверный объект', $this->uri());
@@ -1496,9 +1484,10 @@ class Entity implements ITrace
 
         // Проверка и фильтр атрибутов
         $attribs = new Values($this->_attribs);
-        $this->_attribs = array_replace($this->_attribs, $attribs->get($this->getRule(), $error));
+        $this->_attribs = array_replace($this->_attribs, $attribs->get($this->rule(), $error));
+        /** @var $error Error */
         if ($error){
-            $errors->_attribs->add($error->getAll());
+            $errors->_attribs->add($error->children());
         }
         // Проверка подчиненных
         if ($children){
@@ -1561,7 +1550,7 @@ class Entity implements ITrace
      * @throws \Exception
      * @return bool
      */
-    public function verify($cond)
+    function verify($cond)
     {
         if (empty($cond)) return true;
         if (is_string($cond)) $cond = Data::parseCond($cond);
@@ -1711,7 +1700,7 @@ class Entity implements ITrace
 	 * @param string|Entity $parent Экземпляр родителя или его идентификатор
      * @return bool
      */
-    public function in($parent)
+    function in($parent)
     {
         if ($this->eq($parent)) return true;
         return $this->childOf($parent);
@@ -1722,7 +1711,7 @@ class Entity implements ITrace
      * @param string|Entity $proto Экземпляр прототипа или его идентификатор
      * @return bool
      */
-    public function is($proto)
+    function is($proto)
     {
         if ($proto == 'all') return true;
         if ($this->eq($proto)) return true;
@@ -1734,7 +1723,7 @@ class Entity implements ITrace
      * @param string|Entity $object Объект или идентификатор объекта, с котоым проверяется наследство или родительство
      * @return bool
      */
-    public function of($object)
+    function of($object)
     {
         return $this->in($object) || $this->is($object);
     }
@@ -1744,7 +1733,7 @@ class Entity implements ITrace
      * @param Entity $object
      * @return bool
      */
-    public function eq($object)
+    function eq($object)
     {
         if ($object instanceof Entity){
             return $this->key() === $object->key();
@@ -1757,7 +1746,7 @@ class Entity implements ITrace
      * @param $object
      * @return bool
      */
-    public function childOf($object)
+    function childOf($object)
     {
         if ($object instanceof Entity){
             $object = $object->uri();
@@ -1773,7 +1762,7 @@ class Entity implements ITrace
      * @param $object
      * @return bool
      */
-    public function heirOf($object)
+    function heirOf($object)
     {
         return ($p = $this->proto()) ? $p->is($object) : false;
     }
@@ -1783,7 +1772,7 @@ class Entity implements ITrace
      * @param null|bool $is_change Установка признака, если не null
      * @return bool
      */
-    public function isChenged($is_change = null)
+    function isChenged($is_change = null)
     {
         if (isset($is_change)){
             $this->_changed = $is_change;
@@ -1796,7 +1785,7 @@ class Entity implements ITrace
      * Признак, находится ли объект в процессе сохранения?
      * @return bool
      */
-    public function isSaved()
+    function isSaved()
     {
         return $this->_is_saved;
     }
@@ -1805,7 +1794,7 @@ class Entity implements ITrace
      * Признак, является ли объект внешним?
      * @return bool
      */
-    public function isRemote()
+    function isRemote()
     {
         return Data::isAbsoluteUri($this->uri());
     }
@@ -1820,7 +1809,7 @@ class Entity implements ITrace
      * @param int $export_class Экпортировать или нет класс объекта (его php код)? 0 - нет, 1 - hash файла, 2 - hash и содержимое в base64
      * @return array
      */
-    public function export($save_to_file = true, $more_info = false, $export_properties = true, $export_file = 0, $export_class = 0)
+    function export($save_to_file = true, $more_info = false, $export_properties = true, $export_file = 0, $export_class = 0)
     {
         $export = array();
         if ($this->isDefaultValue()) $export['is_default_value'] = true;
@@ -1905,7 +1894,7 @@ class Entity implements ITrace
      * Названия свойств, которые экспортировать вместе с объектом
      * @return array
      */
-    public function exportedProperties()
+    function exportedProperties()
     {
         return array('title', 'description');
     }
@@ -1915,7 +1904,7 @@ class Entity implements ITrace
      * Формат массива как в info файле.
      * @param $info
      */
-    public function import($info)
+    function import($info)
     {
         // Имя и родитель
         if (isset($info['uri'])){
@@ -1971,7 +1960,7 @@ class Entity implements ITrace
      * @param array $use Используемые дополнительные классы (может понадобиться, если определяются методы)
      * @return string Программный код класса
      */
-    public function classTemplate($methods = array(), $use = array())
+    function classTemplate($methods = array(), $use = array())
     {
         // phpDoc
         $title = $this->title->value();
@@ -2029,7 +2018,7 @@ $methods
      * @param mixed $cond
      * @return mixed
      */
-    public function cond($cond = null)
+    function cond($cond = null)
     {
         if (isset($cond)){
             $this->_cond = $cond;
@@ -2044,7 +2033,7 @@ $methods
      * $value = (string)$obgect;
      * @return mixed
      */
-    public function __toString()
+    function __toString()
     {
         return (string)$this->value();
     }
@@ -2056,7 +2045,7 @@ $methods
      * @param array $args
      * @return null|void
      */
-    public function __call($method, $args)
+    function __call($method, $args)
     {
         return false;
     }
@@ -2064,7 +2053,7 @@ $methods
     /**
      * Клонирование объекта
      */
-    public function __clone()
+    function __clone()
     {
         foreach ($this->_children as $name => $child){
             $this->_children[$name] = clone $child;
@@ -2075,7 +2064,7 @@ $methods
      * Значения внутренных свойств объекта для трасировки
      * @return array
      */
-    public function trace()
+    function trace()
     {
         //$trace['hash'] = spl_object_hash($this);
         $trace['_attribs'] = $this->_attribs;

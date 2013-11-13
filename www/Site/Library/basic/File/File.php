@@ -12,17 +12,18 @@ use Boolive\values\Rule;
 
 class File extends Entity
 {
-    public function defineRule()
+    function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['file']->arrays[0]['name']->ospatterns($this->validExtentions())->required();
+        $rule = parent::rule();
+        $rule->arrays[0]['file']->arrays[0]['name']->ospatterns($this->validExtentions())->required();
+        return $rule;
     }
 
     /**
      * Шаблоны допустимых имен файлов (расширений)
      * @return array
      */
-    public function validExtentions()
+    function validExtentions()
     {
         return explode(' ', $this->extentions->value());
     }
@@ -32,7 +33,7 @@ class File extends Entity
      * @param $file_name
      * @return bool
      */
-    public function isValidExtention($file_name)
+    function isValidExtention($file_name)
     {
         Check::ospatterns($file_name, $error, Rule::ospatterns($this->validExtentions()));
         return !isset($error);

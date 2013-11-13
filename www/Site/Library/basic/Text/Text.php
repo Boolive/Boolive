@@ -11,13 +11,14 @@ use Boolive\data\Entity;
 
 class Text extends Entity
 {
-    public function defineRule()
+    function rule()
     {
-        parent::defineRule();
-        $this->_rule->arrays[0]['value']->min(0)->max(65535);
+        $rule = parent::rule();
+        $rule->arrays[0]['value']->min(0)->max(65535);
+        return $rule;
     }
 
-    public function save($children = true, $access = true)
+    function save($children = true, $access = true)
     {
         if ($this->_attribs['value_type'] != Entity::VALUE_FILE){
             $this->_attribs['value_type'] = Entity::VALUE_TEXT;
