@@ -1,19 +1,21 @@
 {
     "value": "",
+    "value_type": 2,
     "proto": "/Library/basic/Text",
+    "is_mandatory": true,
     "order": 4,
     "children": {
         "title": {
             "value": "Пароль",
             "proto": "/Library/basic/Text/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/basic/Text/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

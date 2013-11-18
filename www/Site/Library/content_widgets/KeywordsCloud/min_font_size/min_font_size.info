@@ -1,12 +1,13 @@
 {
     "value": "8",
     "proto": "/Library/basic/Number",
+    "is_mandatory": true,
     "order": 7,
     "children": {
         "title": {
             "value": "Минимальный размер шрифта",
             "proto": "/Library/basic/Number/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

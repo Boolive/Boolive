@@ -8,13 +8,13 @@
         "title": {
             "value": "Обработчик форм",
             "proto": "/Library/views/View/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Принимает запросы от форм. Во входящих данных должен быть параметр widget с uri виджета (форма). Клиенту отвечает редиректом на текущий запрос без парметров",
             "proto": "/Library/views/View/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

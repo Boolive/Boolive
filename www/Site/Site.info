@@ -7,13 +7,13 @@
         "title": {
             "value": "Мой сайт",
             "proto": "/Library/views/View/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Содержит абсолютно все данные о сайте, а также логику его работы",
             "proto": "/Library/views/View/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

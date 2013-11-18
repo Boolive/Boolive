@@ -7,7 +7,7 @@
         "title": {
             "value": "Виджеты",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

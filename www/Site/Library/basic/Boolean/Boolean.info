@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Булево",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Логическое значение ДА или НЕТ",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -2,19 +2,20 @@
     "value": "style.css",
     "value_type": 3,
     "proto": "/Library/views/Css",
+    "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {
             "value": "style",
             "proto": "/Library/views/Css/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "proto": "/Library/views/Css/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -2,18 +2,19 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Action",
+    "is_mandatory": true,
     "order": 18,
     "children": {
         "title": {
             "value": "Установка обновлений",
             "proto": "/Library/access/Action/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Установка найденных обновлений для объекта",
             "proto": "/Library/access/Action/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

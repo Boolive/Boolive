@@ -6,13 +6,13 @@
         "title": {
             "value": "Простые",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 5
         },
         "description": {
             "value": "Коллекция простых объектов",
             "proto": "/Library/basic/Package/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 6
         }
     }

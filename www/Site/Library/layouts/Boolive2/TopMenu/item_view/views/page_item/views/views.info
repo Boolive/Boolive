@@ -3,6 +3,7 @@
     "value": "",
     "proto": "/Library/layouts/Boolive2/TopMenu/item_view/views",
     "is_link": true,
+    "is_mandatory": true,
     "is_relative": true,
     "order": 6
 }

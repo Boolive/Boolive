@@ -1,10 +1,11 @@
 {
     "value": "",
+    "is_mandatory": true,
     "order": 7,
     "children": {
         "title": {
             "value": "Быстрый выбор",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

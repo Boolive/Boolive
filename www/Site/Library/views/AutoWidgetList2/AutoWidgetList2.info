@@ -8,33 +8,34 @@
         "title": {
             "value": "Виджет автоотображения свойств объекта",
             "proto": "/Library/views/Widget/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "description": {
             "value": "Для отображения свойств объекта соответствующими виджетом из списка",
             "proto": "/Library/views/Widget/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 3
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -43,20 +44,21 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
+            "is_mandatory": true,
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/views/Widget/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -65,12 +67,14 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/object_rule",
+            "is_mandatory": true,
             "order": 7,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/views/Widget/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

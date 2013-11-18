@@ -4,19 +4,21 @@
     "value_type": 3,
     "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.menu",
     "is_link": true,
+    "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "jquery.ui.menu",
             "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.menu/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Эталон для всех скриптов на языке JavaScript",
             "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.menu/description",
+            "is_mandatory": true,
             "order": 2
         }
     }

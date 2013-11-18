@@ -21,7 +21,7 @@ class Draft extends ToggleAction
     function toggle()
     {
         $result = array();
-        // Изменение признака is_hidden
+        // Изменение признака is_draft
         $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
         if ($first = reset($objects)){
             $result['changes'] = array();

@@ -1,20 +1,22 @@
 {
     "is_default_value": true,
     "value": " ",
+    "value_type": 2,
     "proto": "/Library/basic/HTMLText",
+    "is_mandatory": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Tекст",
             "proto": "/Library/basic/HTMLText/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "HTML текст длиной до 65535 символов (64Кбайт)",
             "proto": "/Library/basic/HTMLText/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

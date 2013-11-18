@@ -2,5 +2,6 @@
     "is_default_value": true,
     "value": "1",
     "proto": "/Library/views/Logo/use_object",
+    "is_mandatory": true,
     "order": 4
 }

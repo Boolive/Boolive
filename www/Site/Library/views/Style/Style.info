@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Стиль ",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Для оформления одного объекта",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "width": {

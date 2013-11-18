@@ -2,18 +2,19 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Action",
+    "is_mandatory": true,
     "order": 8,
     "children": {
         "title": {
             "value": "Исполнение",
             "proto": "/Library/access/Action/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Вызов методов объекта",
             "proto": "/Library/access/Action/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

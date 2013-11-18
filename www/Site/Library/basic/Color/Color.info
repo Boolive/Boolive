@@ -4,10 +4,12 @@
     "children": {
         "title": {
             "value": "Цвет",
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Код цвета в HEX формате. Например #FF0099",
+            "is_mandatory": true,
             "order": 2
         }
     }

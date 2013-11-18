@@ -7,13 +7,13 @@
         "title": {
             "value": "Формы",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Коллекция объектов для создания веб-форм",
             "proto": "/Library/basic/Package/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

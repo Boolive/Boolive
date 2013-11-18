@@ -4,12 +4,12 @@
     "children": {
         "title": {
             "value": "Пакет",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Коллекция объектов",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

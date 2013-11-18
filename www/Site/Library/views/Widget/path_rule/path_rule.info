@@ -1,15 +1,16 @@
 {
     "value": "",
+    "is_mandatory": true,
     "order": 8,
     "children": {
         "title": {
             "value": "Правило на URL (http)",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Регулярное выражение на адрес запроса, например ^news(/|$)",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

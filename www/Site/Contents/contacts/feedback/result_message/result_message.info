@@ -2,20 +2,21 @@
     "is_default_value": true,
     "value": "Спасибо, сообщение успешно отправлено",
     "proto": "/Library/content_samples/Feedback/result_message",
+    "is_mandatory": true,
     "order": 6,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Текст",
             "proto": "/Library/content_samples/Feedback/result_message/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/content_samples/Feedback/result_message/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

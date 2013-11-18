@@ -8,33 +8,34 @@
         "title": {
             "value": "Виджет автоотображения пунктов меню",
             "proto": "/Library/views/AutoWidgetList2/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Отображает пункт меню и подчиненные пункты меню, выбирая для этого соответствующий вид из списка видов.",
             "proto": "/Library/views/AutoWidgetList2/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList2/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList2/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -43,20 +44,21 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidgetList2/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/views/AutoWidgetList2/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }

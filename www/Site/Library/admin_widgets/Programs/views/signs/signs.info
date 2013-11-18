@@ -1,18 +1,18 @@
 {
     "value": "access(write/change)",
     "proto": "/Library/views/ViewSingle",
-    "order": 14,
+    "order": 16,
     "children": {
         "title": {
             "value": "Признаки",
             "proto": "/Library/views/ViewSingle/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Признаки выделенных объектов",
             "proto": "/Library/views/ViewSingle/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

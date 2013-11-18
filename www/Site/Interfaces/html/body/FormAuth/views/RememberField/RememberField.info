@@ -9,34 +9,35 @@
             "is_default_value": true,
             "value": "Поле формы",
             "proto": "/Library/forms/FormAuth/views/RememberField/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Эталон поля ввода строки",
             "proto": "/Library/forms/FormAuth/views/RememberField/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/forms/FormAuth/views/RememberField/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/forms/FormAuth/views/RememberField/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/forms/FormAuth/views/RememberField/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -45,12 +46,14 @@
             "is_default_value": true,
             "value": "attr(name,=,remember)",
             "proto": "/Library/forms/FormAuth/views/RememberField/object_rule",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/views/RememberField/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

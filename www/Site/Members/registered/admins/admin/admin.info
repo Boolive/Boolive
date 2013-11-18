@@ -1,40 +1,39 @@
 {
     "value": "",
     "proto": "/Library/access/User",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "value": "Админ",
             "proto": "/Library/access/User/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Эталон для создания пользователей",
             "proto": "/Library/access/User/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "email": {
             "value": "boolive@yandex.com",
             "proto": "/Library/access/User/email",
+            "is_mandatory": true,
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Email",
                     "proto": "/Library/access/User/email/title",
-                    "is_hidden": true,
-                    "is_draft": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Адрес электронной почты",
                     "proto": "/Library/access/User/email/description",
-                    "is_hidden": true,
-                    "is_draft": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -42,10 +41,12 @@
         "passw": {
             "value": "1eb47d0efadaadc81b4c435f53abb9679bee359c97d0007726466c0c80f82c23",
             "proto": "/Library/access/User/passw",
+            "is_mandatory": true,
             "order": 6
         },
         "visit_time": {
             "value": "1368016086",
+            "is_mandatory": true,
             "order": 7
         }
     }

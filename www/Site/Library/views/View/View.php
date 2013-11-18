@@ -129,7 +129,6 @@ class View extends Entity
     /**
      * Работа.
      * Обработка запроса и формирование вывода.
-     * Результат выводится функциями echo, print или возвращается через return
      * @return string|void Результат работы. Вместо return можно использовать вывод строк (echo, print,...)
      */
     function work(){}

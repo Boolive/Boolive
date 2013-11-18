@@ -7,13 +7,13 @@
         "title": {
             "value": "Группа пользователей",
             "proto": "/Library/access/Member/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Эталон для создания групп",
             "proto": "/Library/access/Member/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

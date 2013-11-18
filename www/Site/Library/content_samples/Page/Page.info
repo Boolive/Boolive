@@ -5,22 +5,24 @@
     "children": {
         "title": {
             "value": "Страница",
+            "is_mandatory": true,
             "order": 1,
             "children": {
                 "title": {
                     "value": "Название",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }
         },
         "description": {
             "value": "",
+            "is_mandatory": true,
             "order": 6,
             "children": {
                 "title": {
                     "value": "Описание ",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

@@ -29,7 +29,7 @@
                     }else{
                         history.back();
                         // @todo Выделение родительского объекта
-                        history.back();
+                        //history.back();
                     }
                     // Вход в родительский объект
 

@@ -2,5 +2,6 @@
     "is_default_value": true,
     "value": "1",
     "proto": "/Library/javascripts/history/redirect",
+    "is_mandatory": true,
     "order": 6
 }

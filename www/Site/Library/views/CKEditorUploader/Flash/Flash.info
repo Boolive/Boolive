@@ -3,21 +3,6 @@
     "value": "",
     "proto": "/Library/basic/Flash",
     "is_link": true,
-    "order": 4,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Flash файл",
-            "proto": "/Library/basic/Flash/title",
-            "is_hidden": true,
-            "order": 1
-        },
-        "description": {
-            "is_default_value": true,
-            "value": "Flash файл в формате .swf",
-            "proto": "/Library/basic/Flash/description",
-            "is_hidden": true,
-            "order": 2
-        }
-    }
+    "is_mandatory": true,
+    "order": 4
 }

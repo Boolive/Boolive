@@ -94,11 +94,11 @@
             /*}*/
         .ProgramsMenu ul li.view_toggle_action.checked .item,
         .ProgramsMenu ul li.view_toggle_action.checked .item:hover{
-            background-color: #E0E0E0;
+            background-color: #888;
             }
             .ProgramsMenu ul li.view_toggle_action.checked .item .title,
             .ProgramsMenu ul li.view_toggle_action.checked .item:hover .title{
-                color: #333;
+                color: #FFF;
             }
 
 

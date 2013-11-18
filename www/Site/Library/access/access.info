@@ -6,12 +6,12 @@
         "title": {
             "value": "Доступ и пользователи",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Пакет правил доступа, ролей, пользователей и групп",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

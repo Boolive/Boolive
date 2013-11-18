@@ -1,10 +1,11 @@
 {
     "value": "",
+    "is_mandatory": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Права доступа",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

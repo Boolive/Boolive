@@ -20,7 +20,7 @@ class view_select_object extends Widget
                 'object' => Rule::entity()->required(),
                 'program' => Rule::entity(array('is', '/Library/admin_widgets/SelectObject'))->required(), // Объект для пункта меню
                 //'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
-                'show' => Rule::bool()->default(true)->required(), // Показывать пункт или только его подчиенных?
+                'show' => Rule::bool()->default(true)->required(), // Показывать пункт или только его подчиненных?
                 'base_uri' => Rule::string()->required()
             ))
         ));

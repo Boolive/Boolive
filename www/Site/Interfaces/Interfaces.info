@@ -6,13 +6,13 @@
         "title": {
             "value": "Интерфейс",
             "proto": "/Library/views/ViewGroup/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Вид сайта, сервисы, API",
             "proto": "/Library/views/ViewGroup/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -8,14 +8,14 @@
             "is_default_value": true,
             "value": "Роль",
             "proto": "/Library/access/Role/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Сгруппированные права доступа по действиям над объектами.",
             "proto": "/Library/access/Role/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

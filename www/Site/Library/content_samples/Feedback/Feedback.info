@@ -5,8 +5,8 @@
     "children": {
         "title": {
             "value": "Обратная связь",
-            "is_hidden": true,
-            "order": 4
+            "is_mandatory": true,
+            "order": 1
         }
     }
 }

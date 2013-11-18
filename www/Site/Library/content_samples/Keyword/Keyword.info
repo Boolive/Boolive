@@ -5,7 +5,7 @@
     "children": {
         "title": {
             "value": "Ключевое слово",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

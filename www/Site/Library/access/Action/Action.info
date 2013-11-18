@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Действие",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Действие, на которое устанавливается правило доступа или запрета. Имя объекта соответствует названию действия.",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

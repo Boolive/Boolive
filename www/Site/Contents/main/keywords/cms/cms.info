@@ -3,6 +3,6 @@
     "value": "1",
     "proto": "/Keywords/cms",
     "is_link": true,
-    "is_hidden": true,
+    "is_mandatory": true,
     "order": 4
 }

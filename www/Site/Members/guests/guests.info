@@ -1,18 +1,18 @@
 {
     "value": "",
     "proto": "/Library/access/Group",
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "value": "Гости",
             "proto": "/Library/access/Group/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Незарегистрированные, но сохраненные пользователи",
             "proto": "/Library/access/Group/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -2,5 +2,6 @@
     "is_default_value": true,
     "value": "/admin/",
     "proto": "/Library/javascripts/history/basepath",
+    "is_mandatory": true,
     "order": 3
 }

@@ -1,20 +1,21 @@
 {
     "value": "info@boolive.ru",
     "proto": "/Library/content_samples/Feedback/email_to",
+    "is_mandatory": true,
     "order": 2,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Email",
             "proto": "/Library/content_samples/Feedback/email_to/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Адрес электронной почты",
             "proto": "/Library/content_samples/Feedback/email_to/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

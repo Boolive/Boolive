@@ -8,33 +8,34 @@
         "title": {
             "value": "HTML разметка",
             "proto": "/Library/views/Widget/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Определяет заголовки HTML документа, подключая необходимые теги в <HEAD>, требуемые виджетами",
             "proto": "/Library/views/Widget/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Widget/res",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/Widget/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }

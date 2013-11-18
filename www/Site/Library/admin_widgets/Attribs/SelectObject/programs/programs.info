@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject/programs",
     "is_link": true,
+    "is_mandatory": true,
     "order": 6
 }

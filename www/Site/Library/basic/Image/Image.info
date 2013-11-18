@@ -8,14 +8,14 @@
         "title": {
             "value": "Изображение",
             "proto": "/Library/basic/File/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Объект ассоциируемый с файлом. ",
             "proto": "/Library/basic/File/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 4
         }
     }

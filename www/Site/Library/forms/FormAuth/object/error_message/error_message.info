@@ -1,4 +1,5 @@
 {
     "value": "Неверный логин или пароль",
+    "is_mandatory": true,
     "order": 7
 }

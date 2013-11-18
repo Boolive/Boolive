@@ -1,4 +1,5 @@
 {
     "value": "Отмена",
+    "is_mandatory": true,
     "order": 4
 }

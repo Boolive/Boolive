@@ -7,35 +7,36 @@
         "title": {
             "value": "jQuery",
             "proto": "/Library/javascripts/JavaScript/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "JavaScript-библиотека для взаимодействия с HTML",
             "proto": "/Library/javascripts/JavaScript/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/JavaScript/depends/title",
-                    "is_hidden": true,
                     "is_draft": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/javascripts/JavaScript/depends/description",
-                    "is_hidden": true,
                     "is_draft": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }

@@ -7,32 +7,33 @@
         "title": {
             "value": "Список ключевых слов",
             "proto": "/Library/views/AutoWidgetList2/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Виджет для отображения всех ключевых слов страницы или другого содержимого",
             "proto": "/Library/views/AutoWidgetList2/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList2/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/AutoWidgetList2/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 3
                 }
             }
@@ -41,20 +42,21 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidgetList2/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/views/AutoWidgetList2/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -62,12 +64,14 @@
         "object_rule": {
             "value": "is(/Library/content_samples/Page/keywords)",
             "proto": "/Library/views/AutoWidgetList2/object_rule",
+            "is_mandatory": true,
             "order": 7,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

@@ -1,18 +1,19 @@
 {
     "value": "",
     "proto": "/Library/content_samples/Page",
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "value": "Главная",
             "proto": "/Library/content_samples/Page/title",
+            "is_mandatory": true,
             "order": 1,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }
@@ -20,13 +21,14 @@
         "description": {
             "value": "Главная страница первого простейшего сайта",
             "proto": "/Library/content_samples/Page/description",
+            "is_mandatory": true,
             "order": 7,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Описание ",
                     "proto": "/Library/content_samples/Page/description/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

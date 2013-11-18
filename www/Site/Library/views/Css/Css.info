@@ -8,13 +8,13 @@
         "title": {
             "value": "CSS",
             "proto": "/Library/views/View/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "proto": "/Library/views/View/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

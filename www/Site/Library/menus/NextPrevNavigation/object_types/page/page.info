@@ -2,20 +2,21 @@
     "value": "",
     "proto": "/Library/content_samples/Page",
     "is_link": true,
+    "is_mandatory": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Страницы",
             "proto": "/Library/content_samples/Page/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
-                    "is_hidden": true,
                     "is_draft": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

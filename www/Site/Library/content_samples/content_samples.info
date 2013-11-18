@@ -6,13 +6,13 @@
         "title": {
             "value": "Образцы содержимого",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Образцы содержимого. Страницы, разделы, каталоги, товар...",
             "proto": "/Library/basic/Package/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

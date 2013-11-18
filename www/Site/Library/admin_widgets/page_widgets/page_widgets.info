@@ -7,12 +7,12 @@
         "title": {
             "value": "Виджеты страницы",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Мини редакторы для свойств страницы",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Допуск",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Правило, разрешающее доступ к объектам. В правило добавляются ссылки на объекты",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

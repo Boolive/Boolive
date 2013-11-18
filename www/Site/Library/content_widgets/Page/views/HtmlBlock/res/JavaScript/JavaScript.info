@@ -3,40 +3,42 @@
     "value": "JavaScript.js",
     "value_type": 3,
     "proto": "/Library/views/HtmlBlock/res/JavaScript",
+    "is_mandatory": true,
     "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "JavaScript подсветки кода",
             "proto": "/Library/views/HtmlBlock/res/JavaScript/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Эталон для всех скриптов на языке JavaScript",
             "proto": "/Library/views/HtmlBlock/res/JavaScript/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/HtmlBlock/res/JavaScript/depends",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Используемые скрипты",
                     "proto": "/Library/views/HtmlBlock/res/JavaScript/depends/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "proto": "/Library/views/HtmlBlock/res/JavaScript/depends/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }

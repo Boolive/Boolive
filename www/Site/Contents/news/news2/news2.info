@@ -6,13 +6,14 @@
         "title": {
             "value": "Вторая новость",
             "proto": "/Library/content_samples/Page/title",
+            "is_mandatory": true,
             "order": 1,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Название",
                     "proto": "/Library/content_samples/Page/title/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }
@@ -21,13 +22,14 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/content_samples/Page/description",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Описание ",
                     "proto": "/Library/content_samples/Page/description/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

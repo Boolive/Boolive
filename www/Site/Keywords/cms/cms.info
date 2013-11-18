@@ -6,7 +6,7 @@
         "title": {
             "value": "CMS",
             "proto": "/Library/content_samples/Keyword/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

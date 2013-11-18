@@ -2,5 +2,6 @@
     "value": "style.css",
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject/res/style",
+    "is_mandatory": true,
     "order": 5
 }

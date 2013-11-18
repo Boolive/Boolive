@@ -2,40 +2,42 @@
     "value": "menu.tpl",
     "value_type": 3,
     "proto": "/Library/menus/Menu",
-    "order": 2,
+    "is_mandatory": true,
+    "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Меню",
             "proto": "/Library/menus/Menu/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Навигационное меню по содержимому сайта.",
             "proto": "/Library/menus/Menu/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/menus/Menu/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/menus/Menu/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/menus/Menu/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -48,7 +50,7 @@
             "children": {
                 "title": {
                     "value": "Пункты",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -56,18 +58,21 @@
         "cache": {
             "value": 1,
             "proto": "/Library/menus/Menu/cache",
+            "is_mandatory": true,
             "order": 9
         },
         "object_rule": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/menus/Menu/object_rule",
+            "is_mandatory": true,
             "order": 11,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/menus/Menu/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Файл",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Объект ассоциируемый с файлом. ",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

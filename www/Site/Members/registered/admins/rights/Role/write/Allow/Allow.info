@@ -7,14 +7,14 @@
             "is_default_value": true,
             "value": "Допуск",
             "proto": "/Library/access/Allow/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Правило, разрешающее доступ к объектам. В правило добавляются ссылки на объекты",
             "proto": "/Library/access/Allow/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

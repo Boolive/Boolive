@@ -1,18 +1,18 @@
 {
     "value": "",
     "proto": "/Library/access/Group",
-    "order": 3,
+    "order": 4,
     "children": {
         "title": {
             "value": "Администраторы",
             "proto": "/Library/access/Group/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Пользователи, управляющие сайтом",
             "proto": "/Library/access/Group/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

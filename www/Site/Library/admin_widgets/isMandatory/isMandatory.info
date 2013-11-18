@@ -1,0 +1,37 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/ToggleAction",
+    "is_default_class": false,
+    "order": 28,
+    "children": {
+        "title": {
+            "value": "Обязательный",
+            "proto": "/Library/admin_widgets/ToggleAction/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Установка признака \"Обязательный\" или его отмена для выделенных объектов",
+            "proto": "/Library/admin_widgets/ToggleAction/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "object_rule": {
+            "value": "access(write/change/is_mandatory)",
+            "proto": "/Library/admin_widgets/ToggleAction/object_rule",
+            "is_mandatory": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на объект",
+                    "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

@@ -3,20 +3,21 @@
     "value": "jquery.ui.ObjectItem.js",
     "value_type": 3,
     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem",
+    "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Boolive.ObjectItem",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "depends": {
@@ -24,6 +25,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/jquery.ui.ObjectItem/depends",
             "is_link": true,
+            "is_mandatory": true,
             "order": 3
         }
     }

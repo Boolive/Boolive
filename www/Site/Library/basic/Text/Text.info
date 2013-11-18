@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Текст",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

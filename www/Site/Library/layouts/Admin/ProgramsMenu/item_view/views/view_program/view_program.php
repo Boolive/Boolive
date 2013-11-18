@@ -18,7 +18,7 @@ class view_program extends Widget
     {
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
-                'program' => Rule::entity(array('is', '/Library/views/Widget'))->required(), // Объект для пункта меню
+                'program' => Rule::entity(array('is', '/Library/views/View'))->required(), // Объект для пункта меню
                 //'active' => Rule::entity()->default(null)->required(),// Активный объект (пункт меню)
                 'show' => Rule::bool()->default(true)->required(), // Показывать пункт или только его подчиенных?
                 'base_uri' => Rule::string()->required()

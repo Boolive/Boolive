@@ -1,19 +1,20 @@
 {
     "value": 0,
     "proto": "/Library/basic/Boolean",
+    "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {
             "value": "Запомнить",
             "proto": "/Library/basic/Boolean/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Логическое значение ДА или НЕТ",
             "proto": "/Library/basic/Boolean/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

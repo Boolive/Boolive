@@ -1,10 +1,11 @@
 {
     "value": "Выполнить",
+    "is_mandatory": true,
     "order": 6,
     "children": {
         "title": {
             "value": "Название действия",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

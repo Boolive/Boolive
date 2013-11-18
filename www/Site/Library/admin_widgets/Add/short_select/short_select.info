@@ -2,13 +2,14 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/admin_widgets/SelectObject/short_select",
+    "is_mandatory": true,
     "order": 8,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Быстрый выбор",
             "proto": "/Library/admin_widgets/SelectObject/short_select/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

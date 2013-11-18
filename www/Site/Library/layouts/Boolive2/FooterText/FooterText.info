@@ -3,39 +3,41 @@
     "value": "HtmlBlock.tpl",
     "value_type": 3,
     "proto": "/Library/views/HtmlBlock",
+    "is_mandatory": true,
     "order": 10,
     "children": {
         "title": {
             "value": "Текст в футере",
             "proto": "/Library/views/HtmlBlock/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/HtmlBlock/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/HtmlBlock/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/views/HtmlBlock/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/HtmlBlock/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -44,41 +46,44 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/HtmlBlock/cache",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
                     "proto": "/Library/views/HtmlBlock/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/views/HtmlBlock/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
         },
         "object": {
             "value": "<p>© <em><strong>Boolive</strong></em> 2013. <a href=\"/admin\">Войти</a>&nbsp;</p>\n",
+            "value_type": 2,
             "proto": "/Library/views/HtmlBlock/object",
+            "is_mandatory": true,
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Объект отображения",
                     "proto": "/Library/views/HtmlBlock/object/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "HTML текст длиной до 65535 символов (64Кбайт)",
                     "proto": "/Library/views/HtmlBlock/object/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -87,12 +92,14 @@
             "is_default_value": true,
             "value": "is(/Library/basic/HTMLText)",
             "proto": "/Library/views/HtmlBlock/object_rule",
+            "is_mandatory": true,
             "order": 6,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/views/HtmlBlock/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

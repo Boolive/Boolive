@@ -4,12 +4,12 @@
     "children": {
         "title": {
             "value": "Библиотека",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Готовые для использования объекты",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

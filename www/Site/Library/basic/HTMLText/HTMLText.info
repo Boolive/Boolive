@@ -7,13 +7,13 @@
         "title": {
             "value": "Эталон HTML текста",
             "proto": "/Library/basic/Text/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "HTML текст длиной до 65535 символов (64Кбайт)",
             "proto": "/Library/basic/Text/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

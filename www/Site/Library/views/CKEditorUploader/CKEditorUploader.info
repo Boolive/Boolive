@@ -8,13 +8,13 @@
         "title": {
             "value": "CKEditor File Uploader",
             "proto": "/Library/views/View/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Загрузчик файлов для WYSIWYG редактора CKEditor 4",
             "proto": "/Library/views/View/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -5,12 +5,12 @@
     "children": {
         "title": {
             "value": "Число",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Числовое значение любой величены",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

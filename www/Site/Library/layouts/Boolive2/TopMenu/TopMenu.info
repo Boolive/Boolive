@@ -3,40 +3,42 @@
     "value": "TopMenu.tpl",
     "value_type": 3,
     "proto": "/Library/menus/TopMenu",
+    "is_mandatory": true,
     "order": 7,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Горизонтальное меню",
             "proto": "/Library/menus/TopMenu/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Навигационное меню с выпадающими подменю",
             "proto": "/Library/menus/TopMenu/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/menus/TopMenu/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "",
                     "proto": "/Library/menus/TopMenu/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "",
                     "proto": "/Library/menus/TopMenu/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -45,20 +47,21 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/menus/TopMenu/cache",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "",
                     "proto": "/Library/menus/TopMenu/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "",
                     "proto": "/Library/menus/TopMenu/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -67,12 +70,14 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/menus/TopMenu/object_rule",
+            "is_mandatory": true,
             "order": 6,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/menus/TopMenu/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }
@@ -82,6 +87,7 @@
             "value": "",
             "proto": "/Library/menus/TopMenu/object",
             "is_link": true,
+            "is_mandatory": true,
             "order": 7
         }
     }

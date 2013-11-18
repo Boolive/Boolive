@@ -8,30 +8,31 @@
         "title": {
             "value": "Виджет",
             "proto": "/Library/views/View/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета",
             "proto": "/Library/views/View/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "value": "",
             "proto": "/Library/views/ViewGroup",
+            "is_mandatory": true,
             "order": 5,
             "children": {
                 "title": {
                     "value": "Ресурсы",
                     "proto": "/Library/views/ViewGroup/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/views/ViewGroup/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -40,34 +41,36 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/basic/Boolean",
+            "is_mandatory": true,
             "order": 6,
             "children": {
                 "title": {
                     "value": "Кэшировать?",
                     "proto": "/Library/basic/Boolean/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/basic/Boolean/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
         },
         "object_rule": {
             "value": "",
+            "is_mandatory": true,
             "order": 7,
             "children": {
                 "title": {
                     "value": "Правило на объект",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Правило на отображаемый объект. Если объект не соответствует правилу, то виджет не работает.",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }

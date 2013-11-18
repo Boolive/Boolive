@@ -6,13 +6,13 @@
         "title": {
             "value": "Пользователи и группы",
             "proto": "/Library/access/Group/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Все пользователи и группы с назначенными правами доступа",
             "proto": "/Library/access/Group/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

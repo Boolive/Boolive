@@ -2,18 +2,19 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Action",
+    "is_mandatory": true,
     "order": 16,
     "children": {
         "title": {
             "value": "Логика",
             "proto": "/Library/access/Action/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Изменение признака \"Своя логика\" и редактирование логики через админку",
             "proto": "/Library/access/Action/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

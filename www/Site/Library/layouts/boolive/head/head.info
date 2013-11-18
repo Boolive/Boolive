@@ -1,24 +1,26 @@
 {
     "value": "",
     "proto": "/Library/views/ViewGroup",
-    "order": 3,
+    "is_mandatory": true,
+    "order": 4,
     "children": {
         "title": {
             "value": "Шапка",
             "proto": "/Library/views/ViewGroup/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
             "proto": "/Library/views/ViewGroup/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 3
         },
         "cache": {
             "value": 1,
             "proto": "/Library/views/Widget/cache",
+            "is_mandatory": true,
             "order": 4
         }
     }

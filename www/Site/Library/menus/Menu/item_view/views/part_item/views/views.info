@@ -3,6 +3,7 @@
     "value": "",
     "proto": "/Library/menus/Menu/item_view/views",
     "is_link": true,
+    "is_mandatory": true,
     "is_relative": true,
     "order": 5
 }

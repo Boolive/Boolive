@@ -1,17 +1,18 @@
 {
     "value": "",
+    "is_mandatory": true,
     "order": 4,
     "children": {
         "title": {
             "value": "Список разрешенных объектов",
             "proto": "/Library/views/Widget/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Список объектов, по которым разрешена навигация",
             "proto": "/Library/views/Widget/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

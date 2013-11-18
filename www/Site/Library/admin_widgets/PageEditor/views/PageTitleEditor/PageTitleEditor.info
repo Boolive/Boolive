@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/page_widgets/PageTitleEditor",
     "is_link": true,
+    "is_mandatory": true,
     "order": 3
 }

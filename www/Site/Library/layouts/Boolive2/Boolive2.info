@@ -8,34 +8,35 @@
         "title": {
             "value": "Boolive2",
             "proto": "/Library/layouts/Layout/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Виджет для создания макетов (разметки html страницы).",
             "proto": "/Library/layouts/Layout/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/layouts/Layout/res",
+            "is_mandatory": true,
             "order": 3,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/layouts/Layout/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/layouts/Layout/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -44,20 +45,21 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/layouts/Layout/cache",
+            "is_mandatory": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
                     "proto": "/Library/layouts/Layout/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/layouts/Layout/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -66,13 +68,14 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/layouts/Layout/object_rule",
+            "is_mandatory": true,
             "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/layouts/Layout/object_rule/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

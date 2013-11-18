@@ -2,5 +2,6 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/javascripts/history/type",
+    "is_mandatory": true,
     "order": 5
 }

@@ -3,40 +3,42 @@
     "value": "FormAuth.tpl",
     "value_type": 3,
     "proto": "/Library/forms/FormAuth",
+    "is_mandatory": true,
     "order": 10,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Аутентификация",
             "proto": "/Library/forms/FormAuth/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 5
         },
         "description": {
             "is_default_value": true,
             "value": "Для аутентификации пользователя перед доступом к закрытым разделам сайта",
             "proto": "/Library/forms/FormAuth/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 6
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/forms/FormAuth/res",
+            "is_mandatory": true,
             "order": 7,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
                     "proto": "/Library/forms/FormAuth/res/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "proto": "/Library/forms/FormAuth/res/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 3
                 }
             }
@@ -51,7 +53,7 @@
                     "is_default_value": true,
                     "value": "Модель авторизации",
                     "proto": "/Library/forms/FormAuth/object/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 }
             }
@@ -60,20 +62,21 @@
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/forms/FormAuth/cache",
+            "is_mandatory": true,
             "order": 10,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
                     "proto": "/Library/forms/FormAuth/cache/title",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "proto": "/Library/forms/FormAuth/cache/description",
-                    "is_hidden": true,
+                    "is_mandatory": true,
                     "order": 2
                 }
             }
@@ -82,12 +85,14 @@
             "is_default_value": true,
             "value": "",
             "proto": "/Library/forms/FormAuth/object_rule",
+            "is_mandatory": true,
             "order": 11,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/object_rule/title",
+                    "is_mandatory": true,
                     "order": 1
                 }
             }

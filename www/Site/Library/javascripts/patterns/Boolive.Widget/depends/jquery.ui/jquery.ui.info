@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/jquery.ui",
     "is_link": true,
+    "is_mandatory": true,
     "order": 4
 }

@@ -8,14 +8,14 @@
             "is_default_value": true,
             "value": "Логин",
             "proto": "/Library/forms/FormAuth/object/name/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Имя пользователя",
             "proto": "/Library/forms/FormAuth/object/name/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -7,13 +7,13 @@
         "title": {
             "value": "Шаблоны скриптов",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Заготовки для написания собственных скриптов с использованием различных библиотек. ",
             "proto": "/Library/basic/Package/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

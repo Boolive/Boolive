@@ -7,13 +7,13 @@
         "title": {
             "value": "JavaScripts",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Пакет с JavaScript-библиотеками, плагинами и заготовками для написания собственных скриптов",
             "proto": "/Library/basic/Package/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

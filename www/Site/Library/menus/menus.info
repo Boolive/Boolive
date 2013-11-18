@@ -7,13 +7,13 @@
         "title": {
             "value": "Навигация",
             "proto": "/Library/basic/Package/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Коллекция виджетов для навигации по сайту",
             "proto": "/Library/basic/Package/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/jquery",
     "is_link": true,
+    "is_mandatory": true,
     "order": 3
 }

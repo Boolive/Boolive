@@ -18,7 +18,6 @@ class Logo extends Widget
     function show($v = array(), $commands, $input)
     {
         $v['image'] = $this->_input['REQUEST']['object']->file();
-        //$v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
         return parent::show($v, $commands, $input);
     }
 }
