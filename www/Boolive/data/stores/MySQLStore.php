@@ -775,7 +775,7 @@ class MySQLStore extends Entity
      * Если для объекта есть обновления, то он помечается признаком dif = changed
      * Ищутся новые свойства (подчиненные объекты) от прототипа или info файлов. Найденные объекты сохраняются с признаком dif = new, если уже были проиндексированы после создания. Иначе без признака.
      * Проверяются существующие свойства объекта, если их прототип отсутсвует, но был свойством прототипа родителя, то такие свойства помечаются dif = delete
-     * Для каждого свойства запускается findUpdate()
+     * Для каждого свойства запускается findUpdates()
      *
      * @param Entity $entity Обновляеый объект
      * @param int $step_size Количество проверяемых подчиненных за раз
@@ -890,26 +890,29 @@ class MySQLStore extends Entity
                     // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
                     foreach ($pchildren as $proto){
                         /** @var $proto Entity */
-                        // Если прототип относительный, то проверить наличие свойства в объекте с именем этого прототипа
-                        // если есть, то создавать его не надо
-                        if (!$proto->isRelative() || !($c = $entity->{$proto->name()}) || !$c->isExist() || !$c->isRelative()){
-                            $child = $proto->birth($entity, false);
-                            $child->_attribs['is_mandatory'] = $proto->isMandatory();
-                            $child->_attribs['diff'] = $diff;
-                            $child->_attribs['diff_from'] = 1;
-                            $this->write($child, false);
-                            // После сохранения, когда получает уникальное имя, меняем прототип, если он должен быть относительным
-                            if ($proto->isRelative() && ($p = $proto->proto())){
-                                $new_proto = Data::getRelativeProto($child->uri(), $proto->uri(), $p->uri());
-                                if ($new_proto!==false){
-                                    $new_proto = Data::read(array(
-                                        'from' => $new_proto,
-                                        'select' => 'self',
-                                        'cache' => 0
-                                    ));
-                                    $child->proto($new_proto);
-                                    $child->isRelative(true);
-                                    $this->write($child, false);
+                        $c = $entity->{$proto->name()};
+                        if (!$c->isExist()){
+                            // Если прототип относительный, то проверить наличие свойства в объекте с именем этого прототипа
+                            // если есть, то создавать его не надо
+                            if (!$proto->isRelative() || !$c->isRelative()){
+                                $child = $proto->birth($entity, false);
+                                $child->_attribs['is_mandatory'] = $proto->isMandatory();
+                                $child->_attribs['diff'] = $diff;
+                                $child->_attribs['diff_from'] = 1;
+                                $this->write($child, false);
+                                // После сохранения, когда получает уникальное имя, меняем прототип, если он должен быть относительным
+                                if ($proto->isRelative() && ($p = $proto->proto())){
+                                    $new_proto = Data::getRelativeProto($child->uri(), $proto->uri(), $p->uri());
+                                    if ($new_proto!==false){
+                                        $new_proto = Data::read(array(
+                                            'from' => $new_proto,
+                                            'select' => 'self',
+                                            'cache' => 0
+                                        ));
+                                        $child->proto($new_proto);
+                                        $child->isRelative(true);
+                                        $this->write($child, false);
+                                    }
                                 }
                             }
                         }
