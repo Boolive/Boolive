@@ -45,6 +45,7 @@ class Explorer extends AutoWidgetList2
                 $this->filter->hidden->value(!empty($this->_input['REQUEST']['filter']['hidden']));
                 $this->filter->draft->value(!empty($this->_input['REQUEST']['filter']['draft']));
                 $this->filter->updates->value(!empty($this->_input['REQUEST']['filter']['updates']));
+                $this->filter->mandatory->value(!empty($this->_input['REQUEST']['filter']['mandatory']));
                 $this->filter->save();
             }
             // Текущий фильтр для отображения меню фильтра
@@ -90,11 +91,12 @@ class Explorer extends AutoWidgetList2
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
         $filters = $this->filter->find(array('key'=>'name', 'cache'=>2));
         $any = array();
-        // Реальные объекты. У которых все признаки false
+        // Обычные объекты. У которых все признаки false
         if ($filters['real']->value()) {
             $any[] = array('all', array(
                 array('attr', 'is_hidden', '=', $obj['is_hidden']),
                 array('attr', 'is_draft', '=', $obj['is_draft']),
+                array('attr', 'is_mandatory', '=', 0),
                 array('attr', 'diff', '!=', Entity::DIFF_ADD)
             ));
         }
@@ -104,11 +106,17 @@ class Explorer extends AutoWidgetList2
         }else{
             $cond['where'][] = array('attr', 'is_hidden', '=', $obj['is_hidden']);
         }
-        // Удаленные объекты
+        // Черновики
         if ($filters['draft']->value()) {
             $any[] = array('attr', 'is_draft', '!=', $obj['is_draft']);
         }else{
             $cond['where'][] = array('attr', 'is_draft', '=', $obj['is_draft']);
+        }
+        // Свойства
+        if ($filters['mandatory']->value()) {
+            $any[] = array('attr', 'is_mandatory', '!=', 0);
+        }else{
+            $cond['where'][] = array('attr', 'is_mandatory', '=', 0);
         }
         // Обновления
         if ($filters['updates']->value()) {

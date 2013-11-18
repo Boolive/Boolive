@@ -74,6 +74,14 @@
                         view.removeClass('draft');
                     }
                 }
+                // Свойство
+                if (!_.isUndefined(changes['is_mandatory'])){
+                    if (changes['is_mandatory']){
+                        view.addClass('mandatory');
+                    }else{
+                        view.removeClass('mandatory');
+                    }
+                }
                 // Ссылка
                 if (!_.isUndefined(changes['is_link'])){
                     if (changes['is_link']){

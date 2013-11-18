@@ -10,6 +10,9 @@
         if($v['is_link']->bool()){
             $class .= ' link';
         }
+        if($v['is_mandatory']->bool()){
+            $class .= ' mandatory';
+        }
         switch ($v['diff']->int()){
             case \Boolive\data\Entity::DIFF_CHANGE:
                 $class .= ' diff_change';
@@ -36,4 +39,5 @@
             <span class="description"><?php echo $v['description'];?></span>
         </span>
 	</div>
+
 </div>

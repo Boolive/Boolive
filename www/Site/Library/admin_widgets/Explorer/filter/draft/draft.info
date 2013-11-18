@@ -1,19 +1,20 @@
 {
     "value": 1,
     "proto": "/Library/basic/Boolean",
-    "order": 4,
+    "is_mandatory": true,
+    "order": 6,
     "children": {
         "title": {
             "value": "Черновики",
             "proto": "/Library/basic/Boolean/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Логическое значение ДА или НЕТ",
             "proto": "/Library/basic/Boolean/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         }
     }

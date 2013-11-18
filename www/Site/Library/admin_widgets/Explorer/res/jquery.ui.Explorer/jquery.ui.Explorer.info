@@ -2,12 +2,13 @@
     "value": "jquery.ui.Explorer.js",
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {
             "value": "Boolive.Explorer",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "depends": {
@@ -15,6 +16,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
+            "is_mandatory": true,
             "order": 3
         }
     }

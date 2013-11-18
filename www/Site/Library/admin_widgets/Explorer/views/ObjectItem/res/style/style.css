@@ -4,6 +4,13 @@
 	position: relative;
     cursor: default;
 	}
+    .ObjectItem.list .sub{
+        margin: 0 0 0 25px;
+
+    }
+    .ObjectItem.list .sub > .view{
+        border-left: 1px solid #F0F0F0;
+    }
 	.ObjectItem.list .view{
 		overflow: hidden;
 		padding: 0 40px 0 0px;
@@ -116,6 +123,10 @@
                         }
                     .ObjectItem.list .draft .main .title > *{
                         color: #555;
+                        /*font-weight: bold;*/
+                        }
+                    .ObjectItem.list .mandatory .main .title > *{
+                        color: #9F1C67;
                         }
                     .ObjectItem.list .main .title:hover > *{
                         text-decoration: underline;

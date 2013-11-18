@@ -1,10 +1,11 @@
 {
     "value": "",
+    "is_mandatory": true,
     "order": 6,
     "children": {
         "title": {
             "value": "Вид (способ отображения)",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

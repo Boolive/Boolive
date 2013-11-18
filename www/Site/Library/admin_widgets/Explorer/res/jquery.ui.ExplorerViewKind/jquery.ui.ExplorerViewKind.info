@@ -2,18 +2,19 @@
     "value": "jquery.ui.ExplorerViewKind.js",
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
+    "is_mandatory": true,
     "order": 7,
     "children": {
         "title": {
             "value": "Меню вида",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Смена способы отображения объектов",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
-            "is_hidden": true,
+            "is_mandatory": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +22,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
+            "is_mandatory": true,
             "order": 3
         }
     }
