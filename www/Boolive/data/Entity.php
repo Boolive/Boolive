@@ -45,16 +45,6 @@ class Entity implements ITrace
     /** @const int Объект связан с файлом. Значением объекта является имя файла. */
     const VALUE_FILE = 3;
 
-    /** Типы владения объектом его родителем. Используется при прототипировании родителя */
-    /** @const int Обязатлеьное владение. Автоматически прототипируется в новых наследниках родителя. */
-    const POSSESSION_MANDATORY = 0;
-    /** @const int Дополнительное владение. Вручную прототипируется (устанавливается) в наследниках родителя. */
-    const POSSESSION_ADDITIONAL = 1;
-    /** @const int Внутреннее владение. Не прототипируется в новых наследниках родителя и не видет при их обновлении для ручной установки.
-     * В обычных случаях объект остаётся доступным с учётом прав доступа
-     */
-    const POSSESSION_INTERNAL = 2;
-
     /** @var array Атрибуты */
     public $_attribs = array(
         'uri'          => null,
@@ -71,12 +61,12 @@ class Entity implements ITrace
         'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
+        'is_mandatory'  => 0,
         'is_relative'  => 0,
         'is_default_value' => null, // по умолчанию равен id
         'is_default_class' => 0,
         'is_accessible'    => 1,
         'is_exist'     => 0,
-        'possession'   => Entity::POSSESSION_MANDATORY,
         'author'	   => null,
         'update_step'  => 0,
         'update_time'  => 0,
@@ -95,6 +85,8 @@ class Entity implements ITrace
     protected $_link = false;
     /** @var Entity Экземпляр прототипа, от которого берется значение по умолчанию */
     protected $_default_value_proto = false;
+    /** @var bool Признак, свойство внутренне или нет */
+    protected $_is_inner = false;
     /** @var bool Принзнак, объект в процессе сохранения? */
     protected $_is_saved = false;
     /** @var bool Признак, изменены ли атрибуты объекта */
@@ -158,22 +150,22 @@ class Entity implements ITrace
             'id'           => Rule::uri(), // Сокращенный или полный URI
             'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(50)->required(), // Имя объекта без символов /@:#\
             'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
-            'date'		   => Rule::int(), // Дата создания в секундах. Версия объекта
+            'date'		   => Rule::int(), // Дата создания в секундах
             'parent'       => Rule::uri(), // URI родителя
             'proto'        => Rule::uri(), // URI прототипа
             'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
-            'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения (0=авто, 1=простое, 2=текст, 3=файл)
+            'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения. Определяет способ хранения (0=авто, 1=простое, 2=текст, 3=файл)
             'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
             'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
             'is_link'      => Rule::uri(), // Ссылка или нет?
+            'is_mandatory'  => Rule::bool()->int(), // Признак, обязательный или дополненый?
             'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
-            'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или оно переопределено?
+            'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё?
             'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
-            'possession'   => Rule::int()->min(0)->max(2), // Коды владения объектом его родителем
-            'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
+            'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
             'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
             'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
-            // Сведения о загружаемом файле. Не является атрибутом объекта
+            // Сведения о загружаемом файле. Не является атрибутом объекта, но используется в общей обработке
             'file'	=> Rule::arrays(array(
                 'tmp_name'	=> Rule::string(), // Путь на связываемый файл
                 'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
@@ -279,8 +271,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Дата изменения или версия объекта.
-     * Если история изменения объекта не ведется, то является датой создания объекта
+     * Дата изменения
      * @return mixed
      */
     function date()
@@ -327,6 +318,7 @@ class Entity implements ITrace
 
     /**
      * Тип значения (коды типов определены константами Entity::VALUE_*)
+     * Определяет способ хранения значения
      * @param null|integer $new_type Новые тип значения, если не null
      * @return integer Текущий тип значения
      */
@@ -504,7 +496,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, является занчение файлом или нет?
+     * Признак, является значение файлом или нет?
      * @param null|bool $is_file Новое значение, если не null
      * @return bool
      */
@@ -616,6 +608,21 @@ class Entity implements ITrace
     }
 
     /**
+     * Признак, объект является обязательным для родителя (true) или дополненым (false)?
+     * @param null|bool $is_mandatory Новое значение, если не null
+     * @return bool
+     */
+    function isMandatory($is_mandatory = null)
+    {
+        if (isset($is_mandatory) && (empty($this->_attribs['is_mandatory']) == $is_mandatory)){
+            $this->_attribs['is_mandatory'] = $is_mandatory;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_mandatory']);
+    }
+
+    /**
      * Признак, прототип относительный или нет?
      * @param null|bool $is_relative Новое значение, если не null
      * @return bool
@@ -640,7 +647,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, доступен объект или нет для совершения указываемого действия над ним
+     * Признак, доступен объект или нет для совершения указываемого действия над ним?
      * Доступность проверяется для текущего пользователя
      * @param string $action Название действия. По умолчанию дейсвте чтения объекта.
      * @return bool
@@ -657,7 +664,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, наследуется ли значение от прототипа и от кого именно
+     * Признак, наследуется ли значение от прототипа и от кого именно?
      * @param null $is_default Новое значение признака. Для отмены значения по умолчанию необходимое изменить само значение.
      * @param $return_proto Если значение по умолчанию, то возвращать прототип, чьё значение наследуется или true?
      * @return bool|Entity
@@ -768,21 +775,6 @@ class Entity implements ITrace
     }
 
     /**
-     * Тип владения объектом его родителем
-     * @param null|int $possession Новый код владения. Коды определены константами Entity::POSSESSION_*
-     * @return int Установленный код владения или текущий
-     */
-    function possession($possession = null)
-    {
-        if (isset($possession)){
-            $this->_attribs['possession'] = $possession;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return $this->_attribs['possession'];
-    }
-
-    /**
      * Найденные отличия в объекте
      * @param null|int $diff
      * @return int Код отличия
@@ -800,7 +792,7 @@ class Entity implements ITrace
     /**
      * От куда найдены отличия в объекте?
      * @param null|int $diff_from
-     * @return int Код отличия
+     * @return int Код, от куда обновления
      */
     function diff_from($diff_from = null)
     {
@@ -930,7 +922,7 @@ class Entity implements ITrace
 
     /**
      * Имя родителя
-     * Если известен свой URI, то имя родителя определяется без обращения к родителю
+     * Имя родителя определяется без загрузки и обращения к родителю
      * @return string
      */
     function parentName()
@@ -1097,6 +1089,35 @@ class Entity implements ITrace
     }
 
     /**
+     * Внутреннй.
+     * Доступ к внутренему объекту, который скрыт в (одном из) прототипе родителя
+     * Объеты не создаются автоматически из-за скрытости их прототипов, но к ним можно получить доступ.
+     * @return $this | Entity Текущий или новый объект, если текущий не существует, но у него есть скрытый прототип
+     */
+    function inner()
+    {
+        if (!$this->isExist() && !$this->_attribs['proto'] && ($p = $this->parent())){
+            // У прототипов родителя найти свойство с именем $this->name()
+            $find = false;
+            $name = $this->name();
+            $protos = array($this);
+            $parents = array($p);
+            while (($p = $p->proto()) && !$find){
+                $propertry = $p->{$name};
+                $find = $propertry->isExist();
+                $protos[] = $propertry;
+                $parents[] = $p;
+            }
+            for ($i = sizeof($protos)-1; $i>0; $i--){
+                $protos[$i-1] = $protos[$i]->birth($parents[$i-1], false);
+                $protos[$i-1]->_is_inner = true;
+            }
+            return $protos[0];
+        }
+        return $this;
+    }
+
+    /**
      * Следующий объект
      */
     function next()
@@ -1177,11 +1198,13 @@ class Entity implements ITrace
             if (!$obj->isExist()){
                 $obj->_attribs['name'] = $name;
                 $obj->_attribs['uri'] = $this->uri().'/'.$name;
-
             }else{
 
             }
             $this->__set($name, $obj);
+            if (!$obj->isExist()){
+                $obj->_changed = false;
+            }
             return $obj;
         }
     }
@@ -1365,7 +1388,7 @@ class Entity implements ITrace
     #################################################
 
     /**
-     * Сохранение объекта в секции
+     * Сохранение объекта
      * @param bool $children Признак, сохранять подчиенных или нет?
      * @param bool $access Признак, проверять доступ на запись или нет?
      * @throws \Exception
@@ -1376,21 +1399,26 @@ class Entity implements ITrace
         if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;
-                // Сохранение родителя, если не сохранен или требует переименования
-                if ($this->_parent){
-                    if (!$this->_parent->isExist() || $this->_parent->_autoname){
-                        $this->_parent->save(false, $access);
+                if ($this->_changed){
+                    // Сохранение родителя, если не сохранен или требует переименования
+                    if ($this->_parent){
+                        if (!$this->_parent->isExist() || $this->_parent->_autoname){
+                            $this->_parent->save(false, $access);
+                        }
+                        $this->_attribs['parent'] = $this->_parent->key();
                     }
-                    $this->_attribs['parent'] = $this->_parent->key();
-                }
-                if ($this->_proto){
-                    $this->_attribs['proto'] = $this->_proto->key();
-                }
-                 // Если создаётся история, то нужна новая дата
-                if (empty($this->_attribs['date']) && !$this->isExist()) $this->_attribs['date'] = time();
-                // Сохранение себя
-                if ($this->_changed && Data::write($this, $access)){
-                    $this->_changed = false;
+                    if ($this->_proto){
+                        if (!$this->_proto->isExist()){
+                            $this->_proto->save(false, $access);
+                        }
+                        $this->_attribs['proto'] = $this->_proto->key();
+                    }
+                     // Если создаётся история, то нужна новая дата
+                    if (empty($this->_attribs['date']) && !$this->isExist()) $this->_attribs['date'] = time();
+                    // Сохранение себя
+                    if (Data::write($this, $access)){
+                        $this->_changed = false;
+                    }
                 }
                 // Сохранение подчиненных
                 if ($children){
@@ -1419,7 +1447,7 @@ class Entity implements ITrace
 
     /**
      * Уничтожение объекта
-     * Полностью удаляется объект и его подчиненных.
+     * Полностью удаляется объект и его подчиненные.
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
      * @param bool $integrity Признак, проверять целостность данных?
      * @return bool Были ли объекты уничтожены?
@@ -1435,7 +1463,7 @@ class Entity implements ITrace
 
     /**
      * Создание нового объекта прототипированием от себя
-     * @param null|Entity $for Для кого создаётся новый объект?
+     * @param null|Entity $for Для кого создаётся новый объект (будущий родитель)?
      * @param bool $draft Признак, создавать черновик?
      * @return Entity
      */
@@ -1449,18 +1477,19 @@ class Entity implements ITrace
         /** @var $obj Entity */
         $obj = new $class($attr);
         $obj->name(null, true); // Уникальность имени
+        if (isset($for)) $obj->parent($for);
         $obj->proto($this);
         $obj->isHidden($this->isHidden());
         $obj->isDraft($draft);
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;
-        if (isset($for)) $obj->parent($for);
         return $obj;
     }
 
     /**
      * Хранилище объекта
+     * Где объект сохранен или будет сохранен?
      * @return stores\MySQLStore|null
      */
     function store()
@@ -1546,7 +1575,7 @@ class Entity implements ITrace
      *     )),
      *     array('is', '/Library/object')          // кем объект является? проверка наследования
      * )
-     * @param array $cond Условие как для поиска
+     * @param array|string $cond Условие как для поиска
      * @throws \Exception
      * @return bool
      */
@@ -1569,7 +1598,7 @@ class Entity implements ITrace
             case 'not':
                 return !$this->verify($cond[1]);
             case 'attr':
-                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'possession', 'diff', 'diff_from'))){
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
                     $value = $this->{$cond[1]}();
                 }else
                 if ($cond[1] == 'is_hidden'){
@@ -1589,6 +1618,9 @@ class Entity implements ITrace
                 }else
                 if ($cond[1] == 'is_relative'){
                     $value = $this->isRelative();
+                }else
+                if ($cond[1] == 'is_mandatory'){
+                    $value = $this->isMandatory();
                 }
                 switch ($cond[2]){
                     case '=': return $value == $cond[3];
@@ -1719,7 +1751,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Проверка, является подчиенным или наследником для указанного объекта
+     * Проверка, является подчиенным или наследником для указанного объекта?
      * @param string|Entity $object Объект или идентификатор объекта, с котоым проверяется наследство или родительство
      * @return bool
      */
@@ -1729,7 +1761,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Сравнение объекта по uri
+     * Сравнение с дргуим объектом (экземпляром) по uri
      * @param Entity $object
      * @return bool
      */
@@ -1768,39 +1800,7 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, изменены атрибуты объекта или нет
-     * @param null|bool $is_change Установка признака, если не null
-     * @return bool
-     */
-    function isChenged($is_change = null)
-    {
-        if (isset($is_change)){
-            $this->_changed = $is_change;
-            $this->_checked = false;
-        }
-        return $this->_changed;
-    }
-
-    /**
-     * Признак, находится ли объект в процессе сохранения?
-     * @return bool
-     */
-    function isSaved()
-    {
-        return $this->_is_saved;
-    }
-
-    /**
-     * Признак, является ли объект внешним?
-     * @return bool
-     */
-    function isRemote()
-    {
-        return Data::isAbsoluteUri($this->uri());
-    }
-
-    /**
-     * Экпорт объекта в массив и сохранение в файл info в формате JSON
+     * Экпорт объекта в массив с возможностью сохраненить в файл .info в формате JSON в директории объекта
      * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
      * @param bool $save_to_file Признак, сохранять в файл?
      * @param bool $more_info Признак, экспортировать дополнительную информацию об объекте
@@ -1820,9 +1820,9 @@ class Entity implements ITrace
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
         if ($this->isDraft(null, false)) $export['is_draft'] = true;
+        if ($this->isMandatory()) $export['is_mandatory'] = true;
         if ($this->isRelative()) $export['is_relative'] = true;
         $export['order'] = $this->order();
-        if ($this->possession() != Entity::POSSESSION_MANDATORY) $export['possession'] = $this->possession();
         // Расширенный импорт
         if ($more_info){
             $export['id'] = $this->id();
@@ -1834,6 +1834,7 @@ class Entity implements ITrace
             if (!$this->isHidden()) $export['is_hidden'] = false;
             if (!$this->isDraft()) $export['is_draft'] = false;
             if (!$this->isRelative()) $export['is_relative'] = false;
+            if (!$this->isMandatory()) $export['is_mandatory'] = false;
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
             if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
             if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
@@ -1892,6 +1893,7 @@ class Entity implements ITrace
 
     /**
      * Названия свойств, которые экспортировать вместе с объектом
+     * Другие подчиненные будут экпортироваться в отдельные .info файлы
      * @return array
      */
     function exportedProperties()
@@ -1901,7 +1903,7 @@ class Entity implements ITrace
 
     /**
      * Импортирование атрибутов и подчиенных из массива
-     * Формат массива как в info файле.
+     * Формат массива как в Entity->export()
      * @param $info
      */
     function import($info)
@@ -1928,11 +1930,7 @@ class Entity implements ITrace
         if (!empty($info['is_hidden'])) $this->isHidden(true);
         if (!empty($info['is_draft'])) $this->isDraft(true);
         if (!empty($info['is_relative'])) $this->isRelative(true);
-        if (isset($info['possession'])){
-            $this->possession($info['possession']);
-        }else{
-            $this->possession(Entity::POSSESSION_MANDATORY);
-        }
+        if (!empty($info['is_mandatory'])) $this->isMandatory(true);
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);
@@ -1955,7 +1953,56 @@ class Entity implements ITrace
     }
 
     /**
+     * Признак, изменены атрибуты объекта или нет
+     * @param null|bool $is_change Установка признака, если не null
+     * @return bool
+     */
+    function isChenged($is_change = null)
+    {
+        if (isset($is_change)){
+            $this->_changed = $is_change;
+            $this->_checked = false;
+        }
+        return $this->_changed;
+    }
+
+    /**
+     * Признак, находится ли объект в процессе сохранения?
+     * @return bool
+     */
+    function isSaved()
+    {
+        return $this->_is_saved;
+    }
+
+    /**
+     * Признак, объект внутренний или нет?
+     * Объект является внутренним, если не существует, но был получен прототипированием от свойств прототипа родителя
+     * @param null|bool $is_inner Новое значение, если не null
+     * @return bool|null
+     */
+    function isInnder($is_inner = null)
+    {
+        if (isset($is_inner) && (empty($this->_is_inner) == $is_inner)){
+            $this->_is_inner = $is_inner;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return $this->_is_inner;
+    }
+
+    /**
+     * Признак, является ли объект внешним?
+     * @return bool
+     */
+    function isRemote()
+    {
+        return Data::isAbsoluteUri($this->uri());
+    }
+
+    /**
      * Шаблон своего класса
+     * Для автоматического создания php файла с класом данного объекта.
      * @param array $methods Код предопределяемых методов
      * @param array $use Используемые дополнительные классы (может понадобиться, если определяются методы)
      * @return string Программный код класса
@@ -2014,7 +2061,7 @@ $methods
     /**
      * Условие, которым выбран объект
      * Устанавливается хранилищем после выборки объекта
-     * Может быть не установленным
+     * Может быть неустановленным
      * @param mixed $cond
      * @return mixed
      */
@@ -2071,9 +2118,9 @@ $methods
         $trace['_changed'] = $this->_changed;
         $trace['_checked'] = $this->_checked;
         $trace['_autoname'] = $this->_autoname;
-        //$trace['_proto'] = $this->_proto;
-        //$trace['_parent'] = $this->_parent;
-        $trace['_cond'] = $this->_cond;
+        $trace['_proto'] = $this->_proto;
+        $trace['_parent'] = $this->_parent;
+//        $trace['_cond'] = $this->_cond;
         $trace['_children'] = $this->_children;
         return $trace;
     }

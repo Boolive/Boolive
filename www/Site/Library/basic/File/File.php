@@ -25,7 +25,7 @@ class File extends Entity
      */
     function validExtentions()
     {
-        return explode(' ', $this->extentions->value());
+        return explode(' ', $this->extentions->inner()->value());
     }
 
     /**

@@ -404,8 +404,8 @@ class MySQLStore extends Entity
                         if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
                             $error->access = new Error('Нет доступа на смену признака "своя логика"', 'write/change/is_default_class');
                         }else
-                        if ($current['possession'] != $attr['possession'] && !$entity->isAccessible('write/change/possession')){
-                            $error->access = new Error('Нет доступа на смену принадлежности', 'write/change/possession');
+                        if ($current['is_mandatory'] != $attr['is_mandatory'] && !$entity->isAccessible('write/change/is_mandatory')){
+                            $error->access = new Error('Нет доступа на смену признака "свойство"', 'write/change/is_mandatory');
                         }else
                         if ($current['diff'] != $attr['diff'] && $attr['diff'] == Entity::DIFF_NO && !$entity->isAccessible('write/change/diff')){
                             $error->access = new Error('Нет доступа на установку обновлений', 'write/change/diff');
@@ -510,8 +510,8 @@ class MySQLStore extends Entity
                     unset($attr['class']);
                 }
                 $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type',
-                        'is_draft', 'is_hidden', 'is_link', 'is_relative', 'is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt', 'possession', 'update_time', 'diff', 'diff_from');
+                        'is_draft', 'is_hidden', 'is_link', 'is_mandatory', 'is_relative', 'is_default_value', 'is_default_class',
+                        'proto_cnt', 'parent_cnt', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id
@@ -841,11 +841,11 @@ class MySQLStore extends Entity
                     // С каким diff добавлять подчиенные от прототипа?
                     $diff = $update_time == 0 && $entity->_attribs['diff'] != Entity::DIFF_ADD ? Entity::DIFF_NO : Entity::DIFF_ADD;
                     if ($diff == Entity::DIFF_NO){
-                        // Искать только обязательные свойства
-                        $where = array('attr', 'possession', '=', Entity::POSSESSION_MANDATORY);
+                        // Искать только обязательные свойства, которые не черновики и не скрыты
+                        $where = array('attr', 'is_mandatory', '=', 1);
                     }else{
-                        // Не искать внутренние свойства
-                        $where = array('attr', 'possession', '!=', Entity::POSSESSION_INTERNAL);
+                        // Искать любые свойства, кроме черновиков и скрытый
+                        $where = null;
                     }
                     // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
                     $pchildren = $proto->find(array(
@@ -894,7 +894,7 @@ class MySQLStore extends Entity
                         // если есть, то создавать его не надо
                         if (!$proto->isRelative() || !($c = $entity->{$proto->name()}) || !$c->isExist() || !$c->isRelative()){
                             $child = $proto->birth($entity, false);
-                            $child->_attribs['possession'] = $proto->possession();
+                            $child->_attribs['is_mandatory'] = $proto->isMandatory();
                             $child->_attribs['diff'] = $diff;
                             $child->_attribs['diff_from'] = 1;
                             $this->write($child, false);
@@ -976,8 +976,6 @@ class MySQLStore extends Entity
                         }
                         if ($entity->isExist() && $entity->diff()!=Entity::DIFF_ADD){
                             // Проверка различий в атрибутах
-                            if (empty($info['possession'])) $info['possession'] = Entity::POSSESSION_MANDATORY;
-
                             if ((isset($info['proto']) && ($p = $entity->proto()) && $p->uri()!=$info['proto']) ||
                                 (isset($info['value']) && $entity->_attribs['value']!=$info['value']) ||
                                 (isset($info['value_type']) && $entity->_attribs['value_type']!=$info['value_type']) ||
@@ -986,7 +984,7 @@ class MySQLStore extends Entity
                                 (isset($info['is_link']) && $entity->isLink()!=$info['is_link']) ||
                                 (isset($info['is_default_value']) && $entity->isDefaultValue()!=$info['is_default_value']) ||
                                 (isset($info['is_default_class']) && $entity->isDefaultClass()!=$info['is_default_class']) ||
-                                ($info['possession'] != $entity->possession())
+                                (isset($info['is_mandatory']) && $entity->isMandatory()!=$info['is_mandatory'])
                             ){
                                 $entity->_attribs['diff'] = Entity::DIFF_CHANGE;
                                 $osave2->execute(array(
@@ -1045,11 +1043,11 @@ class MySQLStore extends Entity
             $entity->diff(Entity::DIFF_NO);
             //$entity->_attribs['update_time'] = 0;
             $entity->save(false);
-            // Выбрать все подчиенные с DIFF_ADD и POSSESSION_MANDATORY и установить им DIFF_NO
+            // Выбрать все подчиенные с DIFF_ADD и is_mandatory и установить им DIFF_NO
             $new_children = $entity->find(array(
                 'where' => array(
                     array('attr', 'diff', '=', Entity::DIFF_ADD),
-                    array('attr', 'possession', '=', Entity::POSSESSION_MANDATORY)
+                    //array('attr', 'is_mandatory', '=', 1)
                 )
             ));
             foreach ($new_children as $child){
@@ -1071,7 +1069,7 @@ class MySQLStore extends Entity
                         $entity->_attribs['value_type'] = $proto->valueType();
                         $entity->isDraft($proto->isDraft());
                         $entity->isHidden($proto->isHidden());
-                        $entity->possession($proto->possession());
+                        $entity->isMandatory($proto->isMandatory());
                         $entity->_changed = true;
                         $entity->_checked = false;
 
@@ -1297,7 +1295,7 @@ class MySQLStore extends Entity
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Подчиненные объекты
-                        $result['from'] = ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
+                        $result['from'] = ' FROM {objects} obj USE INDEX(child) JOIN {ids} u ON (u.id = obj.id)';
                         if ($multy){
                             $result['select'].= ', CONCAT("//",obj.parent) as `from`';
                             $result['where'].= 'obj.parent IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
@@ -1442,7 +1440,7 @@ class MySQLStore extends Entity
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Прямые наследники
-                        $result['from'] = ' FROM {objects} obj USE INDEX(property) JOIN {ids} u ON (u.id = obj.id)';
+                        $result['from'] = ' FROM {objects} obj USE INDEX(child) JOIN {ids} u ON (u.id = obj.id)';
                         if ($multy){
                             $result['select'].= ', CONCAT("//",obj.proto) as `from`';
                             $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
@@ -1568,7 +1566,7 @@ class MySQLStore extends Entity
                                 $cond[$i].= '?';
                                 $result['binds'][] = $c[3];
                             }
-                            if ($c[1] == 'is_draft' || $c[1] == 'diff'){
+                            if ($c[1] == 'is_draft' || $c[1] == 'diff' || $c[1] == 'is_hidden'){
                                 $attr_exists[$c[1]] = true;
                             }
                         }else
@@ -1743,8 +1741,9 @@ class MySQLStore extends Entity
                 if ($level == 1){
                     $more_cond = array();
                     if (empty($attr_exists['is_draft'])) $more_cond[]  = '`'.$table.'`.is_draft = 0';
+                    if (empty($attr_exists['is_hidden'])) $more_cond[]  = '`'.$table.'`.is_hidden = 0';
                     if (empty($attr_exists['diff'])) $more_cond[]  = '`'.$table.'`.diff != '.Entity::DIFF_ADD;
-                    $attr_exists = array('is_draft' => true, 'diff' => true);
+                    $attr_exists = array('is_hidden' => true, 'is_draft' => true, 'diff' => true);
                     if ($glue == ' AND '){
                         $cond = array_merge($cond, $more_cond);
                     }else
@@ -1755,7 +1754,7 @@ class MySQLStore extends Entity
                 }
                 return implode($glue, $cond);
             };
-            $attr_exists = $only_where ? array('is_draft' => true, 'diff' => true) : array();
+            $attr_exists = $only_where ? array('is_hidden' => true, 'is_draft' => true, 'diff' => true) : array();
             // Если услвоия есть, то добавляем их в SQL
             if ($w = $convert($cond['where'], ' AND ', 'obj', 0, $attr_exists)){
                 if (empty($result['where'])){
@@ -1767,7 +1766,7 @@ class MySQLStore extends Entity
         }else{
             if ($cond['select'][0] != 'self'){
                 if (!empty($result['where'])) $result['where'].=' AND ';
-                $result['where'].= 'obj.is_draft = 0 AND obj.diff != '.Entity::DIFF_ADD;
+                $result['where'].= 'obj.is_draft = 0 AND obj.is_hidden = 0 AND obj.diff != '.Entity::DIFF_ADD;
             }
         }
 
@@ -2169,7 +2168,7 @@ class MySQLStore extends Entity
         $attribs['value_type'] = intval($attribs['value_type']);
         if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
-        $attribs['possession'] = intval($attribs['possession']);
+        $attribs['is_mandatory'] = intval($attribs['is_mandatory']);
         $attribs['update_step'] = intval($attribs['update_step']);
         $attribs['update_time'] = intval($attribs['update_time']);
         $attribs['diff'] = intval($attribs['diff']);
@@ -2368,19 +2367,19 @@ class MySQLStore extends Entity
                   `value` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Строковое значение',
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
                   `value_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'Тип значения. 1 - строка, 2 - текст, 3 - файл',
-                  `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Удален или нет? Значение зависит от родителя',
+                  `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Черновик или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
+                  `is_mandatory` INT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Обязательный (1) или нет (0)? ',
                   `is_relative` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор прототипа, чьё значение наследуется (если не наследуется, то свой id)',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
-                  `possession` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Тип владения объектом его родителем. Коды владения - Entity:POSSESSION_*:',
                   `update_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг обновления. Если не 0, то обновление не закончено',
                   `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
                   `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды различиый - Entity::DIFF_*',
                   `diff_from` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'От куда изменения. 1 - от прототипа. 0 и меньше от info файла. Кодируется относительное расположение info файла',
                   PRIMARY KEY (`id`),
-                  KEY `property` (`parent`,`order`,`name`,`value`,`valuef`),
+                  KEY `child` (`parent`,`order`,`name`,`value`,`valuef`),
                   KEY `indexation` (`parent`,`id`),
                   KEY `default_value` (`is_default_value`)
                 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'

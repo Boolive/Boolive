@@ -41,7 +41,8 @@ class Layout extends Widget
                 'select' => 'children',
                 'from' => '/Contents',
                 'where' => array(
-                    array('attr', 'is_hidden', '=', 0)
+                    array('attr', 'is_hidden', '=', 0),
+                    array('attr', 'is_mandatory', '=', 0)
                 ),
                 'order' => array(
                     array('order', 'ASC')

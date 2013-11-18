@@ -157,7 +157,7 @@ class RESTful extends View
         if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));
         if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
         if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
-        if (isset($attribs['possession'])) $obj->possession($attribs['possession']);
+        if (isset($attribs['is_mandatory'])) $obj->isMandatory($attribs['is_mandatory']);
         $class_changed = isset($attribs['is_default_class']) && (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
         if (isset($attribs['is_default_class'])){
             $obj->isDefaultClass(!empty($attribs['is_default_class']));

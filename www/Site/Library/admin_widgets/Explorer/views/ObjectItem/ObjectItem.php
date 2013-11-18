@@ -27,7 +27,7 @@ class ObjectItem extends Widget
         $obj = $this->_input['REQUEST']['object'];
 
         // Заголовк объекта
-        $v['title'] = $obj->title->value();
+        $v['title'] = $obj->title->inner()->value();
         if (empty($v['title']) && $obj->isLink()){
             $v['title'] = $obj->linked()->title->value();
         }
@@ -51,6 +51,7 @@ class ObjectItem extends Widget
         $v['is_draft'] = $obj->isDraft(null, false);
         $v['is_file'] = $obj->isFile();
         $v['is_link'] = $obj->isLink();
+        $v['is_mandatory'] = $obj->isMandatory();
         $v['is_default_value'] = $obj->isDefaultValue();
         $v['link'] = $obj->linked()->uri(false, true);
         if ($v['is_link']){
