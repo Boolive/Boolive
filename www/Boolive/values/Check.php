@@ -669,7 +669,7 @@ class Check
         if (empty($value)) return $value;
         $check = $value;
         if (!preg_match('#^([^:/]+://).*$#iu', $check)){
-            $check = 'http://'.trim($check, '/');
+            $check = 'http://check/'.trim($check, '/');
         }
         if (!is_scalar($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
             $error = new Error(array('"Некорректный URI', $value), 'uri');
