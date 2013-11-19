@@ -6,6 +6,7 @@
  */
 namespace Library\content_widgets\Part;
 
+use Boolive\data\Entity;
 use Library\content_widgets\Page\Page,
     Boolive\values\Rule;
 
@@ -25,8 +26,15 @@ class Part extends Page
     {
         $obj = $this->_input['REQUEST']['object'];
         $count_per_page = max(1, $this->count_per_page->value());
-        $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count'))/$count_per_page);
+        $where = array('all', array(
+            array('attr', 'is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
+            array('attr', 'is_draft', '=', 0),
+            array('attr', 'is_mandatory', '=', 0),
+            array('attr', 'diff', '!=', Entity::DIFF_ADD)
+        ));
+        $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count', 'where'=>$where))/$count_per_page);
         $cond = array(
+            'where' => $where,
             'order' => array(array('order', 'ASC')),
             'limit' => array(
                 ($this->_input['REQUEST']['page'] - 1) * $count_per_page,

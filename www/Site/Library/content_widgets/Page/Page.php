@@ -19,11 +19,14 @@ class Page extends AutoWidgetList2
 
     protected function getList($cond = array())
     {
-        $cond['where'] = array('all', array(
+        if (!isset($cond['where'])){
+            $cond['where'] = array('all', array(
                 array('attr', 'is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
                 array('attr', 'is_draft', '=', 0),
+                array('attr', 'is_mandatory', '=', 1),
                 array('attr', 'diff', '!=', Entity::DIFF_ADD)
             ));
+        }
         return parent::getList($cond);
     }
 }
