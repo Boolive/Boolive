@@ -28,7 +28,8 @@
 			padding: 4px 5px 6px 10px;
 			/*overflow: hidden;*/
 			white-space: nowrap;
-            border-radius: 10px;
+            /*border-radius: 10px;*/
+            border-radius: 15px;
             cursor: pointer;
             line-height: 20px;
 			}
@@ -68,7 +69,7 @@
         }
         .ProgramsMenu ul li.group .group-title{
             height: 1px;
-            margin: 0 0 20px 0;
+            margin: 0 10px 20px 0;
             padding: 0 10px;
             background-color: #d9d9d9;
             text-align: center;

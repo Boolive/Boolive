@@ -1,0 +1,85 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/ToggleAction",
+    "is_default_class": false,
+    "order": 33,
+    "children": {
+        "title": {
+            "value": "Относительный",
+            "proto": "/Library/admin_widgets/ToggleAction/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Смена признака относительности прототипа. Если создавать новые объекты от объектов с относительным прототипом, то у нового объекта прототип будет автоматически найдет относительно расположения нового объекта. Относительность позволяет создавать наследуемые циклические связи.",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/ToggleAction/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/ToggleAction/res",
+            "is_mandatory": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/admin_widgets/ToggleAction/res/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/admin_widgets/ToggleAction/res/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/admin_widgets/ToggleAction/cache",
+            "is_mandatory": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/admin_widgets/ToggleAction/cache/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/admin_widgets/ToggleAction/cache/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/ToggleAction/object_rule",
+            "is_mandatory": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на объект",
+                    "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}
