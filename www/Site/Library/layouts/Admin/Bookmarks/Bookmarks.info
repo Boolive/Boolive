@@ -1,0 +1,96 @@
+{
+    "value": "Bookmarks.tpl",
+    "value_type": 3,
+    "proto": "/Library/menus/Menu",
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Закладки",
+            "proto": "/Library/menus/Menu/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Меню на объекты в админке",
+            "proto": "/Library/menus/Menu/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/menus/Menu/res",
+            "is_mandatory": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/menus/Menu/res/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "proto": "/Library/menus/Menu/res/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/menus/Menu/cache",
+            "is_mandatory": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/menus/Menu/cache/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "proto": "/Library/menus/Menu/cache/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/menus/Menu/object_rule",
+            "is_mandatory": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на объект",
+                    "proto": "/Library/menus/Menu/object_rule/title",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        },
+        "object": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/menus/Menu/object",
+            "is_mandatory": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Пункты",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

@@ -11,6 +11,7 @@
     </div>
     <div class="left">
         <!--<div class="shadow"></div>-->
+        <?php echo $v->Bookmarks->string();?>
     </div>
     <div class="right">
         <!--<div class="shadow"></div>-->

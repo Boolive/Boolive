@@ -11,6 +11,7 @@ Version 2.0.beta work in progress
 - new #155 Added fulltext search of objects (VladimirShestakov)
 - new #156 Added widgets for searching in the contents of the site (VladimirShestakov)
 - new Добавлена программа isRelative в админке для смены признака относительности прототипа (VladimirShestakov)
+- new #102 Создано меню закладок "Bookmarks" в админке (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

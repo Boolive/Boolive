@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/layouts/Admin/Bookmarks/item_view/views",
+    "is_link": true,
+    "is_mandatory": true,
+    "is_relative": true,
+    "order": 6
+}

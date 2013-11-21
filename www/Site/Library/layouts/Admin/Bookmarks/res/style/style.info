@@ -1,0 +1,23 @@
+{
+    "value": "style.css",
+    "value_type": 3,
+    "proto": "/Library/menus/Menu/res/style",
+    "is_mandatory": true,
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "CSS",
+            "proto": "/Library/menus/Menu/res/style/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Каскадная таблица стилей для оформления HTML-документа",
+            "proto": "/Library/menus/Menu/res/style/description",
+            "is_mandatory": true,
+            "order": 2
+        }
+    }
+}
