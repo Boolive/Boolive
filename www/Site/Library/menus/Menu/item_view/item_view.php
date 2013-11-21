@@ -13,6 +13,8 @@ use Boolive\values\Rule,
 
 class item_view extends AutoWidgetList2
 {
+    protected $_cut_contents_url = true;
+
     function startRule()
     {
         return Rule::arrays(array(
@@ -41,13 +43,14 @@ class item_view extends AutoWidgetList2
 
             // Ссылка
             $real = $obj->linked();
-            if (substr($real->uri(), 0, 10) == '/Contents/'){
+            if ($this->_cut_contents_url && substr($real->uri(), 0, 10) == '/Contents/'){
                 $v['item_href'] = substr($real->uri(), 9);
             }else{
                 $v['item_href'] = $real->uri();
             }
             // Название пункта
-            $v['item_text'] = $real->title->value();
+            $v['item_text'] = $obj->title->value();
+            if (empty($v['item_text'])) $v['item_text'] = $real->title->inner()->value();
             $v['item_title'] = $v['item_text'];
             // Иконка
             if ($real->icon->isExist()){

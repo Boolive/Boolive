@@ -16,7 +16,8 @@ class Menu extends Widget
         View::startInit($input);
     }
 
-    function startInitChild($input){
+    function startInitChild($input)
+    {
         parent::startInitChild($input);
         // Подчиенным нужно передать активный пункт меню и отображаемый объект меню
         // Входящий объект используется как активный пункт меню
@@ -27,7 +28,8 @@ class Menu extends Widget
         $this->_input_child['REQUEST']['show'] = false;
     }
 
-    function show($v = array(), $commands, $input){
+    function show($v = array(), $commands, $input)
+    {
         $v['title'] = $this->title->value();
         //$v['view'] = $this->startChild('view');
         $v['item_view'] = $this->startChild('item_view');
