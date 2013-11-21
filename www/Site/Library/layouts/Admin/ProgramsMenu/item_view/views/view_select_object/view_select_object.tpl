@@ -1,6 +1,6 @@
 <li class="view_select" data-v="<?php echo $v['view_uri'];?>" data-o="<?php echo $v['program_uri'];?>" data-p="SelectObjectItem">
     <div class="item" href="">
-        <span class="view_all">
+        <span class="view_all" title="<?=$v['description']?>">
             <span class="title"><?php echo $v['title'];?></span>
             <img class="icon" src="<?php echo $v['icon'];?>"/>
         </span>

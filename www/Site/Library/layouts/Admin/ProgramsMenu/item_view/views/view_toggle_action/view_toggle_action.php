@@ -32,6 +32,7 @@ class view_toggle_action extends Widget
             $real = $obj->linked();
             $v['checked'] = $real->state();
             $v['title'] = $real->title->value();
+            $v['description'] = $real->description->value();
 //            $v['program'] = preg_replace('/'.preg_quote($this->_input['REQUEST']['base_uri'],'/').'/u', '', $obj->uri());
 //            $v['href'] = Input::url(null, 0, array('view_name' => $v['program']));
             $v['icon'] = $real->icon->file();

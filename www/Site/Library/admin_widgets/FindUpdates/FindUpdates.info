@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Выполнить поиск обновлений для перечисленных объектов?\nОбновления ищутся в прототипе объекта и его info файле.",
+            "value": "Поиск обновлений для выделенных объектов.\nОбновления ищутся в прототипе и в info файлах.",
             "proto": "/Library/admin_widgets/ProgressAction/description",
             "is_mandatory": true,
             "order": 2

@@ -35,6 +35,7 @@ class view_select_object extends Widget
             $real = $obj->linked();
             $v['checked'] = $real->state();
             $v['title'] = $real->title->value();
+            $v['description'] = $real->description->value();
             $v['icon'] = $real->icon->file();
             $v['show-item'] = true;
 

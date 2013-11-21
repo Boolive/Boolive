@@ -12,7 +12,7 @@
             "order": 2
         },
         "description": {
-            "value": "Установка новых объектов и обновлений",
+            "value": "Установка дополнений обновлений объекта",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
             "order": 3

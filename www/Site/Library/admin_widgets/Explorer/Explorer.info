@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Отображает списком свойства объекта",
+            "value": "Обозреватель свойств объекта",
             "proto": "/Library/views/AutoWidgetList2/description",
             "is_mandatory": true,
             "order": 2

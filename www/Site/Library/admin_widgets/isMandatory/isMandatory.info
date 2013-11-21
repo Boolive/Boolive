@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Установка признака \"Обязательный\" или его отмена для выделенных объектов",
+            "value": "Обязательный объект?",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
             "order": 2

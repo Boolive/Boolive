@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Выберите объекты, которые хотите добавить",
+            "value": "Добавление нового объекта",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_mandatory": true,
             "order": 2

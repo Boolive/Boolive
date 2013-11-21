@@ -34,6 +34,7 @@ class view_program extends Widget
             // Ссылка
             $real = $obj->linked();
             $v['title'] = $real->title->value();
+            $v['description'] = $real->description->value();
             $v['program'] = preg_replace('/'.preg_quote($this->_input['REQUEST']['base_uri'],'/').'/u', '', $obj->uri());
             $v['href'] = Input::url(null, 0, array('view_name' => $v['program']));
             $v['icon'] = $real->icon->file();

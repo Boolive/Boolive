@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Сохраняет выбранные объекты в файловую систему",
+            "value": "Сохранение выбранных объектов в файлы",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
             "order": 2

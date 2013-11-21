@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Редактор атрибутов любого объекта",
+            "value": "Редактор атрибутов объекта",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
             "order": 2
