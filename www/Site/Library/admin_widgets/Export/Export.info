@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 19,
+    "order": 24,
     "children": {
         "title": {
             "value": "Экспорт",
@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Сохранение выбранных объектов в файлы",
+            "value": "Сохранение в файлы",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
             "order": 2

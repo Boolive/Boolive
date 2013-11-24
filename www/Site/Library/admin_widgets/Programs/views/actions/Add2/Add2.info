@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/Add",
     "is_link": true,
+    "is_draft": true,
     "order": 18
 }

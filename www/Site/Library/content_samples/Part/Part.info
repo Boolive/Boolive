@@ -6,6 +6,10 @@
             "value": "Раздел",
             "is_mandatory": true,
             "order": 1
+        },
+        "description": {
+            "value": "Группировка публикаций (страниц, статей, новостей)",
+            "order": 2
         }
     }
 }

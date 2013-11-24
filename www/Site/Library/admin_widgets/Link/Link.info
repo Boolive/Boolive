@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 29,
+    "order": 35,
     "children": {
         "title": {
             "value": "Ссылка",
@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Ссылка на другой объект? \nСсылка используется, чтобы сослаться на прототип, а не наследовать его свойства и логику. Автор статьи - это ссылка на пользователя.",
+            "value": "Ссылка на другой объект? Использовать объект вместо создания нового наследованием",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
             "order": 2

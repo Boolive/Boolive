@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 28,
+    "order": 36,
     "children": {
         "title": {
             "value": "Обязательный",
@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Обязательный объект?",
+            "value": "Неотъемлемый объект? Всегда наследуется",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
             "order": 2

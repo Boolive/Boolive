@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 31,
+    "order": 10,
     "children": {
         "title": {
             "value": "Действие с прогрессом выполнения",

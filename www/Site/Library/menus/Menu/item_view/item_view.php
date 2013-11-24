@@ -49,8 +49,10 @@ class item_view extends AutoWidgetList2
                 $v['item_href'] = $real->uri();
             }
             // Название пункта
-            $v['item_text'] = $obj->title->value();
-            if (empty($v['item_text'])) $v['item_text'] = $real->title->inner()->value();
+//            $v['item_text'] = $obj->title->value();
+//            if (empty($v['item_text']))
+            $v['item_text'] = $obj->title->inner()->value();
+            $v['item_descript'] = $obj->description->inner()->value();
             $v['item_title'] = $v['item_text'];
             // Иконка
             if ($real->icon->isExist()){

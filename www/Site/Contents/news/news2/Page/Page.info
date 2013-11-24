@@ -21,7 +21,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "",
+            "value": "Эталон для публикаций - страниц, статей, новостей...",
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
             "order": 3,

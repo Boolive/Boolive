@@ -4,10 +4,10 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_default_class": false,
-    "order": 30,
+    "order": 23, 
     "children": {
         "title": {
-            "value": "Добавить…",
+            "value": "Добавить",
             "proto": "/Library/admin_widgets/SelectObject/title",
             "is_mandatory": true,
             "order": 1

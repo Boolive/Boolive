@@ -3,5 +3,12 @@
     "value": "",
     "proto": "/Library/content_samples/Page",
     "is_link": true,
-    "order": 1
+    "order": 1,
+    "children": {
+        "title": {
+            "value": "Страницу",
+            "is_draft": true,
+            "order": 1
+        }
+    }
 }

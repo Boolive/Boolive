@@ -43,13 +43,15 @@
             .Bookmarks ul li .item .title{
                 display: inline-block;
                 vertical-align: middle;
-                color: #444;
+                color: #666;
                 }
                 .Bookmarks ul li .item:hover{
-                    background-color: #EEE;
+                    /*background-color: #EEE;*/
+                    background-color: rgba(166, 218, 255, 0.30);
+                    border-color: rgba(140, 207, 255, 0.30);
                 }
                 .Bookmarks ul li .item:hover .title{
-                    color: #111;
+                    color: #333;
                     /*text-decoration: underline;*/
                     }
             .Bookmarks ul li .item .icon{
@@ -66,10 +68,12 @@
         }
 	.Bookmarks ul li.active > .item{
         /*background-color: #c8f291;*/
-        background-color: #e6e6e6;
+        /*background-color: #e6e6e6;*/
+        background-color: rgba(128, 200, 255, 0.3);
+        border-color: rgba(128, 200, 255, 0.3);
 		}
 		.Bookmarks ul li.active > .item .title{
-			/*color: #FFF;*/
+			color: #000;
             /*text-decoration: underline;*/
 			}
 			.Bookmarks ul li.active .item:hover .title{

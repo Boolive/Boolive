@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 33,
+    "order": 38,
     "children": {
         "title": {
             "value": "Относительный",
@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Прототип относительный?\nПри создании нового объекта прототип будет выбран относительно расположения объекта. ",
+            "value": "Прототип относительный? Для нового объекта прототип будет выбран относительно расположения объекта",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
             "order": 2

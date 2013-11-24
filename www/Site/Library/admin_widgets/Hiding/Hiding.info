@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 26,
+    "order": 33,
     "children": {
         "title": {
             "value": "Скрытый",
@@ -13,7 +13,7 @@
             "order": 2
         },
         "description": {
-            "value": "Скрытие объекты невидимы и не наследуются, но остаются доступными при прямом обращении к ним.",
+            "value": "Невидимый объект? Не отображается но доступен",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
             "order": 3

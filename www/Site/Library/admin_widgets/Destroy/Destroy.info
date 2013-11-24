@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 21,
+    "order": 27,
     "children": {
         "title": {
             "value": "Удалить",
@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Уничтожение выбранных объектов вместе с файлами",
+            "value": "Уничтожение вместе с файлами без возможности восстановления!",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
             "order": 2

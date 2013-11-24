@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 27,
+    "order": 32,
     "children": {
         "title": {
             "value": "Черновик",
@@ -13,7 +13,7 @@
             "order": 1
         },
         "description": {
-            "value": "Не полностью созданный объект?",
+            "value": "Не полностью созданный объект? Доступен только в админке",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
             "order": 2

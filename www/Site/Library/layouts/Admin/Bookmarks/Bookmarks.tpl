@@ -2,5 +2,5 @@
     <div class="title-wrap">
       <span class="title common_background"><?=$v['title']?></span>
     </div>
-    <?php echo $v['item_view']->string();?>
+    <?=$v['item_view']->string();?>
 </div>

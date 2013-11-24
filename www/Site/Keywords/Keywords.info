@@ -1,6 +1,7 @@
 {
     "value": "",
-    "order": 9,
+    "is_mandatory": true,
+    "order": 4,
     "children": {
         "title": {
             "value": "Ключевые слова",
