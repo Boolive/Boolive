@@ -1,0 +1,62 @@
+.AddTool{
+    padding:4px 0 0 0;
+    font-size:14px;
+    cursor: default;
+    }
+    .AddTool > *{
+        vertical-align: middle;
+        }
+    .AddTool .icon{
+
+        width: 16px;
+        height: 16px;
+    }
+    .AddTool .label{
+        color: #85bf19;
+        margin: 0 5px 0 0;
+
+    }
+    .AddTool .item{
+        display: inline-block;
+        text-decoration:none;
+        margin: 0px 0px;
+        padding: 4px 10px 4px 10px;
+        /*overflow: hidden;*/
+        white-space: nowrap;
+        border-radius: 5px;
+        background: #fafafa;
+        border: 1px solid #f0f0f0;
+        /*border-top-right-radius: 10px;*/
+        /*border-bottom-right-radius: 10px;*/
+        cursor: pointer;
+        color: #000;
+        }
+        .AddTool .item:hover{
+            /*background: #efefef;*/
+            background-color: rgba(128, 200, 255, 0.3);
+            border-color: rgba(128, 200, 255, 0.3);
+            }
+        .AddTool .item:focus{
+            background: #e5e5e5;
+            background-color: rgba(26, 159, 255, 0.30);
+            border-color: rgba(3, 150, 255, 0.30);
+        }
+    .AddTool .more{
+        background: #fff;
+        color: #666;
+        border-color: #eee;
+        /*text-decoration: underline;*/
+        }
+    .AddTool .link{
+        /*color: #1889f2;*/
+        }
+        .AddTool .link:after{
+            color: #2691FB;
+            content: "↝";
+            font: 400 15px/16px "Times New Roman";
+            /*background: #2691FB;*/
+            padding: 0 0px;
+            margin: 0 0 0 2px;
+            display: inline-block;
+            border-radius: 16px;
+            }

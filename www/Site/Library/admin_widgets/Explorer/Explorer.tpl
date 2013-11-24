@@ -1,15 +1,7 @@
 <div class="Explorer" data-o="<?=$v['uri']?>" data-v="<?php echo $v['view_uri'];?>" data-p="Explorer">
+
     <div class="toolbar">
-<!--        <div class="left" style="padding: 7px 5px; font-size:14px;">-->
-<!--            <img class="icon" src="/Site/Library/admin_widgets/Add/icon/icon.png" style="vertical-align: middle">-->
-<!--<!--            <span style="color:#85bf19;">Добавить:</span>-->
-<!--            <a href="">Страницу</a>,-->
-<!--            <a href="">Раздел</a>,-->
-<!--            <a href="">Форму связи</a>,-->
-<!--            <a href="">Объект</a>,-->
-<!--            <a href="">Ссылку</a> |-->
-<!--            <a href="">ещё</a>-->
-<!--        </div>-->
+        <?=$v->AddTool->string();?>
         <div class="btn-group view-filter-group right" data-p="ExplorerFilter">
             <a class="btn-tool  btn-tool-square view-filter" title="Фильтр" href=""></a>
             <ul class="dropdown-menu pull-right">

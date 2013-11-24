@@ -24,6 +24,9 @@
         border-right: 1px solid transparent;
         border-radius: 5px;
 		}
+    .ObjectItem.list:nth-of-type(odd) .view{
+        background-color: #fefefe;
+        }
 		.ObjectItem.list .view:hover{
 			background-color: #EBF5FF;
 			border: 1px solid #E6F1FA;
@@ -150,9 +153,13 @@
             background-color: #FFF;
             border-radius: 5px;
 			}
+            .ObjectItem.list:nth-of-type(odd) .view .info{
+                background-color: #fefefe;
+                }
             .ObjectItem.list .view:hover .info{
                 background-color: #EBF5FF;
             }
+
 			.ObjectItem.list .info > *{
 				margin: 0px 5px;
 				display: block;
