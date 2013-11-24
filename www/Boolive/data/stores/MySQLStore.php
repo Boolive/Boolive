@@ -842,10 +842,13 @@ class MySQLStore extends Entity
                     $diff = $update_time == 0 && $entity->_attribs['diff'] != Entity::DIFF_ADD ? Entity::DIFF_NO : Entity::DIFF_ADD;
                     if ($diff == Entity::DIFF_NO){
                         // Искать только обязательные свойства, которые не черновики и не скрыты
-                        $where = array('attr', 'is_mandatory', '=', 1);
+                        $where = array(
+                            array('attr', 'is_mandatory', '=', 1),
+                            array('attr', 'is_hidden', '>=', 0)
+                        );
                     }else{
                         // Искать любые свойства, кроме черновиков и скрытый
-                        $where = null;
+                        $where = array('attr', 'is_hidden', '>=', 0);
                     }
                     // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
                     $pchildren = $proto->find(array(
@@ -875,7 +878,8 @@ class MySQLStore extends Entity
                     $ochildren = $entity->find(array(
                         'where' => array(
                                 array('attr', 'proto', 'in', $pids),
-                                array('attr', 'is_draft', '>=', 0), // учитываьт черновики
+                                array('attr', 'is_draft', '>=', 0), // учитывать черновики
+                                array('attr', 'is_hidden', '>=', 0),
                                 array('attr', 'diff', '!=', Entity::DIFF_DELETE)
                         )
                     ), false, false, false);
@@ -1046,11 +1050,11 @@ class MySQLStore extends Entity
             $entity->diff(Entity::DIFF_NO);
             //$entity->_attribs['update_time'] = 0;
             $entity->save(false);
-            // Выбрать все подчиенные с DIFF_ADD и is_mandatory и установить им DIFF_NO
+            // Выбрать все подчиненные с DIFF_ADD и is_mandatory и установить им DIFF_NO
             $new_children = $entity->find(array(
                 'where' => array(
                     array('attr', 'diff', '=', Entity::DIFF_ADD),
-                    //array('attr', 'is_mandatory', '=', 1)
+                    array('attr', 'is_hidden', '>=', 0)
                 )
             ));
             foreach ($new_children as $child){
