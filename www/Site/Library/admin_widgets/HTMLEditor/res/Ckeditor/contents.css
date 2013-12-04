@@ -103,9 +103,9 @@ pre
 }
 
 .more:after{
+    content:"Разделение краткого от полного содержания.";
 }
 .more {
-    content: 'Разделение краткого от полного содержания.';
    /* background: url("images/pagebreak.gif?t=D6IE") 50% 50% no-repeat transparent !important;*/
     border-bottom: 1px dotted #999999 !important;
     border-top: 1px dotted #999999 !important;
