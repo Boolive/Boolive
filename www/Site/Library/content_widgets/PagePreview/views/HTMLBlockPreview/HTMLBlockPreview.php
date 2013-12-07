@@ -17,174 +17,51 @@ class HTMLBlockPreview extends HtmlBlock
         $v['object'] = $this->_input['REQUEST']['object']->value();
 
         $text = $v['object'];
-        $len = strlen($text);
+        $len = mb_strlen($text);
 
-        $size = (strpos($text,'<a class="more"> </a>') ? strpos($text,'<a class="more"> </a>')-3 : $len);
+        $tags = array(); // массив, в который записываем кол-во открытых тэгов
 
-        if ($len <= $size)
-            return $text;
+        $r = preg_split('/(<[^>]*>)/im',$text,-1,PREG_SPLIT_DELIM_CAPTURE);
 
-        $textLen = 0;
-        $position  = -1;
-        $tagNameStartPos = 0;
-        $tagNameEndPos = 0;
-        $openTagList = array();
+        $c =0 ; // счетчик длины строки
+        $mx = (mb_strpos($text,'<a class="more"> </a>') ? mb_strpos($text,'<a class="more"> </a>') : $len);; // макс. длина текста
+        $cw = true; // достигли ли макс. - можно заменить на ($mx>$c)
+        $res = ''; // результат
 
-        // Stateful machine status
-        // 0 - scanning text
-        // 1 - scanning tag name
-        // 2 - scanning tag content
-        // 3 - scanning tag attribute value
-        // 4 - waiting for tag close mark
-        $state = 0;
+        foreach ($r as $w) {
 
-        // 0 - no quotes active
-        // 1 - single quotes active
-        // 2 - double quotes active
-        $quoteType = 0;
+            // если тэг
+            if (preg_match('/<(\/?)([a-z]+)\s*[^>]*>/ims',$w,$m)) {
+                if ($m[1]!='/') { // открывающий
 
-        // Flag if 'tag close symbol' is used
-        $closeFlag = 0;
-
-        while ((($position+1) < $len) && ($textLen < $size)) {
-            $position++;
-            $char = $text{$position};
-            //	printf("%03u[%u][%03u][%02u] %s\n", $position, $state, $textLen, count($openTagList), $char);
-
-            switch ($state) {
-                // Scanning text
-                case 0:
-                    // '<' - way to starting tag
-                    if ($char == '<') {
-                        $state = 1;
-                        $tagNameStartPos = $position+1;
-                        continue;
+                    if ($cw){ // если еще не макс., то пишем, добавляем в счетчик тэгов
+                        $tags[mb_strtolower($m[2])]++;
+                        $res.=$w;
                     }
-                    $textLen++;
+                } else { // закрывыющий тэг
 
-                    break;
-                case 1:
-                    // If this is a space/tab - tag name is finished
-                    if (($char == ' ')||($char == "\t")) {
-                        $tagNameLen = $position - $tagNameStartPos;
-                        $state = 2;
-                        continue;
+                    // уменьшаем счетчик , если есть такой открытый тэг - пишем
+                    if ($tags[mb_strtolower($m[2])]>0) {
+                        $res.=$w;
                     }
+                    $tags[mb_strtolower($m[2])]--;
+                }
+            }
+            if ($cw) {
+                $len = mb_strlen($w); // длина текста
+                if ($len+$c>$mx) { // достигли?
+                    // обрезаем, добавляем ...
+                    $res.=mb_substr($w,0,$mx-$c);
+                    $cw = false;
+                }else {
 
-                    // Activity on tag close flag
-                    if ($char == '/') {
-                        if ($tagNameStartPos == $position)
-                            continue;
-
-                        $tagNameLen = $position - $tagNameStartPos + 1;
-                        $state = 4;
-                        continue;
-                    }
-
-                    // Action on tag closing
-                    if ($char == '>') {
-                        $tagNameLen = $position - $tagNameStartPos;
-                        $tagName = substr($text, $tagNameStartPos, $tagNameLen);
-                        //		print "openTag[1]: $tagName\n";
-
-                        // Closing tag
-                        if ($tagName{0} == '/') {
-                            if ((count($openTagList)) && ($openTagList[count($openTagList)-1] == substr($tagName, 1)))
-                                array_pop($openTagList);
-                        } else {
-                            // Opening tag
-                            if (substr($tagName, -1, 1) != '/') {
-                                // And not closed at the same time
-                                array_push($openTagList, $tagName);
-                            }
-                        }
-                        $state = 0;
-                        continue;
-                    }
-
-                    // Tag name may contain only english letters
-                    if (!((($char >= 'A') && ($char <= 'Z')) || (($char >= 'a') && ($char <= 'z')))) {
-                        $state = 0;
-                        continue;
-                    }
-                    break;
-                case 2:
-                    // Activity on tag close flag
-                    if ($char == '/') {
-                        $state = 4;
-                        continue;
-                    }
-
-                    // Action on tag closing
-                    if ($char == '>') {
-                        $tagName = substr($text, $tagNameStartPos, $tagNameLen);
-                        //		print "openTag: $tagName\n";
-
-                        // Closing tag
-                        if ((count($openTagList)) && ($openTagList[count($openTagList)-1] == substr($tagName, 1))) {
-                            if ($openTagList[count($openTagList)] == substr($tagName, 1))
-                                array_pop($openTagList);
-                        } else {
-                            // Opening tag
-                            if (substr($tagName, -1, 1) != '/') {
-                                // And not closed at the same time
-                                array_push($openTagList, $tagName);
-                            }
-                        }
-                        $state = 0;
-                        continue;
-                    }
-
-                    // Action on quote
-                    if (($char == '"')||($char == "'")) {
-                        $quoteType = ($char == '"')?2:1;
-                        $state = 3;
-                        continue;
-                    }
-                    break;
-                case 3:
-                    // Act only on quote
-                    if ((($char == '"') && ($quoteType == 2)) || (($char == "'") && ($quoteType == 1))) {
-                        $state = 2;
-                        continue;
-                    }
-                    break;
-                case 4:
-                    // Only spaces or tag close mark is accepted
-                    if (($char == ' ') || ($char == "\t")) {
-                        continue;
-                    }
-
-                    if ($char == '>') {
-                        $tagName = substr($text, $tagNameStartPos, $tagNameLen);
-                        //			print "openTag: $tagName\n";
-
-                        // Closing tag
-                        if ($tagName{0} != '/') {
-                            if ((count($openTagList)) && ($openTagList[count($openTagList)-1] == substr($tagName, 1)))
-                                array_pop($openTagList);
-                        } else {
-                            // Opening tag
-                            if (substr($tagName, -1, 1) != '/') {
-                                // And not closed at the same time
-                                array_push($openTagList, $tagName);
-                            }
-                        }
-                        $state = 0;
-                        continue;
-                    }
-
-                    // Wrong symbol [ this is wholy text ]
-                    $state = 0;
-                    break;
+                    $res.=$w;
+                    $c+=$len;
+                }
             }
         }
 
-        $output = substr($text, 0, $position+1);
-
-        // Check if we have opened tags
-        while ($tag = array_pop($openTagList))
-            $output .= "</".$tag.">";
+        $output = $res;
 
         $v['object'] = $output;
 
