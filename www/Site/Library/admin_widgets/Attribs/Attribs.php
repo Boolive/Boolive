@@ -70,8 +70,12 @@ class Attribs extends Widget
             // Значение
             if (empty($attribs['is_null'])){
                 if (!empty($attribs['is_file'])) $obj->isDefaultValue(false);
-                if (isset($attribs['value']) && $obj->value()!=$attribs['value']) $obj->value($attribs['value']);
-
+                if (isset($attribs['value']) && $obj->value()!=$attribs['value']){
+                    $obj->value($attribs['value']);
+                }else
+                if ($obj->isDefaultValue()){
+                    $obj->isDefaultValue(false);
+                }
             }else{
                 // Обнуление значения
                 $obj->isDefaultValue(true);
