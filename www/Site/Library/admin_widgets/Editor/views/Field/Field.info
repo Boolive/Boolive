@@ -1,0 +1,28 @@
+{
+    "value": "Field.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/Editor/views/Item",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Поле формы",
+            "proto": "/Library/admin_widgets/Editor/views/Item/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/Editor/views/Item/res",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "object_rule": {
+            "value": "is(/Library/basic/String)",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/Editor/views/Item/object_rule",
+            "is_mandatory": true,
+            "order": 3
+        }
+    }
+}

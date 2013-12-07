@@ -1,0 +1,71 @@
+.Field{
+    background-color: transparent;
+    border: none;
+    display: block;
+    /*overflow: hidden;*/
+    padding: 0 0;
+    margin: 15px 0;
+    color: #111;
+    height: auto;
+    vertical-align: middle;
+    }
+    .Field__title{
+        font-size: 13px;
+        font-weight: bold;
+        color: #888;
+        padding-left: 0;
+        }
+    .Field__description{
+        color: #888;
+        font-size: 10px;
+        display: block;
+        }
+    .Field__error{
+        color: #ff0c08;
+        font-size: 12px;
+        }
+    .Field__input-wrap{
+        margin-right: 30px;
+        }
+    .Field__input{
+        font-size: 24px;
+        display: block;
+        width: 100%;
+        border: none;
+        background-color: transparent;
+        }
+    .Field.Item_draft .inpt{
+        border: 1px dashed #b3b3b3;
+        }
+        .Field.Item_draft .Field__input{
+            font-style: italic;
+            color: #666;
+            }
+/* Hover */
+.Field:hover{
+    background-color: transparent;
+    border: none;
+    }
+    .Field:active{
+        background-color: transparent;
+        border: none;
+        }
+/* Hover */
+.Field:hover .inpt{
+    border: 1px solid #95c1e6;
+    }
+/* Выделение */
+.Field.Item_selected{
+    background-color: transparent;
+    border: none;
+    }
+    .Field.Item_selected .inpt{
+        border-color: #1a8cff;
+        }
+    .Field.Item_selected .Item__title,
+    .Field.Item_selected .Item__description{
+        color: #888;
+        }
+    .Field.Item_selected .Item__title:hover{
+        color: #0073e6;
+    }

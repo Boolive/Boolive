@@ -1,0 +1,20 @@
+{
+    "value": "ImageField.js",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/Editor/views/Field/res/Field",
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive ImageField",
+            "proto": "/Library/admin_widgets/Editor/views/Field/res/Field/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/Widget/depends",
+            "order": 2
+        }
+    }
+}

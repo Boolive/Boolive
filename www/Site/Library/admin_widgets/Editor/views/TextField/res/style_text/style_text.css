@@ -1,0 +1,10 @@
+.TextField{
+
+    }
+    .TextField__input-wrap{
+        margin-right: 0;
+    }
+    .TextField__input{
+        font-size: 14px;
+        height: 100px;
+    }

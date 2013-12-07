@@ -1,0 +1,84 @@
+.ImageField{
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 15px 15px 0;
+}
+.ImageField .inpt{
+    box-shadow: none;
+    display: block;
+    background-color: #fdfdfd;
+    border-color: #f8f8f8;
+}
+.ImageField__wrap{
+    margin-right: 30px;
+    padding: 2px;
+    overflow: hidden;
+    }
+    .ImageField__image{
+        max-height: 150px;
+        max-width: 100%;
+        margin-right: 5px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        background-color: #fff;
+        }
+        .ImageField .maximize{
+            max-height: none;
+        }
+    .ImageField__form{
+        position: relative;
+        display: block;
+        vertical-align: top;
+        margin: 5px 0 0 0;
+        white-space: nowrap;
+
+        }
+        .ImageField__fileupload{
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            font-size: 14px;
+            vertical-align: bottom;
+            margin: 0;
+            }
+            .ImageField__fileupload input{
+                font-size: 15pt;
+                cursor:pointer;
+                padding: 0;
+                margin: 0;
+                border: none;
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                filter: alpha(opacity:0);
+                cursor: pointer;
+                }
+            .ImageField__fileupload:hover{
+
+            }
+        .ImageField__reset{
+            display: inline-block;
+            font-size: 14px;
+            vertical-align: top;
+            }
+            .ImageField__reset:hover{
+            }
+        .ImageField__filename{
+            vertical-align: top;
+            display: inline-block;
+            text-align: right;
+            font-size: 12px;
+            padding: 5px;
+        }
+.ImageField__select{
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+/* Hover */
+.ImageField:hover .inpt{
+    background-color: #f0f7ff;
+    }

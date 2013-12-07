@@ -1,0 +1,15 @@
+{
+    "value": "HTMLField.js",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/Editor/views/Field/res/Field",
+    "is_mandatory": true,
+    "order": 8,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive HTMLField",
+            "proto": "/Library/admin_widgets/Editor/views/Field/res/Field/title",
+            "is_mandatory": true,
+            "order": 1
+        }
+    }
+}

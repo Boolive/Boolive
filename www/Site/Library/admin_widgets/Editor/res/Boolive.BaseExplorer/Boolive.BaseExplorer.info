@@ -1,0 +1,48 @@
+{
+    "is_default_value": true,
+    "value": "Boolive.BaseExplorer.js",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer",
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Boolive.BaseExplorer",
+            "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "jQueryUI виджет с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/depends",
+            "is_mandatory": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Используемые скрипты",
+                    "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/depends/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "value_type": 2,
+                    "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/depends/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

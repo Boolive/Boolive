@@ -1,0 +1,36 @@
+{
+    "value": "ImageField.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/Editor/views/Field",
+    "is_default_class": false,
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Поле изображения",
+            "proto": "/Library/admin_widgets/Editor/views/Field/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Поле формы для редактирования изображения",
+            "value_type": 2,
+            "proto": "/Library/views/Widget/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/Editor/views/Field/res",
+            "is_mandatory": true,
+            "order": 3
+        },
+        "object_rule": {
+            "value": "is(/Library/basic/Image)",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/Editor/views/Field/object_rule",
+            "is_mandatory": true,
+            "order": 5
+        }
+    }
+}

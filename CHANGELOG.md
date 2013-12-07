@@ -13,6 +13,7 @@ Version 2.0.beta work in progress
 - new Добавлена программа isRelative в админке для смены признака относительности прототипа (VladimirShestakov)
 - new #102 Создано меню закладок "Bookmarks" в админке (VladimirShestakov)
 - new Added BaseExplorer for creating other explorers (VladimirShestakov)
+- new Added the common Editor for all objects (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------
