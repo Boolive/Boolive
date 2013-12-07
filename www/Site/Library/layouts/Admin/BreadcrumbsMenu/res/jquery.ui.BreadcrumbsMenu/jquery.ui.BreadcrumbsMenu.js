@@ -7,12 +7,14 @@
 	$.widget("boolive.BreadcrumbsMenu", $.boolive.Widget, {
         view: null,
         inline: null,
+        tab: null,
 
         _create: function() {
 			$.boolive.Widget.prototype._create.call(this);
             var self = this;
             self.view = self.element.find('.view');
             self.inline = self.element.find('.inline');
+            self.tab = self.view.children('li:first').removeClass('active').remove();
             // Режим редактирование
             self.element.on('click', function(e){
                 e.preventDefault();
@@ -84,24 +86,22 @@
                 var self = this;
                 var item = this.element.find('li a[data-o="'+uri+'"]');
                 if (item.size()==0){
-
                     this.call_('getBreadcrumbs', self.options.view, {object: uri}, function(data, textStatus, jqXHR){
                         if (_.isArray(data.result)){
-                            var tab = self.view.children('li:first').removeClass('active');
-                            self.view.empty();
                             var cnt = data.result.length;
+                            self.view.empty();
                             for (var i=0; i<cnt; i++){
-                                tab.css('z-index', i).children('a').attr('data-o', data.result[i]['uri']).attr('href', data.result[i]['url']).text(data.result[i]['title']);
-                                tab.removeClass();
+                                self.tab.css('z-index', i).children('a').attr('data-o', data.result[i]['uri']).attr('href', data.result[i]['url']).text(data.result[i]['title']);
+                                self.tab.removeClass();
                                 if (data.result[i]['class']){
-                                    tab.addClass(data.result[i]['class']);
+                                    self.tab.addClass(data.result[i]['class']);
                                 }
-                                self.view.prepend(tab.clone());
+                                self.view.prepend(self.tab.clone().show());
                             }
                         }
                     });
                 }else{
-                    self.view.find('li').removeClass('active').removeClass('preactive');
+                    self.view.find('li').removeClass('active').removeClass('preactive').show();
                     item.parent().addClass('active');
                 }
                 //if (!self.inline.is(":visible")){
