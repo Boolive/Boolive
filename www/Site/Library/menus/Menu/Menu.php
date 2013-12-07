@@ -26,6 +26,9 @@ class Menu extends Widget
         $this->_input_child['REQUEST']['object'] = $this->object->linked();
         // Не показыват корневой пункт меню
         $this->_input_child['REQUEST']['show'] = false;
+        if (isset($this->_input_child['REQUEST']['view_name'])){
+            unset($this->_input_child['REQUEST']['view_name']);
+        }
     }
 
     function show($v = array(), $commands, $input)

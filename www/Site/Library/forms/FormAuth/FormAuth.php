@@ -32,6 +32,9 @@ class FormAuth extends AutoWidgetList2
     }
 
     function show($v = array(), $commands, $input){
+        if (isset($this->_input_child['REQUEST']['view_name'])){
+            unset($this->_input_child['REQUEST']['view_name']);
+        }
 //        trace($this->_input['REQUEST']['object']);
 //        $this->_input['REQUEST']['object'] = $this->object;
         // Обработка объекта - формирование полей формы с проверкой введенных значений
