@@ -9,13 +9,6 @@
             "proto": "/Library/access/Role/title",
             "is_mandatory": true,
             "order": 1
-        },
-        "description": {
-            "is_default_value": true,
-            "value": "Сгруппированные права доступа по действиям над объектами.",
-            "proto": "/Library/access/Role/description",
-            "is_mandatory": true,
-            "order": 2
         }
     }
 }

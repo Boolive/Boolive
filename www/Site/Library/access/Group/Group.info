@@ -11,9 +11,9 @@
             "order": 1
         },
         "description": {
-            "value": "Эталон для создания групп",
+            "value": "Содержит пользователей и подгруппы с возможностью назначить им общие права",
+            "value_type": 2,
             "proto": "/Library/access/Member/description",
-            "is_mandatory": true,
             "order": 2
         }
     }

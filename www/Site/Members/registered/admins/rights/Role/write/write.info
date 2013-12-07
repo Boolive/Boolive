@@ -3,14 +3,5 @@
     "value": "",
     "proto": "/Library/access/Role/write",
     "is_mandatory": true,
-    "order": 4,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Запись",
-            "proto": "/Library/access/Role/write/title",
-            "is_mandatory": true,
-            "order": 1
-        }
-    }
+    "order": 4
 }

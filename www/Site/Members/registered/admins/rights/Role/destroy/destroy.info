@@ -3,14 +3,5 @@
     "value": "",
     "proto": "/Library/access/Role/destroy",
     "is_mandatory": true,
-    "order": 6,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Уничтожение",
-            "proto": "/Library/access/Role/destroy/title",
-            "is_mandatory": true,
-            "order": 1
-        }
-    }
+    "order": 6
 }

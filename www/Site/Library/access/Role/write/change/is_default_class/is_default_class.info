@@ -8,13 +8,12 @@
         "title": {
             "value": "Логика",
             "proto": "/Library/access/Action/title",
-            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Изменение признака \"Своя логика\" и редактирование логики через админку",
+            "value_type": 2,
             "proto": "/Library/access/Action/description",
-            "is_mandatory": true,
             "order": 2
         }
     }

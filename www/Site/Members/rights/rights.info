@@ -3,19 +3,5 @@
     "value": "",
     "proto": "/Library/access/Group/rights",
     "is_mandatory": true,
-    "order": 4,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Права доступа",
-            "proto": "/Library/access/Group/rights/title",
-            "is_mandatory": true,
-            "order": 1
-        },
-        "description": {
-            "value": "Базовые права для всех",
-            "is_mandatory": true,
-            "order": 2
-        }
-    }
+    "order": 4
 }

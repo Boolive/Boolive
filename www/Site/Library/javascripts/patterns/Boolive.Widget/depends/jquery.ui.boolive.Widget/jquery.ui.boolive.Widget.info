@@ -1,8 +1,8 @@
 {
     "is_default_value": true,
-    "value": "jquery.ui.boolive.Widget.js",
+    "value": "Widget.js",
     "value_type": 3,
-    "proto": "/Library/javascripts/jquery.ui.boolive.Widget",
+    "proto": "/Library/javascripts/Widget",
     "is_link": true,
     "is_mandatory": true,
     "order": 7

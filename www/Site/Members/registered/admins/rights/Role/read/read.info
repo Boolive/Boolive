@@ -3,14 +3,5 @@
     "value": "",
     "proto": "/Library/access/Role/read",
     "is_mandatory": true,
-    "order": 3,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Чтение",
-            "proto": "/Library/access/Role/read/title",
-            "is_mandatory": true,
-            "order": 1
-        }
-    }
+    "order": 3
 }

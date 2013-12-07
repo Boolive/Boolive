@@ -1,16 +1,4 @@
 {
     "value": "",
-    "order": 7,
-    "children": {
-        "title": {
-            "value": "Библиотека",
-            "is_mandatory": true,
-            "order": 1
-        },
-        "description": {
-            "value": "Готовые для использования объекты",
-            "is_mandatory": true,
-            "order": 2
-        }
-    }
+    "order": 34
 }

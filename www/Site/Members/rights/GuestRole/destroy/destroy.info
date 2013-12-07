@@ -3,21 +3,5 @@
     "value": "",
     "proto": "/Library/access/Role/destroy",
     "is_mandatory": true,
-    "order": 5,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Уничтожение",
-            "proto": "/Library/access/Role/destroy/title",
-            "is_mandatory": true,
-            "order": 1
-        },
-        "description": {
-            "is_default_value": true,
-            "value": "Безвозвратное удаление объекта с его файлами и подчиненными объектами.",
-            "proto": "/Library/access/Role/destroy/description",
-            "is_mandatory": true,
-            "order": 2
-        }
-    }
+    "order": 5
 }

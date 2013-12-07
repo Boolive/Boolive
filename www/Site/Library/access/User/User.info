@@ -8,41 +8,50 @@
             "value": "Пользователь",
             "proto": "/Library/access/Member/title",
             "is_mandatory": true,
-            "order": 1
+            "order": 1,
+            "children": {
+                "title": {
+                    "value": "Имя",
+                    "proto": "/Library/basic/String",
+                    "order": 1
+                }
+            }
         },
         "description": {
-            "value": "Эталон для создания пользователей",
+            "value": "Авторизованный посетитель сайта",
+            "value_type": 2,
             "proto": "/Library/access/Member/description",
-            "is_mandatory": true,
             "order": 2
         },
         "email": {
             "value": "none@none.none",
             "proto": "/Library/basic/Email",
             "is_mandatory": true,
-            "order": 6,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Email",
-                    "proto": "/Library/basic/Email/title",
-                    "is_mandatory": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Адрес электронной почты",
-                    "proto": "/Library/basic/Email/description",
-                    "is_mandatory": true,
-                    "order": 2
-                }
-            }
+            "order": 6
         },
         "passw": {
             "value": "aa7351d4e6f08651bcb8f8962c9a0ed0879e5f45f4bc9e2f0433aa8cc5972eb6",
             "proto": "/Library/basic/Password",
             "is_mandatory": true,
             "order": 7
+        },
+        "visit_time": {
+            "is_default_value": true,
+            "value": "0",
+            "proto": "/Library/basic/Number",
+            "order": 10,
+            "children": {
+                "title": {
+                    "value": "Время визита",
+                    "proto": "/Library/basic/Number/title",
+                    "order": 1
+                },
+                "description": {
+                    "value": "Когда последний раз пользователь заходил на сайт",
+                    "proto": "/Library/basic/Number/description",
+                    "order": 2
+                }
+            }
         }
     }
 }

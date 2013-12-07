@@ -2,14 +2,5 @@
     "value": "",
     "proto": "/Library/content_samples/Page/keywords",
     "is_mandatory": true,
-    "order": 6,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "value": "Ключевые слова",
-            "proto": "/Library/content_samples/Page/keywords/title",
-            "is_mandatory": true,
-            "order": 2
-        }
-    }
+    "order": 13
 }

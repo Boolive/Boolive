@@ -7,32 +7,15 @@
             "value": "Третья новость",
             "proto": "/Library/content_samples/Page/title",
             "is_mandatory": true,
-            "order": 1,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Название",
-                    "proto": "/Library/content_samples/Page/title/title",
-                    "is_mandatory": true,
-                    "order": 1
-                }
-            }
+            "order": 1
         },
         "description": {
             "is_default_value": true,
-            "value": "Эталон для публикаций - страниц, статей, новостей...",
+            "value": "Публикация на сайте - страница, статья, новость или другое",
+            "value_type": 2,
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Описание ",
-                    "proto": "/Library/content_samples/Page/description/title",
-                    "is_mandatory": true,
-                    "order": 1
-                }
-            }
+            "order": 4
         }
     }
 }
