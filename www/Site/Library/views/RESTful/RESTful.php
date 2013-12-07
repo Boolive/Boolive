@@ -31,7 +31,7 @@ class RESTful extends View
                 'path' => Rule::string(), // uri изменяемого объекта (PUT) или в который добавлять новый (POST)
                 'method' => Rule::string(), // метод запроса
                 'call' => Rule::string()->default('')->required(), // вызываемый метод объекта
-                'entity' => Rule::arrays(Rule::string()), // атрибуты изменяемого объекта
+                'entity' => Rule::arrays(Rule::string())->default(array())->required(), // атрибуты изменяемого объекта
                 'file_content' => Rule::int()->default(0)->required(), // Экпортировать файл объекта или нет?
                 'class_content' => Rule::int()->default(0)->required() // Экпортировать класс объекта или нет?
             )),
@@ -55,6 +55,7 @@ class RESTful extends View
             case 'POST':
             // Редактирование или создание объекта, если его нет
             case 'PUT':
+
                 $attribs = $this->_input['REQUEST']['entity'];
                 if (isset($this->_input['FILES']['entity']['file'])){
                     $attribs['file'] = $this->_input['FILES']['entity']['file'];
