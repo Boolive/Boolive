@@ -340,19 +340,22 @@ class MySQLStore extends Entity
                     $attr['value_type'] = Entity::VALUE_FILE;
                     // Если нет временного имени, значит создаётся из значения
                     if (empty($attr['file']['tmp_name'])){
-                        $attr['value'] = $attr['file']['name'];
+                        if (!isset($attr['file']['content'])) $attr['file']['content'] = '';
+                        if (!isset($attr['file']['name'])) $attr['file']['name'] = $attr['name'].'.txt';
+                        $f = File::fileInfo($attr['file']['name']);
                     }else{
+                        if (isset($attr['file']['content'])) unset($attr['file']['content']);
                         $f = File::fileInfo($attr['file']['tmp_name']);
-                        $attr['value'] = ($f['back']?'../':'').$attr['name'];
-                        // расширение
-                        if (empty($attr['file']['name'])){
-                            if ($f['ext']) $attr['value'].='.'.$f['ext'];
-                        }else{
-                            $f = File::fileInfo($attr['file']['name']);
-                            if ($f['ext']) $attr['value'].='.'.$f['ext'];
-                        }
-                        unset($attr['file']['content']);
                     }
+                    $attr['value'] = ($f['back']?'../':'').$attr['name'];
+                    // расширение
+                    if (empty($attr['file']['name'])){
+                        if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                    }else{
+                        $f = File::fileInfo($attr['file']['name']);
+                        if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                    }
+                    $value_src = $attr['value'];
                 }
                 // Текущая запись
                 if (!$new_id){
@@ -481,13 +484,17 @@ class MySQLStore extends Entity
                 // Связывание с новым файлом
                 if (isset($attr['file'])){
                     $path = $entity->dir(true).$attr['value'];
-                    if ($attr['file']['tmp_name']!=$path){
-                        if (!File::upload($attr['file']['tmp_name'], $path)){
-                            // @todo Проверить безопасность.
-                            // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
-                            if (!File::copy($attr['file']['tmp_name'], $path)){
-                                $attr['value_type'] = Entity::VALUE_SIMPLE;
-                                $attr['value'] = '';
+                    if (isset($attr['file']['content'])){
+                        File::create($attr['file']['content'], $path);
+                    }else{
+                        if ($attr['file']['tmp_name']!=$path){
+                            if (!File::upload($attr['file']['tmp_name'], $path)){
+                                // @todo Проверить безопасность.
+                                // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
+                                if (!File::copy($attr['file']['tmp_name'], $path)){
+                                    $attr['value_type'] = Entity::VALUE_SIMPLE;
+                                    $attr['value'] = '';
+                                }
                             }
                         }
                     }

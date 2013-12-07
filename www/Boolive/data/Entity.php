@@ -168,10 +168,11 @@ class Entity implements ITrace
             // Сведения о загружаемом файле. Не является атрибутом объекта, но используется в общей обработке
             'file'	=> Rule::arrays(array(
                 'tmp_name'	=> Rule::string(), // Путь на связываемый файл
-                'name'		=> Rule::lowercase()->ospatterns('*.*')->required()->ignore('lowercase'), // Имя файла, из которого будет взято расширение
+                'name'		=> Rule::lowercase()->ospatterns('*.*')->ignore('lowercase')->required(), // Имя файла, из которого будет взято расширение
                 'size'		=> Rule::int(), // Размер в байтах
                 'error'		=> Rule::int()->eq(0, true), // Код ошибки. Если 0, то ошибки нет
-                'type'      => Rule::string() // MIME тип файла
+                'type'      => Rule::string(), // MIME тип файла
+                'content'   => Rule::string()
             )),
             // Сведения о классе объекта (загружаемый файл или программный код). Не является атрибутом объекта
             'class' => Rule::arrays(array(
@@ -334,7 +335,7 @@ class Entity implements ITrace
 
     /**
      * Файл, ассоциированный с объектом
-     * @param null|array|string $new_file Информация о новом файле. Полный путь к файлу или сведения из $_FILES
+     * @param null|array|string $new_file Информация о новом файле. Полный путь к новому файлу или сведения из $_FILES
      * @param bool $root Возвращать полный путь или от директории сайта
      * @param bool $cache_remote Если файл внешний, то сохранить его к себе на сервер и возвратить путь на него
      * @return null|string
@@ -364,7 +365,7 @@ class Entity implements ITrace
         }
         // Возврат пути к текущему файлу, если есть
         if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
-            if ($proto = $this->isDefaultValue(null, true)){
+            if (($proto = $this->isDefaultValue(null, true)) && $proto->isExist()){
                 $file = $proto->file(null, $root);
                 if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
                     $file_path = Data::convertAbsoluteToLocal($file, false);
@@ -693,7 +694,15 @@ class Entity implements ITrace
                 }
             }else{
                 if (IS_INSTALL && $this->_attribs['is_default_value']!=$this->_attribs['id'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
-                    $this->file($proto->file(null, true));
+                    $content = $this->fileTemplate();
+                    if (is_null($content)){
+                        $this->file($proto->file(null, true));
+                    }else{
+                        $this->file(array(
+                            'name' => File::changeName(File::fileName($proto->file()), $this->name()),
+                            'content' => $content
+                        ));
+                    }
                 }
                 $this->_attribs['is_default_value'] = $this->_attribs['id'];
             }
@@ -1318,10 +1327,10 @@ class Entity implements ITrace
             $cond['from'] = $this;//->id();
             $result = Data::read($cond, $access, $index);
         }else
-        if (isset($this->_attribs['uri'])){
-            $cond['from'] = $this->_attribs['uri'];
-            $result = Data::read($cond, $access, $index);
-        }else
+//        if (isset($this->_attribs['uri'])){
+//            $cond['from'] = $this->_attribs['uri'];
+//            $result = Data::read($cond, $access, $index);
+//        }else
         if ($p = $this->proto()){
             $cond['from'] = $p;//->id();
             $result = Data::read($cond, $access, $index);
@@ -1830,6 +1839,7 @@ class Entity implements ITrace
             $export['name'] = $this->name();
             $export['date'] = $this->date();
             $export['proto_cnt'] = $this->protoCount();
+            if ($this->isFile()) $export['file'] = $this->file();
             if ($this->parent()) $export['parent'] = $this->parent()->uri();
             if (!$this->isHidden()) $export['is_hidden'] = false;
             if (!$this->isDraft()) $export['is_draft'] = false;
@@ -2056,6 +2066,17 @@ class $name extends $shorts[1]
 {
 $methods
 }";
+    }
+
+    /**
+     * Шаблон своего файла
+     * Для автоматического создания файла при переопредлении файла прототипа
+     * Если возвращается null, то полностью копируется файл прототипа
+     * @return null|string
+     */
+    function fileTemplate()
+    {
+        return null;
     }
 
     /**
