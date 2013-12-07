@@ -27,7 +27,9 @@
     .Field__input-wrap{
         margin-right: 30px;
         }
-    .Field__input{
+    .Field__input[type="text"],
+    .Field__input[type="password"]
+    {
         font-size: 24px;
         display: block;
         width: 100%;

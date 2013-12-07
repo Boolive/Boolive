@@ -6,7 +6,7 @@
     if($v['is_mandatory']->bool()) $class .= ' Item_mandatory';
 ?>
 <div class="Item Field KeywordsField<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="KeywordsField">
-    <label class="Item__title Field__title" for="<?=$v['object']?>"><?=$v['title']?></label>
+    <label class="Field__title" for="<?=$v['id']?>"><?=$v['title']?></label>
     <div class="inpt KeywordsField__keywords">
         <div class=" KeywordsField__keywords-old">
         <?php
@@ -18,7 +18,7 @@
             }
             ?>
         </div>
-        <input type="text" class="KeywordsField__keywords-value" value="">
+        <input type="text" class="KeywordsField__keywords-value" value="" id="<?=$v['id']?>">
         <div class="Item__select Field__select"><img width="16" height="16" src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
     </div>
     <div class="Item__description Field__description"><?=$v['description']?></div>

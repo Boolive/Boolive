@@ -12,7 +12,7 @@
             var self = this;
             self._error = '';
             self._input = self.element.find('.Field__input');
-            self._value = self._input.val();
+            self._value = self.getValue();
             self._input.on('input propertychange', function(e) {
                 self._change(e);
             });
@@ -28,7 +28,15 @@
         },
 
         _isChanged: function(){
-            return this._value != this._input.val();
+            return this._value != this.getValue();
+        },
+
+        getValue: function(){
+            return this._input.val()
+        },
+
+        setValue: function(value){
+            this._input.val(value);
         },
 
         call_save: function(e){
@@ -43,12 +51,12 @@
                     data: {
                         method: 'PUT',
                         entity:{
-                            value: self._input.val()
+                            value: self.getValue()
                         }
                     },
                     success: function(result, textStatus, jqXHR){
                         self.element.find('.Field__error').text('');
-                        self._value = self._input.val();
+                        self._value = self.getValue();
                         self._change();
                     },
                     error: function(jqXHR, textStatus){
@@ -73,7 +81,7 @@
         },
 
         call_cancel: function(e){
-            this._input.val(this._value);
+            this.setValue(this._value);
         }
     });
 })(jQuery, _);

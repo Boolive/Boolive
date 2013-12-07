@@ -14,7 +14,7 @@
             var self = this;
             self._error = '';
             self._input = self.element.find('.Field__input');
-            self._value = self._input.val();
+            self._value = self.getValue();
             self._editor = self._input.ckeditor();
             // Проверка измененеий при визуальном редактировании
             self._editor.editor.on('change', function(e) {
@@ -33,7 +33,8 @@
                 });
             });
         },
-        call_cancel: function(e){
+
+        setValue: function(value){
             this._editor.val(this._value);
         }
     })

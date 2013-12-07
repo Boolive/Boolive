@@ -3,7 +3,7 @@
     "value": "Item.tpl",
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer/views/Item",
-    "order": 14,
+    "order": 16,
     "children": {
         "title": {
             "is_default_value": true,

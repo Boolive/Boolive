@@ -7,4 +7,6 @@
     .TextField__input{
         font-size: 14px;
         height: 100px;
+        width: 100%;
+        border: none;
     }

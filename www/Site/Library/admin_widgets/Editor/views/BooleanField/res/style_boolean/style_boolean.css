@@ -1,0 +1,13 @@
+.BooleanField__input-wrap{
+    vertical-align: middle;
+    }
+    .BooleanField__select{
+        line-height: 22px;
+    }
+    .BooleanField__title{
+        vertical-align: middle;
+    }
+    .BooleanField__description{
+        vertical-align: middle;
+        display: inline-block;
+    }

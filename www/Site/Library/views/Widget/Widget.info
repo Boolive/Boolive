@@ -37,7 +37,6 @@
             }
         },
         "cache": {
-            "is_default_value": true,
             "value": 0,
             "proto": "/Library/basic/Boolean",
             "is_mandatory": true,

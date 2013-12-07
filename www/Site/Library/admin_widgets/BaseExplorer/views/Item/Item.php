@@ -24,6 +24,7 @@ class Item extends Widget
         $v['name'] = $obj->name();
         $v['value'] = (string)$obj->value();
         $v['uri'] = $obj->uri(false, true);
+        $v['id'] = $obj->key();
         $v['is_hidden'] = $obj->isHidden(null, false);
         $v['is_draft'] = $obj->isDraft(null, false);
         $v['is_file'] = $obj->isFile();
