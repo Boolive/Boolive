@@ -1,0 +1,153 @@
+.Item{
+    background-color: #F1F1F1;
+    border: 1px solid #EDEDED;
+    border-radius: 5px;
+    position: relative;
+    box-sizing: border-box;
+    font: normal 13px/1 Arial,"sans-serif";
+    margin: 5px 0;
+    }
+    .item:nth-of-type(odd) .Item{
+        background-color: #f5f5f5;
+        }
+.Item__main{
+    height: 32px;
+    margin: 0 30px 0 0;
+    white-space: nowrap;
+    word-wrap:break-word;
+    overflow: hidden;
+    line-height: 32px;
+    cursor: default;
+    }
+.Item__select{
+    cursor: pointer;
+    width: 30px;
+    position: absolute;
+    line-height: 30px;
+    right: 0;
+    top: 0;
+    text-align: center;
+    }
+    .Item__select img{
+        vertical-align: middle;
+        }
+.Item__title{
+    font-size: 16px;
+    padding: 0 10px;
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    }
+    .Item__title:hover{
+        text-decoration: underline;
+        color: #0073e6;
+        }
+
+.Item__description{
+    font-size: 12px;
+    color: #888;
+    display: inline-block;
+    }
+.Item__prop{
+    font-size: 16px;
+    color: #333;
+    display: none;
+    float: right;
+    width: 30px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    }
+    .Item__prop > img{
+        vertical-align: middle;
+        }
+    .Item__prop:hover{
+        background-color: #d4eafc;
+        }
+.Item__value{
+    font-size: 16px;
+    color: #333;
+    text-align: right;
+    display: block;
+    float: right;
+    max-width: 200px;
+    min-width: 50px;
+    padding: 0 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    z-index: 1;
+    }
+/* Состояния */
+.Item_hidden{
+    opacity: 0.25;
+    }
+.Item_draft{
+    background-color: #FFF;
+    border: 1px dashed #E0E0E0;
+    }
+    .Item_draft .Item__title,
+    .Item_draft .Item__description,
+    .Item_draft .Item__value{
+        font-style: italic;
+        color: #666;
+        }
+    .item:nth-of-type(odd) .Item_draft{
+        background-color: #fefefe;
+        border: 1px dashed #E0E0E0;
+        }
+.Item_link{
+    }
+    .Item_link .Item__title:after{
+        content: '↝';
+        font: normal 16px/16px "Times New Roman";
+        color: #0073bf;
+        margin-left: 3px;
+        text-decoration: none;
+        }
+    .Item_link .Item__prop{
+        display: block;
+        }
+.Item_mandatory{
+    }
+    .Item_mandatory .Item__title:before{
+        content: '*';
+        font: normal 22px/16px "Times New Roman";
+        color: #bf028b;
+        position: absolute;
+        right: -2px;
+        top: 50%;
+        margin-top: -2px;
+        text-decoration: none;
+        }
+/* Hover */
+.Item:hover,
+.item:nth-of-type(odd) .Item:hover{
+    background-color: #EBF5FF;
+    border: 1px solid #E6F1FA;
+    }
+    .Item:active,
+    .item:nth-of-type(odd) .Item:active{
+        background-color: #EBF5FF;
+        border: 1px solid #d2e8fa;
+        }
+/* Выделение */
+.Item.Item_selected{
+    background-color: #61B0FF;
+    border: 1px solid transparent;
+    color: #fff;
+    }
+.Item:nth-of-type(odd) .Item.Item_selected{
+    background-color: #4da6ff;
+    border: 1px solid transparent;
+    color: #fff;
+    }
+    .Item_selected .Item__title,
+    .Item_selected .Item__value{
+        color: #fff;
+        }
+    .Item_selected .Item__description{
+        color: rgba(255,255,255,0.7);
+        }

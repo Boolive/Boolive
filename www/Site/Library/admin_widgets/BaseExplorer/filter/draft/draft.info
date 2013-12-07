@@ -1,0 +1,12 @@
+{
+    "value": 1,
+    "proto": "/Library/basic/Boolean",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Черновики",
+            "proto": "/Library/basic/Boolean/title",
+            "order": 1
+        }
+    }
+}
