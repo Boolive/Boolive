@@ -1,16 +1,18 @@
 {
     "value": "",
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
     "order": 8,
     "children": {
         "title": {
             "value": "Допуск",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/title",
             "order": 1
         },
         "description": {
             "value": "Правило, разрешающее доступ к объектам. В правило добавляются ссылки на объекты",
-            "is_mandatory": true,
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
             "order": 2
         }
     }

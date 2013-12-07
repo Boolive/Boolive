@@ -1,16 +1,17 @@
 {
     "value": 0,
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
-    "order": 14,
+    "order": 10,
     "children": {
         "title": {
             "value": "Булево",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/title",
             "order": 1
         },
         "description": {
             "value": "Логическое значение ДА или НЕТ",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/description",
             "order": 2
         }
     }

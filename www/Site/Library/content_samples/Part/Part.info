@@ -1,14 +1,17 @@
 {
     "value": "",
+    "proto": "/Library/basic/Object",
     "order": 4,
     "children": {
         "title": {
             "value": "Раздел",
+            "proto": "/Library/basic/Object/title",
             "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Группировка публикаций (страниц, статей, новостей)",
+            "proto": "/Library/basic/Object/description",
             "order": 2
         }
     }

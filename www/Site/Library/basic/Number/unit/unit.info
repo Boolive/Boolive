@@ -1,16 +1,17 @@
 {
-    "value": "name@mail.com",
+    "is_default_value": true,
+    "value": "",
     "proto": "/Library/basic/String",
-    "is_default_class": false,
-    "order": 16,
+    "order": 3,
     "children": {
         "title": {
-            "value": "Email",
+            "value": "Единица измерения",
             "proto": "/Library/basic/String/title",
             "order": 1
         },
         "description": {
-            "value": "Адрес электронной почты",
+            "value": "Строковое значение длиной до 255 символов",
+            "value_type": 2,
             "proto": "/Library/basic/String/description",
             "order": 2
         }

@@ -12,7 +12,7 @@ use Boolive\values\Rule;
 
 class File extends Entity
 {
-    function rule()
+    protected function rule()
     {
         $rule = parent::rule();
         $rule->arrays[0]['file']->arrays[0]['name']->ospatterns($this->validExtentions())->required();

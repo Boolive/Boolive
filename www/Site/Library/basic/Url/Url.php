@@ -6,15 +6,15 @@
  */
 namespace Library\basic\Url;
 
-use Boolive\data\Entity,
-    Boolive\values\Rule;
+use Boolive\values\Rule;
+use Library\basic\String\String;
 
-class Url extends Entity
+class Url extends String
 {
     protected function rule()
     {
         $rule = parent::rule();
-        $rule->arrays[0]['value'] = Rule::url();
+        $rule->arrays[0]['value']->url();
         return $rule;
     }
 }

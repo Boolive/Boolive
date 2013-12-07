@@ -6,10 +6,10 @@
  */
 namespace Library\basic\Email;
 
-use Boolive\data\Entity,
-    Boolive\values\Rule;
+use Boolive\values\Rule;
+use Library\basic\String\String;
 
-class Email extends Entity
+class Email extends String
 {
     /**
      * Установка правила на атрибуты
@@ -17,7 +17,7 @@ class Email extends Entity
     protected function rule()
     {
         $rule = parent::rule();
-        $rule->arrays[0]['value'] = Rule::email();
+        $rule->arrays[0]['value']->email();
         return $rule;
     }
 }

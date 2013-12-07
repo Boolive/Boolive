@@ -1,16 +1,18 @@
 {
     "value": "",
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
-    "order": 17,
+    "order": 27,
     "children": {
         "title": {
             "value": "Файл",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/title",
             "order": 1
         },
         "description": {
-            "value": "Объект ассоциируемый с файлом. ",
-            "is_mandatory": true,
+            "value": "Объект, значением которого является файл. ",
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
             "order": 2
         }
     }

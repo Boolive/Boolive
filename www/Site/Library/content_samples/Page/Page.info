@@ -1,22 +1,19 @@
 {
     "value": "",
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
     "order": 3,
     "children": {
         "title": {
             "value": "Страница",
+            "proto": "/Library/basic/Object/title",
             "is_mandatory": true,
-            "order": 1,
-            "children": {
-                "title": {
-                    "value": "Название",
-                    "is_mandatory": true,
-                    "order": 1
-                }
-            }
+            "order": 1
         },
         "description": {
-            "value": "Эталон для публикаций - страниц, статей, новостей...",
+            "value": "Публикация на сайте - страница, статья, новость или другое",
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
             "is_mandatory": true,
             "order": 6,
             "children": {

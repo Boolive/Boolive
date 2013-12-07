@@ -1,14 +1,17 @@
 {
     "value": "",
-    "order": 10,
+    "proto": "/Library/basic/Object",
+    "order": 20,
     "children": {
         "title": {
             "value": "Пакет",
+            "proto": "/Library/basic/Object/title",
             "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Коллекция объектов",
+            "proto": "/Library/basic/Object/description",
             "is_mandatory": true,
             "order": 2
         }

@@ -1,19 +1,18 @@
 {
-    "is_default_value": true,
-    "value": " ",
+    "value": "",
+    "value_type": 2,
     "proto": "/Library/basic/Text",
-    "order": 15,
+    "order": 12,
     "children": {
         "title": {
-            "value": "Эталон HTML текста",
+            "value": "HTML текст",
             "proto": "/Library/basic/Text/title",
-            "is_mandatory": true,
             "order": 1
         },
         "description": {
-            "value": "HTML текст длиной до 65535 символов (64Кбайт)",
+            "value": "Текст с HTML тегами и длиной до 65535 символов (64Кбайт)",
+            "value_type": 2,
             "proto": "/Library/basic/Text/description",
-            "is_mandatory": true,
             "order": 2
         }
     }

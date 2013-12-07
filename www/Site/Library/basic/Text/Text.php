@@ -11,7 +11,7 @@ use Boolive\data\Entity;
 
 class Text extends Entity
 {
-    function rule()
+    protected function rule()
     {
         $rule = parent::rule();
         $rule->arrays[0]['value']->min(0)->max(65535);

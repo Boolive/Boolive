@@ -20,9 +20,9 @@ class Add extends SelectObject
             foreach ($protos as $proto){
                 /** @var $proto \Boolive\data\Entity */
                 $obj = $proto->birth($parent);
-                if ($proto->uri() == '/Library/basic/Object'){
-                    $obj->proto(false);
-                }
+//                if ($proto->uri() == '/Library/basic/Object'){
+//                    $obj->proto(false);
+//                }
                 if ($this->_input['REQUEST']['is_link']){
                     $obj->isLink(true);
                 }

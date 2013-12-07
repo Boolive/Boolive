@@ -1,12 +1,19 @@
 {
     "value": "",
+    "proto": "/Library/basic/Object",
     "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {
             "value": "Ключевые слова",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/title",
             "order": 1
+        },
+        "description": {
+            "value": "Список ключевых слов и словосочетаний через запятую. Для поисковых систем",
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
+            "order": 2
         }
     }
 }

@@ -1,16 +1,19 @@
 {
     "value": "",
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
     "order": 7,
     "children": {
         "title": {
             "value": "Действие",
+            "proto": "/Library/basic/Object/title",
             "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Действие, на которое устанавливается правило доступа или запрета. Имя объекта соответствует названию действия.",
-            "is_mandatory": true,
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
             "order": 2
         }
     }

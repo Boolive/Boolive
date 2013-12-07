@@ -4,7 +4,7 @@
     "order": 8,
     "children": {
         "title": {
-            "value": "Образцы содержимого",
+            "value": "Публикации",
             "proto": "/Library/basic/Package/title",
             "is_mandatory": true,
             "order": 1

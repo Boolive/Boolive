@@ -4,13 +4,39 @@
     "children": {
         "title": {
             "value": "Объект",
-            "is_mandatory": true,
-            "order": 1
+            "proto": "/Library/basic/String",
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Название",
+                    "proto": "/Library/basic/String/title",
+                    "order": 1
+                },
+                "description": {
+                    "value": "Название должно содержать смысл и быть коротким",
+                    "proto": "/Library/basic/String/description",
+                    "order": 2
+                }
+            }
         },
         "description": {
-            "value": "Простейший объект без свойств и логики",
-            "is_mandatory": true,
-            "order": 2
+            "value": "Простейший объект для создания новых с нуля",
+            "value_type": 2,
+            "proto": "/Library/basic/Text",
+            "order": 5,
+            "children": {
+                "title": {
+                    "value": "Описание",
+                    "proto": "/Library/basic/Text/title",
+                    "order": 1
+                },
+                "description": {
+                    "value": "Краткое описание, дополняющее название",
+                    "value_type": 2,
+                    "proto": "/Library/basic/Text/description",
+                    "order": 2
+                }
+            }
         }
     }
 }

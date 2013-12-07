@@ -1,16 +1,18 @@
 {
     "value": " ",
+    "value_type": 2,
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
-    "order": 9,
+    "order": 11,
     "children": {
         "title": {
             "value": "Текст",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/title",
             "order": 1
         },
         "description": {
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/description",
             "order": 2
         }
     }
