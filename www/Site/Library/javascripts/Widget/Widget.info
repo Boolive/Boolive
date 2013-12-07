@@ -1,0 +1,27 @@
+{
+    "value": "Widget.js",
+    "value_type": 3,
+    "proto": "/Library/javascripts/JavaScript",
+    "is_default_class": false,
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive Widget",
+            "proto": "/Library/javascripts/JavaScript/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Логика виджета на стороне клиента (в браузере)",
+            "value_type": 2,
+            "proto": "/Library/javascripts/JavaScript/description",
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/JavaScript/depends",
+            "order": 3
+        }
+    }
+}
