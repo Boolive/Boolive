@@ -50,6 +50,7 @@ body{
         position: relative;
         outline: none;
         box-sizing: border-box;
+        -moz-box-sizing: border-box;
     }
     .FormAuth textarea{
         height: 200px;

@@ -12,7 +12,8 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
+            "value": "Автоматически исполняет и отображает все подчиненные объекты",
+            "value_type": 2,
             "proto": "/Library/views/ViewGroup/description",
             "is_mandatory": true,
             "order": 3

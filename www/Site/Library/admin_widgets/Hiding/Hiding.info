@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 33,
+    "order": 34,
     "children": {
         "title": {
             "value": "Скрытый",

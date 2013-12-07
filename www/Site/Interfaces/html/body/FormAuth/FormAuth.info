@@ -37,6 +37,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/forms/FormAuth/res/description",
                     "is_mandatory": true,
                     "order": 3
@@ -75,6 +76,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
                     "proto": "/Library/forms/FormAuth/cache/description",
                     "is_mandatory": true,
                     "order": 2
@@ -84,6 +86,7 @@
         "object_rule": {
             "is_default_value": true,
             "value": "",
+            "value_type": 2,
             "proto": "/Library/forms/FormAuth/object_rule",
             "is_mandatory": true,
             "order": 11,

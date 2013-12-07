@@ -295,7 +295,7 @@
                         url: "/",
                         data: {
                             direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
-                            object: self.model.attrib['proto']!='null'?self.model.attrib['proto']:'' //какой объект показать
+                            object: self.model.attrib['proto']!='null'?self.model.attrib['proto']:'/Library' //какой объект показать
                         }
                     },
                     function(result, params){

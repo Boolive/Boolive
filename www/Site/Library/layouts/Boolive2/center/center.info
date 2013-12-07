@@ -3,19 +3,19 @@
     "value": "",
     "proto": "/Library/views/ViewSingle",
     "is_mandatory": true,
-    "order": 12,
+    "order": 14,
     "children": {
         "title": {
             "value": "Центр",
             "proto": "/Library/views/ViewSingle/title",
             "is_mandatory": true,
-            "order": 5
+            "order": 1
         },
         "description": {
             "value": "Центральная область вставки",
             "proto": "/Library/views/ViewSingle/description",
             "is_mandatory": true,
-            "order": 6
+            "order": 2
         }
     }
 }

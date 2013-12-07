@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 31,
+    "order": 32,
     "children": {
         "title": {
             "value": "Установить",
@@ -34,6 +34,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/views/Widget/res/description",
                     "is_mandatory": true,
                     "order": 2
@@ -57,6 +58,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
                     "proto": "/Library/views/Widget/cache/description",
                     "is_mandatory": true,
                     "order": 2

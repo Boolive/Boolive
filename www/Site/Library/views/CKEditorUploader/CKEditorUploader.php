@@ -41,6 +41,7 @@ class CKEditorUploader extends View
         try{
             if ($text->isExist() && $proto->isExist()){
                 $file = $proto->birth($text, false);
+                $file->isDraft(false);
                 $file->file($this->_input['FILES']['upload']);
                 $file->save();
                 $file_url = $file->file(null, false);

@@ -16,6 +16,7 @@
         "description": {
             "is_default_value": true,
             "value": "Эталон для всех скриптов на языке JavaScript",
+            "value_type": 2,
             "proto": "/Library/views/HtmlBlock/res/JavaScript/description",
             "is_mandatory": true,
             "order": 2
@@ -37,6 +38,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "value_type": 2,
                     "proto": "/Library/views/HtmlBlock/res/JavaScript/depends/description",
                     "is_mandatory": true,
                     "order": 2

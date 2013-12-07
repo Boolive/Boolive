@@ -7,8 +7,7 @@
  */
 namespace Library\views\AutoWidgetList2;
 
-use Boolive\data\Data,
-    Library\views\Widget\Widget;
+use Library\views\Widget\Widget;
 
 class AutoWidgetList2 extends Widget
 {

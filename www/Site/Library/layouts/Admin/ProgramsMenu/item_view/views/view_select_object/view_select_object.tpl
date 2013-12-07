@@ -7,11 +7,11 @@
         <div class="popup-left">
             <ul class="">
                 <?php foreach ($v['shorts'] as $item):?>
-                    <li><a class="object" href="<?php echo $item['uri']->uri();?>"><?php echo $item['title'];?></a></li>
+                    <li title="<?=$item['description'];?>"><a class="object" href="<?php echo $item['uri']->uri();?>"><?php echo $item['title'];?></a></li>
                 <?php endforeach; ?>
-                <li class="hsplit"></li>
-                <li class="view_all link"><a href="">Ссылку...</a></li>
-                <li class="view_all"><a href="">Показать все...</a></li>
+<!--                <li class="hsplit"></li>-->
+                <li class="view_all link"><a href="" title="Использовать существующий объект">Ссылку...</a></li>
+                <li class="view_all"><a href="" title="Новый объект из любого существующего">Другое...</a></li>
             </ul>
         </div>
     </div>

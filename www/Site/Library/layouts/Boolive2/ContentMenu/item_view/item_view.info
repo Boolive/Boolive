@@ -37,6 +37,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/menus/Menu/item_view/res/description",
                     "is_mandatory": true,
                     "order": 2
@@ -60,6 +61,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
                     "proto": "/Library/menus/Menu/item_view/cache/description",
                     "is_mandatory": true,
                     "order": 2

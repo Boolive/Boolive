@@ -9,11 +9,11 @@
         ?></div>
         <?php echo $v->BreadcrumbsMenu->string();?>
     </div>
-    <div class="left">
+    <div class="sidebar left">
         <!--<div class="shadow"></div>-->
         <?php echo $v->Bookmarks->string();?>
     </div>
-    <div class="right">
+    <div class="sidebar right">
         <!--<div class="shadow"></div>-->
         <?php echo $v->ProgramsMenu->string();?>
     </div>

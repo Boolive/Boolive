@@ -21,9 +21,11 @@
             "order": 3
         },
         "object": {
-            "value": "object.png",
+            "is_default_value": true,
+            "value": "logo.png",
             "value_type": 3,
-            "proto": "/Library/views/Logo/object",
+            "proto": "/logo",
+            "is_link": true,
             "is_mandatory": true,
             "order": 6,
             "children": {
@@ -53,6 +55,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/views/Logo/res/description",
                     "is_mandatory": true,
                     "order": 2

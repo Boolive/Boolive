@@ -15,18 +15,18 @@
                 e.stopPropagation();
                 var is_link = $(this).hasClass('link');
                 var s = self.callParents('getState');
-                var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
+//                var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
                 self.callParents('openWindow', [null,
                     {
                         url: "/",
                         data: {
                             direct: self.options.object, // uri выиджета выбора объекта
-                            object: '' //какой объект показать
+                            object: '/Library' //какой объект показать
                         }
                     },
                     function(result, params){
                         if (result == 'submit' && 'selected' in params){
-                            self.selected(params.selected, object, is_link);
+                            self.selected(params.selected, s.object, is_link);
                         }
                     }
                 ]);
@@ -35,8 +35,8 @@
                 e.preventDefault();
                 e.stopPropagation();
                 var s = self.callParents('getState');
-                var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
-                self.selected($(this).attr('href'), object);
+//                var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
+                self.selected($(this).attr('href'), s.object);
             });
         },
 

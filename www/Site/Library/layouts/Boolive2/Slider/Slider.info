@@ -38,6 +38,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/content_widgets/Slider/res/description",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -63,6 +64,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
                     "proto": "/Library/content_widgets/Slider/cache/description",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -73,6 +75,7 @@
         "object_rule": {
             "is_default_value": true,
             "value": "",
+            "value_type": 2,
             "proto": "/Library/content_widgets/Slider/object_rule",
             "is_mandatory": true,
             "order": 6,
@@ -92,16 +95,7 @@
             "value": "",
             "proto": "/Library/content_widgets/Slider/object",
             "is_mandatory": true,
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Слайды",
-                    "proto": "/Library/content_widgets/Slider/object/title",
-                    "is_mandatory": true,
-                    "order": 1
-                }
-            }
+            "order": 7
         }
     }
 }

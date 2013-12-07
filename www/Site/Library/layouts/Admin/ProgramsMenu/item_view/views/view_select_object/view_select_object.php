@@ -44,22 +44,24 @@ class view_select_object extends Widget
                     array('heirs', $this->_input['REQUEST']['object']))
                 )
             );
-            $entity = Data::read('/Library/basic/Object');
+
             $v['shorts'] = array();
             foreach ($shorts as $short){
                 $objects = $short->find(array('attr','is_link','>',0));
                 foreach ($objects as $o){
-                    $o = $o->linked();
+                    $r = $o->linked();
                     $v['shorts'][] = array(
-                        'uri' => $o->uri(),
-                        'title' => $o->title->value()
+                        'uri' => $r->uri(),
+                        'title' => $o->title->inner()->value(),
+                        'description' => $o->description->inner()->value()
                     );
                 }
             }
-            $v['shorts'][] = array(
-                'uri' => $entity->uri(),
-                'title' => $entity->title->value()
-            );
+//             $entity = Data::read('/Library/basic/Object');
+//            $v['shorts'][] = array(
+//                'uri' => $entity->uri(),
+//                'title' => $entity->title->value()
+//            );
         }else{
             $v['show-item'] = false;
         }

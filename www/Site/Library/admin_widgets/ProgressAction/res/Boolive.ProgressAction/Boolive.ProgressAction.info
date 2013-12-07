@@ -7,14 +7,15 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Boolive.Widget заготовка",
+            "value": "Boolive.Widget",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
-            "value": "Заготовка для jQueryUI виджета с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
+            "value": "jQueryUI виджет с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
+            "value_type": 2,
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_mandatory": true,
             "order": 2
@@ -36,6 +37,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "value_type": 2,
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/description",
                     "is_mandatory": true,
                     "order": 2

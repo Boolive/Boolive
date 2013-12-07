@@ -11,7 +11,7 @@ use Library\views\View\View;
 
 class Css extends View
 {
-    function rule()
+    protected function rule()
     {
         $rule = parent::rule();
         // Ассоциация с файлами с расширением css

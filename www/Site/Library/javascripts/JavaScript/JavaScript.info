@@ -8,13 +8,12 @@
         "title": {
             "value": "JavaScript",
             "proto": "/Library/views/View/title",
-            "is_mandatory": true,
             "order": 1
         },
         "description": {
             "value": "Эталон для всех скриптов на языке JavaScript",
+            "value_type": 2,
             "proto": "/Library/views/View/description",
-            "is_mandatory": true,
             "order": 2
         },
         "depends": {
@@ -26,13 +25,12 @@
                 "title": {
                     "value": "Используемые скрипты",
                     "proto": "/Library/views/ViewGroup/title",
-                    "is_mandatory": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "value_type": 2,
                     "proto": "/Library/views/ViewGroup/description",
-                    "is_mandatory": true,
                     "order": 2
                 }
             }

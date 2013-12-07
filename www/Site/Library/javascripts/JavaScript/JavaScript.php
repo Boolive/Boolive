@@ -11,7 +11,7 @@ use Library\views\View\View;
 
 class JavaScript extends View
 {
-    function rule()
+    protected function rule()
     {
         $rule = parent::rule();
         $rule->arrays[0]['file']->arrays[0]['name']->ospatterns('*.js');

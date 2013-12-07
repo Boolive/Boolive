@@ -14,7 +14,8 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "",
+            "value": "Каскадная таблица стилей для оформления HTML-документа",
+            "value_type": 2,
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/style/description",
             "is_mandatory": true,
             "order": 2

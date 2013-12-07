@@ -36,6 +36,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/forms/FormAuth/views/RememberField/res/description",
                     "is_mandatory": true,
                     "order": 2

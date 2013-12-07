@@ -86,7 +86,7 @@
                 var uri;
                 for (uri in info){
                     if (this.element.find('.list [data-o="'+uri+'"]').size()==0){
-                        this.reload({object: this.options.object});
+                        this.reload({object: this.options.object}, {url:'/'});
                         break;
                     }
                 }

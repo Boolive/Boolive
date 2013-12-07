@@ -8,7 +8,6 @@
         context.find('[data-p]').each(function(){
             var plugin = $(this).attr('data-p');
             var options = $(this).data('p-option');
-            console.log(options);
             if (typeof $(this)[plugin] == 'function'){
                 $(this)[plugin](options).removeAttr('data-p');
             }

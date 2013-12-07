@@ -28,21 +28,15 @@ class ObjectItem extends Widget
 
         // Заголовк объекта
         $v['title'] = $obj->title->inner()->value();
-        if (empty($v['title']) && $obj->isLink()){
-            $v['title'] = $obj->linked()->title->value();
-        }
+//        if (empty($v['title']) && $obj->isLink()){
+//            $v['title'] = $obj->linked()->title->value();
+//        }
         if (empty($v['title'])){
             $v['title'] = $obj->name();
         }
         // Описание объекта
-        if ($obj->description->isExist()){
-            $v['description'] = $obj->description->value();
-        }else
-        if ($obj->isLink()){
-            $v['description'] = $obj->linked()->description->value();
-        }else{
-            $v['description'] = '';
-        }
+        $v['description'] = $obj->description->inner()->value();
+
         // Атрибуты
         $v['name'] = $obj->name();
         $v['value'] = (string)$obj->value();

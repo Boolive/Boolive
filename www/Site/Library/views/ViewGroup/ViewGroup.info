@@ -11,7 +11,8 @@
             "order": 1
         },
         "description": {
-            "value": "Автоматичеки исполненяет и отображает все подчиенные объекты",
+            "value": "Автоматически исполняет и отображает все подчиненные объекты",
+            "value_type": 2,
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
             "order": 2

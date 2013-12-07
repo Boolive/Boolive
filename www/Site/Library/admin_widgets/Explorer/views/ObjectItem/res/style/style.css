@@ -229,7 +229,7 @@
         border: 1px solid #FFF;
         }
     .ObjectItem.list.selected .info,
-    .ObjectItem.list.selected .view:hover .info{
+    .ObjectItem.list.selected .view .info{
         background-color: #61B0FF;
         }
     .ObjectItem.list.selected .main .title *,

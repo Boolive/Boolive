@@ -36,7 +36,8 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "",
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
                     "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_draft": true,
                     "is_mandatory": true,

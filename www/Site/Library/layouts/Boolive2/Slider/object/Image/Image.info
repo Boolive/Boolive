@@ -13,7 +13,8 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Объект ассоциируемый с файлом. ",
+            "value": "Файл изображения",
+            "value_type": 2,
             "proto": "/Library/basic/Image/description",
             "is_mandatory": true,
             "order": 2

@@ -44,6 +44,7 @@
   vertical-align: baseline !important;
   width: auto !important;
   box-sizing: content-box !important;
+  -moz-box-sizing: content-box !important;
   font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
   font-weight: normal !important;
   font-style: normal !important;
@@ -86,6 +87,7 @@
 }
 .syntaxhighlighter table td.code .container textarea {
   box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
   position: absolute !important;
   left: 0 !important;
   top: 0 !important;

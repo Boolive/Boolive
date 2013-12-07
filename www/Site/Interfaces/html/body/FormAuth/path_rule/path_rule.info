@@ -14,6 +14,7 @@
         "description": {
             "is_default_value": true,
             "value": "Регулярное выражение на адрес запроса, например ^news(/|$)",
+            "value_type": 2,
             "proto": "/Library/forms/FormAuth/path_rule/description",
             "is_mandatory": true,
             "order": 2
