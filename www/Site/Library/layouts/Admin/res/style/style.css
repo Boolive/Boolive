@@ -13,7 +13,7 @@
 		top: 32px;
 		position: fixed;
 		z-index: 2;
-		overflow:hidden;
+		overflow:auto;
 		}
         .Admin > .left .shadow{
             position: absolute;
@@ -34,7 +34,7 @@
 		bottom: 0;
 		position: fixed;
 		z-index: 3;
-		/*overflow:hidden;*/
+		/*overflow-y:hidden;*/
 		padding: 0;
         top: 32px;
 		}

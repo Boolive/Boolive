@@ -31,8 +31,9 @@
             // Расширение jquery объектов Admin
             var self = this;
             self.options.basepath = self.element.attr('data-base');
+            self.element.children('.sidebar').touchScroll();
             // Контейнер окон
-            self._windows = self.element.find('.center');
+            self._windows = self.element.find('> .center');
             // Текущее окно
             self._window_current = self._windows.children(':first');
             // Состояние и подчиенные виджеты текущего окна
@@ -285,7 +286,7 @@
             var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object);
 
             if ('object' in change && !('view_name' in state) && !(object_str in this._state.remember_view)){
-                state.view_name = null;
+                if (!/^views\//.test(this._state.view_name)) state.view_name = null;
             }
             if (!('view_name' in state) && object_str in this._state.remember_view){
                 state.view_name = this._state.remember_view[object_str];

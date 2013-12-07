@@ -1,0 +1,29 @@
+{
+    "value": "jquery.mousewheel.js",
+    "value_type": 3,
+    "proto": "/Library/javascripts/patterns/jQueryScript",
+    "is_mandatory": true,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "MouseWheel",
+            "proto": "/Library/javascripts/patterns/jQueryScript/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Плагин добавляющий jQuery события прокрутки колесом мышки",
+            "value_type": 2,
+            "proto": "/Library/javascripts/patterns/jQueryScript/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/patterns/jQueryScript/depends",
+            "is_mandatory": true,
+            "order": 3
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "value": "jquery.touchscroll.js",
+    "value_type": 3,
+    "proto": "/Library/javascripts/patterns/jQueryScript",
+    "order": 16,
+    "children": {
+        "title": {
+            "value": "Прокрутка пальцем и мышкой",
+            "proto": "/Library/javascripts/patterns/jQueryScript/title",
+            "order": 1
+        },
+        "description": {
+            "value": "jQuery плагин для активации прокрутки пальцем и мышкой для любого элемента",
+            "value_type": 2,
+            "proto": "/Library/javascripts/patterns/jQueryScript/description",
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/patterns/jQueryScript/depends",
+            "order": 3
+        }
+    }
+}
