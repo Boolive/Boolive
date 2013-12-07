@@ -5,7 +5,7 @@
     "order": 13,
     "children": {
         "title": {
-            "value": "Программы",
+            "value": "Вид",
             "proto": "/Library/views/ViewSingle/title",
             "is_mandatory": true,
             "order": 1

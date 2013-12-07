@@ -339,7 +339,7 @@ h4{
 }
 /* Элементы формы */
 .inpt{
-    border: 1px #E0E0E0 solid;
+    border: 1px #b3b3b3 solid;
     background-color: #FFF;
     width: 100%;
     color: #000;
@@ -347,8 +347,8 @@ h4{
     padding: 2px 4px;
     max-width: 100%;
     margin: 0;
-    box-shadow: inset -1px 1px 3px 0 #f5f5f5;
-    border-radius: 5px;
+    box-shadow: inset -1px 1px 3px 0 #e8e8e8;
+    border-radius: 3px;
     display: inline-block;
     position: relative;
     outline: none;

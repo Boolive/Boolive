@@ -2,7 +2,7 @@
     "value": "Image_1.jpg",
     "value_type": 3,
     "proto": "/Library/basic/Image",
-    "order": 3,
+    "order": 4,
     "children": {
         "title": {
             "is_default_value": true,

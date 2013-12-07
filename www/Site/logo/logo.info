@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/basic/Image",
     "is_mandatory": true,
-    "order": 14,
+    "order": 18,
     "children": {
         "title": {
             "value": "Логотип",

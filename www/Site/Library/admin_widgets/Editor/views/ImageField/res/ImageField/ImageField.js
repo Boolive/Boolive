@@ -15,6 +15,7 @@
             var self = this;
             self._reset = this.element.find('.ImageField__reset').hide();
             self._filename = this.element.find('.ImageField__filename').hide();
+            self._upload = this.element.find('.ImageField__fileupload');
             self._img = this.element.find('.ImageField__image');
             self._img.on('click', function(e){
                 $(this).toggleClass('maximize');
@@ -22,8 +23,9 @@
             self._form = this.element.find('.ImageField__form');
             self._form.on('change', '[type=file]', function() {
                 self._isempty = false;
+                self._upload.hide();
                 self._reset.show();
-                self._filename.text(self.getLastParam($(this).val())).show();
+//                self._filename.text(self.getLastParam($(this).val())).show();
                 self._change();
             });
             self._reset.on('click', function(e){
@@ -88,6 +90,7 @@
         call_cancel: function(){
             this._isempty = true;
             this._reset.hide();
+            this._upload.show();
             this._filename.hide();
             var file_input = this._form.find('input[type="file"]:first');
             this.element.find('.Field__error').text('');

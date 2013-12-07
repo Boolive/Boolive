@@ -2,28 +2,30 @@
     display: inline-block;
     vertical-align: top;
     margin: 0 15px 15px 0;
+    max-width: 100%;
 }
 .ImageField .inpt{
     box-shadow: none;
     display: block;
+    padding: 3px;
     background-color: #fdfdfd;
-    border-color: #f8f8f8;
 }
+.ImageField__image-wrap{
+    min-height: 30px;
+    background-color: #555;
+    display: block;
+    width: 100%;
+    }
 .ImageField__wrap{
-    margin-right: 30px;
-    padding: 2px;
     overflow: hidden;
+    position: relative;
     }
     .ImageField__image{
         max-height: 150px;
         max-width: 100%;
-        margin-right: 5px;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        background-color: #fff;
+        display: block;
         }
         .ImageField .maximize{
             max-height: none;
@@ -32,20 +34,20 @@
         position: relative;
         display: block;
         vertical-align: top;
-        margin: 5px 0 0 0;
         white-space: nowrap;
 
         }
         .ImageField__fileupload{
             position: relative;
             overflow: hidden;
-            display: inline-block;
+            display: block;
             font-size: 14px;
             vertical-align: bottom;
             margin: 0;
             }
             .ImageField__fileupload input{
-                font-size: 15pt;
+                font-size: 30pt;
+                letter-spacing: 200px;
                 cursor:pointer;
                 padding: 0;
                 margin: 0;
@@ -53,19 +55,23 @@
                 opacity: 0;
                 position: absolute;
                 top: 0;
-                left: 0;
+                right: 0;
                 filter: alpha(opacity:0);
-                cursor: pointer;
                 }
             .ImageField__fileupload:hover{
 
             }
         .ImageField__reset{
-            display: inline-block;
+            display: block;
             font-size: 14px;
             vertical-align: top;
+            margin: 0;
+            background-color: #ffd9d9;
+            color: #d90000;
             }
             .ImageField__reset:hover{
+                background-color: #ff3333;
+                color: #fff;
             }
         .ImageField__filename{
             vertical-align: top;
@@ -75,8 +81,8 @@
             padding: 5px;
         }
 .ImageField__select{
-    border: 1px solid transparent;
-    border-radius: 5px;
+    right: 3px;
+    top: 3px;
 }
 /* Hover */
 .ImageField:hover .inpt{

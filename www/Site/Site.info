@@ -15,7 +15,7 @@
             "value_type": 2,
             "proto": "/Library/views/Site/description",
             "is_mandatory": true,
-            "order": 16
+            "order": 17
         }
     }
 }

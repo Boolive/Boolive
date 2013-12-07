@@ -63,6 +63,7 @@
     }
     .Field.Item_selected .inpt{
         border-color: #1a8cff;
+        box-shadow: inset -1px 1px 3px 0 #b3d9ff;
         }
     .Field.Item_selected .Item__title,
     .Field.Item_selected .Item__description{
