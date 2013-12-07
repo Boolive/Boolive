@@ -1,0 +1,14 @@
+{
+    "value": "logo.png",
+    "value_type": 3,
+    "proto": "/Library/basic/Image",
+    "is_mandatory": true,
+    "order": 14,
+    "children": {
+        "title": {
+            "value": "Логотип",
+            "proto": "/Library/basic/Image/title",
+            "order": 1
+        }
+    }
+}

@@ -1,20 +1,21 @@
 {
     "value": "",
-    "proto": "/Library/views/View",
+    "proto": "/Library/views/Site",
     "is_default_class": false,
-    "order": 1,
+    "order": 10,
     "children": {
         "title": {
             "value": "Мой сайт",
-            "proto": "/Library/views/View/title",
+            "proto": "/Library/views/Site/title",
             "is_mandatory": true,
-            "order": 1
+            "order": 7
         },
         "description": {
-            "value": "Содержит абсолютно все данные о сайте, а также логику его работы",
-            "proto": "/Library/views/View/description",
+            "value": "Мой самый любимый сайт! Заработаю на нём миллионы",
+            "value_type": 2,
+            "proto": "/Library/views/Site/description",
             "is_mandatory": true,
-            "order": 2
+            "order": 16
         }
     }
 }

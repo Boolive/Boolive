@@ -1,0 +1,19 @@
+{
+    "value": "favicon.ico",
+    "value_type": 3,
+    "proto": "/Library/basic/Image",
+    "is_mandatory": true,
+    "order": 15,
+    "children": {
+        "title": {
+            "value": "Favicon",
+            "proto": "/Library/basic/Image/title",
+            "order": 1
+        },
+        "description": {
+            "value": "Иконка в строке адреса браузера",
+            "proto": "/Library/basic/Image/description",
+            "order": 2
+        }
+    }
+}
