@@ -32,7 +32,7 @@ class FormField extends Widget
             }
         }
         $v['uri'] = $this->_input['REQUEST']['object']->uri();
-        $v['title'] = $this->_input['REQUEST']['object']->title->value();
+        $v['title'] = $this->_input['REQUEST']['object']->title->inner()->value();
         $v['value'] = $this->_input['REQUEST']['object']->value();
         $v['id'] = md5($this->uri());
         return parent::show($v, $commands, $input);
