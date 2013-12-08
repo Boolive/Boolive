@@ -34,7 +34,7 @@ class Html extends Widget
         // Meta
         $site = Data::read();
         if ($site->favicon->isExist()){
-            $this->_commands->htmlHead('link', array('rel'=>'shortcut icon', 'type'=>$site->favicon->mime(), 'href'=>$site->favicon->file().'?'.$site->favicon->date()));
+            $this->_commands->htmlHead('link', array('rel'=>'shortcut icon', 'type'=>$site->favicon->mime(), 'href'=>$site->favicon->file().'?'.$site->favicon->date(true)));
         }
         $v['meta'] = array(
             'title' => $site->title->isExist()? array($site->title->value()) : array(),

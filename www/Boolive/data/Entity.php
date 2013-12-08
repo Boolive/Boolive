@@ -275,12 +275,16 @@ class Entity implements ITrace
      * Дата изменения
      * @return mixed
      */
-    function date()
+    function date($of_default = false)
     {
         if (!isset($this->_attribs['date'])){
             $this->_attribs['date'] = time();
         }
-        return (int)$this->_attribs['date'];
+        if ($of_default && ($p = $this->isDefaultValue(null, true))){
+            return (int)$p->_attribs['date'];
+        }else{
+            return (int)$this->_attribs['date'];
+        }
     }
 
     /**
