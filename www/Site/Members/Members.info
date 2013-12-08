@@ -1,5 +1,20 @@
 {
     "value": "",
     "proto": "/Library/access/Group",
-    "order": 43
+    "order": 43,
+    "children": {
+        "title": {
+            "value": "Пользователи и группы",
+            "proto": "/Library/access/Group/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Все пользователи и группы с назначенными правами доступа",
+            "value_type": 2,
+            "proto": "/Library/access/Group/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

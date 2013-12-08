@@ -2,5 +2,20 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Object",
-    "order": 9
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Фильтр",
+            "proto": "/Library/basic/Object/title",
+            "is_hidden": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Настройки, какие объекты отображать",
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
+            "is_hidden": true,
+            "order": 2
+        }
+    }
 }

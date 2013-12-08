@@ -1860,7 +1860,8 @@ class Entity implements ITrace
             if ($children === true){
                 $children = $this->find(array(
                     'where' => array(
-                        array('attr', 'is_draft', '>=', 0)
+                        array('attr', 'is_draft', '>=', 0),
+                        array('attr', 'is_hidden', '>=', 0)
                     ),
                     'comment' => 'read children for export'
                 ), false, false);
@@ -1869,7 +1870,8 @@ class Entity implements ITrace
                 $children = $this->find(array(
                     'where' => array(
                         array('attr', 'name', 'in',  $children),
-                        array('attr', 'is_draft', '>=', 0)
+                        array('attr', 'is_draft', '>=', 0),
+                        array('attr', 'is_hidden', '>=', 0)
                     ),
                     'comment' => 'read children by names for export'
                 ), false, false);

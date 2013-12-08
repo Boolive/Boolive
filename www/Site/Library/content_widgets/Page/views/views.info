@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/Library/views/AutoWidgetList2/views",
     "is_mandatory": true,
-    "order": 7,
+    "order": 9,
     "children": {
         "title": {
             "is_default_value": true,

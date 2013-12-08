@@ -1,13 +1,15 @@
 {
     "value": "*.swf",
     "proto": "/Library/basic/File/extentions",
-    "order": 5,
     "is_hidden": true,
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Допустимые расширения",
             "proto": "/Library/basic/File/extentions/title",
+            "is_hidden": true,
+            "is_mandatory": true,
             "order": 1
         }
     }

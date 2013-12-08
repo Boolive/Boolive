@@ -15,31 +15,7 @@
             "value": "Виджет для отображения страницы. Свойства страницы отображаются подходящими виджетами из списка видов.",
             "proto": "/Library/views/AutoWidgetList2/description",
             "is_mandatory": true,
-            "order": 2
-        },
-        "res": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/views/AutoWidgetList2/res",
-            "is_mandatory": true,
-            "order": 5,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/AutoWidgetList2/res/title",
-                    "is_mandatory": true,
-                    "order": 2
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidgetList2/res/description",
-                    "is_mandatory": true,
-                    "order": 3
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
@@ -65,11 +41,35 @@
                 }
             }
         },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/views/AutoWidgetList2/res",
+            "is_mandatory": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/views/AutoWidgetList2/res/title",
+                    "is_mandatory": true,
+                    "order": 2
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
+                    "proto": "/Library/views/AutoWidgetList2/res/description",
+                    "is_mandatory": true,
+                    "order": 3
+                }
+            }
+        },
         "object_rule": {
             "value": "is(/Library/content_samples/Page)",
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
-            "order": 8,
+            "order": 10,
             "children": {
                 "title": {
                     "is_default_value": true,

@@ -8,6 +8,7 @@
         "title": {
             "value": "Список видов",
             "proto": "/Library/admin_widgets/BaseExplorer/views/title",
+            "is_hidden": true,
             "is_mandatory": true,
             "order": 3
         },
@@ -16,6 +17,7 @@
             "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
             "value_type": 2,
             "proto": "/Library/admin_widgets/BaseExplorer/views/description",
+            "is_hidden": true,
             "is_mandatory": true,
             "order": 4
         }

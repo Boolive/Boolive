@@ -1,9 +1,12 @@
 {
     "value": "*.*",
+    "proto": "/Library/basic/String",
+    "is_hidden": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Допустимые расширения",
+            "proto": "/Library/basic/String/title",
             "is_mandatory": true,
             "order": 1
         }

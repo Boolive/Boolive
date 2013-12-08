@@ -14,6 +14,7 @@
         "description": {
             "is_default_value": true,
             "value": "Имя пользователя",
+            "value_type": 2,
             "proto": "/Library/forms/FormAuth/object/name/description",
             "is_mandatory": true,
             "order": 2

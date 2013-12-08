@@ -1,5 +1,22 @@
 {
     "value": "",
     "proto": "/Library/access/Group",
-    "order": 6
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Зарегистрированные",
+            "proto": "/Library/access/Group/title",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Пользователи, выполнившие регистрацию на сайте",
+            "value_type": 2,
+            "proto": "/Library/access/Group/description",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 2
+        }
+    }
 }

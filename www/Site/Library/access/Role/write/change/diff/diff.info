@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/Library/access/Action",
     "is_mandatory": true,
-    "order": 18,
+    "order": 19,
     "children": {
         "title": {
             "value": "Установка обновлений",

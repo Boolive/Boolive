@@ -2,18 +2,17 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/View",
-    "is_default_class": false,
-    "order": 4,
+    "is_hidden": true,
+    "order": 29,
     "children": {
         "title": {
-            "value": "Единственный вид",
+            "value": "Сайт",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Базовый объект для создания элементов интерфейса",
+            "value": "Основные настройки сайта и все его разделы",
             "value_type": 2,
             "proto": "/Library/views/View/description",
             "is_mandatory": true,

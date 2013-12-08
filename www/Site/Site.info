@@ -11,7 +11,7 @@
             "order": 7
         },
         "description": {
-            "value": "Мой самый любимый сайт! Заработаю на нём миллионы",
+            "value": "Мой самый любимый сайт!",
             "value_type": 2,
             "proto": "/Library/views/Site/description",
             "is_mandatory": true,

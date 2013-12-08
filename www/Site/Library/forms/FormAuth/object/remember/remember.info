@@ -13,6 +13,7 @@
         "description": {
             "is_default_value": true,
             "value": "Логическое значение ДА или НЕТ",
+            "value_type": 2,
             "proto": "/Library/basic/Boolean/description",
             "is_mandatory": true,
             "order": 2

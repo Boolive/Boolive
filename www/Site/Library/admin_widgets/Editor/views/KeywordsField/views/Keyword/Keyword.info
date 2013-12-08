@@ -23,7 +23,7 @@
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
-            "order": 3
+            "order": 4
         }
     }
 }

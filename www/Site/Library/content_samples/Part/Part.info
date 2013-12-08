@@ -11,6 +11,7 @@
         },
         "description": {
             "value": "Группировка публикаций (страниц, статей, новостей)",
+            "value_type": 2,
             "proto": "/Library/basic/Object/description",
             "order": 2
         }

@@ -19,6 +19,7 @@
             "children": {
                 "title": {
                     "value": "Описание ",
+                    "proto": "/Library/basic/Object/description/title",
                     "is_mandatory": true,
                     "order": 1
                 }

@@ -12,6 +12,7 @@
         },
         "description": {
             "value": "Имя пользователя",
+            "value_type": 2,
             "proto": "/Library/basic/Email/description",
             "is_mandatory": true,
             "order": 2

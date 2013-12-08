@@ -1,4 +1,18 @@
 {
     "value": "",
-    "order": 40
+    "order": 40,
+    "children": {
+        "title": {
+            "value": "Содержимое",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 3
+        },
+        "description": {
+            "value": "Структура сайта, страницы, разделы...",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 6
+        }
+    }
 }

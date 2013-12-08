@@ -11,6 +11,7 @@
         },
         "description": {
             "value": "Образцы содержимого. Страницы, разделы, каталоги, товар...",
+            "value_type": 2,
             "proto": "/Library/basic/Package/description",
             "is_mandatory": true,
             "order": 2

@@ -11,6 +11,7 @@
         },
         "description": {
             "value": "Абсолютный URL, например http://site.ru",
+            "value_type": 2,
             "proto": "/Library/basic/String/description",
             "order": 2
         }

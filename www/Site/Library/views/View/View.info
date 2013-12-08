@@ -12,6 +12,7 @@
         },
         "description": {
             "value": "Базовый объект для создания элементов интерфейса",
+            "value_type": 2,
             "proto": "/Library/basic/Object/description",
             "is_mandatory": true,
             "order": 2

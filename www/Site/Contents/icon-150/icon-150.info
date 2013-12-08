@@ -2,6 +2,7 @@
     "value": "icon-150.png",
     "value_type": 3,
     "proto": "/Library/basic/Image",
+    "is_hidden": true,
     "is_mandatory": true,
     "order": 7,
     "children": {

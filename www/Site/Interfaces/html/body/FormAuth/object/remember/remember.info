@@ -14,6 +14,7 @@
         "description": {
             "is_default_value": true,
             "value": "Логическое значение ДА или НЕТ",
+            "value_type": 2,
             "proto": "/Library/forms/FormAuth/object/remember/description",
             "is_mandatory": true,
             "order": 2

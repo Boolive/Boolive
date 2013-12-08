@@ -12,6 +12,7 @@
         },
         "description": {
             "value": "Иконка в строке адреса браузера",
+            "value_type": 2,
             "proto": "/Library/basic/Image/description",
             "order": 2
         }

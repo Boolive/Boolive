@@ -14,6 +14,7 @@
         "description": {
             "is_default_value": true,
             "value": "Адрес электронной почты",
+            "value_type": 2,
             "proto": "/Library/basic/Email/description",
             "is_mandatory": true,
             "order": 2

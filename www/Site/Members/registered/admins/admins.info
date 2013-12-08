@@ -11,6 +11,7 @@
         },
         "description": {
             "value": "Пользователи, управляющие сайтом",
+            "value_type": 2,
             "proto": "/Library/access/Group/description",
             "is_mandatory": true,
             "order": 2
