@@ -10,13 +10,16 @@
  *
  * @example
  * $c = new Commands();
- * // создание команды addHtml с двумя аргументами
- * $c->addHtml('link', array('rel'=>'stylesheet', 'type'=>'text/css', 'href'=>'style.css'));
+ * // создание команды htmlHead с двумя аргументами
+ * $c->htmlHead('link', array('rel'=>'stylesheet', 'type'=>'text/css', 'href'=>'style.css'));
  * @link http://boolive.ru/createcms/processing-request
  * @version 1.0
  */
 namespace Boolive\commands;
-
+/**
+ * @method null redirect($url) HTTP редирект на указанный http url адрес
+ * @method null htmlHead($tag, $args = array(), $unique = false) Добавление тега в &lt;head&gt; Содержимое тега указывается аргументом "text"
+ */
 class Commands
 {
     /**
@@ -75,7 +78,7 @@ class Commands
      * Под одним именем может быть несколько команд
      * @param $name Название команды
      * @param bool $unique
-     * @return array Аргументы команд. Первое измерение (числовое) соответсвует командам, второе - аргументам
+     * @return array Массив одноименных команд с их аргументами. Первое измерение (числовое) соответсвует командам, второе - аргументам
      */
     function get($name, $unique = true)
     {

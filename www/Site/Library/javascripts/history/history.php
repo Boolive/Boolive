@@ -26,9 +26,10 @@ class history extends JavaScript
             if ($basepath = $this->basepath->value()){
                 $config[] = 'basepath='.DIR_WEB.trim($basepath,'/').'/';
             }
-            if ($config) $file.='?'.implode('&',$config);
+            $config[] = $this->date();
+            $file.='?'.implode('&',$config);
 
-            $this->_commands->addHtml('script', array('type'=>'text/javascript', 'src'=>$file));
+            $this->_commands->htmlHead('script', array('type'=>'text/javascript', 'src'=>$file, 'text'=>''));
         }
     }
 }

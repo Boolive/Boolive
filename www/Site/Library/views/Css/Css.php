@@ -28,7 +28,7 @@ class Css extends View
 //        }
         // Подключение CSS файла
         if ($file = $this->file()){
-            $this->_commands->addHtml('link', array('rel'=>"stylesheet", 'type'=>"text/css", 'href'=>$file));
+            $this->_commands->htmlHead('link', array('rel'=>"stylesheet", 'type'=>"text/css", 'href'=>$file.'?'.$this->date()));
         }
     }
 }

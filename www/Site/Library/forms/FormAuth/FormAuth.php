@@ -52,7 +52,7 @@ class FormAuth extends AutoWidgetList2
         if (isset($this->_input['REQUEST'][$this->uri()]['submit'])){
             //Выполнение действия (отправка)
             if ($this->_input['REQUEST']['object']->auth()){
-                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri())), true, true));
+                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri()))));
             }else{
                 $v['error'] = $this->_input_child['REQUEST']['object']->error_message->value();
             }

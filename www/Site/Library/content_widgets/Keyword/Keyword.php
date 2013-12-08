@@ -17,6 +17,7 @@ class Keyword extends Widget
         $keyword = $this->_input['REQUEST']['object']->linked();
         $v['title'] = $keyword->title->value();
         $v['href'] = $keyword->uri();
+        //$this->_commands->htmlHead('meta', array('name'=>'keywords', 'content'=>$v['title']));
         return parent::show($v, $commands, $input);
     }
 }

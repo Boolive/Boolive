@@ -8,8 +8,7 @@
  */
 namespace Library\basic\Image;
 
-use Boolive\develop\Trace,
-    Boolive\functions\F,
+use Boolive\functions\F,
     Library\basic\File\File;
 
 class Image extends File
@@ -431,14 +430,14 @@ class Image extends File
      * Расширение (тип) изображения
      * @return string|bool
      */
-    function ext()
-    {
-        if ($info = $this->info()){
-            return $info['ext'];
-        }else{
-            return false;
-        }
-    }
+//    function ext()
+//    {
+//        if ($info = $this->info()){
+//            return $info['ext'];
+//        }else{
+//            return false;
+//        }
+//    }
 
     /**
      * Системные требования

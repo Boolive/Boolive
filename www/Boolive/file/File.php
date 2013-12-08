@@ -233,6 +233,21 @@ class File
     }
 
     /**
+     * Расширение файла
+     * @param $path
+     * @return mixed
+     */
+    static function fileExtention($path)
+    {
+        $list = F::explode('.', $path, -2);
+        if (count($list)>1){
+            return strtolower($list[1]);
+        }else{
+            return '';
+        }
+    }
+
+    /**
      * Создание уникального имени для файла или директории
      * @param $dir Директория со слэшем на конце, в которой подобрать уникальное имя
      * @param $name Базовое имя, к которому будут добавляться числовые префиксы для уникальности

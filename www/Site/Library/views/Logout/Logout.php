@@ -27,7 +27,7 @@ class Logout extends View
     function work()
     {
         Auth::setUser(null);
-        $this->_commands->redirect(Input::url(null, 0, array(), false, true));
+        $this->_commands->redirect(Input::url(null, 0, array()));
         return false;//какбы не работали, чтобы продолжился запуск следующих предствлений
     }
 }

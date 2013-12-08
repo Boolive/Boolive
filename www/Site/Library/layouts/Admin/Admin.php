@@ -46,7 +46,8 @@ class Admin extends Layout
 
     function show($v = array(), $commands, $input)
     {
-        $this->_commands->addHtml('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB.'admin/'));
+        $this->_commands->htmlHead('title', array('text'=>'Boolive'));
+        $this->_commands->htmlHead('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB.'admin/'));
         $v['basepath'] = DIR_WEB.'admin';
         return parent::show($v, $commands, $input);
     }

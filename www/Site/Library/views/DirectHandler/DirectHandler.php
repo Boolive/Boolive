@@ -28,21 +28,17 @@ class DirectHandler extends View
     {
         $v = array();
         $v['out'] = $this->_input['REQUEST']['direct']->start($this->_commands, $this->_input_child);
-		// Вместе с html нужно передать пути на файлы css и js
-        foreach ($this->_commands->get('addHtml') as $com){
+		// Вместе с html нужно передать пути на css и js
+        foreach ($this->_commands->get('htmlHead') as $com){
             if (in_array($com[0], array("link", "script"/*, "meta", "title", "style"*/))){
-                if (isset($com[1]['text'])){
-                    $text = $com[1]['text'];
-                    unset($com[1]['text']);
-                }
-                if (isset($com[1]['src'])) $com[1]['src'] = $com[1]['src'].'?'.TIMESTAMP;
-                if (isset($com[1]['href'])) $com[1]['href'] = $com[1]['href'].'?'.TIMESTAMP;
                 $attr = '';
                 foreach ($com[1] as $name => $value) $attr.=' '.$name.'="'.$value.'"';
-
-                if (($com[0] == "link" || $com[0] == "script") && !isset($text)){
+                if (($com[0] == "link" || $com[0] == "script")){
                     if (isset($com[1]['src'])) $v['links'][] = $com[1]['src'];
                     if (isset($com[1]['href'])) $v['links'][] = $com[1]['href'];
+                }else{
+                    if (!isset($v[$com[0]])) $v[$com[0]] = array();
+                    $v[$com[0]][] = $com[1];
                 }
             }
         }

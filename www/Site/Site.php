@@ -34,7 +34,6 @@ class Site extends View
     function work()
     {
         return $this->Interfaces->start($this->_commands, $this->_input_child);
-        //return $this->startChild('Interfaces');
     }
 
     function birth($for = null, $draft = true)

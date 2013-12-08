@@ -235,6 +235,9 @@ class Check
                 if ($arg instanceof Rule){
                     $rule_default = $arg;
                 }else
+                if (is_string($arg)){
+                    $rule_default = Rule::$arg();
+                }else
                 if ($arg === true){
                     $tree = true;
                 }

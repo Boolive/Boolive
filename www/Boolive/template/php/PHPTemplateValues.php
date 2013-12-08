@@ -35,11 +35,6 @@ class PHPTemplateValues extends Values
         $this->_entity = $entity;
     }
 
-    protected function defineRule()
-    {
-        $this->_rule = Rule::arrays(Rule::any(Rule::string()->escape()->ignore('escape'), Rule::null()), true);
-    }
-
     function __get($name)
     {
         $start = (!$this->offsetExists($name) && isset($this->_entity));
@@ -53,5 +48,10 @@ class PHPTemplateValues extends Values
             }
         }
         return $sub;
+    }
+
+    function __toString()
+    {
+        return (string)$this->get(Rule::escape());
     }
 }

@@ -47,7 +47,7 @@ class Feedback extends AutoWidgetList2
             //Выполнение действия (отправка)
             if ($object->send()){
                 // Редирект на адрес текущего запроса с параметром ok
-                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri())), true, true));
+                $this->_commands->redirect(Input::url(null, 0, array('ok'=>md5($this->uri()))));
             }else{
                 $v['error'] = true;
                 $v['error_message'] = $object->error_message->value();
