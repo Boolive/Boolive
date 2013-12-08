@@ -5,11 +5,11 @@
     if($v['is_link']->bool()) $class .= ' Item_link';
     if($v['is_mandatory']->bool()) $class .= ' Item_mandatory';
 ?>
-<div class="Item Field BooleanField<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="BooleanField">
-    <div class="inpt">
+<div class="Item BooleanField<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="BooleanField">
+    <div class="Item__main">
         <div class="Field__input-wrap BooleanField__input-wrap">
             <input class="Field__input BooleadField_input" type="checkbox" id="<?=$v['id']?>" value="1" <?=($v['value']->bool()?'checked':'')?>>
-            <label class="Field__title" for="<?=$v['id']?>"><?=$v['title']?></label>
+            <label class="Field__title BooleanField__title" for="<?=$v['id']?>"><?=$v['title']?></label>
             <div class="Item__description"><?=$v['description']?></div>
         </div>
         <div class="Item__select Field__select BooleanField__select"><img width="16" height="16" src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>

@@ -14,11 +14,37 @@
         font-weight: bold;
         color: #888;
         padding-left: 0;
+        display: inline-block;
+        position: relative;
+        padding-right: 10px;
         }
+        .Item_link .Field__title:after{
+            content: '↝';
+            font: normal 16px/10px "Times New Roman";
+            color: #0073bf;
+            margin-left: 3px;
+            text-decoration: none;
+            display: inline-block;
+            }
+        .Item_mandatory .Field__title:before{
+            content: '*';
+            font: normal 22px/16px "Times New Roman";
+            color: #bf028b;
+            position: absolute;
+            right: -2px;
+            top: 50%;
+            margin-top: -2px;
+            text-decoration: none;
+            }
     .Field__description{
-        color: #888;
-        font-size: 10px;
+        color: #ddd;
+        font-size: 11px;
+        line-height: 11px;
+        margin: 0;
+        padding: 0;
         display: block;
+        margin: 1px;
+        /*display: none;*/
         }
     .Field__error{
         color: #ff0c08;
@@ -43,6 +69,9 @@
             font-style: italic;
             color: #666;
             }
+.Field .inpt{
+    display: block;
+}
 /* Hover */
 .Field:hover{
     background-color: transparent;

@@ -1,13 +1,26 @@
+.BooleanField{
+    margin: 5px 0;
+    background-color: #F1F1F1;
+    border: 1px solid #EDEDED;
+    border-radius: 5px;
+}
 .BooleanField__input-wrap{
     vertical-align: middle;
+    margin-left: 5px;
     }
     .BooleanField__select{
-        line-height: 22px;
+        /*line-height: 22px;*/
     }
     .BooleanField__title{
-        vertical-align: middle;
+        color: #333;
+        font-size: 16px;
+        font-weight: normal;
     }
-    .BooleanField__description{
-        vertical-align: middle;
-        display: inline-block;
+.BooleanField.Item_selected{
+    background-color: #61B0FF;
+    border: 1px solid transparent;
+    color: #fff;
+    }
+.Item_selected .BooleanField__title{
+    color: #fff;
     }

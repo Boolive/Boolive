@@ -7,6 +7,10 @@
 
         _create: function() {
             $.boolive.Field.prototype._create.call(this);
+            var self = this;
+            this._input.on('change', function(e) {
+                self._change(e);
+            });
         },
 
         getValue: function(){

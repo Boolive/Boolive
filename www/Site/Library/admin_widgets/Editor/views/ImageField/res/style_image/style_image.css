@@ -11,8 +11,8 @@
     background-color: #fdfdfd;
 }
 .ImageField__image-wrap{
-    min-height: 30px;
-    background-color: #555;
+    min-height: 27px;
+    background: url(img_bg.png) repeat;
     display: block;
     width: 100%;
     }
@@ -81,8 +81,8 @@
             padding: 5px;
         }
 .ImageField__select{
-    right: 3px;
-    top: 3px;
+    /*right: 3px;*/
+    /*top: 3px;*/
 }
 /* Hover */
 .ImageField:hover .inpt{
