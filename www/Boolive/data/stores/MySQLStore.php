@@ -627,6 +627,7 @@ class MySQLStore extends Entity
                         $u = $this->db->prepare('
                             UPDATE {objects}, {protos} SET
                                 `value` = IF(is_default_value=:vproto, :value, value),
+                                `valuef` = IF(is_default_value=:vproto, :valuef, valuef),
                                 `value_type` = IF(is_default_value=:vproto, :value_type, value_type),
                                 `is_default_value` = IF((is_default_value=:vproto  || is_default_value=:max_id), :proto, is_default_value),
                                 `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
@@ -636,6 +637,7 @@ class MySQLStore extends Entity
                         ');
                         $u->execute(array(
                             ':value' => $attr['value'],
+                            ':valuef' => $attr['valuef'],
                             ':value_type' => $attr['value_type'],
                             ':vproto' => $current['is_default_value']/* ? $current['is_default_value'] : $current['id']*/,
                             ':cclass' => $current['is_default_class'] ? $current['is_default_class'] : $current['id'],
