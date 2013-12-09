@@ -13,7 +13,7 @@
             "value": "Главная страница первого простейшего сайта",
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
-            "order": 14
+            "order": 16
         }
     }
 }

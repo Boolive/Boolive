@@ -1,0 +1,89 @@
+{
+    "is_default_value": true,
+    "value": "FormReg.tpl",
+    "value_type": 3,
+    "proto": "/Library/forms/FormReg",
+    "is_mandatory": true,
+    "order": 17,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Регистрация",
+            "proto": "/Library/forms/FormReg/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Форма регистрации пользователя",
+            "proto": "/Library/forms/FormReg/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/forms/FormReg/res",
+            "is_mandatory": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/forms/FormReg/res/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
+                    "proto": "/Library/forms/FormReg/res/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/forms/FormReg/cache",
+            "is_mandatory": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/forms/FormReg/cache/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
+                    "proto": "/Library/forms/FormReg/cache/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/Library/forms/FormReg/object_rule",
+            "is_mandatory": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на объект",
+                    "proto": "/Library/forms/FormReg/object_rule/title",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}
