@@ -57,6 +57,12 @@ class view_select_object extends Widget
                     );
                 }
             }
+            if ($p = $this->_input['REQUEST']['object']->proto()){
+                $v['open_proto'] = $p->uri();
+            }
+            $v['open_all'] = '/Library';
+            $v['open_link'] = '/Library';
+
 //             $entity = Data::read('/Library/basic/Object');
 //            $v['shorts'][] = array(
 //                'uri' => $entity->uri(),

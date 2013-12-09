@@ -15,13 +15,15 @@
                 e.stopPropagation();
                 var is_link = $(this).hasClass('link');
                 var s = self.callParents('getState');
+                var open = $(this).attr('data-open');
 //                var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
                 self.callParents('openWindow', [null,
                     {
                         url: "/",
                         data: {
                             direct: self.options.object, // uri выиджета выбора объекта
-                            object: '/Library' //какой объект показать
+                            object: open, //какой объект показать
+                            view_name: 'views/Explorer'
                         }
                     },
                     function(result, params){
