@@ -1,0 +1,23 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/View",
+    "is_default_class": false,
+    "is_mandatory": true,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Вид видов",
+            "proto": "/Library/views/View/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Для отображения виджетов и любых других видов, например, js",
+            "value_type": 2,
+            "proto": "/Library/views/View/description",
+            "is_mandatory": true,
+            "order": 2
+        }
+    }
+}

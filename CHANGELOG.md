@@ -14,6 +14,7 @@ Version 2.0.beta work in progress
 - new #102 Создано меню закладок "Bookmarks" в админке (VladimirShestakov)
 - new Added BaseExplorer for creating other explorers (VladimirShestakov)
 - new Added the common Editor for all objects (VladimirShestakov)
+- new Widgets and other views can be added to the site pages and sections (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------
