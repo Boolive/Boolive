@@ -176,7 +176,8 @@
 						}
 						else {
 							if (elementTag == 'link') {
-								$.cssReady(css_index, taskId);
+                                $.__loadedSuccessfully(taskId);
+								//$.cssReady(css_index, taskId);
 							}
 							else {
                                 if (/WebKit/i.test(navigator.userAgent)) {
