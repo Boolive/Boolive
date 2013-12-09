@@ -21,7 +21,6 @@
 
                 self.on('mousewheel', function(event, delta){
                    $(this).scrollTop($(this).scrollTop()-delta*50);
-                    console.log('scroll');
                 });
 
 //            }

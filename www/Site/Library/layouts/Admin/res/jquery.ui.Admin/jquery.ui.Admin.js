@@ -284,23 +284,26 @@
                 }
             }
             // Выбор вида
-            var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object);
-
-            if ('object' in change && !('view_name' in state) && !(object_str in this._state.remember_view)){
-                //if (!/^views\//.test(this._state.view_name)) state.view_name = null;
+            if ('object' in change || 'view_name' in state){
+                var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object);
+                // Если вход в объект и не указан view_name и его нет в истории для объекта, то по умолчанию
+                if ('object' in change && !('view_name' in state) && !(object_str in this._state.remember_view)){
+                    if (!/^views\//.test(this._state.view_name)) state.view_name = null;
+                }
+                // Если не указан view_name, но он есть в истории
+                if (!('view_name' in state) && object_str in this._state.remember_view){
+                    state.view_name = this._state.remember_view[object_str];
+                }
+                // Смена view_name
+                if ('view_name' in state && state.view_name != this._state.view_name){
+                    this._state.view_name = state.view_name;
+                    change['view_name'] = true;
+                }
+                // view_name в историю, если его uri = ...views/*
+                if (/^views\//.test(this._state.view_name)){
+                    this._state.remember_view[object_str] = this._state.view_name;
+                }
             }
-            if (!('view_name' in state) && object_str in this._state.remember_view){
-                state.view_name = this._state.remember_view[object_str];
-            }
-            if ('view_name' in state && state.view_name != this._state.view_name){
-                this._state.view_name = state.view_name;
-                change['view_name'] = true;
-            }
-            if (!('view_name' in this._state)) this._state.view_name = null;
-            if (/^views\//.test(this._state.view_name)){
-                this._state.remember_view[object_str] = this._state.view_name;
-            }
-
             if (!$.isEmptyObject(change)){
                 // Запись истории
                 if (without_history!==true){

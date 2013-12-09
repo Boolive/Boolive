@@ -20,7 +20,7 @@
                 e.stopPropagation();
                 e.preventDefault();
                 // Сначала выделяем себя
-                self.callParents('setState', [{selected:  self.options.object}]);
+                //self.callParents('setState', [{selected:  self.options.object}]);
                 // Теперь входим
                 self.callParents('setState', [{object:  self.options.link}]);
             });
