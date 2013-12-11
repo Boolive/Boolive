@@ -56,7 +56,11 @@
             // Изменение в модели
             this.model
             .on('change-attrib:parent', function(value){
-                self.element.find('.Editor__attribs-uri-parent').text(value+'/').show();
+                if (value == null){
+                    self.element.find('.Editor__attribs-uri-parent').text('').hide();
+                }else{
+                    self.element.find('.Editor__attribs-uri-parent').text(value+'/').show();
+                }
             })
             .on('change-attrib:name', function(value){
                 self.element.find('.Editor__attribs-uri-name').val(value);
@@ -66,6 +70,7 @@
                     self.callParents('change', [self.model.attrib.uri], null, true);
                 }else{
                     self.callParents('nochange', [self.model.attrib.uri], null, true);
+                    self.element.find('.Editor__attribs-error').text('');
                 }
             });
 
@@ -82,7 +87,7 @@
             this.model.init({
                 uri:this.options.object,
                 name: uris.pop(),
-                parent: uris.join('/')
+                parent: uris.length==0 ? null : uris.join('/')
             });
         },
 
