@@ -163,7 +163,7 @@
          */
         callChildren: function(call, args, target, all){
             var stop = undefined;
-            if (target && target!=this){
+            if (target/* && target!=this*/){
                 // По target опредлить окно и для него вызывать обработчик
                 // Если target вне окон, то используется текущее окно
                 if ($.isFunction(this['call_'+call])){
@@ -193,9 +193,10 @@
          * @param call Название действия (функции)
          * @param args Аргументы
          * @param target Объект, иницировавший вызов действия. По умолчанию this.
+         * @param up Признак, когда вызов дойдет до корневого объекты, перенаправить вызов всем подчиенным.
          * @extends $.boolive.Widget.callParents
          */
-        callParents: function(call, args, target){
+        callParents: function(call, args, target, up){
             if (!target) target = null;
             var window = null;
             if (!target){
@@ -203,21 +204,23 @@
             }
             // Обработка если target из текущего окна или вне окна
             if (!window || !window.length || window == this._window_current){
-                var stop = undefined;
-                if (target && target!=this){
-                    if ($.isFunction(this['call_'+call])){
-                        var a = [{target: target, direct: 'parents'}].concat(args);
-                        stop = this['call_'+call].apply(this, a);
-                    }else{
-                        this.callChildren(call, args, target);
-                    }
-                }
-                if (stop !== undefined){
-                    return stop;
-                }else
-                if (this._parent){
-                    return this._parent.callParents(call, args, target || this);
-                }
+                return $.boolive.Widget.prototype.callParents.apply(this, [call, args, target, up]);
+//                var stop = undefined;
+//                if (!up && target && target!=this){
+//                    if ($.isFunction(this['call_'+call])){
+//                        var a = [{target: target, direct: 'parents'}].concat(args);
+//                        stop = this['call_'+call].apply(this, a);
+//                    }
+//                }
+//                if (stop !== undefined){
+//                    return stop;
+//                }else
+//                if (this._parent){
+//                    return this._parent.callParents(call, args, target || this, up);
+//                }else
+//                if (up){
+//                    this.callChildren(call, args, target);
+//                }
             }
             return undefined;
         },
@@ -483,6 +486,16 @@
                 uri = uri + '&view_name=' + state.view_name;
             }
             return uri;
+        },
+
+        call_updateURI: function(e, args){
+            $.boolive.Widget.prototype.call_updateURI.apply(this, [e, args]);
+            var reg = new RegExp('^'+args.uri+'(\/|$)');
+            if (this._state.object === args.uri){
+                this._state.object = args.new_uri;
+                this._state.selected = [args.new_uri];
+                history.replaceState(this._state, '', this.getURIFromState(this._state));
+            }
         }
 	})
 })(jQuery, window, _);

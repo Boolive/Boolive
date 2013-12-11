@@ -53,7 +53,7 @@
                 success: function(result, textStatus, jqXHR){
                     if (_.isObject(result.out) && !_.isEmpty(result.out.changes)){
                         //console.log(result);
-                        self.callParents('object_update', [result.out.changes]);
+                        self.callParents('object_update', [result.out.changes], null, true);
                     }
                 }
             });

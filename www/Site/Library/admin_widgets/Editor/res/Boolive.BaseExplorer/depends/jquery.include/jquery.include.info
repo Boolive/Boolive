@@ -1,9 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "jquery.include.js",
-    "value_type": 3,
-    "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/depends/jquery.include",
-    "is_link": true,
-    "is_mandatory": true,
-    "order": 5
-}

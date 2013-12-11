@@ -46,7 +46,7 @@ class BreadcrumbsMenu extends Widget{
         $items = array();
         foreach ($parents as $p){
             $item = array(
-                'url' => '/admin'.$p->uri(),
+                'url' => ltrim($p->uri(),'/'),
                 'uri' => $p->uri(),
                 'class' => empty($items) ? 'active' : '' // активный первый элемент
             );

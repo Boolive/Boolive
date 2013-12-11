@@ -14,7 +14,7 @@
             this._changes = {};
             this.element.find('.s2').on('click', function(){
                 self._setSaveState('s3');
-                self.callParents('save');
+                self.callParents('save', null, null, true);
             });
         },
 
@@ -30,15 +30,24 @@
         },
 
         call_change: function(caller, object){ //before
-            console.log('Change '+object);
             this._changes[object] = true;
             this._setSaveState('s2');
         },
         call_nochange: function(caller, object){ //before
             delete this._changes[object];
-            console.log('Nochange '+object);
             if (_.isEmpty(this._changes)){
                 this._setSaveState('s1');
+            }
+        },
+        call_updateURI: function(e, args){
+            var uris = _.keys(this._changes);
+            var reg = new RegExp('^'+args.uri+'(\/|$)');
+            var i,cnt=uris.length;
+            for (i=0; i<cnt; i++){
+                if (reg.test(uris[i])){
+                    this._changes[uris[i].replace(args.uri, args.new_uri)] = true;
+                    delete this._changes[uris[i]];
+                }
             }
         }
     })

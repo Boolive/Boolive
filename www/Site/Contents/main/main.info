@@ -7,13 +7,13 @@
             "value": "Главная",
             "proto": "/Library/content_samples/Page/title",
             "is_mandatory": true,
-            "order": 9
+            "order": 11
         },
         "description": {
             "value": "Главная страница первого простейшего сайта",
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
-            "order": 16
+            "order": 20
         }
     }
 }

@@ -2,14 +2,14 @@
     "is_default_value": true,
     "value": "style.css",
     "value_type": 3,
-    "proto": "/Library/forms/FormReg/res/style",
+    "proto": "/Library/admin_widgets/SelectObject/res/style",
     "is_mandatory": true,
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "CSS",
-            "proto": "/Library/forms/FormReg/res/style/title",
+            "proto": "/Library/admin_widgets/SelectObject/res/style/title",
             "is_mandatory": true,
             "order": 1
         },
@@ -17,7 +17,7 @@
             "is_default_value": true,
             "value": "Каскадная таблица стилей для оформления HTML-документа",
             "value_type": 2,
-            "proto": "/Library/forms/FormReg/res/style/description",
+            "proto": "/Library/admin_widgets/SelectObject/res/style/description",
             "is_mandatory": true,
             "order": 2
         }

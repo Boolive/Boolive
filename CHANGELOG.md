@@ -5,6 +5,7 @@ Version 2.0.beta work in progress
 ----------------------------
 - new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
 - new #107 Added convenient method of adding link to the object (VladimirShestakov)
+- new #149 Added the panel for fast editing of the address of object - renaming and relocation (VladimirShestakov)
 - enh #151 Attribute is_delete is renamed to is_draft, Entity->isDelete() to Entity->isDragt() (VladimirShestakov)
 - enh #152 By default all new objects are drafts (VladimirShestakov)
 - new #154 The table "text" is used for values with a length more than 255 characters (VladimirShestakov)

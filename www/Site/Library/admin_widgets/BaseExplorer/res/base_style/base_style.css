@@ -36,8 +36,9 @@
         font-size: 28px;
         padding: 0;
         color: #85cc02;
-        margin: 0 0 5px 0;
+        margin: 0;
         text-decoration: none;
+        display: inline;
         }
         .BaseExplorer__title-a:hover,
         .BaseExplorer__title-a:focus{

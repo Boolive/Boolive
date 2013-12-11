@@ -22,10 +22,9 @@
          },
         _change: function(e){
             if (this._value != this._input.val()){
-                console.log(this.options.object);
-                this.callParents('change', [this.options.object]);
+                this.callParents('change', [this.options.object], null, true);
             }else{
-                this.callParents('nochange', [this.options.object]);
+                this.callParents('nochange', [this.options.object], null, true);
 
             }
         },

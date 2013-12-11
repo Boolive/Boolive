@@ -91,8 +91,9 @@
             },
 
             is_change: function(){
+                var name;
                 for (name in this.attrib){
-                    if (this.attrib[name]!=this.attrib_start[name]) return true;
+                    if (this.attrib[name] != this.attrib_start[name]) return true;
                 }
                 return false;
             },
@@ -204,11 +205,11 @@
             })
             .on('change-attrib', function(change){
                 if (change){
-                    self.callParents('change', [self.model.object]);
+                    self.callParents('change', [self.model.object], null, true);
 //                    form.find('.submit').text('Сохранить').removeClass('btn-disable');
 //                    form.find('.reset').removeClass('hide');
                 }else{
-                    self.callParents('nochange', [self.model.object]);
+                    self.callParents('nochange', [self.model.object], null, true);
 //                    form.find('.submit').text('Сохранено').addClass('btn-disable');
 //                    form.find('.reset').addClass('hide');
                 }

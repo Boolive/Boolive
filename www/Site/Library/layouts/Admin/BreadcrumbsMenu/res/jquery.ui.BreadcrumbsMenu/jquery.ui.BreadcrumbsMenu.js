@@ -108,6 +108,20 @@
                     self.inline.find('input').val(uri);
                 //}
             }
+        },
+
+        call_updateURI: function(e, args){
+            this.call_setState({}, {object: args.new_uri}, {object:true});
+//            var reg = new RegExp('^'+args.uri+'(\/|$)');
+//            if (reg.test(this.options.object)){
+//                this.options.object = this.options.object.replace(args.uri, args.new_uri);
+//            }
+//            this.element.find('li a[data-o^="'+args.uri+'"]').each(function(){
+//                if (reg.test($(this).attr('data-o'))){
+//                    $(this).attr('data-o', $(this).attr('data-o').replace(args.uri, args.new_uri));
+//                    $(this).attr('href', $(this).attr('data-o').replace(/^\//,''));
+//                }
+//            })
         }
 	})
 })(jQuery, window, _);

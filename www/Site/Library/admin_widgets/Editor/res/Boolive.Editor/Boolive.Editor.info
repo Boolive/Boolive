@@ -1,0 +1,20 @@
+{
+    "value": "Boolive.Editor.js",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive Editor",
+            "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/Widget/depends",
+            "order": 2
+        }
+    }
+}

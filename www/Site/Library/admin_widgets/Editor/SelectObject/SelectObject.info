@@ -1,36 +1,34 @@
 {
     "is_default_value": true,
-    "value": "FormReg.tpl",
+    "value": "SelectObject.tpl",
     "value_type": 3,
-    "proto": "/Library/forms/FormReg",
-    "is_mandatory": true,
-    "order": 17,
+    "proto": "/Library/admin_widgets/SelectObject",
+    "order": 11,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Регистрация",
-            "proto": "/Library/forms/FormReg/title",
+            "value": "Выбор",
+            "proto": "/Library/admin_widgets/SelectObject/title",
             "is_mandatory": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
-            "value": "Форма регистрации пользователя",
-            "proto": "/Library/forms/FormReg/description",
+            "value": "Виджет выбора объектов из всех существующих",
+            "proto": "/Library/admin_widgets/SelectObject/description",
             "is_mandatory": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/forms/FormReg/res",
+            "proto": "/Library/admin_widgets/SelectObject/res",
             "is_mandatory": true,
-            "order": 3,
+            "order": 5,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Ресурсы",
-                    "proto": "/Library/forms/FormReg/res/title",
+                    "proto": "/Library/admin_widgets/SelectObject/res/title",
                     "is_mandatory": true,
                     "order": 1
                 },
@@ -38,23 +36,23 @@
                     "is_default_value": true,
                     "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "value_type": 2,
-                    "proto": "/Library/forms/FormReg/res/description",
+                    "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_mandatory": true,
-                    "order": 2
+                    "order": 4
                 }
             }
         },
         "cache": {
             "is_default_value": true,
             "value": 0,
-            "proto": "/Library/forms/FormReg/cache",
+            "proto": "/Library/admin_widgets/SelectObject/cache",
             "is_mandatory": true,
-            "order": 4,
+            "order": 8,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Кэшировать?",
-                    "proto": "/Library/forms/FormReg/cache/title",
+                    "proto": "/Library/admin_widgets/SelectObject/cache/title",
                     "is_mandatory": true,
                     "order": 1
                 },
@@ -62,7 +60,7 @@
                     "is_default_value": true,
                     "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
-                    "proto": "/Library/forms/FormReg/cache/description",
+                    "proto": "/Library/admin_widgets/SelectObject/cache/description",
                     "is_mandatory": true,
                     "order": 2
                 }
@@ -72,14 +70,14 @@
             "is_default_value": true,
             "value": "",
             "value_type": 2,
-            "proto": "/Library/forms/FormReg/object_rule",
+            "proto": "/Library/admin_widgets/SelectObject/object_rule",
             "is_mandatory": true,
-            "order": 5,
+            "order": 9,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Правило на объект",
-                    "proto": "/Library/forms/FormReg/object_rule/title",
+                    "proto": "/Library/admin_widgets/SelectObject/object_rule/title",
                     "is_mandatory": true,
                     "order": 1
                 }

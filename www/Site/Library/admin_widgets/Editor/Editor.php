@@ -13,13 +13,15 @@ class Editor extends BaseExplorer
     function show($v = array(), $commands, $input)
     {
         $v['object'] = $this->_input['REQUEST']['object']->uri();
-        if ($p = $this->_input['REQUEST']['object']->proto()){
-            $v['title'] = $p->title->inner()->value();
+        $obj = $this->_input['REQUEST']['object'];
+        $v['title'] = $obj->title->inner()->value();
+        if ($p = $obj->proto()){
+
             $v['description'] = $p->description->inner()->value();
             $v['proto'] = ltrim($p->uri(),'/');
         }else{
-            $v['title'] = 'Сущность';
-            $v['description'] = 'Объект без прототипа';
+            //$v['title'] = 'Сущность';
+            $v['description'] = $obj->description->inner()->value();
             $v['proto'] = '//0';
         }
         return parent::show($v,$commands, $input);

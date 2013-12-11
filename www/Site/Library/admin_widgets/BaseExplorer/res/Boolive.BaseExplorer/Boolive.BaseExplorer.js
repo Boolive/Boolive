@@ -82,11 +82,15 @@
             var self = this;
             this.reload({object: this.options.object}, {
                     success: function(){
-                        self.init_sortable();
+                        self.afterReload();
                     },
                     url: '/'
                 }
             );
+        },
+
+        afterReload: function(){
+            this.init_sortable();
         }
     })
 })(jQuery, _);

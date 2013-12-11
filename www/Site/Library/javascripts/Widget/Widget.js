@@ -12,7 +12,6 @@
      * Виджет на основе JQuery UI Widget
      */
     $.widget("boolive.Widget", {
-
         options: {
             view: undefined, // Идентификатор вида (виджета).
             object: undefined // Идентификатор отображаемого объекта
@@ -102,7 +101,7 @@
          */
         callChildren: function(call, args, target){
             var stop = undefined;
-            if (target && target!=this){
+            if (target/* && target!=this*/){
                 if ($.isFunction(this['call_'+call])){
                     if (!$.isArray(args)) args = [args];
                     var a = [{target: target, direct: 'children'}].concat(args);
@@ -127,11 +126,12 @@
          * @param call Название действия (функции)
          * @param args Массив аргументов
          * @param target Объект, иницировавший вызов действия. По умолчанию this.
+         * @param up Признак, когда вызов дойдет до корневого объекты, перенаправить вызов всем подчиенным.
          */
-        callParents: function(call, args, target){
+        callParents: function(call, args, target, up){
             if (!target) target = null;
             var stop = undefined;
-            if (target && target!=this){
+            if (!up && target /*&& target!=this*/){
                 if ($.isFunction(this['call_'+call])){
                     if (!$.isArray(args)) args = [args];
                     var a = [{target: target, direct: 'parents'}].concat(args);
@@ -142,7 +142,10 @@
                 return stop;
             }else
             if (this._parent){
-                return this._parent.callParents(call, args, target || this);
+                return this._parent.callParents(call, args, target || this, up);
+            }else
+            if (up){
+                this.callChildren(call, args, target);
             }
             return undefined;
         },
@@ -310,7 +313,7 @@
          * @returns {{}}
          */
         changes: function(prev, now, replace_prev){
-            replace_prev = replace_prev == true;
+            replace_prev = (replace_prev == true);
             var changes = {};
             for (var prop in now){
                 if (typeof prev[prop] != typeof now[prop]){
@@ -335,6 +338,14 @@
                 }
             }
             return changes;
+        },
+
+        call_updateURI: function(e, args){
+            var reg = new RegExp('^'+args.uri+'(\/|$)');
+            if (reg.test(this.options.object)){
+                this.options.object = this.options.object.replace(args.uri, args.new_uri);
+                this.element.attr('data-o', this.options.object);
+            }
         }
     });
 })(jQuery, _, window);

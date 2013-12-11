@@ -20,9 +20,9 @@
 
         _change: function(e){
             if (this._isChanged()){
-                this.callParents('change', [this.options.object]);
+                this.callParents('change', [this.options.object], null, true);
             }else{
-                this.callParents('nochange', [this.options.object]);
+                this.callParents('nochange', [this.options.object], null, true);
 
             }
         },

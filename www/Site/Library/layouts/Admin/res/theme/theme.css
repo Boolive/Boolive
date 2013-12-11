@@ -218,7 +218,7 @@ h4{
     position: relative;
     text-decoration: none;
     color: #555;
-    border-radius: 2px;
+    border-radius: 3px;
     }
     .btn-tool:hover, .btn-group:hover > .btn-tool{
         box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.1);

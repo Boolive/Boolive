@@ -1,0 +1,13 @@
+{
+    "value": "Model.js",
+    "value_type": 3,
+    "proto": "/Library/javascripts/JavaScript",
+    "order": 1,
+    "children": {
+        "title": {
+            "value": "Модель",
+            "proto": "/Library/javascripts/JavaScript/depends/title",
+            "order": 1
+        }
+    }
+}
