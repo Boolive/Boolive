@@ -863,6 +863,16 @@ class Entity implements ITrace
                 $this->_parent = null;
                 //$this->updateURI($this->name());
             }else{
+                // Новый родитель не должен быть свойстовм объекта
+                if ($new_parent->in($this)){
+                    $errors = new Error('Неверный объект', $this->uri());
+                    if ($new_parent->eq($this)){
+                        $errors->_attribs->parent = 'Объект не может сам для себя стать родителем';
+                    }else{
+                        $errors->_attribs->parent = 'Свойство не может стать родителем для объекта';
+                    }
+                    throw $errors;
+                }
                 // Смена родителя
                 $this->_parent = $new_parent;
                 $this->_attribs['parent'] = $new_parent->key();
@@ -972,6 +982,16 @@ class Entity implements ITrace
                 }
                 $this->_proto = null;
             }else{
+                // Новый родитель не должен быть свойстовм объекта
+                if ($this->isExist() && $new_proto->is($this)){
+                    $errors = new Error('Неверный объект', $this->uri());
+                    if ($new_proto->eq($this)){
+                        $errors->_attribs->proto = 'Объект не может сам для себя стать прототипом';
+                    }else{
+                        $errors->_attribs->proto = 'Наследник не может стать прототипом для объекта';
+                    }
+                    throw $errors;
+                }
                 // Наследование значения
                 if ($this->isDefaultValue()){
                     $this->_attribs['value'] = $new_proto->value();
