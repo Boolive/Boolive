@@ -16,13 +16,13 @@ class Editor extends BaseExplorer
         $obj = $this->_input['REQUEST']['object'];
         $v['title'] = $obj->title->inner()->value();
         if ($p = $obj->proto()){
-
-            $v['description'] = $p->description->inner()->value();
-            $v['proto'] = ltrim($p->uri(),'/');
+            $v['proto-uri'] = $p->uri();
+            $v['proto-title'] = $p->title->inner()->value();
+            $v['proto-description'] = $p->description->inner()->value();
         }else{
-            //$v['title'] = 'Сущность';
-            $v['description'] = $obj->description->inner()->value();
-            $v['proto'] = '//0';
+            $v['proto-uri'] = '//0';
+            $v['proto-title'] = 'Сущность';
+            $v['proto-description'] = $obj->description->inner()->value();
         }
         return parent::show($v,$commands, $input);
     }

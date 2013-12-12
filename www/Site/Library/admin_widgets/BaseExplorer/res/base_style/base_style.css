@@ -1,14 +1,12 @@
 .BaseExplorer{
-    margin: 15px;
-    margin-bottom: 30px;
-    /*display: table;*/
-    /*table-layout: fixed;*/
+    margin: 15px 15px 30px;
     }
     .BaseExplorer__head{
         display: table;
         width: 100%;
         height: 30px;
         table-layout: fixed;
+        position: relative;
         }
         .BaseExplorer__head-left{
             display: table-cell;
@@ -18,7 +16,9 @@
             display: table-cell;
             text-align: right;
             vertical-align: top;
-        }
+            position: relative;
+            width: 100px;
+            }
     .BaseExplorer__empty{
         text-align: center;
         font-size: 24px;
@@ -47,6 +47,6 @@
     .BaseExplorer__description{
         font-size: 12px;
         padding: 0;
-        margin: 0 0 15px 0;
-        color: #666;
-    }
+        margin: 0 0 25px 0;
+        color: #999;
+        }

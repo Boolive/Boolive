@@ -16,6 +16,10 @@
         _create: function() {
             $.boolive.BaseExplorer.prototype._create.call(this);
             var self = this;
+            this.element.on('click', '.Editor__proto', function(e){
+                e.preventDefault();
+                self.callParents('setState', [{object:  $(this).attr('data-o')}]);
+            });
             this.element.on('click', '.Editor__attribs-btn', function(e){
                 var attribs = self.element.find('.Editor__attribs:first');
                 $(this).toggleClass('active');
