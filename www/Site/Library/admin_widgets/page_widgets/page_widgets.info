@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/Library/basic/Package",
     "is_draft": true,
-    "order": 27,
+    "order": 28,
     "children": {
         "title": {
             "value": "Виджеты страницы",

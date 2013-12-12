@@ -1,0 +1,86 @@
+{
+    "value": "TileExplorer.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/BaseExplorer",
+    "order": 42,
+    "children": {
+        "title": {
+            "value": "Плитка",
+            "proto": "/Library/admin_widgets/BaseExplorer/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Обозреватель объектов в виде плитки",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/BaseExplorer/description",
+            "is_mandatory": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/admin_widgets/BaseExplorer/res",
+            "is_mandatory": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Ресурсы",
+                    "proto": "/Library/admin_widgets/BaseExplorer/res/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
+                    "proto": "/Library/admin_widgets/BaseExplorer/res/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/Library/admin_widgets/BaseExplorer/cache",
+            "is_mandatory": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Кэшировать?",
+                    "proto": "/Library/admin_widgets/BaseExplorer/cache/title",
+                    "is_mandatory": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
+                    "proto": "/Library/admin_widgets/BaseExplorer/cache/description",
+                    "is_mandatory": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/BaseExplorer/object_rule",
+            "is_mandatory": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Правило на объект",
+                    "proto": "/Library/admin_widgets/BaseExplorer/object_rule/title",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

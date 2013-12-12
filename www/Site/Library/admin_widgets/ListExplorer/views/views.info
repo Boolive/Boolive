@@ -1,0 +1,25 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/admin_widgets/BaseExplorer/views",
+    "is_mandatory": true,
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Список видов",
+            "proto": "/Library/admin_widgets/BaseExplorer/views/title",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
+            "proto": "/Library/admin_widgets/BaseExplorer/views/description",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 2
+        }
+    }
+}

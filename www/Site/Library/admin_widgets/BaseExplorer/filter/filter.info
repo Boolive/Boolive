@@ -2,6 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/basic/Object",
+    "is_mandatory": true,
     "order": 9,
     "children": {
         "title": {

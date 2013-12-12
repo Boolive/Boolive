@@ -42,6 +42,7 @@ class Item extends Widget
         if ($v['value_short'] != $v['value']){
             $v['value_short'].= '...';
         }
+        $v['diff'] = $obj->diff();
         return parent::show($v,$commands, $input);
     }
 }

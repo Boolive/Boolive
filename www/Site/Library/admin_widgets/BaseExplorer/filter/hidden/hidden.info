@@ -1,6 +1,7 @@
 {
-    "value": 0,
+    "value": 1,
     "proto": "/Library/basic/Boolean",
+    "is_mandatory": true,
     "order": 5,
     "children": {
         "title": {

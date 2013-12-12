@@ -7,14 +7,14 @@
             "value": "Виджеты админки",
             "proto": "/Library/basic/Package/title",
             "is_mandatory": true,
-            "order": 1
+            "order": 2
         },
         "description": {
             "is_default_value": true,
             "value": "Коллекция объектов",
             "proto": "/Library/basic/Package/description",
             "is_mandatory": true,
-            "order": 2
+            "order": 3
         }
     }
 }

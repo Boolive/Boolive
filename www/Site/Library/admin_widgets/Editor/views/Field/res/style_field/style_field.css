@@ -36,6 +36,32 @@
             margin-top: -2px;
             text-decoration: none;
             }
+        .Item_diff-add .Field__title:before,
+        .Item_diff-change .Field__title:before,
+        .Item_diff-delete .Field__title:before{
+            vertical-align: middle;
+            font: normal 12px/8px "Times New Roman";
+            color: #FFF;
+            font-weight: bold;
+            margin-right: 4px;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 0px 4px;
+            position: static;
+        }
+        .Item_diff-add .Field__title:before{
+            content: '+';
+            background-color: #85cc29;
+            }
+        .Item_diff-change .Field__title:before{
+            content: '!';
+            background-color: #9352cc;
+            padding: 0 7px;
+            }
+        .Item_diff-delete .Field__title:before{
+            content: '×';
+            background-color: #e67573;
+            }
     .Field__description{
         color: #ddd;
         font-size: 11px;
@@ -53,6 +79,10 @@
     .Field__input-wrap{
         margin-right: 30px;
         }
+    textarea.Field__input{
+        border: none;
+        background-color: transparent;
+    }
     .Field__input[type="text"],
     .Field__input[type="password"]
     {
@@ -92,7 +122,7 @@
     }
     .Field.Item_selected .inpt{
         border-color: #1a8cff;
-        box-shadow: inset -1px 1px 3px 0 #b3d9ff;
+        box-shadow: inset 0px 0px 0 2px #b3d9ff;
         }
     .Field.Item_selected .Item__title,
     .Field.Item_selected .Item__description{

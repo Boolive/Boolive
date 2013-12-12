@@ -10,6 +10,12 @@
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_mandatory": true,
             "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/Widget/depends",
+            "order": 2
         }
     }
 }

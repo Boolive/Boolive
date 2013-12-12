@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ProgressAction",
     "is_default_class": false,
-    "order": 26,
+    "order": 27,
     "children": {
         "title": {
             "value": "Поиск обновлений",

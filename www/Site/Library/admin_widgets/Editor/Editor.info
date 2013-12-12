@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer",
     "is_default_class": false,
-    "order": 21,
+    "order": 22,
     "children": {
         "title": {
             "value": "Редактор",

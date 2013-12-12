@@ -4,6 +4,17 @@
     if($v['is_draft']->bool()) $class .= ' Item_draft';
     if($v['is_link']->bool()) $class .= ' Item_link';
     if($v['is_mandatory']->bool()) $class .= ' Item_mandatory';
+    switch ($v['diff']->int()){
+        case \Boolive\data\Entity::DIFF_CHANGE:
+            $class .= ' Item_diff-change';
+            break;
+        case \Boolive\data\Entity::DIFF_ADD:
+            $class .= ' Item_diff-add';
+            break;
+        case \Boolive\data\Entity::DIFF_DELETE:
+            $class .= ' Item_diff-delete';
+            break;
+    }
 ?>
 <div class="Item Field TextField HTMLField<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="HTMLField">
     <label class="Field__title" for="<?=$v['id']?>"><?=$v['title']?></label>

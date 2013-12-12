@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_default_class": false,
-    "order": 24,
+    "order": 25,
     "children": {
         "title": {
             "value": "Добавить",

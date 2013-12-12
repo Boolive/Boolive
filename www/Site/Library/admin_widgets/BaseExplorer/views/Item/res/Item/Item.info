@@ -2,6 +2,7 @@
     "value": "Item.js",
     "value_type": 3,
     "proto": "/Library/javascripts/Widget",
+    "is_mandatory": true,
     "order": 3,
     "children": {
         "title": {

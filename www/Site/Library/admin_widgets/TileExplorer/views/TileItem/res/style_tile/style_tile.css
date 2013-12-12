@@ -1,0 +1,76 @@
+.TileItem{
+    display: inline-block;
+    margin: 5px;
+    }
+    .TileItem__main{
+        height: 95px;
+        padding: 15px;
+        margin: 0;
+        }
+    .TileItem__title-wrap{
+        margin-bottom: -5px;
+    }
+    .TileItem__title{
+        font-size: 29px;
+        padding-left: 0;
+        display: inline-block;
+        color: #333;
+        }
+        .TileItem__title:hover{
+            color: #000;
+        }
+    .Item_link .TileItem__title:after{
+        font-size: 30px;
+        line-height: 20px;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .Item_mandatory .TileItem__title:before{
+        font-size: 30px;
+        right: -6px;
+    }
+    .TileItem__title-min{
+        display: block;
+        font-size: 18px;
+        line-height: 18px;
+        margin-bottom: 3px;
+        }
+    .TileItem__description{
+        display: block;
+        font-size: 11px;
+        max-width: 218px;
+        max-height: 30px;
+        overflow: hidden;
+        line-height: normal;
+        white-space: normal;
+        }
+    .TileItem__value{
+        display: block;
+        font-size: 11px;
+        overflow: hidden;
+        height: 20px;
+        line-height: 25px;
+        padding: 0 0 8px 0;
+        text-align: left;
+        white-space: nowrap;
+        position: absolute;
+        right: 15px;
+        left: 15px;
+        bottom: 0;
+        /*font-weight: bold;*/
+        }
+    .TileItem__select{
+
+        }
+    .TileItem__prop{
+        cursor: pointer;
+        width: 30px;
+        position: absolute;
+        line-height: 30px;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        }
+.Item_selected .TileItem__title{
+    color: #fff;
+}

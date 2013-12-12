@@ -44,10 +44,20 @@ class BaseExplorer extends AutoWidgetList2
 
     function show($v = array(), $commands, $input)
     {
-        if (!isset($v['title'])) $v['title'] = '';
-        if (!isset($v['description'])) $v['description'] = '';
         /** @var Entity $obj */
         $obj = $this->_input['REQUEST']['object'];
+        $v['object'] = $obj->uri();
+        $v['title'] = $obj->title->inner()->value();
+        if ($v['title'] === '') $v['title'] = $obj->name();
+        if ($p = $obj->proto()){
+            $v['proto-uri'] = $p->uri();
+            $v['proto-title'] = $p->title->inner()->value();
+            $v['proto-description'] = $p->description->inner()->value();
+        }else{
+            $v['proto-uri'] = '//0';
+            $v['proto-title'] = 'Сущность';
+            $v['proto-description'] = $obj->description->inner()->value();
+        }
         if (!$obj->isExist()){
             $v['empty'] = 'Не найден';
             $v['empty_description'] = 'Объект, к которому вы обращаетесь отсутсвует';

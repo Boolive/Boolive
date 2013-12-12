@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "base_style.css",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/BaseExplorer/res/base_style",
+    "is_mandatory": true,
+    "order": 4
+}

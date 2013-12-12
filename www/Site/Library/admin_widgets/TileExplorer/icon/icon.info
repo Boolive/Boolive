@@ -1,0 +1,24 @@
+{
+    "value": "icon.png",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/BaseExplorer/icon",
+    "is_mandatory": true,
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Иконка",
+            "proto": "/Library/admin_widgets/BaseExplorer/icon/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Файл изображения",
+            "value_type": 2,
+            "proto": "/Library/admin_widgets/BaseExplorer/icon/description",
+            "is_mandatory": true,
+            "order": 2
+        }
+    }
+}
