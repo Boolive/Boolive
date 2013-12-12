@@ -4,5 +4,6 @@
     "proto": "/Library/admin_widgets/BaseExplorer/filter",
     "is_link": true,
     "is_mandatory": true,
+    "is_relative": true,
     "order": 4
 }

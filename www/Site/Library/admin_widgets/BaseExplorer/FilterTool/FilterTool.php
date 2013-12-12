@@ -49,7 +49,7 @@ class FilterTool extends Widget
         $v['filters'] = array();
         foreach ($filters as $name => $f) {
             if ($f instanceof \Library\basic\Boolean\Boolean) {
-                $v['filters'][$name] = array('title' => $f->title->value(), 'value' => $f->value());
+                $v['filters'][$name] = array('title' => $f->title->inner()->value(), 'value' => $f->value());
             }
         }
         $v['icon'] = $this->icon->inner()->file();

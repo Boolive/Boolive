@@ -1,6 +1,5 @@
 {
-    "is_default_value": true,
     "value": 1,
     "proto": "/Library/admin_widgets/BaseExplorer/filter/updates",
-    "order": 1
+    "order": 6
 }

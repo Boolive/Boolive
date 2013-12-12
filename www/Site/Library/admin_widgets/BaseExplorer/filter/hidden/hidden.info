@@ -1,8 +1,8 @@
 {
-    "value": 1,
+    "value": 0,
     "proto": "/Library/basic/Boolean",
     "is_mandatory": true,
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "value": "Скрытые",

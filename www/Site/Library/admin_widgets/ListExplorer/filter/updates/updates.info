@@ -3,5 +3,5 @@
     "value": 1,
     "proto": "/Library/admin_widgets/BaseExplorer/filter/updates",
     "is_mandatory": true,
-    "order": 5
+    "order": 8
 }
