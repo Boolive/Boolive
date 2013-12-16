@@ -2,7 +2,7 @@
     width: 100%;
     position: absolute;
     }
-    .Bookmarks .title-wrap{
+    .Bookmarks__title-wrap{
         height: 1px;
         margin: 20px 0px 10px 10px;
         font-size: 8pt;
@@ -11,7 +11,7 @@
         text-align: center;
         position: relative;
         }
-        .Bookmarks .title-wrap > .title{
+        .Bookmarks__title{
             line-height: 20px;
             color: #d5d5d5;
             margin: auto;
@@ -20,16 +20,17 @@
             top: -10px;
         }
 
-    .Bookmarks ul{
+
+    .Bookmarks__items-list{
         list-style-type: none;
         padding: 0;
         margin: 0 0 0 10px;
         position: relative;
         }
-		.Bookmarks ul li .item{
+		.Bookmarks__item-link{
 			display: inline-block;
 			text-decoration:none;
-            margin: 5px 10px 0 0;
+            margin: 5px 0 0;
 			padding: 4px 15px 6px 10px;
 			/*overflow: hidden;*/
 			white-space: nowrap;
@@ -38,44 +39,68 @@
             /*border-bottom-right-radius: 10px;*/
             cursor: pointer;
             /*line-height: 20px;*/
-            font-size: 19px;
+            font-size: 17px;
+            color: #008ee6;
 			}
-            .Bookmarks ul li .item .title{
+            .Bookmarks__item-title{
                 display: inline-block;
                 vertical-align: middle;
-                color: #666;
+
                 }
-                .Bookmarks ul li .item:hover{
+                .Bookmarks__item-link:hover{
                     /*background-color: #EEE;*/
                     background-color: rgba(166, 218, 255, 0.30);
                     border-color: rgba(140, 207, 255, 0.30);
                 }
-                .Bookmarks ul li .item:hover .title{
-                    color: #333;
+                .Bookmarks__item-link:hover .Bookmarks__item-title{
+                    /*color: #000;*/
                     /*text-decoration: underline;*/
                     }
-            .Bookmarks ul li .item .icon{
+            .Bookmarks__item-icon{
                 max-width: 16px;
                 max-height: 16px;
                 margin: 0 0 0 5px;
                 vertical-align: middle;
             }
-    .Bookmarks ul li ul{
-        margin: 0 0 0 0;
+    .Bookmarks__items-list .Bookmarks__items-list{
+        margin: 0 0 0 10px;
         }
-        .Bookmarks ul li ul li .item{
+        .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
             font-size: 15px;
         }
-	.Bookmarks ul li.active > .item{
+	.Bookmarks__item.active > .Bookmarks__item-link{
         /*background-color: #c8f291;*/
         /*background-color: #e6e6e6;*/
-        background-color: rgba(128, 200, 255, 0.3);
+        background-color: rgb(128, 200, 255);
         border-color: rgba(128, 200, 255, 0.3);
 		}
-		.Bookmarks ul li.active > .item .title{
-			color: #000;
-            /*text-decoration: underline;*/
+		.Bookmarks__item.active > .Bookmarks__item-link{
+			color: #fff;
 			}
-			.Bookmarks ul li.active .item:hover .title{
-
-				}
+.Bookmarks__toolitem{
+    text-align: center;
+    margin: 10px 0;
+    opacity: 0.05;
+    }
+    .Bookmarks__toolitem:hover{
+        opacity: 1;
+        }
+.Bookmarks__add{
+    cursor: pointer;
+}
+.Bookmarks__config{
+    position: absolute;
+    padding: 0 5px;
+    left: -8px;
+    height: 16px;
+    top: -8px;
+    cursor: pointer;
+    width: 30px;
+    text-align: left;
+    }
+    .Bookmarks__config img{
+        display: none;
+    }
+    .Bookmarks__config:hover img{
+        display: inline-block;
+    }

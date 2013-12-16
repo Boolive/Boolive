@@ -5,7 +5,7 @@
     "proto": "/Library/javascripts/history",
     "is_link": true,
     "is_mandatory": true,
-    "order": 4,
+    "order": 5,
     "children": {
         "title": {
             "is_default_value": true,

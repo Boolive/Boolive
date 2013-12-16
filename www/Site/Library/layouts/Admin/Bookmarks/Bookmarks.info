@@ -2,6 +2,7 @@
     "value": "Bookmarks.tpl",
     "value_type": 3,
     "proto": "/Library/menus/Menu",
+    "is_default_class": false,
     "order": 11,
     "children": {
         "title": {
@@ -90,6 +91,7 @@
             "children": {
                 "title": {
                     "value": "Пункты",
+                    "is_hidden": true,
                     "is_mandatory": true,
                     "order": 1
                 }

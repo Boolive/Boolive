@@ -3,11 +3,10 @@
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "is_mandatory": true,
-    "order": 5,
+    "order": 7,
     "children": {
         "title": {
-            "is_default_value": true,
-            "value": "Boolive.Widget",
+            "value": "jQueryUI Boolive Admin",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_mandatory": true,
             "order": 1

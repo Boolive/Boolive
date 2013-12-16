@@ -11,6 +11,36 @@
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
+            self.element.on('click', '.Bookmarks__add', function(e){
+                e.preventDefault();
+                var proto = self.callParents('getState').object;
+                var url = /^[a-z]+:\/\//i.test(self.options.object) ? self.options.object : window.location.protocol + '//' + window.location.host + self.options.object;
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    accepts: {json: 'application/json'},
+                    url: url,
+                    data: {
+                        method: 'POST',
+                        entity: {
+                            proto: proto,
+                            parent: self.options.object,
+                            is_link: true,
+                            is_draft: false
+                        }
+                    },
+                    success: function(result, textStatus, jqXHR){
+                        self.reload({
+                            object: proto
+                        }, function(){
+//                            alert('add!!');
+                        });
+                    },
+                    error: function(jqXHR, textStatus){
+                        console.log(jqXHR);
+                    }
+                });
+            });
             // Нажатие по пункту меню
 			self.element.on('click', 'a', function(e){
                 e.preventDefault();

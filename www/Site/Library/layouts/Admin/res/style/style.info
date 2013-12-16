@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
-    "order": 7,
+    "order": 9,
     "children": {
         "title": {
             "is_default_value": true,
