@@ -147,7 +147,8 @@ class KeywordsField extends AutoWidgetList2
         $keywords = Data::read('/Keywords');
         $result = $keywords->find(array(
             'where' => array(
-                array("attr", "name", "like", $this->_input['REQUEST']['request'] . "%")
+                array("attr", "name", "like", $this->_input['REQUEST']['request'] . "%"),
+                array('attr', 'is_hidden', '<=', $keywords->_attribs['is_hidden'])
             )
         ));
         $suggetions = array();

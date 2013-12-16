@@ -150,9 +150,11 @@
 
         init_sortable: function(){
             var self = this;
+            var clone;
             this.element.find('.BaseExplorer__list:first').sortable({
                 distance: 15,
                 handle: '.Item__select',
+                placeholder: 'BaseExplorer__item-placeholder',
                 //forceHelperSize: false,
                 update: function(event, ui) {
                     var object_uri = {};
@@ -172,6 +174,11 @@
                         saveOrder:{object_uri:object_uri, next_uri:next_uri},
                         object: self.options.object
                     });
+                },
+                start: function( event, ui ) {
+//                    ui.placeholder.css(ui.item.css(['width', 'height']));
+                    ui.placeholder.outerWidth(ui.item.outerWidth());
+                    ui.placeholder.outerHeight(ui.item.outerHeight());
                 }
             });
         },

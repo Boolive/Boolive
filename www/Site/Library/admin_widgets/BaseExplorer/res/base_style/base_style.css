@@ -163,3 +163,8 @@
         background-color: #aaa;
         color: #fff;
         }
+.BaseExplorer__item-placeholder{
+    border: 1px dotted #1a8cff;
+    border-radius: 5px;
+    display: inline-block;
+}

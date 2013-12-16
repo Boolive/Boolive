@@ -1,0 +1,21 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/views/ViewSingle",
+    "order": 18,
+    "children": {
+        "title": {
+            "value": "Дополнительно",
+            "proto": "/Library/views/ViewSingle/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Дополнительные программы, которых скоро не будет",
+            "value_type": 2,
+            "proto": "/Library/views/ViewSingle/description",
+            "is_mandatory": true,
+            "order": 2
+        }
+    }
+}

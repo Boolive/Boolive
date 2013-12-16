@@ -69,7 +69,7 @@
                         self.element.find('.Field__error').text('');
                         self._input.val('');
                         if(responseText.out!==false){
-                            self.load(self.element.find('..KeywordsField__keywords-old'), 'append',  self.options.view+'/views',{object: responseText.out}, {url:'/'});
+                            self.load(self.element.find('.KeywordsField__keywords-old'), 'append',  self.options.view+'/views',{object: responseText.out}, {url:'/'});
                         }
                     }
                 }
