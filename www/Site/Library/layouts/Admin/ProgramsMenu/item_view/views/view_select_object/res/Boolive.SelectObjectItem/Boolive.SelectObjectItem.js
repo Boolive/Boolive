@@ -23,7 +23,7 @@
                         data: {
                             direct: self.options.object, // uri выиджета выбора объекта
                             object: open, //какой объект показать
-                            view_name: 'views/Explorer'
+                            view_name: 'views/TileExplorer'
                         }
                     },
                     function(result, params){
