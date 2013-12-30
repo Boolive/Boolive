@@ -1,0 +1,14 @@
+{
+    "value": "Мой самый любимый сайт!",
+    "value_type": 2,
+    "proto": "/Library/basic/Text",
+    "is_mandatory": true,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Описание сайта",
+            "proto": "/Library/basic/Text/title",
+            "order": 1
+        }
+    }
+}

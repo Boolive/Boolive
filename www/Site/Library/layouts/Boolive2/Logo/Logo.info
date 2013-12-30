@@ -24,7 +24,7 @@
             "is_default_value": true,
             "value": "logo.png",
             "value_type": 3,
-            "proto": "/logo",
+            "proto": "/options/site_logo",
             "is_link": true,
             "is_mandatory": true,
             "order": 6,

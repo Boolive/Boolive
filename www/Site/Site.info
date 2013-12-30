@@ -2,20 +2,6 @@
     "value": "",
     "proto": "/Library/views/Site",
     "is_default_class": false,
-    "order": 10,
-    "children": {
-        "title": {
-            "value": "Мой сайт",
-            "proto": "/Library/views/Site/title",
-            "is_mandatory": true,
-            "order": 7
-        },
-        "description": {
-            "value": "Мой самый любимый сайт!",
-            "value_type": 2,
-            "proto": "/Library/views/Site/description",
-            "is_mandatory": true,
-            "order": 17
-        }
-    }
+    "is_mandatory": true,
+    "order": 10
 }
