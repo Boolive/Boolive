@@ -42,7 +42,7 @@
         },
         "object": {
             "value": "",
-            "proto": "/Keywords",
+            "proto": "/Contents/Keywords",
             "is_link": true,
             "is_mandatory": true,
             "order": 5

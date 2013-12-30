@@ -3,5 +3,6 @@
     "value": "2",
     "proto": "/Contents/Keywords/cms",
     "is_link": true,
-    "order": 4
+    "is_hidden": true,
+    "order": 1
 }

@@ -1,7 +1,7 @@
 {
     "value": "1",
     "proto": "/Library/content_samples/Keyword",
-    "order": 3,
+    "order": 5,
     "children": {
         "title": {
             "value": "PHP",

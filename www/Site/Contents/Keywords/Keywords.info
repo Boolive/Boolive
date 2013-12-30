@@ -1,0 +1,22 @@
+{
+    "value": "",
+    "proto": "/Library/basic/Object",
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Ключевые слова",
+            "proto": "/Library/basic/Object/title",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 2
+        },
+        "description": {
+            "value": "Все ключевые слова, используемые в публикациях",
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
+            "is_hidden": true,
+            "is_mandatory": true,
+            "order": 3
+        }
+    }
+}

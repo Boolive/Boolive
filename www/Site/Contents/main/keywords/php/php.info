@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "1",
-    "proto": "/Keywords/php",
+    "proto": "/Contents/Keywords/php",
     "is_link": true,
     "order": 5
 }

@@ -11,9 +11,10 @@
         },
         "description": {
             "value": "Главная страница первого простейшего сайта",
+            "value_type": 2,
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
-            "order": 20
+            "order": 22
         }
     }
 }

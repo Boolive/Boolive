@@ -1,0 +1,31 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/Page",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Страница",
+            "proto": "/Library/content_samples/Page/title",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Публикация на сайте - страница, статья, новость или другое",
+            "value_type": 2,
+            "proto": "/Library/content_samples/Page/description",
+            "is_mandatory": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Описание ",
+                    "proto": "/Library/content_samples/Page/description/title",
+                    "is_mandatory": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

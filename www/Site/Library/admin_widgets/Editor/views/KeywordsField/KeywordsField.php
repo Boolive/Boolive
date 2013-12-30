@@ -84,7 +84,7 @@ class KeywordsField extends AutoWidgetList2
         $obj = $this->_input['REQUEST']['object'];
         $key_title = $this->_input['REQUEST']['Keyword']['value'];
         $key_name = mb_strtolower(F::translit($key_title));
-        $keywords = Data::read('/Keywords');
+        $keywords = Data::read('/Contents/Keywords');
         $key = $keywords->{$key_name};
         // Создание слова в общей коллекции ключевых слов
         if (!$key->isExist()){
@@ -144,7 +144,7 @@ class KeywordsField extends AutoWidgetList2
      */
     protected function callFind()
     {
-        $keywords = Data::read('/Keywords');
+        $keywords = Data::read('/Contents/Keywords');
         $result = $keywords->find(array(
             'where' => array(
                 array("attr", "name", "like", $this->_input['REQUEST']['request'] . "%"),

@@ -1,0 +1,14 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/Library/content_samples/Part",
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Статьи",
+            "proto": "/Library/content_samples/Part/title",
+            "is_mandatory": true,
+            "order": 1
+        }
+    }
+}

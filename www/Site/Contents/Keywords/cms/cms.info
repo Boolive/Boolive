@@ -1,7 +1,7 @@
 {
-    "value": "1",
+    "value": "2",
     "proto": "/Library/content_samples/Keyword",
-    "order": 6,
+    "order": 8,
     "children": {
         "title": {
             "value": "CMS",
