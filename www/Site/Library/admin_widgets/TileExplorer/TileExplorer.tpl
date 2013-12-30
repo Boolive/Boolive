@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <p class="BaseExplorer__description"><?=$v['proto-description']?></p>
+    <p class="BaseExplorer__description"><?=$v['description']?></p>
 
     <div class="BaseExplorer__list TileExplorer__list">
     <?php

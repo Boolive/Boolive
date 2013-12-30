@@ -48,6 +48,7 @@ class BaseExplorer extends AutoWidgetList2
         $obj = $this->_input['REQUEST']['object'];
         $v['object'] = $obj->uri();
         $v['title'] = $obj->title->inner()->value();
+        $v['description'] = $obj->description->inner()->value();
         if ($v['title'] === '') $v['title'] = $obj->name();
         if ($p = $obj->proto()){
             $v['proto-uri'] = $p->uri();

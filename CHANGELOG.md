@@ -16,6 +16,7 @@ Version 2.0.beta work in progress
 - new Added BaseExplorer for creating other explorers (VladimirShestakov)
 - new Added the common Editor for all objects (VladimirShestakov)
 - new Widgets and other views can be added to the site pages and sections (VladimirShestakov)
+- new Added start page in the admin panel (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

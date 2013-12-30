@@ -30,16 +30,16 @@ class SelectObject extends Widget
         ));
     }
 
-    function startInitChild($input)
-    {
-        parent::startInitChild($input);
-    }
-
-    function show($v = array(), $commands, $input)
+    function work()
     {
         if ($this->_input['REQUEST']['call'] == 'selected' && isset($this->_input['REQUEST']['selected'])){
             return $this->selected();
         }
+        return parent::work();
+    }
+
+    function show($v = array(), $commands, $input)
+    {
         $v['title'] = $this->title->value();
         $v['submit_title'] = $this->submit_title->value();
         $v['cancel_title'] = $this->cancel_title->value();

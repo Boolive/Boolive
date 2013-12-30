@@ -1,4 +1,4 @@
-<div class="Explorer" data-o="<?=$v['uri']?>" data-v="<?php echo $v['view_uri'];?>" data-p="Explorer">
+<div class="Explorer" data-o="<?=$v['uri']?>" data-v="<?=$v['view_uri'];?>" data-p="Explorer">
 
     <div class="toolbar">
         <?=$v->AddTool->string();?>

@@ -2,6 +2,7 @@
     /*position: absolute;*/
     /*height: 100%;*/
     width: 100%;
+    padding: 5px 0;
 	}
 .ProgramsMenu ul{
 	list-style-type: none;
@@ -17,7 +18,7 @@
 		padding: 0;
 		z-index:3;
 		clear: both;
-        margin: 10px 0 0px 0;
+        margin: 10px 0 0 0;
         text-align: right;
 
 		}
@@ -25,7 +26,7 @@
 			display: inline-block;
 			text-decoration:none;
             margin: 0 10px 0 0;
-			padding: 4px 5px 6px 10px;
+			padding: 4px 5px 6px 5px;
 			/*overflow: hidden;*/
 			white-space: nowrap;
             /*border-radius: 10px;*/
@@ -37,6 +38,7 @@
                 display: inline-block;
                 vertical-align: middle;
                 color: #888;
+                margin: 0 5px;
                 }
                 .ProgramsMenu ul li .item:hover{
                     background-color: #EEE;
@@ -48,7 +50,7 @@
             .ProgramsMenu ul li .item .icon{
                 max-width: 16px;
                 max-height: 16px;
-                margin: 0 0 0 5px;
+                margin: 0 0 0 0px;
                 vertical-align: middle;
             }
 

@@ -1,0 +1,97 @@
+.Start{
+    margin: 15px 30px 30px;
+}
+.Start__title{
+    font-size: 36px;
+    padding: 0;
+    color: #85cc02;
+    margin: 0;
+    text-decoration: none;
+    display: inline;
+    }
+.Start__description{
+    font-size: 12px;
+    padding: 0;
+    margin: 0 0 25px 0;
+    color: #999;
+    }
+
+.Start__main h2{
+    font-size: 24px;
+    margin: 15px 0;
+}
+.Start__main p{
+    margin: 15px 0;
+    line-height: 1.48;
+    font-size: 15px;
+}
+.Start__main p:first-of-type{
+    margin-top: 0;
+}
+.Start__main p:last-of-type{
+    margin-bottom: 0;
+}
+.Start__grid{
+    display: table;
+    width: 100%;
+}
+.Start__row{
+    display: table-row;
+}
+.Start__col33{
+    display: table-cell;
+    padding: 0 15px;
+    vertical-align: top;
+    width: 33%;
+    border-right: 1px dotted #ccc;
+}
+.Start__col0{
+    display: table-cell;
+    padding: 5px 0 5px 15px;
+    vertical-align: top;
+}
+.Start__col100{
+    display: table-cell;
+    padding: 5px 15px;
+    vertical-align: top;
+    width: 100%;
+}
+.Start__col33:last-of-type{
+    border-right: 0;
+}
+.Start__btn{
+
+}
+.Start__btn{
+    display: inline-block;
+    text-decoration:none;
+    margin: 0;
+    padding: 4px 5px 6px 5px;
+    /*overflow: hidden;*/
+    white-space: nowrap;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #555;
+    background: #f3f3f3;
+    }
+    .Start__btn-title{
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 5px;
+        }
+        .Start__btn:hover{
+            /*background-color: #EEE;*/
+            background-color: #bbb;
+            border-color: #b5b5b5;
+        }
+        .Start__btn:hover .Start__btn-title{
+            color: #fff;
+            /*text-decoration: underline;*/
+            }
+    .Start__btn-icon{
+        max-width: 16px;
+        max-height: 16px;
+        margin: 0;
+        vertical-align: middle;
+    }

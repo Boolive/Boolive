@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "Start.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/Start",
+    "is_link": true,
+    "order": 10
+}

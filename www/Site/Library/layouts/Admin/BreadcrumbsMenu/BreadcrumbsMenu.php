@@ -56,7 +56,8 @@ class BreadcrumbsMenu extends Widget{
             if ($p->name() == '' && $p->isRemote()){
                 $item['title'] = $p->uri();
             }else{
-                $item['title'] = ($p->title->isExist()) ? $p->title->value() : $p->name();
+                $t = $p->title->inner();
+                $item['title'] = $t->isExist()||$t->isInner() ? $t->value() : $p->name();
             }
             $items[] = $item;
         }

@@ -157,6 +157,7 @@
          * @param settings Дополнительные парметры ajax запроса и функции обратного вызова как в $.ajax()
          */
         callServer: function(call, data, settings){
+
             if (_.isFunction(settings)){
                 settings = {success:settings};
             }else

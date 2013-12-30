@@ -1654,6 +1654,14 @@ class Entity implements ITrace
                 }else
                 if ($cond[1] == 'is_mandatory'){
                     $value = $this->isMandatory();
+                }else
+                if ($cond[1] == 'parent_cnt'){
+                    $value = $this->parentCount();
+                }else
+                if ($cond[1] == 'proto_cnt'){
+                    $value = $this->protoCount();
+                }else{
+                    $value = null;
                 }
                 switch ($cond[2]){
                     case '=': return $value == $cond[3];
@@ -2017,7 +2025,7 @@ class Entity implements ITrace
      * @param null|bool $is_inner Новое значение, если не null
      * @return bool|null
      */
-    function isInnder($is_inner = null)
+    function isInner($is_inner = null)
     {
         if (isset($is_inner) && (empty($this->_is_inner) == $is_inner)){
             $this->_is_inner = $is_inner;

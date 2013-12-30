@@ -1,5 +1,5 @@
 {
-    "value": "in",
+    "value": "childOf",
     "proto": "/Library/access/Allow",
     "order": 2
 }

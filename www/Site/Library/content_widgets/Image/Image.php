@@ -12,11 +12,15 @@ class Image extends Widget
 {
     function show($v = array(), $commands, $input)
     {
-        $v['file'] = $this->_input['REQUEST']['object']->file();
-        $v['style'] = $this->_input['REQUEST']['object']->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'return'=>false, 'comment' => 'read tree of text element'));
-        if ($this->_input['REQUEST']['object']->style->isExist()){
-            $v['style'] = $this->_input['REQUEST']['object']->style->getStyle();
+        /** @var \Library\basic\Image\Image $obj */
+        $obj = $this->_input['REQUEST']['object'];
+        $v['file'] = $obj->file();
+        $v['style'] = $obj->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'return'=>false, 'comment' => 'read tree of text element'));
+        if ($obj->style->isExist()){
+            $v['style'] = $obj->style->getStyle();
         }
+        $v['width'] = $obj->width();
+        $v['height'] = $obj->height();
         return parent::show($v, $commands, $input);
     }
 }

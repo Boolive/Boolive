@@ -12,7 +12,7 @@
             "order": 1
         },
         "description": {
-            "value": "Основные настройки сайта и все его разделы",
+            "value": "Содержит все данные о сайте - публикации, настройки, интерфейс, пользователей...",
             "value_type": 2,
             "proto": "/Library/views/View/description",
             "is_mandatory": true,

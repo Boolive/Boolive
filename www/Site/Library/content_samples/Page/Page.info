@@ -8,14 +8,14 @@
             "value": "Страница",
             "proto": "/Library/basic/Object/title",
             "is_mandatory": true,
-            "order": 1
+            "order": 2
         },
         "description": {
             "value": "Публикация на сайте - страница, статья, новость или другое",
             "value_type": 2,
             "proto": "/Library/basic/Object/description",
             "is_mandatory": true,
-            "order": 6,
+            "order": 7,
             "children": {
                 "title": {
                     "value": "Описание ",

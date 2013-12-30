@@ -4,7 +4,7 @@
     }
     .Bookmarks__title-wrap{
         height: 1px;
-        margin: 20px 0px 10px 10px;
+        margin: 20px 0 10px 10px;
         font-size: 8pt;
         padding: 0 10px;
         background-color: #e6e6e6;
@@ -31,7 +31,7 @@
 			display: inline-block;
 			text-decoration:none;
             margin: 5px 0 0;
-			padding: 4px 15px 6px 10px;
+			padding: 4px 5px 6px 5px;
 			/*overflow: hidden;*/
 			white-space: nowrap;
             border-radius: 15px;
@@ -45,7 +45,7 @@
             .Bookmarks__item-title{
                 display: inline-block;
                 vertical-align: middle;
-
+                margin: 0 5px;
                 }
                 .Bookmarks__item-link:hover{
                     /*background-color: #EEE;*/
@@ -59,7 +59,7 @@
             .Bookmarks__item-icon{
                 max-width: 16px;
                 max-height: 16px;
-                margin: 0 0 0 5px;
+                margin: 0;
                 vertical-align: middle;
             }
     .Bookmarks__items-list .Bookmarks__items-list{
