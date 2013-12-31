@@ -86,7 +86,7 @@
          */
         _init_state: function(){
             var l = history.location || document.location;
-            var expr = new RegExp('^'+this.options.basepath+'/(.*)$');
+            var expr = new RegExp('^'+this.options.basepath+'(/|$)(.*)$');
             var uri_args = this.getStateFromURI('object='+l.pathname.replace(expr, '$1'));
             if (typeof uri_args.object == 'string'){
                 if (uri_args.object) uri_args.object = '/'+uri_args.object;
