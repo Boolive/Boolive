@@ -42,7 +42,7 @@ class ProgressAction extends Widget
             $v['objects'] = array();
             foreach ($objects as $o){
                 $item = array();
-                if (!($item['title'] = $o->title->value())){
+                if (!($item['title'] = $o->title->inner()->value())){
                     $item['title'] = $o->name();
                 }
                 $item['uri'] = $o->uri();

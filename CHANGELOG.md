@@ -1,7 +1,7 @@
 Boolive Change Log
 ==================
 
-Version 2.0.beta work in progress
+Version 2.0.beta December, 31 2013
 ----------------------------
 - new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
 - new #107 Added convenient method of adding link to the object (VladimirShestakov)
@@ -17,6 +17,7 @@ Version 2.0.beta work in progress
 - new Added the common Editor for all objects (VladimirShestakov)
 - new Widgets and other views can be added to the site pages and sections (VladimirShestakov)
 - new Added start page in the admin panel (VladimirShestakov)
+- enh #160 Primary rights (prohibitions) for all users is configured (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

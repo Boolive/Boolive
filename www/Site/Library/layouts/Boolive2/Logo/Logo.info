@@ -22,7 +22,7 @@
         },
         "object": {
             "is_default_value": true,
-            "value": "logo.png",
+            "value": "site_logo.png",
             "value_type": 3,
             "proto": "/options/site_logo",
             "is_link": true,

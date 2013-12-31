@@ -47,7 +47,7 @@ class Export extends Widget
             $v['objects'] = array();
             foreach ($objects as $o){
                 $item = array();
-                if (!($item['title'] = $o->title->value())){
+                if (!($item['title'] = $o->title->inner()->value())){
                     $item['title'] = $o->name();
                 }
                 $item['uri'] = $o->uri();
@@ -55,7 +55,7 @@ class Export extends Widget
                 $v['data-o'][]=$item['uri'];
             }
             $v['data-o'] = json_encode($v['data-o']);
-            $v['title'] = $this->title->value();
+            $v['title'] = $this->title->inner()->value();
             if (count($objects)>1){
                 $v['question'] = 'Вы действительно желаете экспортировать эти объекты?';
                 $v['message'] = 'Объекты и их подчинённые будут сохранены в файлы .info';

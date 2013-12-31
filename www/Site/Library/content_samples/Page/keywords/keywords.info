@@ -2,7 +2,7 @@
     "value": "",
     "proto": "/Library/basic/Object",
     "is_mandatory": true,
-    "order": 6,
+    "order": 7,
     "children": {
         "title": {
             "value": "Ключевые слова",

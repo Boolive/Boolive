@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/Link",
     "is_link": true,
+    "is_hidden": true,
     "order": 28
 }
