@@ -30,14 +30,12 @@
     </div>
     <p class="BaseExplorer__description"><?=$v['description']?></p>
 
-    <div class="BaseExplorer__list TileExplorer__list">
-    <?php
+    <div class="BaseExplorer__list TileExplorer__list"><?php
         $list = $v['views']->arrays(\Boolive\values\Rule::string());
         if(!empty($list)){
             foreach ($list as $item) echo $item;
         }else{
             echo '<div class="BaseExplorer__empty">'.$v['empty'].'<div class="BaseExplorer__empty-explain">'.$v['empty_description'].'</div></div>';
         }
-    ?>
-    </div>
+    ?></div>
 </div>

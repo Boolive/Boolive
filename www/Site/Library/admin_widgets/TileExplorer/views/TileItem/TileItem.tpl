@@ -27,8 +27,7 @@
         $title_big = mb_substr($title_big, 0, $pos);
     }
     $width = max(118, round((mb_strlen($title_big)*18+18)/50)*50+18);
-?>
-<div class="Item TileItem<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item">
+?><div class="Item TileItem<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item">
     <div class="Item__main TileItem__main" style="min-width:<?=$width?>px; <?=$v['icon-style']?>">
         <div class="TileItem__title-wrap"><a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
         <?php if (!empty($title_min)) :?><div class="TileItem__title-min"><?=$title_min?></div><?php endif; ?>
