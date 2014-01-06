@@ -1,0 +1,26 @@
+{
+    "value": "ace.js",
+    "value_type": 3,
+    "proto": "/Library/javascripts/JavaScript",
+    "order": 17,
+    "children": {
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/Library/javascripts/JavaScript/depends",
+            "is_mandatory": true,
+            "order": 1
+        },
+        "title": {
+            "value": "Ace Editor",
+            "proto": "/Library/javascripts/JavaScript/title",
+            "order": 2
+        },
+        "description": {
+            "value": "Редактор текстовых файлов с подсветкой синтаксиса",
+            "value_type": 2,
+            "proto": "/Library/javascripts/JavaScript/description",
+            "order": 3
+        }
+    }
+}
