@@ -360,6 +360,9 @@ class Entity implements ITrace
                         'error'	=> is_file($new_file)? 0 : true
                     );
                 }
+                if (empty($new_file['name']) && $this->isFile()){
+                    $new_file['name'] = $this->name().'.'.File::fileExtention($this->file());
+                }
                 $this->_attribs['file'] = $new_file;
                 $this->_attribs['value_type'] = Entity::VALUE_FILE;
             }

@@ -35,7 +35,6 @@
 
             this.model = new BooliveModel();
 
-
             // Изменение в виде
             this.element.on('input propertychange', '.BaseExplorer__attribs-uri-name', function(e){
                 self.model.set_attrib('name', $(this).val());

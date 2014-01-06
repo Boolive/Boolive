@@ -15,6 +15,7 @@
         "description": {
             "is_default_value": true,
             "value": "Вызов методов объекта",
+            "value_type": 2,
             "proto": "/Library/access/Role/call/description",
             "is_mandatory": true,
             "order": 2

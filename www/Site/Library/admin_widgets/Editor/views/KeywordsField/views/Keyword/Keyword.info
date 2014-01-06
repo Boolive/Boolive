@@ -16,7 +16,7 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
-            "order": 2
+            "order": 3
         },
         "cache": {
             "is_default_value": true,

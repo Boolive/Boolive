@@ -8,6 +8,8 @@
  */
 namespace Library\views\ViewSingle;
 
+use Boolive\cache\Cache;
+use Boolive\input\Input;
 use Library\views\View\View,
     Boolive\values\Rule,
     Boolive\commands\Commands;
@@ -42,11 +44,16 @@ class ViewSingle extends View
 
     function work()
     {
+//        $key = 'ViewSingle/'.$this->id().'/'.md5(Cache::getId($this->_input_child));
+
         // Запускаем по очереди подчиненных, пока один из них не сработает
         if ($this->_input['REQUEST']['view_name']){
             // Если указано, каким отображать, то только его пробуем запустить
             $views = array($this->{$this->_input['REQUEST']['view_name']}->linked());
             unset($this->_input_child['REQUEST']['view_name']);
+//        }else
+//        if ($view_name = Cache::get($key)){
+//            $views = array($this->{json_decode($view_name)}->linked());
         }else{
             // Все виды дл запуска
             $views = $this->getViews();
@@ -56,6 +63,7 @@ class ViewSingle extends View
             /** @var View $view */
             $out = $view->start($this->_commands, $this->_input_child);
             if ($out !== false){
+//                if (!isset($view_name)) Cache::set($key, $view->name());
                 return $out;
             }
             $view = next($views);

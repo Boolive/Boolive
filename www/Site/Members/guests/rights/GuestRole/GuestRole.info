@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/access/Role",
-    "order": 3,
+    "order": 2,
     "children": {
         "title": {
             "value": "Роль гостя",
