@@ -31,7 +31,7 @@ class RESTful extends View
                 'path' => Rule::string(), // uri изменяемого объекта (PUT) или в который добавлять новый (POST)
                 'method' => Rule::string(), // метод запроса
                 'call' => Rule::string()->default('')->required(), // вызываемый метод объекта
-                'entity' => Rule::arrays(Rule::string())->default(array())->required(), // атрибуты изменяемого объекта
+                'entity' => Rule::arrays(Rule::string(), true)->default(array())->required(), // атрибуты изменяемого объекта
                 'file_content' => Rule::int()->default(0)->required(), // Экпортировать файл объекта или нет?
                 'class_content' => Rule::int()->default(0)->required() // Экпортировать класс объекта или нет?
             )),
@@ -59,7 +59,7 @@ class RESTful extends View
                 if (isset($this->_input['FILES']['entity']['file'])){
                     $attribs['file'] = $this->_input['FILES']['entity']['file'];
                 }else{
-                    if (isset($attribs['file'])) unset($attribs['file']);
+                    if (isset($attribs['file']['tmp_name'])) unset($attribs['file']['tmp_name']);
                 }
                 if ($this->_input['REQUEST']['method'] == 'PUT'){
                     $this->put(Data::read($this->_input['REQUEST']['path']), $attribs);
@@ -159,10 +159,18 @@ class RESTful extends View
             if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
             if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
             if (isset($attribs['is_mandatory'])) $obj->isMandatory(!empty($attribs['is_mandatory']));
-            $class_changed = isset($attribs['is_default_class']) && (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
-            if (isset($attribs['is_default_class'])){
-                $obj->isDefaultClass(!empty($attribs['is_default_class']));
+
+            // Класс
+            if (isset($attribs['logic']) && empty($attribs['is_default_class'])){
+                $class_changed = !$obj->isDefaultClass();
+                $obj->logic($attribs['logic']);
+            }else{
+                $class_changed = isset($attribs['is_default_class']) && (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
+                if (isset($attribs['is_default_class'])){
+                    $obj->isDefaultClass(!empty($attribs['is_default_class']));
+                }
             }
+
             // Проверка и сохранение
 
             $obj->save(false);

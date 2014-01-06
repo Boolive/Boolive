@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "LogicEditor.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/LogicEditor",
+    "is_link": true,
+    "order": 34
+}

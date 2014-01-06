@@ -1,6 +1,13 @@
 Boolive Change Log
 ==================
 
+Version 2.0.rc
+----------------------------
+- new Ace editor is added to the library (VladimirShestakov)
+- new #111 LogicEditor is added to the admin panel (VladimirShestakov)
+- new #165 FileEditor is added to the admin panel (VladimirShestakov)
+
+
 Version 2.0.beta December, 31 2013
 ----------------------------
 - new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
