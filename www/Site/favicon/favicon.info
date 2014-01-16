@@ -2,8 +2,8 @@
     "value": "favicon.png",
     "value_type": 3,
     "proto": "/Library/basic/Image",
-    "is_mandatory": true,
-    "order": 6,
+    "is_property": true,
+    "order": 60,
     "children": {
         "title": {
             "value": "Favicon",

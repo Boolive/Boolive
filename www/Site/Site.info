@@ -2,6 +2,20 @@
     "value": "",
     "proto": "/Library/views/Site",
     "is_default_class": false,
-    "is_mandatory": true,
-    "order": 10
+    "order": 10,
+    "children": {
+        "title": {
+            "value": "Мой сайт",
+            "proto": "/Library/views/Site/title",
+            "is_property": true,
+            "order": 57
+        },
+        "description": {
+            "value": "Мой самый любимый сайт!",
+            "value_type": 2,
+            "proto": "/Library/views/Site/description",
+            "is_property": true,
+            "order": 58
+        }
+    }
 }

@@ -2,8 +2,8 @@
     "value": "site_logo.png",
     "value_type": 3,
     "proto": "/Library/basic/Image",
-    "is_mandatory": true,
-    "order": 5,
+    "is_property": true,
+    "order": 59,
     "children": {
         "title": {
             "value": "Логотип",

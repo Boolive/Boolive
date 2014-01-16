@@ -10,6 +10,7 @@
             "proto": "/Library/basic/Image/extentions/title",
             "is_hidden": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }
