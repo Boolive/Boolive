@@ -48,6 +48,7 @@ class SearchResult extends Part
                     array('attr', 'is_hidden', '=', 0),
                     array('attr', 'is_draft', '=', 0),
                     array('attr', 'diff', '!=', Entity::DIFF_ADD),
+                    array('attr', 'is_property', '=', 0),
                     array('any', array(
                         array('child', 'title', array(array('match',$search,1))),
                         array('child', 'text', array(array('match',$search,1)))

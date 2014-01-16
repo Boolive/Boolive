@@ -36,13 +36,13 @@ class Layout extends Widget
 //            $this->_input_child['REQUEST']['page'] = 1;
 //        }
         $object = null;
-        // объект по умолчанию
+        // объект по умолчанию - первый в /contents не являющейся свойством
         if (empty($uri) && ($object = Data::read(array(
                 'select' => 'children',
                 'from' => '/Contents',
                 'where' => array(
                     array('attr', 'is_hidden', '=', 0),
-                    array('attr', 'is_mandatory', '=', 0)
+                    array('attr', 'is_property', '=', 0)
                 ),
                 'order' => array(
                     array('order', 'ASC')

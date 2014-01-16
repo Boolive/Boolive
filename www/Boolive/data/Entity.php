@@ -61,7 +61,8 @@ class Entity implements ITrace
         'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
-        'is_mandatory'  => 0,
+        'is_mandatory' => 0,
+        'is_property'  => 0,
         'is_relative'  => 0,
         'is_default_value' => null, // по умолчанию равен id
         'is_default_class' => 0,
@@ -158,7 +159,8 @@ class Entity implements ITrace
             'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
             'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
             'is_link'      => Rule::uri(), // Ссылка или нет?
-            'is_mandatory'  => Rule::bool()->int(), // Признак, обязательный или дополненый?
+            'is_mandatory' => Rule::bool()->int(), // Признак, обязательный или дополненый?
+            'is_property'  => Rule::bool()->int(), // Признак, свойство или самостоятельный объект?
             'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
             'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё?
             'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
@@ -497,6 +499,8 @@ class Entity implements ITrace
                         'base64' => $base64,
                         'content' => $only_hash? null : ($base64 ? base64_encode($c) : $c)
                     );
+                }else{
+                    $this->_attribs['class_content'] = false;
                 }
             }
         }
@@ -628,6 +632,22 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         return !empty($this->_attribs['is_mandatory']);
+    }
+
+    /**
+     * Признак, объект является свойством для родителя или самостоятельным.
+     * Признак используется для оптимизации выборок и удобства предствления объектов в админке
+     * @param null|bool $is_property  Новое значение, если не null
+     * @return bool
+     */
+    function isProperty($is_property = null)
+    {
+        if (isset($is_property) && (empty($this->_attribs['is_property']) == $is_property)){
+            $this->_attribs['is_property'] = $is_property;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_property']);
     }
 
     /**
@@ -1658,6 +1678,9 @@ class Entity implements ITrace
                 if ($cond[1] == 'is_mandatory'){
                     $value = $this->isMandatory();
                 }else
+                if ($cond[1] == 'is_property'){
+                    $value = $this->isProperty();
+                }else
                 if ($cond[1] == 'parent_cnt'){
                     $value = $this->parentCount();
                 }else
@@ -1779,6 +1802,7 @@ class Entity implements ITrace
     function in($parent)
     {
         if ($this->eq($parent)) return true;
+        if ($parent->_attribs['uri'] == '' && !$parent->isExist()) return false;
         return $this->childOf($parent);
     }
 
@@ -1866,6 +1890,7 @@ class Entity implements ITrace
         if ($this->isDraft(null, false)) $export['is_draft'] = true;
         if ($this->isMandatory()) $export['is_mandatory'] = true;
         if ($this->isRelative()) $export['is_relative'] = true;
+        if ($this->isProperty()) $export['is_property'] = true;
         $export['order'] = $this->order();
         // Расширенный импорт
         if ($more_info){
@@ -1880,6 +1905,7 @@ class Entity implements ITrace
             if (!$this->isDraft()) $export['is_draft'] = false;
             if (!$this->isRelative()) $export['is_relative'] = false;
             if (!$this->isMandatory()) $export['is_mandatory'] = false;
+            if (!$this->isProperty()) $export['is_property'] = false;
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
             if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
             if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
@@ -1978,6 +2004,7 @@ class Entity implements ITrace
         if (!empty($info['is_draft'])) $this->isDraft(true);
         if (!empty($info['is_relative'])) $this->isRelative(true);
         if (!empty($info['is_mandatory'])) $this->isMandatory(true);
+        if (!empty($info['is_property'])) $this->isProperty(true);
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);

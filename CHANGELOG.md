@@ -25,6 +25,7 @@ Version 2.0.beta December, 31 2013
 - new Widgets and other views can be added to the site pages and sections (VladimirShestakov)
 - new Added start page in the admin panel (VladimirShestakov)
 - enh #160 Primary rights (prohibitions) for all users is configured (VladimirShestakov)
+- new #161 Added the sign "property" for objects (VladimirShestakov)
 
 Version 2.0.alpha September, 30 2013
 ----------------------------

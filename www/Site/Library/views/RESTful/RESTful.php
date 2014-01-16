@@ -141,15 +141,15 @@ class RESTful extends View
             // Значение
             if (empty($attribs['is_default_value'])){
                 if (isset($attribs['value'])) $obj->value($attribs['value']);
+                // Файл
+                if (isset($attribs['file'])){
+                    $obj->file($attribs['file']);
+                }else{
+                    if (isset($attribs['is_file'])) $obj->isFile(!empty($attribs['is_file']));
+                }
             }else{
                 // Значения по умолчанию от прототипа
                 $obj->isDefaultValue(true);
-            }
-            // Файл
-            if (isset($attribs['file'])){
-                $obj->file($attribs['file']);
-            }else{
-                if (isset($attribs['is_file'])) $obj->isFile(!empty($attribs['is_file']));
             }
             if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
             if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
@@ -159,20 +159,17 @@ class RESTful extends View
             if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
             if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
             if (isset($attribs['is_mandatory'])) $obj->isMandatory(!empty($attribs['is_mandatory']));
-
+            if (isset($attribs['is_property'])) $obj->isProperty(!empty($attribs['is_property']));
             // Класс
-            if (isset($attribs['logic']) && empty($attribs['is_default_class'])){
+            if (empty($attribs['is_default_class'])){
+                if (isset($attribs['logic'])) $obj->logic($attribs['logic']);
                 $class_changed = !$obj->isDefaultClass();
-                $obj->logic($attribs['logic']);
             }else{
-                $class_changed = isset($attribs['is_default_class']) && (bool)$obj->isDefaultClass() != empty($attribs['is_default_class']);
-                if (isset($attribs['is_default_class'])){
-                    $obj->isDefaultClass(!empty($attribs['is_default_class']));
-                }
+                $class_changed = !(bool)$obj->isDefaultClass();
+                $obj->isDefaultClass(true);
             }
 
             // Проверка и сохранение
-
             $obj->save(false);
             // Если изменился класс, то повторно выбрать объект из хранилища, чтобы обновилась его логика
             if ($class_changed){
@@ -226,6 +223,7 @@ class RESTful extends View
             if (isset($attribs['is_link'])) $obj->isLink(!empty($attribs['is_link']));
             if (isset($attribs['is_relative'])) $obj->isRelative(!empty($attribs['is_relative']));
             if (isset($attribs['is_mandatory'])) $obj->isMandatory(!empty($attribs['is_mandatory']));
+            if (isset($attribs['is_property'])) $obj->isProperty(!empty($attribs['is_property']));
             if (isset($attribs['is_default_class'])){
                 $obj->isDefaultClass(!empty($attribs['is_default_class']));
             }

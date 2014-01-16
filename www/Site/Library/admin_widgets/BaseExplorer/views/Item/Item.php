@@ -30,6 +30,7 @@ class Item extends Widget
         $v['is_file'] = $obj->isFile();
         $v['is_link'] = $obj->isLink();
         $v['is_mandatory'] = $obj->isMandatory();
+        $v['is_property'] = $obj->isMandatory();
         $v['is_default_value'] = $obj->isDefaultValue();
         $v['link'] = $obj->linked()->uri(false, true);
         if ($p = $obj->proto()){

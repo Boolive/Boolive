@@ -408,7 +408,10 @@ class MySQLStore extends Entity
                             $error->access = new Error('Нет доступа на смену признака "своя логика"', 'write/change/is_default_class');
                         }else
                         if ($current['is_mandatory'] != $attr['is_mandatory'] && !$entity->isAccessible('write/change/is_mandatory')){
-                            $error->access = new Error('Нет доступа на смену признака "свойство"', 'write/change/is_mandatory');
+                            $error->access = new Error('Нет доступа на смену признака "обязательный"', 'write/change/is_mandatory');
+                        }else
+                        if ($current['is_property'] != $attr['is_property'] && !$entity->isAccessible('write/change/is_property')){
+                            $error->access = new Error('Нет доступа на смену признака "свойство"', 'write/change/is_property');
                         }else
                         if ($current['diff'] != $attr['diff'] && $attr['diff'] == Entity::DIFF_NO && !$entity->isAccessible('write/change/diff')){
                             $error->access = new Error('Нет доступа на установку обновлений', 'write/change/diff');
@@ -517,7 +520,7 @@ class MySQLStore extends Entity
                     unset($attr['class']);
                 }
                 $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type',
-                        'is_draft', 'is_hidden', 'is_link', 'is_mandatory', 'is_relative', 'is_default_value', 'is_default_class',
+                        'is_draft', 'is_hidden', 'is_link', 'is_mandatory', 'is_property', 'is_relative', 'is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt', 'update_time', 'diff', 'diff_from');
                 $cnt = count($attr_names);
                 // Запись объекта (создание или обновление при наличии)
@@ -910,6 +913,7 @@ class MySQLStore extends Entity
                             if (!$proto->isRelative() || !$c->isRelative()){
                                 $child = $proto->birth($entity, false);
                                 $child->_attribs['is_mandatory'] = $proto->isMandatory();
+                                $child->_attribs['is_property'] = $proto->isProperty();
                                 $child->_attribs['diff'] = $diff;
                                 $child->_attribs['diff_from'] = 1;
                                 $this->write($child, false);
@@ -2185,6 +2189,7 @@ class MySQLStore extends Entity
         if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
         $attribs['is_mandatory'] = intval($attribs['is_mandatory']);
+        $attribs['is_property'] = intval($attribs['is_property']);
         $attribs['update_step'] = intval($attribs['update_step']);
         $attribs['update_time'] = intval($attribs['update_time']);
         $attribs['diff'] = intval($attribs['diff']);
@@ -2387,6 +2392,7 @@ class MySQLStore extends Entity
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
                   `is_mandatory` INT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Обязательный (1) или нет (0)? ',
+                  `is_property` INT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Свойство (1) или нет (0)? ',
                   `is_relative` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор прототипа, чьё значение наследуется (если не наследуется, то свой id)',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
