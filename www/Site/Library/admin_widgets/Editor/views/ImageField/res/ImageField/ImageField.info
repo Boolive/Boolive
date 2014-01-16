@@ -8,6 +8,7 @@
             "value": "jQueryUI Boolive ImageField",
             "proto": "/Library/admin_widgets/Editor/views/Field/res/Field/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "depends": {

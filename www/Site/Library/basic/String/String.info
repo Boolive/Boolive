@@ -7,11 +7,15 @@
         "title": {
             "value": "Строка",
             "proto": "/Library/basic/Object/title",
+            "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Строковое значение длиной 255 символов",
+            "value_type": 2,
             "proto": "/Library/basic/Object/description",
+            "is_property": true,
             "order": 2
         }
     }

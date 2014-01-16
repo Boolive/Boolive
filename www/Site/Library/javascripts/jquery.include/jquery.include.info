@@ -8,12 +8,14 @@
             "value": "Загрузчик JS/CSS файлов",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Плагин для динамической загрузки JavaScript и CSS файлов со стороны клиента (браузера)",
             "proto": "/Library/javascripts/patterns/jQueryScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +23,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

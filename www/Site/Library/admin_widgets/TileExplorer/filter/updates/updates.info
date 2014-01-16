@@ -1,5 +1,7 @@
 {
-    "value": 0,
+    "value": 1,
     "proto": "/Library/admin_widgets/BaseExplorer/filter/updates",
-    "order": 6
+    "is_mandatory": true,
+    "is_property": true,
+    "order": 11
 }

@@ -3,5 +3,6 @@
     "value": "",
     "proto": "/Library/access/Role/read",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3
 }

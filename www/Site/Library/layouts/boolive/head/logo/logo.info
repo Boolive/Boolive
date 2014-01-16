@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/views/Logo",
     "is_mandatory": true,
+    "is_property": true,
     "order": 2,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "Логотип",
             "proto": "/Library/views/Logo/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object": {
@@ -25,6 +27,7 @@
                     "value": "Изображение",
                     "proto": "/Library/views/Logo/object/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -34,6 +37,7 @@
             "value": "",
             "proto": "/Library/views/Logo/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -41,6 +45,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Logo/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -49,6 +54,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/Logo/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -58,6 +64,7 @@
             "value": "Отображает изображение с ссылкой на главную страницу сайта",
             "proto": "/Library/views/Logo/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         }
     }

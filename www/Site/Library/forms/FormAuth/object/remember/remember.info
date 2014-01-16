@@ -2,12 +2,14 @@
     "value": 0,
     "proto": "/Library/basic/Boolean",
     "is_mandatory": true,
+    "is_property": true,
     "order": 5,
     "children": {
         "title": {
             "value": "Запомнить",
             "proto": "/Library/basic/Boolean/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,6 +18,7 @@
             "value_type": 2,
             "proto": "/Library/basic/Boolean/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

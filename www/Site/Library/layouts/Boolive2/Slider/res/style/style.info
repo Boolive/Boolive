@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/content_widgets/Slider/res/style",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "CSS",
             "proto": "/Library/content_widgets/Slider/res/style/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -19,6 +21,7 @@
             "value_type": 2,
             "proto": "/Library/content_widgets/Slider/res/style/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

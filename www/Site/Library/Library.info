@@ -1,17 +1,19 @@
 {
     "value": "",
+    "proto": "/Library/basic/Package",
     "order": 51,
     "children": {
         "title": {
             "value": "Библиотека",
-            "is_hidden": true,
-            "is_mandatory": true,
+            "proto": "/Library/basic/Package/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Готовые для использования объекты",
-            "is_hidden": true,
-            "is_mandatory": true,
+            "value_type": 2,
+            "proto": "/Library/basic/Package/description",
+            "is_property": true,
             "order": 2
         }
     }

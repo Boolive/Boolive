@@ -9,6 +9,7 @@
             "value": "Виджет",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -21,6 +22,7 @@
             "value": "",
             "proto": "/Library/views/ViewGroup",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -40,6 +42,7 @@
             "value": 0,
             "proto": "/Library/basic/Boolean",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {

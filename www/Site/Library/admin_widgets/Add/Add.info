@@ -4,18 +4,20 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_default_class": false,
-    "order": 25,
+    "order": 28,
     "children": {
         "title": {
             "value": "Добавить",
             "proto": "/Library/admin_widgets/SelectObject/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Добавление нового объекта",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -23,6 +25,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -30,6 +33,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/admin_widgets/SelectObject/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -38,6 +42,7 @@
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 4
                 }
             }
@@ -47,6 +52,7 @@
             "value": 0,
             "proto": "/Library/admin_widgets/SelectObject/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 9,
             "children": {
                 "title": {
@@ -54,6 +60,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/admin_widgets/SelectObject/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -62,6 +69,7 @@
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/SelectObject/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -72,6 +80,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/SelectObject/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 10,
             "children": {
                 "title": {
@@ -79,6 +88,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/SelectObject/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

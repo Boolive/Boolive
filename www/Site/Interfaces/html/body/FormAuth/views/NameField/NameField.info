@@ -10,6 +10,7 @@
             "value": "Поле формы",
             "proto": "/Library/forms/FormAuth/views/NameField/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +18,7 @@
             "value": "Эталон поля ввода строки",
             "proto": "/Library/forms/FormAuth/views/NameField/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -24,6 +26,7 @@
             "value": "",
             "proto": "/Library/forms/FormAuth/views/NameField/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -31,6 +34,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/forms/FormAuth/views/NameField/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -39,6 +43,7 @@
                     "value_type": 2,
                     "proto": "/Library/forms/FormAuth/views/NameField/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -48,6 +53,7 @@
             "value": "attr(name,=,name)",
             "proto": "/Library/forms/FormAuth/views/NameField/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -55,6 +61,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/views/NameField/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

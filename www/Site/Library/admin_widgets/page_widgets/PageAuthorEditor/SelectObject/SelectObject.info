@@ -4,12 +4,14 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Виджет выбора автора",
             "proto": "/Library/admin_widgets/SelectObject/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value": "Виджет выбора объектов из всех существующих",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -24,6 +27,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -32,6 +36,7 @@
                     "proto": "/Library/admin_widgets/SelectObject/res/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -41,6 +46,7 @@
                     "proto": "/Library/admin_widgets/SelectObject/res/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 6
                 }
             }

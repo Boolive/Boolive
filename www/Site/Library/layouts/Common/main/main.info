@@ -3,18 +3,21 @@
     "value": "",
     "proto": "/Library/views/ViewGroup",
     "is_mandatory": true,
+    "is_property": true,
     "order": 7,
     "children": {
         "title": {
             "value": "Центр",
             "proto": "/Library/views/ViewGroup/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Область вставки для содержимого страницы",
             "proto": "/Library/views/ViewGroup/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

@@ -8,6 +8,7 @@
             "value": "Поле логического значения",
             "proto": "/Library/admin_widgets/Editor/views/Field/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -15,6 +16,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/Editor/views/Field/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object_rule": {
@@ -22,6 +24,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/Editor/views/Field/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

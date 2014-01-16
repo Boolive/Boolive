@@ -3,5 +3,6 @@
     "value": 0,
     "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/cache",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3
 }

@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer/FilterTool",
     "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "Меню фильтра",
             "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -18,6 +20,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "cache": {
@@ -25,6 +28,7 @@
             "value": 0,
             "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

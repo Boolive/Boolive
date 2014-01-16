@@ -9,12 +9,14 @@
             "value": "Поиск по сайту",
             "proto": "/Library/content_widgets/Part/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отображает форму и результаты поиска",
             "proto": "/Library/content_widgets/Part/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,6 +24,7 @@
             "value": "",
             "proto": "/Library/content_widgets/Part/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         },
         "cache": {
@@ -29,6 +32,7 @@
             "value": 0,
             "proto": "/Library/content_widgets/Part/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4
         },
         "object_rule": {
@@ -36,11 +40,13 @@
             "value": "is(/Library/content_samples/Part)",
             "proto": "/Library/content_widgets/Part/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         },
         "object": {
             "value": "",
             "is_mandatory": true,
+            "is_property": true,
             "order": 9
         }
     }

@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "Boolive.Widget",
             "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -19,6 +21,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -26,6 +29,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -33,6 +37,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction/depends/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -41,6 +46,7 @@
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/ProgressAction/res/Boolive.ProgressAction/depends/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

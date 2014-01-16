@@ -9,12 +9,14 @@
             "value": "Меню авторизации",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Кнопки выхода на сайт и переход к профилю текущего пользователя",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,6 +24,7 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +41,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/Widget/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -46,6 +51,7 @@
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4
         },
         "object_rule": {
@@ -54,6 +60,7 @@
             "value_type": 2,
             "proto": "/Library/views/Widget/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         }
     }

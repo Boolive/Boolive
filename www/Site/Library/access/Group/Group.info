@@ -8,12 +8,14 @@
             "value": "Группа пользователей",
             "proto": "/Library/access/Member/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Содержит пользователей и подгруппы с возможностью назначить им общие права",
             "value_type": 2,
             "proto": "/Library/access/Member/description",
+            "is_property": true,
             "order": 2
         }
     }

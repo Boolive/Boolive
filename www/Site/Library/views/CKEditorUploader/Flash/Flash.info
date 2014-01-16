@@ -4,5 +4,6 @@
     "proto": "/Library/basic/Flash",
     "is_link": true,
     "is_mandatory": true,
+    "is_property": true,
     "order": 4
 }

@@ -9,6 +9,7 @@
             "value": "Список видов",
             "proto": "/Library/forms/FormAuth/views/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,6 +17,7 @@
             "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
             "proto": "/Library/forms/FormAuth/views/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

@@ -7,13 +7,14 @@
             "value": "Администраторы",
             "proto": "/Library/access/Group/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Пользователи, управляющие сайтом",
             "value_type": 2,
             "proto": "/Library/access/Group/description",
-            "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

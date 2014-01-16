@@ -20,6 +20,7 @@
             "value": "",
             "proto": "/Library/views/ViewGroup",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {

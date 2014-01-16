@@ -9,12 +9,14 @@
             "value": "Логотип",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отображает изображение с ссылкой на главную страницу сайта",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object": {
@@ -22,6 +24,7 @@
             "value_type": 3,
             "proto": "/Library/basic/Image",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Изображение",
                     "proto": "/Library/basic/Image/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -38,6 +42,7 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -45,6 +50,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -53,6 +59,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/Widget/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

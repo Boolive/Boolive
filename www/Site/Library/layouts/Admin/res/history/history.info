@@ -5,6 +5,7 @@
     "proto": "/Library/javascripts/history",
     "is_link": true,
     "is_mandatory": true,
+    "is_property": true,
     "order": 5,
     "children": {
         "title": {
@@ -12,6 +13,7 @@
             "value": "HTML5 History API",
             "proto": "/Library/javascripts/history/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -19,6 +21,7 @@
             "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
             "proto": "/Library/javascripts/history/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

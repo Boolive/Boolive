@@ -11,6 +11,7 @@
             "value": "Логотип",
             "proto": "/Library/views/Logo/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "description": {
@@ -18,31 +19,15 @@
             "value": "Отображает изображение с ссылкой на главную страницу сайта",
             "proto": "/Library/views/Logo/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
-        },
-        "object": {
-            "is_default_value": true,
-            "value": "site_logo.png",
-            "value_type": 3,
-            "proto": "/options/site_logo",
-            "is_link": true,
-            "is_mandatory": true,
-            "order": 6,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Изображение",
-                    "proto": "/Library/views/Logo/object/title",
-                    "is_mandatory": true,
-                    "order": 1
-                }
-            }
         },
         "res": {
             "is_default_value": true,
             "value": "",
             "proto": "/Library/views/Logo/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7,
             "children": {
                 "title": {
@@ -50,6 +35,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Logo/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -58,7 +44,28 @@
                     "value_type": 2,
                     "proto": "/Library/views/Logo/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
+                }
+            }
+        },
+        "object": {
+            "is_default_value": true,
+            "value": "site_logo.png",
+            "value_type": 3,
+            "proto": "/site_logo",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Изображение",
+                    "proto": "/Library/views/Logo/object/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
                 }
             }
         }

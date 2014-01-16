@@ -3,5 +3,6 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
+    "is_property": true,
     "order": 7
 }

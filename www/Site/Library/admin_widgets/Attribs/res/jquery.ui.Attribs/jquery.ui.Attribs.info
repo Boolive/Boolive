@@ -3,12 +3,14 @@
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "is_mandatory": true,
+    "is_property": true,
     "order": 5,
     "children": {
         "title": {
             "value": "Boolive.Attribs",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value_type": 2,
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -25,6 +28,7 @@
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

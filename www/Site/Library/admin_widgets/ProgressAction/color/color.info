@@ -2,6 +2,7 @@
     "value": "#499DF2",
     "proto": "/Library/basic/Color",
     "is_mandatory": true,
+    "is_property": true,
     "order": 7,
     "children": {
         "title": {
@@ -9,13 +10,16 @@
             "value": "Цвет",
             "proto": "/Library/basic/Color/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Код цвета в HEX формате. Например #FF0099",
+            "value_type": 2,
             "proto": "/Library/basic/Color/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

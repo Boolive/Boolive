@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/Editor/views/Field/res/style_field",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3
 }

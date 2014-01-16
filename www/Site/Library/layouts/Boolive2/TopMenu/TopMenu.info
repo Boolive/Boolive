@@ -11,6 +11,7 @@
             "value": "Горизонтальное меню",
             "proto": "/Library/menus/TopMenu/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -18,6 +19,7 @@
             "value": "Навигационное меню с выпадающими подменю",
             "proto": "/Library/menus/TopMenu/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -25,6 +27,7 @@
             "value": "",
             "proto": "/Library/menus/TopMenu/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -32,6 +35,7 @@
                     "value": "",
                     "proto": "/Library/menus/TopMenu/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -40,6 +44,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/TopMenu/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -48,6 +53,7 @@
             "value": 1,
             "proto": "/Library/menus/TopMenu/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -55,6 +61,7 @@
                     "value": "",
                     "proto": "/Library/menus/TopMenu/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -63,6 +70,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/TopMenu/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -73,6 +81,7 @@
             "value_type": 2,
             "proto": "/Library/menus/TopMenu/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -80,6 +89,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/menus/TopMenu/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -90,6 +100,7 @@
             "proto": "/Library/menus/TopMenu/object",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 7
         }
     }

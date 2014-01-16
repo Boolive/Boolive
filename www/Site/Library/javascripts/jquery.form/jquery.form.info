@@ -8,12 +8,14 @@
             "value": "Отправка форм по AJAX",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отправка форм",
             "proto": "/Library/javascripts/patterns/jQueryScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +23,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +31,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +40,7 @@
                     "value_type": 2,
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

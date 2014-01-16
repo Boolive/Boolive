@@ -8,12 +8,14 @@
             "value": "Выход",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отмена авторизации",
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

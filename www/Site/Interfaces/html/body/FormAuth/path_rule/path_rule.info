@@ -2,6 +2,7 @@
     "value": "/^\\/(admin|login)(\\/|$)/",
     "proto": "/Library/forms/FormAuth/path_rule",
     "is_mandatory": true,
+    "is_property": true,
     "order": 12,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Правило на URL (http)",
             "proto": "/Library/forms/FormAuth/path_rule/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value_type": 2,
             "proto": "/Library/forms/FormAuth/path_rule/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

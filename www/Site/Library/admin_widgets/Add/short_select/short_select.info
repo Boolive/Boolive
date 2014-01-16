@@ -3,6 +3,7 @@
     "value": "",
     "proto": "/Library/admin_widgets/SelectObject/short_select",
     "is_mandatory": true,
+    "is_property": true,
     "order": 8,
     "children": {
         "title": {
@@ -10,6 +11,7 @@
             "value": "Быстрый выбор",
             "proto": "/Library/admin_widgets/SelectObject/short_select/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

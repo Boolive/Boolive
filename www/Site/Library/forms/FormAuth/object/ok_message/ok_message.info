@@ -1,5 +1,6 @@
 {
     "value": "Успешная авторизация",
     "is_mandatory": true,
+    "is_property": true,
     "order": 6
 }

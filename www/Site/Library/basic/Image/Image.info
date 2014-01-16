@@ -8,12 +8,14 @@
         "title": {
             "value": "Изображение",
             "proto": "/Library/basic/File/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Файл изображения",
             "value_type": 2,
             "proto": "/Library/basic/File/description",
+            "is_property": true,
             "order": 4
         }
     }

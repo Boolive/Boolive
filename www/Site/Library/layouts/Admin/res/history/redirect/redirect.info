@@ -3,5 +3,6 @@
     "value": "1",
     "proto": "/Library/javascripts/history/redirect",
     "is_mandatory": true,
+    "is_property": true,
     "order": 6
 }

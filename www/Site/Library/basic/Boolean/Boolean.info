@@ -7,11 +7,15 @@
         "title": {
             "value": "Булево",
             "proto": "/Library/basic/Object/title",
+            "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Логическое значение ДА или НЕТ",
+            "value_type": 2,
             "proto": "/Library/basic/Object/description",
+            "is_property": true,
             "order": 2
         }
     }

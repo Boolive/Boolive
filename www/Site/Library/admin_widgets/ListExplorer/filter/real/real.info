@@ -3,5 +3,6 @@
     "value": 1,
     "proto": "/Library/admin_widgets/BaseExplorer/filter/real",
     "is_mandatory": true,
-    "order": 1
+    "is_property": true,
+    "order": 10
 }

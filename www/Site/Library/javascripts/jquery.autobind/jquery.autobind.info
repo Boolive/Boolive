@@ -8,12 +8,14 @@
             "value": "Автоподключение jquery плагинов",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Автоматически подключает плагины jquery к тегам с атрибутом data-plugin. Имя плагина берется из атрибута data-plugin",
             "proto": "/Library/javascripts/patterns/jQueryScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +23,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

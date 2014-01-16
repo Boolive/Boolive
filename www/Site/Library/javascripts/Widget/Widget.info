@@ -9,6 +9,7 @@
             "value": "jQueryUI Boolive Widget",
             "proto": "/Library/javascripts/JavaScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {

@@ -2,12 +2,14 @@
     "value": "",
     "proto": "/Library/views/ViewGroup",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4,
     "children": {
         "title": {
             "value": "Шапка",
             "proto": "/Library/views/ViewGroup/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,12 +18,14 @@
             "value_type": 2,
             "proto": "/Library/views/ViewGroup/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         },
         "cache": {
             "value": 1,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4
         }
     }

@@ -3,6 +3,7 @@
     "value_type": 3,
     "proto": "/Library/menus/Menu",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4,
     "children": {
         "title": {
@@ -10,6 +11,7 @@
             "value": "Меню",
             "proto": "/Library/menus/Menu/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value": "Навигационное меню по содержимому сайта.",
             "proto": "/Library/menus/Menu/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -24,6 +27,7 @@
             "value": "",
             "proto": "/Library/menus/Menu/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -31,6 +35,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/menus/Menu/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -39,6 +44,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/Menu/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -52,6 +58,7 @@
                 "title": {
                     "value": "Пункты",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -60,6 +67,7 @@
             "value": 1,
             "proto": "/Library/menus/Menu/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 9
         },
         "object_rule": {
@@ -68,6 +76,7 @@
             "value_type": 2,
             "proto": "/Library/menus/Menu/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 11,
             "children": {
                 "title": {
@@ -75,6 +84,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/menus/Menu/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

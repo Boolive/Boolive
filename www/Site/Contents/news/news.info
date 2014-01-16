@@ -7,6 +7,7 @@
             "value": "Новости",
             "proto": "/Library/content_samples/Part/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

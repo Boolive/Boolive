@@ -3,5 +3,6 @@
     "value": "1",
     "proto": "/Library/views/Logo/use_object",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4
 }

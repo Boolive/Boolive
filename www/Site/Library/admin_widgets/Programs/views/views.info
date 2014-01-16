@@ -3,19 +3,23 @@
     "value": "",
     "proto": "/Library/views/AutoWidget2/views",
     "is_mandatory": true,
+    "is_property": true,
     "order": 7,
     "children": {
         "title": {
             "value": "Список программ",
             "proto": "/Library/views/AutoWidget2/views/title",
-            "is_mandatory": true,
+            "is_hidden": true,
+            "is_property": true,
             "order": 11
         },
         "description": {
             "is_default_value": true,
             "value": "Из этого списка автоматически выбирается один \"вид\" для отображения объекта",
+            "value_type": 2,
             "proto": "/Library/views/AutoWidget2/views/description",
-            "is_mandatory": true,
+            "is_hidden": true,
+            "is_property": true,
             "order": 12
         }
     }

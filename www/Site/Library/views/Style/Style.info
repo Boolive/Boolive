@@ -6,11 +6,13 @@
         "title": {
             "value": "Стиль ",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Для оформления одного объекта",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "width": {

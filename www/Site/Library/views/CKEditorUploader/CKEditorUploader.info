@@ -9,12 +9,14 @@
             "value": "CKEditor File Uploader",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Загрузчик файлов для WYSIWYG редактора CKEditor 4",
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

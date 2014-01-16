@@ -4,12 +4,14 @@
     "value_type": 3,
     "proto": "/Library/menus/Menu",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Меню содержимого ",
             "proto": "/Library/menus/Menu/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         },
         "description": {
@@ -17,6 +19,7 @@
             "value": "Навигационное меню по содержимому сайта.",
             "proto": "/Library/menus/Menu/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4
         },
         "res": {
@@ -24,6 +27,7 @@
             "value": "",
             "proto": "/Library/menus/Menu/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -31,6 +35,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/menus/Menu/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -39,6 +44,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/Menu/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -49,12 +55,14 @@
             "proto": "/Library/menus/Menu/object",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 6
         },
         "cache": {
             "value": 1,
             "proto": "/Library/menus/Menu/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 15,
             "children": {
                 "title": {
@@ -62,6 +70,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/menus/Menu/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -70,6 +79,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/Menu/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -80,6 +90,7 @@
             "value_type": 2,
             "proto": "/Library/menus/Menu/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 17,
             "children": {
                 "title": {
@@ -87,6 +98,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/menus/Menu/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

@@ -9,12 +9,14 @@
             "value": "HTML5 History API",
             "proto": "/Library/javascripts/JavaScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
             "proto": "/Library/javascripts/JavaScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -22,6 +24,7 @@
             "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7,
             "children": {
                 "title": {
@@ -30,6 +33,7 @@
                     "proto": "/Library/javascripts/JavaScript/depends/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -39,6 +43,7 @@
                     "proto": "/Library/javascripts/JavaScript/depends/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

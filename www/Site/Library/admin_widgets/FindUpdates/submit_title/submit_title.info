@@ -2,6 +2,7 @@
     "value": "Искать",
     "proto": "/Library/admin_widgets/ProgressAction/submit_title",
     "is_mandatory": true,
+    "is_property": true,
     "order": 7,
     "children": {
         "title": {
@@ -9,6 +10,7 @@
             "value": "Название действия",
             "proto": "/Library/admin_widgets/ProgressAction/submit_title/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

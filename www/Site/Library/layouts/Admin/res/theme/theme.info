@@ -3,12 +3,14 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {
             "value": "CSS Theme",
             "proto": "/Library/views/Css/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value_type": 2,
             "proto": "/Library/views/Css/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

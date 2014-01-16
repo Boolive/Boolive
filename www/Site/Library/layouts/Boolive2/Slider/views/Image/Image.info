@@ -4,5 +4,6 @@
     "proto": "/Library/content_widgets/Slider/views/Image",
     "is_link": true,
     "is_mandatory": true,
+    "is_property": true,
     "order": 3
 }

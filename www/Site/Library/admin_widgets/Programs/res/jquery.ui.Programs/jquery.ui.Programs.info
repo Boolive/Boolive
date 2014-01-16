@@ -3,6 +3,7 @@
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/Boolive.Widget",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4,
     "children": {
         "depends": {
@@ -11,6 +12,7 @@
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         },
         "title": {
@@ -18,6 +20,7 @@
             "value": "Boolive.Widget",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4
         },
         "description": {
@@ -26,6 +29,7 @@
             "value_type": 2,
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         }
     }

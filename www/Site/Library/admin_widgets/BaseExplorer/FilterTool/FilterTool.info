@@ -4,12 +4,14 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {
             "value": "Меню фильтра",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -17,6 +19,7 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "cache": {
@@ -24,6 +27,7 @@
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

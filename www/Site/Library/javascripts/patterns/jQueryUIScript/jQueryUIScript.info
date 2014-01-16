@@ -8,12 +8,14 @@
             "value": "jQuery UI скрипт",
             "proto": "/Library/javascripts/patterns/jQueryScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "JavaScript использующий библиотеку jQueryUI и jQuery. Также применяется для создания плагинов для jQueryUI",
             "proto": "/Library/javascripts/patterns/jQueryScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +23,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -38,6 +42,7 @@
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

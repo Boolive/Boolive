@@ -9,12 +9,14 @@
             "value": "Программы для работы с объектами",
             "proto": "/Library/views/AutoWidget2/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Программами являются обозреватели и редакторы объектов. Выбираются автоматически по настройкам ассоциации на объекты",
             "proto": "/Library/views/AutoWidget2/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,12 +24,14 @@
             "value": "",
             "proto": "/Library/views/AutoWidget2/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +40,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidget2/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -45,6 +50,7 @@
             "value": 0,
             "proto": "/Library/views/AutoWidget2/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -52,6 +58,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidget2/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -60,6 +67,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidget2/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

@@ -7,6 +7,7 @@
             "value": "Виджеты админки",
             "proto": "/Library/basic/Package/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "description": {
@@ -14,6 +15,7 @@
             "value": "Коллекция объектов",
             "proto": "/Library/basic/Package/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

@@ -9,6 +9,7 @@
             "value": "Виджет ключевого слова",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -16,13 +17,15 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
-            "order": 3
+            "is_property": true,
+            "order": 2
         },
         "cache": {
             "is_default_value": true,
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4
         }
     }

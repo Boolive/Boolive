@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "jQueryUI Boolive BaseExplorer",
             "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

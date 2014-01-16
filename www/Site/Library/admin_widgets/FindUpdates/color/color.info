@@ -2,6 +2,7 @@
     "value": "#5D5D5D",
     "proto": "/Library/admin_widgets/ProgressAction/color",
     "is_mandatory": true,
+    "is_property": true,
     "order": 8,
     "children": {
         "title": {
@@ -9,13 +10,16 @@
             "value": "Цвет",
             "proto": "/Library/admin_widgets/ProgressAction/color/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "is_default_value": true,
             "value": "Код цвета в HEX формате. Например #FF0099",
+            "value_type": 2,
             "proto": "/Library/admin_widgets/ProgressAction/color/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

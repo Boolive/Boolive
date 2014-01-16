@@ -2,18 +2,21 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/ViewSingle",
-    "order": 14,
+    "order": 15,
     "children": {
         "title": {
             "value": "Операции",
             "proto": "/Library/views/ViewSingle/title",
-            "is_mandatory": true,
+            "is_hidden": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Операции над выбранными объектами",
+            "value_type": 2,
             "proto": "/Library/views/ViewSingle/description",
-            "is_mandatory": true,
+            "is_hidden": true,
+            "is_property": true,
             "order": 2
         }
     }

@@ -3,5 +3,6 @@
     "value": "Спасибо, сообщение успешно отправлено",
     "proto": "/Library/content_samples/Feedback/result_message",
     "is_mandatory": true,
+    "is_property": true,
     "order": 6
 }

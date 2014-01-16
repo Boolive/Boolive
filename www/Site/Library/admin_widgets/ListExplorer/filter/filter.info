@@ -3,5 +3,6 @@
     "value": "",
     "proto": "/Library/admin_widgets/BaseExplorer/filter",
     "is_mandatory": true,
+    "is_property": true,
     "order": 9
 }

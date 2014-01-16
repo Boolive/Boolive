@@ -8,12 +8,14 @@
             "value": "jQuery скрипт",
             "proto": "/Library/javascripts/JavaScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "JavaScript использующий библиотеку jQuery. Также применяется для создания плагинов для jQuery",
             "proto": "/Library/javascripts/JavaScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +23,7 @@
             "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "proto": "/Library/javascripts/JavaScript/depends/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -38,6 +42,7 @@
                     "proto": "/Library/javascripts/JavaScript/depends/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

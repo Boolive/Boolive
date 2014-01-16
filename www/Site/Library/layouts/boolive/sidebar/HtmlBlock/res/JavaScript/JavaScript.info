@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/views/HtmlBlock/res/JavaScript",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "JavaScript подсветки кода",
             "proto": "/Library/views/HtmlBlock/res/JavaScript/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -19,6 +21,7 @@
             "value_type": 2,
             "proto": "/Library/views/HtmlBlock/res/JavaScript/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -26,6 +29,7 @@
             "value": "",
             "proto": "/Library/views/HtmlBlock/res/JavaScript/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -33,6 +37,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/views/HtmlBlock/res/JavaScript/depends/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -41,6 +46,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/HtmlBlock/res/JavaScript/depends/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

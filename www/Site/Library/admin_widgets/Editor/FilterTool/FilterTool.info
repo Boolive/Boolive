@@ -4,6 +4,8 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer/FilterTool",
     "is_link": true,
+    "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {
@@ -11,6 +13,7 @@
             "value": "Меню фильтра",
             "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

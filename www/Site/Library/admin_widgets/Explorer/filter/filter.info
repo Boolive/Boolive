@@ -1,11 +1,13 @@
 {
     "value": "",
     "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {
             "value": "Фильтр",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

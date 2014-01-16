@@ -3,5 +3,6 @@
     "value": "",
     "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.menu/depends",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3
 }

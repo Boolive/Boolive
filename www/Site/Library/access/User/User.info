@@ -8,6 +8,7 @@
             "value": "Пользователь",
             "proto": "/Library/access/Member/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1,
             "children": {
                 "title": {
@@ -27,12 +28,14 @@
             "value": "none@none.none",
             "proto": "/Library/basic/Email",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6
         },
         "passw": {
             "value": "aa7351d4e6f08651bcb8f8962c9a0ed0879e5f45f4bc9e2f0433aa8cc5972eb6",
             "proto": "/Library/basic/Password",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7
         },
         "visit_time": {

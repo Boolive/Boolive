@@ -8,6 +8,7 @@
             "value": "Подстраница",
             "proto": "/Library/content_samples/Page/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,6 +17,7 @@
             "value_type": 2,
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

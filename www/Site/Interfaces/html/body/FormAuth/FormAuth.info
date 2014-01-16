@@ -3,7 +3,7 @@
     "value": "FormAuth.tpl",
     "value_type": 3,
     "proto": "/Library/forms/FormAuth",
-    "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {
@@ -11,6 +11,7 @@
             "value": "Аутентификация",
             "proto": "/Library/forms/FormAuth/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         },
         "description": {
@@ -18,6 +19,7 @@
             "value": "Для аутентификации пользователя перед доступом к закрытым разделам сайта",
             "proto": "/Library/forms/FormAuth/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6
         },
         "res": {
@@ -25,6 +27,7 @@
             "value": "",
             "proto": "/Library/forms/FormAuth/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7,
             "children": {
                 "title": {
@@ -32,6 +35,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/forms/FormAuth/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 },
                 "description": {
@@ -40,6 +44,7 @@
                     "value_type": 2,
                     "proto": "/Library/forms/FormAuth/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 3
                 }
             }
@@ -55,6 +60,7 @@
                     "value": "Модель авторизации",
                     "proto": "/Library/forms/FormAuth/object/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -64,6 +70,7 @@
             "value": 0,
             "proto": "/Library/forms/FormAuth/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 10,
             "children": {
                 "title": {
@@ -71,6 +78,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/forms/FormAuth/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -79,6 +87,7 @@
                     "value_type": 2,
                     "proto": "/Library/forms/FormAuth/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -89,6 +98,7 @@
             "value_type": 2,
             "proto": "/Library/forms/FormAuth/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 11,
             "children": {
                 "title": {
@@ -96,6 +106,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

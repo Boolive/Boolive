@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/Library/admin_widgets/isProperty",
+    "is_link": true,
+    "order": 26
+}

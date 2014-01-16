@@ -10,6 +10,7 @@
             "value": "Пароль",
             "proto": "/Library/forms/FormAuth/object/passw/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +18,7 @@
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/forms/FormAuth/object/passw/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

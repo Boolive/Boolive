@@ -3,6 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
@@ -10,6 +11,7 @@
             "value": "CSS",
             "proto": "/Library/views/Css/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

@@ -8,12 +8,14 @@
             "value": "Член :)",
             "proto": "/Library/basic/Object/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Базовый объект для пользователей и групп",
             "proto": "/Library/basic/Object/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

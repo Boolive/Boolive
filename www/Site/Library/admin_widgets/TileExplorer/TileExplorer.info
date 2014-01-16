@@ -2,12 +2,14 @@
     "value": "TileExplorer.tpl",
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer",
-    "order": 42,
+    "is_default_class": false,
+    "order": 24,
     "children": {
         "title": {
             "value": "Плитка",
             "proto": "/Library/admin_widgets/BaseExplorer/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -15,6 +17,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/BaseExplorer/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,6 +25,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -29,6 +33,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/admin_widgets/BaseExplorer/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +42,7 @@
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/BaseExplorer/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -46,6 +52,7 @@
             "value": 0,
             "proto": "/Library/admin_widgets/BaseExplorer/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -53,6 +60,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/admin_widgets/BaseExplorer/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -61,6 +69,7 @@
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/BaseExplorer/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -71,6 +80,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/BaseExplorer/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7,
             "children": {
                 "title": {
@@ -78,6 +88,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/BaseExplorer/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

@@ -4,6 +4,7 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject/res/jquery.ui.SelectObject",
     "is_mandatory": true,
+    "is_property": true,
     "order": 2,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "Boolive.Widget",
             "proto": "/Library/admin_widgets/SelectObject/res/jquery.ui.SelectObject/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -19,6 +21,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/SelectObject/res/jquery.ui.SelectObject/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -27,6 +30,7 @@
             "proto": "/Library/admin_widgets/SelectObject/res/jquery.ui.SelectObject/depends",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }

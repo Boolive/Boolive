@@ -7,12 +7,14 @@
         "title": {
             "value": "URL",
             "proto": "/Library/basic/String/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Абсолютный URL, например http://site.ru",
             "value_type": 2,
             "proto": "/Library/basic/String/description",
+            "is_property": true,
             "order": 2
         }
     }

@@ -4,6 +4,7 @@
     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem",
     "is_default_class": false,
     "is_mandatory": true,
+    "is_property": true,
     "order": 4,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "value": "Виджет объекта",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -18,6 +20,7 @@
             "value": "Отображение объекта в виде пункта списка",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -25,6 +28,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -33,6 +37,7 @@
                     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -42,6 +47,7 @@
                     "proto": "/Library/admin_widgets/Explorer/views/ObjectItem/res/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

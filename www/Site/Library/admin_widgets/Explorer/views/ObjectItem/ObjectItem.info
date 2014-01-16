@@ -4,18 +4,21 @@
     "proto": "/Library/views/Widget",
     "is_default_class": false,
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Виджет объекта",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отображение объекта в виде пункта списка",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -23,6 +26,7 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -30,6 +34,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -38,6 +43,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/Widget/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -47,6 +53,7 @@
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -54,6 +61,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -62,6 +70,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/Widget/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

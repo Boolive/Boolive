@@ -9,6 +9,7 @@
             "value": "Запомнить",
             "proto": "/Library/forms/FormAuth/object/remember/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +18,7 @@
             "value_type": 2,
             "proto": "/Library/forms/FormAuth/object/remember/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

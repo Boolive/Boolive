@@ -3,6 +3,7 @@
     "value": "",
     "proto": "/Library/access/Action",
     "is_mandatory": true,
+    "is_property": true,
     "order": 10,
     "children": {
         "title": {

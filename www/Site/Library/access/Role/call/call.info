@@ -3,18 +3,21 @@
     "value": "",
     "proto": "/Library/access/Action",
     "is_mandatory": true,
+    "is_property": true,
     "order": 8,
     "children": {
         "title": {
             "value": "Исполнение",
             "proto": "/Library/access/Action/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Вызов методов объекта",
             "proto": "/Library/access/Action/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

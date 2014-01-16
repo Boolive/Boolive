@@ -2,18 +2,21 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/ViewSingle",
-    "order": 13,
+    "order": 14,
     "children": {
         "title": {
             "value": "Вид",
             "proto": "/Library/views/ViewSingle/title",
-            "is_mandatory": true,
+            "is_hidden": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Обозреватели и редакторы объекта",
+            "value_type": 2,
             "proto": "/Library/views/ViewSingle/description",
-            "is_mandatory": true,
+            "is_hidden": true,
+            "is_property": true,
             "order": 2
         }
     }

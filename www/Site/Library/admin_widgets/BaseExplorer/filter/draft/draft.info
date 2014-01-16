@@ -2,7 +2,7 @@
     "value": 1,
     "proto": "/Library/basic/Boolean",
     "is_mandatory": true,
-    "order": 5,
+    "order": 6,
     "children": {
         "title": {
             "value": "Черновики",

@@ -2,12 +2,14 @@
     "value": "from@mail.ru",
     "proto": "/Library/basic/Email",
     "is_mandatory": true,
+    "is_property": true,
     "order": 2,
     "children": {
         "title": {
             "value": "Email адрес",
             "proto": "/Library/basic/Email/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,6 +18,7 @@
             "value_type": 2,
             "proto": "/Library/basic/Email/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

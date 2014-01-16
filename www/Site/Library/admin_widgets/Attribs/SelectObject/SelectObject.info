@@ -4,12 +4,14 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_mandatory": true,
+    "is_property": true,
     "order": 5,
     "children": {
         "title": {
             "value": "Выбор",
             "proto": "/Library/admin_widgets/SelectObject/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value": "Виджет выбора объектов из всех существующих",
             "proto": "/Library/admin_widgets/SelectObject/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -25,6 +28,7 @@
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         }
     }

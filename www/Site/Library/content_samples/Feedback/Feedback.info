@@ -6,6 +6,7 @@
         "title": {
             "value": "Обратная связь",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

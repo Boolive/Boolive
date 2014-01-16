@@ -3,5 +3,6 @@
     "proto": "/Library/content_widgets/Page",
     "is_link": true,
     "is_mandatory": true,
+    "is_property": true,
     "order": 4
 }

@@ -8,12 +8,14 @@
             "value": "Boolive.Bookmarks",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "jQueryUI виджет для меню закладок в админке",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "depends": {
@@ -21,6 +23,7 @@
             "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -28,6 +31,7 @@
                     "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +40,7 @@
                     "value_type": 2,
                     "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }

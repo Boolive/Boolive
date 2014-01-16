@@ -8,11 +8,13 @@
         "title": {
             "value": "Текст",
             "proto": "/Library/basic/Object/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/basic/Object/description",
+            "is_property": true,
             "order": 2
         }
     }

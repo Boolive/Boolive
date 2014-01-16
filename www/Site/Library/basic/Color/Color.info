@@ -6,11 +6,14 @@
         "title": {
             "value": "Цвет",
             "proto": "/Library/basic/Object/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Код цвета в HEX формате. Например #FF0099",
+            "value_type": 2,
             "proto": "/Library/basic/Object/description",
+            "is_property": true,
             "order": 2
         }
     }

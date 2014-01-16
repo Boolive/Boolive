@@ -3,5 +3,6 @@
     "value": "",
     "proto": "/Library/access/Role/write/create",
     "is_mandatory": true,
+    "is_property": true,
     "order": 1
 }

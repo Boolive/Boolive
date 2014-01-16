@@ -4,24 +4,27 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 38,
+    "order": 41,
     "children": {
         "title": {
             "value": "Обязательный",
             "proto": "/Library/admin_widgets/ToggleAction/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Неотъемлемый объект? Всегда наследуется",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object_rule": {
             "value": "access(write/change/is_mandatory)",
             "proto": "/Library/admin_widgets/ToggleAction/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

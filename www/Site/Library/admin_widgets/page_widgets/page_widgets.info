@@ -3,17 +3,19 @@
     "value": "",
     "proto": "/Library/basic/Package",
     "is_draft": true,
-    "order": 28,
+    "order": 31,
     "children": {
         "title": {
             "value": "Виджеты страницы",
             "proto": "/Library/basic/Package/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Мини редакторы для свойств страницы",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

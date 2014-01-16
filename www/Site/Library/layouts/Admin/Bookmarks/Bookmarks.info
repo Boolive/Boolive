@@ -9,12 +9,14 @@
             "value": "Закладки",
             "proto": "/Library/menus/Menu/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Меню на объекты в админке",
             "proto": "/Library/menus/Menu/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,6 +24,7 @@
             "value": "",
             "proto": "/Library/menus/Menu/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/menus/Menu/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +41,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/Menu/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -46,6 +51,7 @@
             "value": 0,
             "proto": "/Library/menus/Menu/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -53,6 +59,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/menus/Menu/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -61,6 +68,7 @@
                     "value_type": 2,
                     "proto": "/Library/menus/Menu/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -71,6 +79,7 @@
             "value_type": 2,
             "proto": "/Library/menus/Menu/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -78,6 +87,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/menus/Menu/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -87,12 +97,14 @@
             "value": "",
             "proto": "/Library/menus/Menu/object",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7,
             "children": {
                 "title": {
                     "value": "Пункты",
                     "is_hidden": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

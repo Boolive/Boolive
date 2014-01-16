@@ -9,12 +9,14 @@
             "value": "Аутентификация",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Для аутентификации пользователя перед доступом к закрытым разделам сайта",
             "proto": "/Library/views/AutoWidgetList2/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,6 +24,7 @@
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList2/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 },
                 "description": {
@@ -37,6 +41,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidgetList2/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 3
                 }
             }
@@ -45,11 +50,13 @@
             "value": "",
             "is_default_class": false,
             "is_mandatory": true,
+            "is_property": true,
             "order": 14,
             "children": {
                 "title": {
                     "value": "Модель авторизации",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -59,6 +66,7 @@
             "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 16,
             "children": {
                 "title": {
@@ -66,6 +74,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidgetList2/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -74,6 +83,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidgetList2/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -84,6 +94,7 @@
             "value_type": 2,
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 17,
             "children": {
                 "title": {
@@ -91,6 +102,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

@@ -3,6 +3,7 @@
     "value": "8",
     "proto": "/Library/content_widgets/Part/count_per_page",
     "is_mandatory": true,
+    "is_property": true,
     "order": 7,
     "children": {
         "title": {
@@ -10,6 +11,7 @@
             "value": "Количество объектов содержимого на странице.",
             "proto": "/Library/content_widgets/Part/count_per_page/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

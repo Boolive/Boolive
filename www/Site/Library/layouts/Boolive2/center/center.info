@@ -9,12 +9,14 @@
             "value": "Центр",
             "proto": "/Library/views/ViewSingle/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Центральная область вставки",
             "proto": "/Library/views/ViewSingle/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

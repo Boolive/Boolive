@@ -3,12 +3,14 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/Editor/views/Item/res/Item",
     "is_mandatory": true,
+    "is_property": true,
     "order": 2,
     "children": {
         "title": {
             "value": "jQueryUI Boolive Field",
             "proto": "/Library/admin_widgets/Editor/views/Item/res/Item/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

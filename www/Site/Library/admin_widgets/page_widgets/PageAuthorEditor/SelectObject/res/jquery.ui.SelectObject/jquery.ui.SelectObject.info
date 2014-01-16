@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject/res/jquery.ui.SelectObject",
     "is_mandatory": true,
+    "is_property": true,
     "order": 4
 }

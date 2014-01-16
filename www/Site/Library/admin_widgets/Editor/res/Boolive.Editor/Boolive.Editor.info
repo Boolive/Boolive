@@ -8,6 +8,7 @@
             "value": "jQueryUI Boolive Editor",
             "proto": "/Library/admin_widgets/BaseExplorer/res/Boolive.BaseExplorer/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

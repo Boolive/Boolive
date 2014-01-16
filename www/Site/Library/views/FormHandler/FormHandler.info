@@ -9,12 +9,14 @@
             "value": "Обработчик форм",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Принимает запросы от форм. Во входящих данных должен быть параметр widget с uri виджета (форма). Клиенту отвечает редиректом на текущий запрос без парметров",
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

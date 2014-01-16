@@ -2,13 +2,13 @@
     "is_default_value": true,
     "value": "",
     "proto": "/Library/views/View",
-    "is_hidden": true,
     "order": 29,
     "children": {
         "title": {
             "value": "Сайт",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,6 +16,7 @@
             "value_type": 2,
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

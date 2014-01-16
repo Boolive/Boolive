@@ -3,6 +3,7 @@
     "value": "",
     "proto": "/Library/views/AutoWidgetList2/views",
     "is_mandatory": true,
+    "is_property": true,
     "order": 6,
     "children": {
         "title": {
@@ -11,6 +12,7 @@
             "proto": "/Library/views/AutoWidgetList2/views/title",
             "is_hidden": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -19,6 +21,7 @@
             "proto": "/Library/views/AutoWidgetList2/views/description",
             "is_hidden": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

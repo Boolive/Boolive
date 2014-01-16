@@ -7,11 +7,14 @@
         "title": {
             "value": "Email",
             "proto": "/Library/basic/String/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Адрес электронной почты",
+            "value_type": 2,
             "proto": "/Library/basic/String/description",
+            "is_property": true,
             "order": 2
         }
     }

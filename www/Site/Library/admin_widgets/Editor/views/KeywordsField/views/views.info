@@ -3,5 +3,6 @@
     "value": "",
     "proto": "/Library/views/AutoWidgetList2/views",
     "is_mandatory": true,
+    "is_property": true,
     "order": 6
 }

@@ -1,17 +1,19 @@
 {
     "value": "",
+    "proto": "/Library/content_samples/Part",
     "order": 45,
     "children": {
         "title": {
             "value": "Содержимое",
-            "is_hidden": true,
-            "is_mandatory": true,
+            "proto": "/Library/content_samples/Part/title",
+            "is_property": true,
             "order": 3
         },
         "description": {
             "value": "Структура сайта, страницы, разделы...",
-            "is_hidden": true,
-            "is_mandatory": true,
+            "value_type": 2,
+            "proto": "/Library/content_samples/Part/description",
+            "is_property": true,
             "order": 6
         }
     }

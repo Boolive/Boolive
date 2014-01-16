@@ -5,6 +5,7 @@
         "title": {
             "value": "Объект",
             "proto": "/Library/basic/String",
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -23,6 +24,7 @@
             "value": "Простейший объект для создания новых с нуля",
             "value_type": 2,
             "proto": "/Library/basic/Text",
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {

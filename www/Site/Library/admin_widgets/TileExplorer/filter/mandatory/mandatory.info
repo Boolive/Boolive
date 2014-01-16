@@ -1,5 +1,7 @@
 {
     "value": 1,
     "proto": "/Library/admin_widgets/BaseExplorer/filter/mandatory",
+    "is_mandatory": true,
+    "is_property": true,
     "order": 2
 }

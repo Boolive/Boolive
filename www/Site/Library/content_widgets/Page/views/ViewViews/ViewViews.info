@@ -4,12 +4,14 @@
     "proto": "/Library/views/View",
     "is_default_class": false,
     "is_mandatory": true,
+    "is_property": true,
     "order": 7,
     "children": {
         "title": {
             "value": "Вид видов",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value_type": 2,
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

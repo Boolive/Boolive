@@ -7,6 +7,7 @@
             "value": "Главная",
             "proto": "/Library/content_samples/Page/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 11
         },
         "description": {
@@ -14,6 +15,7 @@
             "value_type": 2,
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 22
         }
     }

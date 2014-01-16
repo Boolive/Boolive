@@ -9,12 +9,14 @@
             "value": "RESTful",
             "proto": "/Library/views/View/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Обработчик запросов на получение, создание, изменение и удаление объектов. ",
             "proto": "/Library/views/View/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

@@ -7,12 +7,14 @@
         "title": {
             "value": "Файл",
             "proto": "/Library/basic/Object/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Объект, значением которого является файл. ",
             "value_type": 2,
             "proto": "/Library/basic/Object/description",
+            "is_property": true,
             "order": 2
         }
     }

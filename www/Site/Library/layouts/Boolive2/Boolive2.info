@@ -9,6 +9,7 @@
             "value": "Boolive2",
             "proto": "/Library/layouts/Layout/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -16,6 +17,7 @@
             "value": "Виджет для создания макетов (разметки html страницы).",
             "proto": "/Library/layouts/Layout/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -23,6 +25,7 @@
             "value": "",
             "proto": "/Library/layouts/Layout/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -30,6 +33,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/layouts/Layout/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -38,6 +42,7 @@
                     "value_type": 2,
                     "proto": "/Library/layouts/Layout/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -47,6 +52,7 @@
             "value": 0,
             "proto": "/Library/layouts/Layout/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -54,6 +60,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/layouts/Layout/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -62,6 +69,7 @@
                     "value_type": 2,
                     "proto": "/Library/layouts/Layout/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -72,6 +80,7 @@
             "value_type": 2,
             "proto": "/Library/layouts/Layout/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -79,6 +88,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/layouts/Layout/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

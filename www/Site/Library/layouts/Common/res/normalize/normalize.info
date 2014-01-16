@@ -3,18 +3,21 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Normalize.css",
             "proto": "/Library/views/Css/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Makes browsers render all elements more consistently and in line with modern standards",
             "proto": "/Library/views/Css/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         }
     }

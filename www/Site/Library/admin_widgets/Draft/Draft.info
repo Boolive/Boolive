@@ -4,24 +4,27 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 34,
+    "order": 37,
     "children": {
         "title": {
             "value": "Черновик",
             "proto": "/Library/admin_widgets/ToggleAction/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Не полностью созданный объект? Доступен только в админке",
             "proto": "/Library/admin_widgets/ToggleAction/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object_rule": {
             "value": "access(write/change/is_draft)",
             "proto": "/Library/admin_widgets/ToggleAction/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

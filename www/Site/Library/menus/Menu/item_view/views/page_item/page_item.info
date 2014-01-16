@@ -4,12 +4,14 @@
     "value_type": 3,
     "proto": "/Library/menus/Menu/item_view",
     "is_mandatory": true,
+    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Виджет пункта на страницу",
             "proto": "/Library/menus/Menu/item_view/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
@@ -17,6 +19,7 @@
             "value": "",
             "proto": "/Library/menus/Menu/item_view/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -24,6 +27,7 @@
             "value": "",
             "proto": "/Library/menus/Menu/item_view/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -32,6 +36,7 @@
                     "proto": "/Library/menus/Menu/item_view/res/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -41,6 +46,7 @@
                     "proto": "/Library/menus/Menu/item_view/res/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -50,6 +56,7 @@
             "value": 0,
             "proto": "/Library/menus/Menu/item_view/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -58,6 +65,7 @@
                     "proto": "/Library/menus/Menu/item_view/cache/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -67,6 +75,7 @@
                     "proto": "/Library/menus/Menu/item_view/cache/description",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -75,6 +84,7 @@
             "value": "is(/Library/content_samples/Page)",
             "proto": "/Library/menus/Menu/item_view/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 6,
             "children": {
                 "title": {
@@ -83,6 +93,7 @@
                     "proto": "/Library/menus/Menu/item_view/object_rule/title",
                     "is_draft": true,
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

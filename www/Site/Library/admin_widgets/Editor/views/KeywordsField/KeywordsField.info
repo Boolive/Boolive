@@ -9,6 +9,7 @@
             "value": "Поле списка ключевых слов",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -16,6 +17,7 @@
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object_rule": {
@@ -23,6 +25,7 @@
             "value_type": 2,
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3,
             "children": {
                 "title": {
@@ -30,6 +33,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

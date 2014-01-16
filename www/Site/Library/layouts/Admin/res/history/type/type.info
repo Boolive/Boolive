@@ -3,5 +3,6 @@
     "value": "",
     "proto": "/Library/javascripts/history/type",
     "is_mandatory": true,
+    "is_property": true,
     "order": 5
 }

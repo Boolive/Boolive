@@ -3,18 +3,20 @@
     "value_type": 3,
     "proto": "/Library/views/AutoWidgetList2",
     "is_default_class": false,
-    "order": 41,
+    "order": 22,
     "children": {
         "title": {
             "value": "Базовый обозреватель",
             "proto": "/Library/views/AutoWidgetList2/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Используется для создания программ отображения объектов. Имеет базовые функции фильтра, сортировки, отображения, постраничной навигации и другие.  ",
             "proto": "/Library/views/AutoWidgetList2/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
@@ -22,6 +24,7 @@
             "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -29,6 +32,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/AutoWidgetList2/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -37,6 +41,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidgetList2/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -46,6 +51,7 @@
             "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 5,
             "children": {
                 "title": {
@@ -53,6 +59,7 @@
                     "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidgetList2/cache/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -61,6 +68,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidgetList2/cache/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -71,6 +79,7 @@
             "value_type": 2,
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 7,
             "children": {
                 "title": {
@@ -78,6 +87,7 @@
                     "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 }
             }

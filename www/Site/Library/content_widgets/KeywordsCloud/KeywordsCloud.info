@@ -9,18 +9,21 @@
             "value": "Облако тегов",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отображает все используемые на сайте ключевые слова",
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "res": {
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 4,
             "children": {
                 "title": {
@@ -28,6 +31,7 @@
                     "value": "Ресурсы",
                     "proto": "/Library/views/Widget/res/title",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
@@ -36,6 +40,7 @@
                     "value_type": 2,
                     "proto": "/Library/views/Widget/res/description",
                     "is_mandatory": true,
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -45,6 +50,7 @@
             "proto": "/Contents/Keywords",
             "is_link": true,
             "is_mandatory": true,
+            "is_property": true,
             "order": 5
         }
     }

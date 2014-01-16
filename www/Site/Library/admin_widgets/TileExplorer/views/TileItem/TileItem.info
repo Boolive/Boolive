@@ -9,6 +9,7 @@
             "value": "Пункт объекта плиткой",
             "proto": "/Library/admin_widgets/BaseExplorer/views/Item/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -16,6 +17,7 @@
             "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/views/Item/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "object_rule": {
@@ -24,6 +26,7 @@
             "value_type": 2,
             "proto": "/Library/admin_widgets/BaseExplorer/views/Item/object_rule",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }
