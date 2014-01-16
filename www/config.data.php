@@ -20,7 +20,7 @@ $stores = array(
                 // Тип СУБД
                 'driver' => 'mysql',
                 // Имя базы данных
-                'dbname' => 'boolive',
+                'dbname' => 'boolive2-test',
                 // Адрес сервера
                 'host' => 'localhost',
                 // Порт
@@ -29,7 +29,7 @@ $stores = array(
             // Имя пользователя для подключения к базе данных
             'user' => 'root',
             // Пароль
-            'password' => '',
+            'password' => 'proot',
             // Опции подключения
             'options' => array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'

@@ -286,8 +286,20 @@ namespace Boolive
             if (!version_compare(PHP_VERSION, "5.3.3", ">=")){
                 $requirements[] = 'Несовместимая версия PHP. Установлена '.PHP_VERSION.' Требуется 5.3.3 или выше';
             }
+            // Лимит памяти
+            $memory_limit = ini_get('memory_limit');
+            if (preg_match('/^(\d+)(.)$/', $memory_limit, $matches)) {
+                switch ($matches[2]){
+                    case 'G':$memory_limit = $matches[1] * 1073741824; break;
+                    case 'M':$memory_limit = $matches[1] * 1048576; break;
+                    case 'K':$memory_limit = $matches[1] * 1024; break;
+                }
+            }
+            if ($memory_limit < 32 * 1048576){
+                $requirements[] = 'В настройках PHP увеличьте лимит оперативной памяти до 32 Мегабайт <code>memory_limit 32MB</code>';
+            }
             if (!ini_get('short_open_tag')){
-                //$requirements[] = 'В настройках PHP включите параметр "короткие теги" <code>short_open_tag On</code>';
+                $requirements[] = 'В настройках PHP включите параметр "короткие теги" <code>short_open_tag On</code>';
             }
             if (ini_get('register_globals')){
                 $requirements[] = 'В настройках PHP отключите "регистрацию глобальных переменных" <code>register_globals Off</code>';

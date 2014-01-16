@@ -7,7 +7,7 @@
 define('START_TIME', microtime(true));
 
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', false);
+define('IS_INSTALL', true);
 
 /** @const Версия системы Boolive */
 define('VERSION', '2.0.beta.2013.12.31');
@@ -66,4 +66,9 @@ function get_web_dir()
         $find[1] = "/";
     }
     return $find[1];
+}
+
+if (!version_compare(PHP_VERSION, "5.3.3", ">=")){
+    echo 'Несовместимая версия PHP. Установлена '.PHP_VERSION.' Требуется 5.3.3 или выше';
+    exit;
 }
