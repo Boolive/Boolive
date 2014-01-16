@@ -3,12 +3,13 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 46,
+    "order": 49,
     "children": {
         "title": {
-            "value": "Логика",
+            "value": "Редактор логики",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         },
         "res": {
@@ -16,6 +17,7 @@
             "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
+            "is_property": true,
             "order": 2
         },
         "cache": {
@@ -23,6 +25,7 @@
             "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
+            "is_property": true,
             "order": 3
         }
     }
