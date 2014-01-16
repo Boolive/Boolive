@@ -22,18 +22,6 @@
             </div>
             <div class="item">
                 <div class="col1">
-                    <label>Прототип</label>
-                </div>
-                <div class="col2 item-proto">
-                    <span class="input-pfx tag-link" data-name="proto-uri" title="Сменить прототип...">&nbsp;</span>
-<!--                    <a class="btn-icon-delete" title="Удалить прототип у объекта" href="" data-name="proto-delete" style="display: none;"></a>-->
-                    <input type="hidden" name="attrib[proto]" value="">
-                    <span class="error-message"></span>
-                    <span class="description">Наследуемый объект или на кого ссылаться.</span>
-                </div>
-            </div>
-            <div class="item">
-                <div class="col1">
                     <label for="value">Значение</label>
                 </div>
                 <div class="col2  item-value">
@@ -60,6 +48,18 @@
                     <input class="attrib inpt order" type="text" id="order" name="attrib[order]" data-name="order" value=""/>
                     <span class="error-message"></span>
                     <span class="description">Используется для ручного упорядочивания объектов</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
+                    <label>Прототип</label>
+                </div>
+                <div class="col2 item-proto">
+                    <span class="input-pfx tag-link" data-name="proto-uri" title="Сменить прототип...">&nbsp;</span>
+<!--                    <a class="btn-icon-delete" title="Удалить прототип у объекта" href="" data-name="proto-delete" style="display: none;"></a>-->
+                    <input type="hidden" name="attrib[proto]" value="">
+                    <span class="error-message"></span>
+                    <span class="description">Наследуемый объект или на кого ссылаться.</span>
                 </div>
             </div>
             <div class="item">
