@@ -27,7 +27,7 @@ class DirectHandler extends View
     function work()
     {
         $v = array();
-        $v['out'] = $this->_input['REQUEST']['direct']->start($this->_commands, $this->_input_child);
+        $v['out'] = $this->_input['REQUEST']['direct']->linked()->start($this->_commands, $this->_input_child);
 		// Вместе с html нужно передать пути на css и js
         foreach ($this->_commands->get('htmlHead') as $com){
             if (in_array($com[0], array("link", "script"/*, "meta", "title", "style"*/))){
