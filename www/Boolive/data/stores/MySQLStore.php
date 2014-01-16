@@ -505,7 +505,7 @@ class MySQLStore extends Entity
                 }
                 // Загрузка/обновление класса
                 if (isset($attr['class'])){
-                    $path = $entity->dir(true).$attr['name'].'.php';
+                    $path = $entity->dir(true).($attr['name']===''?'Site':$attr['name']).'.php';
                     if (isset($attr['class']['content'])){
                         File::create($attr['class']['content'], $path);
                     }else{

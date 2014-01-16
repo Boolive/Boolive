@@ -1,7 +1,6 @@
 {
     "value": "",
     "proto": "/Library/views/Site",
-    "is_default_class": false,
     "order": 10,
     "children": {
         "title": {

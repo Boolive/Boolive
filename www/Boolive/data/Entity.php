@@ -787,7 +787,7 @@ class Entity implements ITrace
             }else{
                 $this->_attribs['is_default_class'] = 0;
                 // Если файла класса нет, то создаём его программный код
-                if (IS_INSTALL && !is_file($this->dir(true).$this->name().'.php')){
+                if (IS_INSTALL && !is_file($this->dir(true).($this->name()===''?'Site':'').'.php')){
                     $this->logic(array(
                         'content' => $this->classTemplate()
                     ));

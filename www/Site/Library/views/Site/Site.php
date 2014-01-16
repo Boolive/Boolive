@@ -4,6 +4,8 @@
  * Логика корневого объекта. При исполнении запускает интерфейс.
  * @version 1.0
  */
+namespace Library\views\Site;
+
 use Library\views\View\View,
     Boolive\values\Rule;
 
