@@ -8,6 +8,7 @@
             "value": "jQueryUI Boolive FileEditor",
             "proto": "/Library/javascripts/Widget/title",
             "is_mandatory": true,
+            "is_property": true,
             "order": 1
         }
     }

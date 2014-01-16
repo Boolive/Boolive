@@ -1,8 +1,8 @@
 {
-    "is_default_value": true,
-    "value": "Image.png",
+    "value": "icon.png",
     "value_type": 3,
     "proto": "/Library/basic/Image",
+    "is_property": true,
     "order": 4,
     "children": {
         "title": {

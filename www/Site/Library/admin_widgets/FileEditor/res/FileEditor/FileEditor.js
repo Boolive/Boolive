@@ -9,6 +9,9 @@
         _value: '',
         _changed: false,
         _editor: null,
+        _is_default: null,
+        _contents: null,
+        _menu: null,
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
@@ -30,26 +33,59 @@
             }
             self._editor.getSession().setMode("ace/mode/"+mode);
             self._editor.setFontSize(14);
+            self._editor.setShowPrintMargin(false);
+
+            var contents = this.element.find('.FileEditor__contents');
+            self._contents = {
+                default: contents.children('#default').text(),
+                self: contents.children('#self').text()
+            };
+            self._setIsDeafult(this.element.attr('data-is_default')==='1', true);
+
             self._editor.on('change', function (){
                 self._change();
                 self._autoheight();
 
             });
-            self._editor.setShowPrintMargin(false);
             self._autoheight();
             self._value = self._editor.getValue();
+
+            self._menu = self.element.find('.FileEditor__default-menu');
+            self._menu.children().click(function(){
+                if (!$(this).hasClass('FileEditor__btn_selected')){
+                    self._menu.find('.FileEditor__btn_selected').removeClass('FileEditor__btn_selected');
+                    $(this).addClass('FileEditor__btn_selected');
+                    self._setIsDeafult($(this).hasClass('FileEditor__btn_default'));
+                    self._autoheight();
+                }
+            });
          },
+
+        _setIsDeafult: function(is_default, not_changes)
+        {
+            this._is_default = is_default;
+            this._editor.setReadOnly(this._is_default);
+            if (this._is_default){
+                if (!not_changes) this._contents.self = this._editor.getValue();
+                this._editor.setValue(this._contents.default);
+            }else{
+                if (!not_changes) this._contents.default = this._editor.getValue();
+                this._editor.setValue(this._contents.self);
+            }
+            this._editor.clearSelection();
+            this._editor.moveCursorTo(0,0);
+        },
 
         _autoheight: function(){
             var doc = this._editor.getSession().getDocument();
-            this._input.css('height', 14 * doc.getLength() + 22 + 'px');
-            this._input.css('min-height', $(document).height()-65 + 'px');
+            this._input.css('height', 17 * doc.getLength() + 22 + 'px');
+            this._input.css('min-height', $(document).height()-this._input.offset().top-38 + 'px');
 
             this._editor.resize();
         },
 
         _change: function(e){
-            if (this._value != this._editor.getValue()){
+            if (this._isChanged()){
                 this.callParents('change', [this.options.object], null, true);
             }else{
                 this.callParents('nochange', [this.options.object], null, true);
@@ -57,7 +93,7 @@
             }
         },
         _isChanged: function(){
-            return this._value != this._editor.getValue();
+            return this._value != this._editor.getValue() || this.element.data('is_default') != this._is_default;
         },
         call_save: function(e){
             if (this._isChanged()){
@@ -73,12 +109,14 @@
                         entity:{
                             file:{
                                 content: self._editor.getValue()
-                            }
+                            },
+                            is_default_value: this._is_default
                         }
                     },
                     success: function(result, textStatus, jqXHR){
                         self.element.find('.item__error').text('');
                         self._value = self._editor.getValue();
+                        self.element.data('is_default', self._is_default);
                         self._change();
                     },
                     error: function(jqXHR, textStatus){
@@ -103,6 +141,7 @@
         },
         call_cancel: function(e){
             this._editor.setValue(this._value);
+            this._is_default = this.element.data('is_default');
         }
     })
 })(jQuery, _, ace);
