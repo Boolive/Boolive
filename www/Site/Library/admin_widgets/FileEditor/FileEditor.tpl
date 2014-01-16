@@ -7,7 +7,7 @@
         <div class="FileEditor__head-left">
             <h1 class="FileEditor__title" title=""><span class="FileEditor__title-name">Файл объекта</span> <?=$v['title']?></h1>
             <p class="FileEditor__description">Значение объекта в виде файла</p>
-            <?php if (!$v['file']->bool()):?>
+            <?php if (!$v['file']->bool()): ?>
             <p class="FileEditor__description FileEditor__warning">У объекта нет файлового значения!</p>
             <?php endif;?>
         </div>
