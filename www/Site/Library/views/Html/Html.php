@@ -32,13 +32,13 @@ class Html extends Widget
         $v['head'] = '';
         $this->_commands->htmlHead('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB), true);
         // Meta
-        $site = Data::read()->options;
+        $site = Data::read();
         if ($site->favicon->isExist()){
             $this->_commands->htmlHead('link', array('rel'=>'shortcut icon', 'type'=>$site->favicon->mime(), 'href'=>$site->favicon->file().'?'.$site->favicon->date(true)));
         }
         $v['meta'] = array(
-            'title' => $site->site_name->isExist()? array($site->site_name->value()) : array(),
-            'description' => $site->site_description->isExist()? array($site->site_description->value()) : array(),
+            'title' => $site->title->isExist()? array($site->title->value()) : array(),
+            'description' => $site->description->isExist()? array($site->description->value()) : array(),
             'keywords' => array(),
         );
         $uniq = array();
