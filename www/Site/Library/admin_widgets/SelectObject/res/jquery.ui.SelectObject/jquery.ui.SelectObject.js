@@ -8,7 +8,7 @@
     $.widget("boolive.SelectObject", $.boolive.Widget, {
         // Выделенный объект
         _select: null,
-
+        _right: null,
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
@@ -49,16 +49,26 @@
             var wh = $(window).height();
             var sh = this.element.outerHeight(true);
             var el = this.element.find('> .buttons');
+            if (this._right === null){
+                this._right = ($(window).width() - (el.offset().left + el.outerWidth()));
+            }
             if ( wh < sh) {
+
                 el.css({
                     position: 'fixed',
-                    bottom: 0
+                    bottom: '36px',
+//                    right: this._right,
+                    paddingTop: '30px'
                 });
+                this.element.css('paddingBottom', '36px');
             }else{
                 el.css({
                     position: 'relative',
-                    bottom: 'auto'
+                    bottom: 'auto',
+//                    right: 'auto',
+                    paddingTop: 0
                 });
+                this.element.css('paddingBottom', '0px');
             }
             el.width(this.element.innerWidth());
         }

@@ -14,9 +14,9 @@
                 <?php endif;?>
                 <li class="view_all link" data-open="<?=$v['open_link']?>"><a href="" title="Использовать существующий объект">Ссылку</a></li>
                 <?php if ($v['open_proto']->bool()):?>
-                <li class="view_all addons" data-open="<?=$v['open_proto']?>"><a href="" title="Свойства прототипа">Дополнения</a></li>
+                <li class="view_all addons" data-open="<?=$v['open_proto']?>" data-select="property"><a href="" title="Свойства прототипа">Дополнения</a></li>
                 <?php endif;?>
-                <li class="view_all" data-open="<?=$v['open_all']?>"><a href="" title="Новый объект из любого существующего">Библиотека</a></li>
+                <li class="view_all" data-open="<?=$v['open_all']?>"><a href="" title="Новый объект из любого существующего">Из библиотеки</a></li>
             </ul>
         </div>
     </div>

@@ -24,6 +24,7 @@ class Destroy extends Widget
                     Rule::entity(array('access', 'destroy')/*array('attr','is_draft','=',1)*/)
                 )->required(),
                 'call' => Rule::string()->default('')->required(),
+                'select' => Rule::in(null, 'structure', 'property', 'heirs')->required()
             ))
         ));
     }

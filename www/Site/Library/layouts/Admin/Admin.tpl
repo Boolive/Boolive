@@ -18,6 +18,6 @@
         <?php echo $v->ProgramsMenu->string();?>
     </div>
     <div class="bottom">
-
+        <?php echo $v->MenuSelections->string();?>
     </div>
 </div>

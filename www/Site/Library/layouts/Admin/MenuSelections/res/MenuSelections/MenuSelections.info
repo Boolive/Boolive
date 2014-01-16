@@ -1,0 +1,16 @@
+{
+    "value": "MenuSelections.js",
+    "value_type": 3,
+    "proto": "/Library/javascripts/Widget",
+    "is_mandatory": true,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive MenuSelections",
+            "proto": "/Library/javascripts/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

@@ -11,7 +11,8 @@
             this.element.on('click', '.Start__show-object', function(e){
                 e.preventDefault();
                 self.callParents('setState', [{
-                    object: '/'+$(this).attr('href')
+                    object: '/'+$(this).attr('href'),
+                    select: 'property'
                 }]);
             });
             this.element.on('click', '.Start__add-object', function(e){
@@ -29,8 +30,9 @@
                     url: window.location.protocol + '//' + window.location.host,
                     success: function(result, textStatus, jqXHR){
                         if (_.isObject(result.out) && !_.isEmpty(result.out.uri)){
-                             self.callParents('setState', [{
-                                object: result.out.uri
+                            self.callParents('setState', [{
+                                object: result.out.uri,
+                                select: 'property'
                             }]);
                         }
                     }

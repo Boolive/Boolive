@@ -23,7 +23,7 @@
         // в каком окне подчиенный виджет по его uuid
         _where_children: null,
         // Текущее состояние
-        _state: null, // {object: '', selected: [], view_name: '', window: '#id', }
+        _state: null, // {object: '', selected: [], view_name: '', window: '#id', select:'structure' }
 
         _create: function() {
 			$.boolive.Widget.prototype._create.call(this);
@@ -60,12 +60,14 @@
                     var dx = self._state.history_i - history.state.history_i;
                     history.go(dx);
                 }else{
-                    // В истории текущее окно, поэтому обновляем состояние
-                    self._state.history_o = history.state.history_o;
-                    self._state.history_i = history.state.history_i;
-                    self._state.window = history.state.window;
+                    console.log([history.state, self._state]);
+                    if (!_.isEqual(self._state, history.state)){
+                        // В истории текущее окно, поэтому обновляем состояние
+                        self._state.history_o = history.state.history_o;
+                        self._state.history_i = history.state.history_i;
 
-                    self.call_setState({target: self, direct: 'parents'}, history.state, true);  //before
+                        self.call_setState({target: self, direct: 'parents'}, history.state, true);  //before
+                    }
                 }
             });
             // Загрузка меню
@@ -88,20 +90,25 @@
             var l = history.location || document.location;
             var expr = new RegExp('^'+this.options.basepath+'(/|$)(.*)$');
             var uri_args = this.getStateFromURI('object='+l.pathname.replace(expr, '$2'));
-            if (typeof uri_args.object == 'string'){
+            if (typeof uri_args.object === 'string'){
                 if (uri_args.object) uri_args.object = '/'+uri_args.object;
                 this._state.object = uri_args.object;
                 //this._state.select = uri_args.object;
                 this._state.selected = [uri_args.object];
             }
-            if (typeof uri_args.view_name == 'string'){
+            if (typeof uri_args.select === 'string'){
+                this._state.select = uri_args.select;
+            }else{
+                this._state.select = 'structure';
+            }
+            if (typeof uri_args.view_name === 'string'){
                 this._state.view_name = uri_args.view_name;
             }else{
                 this._state.view_name = null;
             }
             this._state.remember_view = {};
             if (/^views\//.test(this._state.view_name)){
-                this._state.remember_view[this._state.object] = this._state.view_name;
+                this._state.remember_view[this._state.object+'&'+this._state.select] = this._state.view_name;
             }
             this._state.window = this._window_current.attr('id');
             this._state.history_o = 0; // начальный индекс истории текущего окна (необходимо для сброса истории браузера при закрытии окна)
@@ -286,12 +293,23 @@
                     change['selected'] = true;
                 }
             }
-            // Выбор вида
-            if ('object' in change || 'view_name' in state){
-                var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object);
+
+            // Смена выбора (что об объекте показывать)
+            if ('select' in state){
+                this._state.select = state.select;
+                change['select'] = true;
+            }else
+            if ('object' in change && this._state.select != 'structure'){
+                this._state.select = 'structure';
+                change['select'] = true;
+            }
+
+            // Выбор вида, если указан новый или сменился объект или режим выбора объекта
+            if ('object' in change || 'view_name' in state || 'select' in change){
+                var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object)+'&'+this._state.select;
                 // Если вход в объект и не указан view_name и его нет в истории для объекта, то по умолчанию
-                if ('object' in change && !('view_name' in state) && !(object_str in this._state.remember_view)){
-                    if (!/^views\//.test(this._state.view_name)) state.view_name = null;
+                if (('object' in change || 'select' in change) && !('view_name' in state) && !(object_str in this._state.remember_view)){
+                    if (!/^views\//.test(this._state.view_name) || 'select' in change) state.view_name = null;
                 }
                 // Если не указан view_name, но он есть в истории
                 if (!('view_name' in state) && object_str in this._state.remember_view){
@@ -307,10 +325,13 @@
                     this._state.remember_view[object_str] = this._state.view_name;
                 }
             }
+
+
+
             if (!$.isEmptyObject(change)){
                 // Запись истории
                 if (without_history!==true){
-                    if (without_history!==true && ('object' in change || 'view_name' in change)){
+                    if (without_history!==true && ('object' in change || 'view_name' in change || 'select' in change)){
                         this._state.history_i++;
                         history.pushState(this._state, '', this.getURIFromState(this._state));
 
@@ -381,6 +402,7 @@
                             .data('state', {
                                 object: settings.data.object ? settings.data.object : '',
                                 view_name: settings.data.view_name ? settings.data.view_name : null,
+                                select: settings.data.select ? settings.data.select : 'structure',
                                 window: id,
                                 history_o: self._state.history_i,
                                 history_i: self._state.history_i+1
@@ -391,11 +413,11 @@
                         self._window_current.data('state').selected = settings.data.selected ? settings.data.selected : [self._window_current.data('state').object];
                         self._state = self._window_current.data('state');
                         self._state.remember_view = {};
-                        self._state.remember_view[self._state.object] = self._state.view_name;
+                        self._state.remember_view[self._state.object+'&'+self._state.select] = self._state.view_name;
                         // Открытие окна фиксируем в истории браузера
                         history.pushState(self._state, null, self.getURIFromState(self._state));
                         // Сообщаем всем о новосм состоянии
-                        self.refresh_state();
+                        self.refresh_state(false);
                         // Событие для автоматического подключение плагинов в загруженном html
                         $(document).trigger('load-html', [self._window_current]);
                     });
@@ -452,7 +474,7 @@
          * @private
          */
         refresh_state: function(all){
-            this.callChildren('setState', [this._state, {object: true, selected: true, view_name: true}], undefined, all);
+            this.callChildren('setState', [this._state, {object: true, selected: true, view_name: true, select: true}], undefined, all);
         },
 
         /**
@@ -484,6 +506,9 @@
             var uri = this.options.basepath + obj;
             if (state.view_name){
                 uri = uri + '&view_name=' + state.view_name;
+            }
+            if (state.select !== 'structure'){
+                uri = uri + '&select=' + state.select;
             }
             return uri;
         },

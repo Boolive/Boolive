@@ -34,8 +34,26 @@
         $list = $v['views']->arrays(\Boolive\values\Rule::string());
         if(!empty($list)){
             foreach ($list as $item) echo $item;
-        }else{
-            echo '<div class="BaseExplorer__empty">'.$v['empty'].'<div class="BaseExplorer__empty-explain">'.$v['empty_description'].'</div></div>';
-        }
+        }else{?>
+            <div class="BaseExplorer__empty"><?=$v['empty']?>
+                <div class="BaseExplorer__empty-explain">
+                <?php if ($v['select'] == 'structure'):?>
+                У объекта нет подчиненных или они не соответсятвуют фильтру.<br/>
+                Их можно добавить или перейдите к просмотру свойств или других сведений об объекте с помощью нижнего меню.<br/>
+                <a href="<?=ltrim($v['object'],'/')?>&select=property" class="BaseExplorer__show-entity" data-select="property">Свойства</a>
+                <?php elseif($v['select'] == 'property'):?>
+                У объекта нет свойств или они не соответсятвуют фильтру.<br/>
+                Их можно добавить или перейдите к просмотру структуры или других сведений об объекте с помощью нижнего меню.<br/>
+                <a href="<?=ltrim($v['object'],'/')?>&select=structure" class="BaseExplorer__show-entity" data-select="structure">Структура</a>
+                <?php elseif($v['select'] == 'heirs'):?>
+                У объекта нет наследников или они не соответсятвуют фильтру.<br/>
+                Перейдтие к просмотру других сведений об объекте с помощью нижнего меню.
+                <?php elseif($v['select'] == 'protos'):?>
+                У объекта нет прототипов или они не соответсятвуют фильтру.<br/>
+                Перейдтие к просмотру других сведений об объекте с помощью нижнего меню.
+                <?php endif;?>
+                </div>
+            </div>';
+        <?}
     ?></div>
 </div>

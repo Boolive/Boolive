@@ -18,6 +18,7 @@ class BaseExplorer extends AutoWidgetList2
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(),
+                'select' => Rule::string()->default('structure')->required(),
 //                'filter' => Rule::arrays(Rule::string()),
                 'call' => Rule::string(),
                 // Аргументы вызываемых методов (call)
@@ -68,7 +69,42 @@ class BaseExplorer extends AutoWidgetList2
             $v['empty_description'] = 'Недостаточно прав для просмотра объекта';
         }else{
             $v['empty'] = 'Пусто';
-            $v['empty_description'] = 'У объекта нет подчиненных или они не соответсятвуют фильтру';
+            $v['select'] = $this->_input['REQUEST']['select'];
+            if (empty($v['select'])) $v['select'] = 'structure';
+            switch ($this->_input['REQUEST']['select']){
+                case null:
+                case 'structure':
+                    $v['empty_description'] = 'У объекта нет подчиненных или они не соответсятвуют фильтру';
+                    $v['empty_other'] = array(
+                        'title' => 'Свойства',
+                        'select' => 'property'
+                    );
+                    break;
+                case 'property':
+                    $v['empty_description'] = 'У объекта нет свойств или они не соответсятвуют фильтру';
+                    $v['empty_other'] = array(
+                        'title' => 'Структра',
+                        'select' => 'structure'
+                    );
+                    break;
+                case 'heirs':
+                    $v['empty_description'] = 'У объекта нет наследников или они не соответсятвуют фильтру';
+                    $v['empty_other'] = array(
+                        'title' => 'Структра',
+                        'select' => 'structure'
+                    );
+                    break;
+                case 'protos':
+                    $v['empty_description'] = 'У объекта нет прототипов или они не соответсятвуют фильтру';
+                    $v['empty_other'] = array(
+                        'title' => 'Структра',
+                        'select' => 'structure'
+                    );
+                    break;
+                default:
+                    $v['empty_description'] = '';
+            }
+
         }
         return parent::show($v,$commands, $input);
     }
@@ -92,25 +128,25 @@ class BaseExplorer extends AutoWidgetList2
             ));
         }
         // Скрытые объекты
-        if ($filters['hidden']->value()) {
+        if (isset($filters['hidden']) && $filters['hidden']->value()) {
             $any[] = array('attr', 'is_hidden', '!=', $obj['is_hidden']);
         }else{
             $cond['where'][] = array('attr', 'is_hidden', '=', $obj['is_hidden']);
         }
         // Черновики
-        if ($filters['draft']->value()) {
+        if (isset($filters['draft']) && $filters['draft']->value()) {
             $any[] = array('attr', 'is_draft', '!=', $obj['is_draft']);
         }else{
             $cond['where'][] = array('attr', 'is_draft', '=', $obj['is_draft']);
         }
-        // Свойства
-        if ($filters['mandatory']->value()) {
+        // Обязательные
+        if (isset($filters['mandatory']) && $filters['mandatory']->value()) {
             $any[] = array('attr', 'is_mandatory', '!=', 0);
         }else{
             $cond['where'][] = array('attr', 'is_mandatory', '=', 0);
         }
-        // Обновления
-        if ($filters['updates']->value()) {
+        // Дополнения
+        if (isset($filters['updates']) && $filters['updates']->value()) {
             $any[] = array('attr', 'diff', '!=', Entity::DIFF_NO);
         }else{
             $cond['where'][] = array('attr', 'diff', '!=', Entity::DIFF_ADD);
@@ -120,6 +156,25 @@ class BaseExplorer extends AutoWidgetList2
             return array();
         } else {
             $cond['where'][] = array('any', $any);
+        }
+
+        // Что выбирать
+        $select = $this->_input['REQUEST']['select'];
+        if ($select == 'property'){
+            $cond['where'][] = array('attr', 'is_property', '=', 1);
+        }else{
+            $cond['where'][] = array('attr', 'is_property', '=', 0);
+            if (in_array($select, array('protos', 'heirs', 'parents'))){
+                $cond['select'] = $select;
+                if ($select=='protos'){
+                    $cond['depth'] = array(1,Entity::MAX_DEPTH);
+                    $cond['order'] = array('proto_cnt', 'asc');
+                }else
+                if ($select=='parents'){
+                    $cond['depth'] = array(1,Entity::MAX_DEPTH);
+                    $cond['order'] = array('parent_cnt', 'asc');
+                }
+            }
         }
         $cond['group'] = true;
         return parent::getList($cond);

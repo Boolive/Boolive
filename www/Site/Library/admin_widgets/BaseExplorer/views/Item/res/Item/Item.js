@@ -25,13 +25,20 @@
                 self.callParents('setState', [{object:  self.options.link}]);
             });
             // Вход в объект-ссылку
-            self.element.find('.Item__prop').click(function(e){
+            self.element.find('.Item__link').click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
                 // Сначала выделяем себя
                 //self.callParents('setState', [{selected:  self.options.object}]);
                 // Теперь входим
                 self.callParents('setState', [{object:  self.options.object}]);
+            });
+            // Переход к свойствам
+            self.element.find('.Item__prop').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                // Теперь входим
+                self.callParents('setState', [{object:  self.options.object, select: 'property'}]);
             });
             // Множественное выделение объекта
             self.element.find('.Item__select').click(function(e){

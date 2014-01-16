@@ -18,11 +18,12 @@
          */
         call_setState: function(caller, state, changes){
             var self = this;
-            if (caller.direct == 'children' && _.isObject(changes) && ('object' in changes || 'view_name' in changes)){
+            if (caller.direct == 'children' && _.isObject(changes) && ('object' in changes || 'view_name' in changes || 'select' in changes)){
                 this.reload({
                     object: state.object,
                     view_name: state.view_name,
-                    selected: state.selected
+                    selected: state.selected,
+                    select: state.select
                 }, {
                     empty: function(){
                         self.callChildren('program_hide');

@@ -25,7 +25,8 @@ class SelectObject extends Widget
                     Rule::arrays(Rule::entity()),
                     Rule::entity()
                 ),
-                'is_link' => Rule::bool()->default(false)->required()
+                'is_link' => Rule::bool()->default(false)->required(),
+                'select' => Rule::string()->default('structure')->required()
             ))
         ));
     }

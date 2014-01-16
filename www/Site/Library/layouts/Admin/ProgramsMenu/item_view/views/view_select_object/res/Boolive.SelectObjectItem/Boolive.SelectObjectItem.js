@@ -23,12 +23,12 @@
                         data: {
                             direct: self.options.object, // uri выиджета выбора объекта
                             object: open, //какой объект показать
-                            view_name: 'views/TileExplorer'
+                            select: $(this).attr('data-select') || 'structure'
                         }
                     },
                     function(result, params){
                         if (result == 'submit' && 'selected' in params){
-                            self.selected(params.selected, s.object, is_link);
+                            self.selected(params.selected, s.object, is_link, s.select);
                         }
                     }
                 ]);
@@ -38,17 +38,18 @@
                 e.stopPropagation();
                 var s = self.callParents('getState');
 //                var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
-                self.selected($(this).attr('href'), s.object);
+                self.selected($(this).attr('href'), s.object, false, s.select);
             });
         },
 
-        selected: function(selected, object, is_link){
+        selected: function(selected, object, is_link, select_type){
             var self = this;
             self.callServer('selected',{
                 direct: self.options.object,
                 object: object,
                 selected: selected,
-                is_link: is_link
+                is_link: is_link,
+                select: select_type
             },{
                 success: function(result, textStatus, jqXHR){
                     if (_.isObject(result.out) && !_.isEmpty(result.out.changes)){

@@ -27,9 +27,9 @@
         call_setState: function(caller, state, change){ //after
             if (caller.direct == 'children'){
                 var self = this;
-                if ('selected' in change){
+                if ('selected' in change || 'select' in change){
                     var obj = (state.selected.length == 1)? _.first(state.selected) : state.selected;
-                    self.reload({object:obj}, function(){
+                    self.reload({object:obj, select: state.select}, function(){
                         self._select(state);
                     });
                 }else

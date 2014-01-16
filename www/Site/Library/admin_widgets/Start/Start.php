@@ -21,7 +21,8 @@ class Start extends Widget
                     'parent' =>  Rule::entity(),
                     'proto' => Rule::entity(),
                     'is_link' => Rule::bool()->default(false)->required()
-                ))
+                )),
+                'select' => Rule::in(null, 'structure')
             ))
         ));
     }

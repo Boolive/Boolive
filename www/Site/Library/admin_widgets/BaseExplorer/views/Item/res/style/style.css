@@ -51,7 +51,20 @@
     display: inline-block;
     }
 .Item__prop{
-    font-size: 16px;
+    font-size: 14px;
+    display: block;
+    float: right;
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    color: #014b69;
+    }
+    .Item__prop:hover{
+        text-decoration: underline;
+        color: #000;
+        }
+.Item__link{
+    font-size: 14px;
     color: #333;
     display: none;
     float: right;
@@ -59,13 +72,16 @@
     text-align: center;
     position: relative;
     z-index: 1;
+    text-decoration: none;
     }
-    .Item__prop > img{
+    .Item__link > img{
         vertical-align: middle;
         }
-    .Item__prop:hover{
+    .Item__link:hover{
         background-color: #d4eafc;
+        text-decoration: underline;
         }
+
 .Item__value{
     font-size: 14px;
     color: #333;
@@ -119,7 +135,7 @@
         margin-left: 3px;
         text-decoration: none;
         }
-    .Item_link .Item__prop{
+    .Item_link .Item__link{
         display: block;
         }
 .Item_mandatory{
@@ -186,7 +202,8 @@
     }
     .Item_selected .Item__title,
     .Item_selected .Item__value,
-    .Item_selected .Item__default-value{
+    .Item_selected .Item__default-value,
+    .Item_selected .Item__prop{
         color: #fff;
         }
     .Item_selected .Item__file:before{

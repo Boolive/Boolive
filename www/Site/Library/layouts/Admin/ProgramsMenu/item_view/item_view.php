@@ -75,6 +75,7 @@ class item_view extends AutoWidgetList2
                 }
             }
         }
+        if (empty($v['views'])) return null;
         $this->_input_child['REQUEST']['program'] = $this->_input['REQUEST']['program'];
         return Widget::show($v, $commands, $input);
     }

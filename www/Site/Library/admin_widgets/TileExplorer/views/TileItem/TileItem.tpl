@@ -35,5 +35,6 @@
         <div class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?php echo $v['is_default_value']->bool()?' Item__default-value':'';?> TileItem__value" title="<?=$v['value_full']?>"><?=$v['value_short']?></div>
     </div>
     <div class="Item__select TileItem__select"><img width="16" height="16" src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
-    <a class="Item__prop TileItem__prop" title="Свойства ссылки" href="<?php echo ltrim($v['uri'],'/');?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
+    <a class="Item__link TileItem__link" title="Структура ссылки" href="<?php echo ltrim($v['uri'],'/');?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
+    <a class="Item__prop TileItem__prop" title="Изменение свойств" href="<?php echo ltrim($v['uri'],'/').'&select=property';?>">Изменить</a>
 </div>

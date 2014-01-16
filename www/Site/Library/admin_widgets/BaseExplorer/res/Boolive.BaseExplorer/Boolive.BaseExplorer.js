@@ -23,6 +23,11 @@
                 e.preventDefault();
                 self.callParents('setState', [{object:  $(this).attr('data-o')}]);
             });
+            this.element.on('click', '.BaseExplorer__show-entity', function(e){
+                e.preventDefault();
+                self.callParents('setState', [{object:  self.options.object, select:$(this).attr('data-select')}]);
+            });
+
             this.element.on('click', '.BaseExplorer__attribs-btn', function(e){
                 var attribs = self.element.find('.BaseExplorer__attribs:first');
                 $(this).toggleClass('active');
@@ -149,37 +154,39 @@
 
         init_sortable: function(){
             var self = this;
-            var clone;
-            this.element.find('.BaseExplorer__list:first').sortable({
-                distance: 15,
-                handle: '.Item__select',
-                placeholder: 'BaseExplorer__item-placeholder',
-                //forceHelperSize: false,
-                update: function(event, ui) {
-                    var object_uri = {};
-                    var next_uri = {};
-                    var next;
-                    object_uri['uri'] = ui.item.attr('data-o');
-                    if(ui.item.next().length > 0){
-                        next = ui.item.next();
-                        next_uri['uri'] = next.attr('data-o');
-                        next_uri['next'] = 1;
-                    }else{
-                        next  = ui.item.prev();
-                        next_uri['uri'] = next.attr('data-o');
-                        next_uri['next'] = 0;
+            var select = this.callParents('getState').select;
+            if (select == 'structure' || select == 'property'){
+                this.element.find('.BaseExplorer__list:first').sortable({
+                    distance: 15,
+                    handle: '.Item__select',
+                    placeholder: 'BaseExplorer__item-placeholder',
+                    //forceHelperSize: false,
+                    update: function(event, ui) {
+                        var object_uri = {};
+                        var next_uri = {};
+                        var next;
+                        object_uri['uri'] = ui.item.attr('data-o');
+                        if(ui.item.next().length > 0){
+                            next = ui.item.next();
+                            next_uri['uri'] = next.attr('data-o');
+                            next_uri['next'] = 1;
+                        }else{
+                            next  = ui.item.prev();
+                            next_uri['uri'] = next.attr('data-o');
+                            next_uri['next'] = 0;
+                        }
+                        self.callServer('saveOrder', {
+                            saveOrder:{object_uri:object_uri, next_uri:next_uri},
+                            object: self.options.object
+                        });
+                    },
+                    start: function( event, ui ) {
+    //                    ui.placeholder.css(ui.item.css(['width', 'height']));
+                        ui.placeholder.outerWidth(ui.item.outerWidth());
+                        ui.placeholder.outerHeight(ui.item.outerHeight());
                     }
-                    self.callServer('saveOrder', {
-                        saveOrder:{object_uri:object_uri, next_uri:next_uri},
-                        object: self.options.object
-                    });
-                },
-                start: function( event, ui ) {
-//                    ui.placeholder.css(ui.item.css(['width', 'height']));
-                    ui.placeholder.outerWidth(ui.item.outerWidth());
-                    ui.placeholder.outerHeight(ui.item.outerHeight());
-                }
-            });
+                });
+            }
         },
         /**
          * Выделение объекта
@@ -211,16 +218,19 @@
                     reload = reload || (this.element.find('[data-o="'+uri+'"]').size()==0);
                 }
                 if (reload){
-                    this.reload({object: this.options.object}, {url:'/', success: function(){
+                    this.reload({
+                            object: this.options.object,
+                            select: self.callParents('getState').select
+                        }, {url:'/', success: function(){
                         self.init_sortable();
                     }});
                 }
             }
         },
 
-        call_changeFilter: function(caller, filter){
+        call_changeFilter: function(caller){
             var self = this;
-            this.reload({object: this.options.object}, {
+            this.reload({object: this.options.object, select: self.callParents('getState').select}, {
                     success: function(){
                         self.afterReload();
                     },

@@ -25,7 +25,8 @@ class Admin extends Layout
         ));
     }
 
-    function startInitChild($input){
+    function startInitChild($input)
+    {
         parent::startInitChild($input);
         // По URL определяем объект и номер страницы
         $uri = $this->_input['REQUEST']['path'];

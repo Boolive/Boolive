@@ -7,7 +7,7 @@ Version 2.0.rc
 - new #111 LogicEditor is added to the admin panel (VladimirShestakov)
 - new #161 Added the sign "property" for objects (VladimirShestakov)
 - new #165 FileEditor is added to the admin panel (VladimirShestakov)
-
+- new #170 The MenuSelections is added in the bottom of admin panel (VladimirShestakov)
 
 Version 2.0.beta December, 31 2013
 ----------------------------

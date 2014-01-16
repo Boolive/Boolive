@@ -305,7 +305,7 @@ h4{
 .dropdown-menu > .selected > a {
     color: #ffffff;
     text-decoration: none;
-    background-color: #418dd9;
+    background-color: #499df2;
     outline: none;
     background-image: url(img/select-invert.png);
 }
@@ -316,7 +316,7 @@ h4{
 .dropdown-submenu:focus > a {
     color: #ffffff;
     text-decoration: none;
-    background-color: #499df2;
+    background-color: #418dd9;
 }
 
 .dropdown-menu > .disabled > a,

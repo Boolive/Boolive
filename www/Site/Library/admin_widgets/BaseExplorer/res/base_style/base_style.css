@@ -22,15 +22,35 @@
     .BaseExplorer__empty{
         text-align: center;
         font-size: 24px;
+        line-height: 1.48;
         font-weight: bolder;
-        color: #cccccc;
+        color: #999;
+        margin-top: 30px;
         }
         .BaseExplorer__empty-explain{
             text-align: center;
             font-size: 12px;
+            line-height: 1.48;
             font-weight: normal;
-            color: #cccccc;
+            color: #aaa;
             }
+        .BaseExplorer__show-entity{
+            display: inline-block;
+            padding: 3px 8px 4px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #061c33;
+            border-radius: 15px;
+            margin: 10px 5px;
+            background: #F3F3F3;
+            border: 1px solid #eee;
+            text-decoration: none;
+        }
+        .BaseExplorer__show-entity:hover{
+            background: #888;
+            border: 1px solid #808080;
+            color: #fff;
+        }
     .BaseExplorer__title,
     .BaseExplorer__title-a{
         font-size: 28px;
@@ -50,6 +70,7 @@
         margin: 0 0 25px 0;
         color: #999;
         }
+
 .BaseExplorer__attribs-btn{
     display: inline-block;
     width: 16px;
@@ -59,7 +80,7 @@
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     cursor: pointer;
-    opacity: 0.05;
+    opacity: 0.1;
     z-index: 101;
     position: relative;
     border: 1px solid transparent;
@@ -148,20 +169,23 @@
         font-size: 12px;
         min-width: 50px;
     }
+
 .BaseExplorer__proto{
     padding: 3px 8px 3px;
     display: inline-block;
     border-radius: 10px;
-    color: #444;
+    color: #666;/*color: #666;*/
     font-size: 12px;
     text-decoration: none;
     vertical-align: middle;
-    background-color: #f9f9f9;
+    /*background-color: #f9f9f9;*/
     margin: 0 0 5px 0;
     }
     .BaseExplorer__proto:hover{
-        background-color: #aaa;
-        color: #fff;
+        /*background-color: #aaa;*/
+        /*color: #fff;*/
+        background-color: rgba(166, 218, 255, 0.30);
+        border-color: rgba(140, 207, 255, 0.30);
         }
 .BaseExplorer__item-placeholder{
     border: 1px dotted #1a8cff;

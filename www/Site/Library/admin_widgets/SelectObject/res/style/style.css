@@ -1,16 +1,20 @@
 .SelectObject{
-
+    /*margin-bottom: -2px;*/
+    position: relative;
     }
     .SelectObject > .buttons{
-        background: #FFF;
-        border-top: 0px solid #CCC;
-        border-left: 1px solid #CCC;
-        border-right: 1px solid #CCC;
-        margin: 0 -1px;
+        background: rgba(255,255,255,0.8);
+        border-top: 2px solid #fff;
+        /*border-left: 1px solid #CCC;*/
+        /*border-right: 1px solid #CCC;*/
         z-index: 300;
+        text-align: right;
+
+        /*width: 300px;*/
+        /*margin: 0 0 0 auto;*/
         }
         .SelectObject > .buttons > .btn {
-            float: left;
+
             margin-right: 0;
             }
         .SelectObject > .buttons > .content{
@@ -19,4 +23,7 @@
             }
     .SelectObject .Explorer .AddTool{
         display: none;
+    }
+    .SelectObject .buttons__wrap{
+        padding: 0 30px 30px;
     }

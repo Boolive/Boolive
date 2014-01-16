@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="buttons">
-        <div class="layout-main">
+        <div class="buttons__wrap">
             <a class="btn btn-success submit"><?php echo $v['submit_title'];?></a>
             <a class="btn cancel"><?php echo $v['cancel_title'];?></a>
         </div>

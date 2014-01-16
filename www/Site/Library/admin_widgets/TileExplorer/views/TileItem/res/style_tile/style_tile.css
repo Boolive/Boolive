@@ -64,11 +64,25 @@
         }
     .TileItem__prop{
         cursor: pointer;
+        /*width: 30px;*/
+        position: absolute;
+        line-height: 30px;
+        right: 10px;
+        bottom: 0;
+        font-size: 14px;
+        /*text-align: center;*/
+        }
+    .Item_link .TileItem__prop{
+        right: 30px;
+    }
+    .TileItem__link{
+        cursor: pointer;
         width: 30px;
         position: absolute;
         line-height: 30px;
         right: 0;
         bottom: 0;
+        font-size: 14px;
         text-align: center;
         }
 .Item_selected .TileItem__title{

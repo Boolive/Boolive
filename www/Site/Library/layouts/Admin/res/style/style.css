@@ -56,7 +56,7 @@
         margin: 0 auto;
         /*max-width: 920px;*/
 
-        padding: 32px 0px;
+        padding: 32px 0 36px;
         /*top: 32px;
         left: 150px;
 		right: 200px;
@@ -107,10 +107,14 @@
     .Admin .bottom{
         position: fixed;
         /*height: 40px;*/
-        left: 180px;
-        right: 180px;
+        left: 0;
+        right: 0;
         bottom: 0;
         z-index: 100;
+        background: #F3F3F3;
+        border-top: 1px solid #ccc;
+        padding: 0 180px;
+        box-shadow: inset 0px 1px 0px 0px #E5E5E5, inset 0px 3px 3px -2px #E5E5E5;
     }
     .Admin .window{
         background-color: #ffffff;
@@ -119,6 +123,7 @@
         border-left: 1px solid #CCC;
         border-right: 1px solid #CCC;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+        position: relative;
         }
     .Admin .window:first-child{
         border: none;

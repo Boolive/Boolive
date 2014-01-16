@@ -25,7 +25,8 @@ class Export extends Widget
                     Rule::entity()
                 )->required(),
                 'call' => Rule::string()->default('')->required(),
-                'id' => Rule::string()->default(0)->required()
+                'id' => Rule::string()->default(0)->required(),
+                'select' => Rule::in(null, 'structure', 'property')
             ))
         ));
     }

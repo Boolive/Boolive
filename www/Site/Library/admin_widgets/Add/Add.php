@@ -6,10 +6,18 @@
  */
 namespace Library\admin_widgets\Add;
 
+use Boolive\values\Rule;
 use Library\admin_widgets\SelectObject\SelectObject;
 
 class Add extends SelectObject
 {
+     function startRule()
+     {
+         $rule = parent::startRule();
+         $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in(null, 'structure', 'property')->required();
+         return $rule;
+     }
+
     protected function selected()
     {
         $result = array();
@@ -25,6 +33,9 @@ class Add extends SelectObject
 //                }
                 if ($this->_input['REQUEST']['is_link']){
                     $obj->isLink(true);
+                }
+                if ($this->_input['REQUEST']['select'] == 'property'){
+                    $obj->isProperty(true);
                 }
                 // @todo Обрабатывать ошибки
                 $obj->save(false);
