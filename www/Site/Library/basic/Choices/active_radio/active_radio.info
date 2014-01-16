@@ -1,0 +1,16 @@
+{
+    "is_default_value": true,
+    "value": "значение 1",
+    "proto": "/Library/basic/Choices/choice_1",
+    "is_link": true,
+    "is_mandatory": true,
+    "is_property": true,
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Выбранный вариант",
+            "proto": "/Library/basic/String",
+            "order": 1
+        }
+    }
+}
