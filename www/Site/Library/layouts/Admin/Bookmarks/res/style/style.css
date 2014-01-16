@@ -10,6 +10,7 @@
         background-color: #e6e6e6;
         text-align: center;
         position: relative;
+
         }
         .Bookmarks__title{
             line-height: 20px;
@@ -18,8 +19,7 @@
             position: relative;
             padding: 0 5px;
             top: -10px;
-        }
-
+            }
 
     .Bookmarks__items-list{
         list-style-type: none;
@@ -46,6 +46,9 @@
                 display: inline-block;
                 vertical-align: middle;
                 margin: 0 5px;
+                max-width: 125px;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 }
                 .Bookmarks__item-link:hover{
                     /*background-color: #EEE;*/
@@ -61,6 +64,20 @@
                 max-height: 16px;
                 margin: 0;
                 vertical-align: middle;
+            }
+            .Bookmarks__item-remove{
+                padding: 1px 4px;
+                font-size: 10px;
+                border-radius: 15px;
+                color: #444;
+                display: none;
+                }
+                .Bookmarks__item-remove:hover{
+                    background-color: #FC4250;
+                    color: #fff;
+                    }
+            :hover > .Bookmarks__item-remove{
+                display: inline-block;
             }
     .Bookmarks__items-list .Bookmarks__items-list{
         margin: 0 0 0 10px;

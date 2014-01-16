@@ -3,6 +3,7 @@
     <a class="Bookmarks__item-link" href="/admin<?=$v['item_href']; ?>" title="<?=$v['item_descript']; ?>" data-o="<?=$v['item_href']; ?>">
         <?php if ($v['item_icon']->bool()):?><img class="Bookmarks__item-icon"  src="<?=$v['item_icon']->uri();?>" alt=""><?php endif;?>
         <span class="Bookmarks__item-title"><?=$v['item_text']; ?></span>
+        <span class="Bookmarks__item-remove" title="Удалить закладку" data-o="<?=$v['item_key']?>">✖</span>
     </a>
 <?php endif; ?>
 <?php

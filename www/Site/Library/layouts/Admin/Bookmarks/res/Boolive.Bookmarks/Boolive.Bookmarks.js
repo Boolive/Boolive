@@ -41,6 +41,26 @@
                     }
                 });
             });
+            self.element.on('click', '.Bookmarks__item-remove', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                var obj = self.callParents('getState').object;
+                var url = /^[a-z]+:\/\//i.test(self.options.object) ? self.options.object : window.location.protocol + '//' + window.location.host + $(this).attr('data-o');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    accepts: {json: 'application/json'},
+                    url: url,
+                    data: {
+                        method: 'DELETE'
+                    },
+                    error: function(jqXHR, textStatus){
+                        if (jqXHR.status == 204){
+                            self.reload({object: obj});
+                        }
+                    }
+                });
+            });
             // Нажатие по пункту меню
 			self.element.on('click', 'a', function(e){
                 e.preventDefault();
