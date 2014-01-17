@@ -57,7 +57,10 @@ namespace Boolive
                         // Если класс из Remote и его получилось загрузить с его сервера
                         include_once($class_path);
                     }else{
-                        throw new ErrorException('Class not found', 2);
+                        throw new ErrorException('Class "'.$class_name.'" not found', 2);
+                    }
+                    if (!class_exists($class_name, false) && !interface_exists($class_name, false)){
+                        throw new ErrorException('Class "'.$class_name.'" not found', 2);
                     }
                     self::$included[$class_name] = $class_name;
                     if (!isset(self::$activated[$class_name])) {

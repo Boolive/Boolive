@@ -426,7 +426,7 @@ class MySQLStore extends Entity
 
                 $this->db->beginTransaction();
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных
-                if (!empty($current) && ($current['name']!=$attr['name'] || $current['parent']!=$attr['parent'])){
+                if (!empty($current) && ($current['name']!==$attr['name'] || $current['parent']!=$attr['parent'])){
                     // Текущий URI
                     $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
                     $uri = (isset($names[0])?$names[0].'/':'').(empty($current)? $temp_name : $current['name']);
@@ -446,9 +446,22 @@ class MySQLStore extends Entity
                         // Обновление отношений
                         $this->makeParents($attr['id'], $attr['parent'], $dl, true);
                     }
-                    // Переименование/перемещение папки объекта
+
                     if (!empty($uri) && is_dir(DIR_SERVER_PROJECT.ltrim($uri, '/'))){
-                        File::rename(DIR_SERVER_PROJECT.ltrim($uri, '/'), DIR_SERVER_PROJECT.ltrim($uri_new, '/'));
+                        // Переименование/перемещение папки объекта
+                        $dir = DIR_SERVER_PROJECT.ltrim($uri_new, '/');
+                        File::rename(DIR_SERVER_PROJECT.ltrim($uri, '/'), $dir);
+                        if ($current['name'] !== $attr['name']){
+                            // Переименование файла, если он есть
+                            if ($current['value_type'] == Entity::VALUE_FILE && $current['is_default_value'] == $current['id']){
+                                $attr['value'] = File::changeName($current['value'], $attr['name']);
+                                File::rename($dir.'/'.$current['value'], $dir.'/'.$current['value']);
+                            }
+                            // Переименование файла класса
+                            File::rename($dir.'/'.$current['name'].'.php', $dir.'/'.$attr['name'].'.php');
+                            // Переименование .info файла
+                            File::rename($dir.'/'.$current['name'].'.info', $dir.'/'.$attr['name'].'.info');
+                        }
                     }
                     unset($q);
                 }
@@ -2280,7 +2293,9 @@ class MySQLStore extends Entity
     private function classesCacheValidate($new_attr, $last_attr)
     {
         $last_class = isset($last_attr['is_default_class'])? $last_attr['is_default_class'] : Entity::ENTITY_ID;
-        if ($new_attr['is_default_class']!=$last_class && ($new_attr['is_default_class'] == 0 || $last_class == 0)){
+        if (($new_attr['is_default_class']!=$last_class && ($new_attr['is_default_class'] == 0 || $last_class == 0)) ||
+            ($new_attr['is_default_class'] == 0 && $new_attr['uri']!=$last_attr['uri'])
+        ){
             Cache::delete('mysqlstore/classes');
             $this->classes = null;
         }

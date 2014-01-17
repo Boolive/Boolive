@@ -103,6 +103,7 @@ class Entity implements ITrace
      * @var bool|string
      */
     public $_autoname = false;
+    private $_current_name;
 
     /**
      * Конструктор
@@ -213,6 +214,7 @@ class Entity implements ITrace
         if (!isset($new_name) && $choose_unique) $new_name = $this->_attribs['name'];
         // Смена имени
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
+            if (!isset($this->_current_name)) $this->_current_name = $this->_attribs['name'];
             //if ($choose_unique){
                 $this->_autoname = $new_name;
             //}
@@ -220,6 +222,17 @@ class Entity implements ITrace
             $this->_changed = true;
             $this->_checked = false;
         }
+        return $this->_attribs['name'];
+    }
+
+    /**
+     * Текущее имя
+     * Если установлено новое имя, но объекто ещё не сохранен, то возвращается старое имя объекта
+     * @return mixed
+     */
+    function currentName()
+    {
+        if (isset($this->_current_name)) return $this->_current_name;
         return $this->_attribs['name'];
     }
 
@@ -787,7 +800,7 @@ class Entity implements ITrace
             }else{
                 $this->_attribs['is_default_class'] = 0;
                 // Если файла класса нет, то создаём его программный код
-                if (IS_INSTALL && !is_file($this->dir(true).($this->name()===''?'Site':'').'.php')){
+                if (IS_INSTALL && !is_file($this->dir(true).($this->currentName()===''?'Site':$this->currentName()).'.php')){
                     $this->logic(array(
                         'content' => $this->classTemplate()
                     ));
@@ -1475,6 +1488,7 @@ class Entity implements ITrace
                     if (Data::write($this, $access)){
                         $this->_changed = false;
                     }
+                    $this->_current_name = null;
                 }
                 // Сохранение подчиненных
                 if ($children){
@@ -1957,7 +1971,7 @@ class Entity implements ITrace
         if ($save_to_file){
             $content = F::toJSON($export);
             $name = $this->name();
-            if ($this->uri()=='') $name = 'Site';
+            if ($this->uri() === '') $name = 'Site';
             $file = $this->dir(true).$name.'.info';
             File::create($content, $file);
         }
@@ -2088,7 +2102,7 @@ class Entity implements ITrace
         $description = $this->description->value();
         // Название
         $name = $this->name();
-        if (empty($name)) $name = 'Site';
+        if ($name === '') $name = 'Site';
         $namespace = str_replace('/','\\', trim($this->dir(false),'/'));
         if (mb_substr($namespace, 0, 5) == 'Site\\') $namespace = mb_substr($namespace, 5);
         // Наследуемый класс
