@@ -66,18 +66,23 @@
                 vertical-align: middle;
             }
             .Bookmarks__item-remove{
-                padding: 1px 4px;
+                padding: 0px 3px;
                 font-size: 10px;
                 border-radius: 15px;
                 color: #444;
+                background-color: #fff;
+                border: 1px solid #cceaff;
                 display: none;
                 }
                 .Bookmarks__item-remove:hover{
-                    background-color: #FC4250;
-                    color: #fff;
+                    /*background-color: #FC4250;*/
+                    color: #FC4250;
                     }
             :hover > .Bookmarks__item-remove{
                 display: inline-block;
+            }
+            .Bookmarks__item.active > .Bookmarks__item-link .Bookmarks__item-remove{
+                border: 1px solid #40b6ff;
             }
     .Bookmarks__items-list .Bookmarks__items-list{
         margin: 0 0 0 10px;

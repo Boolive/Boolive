@@ -306,6 +306,10 @@
                 return str;
         },
 
+        escape_regex: function(str){
+            return (str+'').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+        },
+
         /**
          * Возвращает объект разницу между объектами
          * @param prev Первый объект

@@ -1,9 +1,9 @@
 <?php if ($v['show-item']->bool()):?>
-<li class="Bookmarks__item <?=$v['item_class'];?>">
-    <a class="Bookmarks__item-link" href="/admin<?=$v['item_href']; ?>" title="<?=$v['item_descript']; ?>" data-o="<?=$v['item_href']; ?>">
+<li class="Bookmarks__item <?=$v['item_class'];?>" data-l="<?=$v['item_href']?>" data-o="<?=$v['item_key']?>">
+    <a class="Bookmarks__item-link" href="/admin<?=$v['item_href']; ?>" title="<?=$v['item_descript']; ?>">
         <?php if ($v['item_icon']->bool()):?><img class="Bookmarks__item-icon"  src="<?=$v['item_icon']->uri();?>" alt=""><?php endif;?>
         <span class="Bookmarks__item-title"><?=$v['item_text']; ?></span>
-        <span class="Bookmarks__item-remove" title="Удалить закладку" data-o="<?=$v['item_key']?>">✖</span>
+        <span class="Bookmarks__item-remove" title="Удалить закладку">✖</span>
     </a>
 <?php endif; ?>
 <?php
