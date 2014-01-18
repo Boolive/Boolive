@@ -8,10 +8,18 @@
  */
 namespace Library\admin_widgets\isRelative;
 
+use Boolive\values\Rule;
 use Library\admin_widgets\ToggleAction\ToggleAction;
 
 class isRelative extends ToggleAction
 {
+    function startRule()
+    {
+        $rule = parent::startRule();
+        $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in('protos')->required();
+        return $rule;
+    }
+    
     protected function initState()
     {
         /** @var \Boolive\data\Entity $object */
