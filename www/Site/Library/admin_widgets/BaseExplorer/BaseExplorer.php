@@ -162,8 +162,10 @@ class BaseExplorer extends AutoWidgetList2
         $select = $this->_input['REQUEST']['select'];
         if ($select == 'property'){
             $cond['where'][] = array('attr', 'is_property', '=', 1);
-        }else{
+        }else
+        if ($select == 'structure'){
             $cond['where'][] = array('attr', 'is_property', '=', 0);
+        }else{
             if (in_array($select, array('protos', 'heirs', 'parents'))){
                 $cond['select'] = $select;
                 if ($select=='protos'){
