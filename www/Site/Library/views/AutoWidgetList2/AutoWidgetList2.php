@@ -22,7 +22,7 @@ class AutoWidgetList2 extends Widget
                 $this->_input_child['REQUEST']['number'] = $i;
                 $result = $this->startChild('views');
                 if ($result !== false){
-                    $v['views'][$object->name()] = $result;
+                    $v['views'][] = $result;
                     $i++;
                 }
             }
