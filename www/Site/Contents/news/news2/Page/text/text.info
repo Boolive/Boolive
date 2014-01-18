@@ -1,8 +1,0 @@
-{
-    "value": "<p>Эта страница добавлена в качестве подчиненной для второй новости. Кстати, новость - это обычная страница.</p>\n",
-    "value_type": 2,
-    "proto": "/Library/content_samples/Page/text",
-    "is_mandatory": true,
-    "is_property": true,
-    "order": 2
-}

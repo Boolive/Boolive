@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/basic/Package",
     "order": 15,
     "children": {
@@ -12,6 +11,7 @@
         },
         "description": {
             "value": "Пакет правил доступа, ролей, пользователей и групп",
+            "proto": "/Library/basic/Package/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 2

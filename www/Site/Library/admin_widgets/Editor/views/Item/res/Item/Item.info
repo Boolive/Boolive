@@ -1,13 +1,11 @@
 {
     "is_default_value": true,
-    "value": "Item.js",
     "value_type": 3,
     "proto": "/Library/admin_widgets/BaseExplorer/views/Item/res/Item",
     "order": 2,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "jQueryUI Boolive Item",
             "proto": "/Library/admin_widgets/BaseExplorer/views/Item/res/Item/title",
             "is_mandatory": true,
             "is_property": true,

@@ -1,13 +1,11 @@
 {
     "is_default_value": true,
-    "value": "item_view.tpl",
     "value_type": 3,
     "proto": "/Library/menus/Menu/item_view/views/part_item",
     "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Виджет пункта на раздел",
             "proto": "/Library/menus/Menu/item_view/views/part_item/title",
             "is_mandatory": true,
             "is_property": true,
@@ -15,7 +13,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/menus/Menu/item_view/views/part_item/description",
             "is_mandatory": true,
             "is_property": true,
@@ -23,7 +20,6 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/menus/Menu/item_view/views/part_item/res",
             "is_mandatory": true,
             "is_property": true,
@@ -31,7 +27,6 @@
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/menus/Menu/item_view/views/part_item/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -39,7 +34,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "is(/Library/content_samples/Part)",
             "proto": "/Library/menus/Menu/item_view/views/part_item/object_rule",
             "is_mandatory": true,
             "is_property": true,
@@ -47,7 +41,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/menus/Menu/item_view/views/part_item/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,

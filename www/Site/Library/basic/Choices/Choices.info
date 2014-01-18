@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/basic/Object",
     "order": 30,
     "children": {
@@ -17,6 +16,23 @@
             "proto": "/Library/basic/Object/description",
             "is_property": true,
             "order": 2
+        },
+        "active_radio": {
+            "is_default_value": true,
+            "proto": "/Library/basic/Choices/choice_1",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_relative": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Выбранный вариант",
+                    "proto": "/Library/basic/String",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

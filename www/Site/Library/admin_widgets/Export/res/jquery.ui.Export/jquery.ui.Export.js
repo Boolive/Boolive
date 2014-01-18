@@ -10,6 +10,7 @@
         process: false,
         bar: null,
         message: null,
+        select: null,
 
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
@@ -18,7 +19,7 @@
             self.options.object = $.parseJSON(this.element.attr('data-o'));
             self.bar = self.element.find('.progress .bar');
             self.message = self.element.find('.progress .message');
-
+            self.select = self.callParents('getState').select;
             self.element.find('.confirm .submit').click(function(e){
                 e.preventDefault();
                 self.start();
@@ -42,7 +43,8 @@
             this.element.find('.confirm').hide();
             this.element.find('.progress').show();
             this.callServer('export_init', {
-                object: this.options.object
+                object: this.options.object,
+                select: this.select
             }, function(result, textStatus, jqXHR){
                 if (result.out && result.out.id){
                     self.progress(result.out.id);
@@ -54,6 +56,7 @@
             var self = this;
             this.callServer('export_do', {
                 object: this.options.object,
+                select: this.select,
                 id: id
             }, function(result, textStatus, jqXHR){
                 if (result.out){

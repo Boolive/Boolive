@@ -3,7 +3,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/Editor/views/Item/res/Item",
     "is_mandatory": true,
-    "is_property": true,
     "order": 2,
     "children": {
         "title": {

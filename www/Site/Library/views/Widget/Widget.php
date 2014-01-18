@@ -71,15 +71,6 @@ class Widget extends View
         return Template::render($this, $v);
     }
 
-    function exportedProperties()
-    {
-        $names = parent::exportedProperties();
-        $names[] = 'res';
-        $names[] = 'object';
-        $names[] = 'object_rule';
-        return $names;
-    }
-
     function classTemplate($methods = array(), $use = array())
     {
 //        $use[] = 'Boolive\values\Rule';

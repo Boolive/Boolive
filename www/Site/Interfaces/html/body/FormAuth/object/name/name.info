@@ -1,12 +1,10 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/forms/FormAuth/object/name",
     "order": 2,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Логин",
             "proto": "/Library/forms/FormAuth/object/name/title",
             "is_mandatory": true,
             "is_property": true,
@@ -14,7 +12,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Имя пользователя",
             "value_type": 2,
             "proto": "/Library/forms/FormAuth/object/name/description",
             "is_mandatory": true,

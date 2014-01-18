@@ -8,39 +8,39 @@
         "title": {
             "value": "Следующая/предыдущая страница",
             "proto": "/Library/views/Widget/title",
-            "is_mandatory": true,
             "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Отображает ссылки на предыдущую и следующую страницу с учётом иерархии.",
+            "value_type": 2,
             "proto": "/Library/views/Widget/description",
-            "is_mandatory": true,
             "is_property": true,
             "order": 2
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
+            "order": 3
+        },
+        "object_types": {
+            "proto": "/Library/basic/Object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4,
             "children": {
                 "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
-                    "is_mandatory": true,
+                    "value": "Список разрешенных объектов",
+                    "proto": "/Library/basic/Object/title",
                     "is_property": true,
                     "order": 1
                 },
                 "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value": "Список объектов, по которым разрешена навигация",
                     "value_type": 2,
-                    "proto": "/Library/views/Widget/res/description",
-                    "is_mandatory": true,
+                    "proto": "/Library/basic/Object/description",
                     "is_property": true,
                     "order": 2
                 }
@@ -48,7 +48,6 @@
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -56,7 +55,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -64,7 +62,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/views/Widget/cache/description",
                     "is_mandatory": true,

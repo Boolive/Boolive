@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/basic/Package",
     "order": 10,
     "children": {
@@ -8,15 +7,15 @@
             "proto": "/Library/basic/Package/title",
             "is_mandatory": true,
             "is_property": true,
-            "order": 2
+            "order": 3
         },
         "description": {
             "is_default_value": true,
-            "value": "Коллекция объектов",
+            "value_type": 2,
             "proto": "/Library/basic/Package/description",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3
+            "order": 4
         }
     }
 }

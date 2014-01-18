@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/basic/Object",
     "order": 20,
     "children": {
@@ -12,6 +11,7 @@
         },
         "description": {
             "value": "Коллекция объектов",
+            "value_type": 2,
             "proto": "/Library/basic/Object/description",
             "is_mandatory": true,
             "is_property": true,

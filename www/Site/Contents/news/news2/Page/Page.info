@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/content_samples/Page",
     "order": 8,
     "children": {
@@ -11,14 +10,28 @@
             "is_property": true,
             "order": 1
         },
+        "text": {
+            "value": "<p>Эта страница добавлена в качестве подчиненной для второй новости. Кстати, новость - это обычная страница.</p>\n",
+            "value_type": 2,
+            "proto": "/Library/content_samples/Page/text",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
         "description": {
             "is_default_value": true,
-            "value": "Публикация на сайте - страница, статья, новость или другое",
             "value_type": 2,
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 3
+        },
+        "keywords": {
+            "is_default_value": true,
+            "proto": "/Library/content_samples/Page/keywords",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
         }
     }
 }

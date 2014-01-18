@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/content_samples/Page",
     "order": 8,
     "children": {
@@ -10,6 +9,14 @@
             "is_property": true,
             "order": 11
         },
+        "text": {
+            "value": "<h2>Привет!</h2>\n\n<p>Система управления сайтом Boolive 2 успешно установлена.<br />\nРаздел администрирования находится по адресу <a href=\"/admin\">/admin</a> Логин: <strong>admin</strong> Пароль: <strong>padmin</strong></p>\n\n<p> </p>\n",
+            "value_type": 2,
+            "proto": "/Library/content_samples/Page/text",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 13
+        },
         "description": {
             "value": "Главная страница первого простейшего сайта",
             "value_type": 2,
@@ -17,6 +24,12 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 22
+        },
+        "keywords": {
+            "proto": "/Library/content_samples/Page/keywords",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 23
         }
     }
 }

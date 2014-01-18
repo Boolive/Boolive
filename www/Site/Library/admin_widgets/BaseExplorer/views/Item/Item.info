@@ -14,7 +14,6 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -22,7 +21,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/views/Widget/object_rule",
             "is_mandatory": true,

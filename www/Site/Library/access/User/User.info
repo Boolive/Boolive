@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/access/Member",
     "is_default_class": false,
     "order": 5,
@@ -14,6 +13,7 @@
                 "title": {
                     "value": "Имя",
                     "proto": "/Library/basic/String",
+                    "is_property": true,
                     "order": 1
                 }
             }
@@ -22,6 +22,8 @@
             "value": "Авторизованный посетитель сайта",
             "value_type": 2,
             "proto": "/Library/access/Member/description",
+            "is_hidden": true,
+            "is_property": true,
             "order": 2
         },
         "email": {
@@ -38,20 +40,51 @@
             "is_property": true,
             "order": 7
         },
+        "avatar": {
+            "value": "avatar.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "value": "Аватарка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Фото пользователя",
+                    "value_type": 2,
+                    "proto": "/Library/basic/Image/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "rights": {
+            "proto": "/Library/access/Member/rights",
+            "is_property": true,
+            "order": 9
+        },
         "visit_time": {
             "is_default_value": true,
-            "value": "0",
             "proto": "/Library/basic/Number",
+            "is_property": true,
             "order": 10,
             "children": {
                 "title": {
                     "value": "Время визита",
                     "proto": "/Library/basic/Number/title",
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Когда последний раз пользователь заходил на сайт",
+                    "value_type": 2,
                     "proto": "/Library/basic/Number/description",
+                    "is_property": true,
                     "order": 2
                 }
             }

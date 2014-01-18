@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/views/Site",
     "order": 10,
     "children": {
@@ -15,6 +14,60 @@
             "proto": "/Library/views/Site/description",
             "is_property": true,
             "order": 58
+        },
+        "site_logo": {
+            "value": "site_logo.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 59,
+            "children": {
+                "title": {
+                    "value": "Логотип",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "favicon": {
+            "value": "favicon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 60,
+            "children": {
+                "title": {
+                    "value": "Favicon",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Иконка в строке адреса браузера",
+                    "value_type": 2,
+                    "proto": "/Library/basic/Image/description",
+                    "is_property": true,
+                    "order": 2
+                },
+                "extentions": {
+                    "value": "*.png *.ico",
+                    "proto": "/Library/basic/Image/extentions",
+                    "is_hidden": true,
+                    "is_property": true,
+                    "order": 3,
+                    "children": {
+                        "title": {
+                            "is_default_value": true,
+                            "proto": "/Library/basic/Image/extentions/title",
+                            "is_hidden": true,
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        }
+                    }
+                }
+            }
         }
     }
 }

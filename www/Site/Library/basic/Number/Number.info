@@ -16,6 +16,27 @@
             "proto": "/Library/basic/Object/description",
             "is_property": true,
             "order": 2
+        },
+        "unit": {
+            "is_default_value": true,
+            "proto": "/Library/basic/String",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Единица измерения",
+                    "proto": "/Library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Строковое значение длиной до 255 символов",
+                    "value_type": 2,
+                    "proto": "/Library/basic/String/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
         }
     }
 }

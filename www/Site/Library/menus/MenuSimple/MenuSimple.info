@@ -21,34 +21,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -56,7 +35,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -64,7 +42,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/views/Widget/cache/description",
                     "is_mandatory": true,
@@ -75,7 +52,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/views/Widget/object_rule",
             "is_mandatory": true,
@@ -84,7 +60,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/views/Widget/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -93,7 +68,7 @@
             }
         },
         "object": {
-            "value": "",
+            "proto": "/Library/basic/Object",
             "is_link": true,
             "is_mandatory": true,
             "is_property": true,
@@ -101,12 +76,57 @@
             "children": {
                 "title": {
                     "value": "Пункты меню",
-                    "is_mandatory": true,
+                    "proto": "/Library/basic/Object/title",
                     "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Ссылки на объекты на которые отображать пункты меню",
+                    "proto": "/Library/basic/Object/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "is": {
+            "proto": "/Library/basic/Object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Что отображать?",
+                    "proto": "/Library/basic/Object/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "На какие объекты формировать пункты меню. Указываются ссылки на прототипы этих объектов или на них самих.",
+                    "value_type": 2,
+                    "proto": "/Library/basic/Object/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "proto": "/Library/views/Widget/path_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/views/Widget/path_rule/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value_type": 2,
+                    "proto": "/Library/views/Widget/path_rule/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2

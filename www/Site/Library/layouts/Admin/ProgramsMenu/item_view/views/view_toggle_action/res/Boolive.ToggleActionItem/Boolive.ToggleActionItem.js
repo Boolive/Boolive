@@ -18,7 +18,8 @@
                 var object = (_.isArray(s.selected) && s.selected.length==1)? _.first(s.selected) : s.selected;
                 self.callServer('toggle',{
                     direct: self.options.object,
-                    object: object
+                    object: object,
+                    select: s.select
                 },{
                     success: function(result, textStatus, jqXHR){
                         if (_.isObject(result.out) && !_.isEmpty(result.out.changes)){

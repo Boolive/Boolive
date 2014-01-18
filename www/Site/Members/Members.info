@@ -1,20 +1,42 @@
 {
-    "value": "",
     "proto": "/Library/access/Group",
     "order": 55,
     "children": {
         "title": {
             "value": "Пользователи и группы",
             "proto": "/Library/access/Group/title",
-            "is_hidden": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Все пользователи и группы с назначенными правами доступа",
             "value_type": 2,
             "proto": "/Library/access/Group/description",
-            "is_hidden": true,
+            "is_property": true,
             "order": 2
+        },
+        "icon-150": {
+            "value": "icon-150.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "rights": {
+            "is_default_value": true,
+            "proto": "/Library/access/Group/rights",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
         }
     }
 }

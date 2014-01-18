@@ -177,11 +177,4 @@ class View extends Entity
         }
         return $result;
     }
-
-    function exportedProperties()
-    {
-        $names = parent::exportedProperties();
-        $names[] = 'cache';
-        return $names;
-    }
 }

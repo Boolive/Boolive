@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/views/ViewSingle",
     "is_mandatory": true,
     "order": 14,
@@ -18,6 +17,22 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 2
+        },
+        "SearchResult": {
+            "is_default_value": true,
+            "value_type": 3,
+            "proto": "/Library/content_widgets/SearchResult",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "ContentView": {
+            "proto": "/Library/content_widgets/Content",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
         }
     }
 }

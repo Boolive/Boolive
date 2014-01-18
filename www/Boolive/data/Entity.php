@@ -1883,7 +1883,7 @@ class Entity implements ITrace
 
     /**
      * Экпорт объекта в массив с возможностью сохраненить в файл .info в формате JSON в директории объекта
-     * Экспортирует атрибуты объекта и свойства, названия которых возвращает Entity::exportedProperties()
+     * Экспортирует атрибуты объекта и свойства
      * @param bool $save_to_file Признак, сохранять в файл?
      * @param bool $more_info Признак, экспортировать дополнительную информацию об объекте
      * @param bool $export_properties Признак, экспортирвоать свойсвта или нет?
@@ -1894,8 +1894,11 @@ class Entity implements ITrace
     function export($save_to_file = true, $more_info = false, $export_properties = true, $export_file = 0, $export_class = 0)
     {
         $export = array();
-        if ($this->isDefaultValue()) $export['is_default_value'] = true;
-        $export['value'] = $this->value();
+        if ($this->isDefaultValue()){
+            $export['is_default_value'] = true;
+        }else{
+            if ($this->value() !== '') $export['value'] = $this->value();
+        }
         if ($this->valueType() > Entity::VALUE_SIMPLE) $export['value_type'] = $this->valueType();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
         if ($this->isLink()) $export['is_link'] = true;
@@ -1929,34 +1932,24 @@ class Entity implements ITrace
         // Свойства (подчиненные) объекта
         if ($export_properties){
             $export['children'] = array();
-            // Названия подчиненных, которые экспортировать вместе с объектом
-            $children = $this->exportedProperties();
-            // Выбор подчиненных
-            if ($children === true){
-                $children = $this->find(array(
-                    'where' => array(
-                        array('attr', 'is_draft', '>=', 0),
-                        array('attr', 'is_hidden', '>=', 0)
-                    ),
-                    'comment' => 'read children for export'
-                ), false, false);
-            }else
-            if (!empty($children) && is_array($children)){
-                $children = $this->find(array(
-                    'where' => array(
-                        array('attr', 'name', 'in',  $children),
-                        array('attr', 'is_draft', '>=', 0),
-                        array('attr', 'is_hidden', '>=', 0)
-                    ),
-                    'comment' => 'read children by names for export'
-                ), false, false);
-            }else{
-                $children = array();
-            }
+            $children = $this->find(array(
+                'where' => array(
+                    array('attr', 'is_draft', '>=', 0),
+                    array('attr', 'is_hidden', '>=', 0),
+                    array('attr', 'is_property', '=', 1)
+                ),
+                'comment' => 'read property for export'
+            ), false, false);
             if (is_array($children)){
                 foreach ($children as $child){
+                    /** @var $child Entity */
                     if ($child->isExist()){
-                        $export['children'][$child->name()] = $child->export(false, $more_info);
+                        $export['children'][$child->name()] = $child->export(true, $more_info);
+                        if ($save_to_file){
+                            $info_file = $child->dir(true).$child->name().'.info';
+                            File::delete($info_file);
+                            File::deleteEmtyDir($child->dir(true));
+                        }
                     }
                 }
             }
@@ -1968,7 +1961,7 @@ class Entity implements ITrace
         if ($export_class) $export['class_content'] = $this->classContent($export_class!=2);
 
         // Сохранение в info файл
-        if ($save_to_file){
+        if ($save_to_file && !$this->isProperty()){
             $content = F::toJSON($export);
             $name = $this->name();
             if ($this->uri() === '') $name = 'Site';
@@ -1976,16 +1969,6 @@ class Entity implements ITrace
             File::create($content, $file);
         }
         return $export;
-    }
-
-    /**
-     * Названия свойств, которые экспортировать вместе с объектом
-     * Другие подчиненные будут экпортироваться в отдельные .info файлы
-     * @return array
-     */
-    function exportedProperties()
-    {
-        return array('title', 'description');
     }
 
     /**

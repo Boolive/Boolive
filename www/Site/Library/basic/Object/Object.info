@@ -1,5 +1,4 @@
 {
-    "value": "",
     "order": 7,
     "children": {
         "title": {
@@ -11,11 +10,14 @@
                 "title": {
                     "value": "Название",
                     "proto": "/Library/basic/String/title",
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Название должно содержать смысл и быть коротким",
+                    "value_type": 2,
                     "proto": "/Library/basic/String/description",
+                    "is_property": true,
                     "order": 2
                 }
             }
@@ -30,12 +32,14 @@
                 "title": {
                     "value": "Описание",
                     "proto": "/Library/basic/Text/title",
+                    "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Краткое описание, дополняющее название",
                     "value_type": 2,
                     "proto": "/Library/basic/Text/description",
+                    "is_property": true,
                     "order": 2
                 }
             }

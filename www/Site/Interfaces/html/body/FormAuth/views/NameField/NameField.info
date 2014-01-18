@@ -1,13 +1,11 @@
 {
     "is_default_value": true,
-    "value": "NameField.tpl",
     "value_type": 3,
     "proto": "/Library/forms/FormAuth/views/NameField",
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Поле формы",
             "proto": "/Library/forms/FormAuth/views/NameField/title",
             "is_mandatory": true,
             "is_property": true,
@@ -15,7 +13,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Эталон поля ввода строки",
             "proto": "/Library/forms/FormAuth/views/NameField/description",
             "is_mandatory": true,
             "is_property": true,
@@ -23,34 +20,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/forms/FormAuth/views/NameField/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/forms/FormAuth/views/NameField/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/forms/FormAuth/views/NameField/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 3
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "attr(name,=,name)",
             "proto": "/Library/forms/FormAuth/views/NameField/object_rule",
             "is_mandatory": true,
             "is_property": true,
@@ -58,7 +34,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/forms/FormAuth/views/NameField/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,

@@ -20,34 +20,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/layouts/Layout/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/layouts/Layout/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/layouts/Layout/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/layouts/Layout/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -55,12 +34,103 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/layouts/Layout/object_rule",
             "is_mandatory": true,
             "is_property": true,
             "order": 5
+        },
+        "header": {
+            "is_default_value": true,
+            "proto": "/Library/views/ViewGroup",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Шапка",
+                    "proto": "/Library/views/ViewGroup/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Область вставки в самом верху страницы",
+                    "proto": "/Library/views/ViewGroup/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "main": {
+            "is_default_value": true,
+            "proto": "/Library/views/ViewGroup",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Центр",
+                    "proto": "/Library/views/ViewGroup/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Область вставки для содержимого страницы",
+                    "proto": "/Library/views/ViewGroup/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "sidebar": {
+            "is_default_value": true,
+            "proto": "/Library/views/ViewGroup",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "value": "Боковая панель",
+                    "proto": "/Library/views/ViewGroup/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Область вставки сбоку от содержимого",
+                    "proto": "/Library/views/ViewGroup/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "footer": {
+            "is_default_value": true,
+            "proto": "/Library/views/ViewGroup",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9,
+            "children": {
+                "title": {
+                    "value": "Подвал",
+                    "proto": "/Library/views/ViewGroup/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Область вставки снизу страницы",
+                    "proto": "/Library/views/ViewGroup/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                }
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/access/Member",
     "is_default_class": false,
     "order": 4,
@@ -17,6 +16,11 @@
             "proto": "/Library/access/Member/description",
             "is_property": true,
             "order": 2
+        },
+        "rights": {
+            "proto": "/Library/access/Member/rights",
+            "is_property": true,
+            "order": 3
         }
     }
 }

@@ -11,13 +11,10 @@
             this.element.on('click', '.MenuSelections__item', function(e){
                 e.preventDefault();
                 var state = self.callParents('getState');
-                if (state.selected.length === 1){
-                    self.callParents('setState', [{
-                        object: _.first(state.selected),
-                        select: $(this).attr('data-name')
-                    }]);
-
-                }
+                self.callParents('setState', [{
+                    object: state.selected.length === 1 ? _.first(state.selected) : state.object,
+                    select: $(this).attr('data-name')
+                }]);
                 e.stopPropagation();
             });
             this.call_setState({direct:'children'}, this.callParents('getState'), {select:true});

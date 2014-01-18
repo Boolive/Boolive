@@ -20,38 +20,49 @@
             "order": 2
         },
         "res": {
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 4
         },
         "object": {
-            "value": "",
             "proto": "/Contents/Keywords",
             "is_link": true,
             "is_mandatory": true,
             "is_property": true,
             "order": 5
+        },
+        "max_font_size": {
+            "value": "20",
+            "proto": "/Library/basic/Number",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Максимальный размер шрифта",
+                    "proto": "/Library/basic/Number/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "min_font_size": {
+            "value": "8",
+            "proto": "/Library/basic/Number",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Минимальный размер шрифта",
+                    "proto": "/Library/basic/Number/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

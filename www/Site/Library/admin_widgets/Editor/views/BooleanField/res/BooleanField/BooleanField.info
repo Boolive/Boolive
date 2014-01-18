@@ -3,7 +3,6 @@
     "value_type": 3,
     "proto": "/Library/admin_widgets/Editor/views/Field/res/Field",
     "is_mandatory": true,
-    "is_property": true,
     "order": 1,
     "children": {
         "title": {

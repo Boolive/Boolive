@@ -21,34 +21,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/AutoWidgetList2/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidgetList2/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 7
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -56,7 +35,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidgetList2/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -64,12 +42,110 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidgetList2/cache/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
+                }
+            }
+        },
+        "views": {
+            "is_default_value": true,
+            "proto": "/Library/views/AutoWidgetList2/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/views/AutoWidgetList2/views/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "proto": "/Library/views/AutoWidgetList2/views/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                },
+                "EmailField": {
+                    "value": "EmailField.tpl",
+                    "value_type": 3,
+                    "proto": "/Library/forms/FormField",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3,
+                    "children": {
+                        "title": {
+                            "value": "Поле email",
+                            "proto": "/Library/forms/FormField/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "res": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/res",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3
+                        },
+                        "object_rule": {
+                            "value": "is(/Library/content_samples/Feedback/email_from)",
+                            "proto": "/Library/forms/FormField/object_rule",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 4
+                        }
+                    }
+                },
+                "MessageField": {
+                    "value": "MessageField.tpl",
+                    "value_type": 3,
+                    "proto": "/Library/forms/FormField",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4,
+                    "children": {
+                        "title": {
+                            "value": "Поле сообщения",
+                            "proto": "/Library/forms/FormField/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "res": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/res",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3
+                        },
+                        "object_rule": {
+                            "value": "is(/Library/content_samples/Feedback/message)",
+                            "proto": "/Library/forms/FormField/object_rule",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 4
+                        }
+                    }
                 }
             }
         },
@@ -82,7 +158,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,

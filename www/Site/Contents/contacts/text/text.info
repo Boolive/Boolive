@@ -1,8 +1,0 @@
-{
-    "value": "<p>Напишите нам письмицо :)</p>\n",
-    "value_type": 2,
-    "proto": "/Library/content_samples/Page/text",
-    "is_mandatory": true,
-    "is_property": true,
-    "order": 2
-}

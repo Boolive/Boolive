@@ -13,7 +13,6 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/admin_widgets/Editor/views/Field/res",
             "is_mandatory": true,
             "is_property": true,

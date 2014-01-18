@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "Logo.tpl",
     "value_type": 3,
     "proto": "/Library/views/Logo",
     "is_mandatory": true,
@@ -8,7 +7,6 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Логотип",
             "proto": "/Library/views/Logo/title",
             "is_mandatory": true,
             "is_property": true,
@@ -16,42 +14,27 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Отображает изображение с ссылкой на главную страницу сайта",
             "proto": "/Library/views/Logo/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 3
         },
+        "use_object": {
+            "is_default_value": true,
+            "proto": "/Library/views/Logo/use_object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Logo/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Logo/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/Logo/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 7
         },
         "object": {
             "is_default_value": true,
-            "value": "site_logo.png",
             "value_type": 3,
             "proto": "/site_logo",
             "is_link": true,
@@ -61,7 +44,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Изображение",
                     "proto": "/Library/views/Logo/object/title",
                     "is_mandatory": true,
                     "is_property": true,

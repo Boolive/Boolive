@@ -1,10 +1,9 @@
 {
     "is_default_value": true,
-    "value": "Widget.tpl",
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
-    "order": 40,
+    "order": 41,
     "children": {
         "title": {
             "value": "Ссылка",
@@ -20,6 +19,23 @@
             "is_property": true,
             "order": 2
         },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
         "object_rule": {
             "value": "access(write/change/is_link)",
             "proto": "/Library/admin_widgets/ToggleAction/object_rule",
@@ -29,7 +45,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,

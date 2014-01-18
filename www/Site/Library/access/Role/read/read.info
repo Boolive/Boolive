@@ -1,19 +1,19 @@
 {
-    "value": "",
     "proto": "/Library/access/Action",
     "is_mandatory": true,
-    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Чтение",
             "proto": "/Library/access/Action/title",
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Выбор объекта из базы данных. Возможность его просматривать",
             "value_type": 2,
             "proto": "/Library/access/Action/description",
+            "is_property": true,
             "order": 2
         }
     }

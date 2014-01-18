@@ -21,33 +21,177 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
+            "order": 3
+        },
+        "views": {
+            "is_default_value": true,
+            "proto": "/Library/views/AutoWidgetList2/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 13,
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/AutoWidgetList2/res/title",
+                    "proto": "/Library/views/AutoWidgetList2/views/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "proto": "/Library/views/AutoWidgetList2/views/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
                 },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidgetList2/res/description",
+                "NameField": {
+                    "value": "NameField.tpl",
+                    "value_type": 3,
+                    "proto": "/Library/forms/FormField",
                     "is_mandatory": true,
                     "is_property": true,
-                    "order": 3
+                    "order": 3,
+                    "children": {
+                        "title": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "res": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/res",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3
+                        },
+                        "object_rule": {
+                            "value": "attr(name,=,name)",
+                            "proto": "/Library/forms/FormField/object_rule",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 5,
+                            "children": {
+                                "title": {
+                                    "is_default_value": true,
+                                    "proto": "/Library/forms/FormField/object_rule/title",
+                                    "is_mandatory": true,
+                                    "is_property": true,
+                                    "order": 1
+                                }
+                            }
+                        }
+                    }
+                },
+                "PasswField": {
+                    "value": "PasswField.tpl",
+                    "value_type": 3,
+                    "proto": "/Library/forms/FormField",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4,
+                    "children": {
+                        "title": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "res": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/res",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3
+                        },
+                        "object_rule": {
+                            "value": "attr(name,=,passw)",
+                            "proto": "/Library/forms/FormField/object_rule",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 5,
+                            "children": {
+                                "title": {
+                                    "is_default_value": true,
+                                    "proto": "/Library/forms/FormField/object_rule/title",
+                                    "is_mandatory": true,
+                                    "is_property": true,
+                                    "order": 1
+                                }
+                            }
+                        }
+                    }
+                },
+                "RememberField": {
+                    "value": "RememberField.tpl",
+                    "value_type": 3,
+                    "proto": "/Library/forms/FormField",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 5,
+                    "children": {
+                        "title": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "res": {
+                            "is_default_value": true,
+                            "proto": "/Library/forms/FormField/res",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3
+                        },
+                        "object_rule": {
+                            "value": "attr(name,=,remember)",
+                            "proto": "/Library/forms/FormField/object_rule",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 5,
+                            "children": {
+                                "title": {
+                                    "is_default_value": true,
+                                    "proto": "/Library/forms/FormField/object_rule/title",
+                                    "is_mandatory": true,
+                                    "is_property": true,
+                                    "order": 1
+                                }
+                            }
+                        }
+                    }
                 }
             }
         },
         "object": {
-            "value": "",
+            "proto": "/Library/basic/Object",
             "is_default_class": false,
             "is_mandatory": true,
             "is_property": true,
@@ -55,15 +199,115 @@
             "children": {
                 "title": {
                     "value": "Модель авторизации",
+                    "proto": "/Library/basic/Object/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
+                },
+                "name": {
+                    "proto": "/Library/basic/Object",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3,
+                    "children": {
+                        "title": {
+                            "value": "Логин",
+                            "proto": "/Library/basic/Email/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "value": "Имя пользователя",
+                            "value_type": 2,
+                            "proto": "/Library/basic/Email/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        }
+                    }
+                },
+                "passw": {
+                    "value_type": 2,
+                    "proto": "/Library/basic/Text",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4,
+                    "children": {
+                        "title": {
+                            "value": "Пароль",
+                            "proto": "/Library/basic/Text/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "proto": "/Library/basic/Text/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        }
+                    }
+                },
+                "remember": {
+                    "value": 0,
+                    "proto": "/Library/basic/Boolean",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 5,
+                    "children": {
+                        "title": {
+                            "value": "Запомнить",
+                            "proto": "/Library/basic/Boolean/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "is_default_value": true,
+                            "value_type": 2,
+                            "proto": "/Library/basic/Boolean/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        }
+                    }
+                },
+                "ok_message": {
+                    "value": "Успешная авторизация",
+                    "proto": "/Library/basic/Text",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 6,
+                    "children": {
+                        "title": {
+                            "value": "Текст успешной авторизации",
+                            "proto": "/Library/basic/Text/title",
+                            "is_property": true,
+                            "order": 1
+                        }
+                    }
+                },
+                "error_message": {
+                    "value": "Неверный логин или пароль",
+                    "proto": "/Library/basic/Text",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 7,
+                    "children": {
+                        "title": {
+                            "value": "Текст неудачной авторизации",
+                            "proto": "/Library/basic/Text/title",
+                            "is_property": true,
+                            "order": 1
+                        }
+                    }
                 }
             }
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -71,7 +315,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidgetList2/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -79,7 +322,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidgetList2/cache/description",
                     "is_mandatory": true,
@@ -90,7 +332,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
@@ -99,11 +340,34 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
+                }
+            }
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "proto": "/Library/views/AutoWidgetList2/path_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 18,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/views/AutoWidgetList2/path_rule/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value_type": 2,
+                    "proto": "/Library/views/AutoWidgetList2/path_rule/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
                 }
             }
         }

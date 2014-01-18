@@ -1,59 +1,20 @@
 {
-    "value": "",
+    "proto": "/Library/basic/Object",
     "is_default_class": false,
     "order": 21,
     "children": {
         "title": {
             "value": "Стиль ",
-            "is_mandatory": true,
+            "proto": "/Library/basic/Object/title",
             "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Для оформления одного объекта",
-            "is_mandatory": true,
+            "value_type": 2,
+            "proto": "/Library/basic/Object/description",
             "is_property": true,
             "order": 2
-        },
-        "width": {
-            "value": "",
-            "order": 3
-        },
-        "height": {
-            "value": "",
-            "order": 4
-        },
-        "margin-top": {
-            "value": "",
-            "order": 5
-        },
-        "margin-right": {
-            "value": "",
-            "order": 6
-        },
-        "margin-bottom": {
-            "value": "",
-            "order": 7
-        },
-        "margin-left": {
-            "value": "",
-            "order": 8
-        },
-        "text-align": {
-            "value": "",
-            "order": 9
-        },
-        "padding-left": {
-            "value": "",
-            "order": 10
-        },
-        "padding-right": {
-            "value": "",
-            "order": 11
-        },
-        "text-indent": {
-            "value": "",
-            "order": 12
         }
     }
 }

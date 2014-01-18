@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/content_samples/Part",
     "order": 45,
     "children": {
@@ -15,6 +14,22 @@
             "proto": "/Library/content_samples/Part/description",
             "is_property": true,
             "order": 6
+        },
+        "icon-150": {
+            "value": "icon-150.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

@@ -1,10 +1,9 @@
 {
     "is_default_value": true,
-    "value": "SelectObject.tpl",
     "value_type": 3,
     "proto": "/Library/admin_widgets/SelectObject",
     "is_default_class": false,
-    "order": 28,
+    "order": 29,
     "children": {
         "title": {
             "value": "Добавить",
@@ -20,36 +19,71 @@
             "is_property": true,
             "order": 2
         },
+        "submit_title": {
+            "is_default_value": true,
+            "proto": "/Library/admin_widgets/SelectObject/submit_title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cancel_title": {
+            "is_default_value": true,
+            "proto": "/Library/admin_widgets/SelectObject/cancel_title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/admin_widgets/SelectObject/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 5,
+            "order": 5
+        },
+        "programs": {
+            "is_default_value": true,
+            "value_type": 3,
+            "proto": "/Library/admin_widgets/SelectObject/programs",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/admin_widgets/SelectObject/res/title",
+                    "proto": "/Library/basic/Image/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
-                },
-                "description": {
+                }
+            }
+        },
+        "short_select": {
+            "is_default_value": true,
+            "proto": "/Library/admin_widgets/SelectObject/short_select",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
                     "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/admin_widgets/SelectObject/res/description",
+                    "proto": "/Library/admin_widgets/SelectObject/short_select/title",
                     "is_mandatory": true,
                     "is_property": true,
-                    "order": 4
+                    "order": 1
                 }
             }
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/admin_widgets/SelectObject/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -57,7 +91,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/admin_widgets/SelectObject/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -65,7 +98,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/SelectObject/cache/description",
                     "is_mandatory": true,
@@ -76,7 +108,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/admin_widgets/SelectObject/object_rule",
             "is_mandatory": true,
@@ -85,7 +116,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/SelectObject/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,

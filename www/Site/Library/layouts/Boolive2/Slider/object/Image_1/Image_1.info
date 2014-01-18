@@ -6,7 +6,6 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Изображение",
             "proto": "/Library/basic/Image/title",
             "is_mandatory": true,
             "is_property": true,
@@ -14,7 +13,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Файл изображения",
             "value_type": 2,
             "proto": "/Library/basic/Image/description",
             "is_mandatory": true,

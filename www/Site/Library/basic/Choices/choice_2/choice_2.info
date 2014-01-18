@@ -7,6 +7,7 @@
         "title": {
             "value": "Вариант 2",
             "proto": "/Library/basic/String/title",
+            "is_property": true,
             "order": 1
         }
     }

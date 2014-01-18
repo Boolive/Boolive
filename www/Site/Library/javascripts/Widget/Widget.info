@@ -16,12 +16,13 @@
             "value": "Логика виджета на стороне клиента (в браузере)",
             "value_type": 2,
             "proto": "/Library/javascripts/JavaScript/description",
+            "is_property": true,
             "order": 2
         },
         "depends": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
+            "is_property": true,
             "order": 3
         }
     }

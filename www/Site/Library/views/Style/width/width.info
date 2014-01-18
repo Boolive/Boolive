@@ -1,0 +1,12 @@
+{
+    "proto": "/Library/basic/String",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "width",
+            "proto": "/Library/basic/String/title",
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

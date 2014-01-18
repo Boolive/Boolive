@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "Выбрать",
-    "proto": "/Library/admin_widgets/SelectObject/submit_title",
-    "is_mandatory": true,
-    "is_property": true,
-    "order": 4
-}

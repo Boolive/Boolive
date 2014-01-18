@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/basic/Object",
     "is_default_class": false,
     "order": 6,
@@ -7,12 +6,16 @@
         "title": {
             "value": "Роль",
             "proto": "/Library/basic/Object/title",
+            "is_hidden": true,
+            "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Сгруппированные права доступа по действиям над объектами.",
             "value_type": 2,
             "proto": "/Library/basic/Object/description",
+            "is_hidden": true,
+            "is_property": true,
             "order": 2
         }
     }

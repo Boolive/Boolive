@@ -14,7 +14,6 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
             "is_property": true,
@@ -30,13 +29,19 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/views/AutoWidgetList2/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
                 }
             }
+        },
+        "views": {
+            "is_default_value": true,
+            "proto": "/Library/views/AutoWidgetList2/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
         }
     }
 }

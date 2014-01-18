@@ -31,11 +31,4 @@ class JavaScript extends View
             $this->_commands->htmlHead('script', array('type'=>'text/javascript', 'src'=>$file.'?'.TIMESTAMP, 'text'=>''));
         }
     }
-
-    function exportedProperties()
-    {
-        $names = parent::exportedProperties();
-        $names[] = 'depends';
-        return $names;
-    }
 }

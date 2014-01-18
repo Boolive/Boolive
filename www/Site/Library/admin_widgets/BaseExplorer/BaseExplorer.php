@@ -163,7 +163,7 @@ class BaseExplorer extends AutoWidgetList2
         if ($select == 'property'){
             $cond['where'][] = array('attr', 'is_property', '=', 1);
         }else
-        if ($select == 'structure'){
+        if ($select == 'structure' || $select == null){
             $cond['where'][] = array('attr', 'is_property', '=', 0);
         }else{
             if (in_array($select, array('protos', 'heirs', 'parents'))){

@@ -1,13 +1,11 @@
 {
     "is_default_value": true,
-    "value": "",
     "value_type": 2,
     "proto": "/Library/forms/FormAuth/object/passw",
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Пароль",
             "proto": "/Library/forms/FormAuth/object/passw/title",
             "is_mandatory": true,
             "is_property": true,
@@ -15,7 +13,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
             "proto": "/Library/forms/FormAuth/object/passw/description",
             "is_mandatory": true,
             "is_property": true,

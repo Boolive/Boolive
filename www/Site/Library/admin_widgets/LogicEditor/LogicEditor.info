@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 49,
+    "order": 50,
     "children": {
         "title": {
             "value": "Редактор логики",
@@ -14,7 +14,6 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -22,11 +21,25 @@
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
             "order": 3
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

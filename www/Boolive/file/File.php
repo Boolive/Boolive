@@ -139,6 +139,21 @@ class File
     }
 
     /**
+     * Удаление пустой директории
+     * @param $dir
+     * @return bool
+     */
+    static function deleteEmtyDir($dir)
+    {
+        $dir = self::makeVirtualDir($dir, false);
+        if (is_dir($dir) && count(scandir($dir)) == 2){
+            return @rmdir($dir);
+        }
+        self::deleteVirtualDir($dir);
+        return false;
+    }
+
+    /**
      * Удаление всех файлов и поддиректорий в указанной директории
      * @param string $dir Путь на очищаемому директорию
      * @param bool $delete_me Удалить указанную директорию (true) или только её содержимое (false)?

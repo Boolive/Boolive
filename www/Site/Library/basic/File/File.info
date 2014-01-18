@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/basic/Object",
     "is_default_class": false,
     "order": 27,
@@ -16,6 +15,21 @@
             "proto": "/Library/basic/Object/description",
             "is_property": true,
             "order": 2
+        },
+        "extentions": {
+            "value": "*.*",
+            "proto": "/Library/basic/String",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Допустимые расширения",
+                    "proto": "/Library/basic/String/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

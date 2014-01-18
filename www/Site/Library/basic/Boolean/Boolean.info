@@ -7,7 +7,6 @@
         "title": {
             "value": "Булево",
             "proto": "/Library/basic/Object/title",
-            "is_mandatory": true,
             "is_property": true,
             "order": 1
         },

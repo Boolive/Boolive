@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "underscore.js",
     "value_type": 3,
     "proto": "/Library/javascripts/underscore",
     "is_link": true,

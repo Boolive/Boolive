@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/AutoWidget2",
     "is_default_class": false,
-    "order": 13,
+    "order": 1,
     "children": {
         "title": {
             "value": "Программы для работы с объектами",
@@ -21,33 +21,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/AutoWidget2/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidget2/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 4
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/AutoWidget2/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -55,7 +35,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/views/AutoWidget2/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -63,12 +42,33 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/views/AutoWidget2/cache/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
+                }
+            }
+        },
+        "views": {
+            "is_default_value": true,
+            "proto": "/Library/views/AutoWidget2/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Список программ",
+                    "proto": "/Library/views/AutoWidget2/views/title",
+                    "is_property": true,
+                    "order": 11
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value_type": 2,
+                    "proto": "/Library/views/AutoWidget2/views/description",
+                    "is_property": true,
+                    "order": 12
                 }
             }
         }

@@ -7,6 +7,7 @@
         "title": {
             "value": "Черновики",
             "proto": "/Library/basic/Boolean/title",
+            "is_property": true,
             "order": 1
         }
     }

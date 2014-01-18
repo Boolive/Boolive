@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 11,
+    "order": 12,
     "children": {
         "title": {
             "value": "Действие с прогрессом выполнения",
@@ -21,34 +21,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -56,7 +35,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/views/Widget/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -64,7 +42,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/views/Widget/cache/description",
                     "is_mandatory": true,
@@ -75,7 +52,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/views/Widget/object_rule",
             "is_mandatory": true,
@@ -84,11 +60,50 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/views/Widget/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
+                }
+            }
+        },
+        "submit_title": {
+            "value": "Выполнить",
+            "proto": "/Library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Название действия",
+                    "proto": "/Library/basic/String/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "color": {
+            "value": "#499DF2",
+            "proto": "/Library/basic/Color",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/basic/Color/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value_type": 2,
+                    "proto": "/Library/basic/Color/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
                 }
             }
         }

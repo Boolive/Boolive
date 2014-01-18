@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/Library/views/Widget",
     "is_default_class": false,
-    "order": 47,
+    "order": 48,
     "children": {
         "title": {
             "value": "Быстрый старт",
@@ -14,7 +14,6 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -22,7 +21,6 @@
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -32,7 +30,15 @@
             "value": "eq()",
             "value_type": 2,
             "proto": "/Library/views/Widget/object_rule",
+            "is_property": true,
             "order": 4
+        },
+        "icon": {
+            "value": "Image.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 5
         }
     }
 }

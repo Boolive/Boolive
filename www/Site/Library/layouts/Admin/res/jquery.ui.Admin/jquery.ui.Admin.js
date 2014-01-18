@@ -24,6 +24,9 @@
         _where_children: null,
         // Текущее состояние
         _state: null, // {object: '', selected: [], view_name: '', window: '#id', select:'structure' }
+        // Запоминание фида и типа выборки для объектов
+        _remember_select: null,
+        _remember_view: null,
 
         _create: function() {
 			$.boolive.Widget.prototype._create.call(this);
@@ -60,13 +63,12 @@
                     var dx = self._state.history_i - history.state.history_i;
                     history.go(dx);
                 }else{
-                    console.log([history.state, self._state]);
                     if (!_.isEqual(self._state, history.state)){
                         // В истории текущее окно, поэтому обновляем состояние
                         self._state.history_o = history.state.history_o;
                         self._state.history_i = history.state.history_i;
-
                         self.call_setState({target: self, direct: 'parents'}, history.state, true);  //before
+                        $(window).trigger('after_popsate', history.state);
                     }
                 }
             });
@@ -106,9 +108,11 @@
             }else{
                 this._state.view_name = null;
             }
-            this._state.remember_view = {};
+            this._remember_select = {};
+            this._remember_view = {};
             if (/^views\//.test(this._state.view_name)){
-                this._state.remember_view[this._state.object+'&'+this._state.select] = this._state.view_name;
+                this._remember_select[this._state.object] = this._state.select;
+                this._remember_view[this._state.object+'&'+this._state.select] = this._state.view_name;
             }
             this._state.window = this._window_current.attr('id');
             this._state.history_o = 0; // начальный индекс истории текущего окна (необходимо для сброса истории браузера при закрытии окна)
@@ -293,14 +297,20 @@
                     change['selected'] = true;
                 }
             }
-
+            var object_str1 = this._state.object;
             // Смена выбора (что об объекте показывать)
             if ('select' in state){
                 this._state.select = state.select;
+                this._remember_select[object_str1] = this._state.select;
                 change['select'] = true;
             }else
-            if ('object' in change && this._state.select != 'structure'){
-                this._state.select = 'structure';
+            if ('object' in change && /*this._state.select != 'structure' && */!('view_name' in state)){
+
+                if (object_str1 in this._remember_select){
+                    this._state.select = this._remember_select[object_str1];
+                }else{
+                    this._state.select = 'structure';
+                }
                 change['select'] = true;
             }
 
@@ -308,12 +318,12 @@
             if ('object' in change || 'view_name' in state || 'select' in change){
                 var object_str = (_.isArray(this._state.object)? this._state.object.join(';') : this._state.object)+'&'+this._state.select;
                 // Если вход в объект и не указан view_name и его нет в истории для объекта, то по умолчанию
-                if (('object' in change || 'select' in change) && !('view_name' in state) && !(object_str in this._state.remember_view)){
+                if (('object' in change || 'select' in change) && !('view_name' in state) && !(object_str in this._remember_view)){
                     if (!/^views\//.test(this._state.view_name) || 'select' in change) state.view_name = null;
                 }
                 // Если не указан view_name, но он есть в истории
-                if (!('view_name' in state) && object_str in this._state.remember_view){
-                    state.view_name = this._state.remember_view[object_str];
+                if (!('view_name' in state) && object_str in this._remember_view){
+                    state.view_name = this._remember_view[object_str];
                 }
                 // Смена view_name
                 if ('view_name' in state && state.view_name != this._state.view_name){
@@ -322,11 +332,9 @@
                 }
                 // view_name в историю, если его uri = ...views/*
                 if (/^views\//.test(this._state.view_name)){
-                    this._state.remember_view[object_str] = this._state.view_name;
+                    this._remember_view[object_str] = this._state.view_name;
                 }
             }
-
-
 
             if (!$.isEmptyObject(change)){
                 // Запись истории
@@ -412,8 +420,6 @@
                         //self._window_current.data('state').select = request.data.select ? request.data.select : self._window_current.data('state').object;
                         self._window_current.data('state').selected = settings.data.selected ? settings.data.selected : [self._window_current.data('state').object];
                         self._state = self._window_current.data('state');
-                        self._state.remember_view = {};
-                        self._state.remember_view[self._state.object+'&'+self._state.select] = self._state.view_name;
                         // Открытие окна фиксируем в истории браузера
                         history.pushState(self._state, null, self.getURIFromState(self._state));
                         // Сообщаем всем о новосм состоянии

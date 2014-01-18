@@ -12,6 +12,7 @@ use Boolive\data\Data,
     Boolive\file\File,
     Library\views\Widget\Widget,
     Boolive\values\Rule;
+use Boolive\data\Entity;
 
 class Destroy extends Widget
 {
@@ -35,14 +36,19 @@ class Destroy extends Widget
         // Удаление
         if ($this->_input['REQUEST']['call'] == 'destroy'){
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
-            try{
-                foreach ($objects as $o){
-                    /** @var \Boolive\data\Entity $o */
-                    // Уничтожение с проверкой доступа и целостностью данных
-                    $o->destroy(true, true);
+            foreach ($objects as $o){
+                /** @var \Boolive\data\Entity $o */
+                // Уничтожение с проверкой доступа и целостностью данных
+                try{
+                    if ($this->_input['REQUEST']['select'] == 'heirs'){
+                        $this->deleteHeirs($o);
+                    }else{
+                        $o->destroy(true, true);
+                    }
+                }catch (Error $e){
+                    if (empty($v['error'])) $v['error'] = '';
+                    $v['error'].= $e->getUserMessage(true);
                 }
-            }catch (Error $e){
-                $v['error'] = $e->getUserMessage(true);
             }
             $v['result'] = true;
             return $v;
@@ -81,4 +87,17 @@ class Destroy extends Widget
             return parent::show($v, $commands, $input);
         }
     }
+
+    function deleteHeirs($obj)
+    {
+        $heirs = $obj->find(array('select'=>'heirs', 'depth'=>array(1,1), 'where'=>array(
+            array('attr', 'is_hidden', '>=', 0),
+            array('attr', 'is_draft', '>=', 0),
+            array('attr', 'is_mandatory', '>=', 0),
+            array('attr', 'diff', '>=', Entity::DIFF_NO)
+        )));
+        foreach ($heirs as $h) $this->deleteHeirs($h);
+        $obj->destroy(true, true);
+    }
+
 }

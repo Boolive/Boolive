@@ -3,7 +3,6 @@
     "value_type": 3,
     "proto": "/Library/javascripts/JavaScript",
     "is_mandatory": true,
-    "is_property": true,
     "order": 6,
     "children": {
         "title": {
@@ -15,7 +14,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Эталон для всех скриптов на языке JavaScript",
             "value_type": 2,
             "proto": "/Library/javascripts/JavaScript/description",
             "is_mandatory": true,
@@ -24,7 +22,6 @@
         },
         "depends": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
             "is_mandatory": true,
             "is_property": true,
@@ -32,7 +29,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/JavaScript/depends/title",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -41,7 +37,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "value_type": 2,
                     "proto": "/Library/javascripts/JavaScript/depends/description",
                     "is_draft": true,

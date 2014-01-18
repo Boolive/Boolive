@@ -3,12 +3,10 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
-    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "CSS",
             "proto": "/Library/views/Css/title",
             "is_mandatory": true,
             "is_property": true,
@@ -16,7 +14,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Каскадная таблица стилей для оформления HTML-документа",
             "value_type": 2,
             "proto": "/Library/views/Css/description",
             "is_mandatory": true,

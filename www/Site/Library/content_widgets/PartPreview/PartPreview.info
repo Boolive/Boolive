@@ -20,36 +20,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/content_widgets/PagePreview/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/content_widgets/PagePreview/res/title",
-                    "is_draft": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/content_widgets/PagePreview/res/description",
-                    "is_draft": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 3
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/content_widgets/PagePreview/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -57,7 +34,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/content_widgets/PagePreview/cache/title",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -66,13 +42,44 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/content_widgets/PagePreview/cache/description",
                     "is_draft": true,
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
+                }
+            }
+        },
+        "views": {
+            "is_default_value": true,
+            "proto": "/Library/content_widgets/PagePreview/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/content_widgets/PagePreview/views/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "proto": "/Library/content_widgets/PagePreview/views/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                },
+                "TitleView": {
+                    "is_default_value": true,
+                    "value_type": 3,
+                    "proto": "/Library/content_widgets/PagePreview/views/TitleView",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
                 }
             }
         },
@@ -85,7 +92,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/content_widgets/PagePreview/object_rule/title",
                     "is_draft": true,
                     "is_mandatory": true,

@@ -1,10 +1,17 @@
 {
     "is_default_value": true,
-    "value": "jquery.ui.menu.js",
     "value_type": 3,
     "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.menu",
     "is_link": true,
     "is_mandatory": true,
-    "is_property": true,
-    "order": 9
+    "order": 9,
+    "children": {
+        "depends": {
+            "is_default_value": true,
+            "proto": "/Library/javascripts/jquery.ui/widgets/jquery.ui.menu/depends",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        }
+    }
 }

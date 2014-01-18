@@ -1,5 +1,4 @@
 {
-    "value": "",
     "proto": "/Library/basic/File",
     "order": 29,
     "children": {
@@ -15,6 +14,22 @@
             "proto": "/Library/basic/File/description",
             "is_property": true,
             "order": 2
+        },
+        "extentions": {
+            "value": "*.swf",
+            "proto": "/Library/basic/File/extentions",
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/basic/File/extentions/title",
+                    "is_hidden": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

@@ -3,7 +3,6 @@
     "value_type": 3,
     "proto": "/Library/javascripts/patterns/jQueryScript",
     "is_mandatory": true,
-    "is_property": true,
     "order": 3,
     "children": {
         "title": {
@@ -22,7 +21,6 @@
         },
         "depends": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/javascripts/patterns/jQueryScript/depends",
             "is_mandatory": true,
             "is_property": true,
@@ -30,7 +28,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Используемые скрипты",
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -38,12 +35,20 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "value_type": 2,
                     "proto": "/Library/javascripts/patterns/jQueryScript/depends/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
+                },
+                "jquery": {
+                    "is_default_value": true,
+                    "value_type": 3,
+                    "proto": "/Library/javascripts/patterns/jQueryScript/depends/jquery",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
                 }
             }
         }

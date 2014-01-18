@@ -18,11 +18,4 @@ class User extends Member
         $v = parent::value($new_value);
         return $get? $v : '';
     }
-
-    function exportedProperties()
-    {
-        $names = parent::exportedProperties();
-        array_push($names, 'email', 'name', 'passw', 'visit_time');
-        return $names;
-    }
 }

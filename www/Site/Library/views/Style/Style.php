@@ -30,13 +30,4 @@ class Style  extends Entity
         }
         return $str;
     }
-
-    /**
-     * Экпортировать все свойства совместно с объектом стиля
-     * @return array|bool
-     */
-    function exportedProperties()
-    {
-        return true;
-    }
 }

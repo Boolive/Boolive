@@ -1,6 +1,147 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/access/Role",
-    "order": 2
+    "order": 2,
+    "children": {
+        "read": {
+            "is_default_value": true,
+            "proto": "/Library/access/Role/read",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "write": {
+            "is_default_value": true,
+            "proto": "/Library/access/Role/write",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2,
+            "children": {
+                "create": {
+                    "is_default_value": true,
+                    "proto": "/Library/access/Role/write/create",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "change": {
+                    "is_default_value": true,
+                    "proto": "/Library/access/Role/write/change",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2,
+                    "children": {
+                        "add_child": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/add_child",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "value": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/value",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "name": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/name",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3
+                        },
+                        "parent": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/parent",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 4
+                        },
+                        "proto": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/proto",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 5
+                        },
+                        "is_draft": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/is_draft",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 6
+                        },
+                        "is_hidden": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/is_hidden",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 7
+                        },
+                        "is_link": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/is_link",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 8
+                        },
+                        "is_default_class": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/is_default_class",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 9
+                        },
+                        "is_mandatory": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/is_mandatory",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 10
+                        },
+                        "diff": {
+                            "is_default_value": true,
+                            "proto": "/Library/access/Role/write/change/diff",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 11
+                        }
+                    }
+                }
+            }
+        },
+        "destroy": {
+            "is_default_value": true,
+            "proto": "/Library/access/Role/destroy",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "call": {
+            "is_default_value": true,
+            "proto": "/Library/access/Role/call",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/access/Role/call/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value_type": 2,
+                    "proto": "/Library/access/Role/call/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
 }

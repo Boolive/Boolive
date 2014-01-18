@@ -3,7 +3,6 @@
     "value_type": 3,
     "proto": "/Library/javascripts/Widget",
     "is_mandatory": true,
-    "is_property": true,
     "order": 3,
     "children": {
         "title": {

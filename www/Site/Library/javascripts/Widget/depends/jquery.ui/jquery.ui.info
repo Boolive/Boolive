@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "jquery.ui.js",
     "value_type": 3,
     "proto": "/Library/javascripts/jquery.ui",
     "is_link": true,

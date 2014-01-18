@@ -8,43 +8,45 @@
         "title": {
             "value": "HTML разметка",
             "proto": "/Library/views/Widget/title",
-            "is_mandatory": true,
             "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Определяет заголовки HTML документа, подключая необходимые теги в <HEAD>, требуемые виджетами",
+            "value_type": 2,
             "proto": "/Library/views/Widget/description",
-            "is_mandatory": true,
             "is_property": true,
             "order": 2
         },
-        "res": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/Library/views/Widget/res",
+        "body": {
+            "proto": "/Library/views/ViewGroup",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4,
+            "order": 3,
             "children": {
                 "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
+                    "value": "Основная область вставки",
+                    "proto": "/Library/views/ViewGroup/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
                     "value_type": 2,
-                    "proto": "/Library/views/Widget/res/description",
+                    "proto": "/Library/views/ViewGroup/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
                 }
             }
+        },
+        "res": {
+            "is_default_value": true,
+            "proto": "/Library/views/Widget/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
         }
     }
 }

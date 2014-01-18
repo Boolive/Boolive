@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "Неверный логин или пароль",
     "proto": "/Library/forms/FormAuth/object/error_message",
     "order": 6
 }

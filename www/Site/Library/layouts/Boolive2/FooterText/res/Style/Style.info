@@ -1,15 +1,12 @@
 {
     "is_default_value": true,
-    "value": "Style.css",
     "value_type": 3,
     "proto": "/Library/views/HtmlBlock/res/Style",
     "is_mandatory": true,
-    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "CSS",
             "proto": "/Library/views/HtmlBlock/res/Style/title",
             "is_mandatory": true,
             "is_property": true,
@@ -17,7 +14,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Каскадная таблица стилей для оформления HTML-документа",
             "value_type": 2,
             "proto": "/Library/views/HtmlBlock/res/Style/description",
             "is_mandatory": true,

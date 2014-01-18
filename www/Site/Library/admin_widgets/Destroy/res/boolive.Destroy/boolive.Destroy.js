@@ -17,23 +17,23 @@
             var self = this;
             // uri объекта
             self.options.object = $.parseJSON(this.element.attr('data-o'));
-//            self.prev_o = this.element.attr('data-prev-o');
-//            self.prev_v = this.element.attr('data-prev-v');
-
             self.element.find('.submit').click(function(e){
                 e.preventDefault();
-                self.callServer('destroy', {object: self.options.object}, function(result, textStatus, jqXHR){
+                self.callServer('destroy', {
+                    object: self.options.object,
+                    select: self.callParents('getState').select
+                }, function(result, textStatus, jqXHR){
                     //@todo Обработать ошибки (контроль доступа и целостности)
                     if (result.out.error){
                         alert(result.out.error);
                     }else{
                         history.back();
-                        // @todo Выделение родительского объекта
-                        //history.back();
+                        // Отмена выделения удаленных объектов
+                        $(window).on('after_popsate'+self.eventNamespace, function(){
+                            $(window).off('after_popsate'+self.eventNamespace);
+                            self.callParents('setState', [{selected:null}]);
+                        });
                     }
-                    // Вход в родительский объект
-
-//                    self.callParents('setState', [{object: self.prev_o, selected: null, view_name: self.prev_v}]);
                 });
             });
             self.element.find('.cancel').click(function(e){

@@ -1,15 +1,12 @@
 {
     "is_default_value": true,
-    "value": "jquery.slides.js",
     "value_type": 3,
     "proto": "/Library/content_widgets/Slider/res/jquery.slides",
     "is_mandatory": true,
-    "is_property": true,
     "order": 3,
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "SlidesJS",
             "proto": "/Library/content_widgets/Slider/res/jquery.slides/title",
             "is_mandatory": true,
             "is_property": true,
@@ -17,7 +14,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "v3.0 http://slidesjs.com/",
             "proto": "/Library/content_widgets/Slider/res/jquery.slides/description",
             "is_mandatory": true,
             "is_property": true,
@@ -25,7 +21,6 @@
         },
         "depends": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/content_widgets/Slider/res/jquery.slides/depends",
             "is_mandatory": true,
             "is_property": true,
@@ -33,7 +28,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Используемые скрипты",
                     "proto": "/Library/content_widgets/Slider/res/jquery.slides/depends/title",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -42,13 +36,21 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
                     "value_type": 2,
                     "proto": "/Library/content_widgets/Slider/res/jquery.slides/depends/description",
                     "is_draft": true,
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2
+                },
+                "jquery": {
+                    "is_default_value": true,
+                    "value_type": 3,
+                    "proto": "/Library/content_widgets/Slider/res/jquery.slides/depends/jquery",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
                 }
             }
         }

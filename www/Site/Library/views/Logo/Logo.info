@@ -19,6 +19,21 @@
             "is_property": true,
             "order": 2
         },
+        "use_object": {
+            "value": 1,
+            "proto": "/Library/basic/Boolean",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Использовать свой объект отображения",
+                    "proto": "/Library/basic/Boolean/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
         "object": {
             "value": "object.png",
             "value_type": 3,
@@ -29,7 +44,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Изображение",
                     "proto": "/Library/basic/Image/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -39,30 +53,10 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 6,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/views/Widget/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 6
         }
     }
 }

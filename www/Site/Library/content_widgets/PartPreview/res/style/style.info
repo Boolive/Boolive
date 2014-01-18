@@ -3,6 +3,5 @@
     "value_type": 3,
     "proto": "/Library/content_widgets/PagePreview/res/style",
     "is_mandatory": true,
-    "is_property": true,
     "order": 1
 }

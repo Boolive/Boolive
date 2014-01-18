@@ -90,7 +90,8 @@ class Export extends Widget
                     'depth' => 'max',
                     'where'=> array(
                         array('attr', 'is_draft', '>=', 0),
-                        array('attr', 'is_hidden', '>=', 0)
+                        array('attr', 'is_hidden', '>=', 0),
+                        array('attr', 'is_property', '=', 0)
                     )
                 ))+1,
                 'step' => 0,
@@ -116,7 +117,7 @@ class Export extends Widget
             $j = $info['jobs_step'];
             $message = '';
             if ($info['jobs'][$j]['step'] <= $info['jobs'][$j]['count']){
-                $cnt = 50;
+                $cnt = 20;
                 // Выбор объектов начиная со step
                 $list = Data::read(array(
                     'select' => array('children'),
@@ -124,25 +125,21 @@ class Export extends Widget
                     'depth' => 'max',
                     'where'=> array(
                         array('attr', 'is_draft', '>=', 0),
-                        array('attr', 'is_hidden', '>=', 0)
+                        array('attr', 'is_hidden', '>=', 0),
+                        array('attr', 'is_property', '=', 0)
                     ),
                     'order'=> array(array('id', 'asc')),
                     'limit' => array($info['jobs'][$j]['step'], $cnt)
                 ));
                 if ($info['jobs'][$j]['step'] == 0){
-                    $list[] = Data::read($info['jobs'][$j]['obj']);
+                    $root =  Data::read($info['jobs'][$j]['obj']);
+                    if (!$root->isProperty()){
+                        $list[] = $root;
+                    }
                 }
 
                 foreach ($list as $obj){
-                    if ($parent = $obj->parent()){
-                        $childrens = $parent->exportedProperties();
-                    }
-                    // Если нет родителя, не указаны названия подчиненных или название объекта не в списке подчиненных
-                    if (!$parent || empty($childrens) || (!empty($childrens) && is_array($childrens) && !in_array($obj->name(), $childrens))){
-                        /** @var Entity $obj  */
-                        $obj->export(true);
-                        $message = $obj->uri();
-                    }
+                    $obj->export(true);
                 }
                 // Экспортирование
                 // Увеличение step

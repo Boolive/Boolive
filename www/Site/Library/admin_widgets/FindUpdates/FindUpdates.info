@@ -1,10 +1,9 @@
 {
     "is_default_value": true,
-    "value": "ProgressAction.tpl",
     "value_type": 3,
     "proto": "/Library/admin_widgets/ProgressAction",
     "is_default_class": false,
-    "order": 30,
+    "order": 31,
     "children": {
         "title": {
             "value": "Поиск обновлений",
@@ -22,34 +21,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/admin_widgets/ProgressAction/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/admin_widgets/ProgressAction/res/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/admin_widgets/ProgressAction/res/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/admin_widgets/ProgressAction/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -57,7 +35,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/admin_widgets/ProgressAction/cache/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -65,7 +42,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/ProgressAction/cache/description",
                     "is_mandatory": true,
@@ -76,7 +52,6 @@
         },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/admin_widgets/ProgressAction/object_rule",
             "is_mandatory": true,
@@ -85,11 +60,67 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/admin_widgets/ProgressAction/object_rule/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
+                }
+            }
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "submit_title": {
+            "value": "Искать",
+            "proto": "/Library/admin_widgets/ProgressAction/submit_title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/admin_widgets/ProgressAction/submit_title/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "color": {
+            "value": "#5D5D5D",
+            "proto": "/Library/admin_widgets/ProgressAction/color",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/admin_widgets/ProgressAction/color/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value_type": 2,
+                    "proto": "/Library/admin_widgets/ProgressAction/color/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
                 }
             }
         }

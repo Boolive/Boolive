@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
     "order": 27,
@@ -18,6 +17,23 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 2
+        },
+        "Image": {
+            "is_default_value": true,
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "Flash": {
+            "is_default_value": true,
+            "proto": "/Library/basic/Flash",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
         }
     }
 }

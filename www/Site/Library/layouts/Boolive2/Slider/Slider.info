@@ -1,6 +1,5 @@
 {
     "is_default_value": true,
-    "value": "Slider.tpl",
     "value_type": 3,
     "proto": "/Library/content_widgets/Slider",
     "is_mandatory": true,
@@ -8,7 +7,6 @@
     "children": {
         "title": {
             "is_default_value": true,
-            "value": "Слайдер",
             "proto": "/Library/content_widgets/Slider/title",
             "is_mandatory": true,
             "is_property": true,
@@ -16,7 +14,6 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "Показывает содержимое слайдами. Возможность их листать",
             "proto": "/Library/content_widgets/Slider/description",
             "is_mandatory": true,
             "is_property": true,
@@ -24,36 +21,13 @@
         },
         "res": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/content_widgets/Slider/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 3,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Ресурсы",
-                    "proto": "/Library/content_widgets/Slider/res/title",
-                    "is_draft": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
-                    "value_type": 2,
-                    "proto": "/Library/content_widgets/Slider/res/description",
-                    "is_draft": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
-            "value": 0,
             "proto": "/Library/content_widgets/Slider/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -61,7 +35,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Кэшировать?",
                     "proto": "/Library/content_widgets/Slider/cache/title",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -70,7 +43,6 @@
                 },
                 "description": {
                     "is_default_value": true,
-                    "value": "Признак, кэшировать или нет работу виджета?",
                     "value_type": 2,
                     "proto": "/Library/content_widgets/Slider/cache/description",
                     "is_draft": true,
@@ -80,9 +52,47 @@
                 }
             }
         },
+        "views": {
+            "is_default_value": true,
+            "proto": "/Library/content_widgets/Slider/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "proto": "/Library/content_widgets/Slider/views/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "proto": "/Library/content_widgets/Slider/views/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                },
+                "Image": {
+                    "is_default_value": true,
+                    "proto": "/Library/content_widgets/Slider/views/Image",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
+                },
+                "Page": {
+                    "is_default_value": true,
+                    "proto": "/Library/content_widgets/Slider/views/Page",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4
+                }
+            }
+        },
         "object_rule": {
             "is_default_value": true,
-            "value": "",
             "value_type": 2,
             "proto": "/Library/content_widgets/Slider/object_rule",
             "is_mandatory": true,
@@ -91,7 +101,6 @@
             "children": {
                 "title": {
                     "is_default_value": true,
-                    "value": "Правило на объект",
                     "proto": "/Library/content_widgets/Slider/object_rule/title",
                     "is_draft": true,
                     "is_mandatory": true,
@@ -102,7 +111,6 @@
         },
         "object": {
             "is_default_value": true,
-            "value": "",
             "proto": "/Library/content_widgets/Slider/object",
             "is_mandatory": true,
             "is_property": true,

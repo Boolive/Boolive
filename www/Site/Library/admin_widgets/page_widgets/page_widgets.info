@@ -1,9 +1,8 @@
 {
     "is_default_value": true,
-    "value": "",
     "proto": "/Library/basic/Package",
     "is_draft": true,
-    "order": 31,
+    "order": 32,
     "children": {
         "title": {
             "value": "Виджеты страницы",
@@ -11,12 +10,6 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 1
-        },
-        "description": {
-            "value": "Мини редакторы для свойств страницы",
-            "is_mandatory": true,
-            "is_property": true,
-            "order": 2
         }
     }
 }
