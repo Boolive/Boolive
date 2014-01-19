@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
     "order": 4,
@@ -13,6 +14,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "Базовый объект для создания элементов интерфейса",
             "value_type": 2,
             "proto": "/Library/views/View/description",
             "is_mandatory": true,

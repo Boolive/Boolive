@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "Widget.tpl",
     "value_type": 3,
     "proto": "/Library/admin_widgets/ToggleAction",
     "is_default_class": false,
@@ -41,16 +42,7 @@
             "proto": "/Library/admin_widgets/ToggleAction/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 11,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/admin_widgets/ToggleAction/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 11
         }
     }
 }

@@ -20,12 +20,14 @@
             "order": 2
         },
         "res": {
+            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
             "order": 4
         },
         "object": {
+            "value": "",
             "proto": "/Contents/Keywords",
             "is_link": true,
             "is_mandatory": true,

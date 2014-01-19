@@ -26,6 +26,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Допустимые расширения",
                     "proto": "/Library/basic/File/extentions/title",
                     "is_hidden": true,
                     "is_mandatory": true,

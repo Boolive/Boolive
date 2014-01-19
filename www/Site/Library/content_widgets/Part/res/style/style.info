@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "style.css",
     "value_type": 3,
     "proto": "/Library/content_widgets/Page/res/style",
     "is_mandatory": true,

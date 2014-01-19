@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "",
     "proto": "/Library/basic/Object",
     "order": 30,
     "children": {
@@ -19,6 +20,7 @@
         },
         "active_radio": {
             "is_default_value": true,
+            "value": "значение 1",
             "proto": "/Library/basic/Choices/choice_1",
             "is_link": true,
             "is_mandatory": true,

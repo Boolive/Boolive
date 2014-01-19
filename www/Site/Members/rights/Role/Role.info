@@ -1,10 +1,12 @@
 {
     "is_default_value": true,
+    "value": "",
     "proto": "/Library/access/Role",
     "order": 2,
     "children": {
         "read": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/access/Role/read",
             "is_mandatory": true,
             "is_property": true,
@@ -12,6 +14,7 @@
         },
         "write": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/access/Role/write",
             "is_mandatory": true,
             "is_property": true,
@@ -19,6 +22,7 @@
             "children": {
                 "create": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/access/Role/write/create",
                     "is_mandatory": true,
                     "is_property": true,
@@ -26,6 +30,7 @@
                 },
                 "change": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/access/Role/write/change",
                     "is_mandatory": true,
                     "is_property": true,
@@ -33,6 +38,7 @@
                     "children": {
                         "add_child": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/add_child",
                             "is_mandatory": true,
                             "is_property": true,
@@ -40,6 +46,7 @@
                         },
                         "value": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/value",
                             "is_mandatory": true,
                             "is_property": true,
@@ -47,6 +54,7 @@
                         },
                         "name": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/name",
                             "is_mandatory": true,
                             "is_property": true,
@@ -54,6 +62,7 @@
                         },
                         "parent": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/parent",
                             "is_mandatory": true,
                             "is_property": true,
@@ -61,6 +70,7 @@
                         },
                         "proto": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/proto",
                             "is_mandatory": true,
                             "is_property": true,
@@ -68,6 +78,7 @@
                         },
                         "is_draft": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/is_draft",
                             "is_mandatory": true,
                             "is_property": true,
@@ -75,6 +86,7 @@
                         },
                         "is_hidden": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/is_hidden",
                             "is_mandatory": true,
                             "is_property": true,
@@ -82,6 +94,7 @@
                         },
                         "is_link": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/is_link",
                             "is_mandatory": true,
                             "is_property": true,
@@ -89,6 +102,7 @@
                         },
                         "is_default_class": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/is_default_class",
                             "is_mandatory": true,
                             "is_property": true,
@@ -96,6 +110,7 @@
                         },
                         "is_mandatory": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/is_mandatory",
                             "is_mandatory": true,
                             "is_property": true,
@@ -103,6 +118,7 @@
                         },
                         "diff": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/access/Role/write/change/diff",
                             "is_mandatory": true,
                             "is_property": true,
@@ -114,6 +130,7 @@
         },
         "destroy": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/access/Role/destroy",
             "is_mandatory": true,
             "is_property": true,
@@ -121,6 +138,7 @@
         },
         "call": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/access/Role/call",
             "is_mandatory": true,
             "is_property": true,
@@ -128,6 +146,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Исполнение",
                     "proto": "/Library/access/Role/call/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -135,6 +154,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Вызов методов объекта",
                     "value_type": 2,
                     "proto": "/Library/access/Role/call/description",
                     "is_mandatory": true,

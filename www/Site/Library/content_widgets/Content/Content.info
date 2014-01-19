@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "AutoWidget2.tpl",
     "value_type": 3,
     "proto": "/Library/views/AutoWidget2",
     "order": 11,
@@ -20,6 +21,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidget2/res",
             "is_mandatory": true,
             "is_property": true,
@@ -30,27 +32,11 @@
             "proto": "/Library/views/AutoWidget2/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidget2/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidget2/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 4
         },
         "views": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidget2/views",
             "is_mandatory": true,
             "is_property": true,
@@ -58,6 +44,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Список видов",
                     "proto": "/Library/views/AutoWidget2/views/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -65,6 +52,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения объекта",
                     "proto": "/Library/views/AutoWidget2/views/description",
                     "is_mandatory": true,
                     "is_property": true,
@@ -72,6 +60,7 @@
                 },
                 "Page": {
                     "is_default_value": true,
+                    "value": "Page.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Page",
                     "is_link": true,
@@ -81,6 +70,7 @@
                 },
                 "Part": {
                     "is_default_value": true,
+                    "value": "Part.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Part",
                     "is_link": true,
@@ -92,20 +82,12 @@
         },
         "object_rule": {
             "is_default_value": true,
+            "value": "",
             "value_type": 2,
             "proto": "/Library/views/AutoWidget2/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 6,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidget2/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 6
         }
     }
 }

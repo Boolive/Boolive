@@ -21,30 +21,15 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 6,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidgetList2/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidgetList2/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 6
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
             "is_property": true,
@@ -52,6 +37,7 @@
         },
         "views": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidgetList2/views",
             "is_mandatory": true,
             "is_property": true,
@@ -59,6 +45,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Список видов",
                     "proto": "/Library/views/AutoWidgetList2/views/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -66,6 +53,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
                     "proto": "/Library/views/AutoWidgetList2/views/description",
                     "is_mandatory": true,
                     "is_property": true,
@@ -73,6 +61,7 @@
                 },
                 "TitleView": {
                     "is_default_value": true,
+                    "value": "TitleView.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/TitleView",
                     "is_link": true,
@@ -82,6 +71,7 @@
                 },
                 "Feedback": {
                     "is_default_value": true,
+                    "value": "Feedback.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Feedback",
                     "is_link": true,
@@ -91,6 +81,7 @@
                 },
                 "Keywords": {
                     "is_default_value": true,
+                    "value": "Keywords.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Keywords",
                     "is_link": true,
@@ -100,6 +91,7 @@
                 },
                 "HtmlBlock": {
                     "is_default_value": true,
+                    "value": "HtmlBlock.tpl",
                     "value_type": 3,
                     "proto": "/Library/views/HtmlBlock",
                     "is_mandatory": true,
@@ -108,6 +100,7 @@
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Виджет HTML блока",
                             "proto": "/Library/views/HtmlBlock/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -115,6 +108,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Элемент пользовательского интерфейса. Отображает данные с помощью шаблонизации.",
                             "value_type": 2,
                             "proto": "/Library/views/HtmlBlock/description",
                             "is_mandatory": true,
@@ -123,22 +117,15 @@
                         },
                         "object_rule": {
                             "is_default_value": true,
+                            "value": "is(/Library/basic/HTMLText)",
                             "proto": "/Library/views/HtmlBlock/object_rule",
                             "is_mandatory": true,
                             "is_property": true,
-                            "order": 7,
-                            "children": {
-                                "title": {
-                                    "is_default_value": true,
-                                    "proto": "/Library/views/HtmlBlock/object_rule/title",
-                                    "is_mandatory": true,
-                                    "is_property": true,
-                                    "order": 1
-                                }
-                            }
+                            "order": 7
                         },
                         "res": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/views/HtmlBlock/res",
                             "is_mandatory": true,
                             "is_property": true,
@@ -146,32 +133,17 @@
                         },
                         "cache": {
                             "is_default_value": true,
+                            "value": 0,
                             "proto": "/Library/views/HtmlBlock/cache",
                             "is_mandatory": true,
                             "is_property": true,
-                            "order": 9,
-                            "children": {
-                                "title": {
-                                    "is_default_value": true,
-                                    "proto": "/Library/views/HtmlBlock/cache/title",
-                                    "is_mandatory": true,
-                                    "is_property": true,
-                                    "order": 1
-                                },
-                                "description": {
-                                    "is_default_value": true,
-                                    "value_type": 2,
-                                    "proto": "/Library/views/HtmlBlock/cache/description",
-                                    "is_mandatory": true,
-                                    "is_property": true,
-                                    "order": 2
-                                }
-                            }
+                            "order": 9
                         }
                     }
                 },
                 "ViewViews": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/views/View",
                     "is_default_class": false,
                     "is_mandatory": true,
@@ -202,19 +174,11 @@
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 10,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidgetList2/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 10
         },
         "NextPrevNavigation": {
             "is_default_value": true,
+            "value": "NextPrevNavigation.tpl",
             "value_type": 3,
             "proto": "/Library/menus/NextPrevNavigation",
             "is_link": true,

@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "",
     "proto": "/Library/views/View",
     "is_default_class": false,
     "order": 27,
@@ -20,6 +21,7 @@
         },
         "Image": {
             "is_default_value": true,
+            "value": "Image.png",
             "value_type": 3,
             "proto": "/Library/basic/Image",
             "is_link": true,
@@ -29,6 +31,7 @@
         },
         "Flash": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/basic/Flash",
             "is_link": true,
             "is_mandatory": true,

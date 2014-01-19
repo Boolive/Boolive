@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "Успешная авторизация",
     "proto": "/Library/forms/FormAuth/object/ok_message",
     "order": 5
 }

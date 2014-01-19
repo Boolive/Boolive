@@ -1896,9 +1896,9 @@ class Entity implements ITrace
         $export = array();
         if ($this->isDefaultValue()){
             $export['is_default_value'] = true;
-        }else{
-            if ($this->value() !== '') $export['value'] = $this->value();
-        }
+        }//else{
+            /*if ($this->value() !== '') */$export['value'] = $this->value();
+        //}
         if ($this->valueType() > Entity::VALUE_SIMPLE) $export['value_type'] = $this->valueType();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
         if ($this->isLink()) $export['is_link'] = true;

@@ -13,6 +13,7 @@
         },
         "depends": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/Widget/depends",
             "is_property": true,
             "order": 2

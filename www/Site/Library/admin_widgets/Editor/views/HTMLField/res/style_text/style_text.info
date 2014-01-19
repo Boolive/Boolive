@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "style_text.css",
     "value_type": 3,
     "proto": "/Library/admin_widgets/Editor/views/TextField/res/style_text",
     "is_mandatory": true,

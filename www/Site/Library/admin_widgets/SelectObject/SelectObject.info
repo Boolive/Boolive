@@ -51,6 +51,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -58,6 +59,7 @@
         },
         "programs": {
             "is_default_value": true,
+            "value": "Programs.tpl",
             "value_type": 3,
             "proto": "/Library/admin_widgets/Programs",
             "is_link": true,
@@ -66,6 +68,7 @@
             "order": 6
         },
         "short_select": {
+            "value": "",
             "proto": "/Library/basic/Object",
             "is_mandatory": true,
             "is_property": true,
@@ -82,44 +85,20 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 8,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/Widget/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 8
         },
         "object_rule": {
             "is_default_value": true,
+            "value": "",
             "value_type": 2,
             "proto": "/Library/views/Widget/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 9,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/Widget/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 9
         }
     }
 }

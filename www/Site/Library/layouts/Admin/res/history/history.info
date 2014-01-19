@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "history.js",
     "value_type": 3,
     "proto": "/Library/javascripts/history",
     "is_link": true,
@@ -8,6 +9,7 @@
     "children": {
         "title": {
             "is_default_value": true,
+            "value": "HTML5 History API",
             "proto": "/Library/javascripts/history/title",
             "is_mandatory": true,
             "is_property": true,
@@ -15,6 +17,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
             "value_type": 2,
             "proto": "/Library/javascripts/history/description",
             "is_mandatory": true,
@@ -23,6 +26,7 @@
         },
         "basepath": {
             "is_default_value": true,
+            "value": "/admin/",
             "proto": "/Library/javascripts/history/basepath",
             "is_mandatory": true,
             "is_property": true,
@@ -30,6 +34,7 @@
         },
         "type": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/history/type",
             "is_mandatory": true,
             "is_property": true,
@@ -37,6 +42,7 @@
         },
         "redirect": {
             "is_default_value": true,
+            "value": 1,
             "proto": "/Library/javascripts/history/redirect",
             "is_mandatory": true,
             "is_property": true,
@@ -44,27 +50,11 @@
         },
         "depends": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/history/depends",
             "is_mandatory": true,
             "is_property": true,
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/javascripts/history/depends/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/javascripts/history/depends/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 7
         }
     }
 }

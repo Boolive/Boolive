@@ -21,6 +21,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_widgets/Part/res",
             "is_mandatory": true,
             "is_property": true,
@@ -28,6 +29,7 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/content_widgets/Part/cache",
             "is_mandatory": true,
             "is_property": true,
@@ -35,6 +37,7 @@
         },
         "object_rule": {
             "is_default_value": true,
+            "value": "is(/Library/content_samples/Part)",
             "proto": "/Library/content_widgets/Part/object_rule",
             "is_mandatory": true,
             "is_property": true,
@@ -42,6 +45,7 @@
         },
         "views": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_widgets/Part/views",
             "is_mandatory": true,
             "is_property": true,
@@ -49,6 +53,7 @@
             "children": {
                 "TitleView": {
                     "is_default_value": true,
+                    "value": "TitleView.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Part/views/TitleView",
                     "is_link": true,
@@ -58,6 +63,7 @@
                 },
                 "Keywords": {
                     "is_default_value": true,
+                    "value": "Keywords.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Part/views/Keywords",
                     "is_link": true,
@@ -67,6 +73,7 @@
                 },
                 "PagePreview": {
                     "is_default_value": true,
+                    "value": "PagePreview.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Part/views/PagePreview",
                     "is_link": true,
@@ -76,6 +83,7 @@
                 },
                 "PartPreview": {
                     "is_default_value": true,
+                    "value": "PartPreview.tpl",
                     "value_type": 3,
                     "proto": "/Library/content_widgets/Part/views/PartPreview",
                     "is_link": true,
@@ -87,6 +95,7 @@
         },
         "count_per_page": {
             "is_default_value": true,
+            "value": "8",
             "proto": "/Library/content_widgets/Part/count_per_page",
             "is_mandatory": true,
             "is_property": true,
@@ -94,6 +103,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Количество объектов содержимого на странице.",
                     "proto": "/Library/content_widgets/Part/count_per_page/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -103,6 +113,7 @@
         },
         "pagesnum": {
             "is_default_value": true,
+            "value": "PageNavigation.tpl",
             "value_type": 3,
             "proto": "/Library/content_widgets/Part/pagesnum",
             "is_link": true,

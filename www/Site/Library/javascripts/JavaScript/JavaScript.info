@@ -19,6 +19,7 @@
             "order": 2
         },
         "depends": {
+            "value": "",
             "proto": "/Library/views/ViewGroup",
             "is_mandatory": true,
             "is_property": true,

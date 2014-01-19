@@ -38,6 +38,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -45,6 +46,7 @@
         },
         "SelectObject": {
             "is_default_value": true,
+            "value": "SelectObject.tpl",
             "value_type": 3,
             "proto": "/Library/admin_widgets/SelectObject",
             "is_mandatory": true,
@@ -60,6 +62,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Виджет выбора объектов из всех существующих",
                     "proto": "/Library/admin_widgets/SelectObject/description",
                     "is_mandatory": true,
                     "is_property": true,
@@ -67,6 +70,7 @@
                 },
                 "submit_title": {
                     "is_default_value": true,
+                    "value": "Выбрать",
                     "proto": "/Library/admin_widgets/SelectObject/submit_title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -74,6 +78,7 @@
                 },
                 "cancel_title": {
                     "is_default_value": true,
+                    "value": "Отмена",
                     "proto": "/Library/admin_widgets/SelectObject/cancel_title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -81,6 +86,7 @@
                 },
                 "res": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/admin_widgets/SelectObject/res",
                     "is_link": true,
                     "is_mandatory": true,
@@ -89,6 +95,7 @@
                 },
                 "programs": {
                     "is_default_value": true,
+                    "value": "Programs.tpl",
                     "value_type": 3,
                     "proto": "/Library/admin_widgets/SelectObject/programs",
                     "is_link": true,
@@ -100,27 +107,11 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 6,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/Widget/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 6
         }
     }
 }

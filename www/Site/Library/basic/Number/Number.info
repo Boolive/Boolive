@@ -19,6 +19,7 @@
         },
         "unit": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/basic/String",
             "is_property": true,
             "order": 3,

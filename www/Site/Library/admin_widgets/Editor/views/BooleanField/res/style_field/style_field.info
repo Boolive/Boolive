@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "style_field.css",
     "value_type": 3,
     "proto": "/Library/admin_widgets/Editor/views/Field/res/style_field",
     "is_mandatory": true,

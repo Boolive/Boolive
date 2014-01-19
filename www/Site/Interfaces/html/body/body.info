@@ -1,10 +1,12 @@
 {
+    "value": "",
     "proto": "/Library/views/Html/body",
     "is_mandatory": true,
     "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
+            "value": "Основная область вставки",
             "proto": "/Library/views/Html/body/title",
             "is_mandatory": true,
             "is_property": true,
@@ -12,6 +14,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "Автоматически исполняет и отображает все подчиненные объекты",
             "value_type": 2,
             "proto": "/Library/views/Html/body/description",
             "is_mandatory": true,
@@ -20,6 +23,7 @@
         },
         "admin": {
             "is_default_value": true,
+            "value": "Admin.tpl",
             "value_type": 3,
             "proto": "/Library/layouts/Admin",
             "is_link": true,
@@ -28,6 +32,7 @@
         },
         "FormAuth": {
             "is_default_value": true,
+            "value": "FormAuth.tpl",
             "value_type": 3,
             "proto": "/Library/forms/FormAuth",
             "is_property": true,
@@ -35,6 +40,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Аутентификация",
                     "proto": "/Library/forms/FormAuth/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -42,6 +48,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Для аутентификации пользователя перед доступом к закрытым разделам сайта",
                     "proto": "/Library/forms/FormAuth/description",
                     "is_mandatory": true,
                     "is_property": true,
@@ -49,6 +56,7 @@
                 },
                 "res": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/forms/FormAuth/res",
                     "is_mandatory": true,
                     "is_property": true,
@@ -56,12 +64,14 @@
                 },
                 "object": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/forms/FormAuth/object",
                     "is_property": true,
                     "order": 8,
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Модель авторизации",
                             "proto": "/Library/forms/FormAuth/object/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -71,12 +81,14 @@
                 },
                 "views": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/forms/FormAuth/views",
                     "is_property": true,
                     "order": 9,
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Список видов",
                             "proto": "/Library/forms/FormAuth/views/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -84,6 +96,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
                             "proto": "/Library/forms/FormAuth/views/description",
                             "is_mandatory": true,
                             "is_property": true,
@@ -93,68 +106,27 @@
                 },
                 "cache": {
                     "is_default_value": true,
+                    "value": 0,
                     "proto": "/Library/forms/FormAuth/cache",
                     "is_mandatory": true,
                     "is_property": true,
-                    "order": 10,
-                    "children": {
-                        "title": {
-                            "is_default_value": true,
-                            "proto": "/Library/forms/FormAuth/cache/title",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 1
-                        },
-                        "description": {
-                            "is_default_value": true,
-                            "value_type": 2,
-                            "proto": "/Library/forms/FormAuth/cache/description",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 2
-                        }
-                    }
+                    "order": 10
                 },
                 "object_rule": {
                     "is_default_value": true,
+                    "value": "",
                     "value_type": 2,
                     "proto": "/Library/forms/FormAuth/object_rule",
                     "is_mandatory": true,
                     "is_property": true,
-                    "order": 11,
-                    "children": {
-                        "title": {
-                            "is_default_value": true,
-                            "proto": "/Library/forms/FormAuth/object_rule/title",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 1
-                        }
-                    }
+                    "order": 11
                 },
                 "path_rule": {
                     "value": "/^\\/(admin|login)(\\/|$)/",
                     "proto": "/Library/forms/FormAuth/path_rule",
                     "is_mandatory": true,
                     "is_property": true,
-                    "order": 12,
-                    "children": {
-                        "title": {
-                            "is_default_value": true,
-                            "proto": "/Library/forms/FormAuth/path_rule/title",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 1
-                        },
-                        "description": {
-                            "is_default_value": true,
-                            "value_type": 2,
-                            "proto": "/Library/forms/FormAuth/path_rule/description",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 2
-                        }
-                    }
+                    "order": 12
                 }
             }
         }

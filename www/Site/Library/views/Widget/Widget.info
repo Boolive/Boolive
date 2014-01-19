@@ -20,6 +20,7 @@
             "order": 2
         },
         "res": {
+            "value": "",
             "proto": "/Library/views/ViewGroup",
             "is_mandatory": true,
             "is_property": true,
@@ -62,6 +63,7 @@
             }
         },
         "object_rule": {
+            "value": "",
             "value_type": 2,
             "proto": "/Library/basic/Text",
             "is_property": true,
@@ -83,6 +85,7 @@
             }
         },
         "path_rule": {
+            "value": "",
             "proto": "/Library/basic/String",
             "is_property": true,
             "order": 8,

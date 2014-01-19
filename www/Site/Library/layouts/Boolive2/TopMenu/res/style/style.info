@@ -3,22 +3,5 @@
     "value_type": 3,
     "proto": "/Library/menus/TopMenu/res/style",
     "is_mandatory": true,
-    "order": 3,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "proto": "/Library/menus/TopMenu/res/style/title",
-            "is_mandatory": true,
-            "is_property": true,
-            "order": 1
-        },
-        "description": {
-            "is_default_value": true,
-            "value_type": 2,
-            "proto": "/Library/menus/TopMenu/res/style/description",
-            "is_mandatory": true,
-            "is_property": true,
-            "order": 2
-        }
-    }
+    "order": 3
 }

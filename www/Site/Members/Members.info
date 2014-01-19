@@ -1,4 +1,5 @@
 {
+    "value": "",
     "proto": "/Library/access/Group",
     "order": 55,
     "children": {
@@ -33,6 +34,7 @@
         },
         "rights": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/access/Group/rights",
             "is_mandatory": true,
             "is_property": true,

@@ -21,6 +21,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -28,30 +29,15 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/Widget/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 4
         },
         "programs": {
             "is_default_value": true,
+            "value": "Programs.tpl",
             "value_type": 3,
             "proto": "/Library/layouts/Admin/Programs",
             "is_link": true,
@@ -83,6 +69,7 @@
                 },
                 "res": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/views/AutoWidgetList2/res",
                     "is_mandatory": true,
                     "is_property": true,
@@ -90,30 +77,15 @@
                 },
                 "cache": {
                     "is_default_value": true,
+                    "value": 0,
                     "proto": "/Library/views/AutoWidgetList2/cache",
                     "is_mandatory": true,
                     "is_property": true,
-                    "order": 4,
-                    "children": {
-                        "title": {
-                            "is_default_value": true,
-                            "proto": "/Library/views/AutoWidgetList2/cache/title",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 1
-                        },
-                        "description": {
-                            "is_default_value": true,
-                            "value_type": 2,
-                            "proto": "/Library/views/AutoWidgetList2/cache/description",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 2
-                        }
-                    }
+                    "order": 4
                 },
                 "views": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/views/AutoWidgetList2/views",
                     "is_mandatory": true,
                     "is_property": true,
@@ -121,6 +93,7 @@
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Список видов",
                             "proto": "/Library/views/AutoWidgetList2/views/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -128,6 +101,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
                             "proto": "/Library/views/AutoWidgetList2/views/description",
                             "is_mandatory": true,
                             "is_property": true,

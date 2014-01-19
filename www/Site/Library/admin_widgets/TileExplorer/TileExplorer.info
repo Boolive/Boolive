@@ -30,6 +30,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Иконка",
                     "proto": "/Library/admin_widgets/BaseExplorer/icon/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -37,6 +38,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Файл изображения",
                     "value_type": 2,
                     "proto": "/Library/admin_widgets/BaseExplorer/icon/description",
                     "is_mandatory": true,
@@ -47,6 +49,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/res",
             "is_mandatory": true,
             "is_property": true,
@@ -54,30 +57,15 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/admin_widgets/BaseExplorer/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 5,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/admin_widgets/BaseExplorer/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/admin_widgets/BaseExplorer/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 5
         },
         "views": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/views",
             "is_mandatory": true,
             "is_property": true,
@@ -85,6 +73,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Список видов",
                     "proto": "/Library/admin_widgets/BaseExplorer/views/title",
                     "is_hidden": true,
                     "is_mandatory": true,
@@ -93,6 +82,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
                     "proto": "/Library/admin_widgets/BaseExplorer/views/description",
                     "is_hidden": true,
                     "is_mandatory": true,
@@ -103,47 +93,24 @@
         },
         "object_rule": {
             "is_default_value": true,
+            "value": "",
             "value_type": 2,
             "proto": "/Library/admin_widgets/BaseExplorer/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/admin_widgets/BaseExplorer/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 7
         },
         "path_rule": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/path_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 8,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/admin_widgets/BaseExplorer/path_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/admin_widgets/BaseExplorer/path_rule/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 8
         },
         "filter": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/admin_widgets/BaseExplorer/filter",
             "is_mandatory": true,
             "is_property": true,
@@ -188,6 +155,7 @@
         },
         "FilterTool": {
             "is_default_value": true,
+            "value": "FilterTool.tpl",
             "value_type": 3,
             "proto": "/Library/admin_widgets/BaseExplorer/FilterTool",
             "is_mandatory": true,
@@ -196,6 +164,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Меню фильтра",
                     "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -203,6 +172,7 @@
                 },
                 "res": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/res",
                     "is_mandatory": true,
                     "is_property": true,
@@ -210,6 +180,7 @@
                 },
                 "cache": {
                     "is_default_value": true,
+                    "value": 0,
                     "proto": "/Library/admin_widgets/BaseExplorer/FilterTool/cache",
                     "is_mandatory": true,
                     "is_property": true,
@@ -219,6 +190,7 @@
         },
         "SelectObject": {
             "is_default_value": true,
+            "value": "SelectObject.tpl",
             "value_type": 3,
             "proto": "/Library/admin_widgets/BaseExplorer/SelectObject",
             "is_link": true,

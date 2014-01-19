@@ -7,6 +7,7 @@
     "children": {
         "title": {
             "is_default_value": true,
+            "value": "Меню",
             "proto": "/Library/menus/Menu/title",
             "is_mandatory": true,
             "is_property": true,
@@ -14,6 +15,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "Навигационное меню по содержимому сайта.",
             "proto": "/Library/menus/Menu/description",
             "is_mandatory": true,
             "is_property": true,
@@ -21,6 +23,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/menus/Menu/res",
             "is_mandatory": true,
             "is_property": true,
@@ -28,6 +31,7 @@
         },
         "object": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/menus/Menu/object",
             "is_property": true,
             "order": 4,
@@ -50,6 +54,7 @@
         },
         "item_view": {
             "is_default_value": true,
+            "value": "item_view.tpl",
             "value_type": 3,
             "proto": "/Library/menus/Menu/item_view",
             "is_property": true,
@@ -57,6 +62,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Виджет пунктов меню",
                     "proto": "/Library/menus/Menu/item_view/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -64,6 +70,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Для отображения свойств объекта соответствующими виджетом из списка",
                     "proto": "/Library/menus/Menu/item_view/description",
                     "is_mandatory": true,
                     "is_property": true,
@@ -71,6 +78,7 @@
                 },
                 "res": {
                     "is_default_value": true,
+                    "value": "",
                     "proto": "/Library/menus/Menu/item_view/res",
                     "is_mandatory": true,
                     "is_property": true,
@@ -78,6 +86,7 @@
                 },
                 "cache": {
                     "is_default_value": true,
+                    "value": 0,
                     "proto": "/Library/menus/Menu/item_view/cache",
                     "is_mandatory": true,
                     "is_property": true,
@@ -85,6 +94,7 @@
                 },
                 "object_rule": {
                     "is_default_value": true,
+                    "value": "is(/Contents)",
                     "proto": "/Library/menus/Menu/item_view/object_rule",
                     "is_mandatory": true,
                     "is_property": true,
@@ -94,20 +104,12 @@
         },
         "object_rule": {
             "is_default_value": true,
+            "value": "",
             "value_type": 2,
             "proto": "/Library/menus/Menu/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 11,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/menus/Menu/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 11
         }
     }
 }

@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "",
     "proto": "/Library/layouts/boolive/top/menu/item_view/views",
     "is_link": true,
     "is_relative": true,

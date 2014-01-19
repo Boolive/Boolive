@@ -19,6 +19,7 @@
             "order": 2
         },
         "body": {
+            "value": "",
             "proto": "/Library/views/ViewGroup",
             "is_mandatory": true,
             "is_property": true,
@@ -33,6 +34,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Автоматически исполняет и отображает все подчиненные объекты",
                     "value_type": 2,
                     "proto": "/Library/views/ViewGroup/description",
                     "is_mandatory": true,
@@ -43,6 +45,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,

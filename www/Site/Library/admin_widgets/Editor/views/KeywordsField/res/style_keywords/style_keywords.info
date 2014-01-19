@@ -3,22 +3,5 @@
     "value_type": 3,
     "proto": "/Library/views/Css",
     "is_mandatory": true,
-    "order": 7,
-    "children": {
-        "title": {
-            "is_default_value": true,
-            "proto": "/Library/views/Css/title",
-            "is_mandatory": true,
-            "is_property": true,
-            "order": 1
-        },
-        "description": {
-            "is_default_value": true,
-            "value_type": 2,
-            "proto": "/Library/views/Css/description",
-            "is_mandatory": true,
-            "is_property": true,
-            "order": 2
-        }
-    }
+    "order": 7
 }

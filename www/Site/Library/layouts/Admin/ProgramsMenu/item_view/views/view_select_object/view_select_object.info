@@ -14,6 +14,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "Элемент пользовательского интерфейса. Отображает данные с помощью шаблонизации.",
             "value_type": 2,
             "proto": "/Library/views/Widget/description",
             "is_mandatory": true,
@@ -22,6 +23,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/Widget/res",
             "is_mandatory": true,
             "is_property": true,
@@ -29,27 +31,11 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/views/Widget/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/Widget/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/Widget/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 4
         }
     }
 }

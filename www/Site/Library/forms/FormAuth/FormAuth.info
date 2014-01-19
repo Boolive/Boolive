@@ -21,6 +21,7 @@
         },
         "res": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidgetList2/res",
             "is_mandatory": true,
             "is_property": true,
@@ -28,6 +29,7 @@
         },
         "views": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidgetList2/views",
             "is_mandatory": true,
             "is_property": true,
@@ -35,6 +37,7 @@
             "children": {
                 "title": {
                     "is_default_value": true,
+                    "value": "Список видов",
                     "proto": "/Library/views/AutoWidgetList2/views/title",
                     "is_mandatory": true,
                     "is_property": true,
@@ -42,6 +45,7 @@
                 },
                 "description": {
                     "is_default_value": true,
+                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
                     "proto": "/Library/views/AutoWidgetList2/views/description",
                     "is_mandatory": true,
                     "is_property": true,
@@ -57,6 +61,7 @@
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Поле формы",
                             "proto": "/Library/forms/FormField/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -64,6 +69,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Эталон поля ввода строки",
                             "proto": "/Library/forms/FormField/description",
                             "is_mandatory": true,
                             "is_property": true,
@@ -71,6 +77,7 @@
                         },
                         "res": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/forms/FormField/res",
                             "is_mandatory": true,
                             "is_property": true,
@@ -81,16 +88,7 @@
                             "proto": "/Library/forms/FormField/object_rule",
                             "is_mandatory": true,
                             "is_property": true,
-                            "order": 5,
-                            "children": {
-                                "title": {
-                                    "is_default_value": true,
-                                    "proto": "/Library/forms/FormField/object_rule/title",
-                                    "is_mandatory": true,
-                                    "is_property": true,
-                                    "order": 1
-                                }
-                            }
+                            "order": 5
                         }
                     }
                 },
@@ -104,6 +102,7 @@
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Поле формы",
                             "proto": "/Library/forms/FormField/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -111,6 +110,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Эталон поля ввода строки",
                             "proto": "/Library/forms/FormField/description",
                             "is_mandatory": true,
                             "is_property": true,
@@ -118,6 +118,7 @@
                         },
                         "res": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/forms/FormField/res",
                             "is_mandatory": true,
                             "is_property": true,
@@ -128,16 +129,7 @@
                             "proto": "/Library/forms/FormField/object_rule",
                             "is_mandatory": true,
                             "is_property": true,
-                            "order": 5,
-                            "children": {
-                                "title": {
-                                    "is_default_value": true,
-                                    "proto": "/Library/forms/FormField/object_rule/title",
-                                    "is_mandatory": true,
-                                    "is_property": true,
-                                    "order": 1
-                                }
-                            }
+                            "order": 5
                         }
                     }
                 },
@@ -151,6 +143,7 @@
                     "children": {
                         "title": {
                             "is_default_value": true,
+                            "value": "Поле формы",
                             "proto": "/Library/forms/FormField/title",
                             "is_mandatory": true,
                             "is_property": true,
@@ -158,6 +151,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Эталон поля ввода строки",
                             "proto": "/Library/forms/FormField/description",
                             "is_mandatory": true,
                             "is_property": true,
@@ -165,6 +159,7 @@
                         },
                         "res": {
                             "is_default_value": true,
+                            "value": "",
                             "proto": "/Library/forms/FormField/res",
                             "is_mandatory": true,
                             "is_property": true,
@@ -175,22 +170,14 @@
                             "proto": "/Library/forms/FormField/object_rule",
                             "is_mandatory": true,
                             "is_property": true,
-                            "order": 5,
-                            "children": {
-                                "title": {
-                                    "is_default_value": true,
-                                    "proto": "/Library/forms/FormField/object_rule/title",
-                                    "is_mandatory": true,
-                                    "is_property": true,
-                                    "order": 1
-                                }
-                            }
+                            "order": 5
                         }
                     }
                 }
             }
         },
         "object": {
+            "value": "",
             "proto": "/Library/basic/Object",
             "is_default_class": false,
             "is_mandatory": true,
@@ -205,6 +192,7 @@
                     "order": 1
                 },
                 "name": {
+                    "value": "",
                     "proto": "/Library/basic/Object",
                     "is_mandatory": true,
                     "is_property": true,
@@ -228,6 +216,7 @@
                     }
                 },
                 "passw": {
+                    "value": "",
                     "value_type": 2,
                     "proto": "/Library/basic/Text",
                     "is_mandatory": true,
@@ -243,6 +232,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Строковое значение длиной до 65535 символа (64Кбайт)",
                             "proto": "/Library/basic/Text/description",
                             "is_mandatory": true,
                             "is_property": true,
@@ -266,6 +256,7 @@
                         },
                         "description": {
                             "is_default_value": true,
+                            "value": "Логическое значение ДА или НЕТ",
                             "value_type": 2,
                             "proto": "/Library/basic/Boolean/description",
                             "is_mandatory": true,
@@ -308,68 +299,28 @@
         },
         "cache": {
             "is_default_value": true,
+            "value": 0,
             "proto": "/Library/views/AutoWidgetList2/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 16,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidgetList2/cache/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidgetList2/cache/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 16
         },
         "object_rule": {
             "is_default_value": true,
+            "value": "",
             "value_type": 2,
             "proto": "/Library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 17,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidgetList2/object_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                }
-            }
+            "order": 17
         },
         "path_rule": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/views/AutoWidgetList2/path_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 18,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/views/AutoWidgetList2/path_rule/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/views/AutoWidgetList2/path_rule/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 18
         }
     }
 }

@@ -2,13 +2,5 @@
     "value": "Model.js",
     "value_type": 3,
     "proto": "/Library/javascripts/JavaScript",
-    "order": 1,
-    "children": {
-        "title": {
-            "value": "Модель",
-            "proto": "/Library/javascripts/JavaScript/depends/title",
-            "is_property": true,
-            "order": 1
-        }
-    }
+    "order": 1
 }

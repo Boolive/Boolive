@@ -33,6 +33,7 @@
             }
         },
         "type": {
+            "value": "",
             "proto": "/Library/basic/String",
             "is_property": true,
             "order": 5,
@@ -61,29 +62,11 @@
         },
         "depends": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
             "is_mandatory": true,
             "is_property": true,
-            "order": 7,
-            "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/javascripts/JavaScript/depends/title",
-                    "is_draft": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/javascripts/JavaScript/depends/description",
-                    "is_draft": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                }
-            }
+            "order": 7
         }
     }
 }

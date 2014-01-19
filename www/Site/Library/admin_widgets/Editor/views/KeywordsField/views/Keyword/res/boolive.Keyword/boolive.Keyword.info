@@ -14,6 +14,7 @@
         },
         "depends": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/patterns/Boolive.Widget/depends",
             "is_link": true,
             "is_mandatory": true,
@@ -22,6 +23,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "jQueryUI виджет с функцией обновления по ajax и взаимодействием с другими виджетами страницы.",
             "value_type": 2,
             "proto": "/Library/javascripts/patterns/Boolive.Widget/description",
             "is_mandatory": true,

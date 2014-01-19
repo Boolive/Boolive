@@ -1,4 +1,5 @@
 {
+    "value": "",
     "proto": "/Library/access/User",
     "order": 5,
     "children": {
@@ -32,6 +33,7 @@
         },
         "avatar": {
             "is_default_value": true,
+            "value": "avatar.png",
             "value_type": 3,
             "proto": "/Library/access/User/avatar",
             "is_mandatory": true,

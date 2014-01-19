@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "",
     "proto": "/Library/content_samples/Page",
     "order": 8,
     "children": {
@@ -20,6 +21,7 @@
         },
         "description": {
             "is_default_value": true,
+            "value": "Публикация на сайте - страница, статья, новость или другое",
             "value_type": 2,
             "proto": "/Library/content_samples/Page/description",
             "is_mandatory": true,
@@ -28,6 +30,7 @@
         },
         "keywords": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/content_samples/Page/keywords",
             "is_mandatory": true,
             "is_property": true,

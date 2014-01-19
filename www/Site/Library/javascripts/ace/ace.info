@@ -19,6 +19,7 @@
         },
         "depends": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/JavaScript/depends",
             "is_property": true,
             "order": 4

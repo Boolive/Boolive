@@ -21,28 +21,15 @@
         },
         "depends": {
             "is_default_value": true,
+            "value": "",
             "proto": "/Library/javascripts/patterns/jQueryUIScript/depends",
             "is_mandatory": true,
             "is_property": true,
             "order": 3,
             "children": {
-                "title": {
-                    "is_default_value": true,
-                    "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value_type": 2,
-                    "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                },
                 "jquery": {
                     "is_default_value": true,
+                    "value": "jquery.js",
                     "value_type": 3,
                     "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/jquery",
                     "is_link": true,
@@ -52,6 +39,7 @@
                 },
                 "jquery.ui": {
                     "is_default_value": true,
+                    "value": "jquery.ui.js",
                     "value_type": 3,
                     "proto": "/Library/javascripts/patterns/jQueryUIScript/depends/jquery.ui",
                     "is_link": true,
@@ -61,6 +49,7 @@
                 },
                 "jquery.include": {
                     "is_default_value": true,
+                    "value": "jquery.include.js",
                     "value_type": 3,
                     "proto": "/Library/javascripts/jquery.include",
                     "is_link": true,
@@ -70,6 +59,7 @@
                 },
                 "underscore": {
                     "is_default_value": true,
+                    "value": "underscore.js",
                     "value_type": 3,
                     "proto": "/Library/javascripts/underscore",
                     "is_link": true,
@@ -79,6 +69,7 @@
                 },
                 "jquery.ui.boolive.Widget": {
                     "is_default_value": true,
+                    "value": "Widget.js",
                     "value_type": 3,
                     "proto": "/Library/javascripts/Widget",
                     "is_link": true,

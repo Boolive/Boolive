@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "jquery.js",
     "value_type": 3,
     "proto": "/Library/javascripts/jquery",
     "is_link": true,

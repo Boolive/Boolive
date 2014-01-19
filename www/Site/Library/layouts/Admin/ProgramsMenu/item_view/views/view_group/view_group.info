@@ -1,5 +1,6 @@
 {
     "is_default_value": true,
+    "value": "item_view.tpl",
     "value_type": 3,
     "proto": "/Library/layouts/Admin/ProgramsMenu/item_view",
     "is_link": true,
