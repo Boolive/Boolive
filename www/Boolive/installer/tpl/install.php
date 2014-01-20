@@ -15,7 +15,7 @@
 		<div id="layout-middle">-->
 			<div id="start" class="window" style="display:none;">
 				<h1 class="logo"><span class="color1">B</span><span class="color2">o</span><span class="color3">o</span>live</h1>
-				<p class="logo-descript">Самая замечательная система для создания и управления сайтом</p>
+				<p class="logo-descript">Супер гибкая система для создания и управления сайтом</p>
 				<!--<p><a href="http://boolive.ru/boolive2-licence">Лицензионное соглашение</a></p>-->
 				<br><br>
 				<a class="button" id="install" href="">Установить</a>

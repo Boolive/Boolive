@@ -41,7 +41,6 @@
         "object_rule": {
             "is_default_value": true,
             "value": "is(/Library/basic/HTMLText)",
-            "value_type": 2,
             "proto": "/Library/views/HtmlBlock/object_rule",
             "is_mandatory": true,
             "is_property": true,

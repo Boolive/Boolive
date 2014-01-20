@@ -46,14 +46,13 @@
                 "title": {
                     "value": "Список видов",
                     "proto": "/Library/views/ViewSingle/title",
-                    "is_mandatory": true,
                     "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
+                    "value_type": 2,
                     "proto": "/Library/views/ViewSingle/description",
-                    "is_mandatory": true,
                     "is_property": true,
                     "order": 2
                 }

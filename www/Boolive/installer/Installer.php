@@ -426,6 +426,9 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
+                    if ($m['uri'] == '/Library/layouts/Admin/Bookmarks'){
+                        $a = 10;
+                    }
                     $entity = new Entity();
                     $entity->import($m);
                     $entity->save(true, false);

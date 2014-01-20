@@ -65,6 +65,7 @@
             }
         },
         "rights": {
+            "is_default_value": true,
             "value": "",
             "proto": "/Library/access/Member/rights",
             "is_property": true,

@@ -50,14 +50,6 @@
                     "is_property": true,
                     "order": 1
                 },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения объекта",
-                    "proto": "/Library/views/AutoWidget2/views/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                },
                 "Page": {
                     "is_default_value": true,
                     "value": "Page.tpl",

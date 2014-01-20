@@ -716,10 +716,10 @@ class Entity implements ITrace
             $curr = $this->_attribs['is_default_value'];
             if ($is_default){
                 // Поиск прототипа, от котоого наследуется значение, чтобы взять его значение
-                if (($proto = $this->proto())/* && $proto->isLink() == $this->isLink()*/){
+                if (($proto = $this->proto(null, true, true))/* && $proto->isLink() == $this->isLink()*/){
                     if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
                 }
-                if (isset($proto) && $proto->isExist()){
+                if ($proto instanceof Entity && $proto->isExist()){
                     if ($proto->store() != $this->store()){
                         $this->_attribs['is_default_value'] = $proto->uri();
                     }else{
@@ -728,9 +728,11 @@ class Entity implements ITrace
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['value_type'] = $proto->valueType();
                 }else{
-                    $this->_attribs['is_default_value'] = Entity::ENTITY_ID;
-                    $this->_attribs['value'] = '';
-                    $this->_attribs['value_type'] = Entity::VALUE_AUTO;
+                    if (!isset($this->_attribs['is_default_value'])){
+                        $this->_attribs['is_default_value'] = Entity::ENTITY_ID;
+                        $this->_attribs['value'] = '';
+                        $this->_attribs['value_type'] = Entity::VALUE_AUTO;
+                    }
                 }
             }else{
                 if (IS_INSTALL && $this->_attribs['is_default_value']!=$this->_attribs['id'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
@@ -763,7 +765,7 @@ class Entity implements ITrace
 //                    'from'=>$this->_attribs['is_default_value'],
 //                    'comment'=>'read default value',
 //                    'cache' => 2
-                ));
+                ), false);
             }
             return $this->_default_value_proto;
         }else{
@@ -783,12 +785,12 @@ class Entity implements ITrace
             $curr = $this->_attribs['is_default_class'];
             if ($is_default){
                 // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
-                if (($proto = $this->proto()) && $proto->isLink() == $this->isLink()){
+                if (($proto = $this->proto(null, true, true)) && $proto->isLink() == $this->isLink()){
                     if ($p = $proto->isDefaultClass(null, true)) $proto = $p;
                 }else{
                     $proto = null;
                 }
-                if (isset($proto) && $proto->isExist()){
+                if ($proto instanceof Entity && $proto->isExist()){
                     if ($proto->store() != $this->store()){
                         $this->_attribs['is_default_class'] = $proto->uri();
                     }else{
@@ -1000,7 +1002,7 @@ class Entity implements ITrace
      * @throws \Exception
      * @return Entity|null|bool
      */
-    function proto($new_proto = null, $load = true)
+    function proto($new_proto = null, $load = true, $reload = false)
     {
         if (is_string($new_proto)) $new_proto = Data::read($new_proto);
         // Смена прототипа
@@ -1062,19 +1064,21 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         // Возврат объекта-прототипа
-        if ($this->_proto === false && $load){
+        $reload = $reload && $this->_proto instanceof Entity && !$this->_proto->isExist() && isset($this->_attribs['proto']);
+        if (($this->_proto === false && $load) || $reload){
             if (isset($this->_attribs['proto'])){
                 $this->_proto = Data::read(array(
                     'from' => $this->_attribs['proto'],
                     'comment' => 'read proto',
-                    'cache' => 2
+                    'cache' => $reload ? 0 : 2
                 ));
                 if (!$this->_proto instanceof Entity){
                     throw new Exception('NO PROTO '.$this->_attribs['proto']);
                 }
-                if (!$this->_proto->isExist()){
-                    $this->_proto = null;
-                }
+                $this->_attribs['proto_cnt'] = null;
+//                if (!$this->_proto->isExist()){
+//                    $this->_proto = null;
+//                }
             }else{
                 $this->_proto = null;
             }
@@ -1484,6 +1488,20 @@ class Entity implements ITrace
                     }
                      // Если создаётся история, то нужна новая дата
                     if (empty($this->_attribs['date']) && !$this->isExist()) $this->_attribs['date'] = time();
+
+//                    if ($this->_attribs['uri'] == '/Library/layouts/Admin/Bookmarks/item_view/views/page_item'){
+                    if ($this->_proto instanceof Entity && !$this->_proto->isExist()){
+                        if ($this->_attribs['is_default_class'] == Entity::ENTITY_ID){
+                            $this->isDefaultClass(true);
+                        }
+                        if ($this->isDefaultValue()){
+                            $this->isDefaultValue(true);
+                        }
+                        if ($this->isLink()){
+                            $this->isLink(true);
+                        }
+                    }
+
                     // Сохранение себя
                     if (Data::write($this, $access)){
                         $this->_changed = false;
@@ -1543,6 +1561,8 @@ class Entity implements ITrace
         $attr = array(
             'name' => $this->name(),
             'order' => self::MAX_ORDER,
+            'is_default_value' => self::ENTITY_ID,
+            'is_default_class' => self::ENTITY_ID
         );
         /** @var $obj Entity */
         $obj = new $class($attr);

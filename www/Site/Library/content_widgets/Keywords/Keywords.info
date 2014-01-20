@@ -41,22 +41,6 @@
             "is_property": true,
             "order": 6,
             "children": {
-                "title": {
-                    "is_default_value": true,
-                    "value": "Список видов",
-                    "proto": "/Library/views/AutoWidgetList2/views/title",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 1
-                },
-                "description": {
-                    "is_default_value": true,
-                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения свойства объекта",
-                    "proto": "/Library/views/AutoWidgetList2/views/description",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 2
-                },
                 "Keyword": {
                     "is_default_value": true,
                     "value": "Keyword.tpl",

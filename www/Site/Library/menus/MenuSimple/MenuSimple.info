@@ -60,6 +60,7 @@
                 },
                 "description": {
                     "value": "Ссылки на объекты на которые отображать пункты меню",
+                    "value_type": 2,
                     "proto": "/Library/basic/Object/description",
                     "is_property": true,
                     "order": 2
