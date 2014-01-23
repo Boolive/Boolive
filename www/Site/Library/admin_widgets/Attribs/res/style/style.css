@@ -1,6 +1,24 @@
 .Attribs{
     font-size: 12pt;
+    margin: 15px 15px 30px;
     }
+    .Attribs__head{
+        position: relative;
+        }
+     .Attribs__title{
+        font-size: 28px;
+        padding: 0;
+        color: #444;
+        margin: 0;
+        text-decoration: none;
+        display: inline;
+        }
+    .Attribs__description{
+        font-size: 12px;
+        padding: 0;
+        margin: 0 0 25px 0;
+        color: #999;
+        }
     /* Пункт формы */
     .Attribs .item{
         margin: 1px 0;
@@ -141,6 +159,14 @@
                     text-decoration: none;
                     font-family: "Times New Roman";
                     line-height: 16px;
+                    }
+                .Attribs .item-is_mandatory label::after {
+                    margin: 4px 0 0 2px;
+                    position: absolute;
+
+                    content: '*';
+                    font: normal 18px/18px "Times New Roman";
+                    color: #bf028b;
                     }
 
         /* Кнопки */

@@ -1,6 +1,10 @@
 <div class="Attribs" data-v="<?php echo $v['view_uri'];?>" data-p="Attribs">
-    <div class="layout-main">
-        <h2><?php echo $v['head'];?></h2>
+    <div class="Attribs__head">
+        <h1 class="Attribs__title"><?php echo $v['head'];?></h1>
+    </div>
+    <p class="Attribs__description">Атрибуты определяют внутреннее устройство объекта и имеются у всех объектов</p>
+    <div class="Attribs__main">
+        <h2></h2>
         <form action="" enctype="multipart/form-data" type="POST">
             <div style="display: none;">
                 <input type="hidden" name="direct" value="<?php echo $v['view_uri'];?>">
@@ -26,7 +30,7 @@
                 </div>
                 <div class="col2  item-value">
                     <div class="inpt value">
-                        <textarea class="attrib" id="value" name="attrib[value]" rows="5" cols="0" data-name="value"></textarea>
+                        <textarea class="attrib" id="value" name="attrib[value]" rows="4" cols="0" data-name="value"></textarea>
                         <div class="tags">
                             <div title="Загрузить файл" class="tag fileupload">Выбрать файл
                                 <input type="file" size="1" name="attrib[file]"/>
@@ -40,16 +44,7 @@
                     <span class="error-message"></span>
                 </div>
             </div>
-            <div class="item">
-                <div class="col1">
-                    <label for="order">Порядковый номер</label>
-                </div>
-                <div class="col2 item-order">
-                    <input class="attrib inpt order" type="text" id="order" name="attrib[order]" data-name="order" value=""/>
-                    <span class="error-message"></span>
-                    <span class="description">Используется для ручного упорядочивания объектов</span>
-                </div>
-            </div>
+
             <div class="item">
                 <div class="col1">
                     <label>Прототип</label>
@@ -64,13 +59,13 @@
             </div>
             <div class="item">
                 <div class="col1">
-                    <label>Признаки</label>
+
                 </div>
-                <div class="col2 item-is_hidden">
-                    <input class="attrib" type="checkbox" id="is_hidden" name="attrib[is_hidden]" data-name="is_hidden" value="1"/>
-                    <label for="is_hidden">Скрытый</label>
+                <div class="col2 item-is_relative">
+                    <input class="attrib" type="checkbox" id="is_relative" name="attrib[is_relative]" data-name="is_relative" value="1"/>
+                    <label for="is_relative">Относительный прототип</label>
                     <span class="error-message"></span><br>
-                    <span class="description">Скрытый объект доступен, но невиден.</span>
+                    <span class="description">Прототип для новых объектов определяется автоматически в зависимости от расположения обекта.</span>
                 </div>
             </div>
             <div class="item">
@@ -81,9 +76,9 @@
                     <input class="attrib" type="checkbox" id="is_link" name="attrib[is_link]" data-name="is_link" value="1"/>
                     <label for="is_link">Ссылка</label>
                     <span class="error-message"></span><br>
-                    <span class="description">Если объект является ссылкой, то свойства прототипа не наследуются.
+                    <span class="description">Если объект является ссылкой, то подчиненные у прототипа не наследуются.
                         Ссылка используется, чтобы сослаться на прототип и использовать его.
-                        Например, автор статьи - это ссылка на пользователя.</span>
+                        Например, автор статьи - это ссылка на пользователя, так как статье не нужен новый объект пользователя</span>
                 </div>
             </div>
             <div class="item">
@@ -92,11 +87,64 @@
                 </div>
                 <div class="col2 item-is_logic">
                     <input class="attrib" type="checkbox" id="is_logic" name="attrib[is_logic]" data-name="is_logic" value="1"/>
-                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Свой класс</label>
+                    <label for="is_logic" title="Объект имеет свой php-класс или использует класс прототипа?">Своя логика</label>
                     <span class="error-message"></span><br>
-                    <span class="description">Своим классом дополняется базовая логика объекта.<br>
+                    <span class="description">Своей логикой дополняется базовая логика объекта. Логика объекта описывается php-классом.<br>
                     Используется класс: <span class="txt-tag class_name"></span><br>
                     </span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
+                    <label for="order">Порядковый номер</label>
+                </div>
+                <div class="col2 item-order">
+                    <input class="attrib inpt order" type="text" id="order" name="attrib[order]" data-name="order" value=""/>
+                    <span class="error-message"></span>
+                    <span class="description">Используется для ручного упорядочивания объектов</span>
+                </div>
+            </div>
+
+
+            <div class="item">
+                <div class="col1">
+
+                </div>
+                <div class="col2 item-is_draft">
+                    <input class="attrib" type="checkbox" id="is_draft" name="attrib[is_draft]" data-name="is_draft" value="1"/>
+                    <label for="is_draft">Черновик</label>
+                    <span class="error-message"></span><br>
+                    <span class="description">Не готовый к использованию объект. Достпуен только в админке</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
+                </div>
+                <div class="col2 item-is_hidden">
+                    <input class="attrib" type="checkbox" id="is_hidden" name="attrib[is_hidden]" data-name="is_hidden" value="1"/>
+                    <label for="is_hidden">Скрытый</label>
+                    <span class="error-message"></span><br>
+                    <span class="description">Скрытый объект доступен везде, но невиден.</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
+                </div>
+                <div class="col2 item-is_mandatory">
+                    <input class="attrib" type="checkbox" id="is_mandatory" name="attrib[is_mandatory]" data-name="is_mandatory" value="1"/>
+                    <label for="is_mandatory">Обязательный</label>
+                    <span class="error-message"></span><br>
+                    <span class="description">Если объект обязательный, то он автоматически наследуется при прототипировании родительского объекта</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="col1">
+                </div>
+                <div class="col2 item-is_property">
+                    <input class="attrib" type="checkbox" id="is_property" name="attrib[is_property]" data-name="is_property" value="1"/>
+                    <label for="is_property">Свойство</label>
+                    <span class="error-message"></span><br>
+                    <span class="description">Является свойством родительского объекта или объект самостоятельный? Например "Страница" - самостоятельный объект, а "текст страницы" - свойство</span>
                 </div>
             </div>
 
@@ -117,7 +165,7 @@
                 <div class="col2 item-date">
                     <span data-name="date" class=""></span>
                     <span class="error-message"></span>
-                    <span class="description">Также применяется в качестве версии объекта.</span>
+                    <span class="description"></span>
                 </div>
             </div>
             <div class="item submits">

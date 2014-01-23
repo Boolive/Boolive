@@ -101,6 +101,10 @@ class Attribs extends Widget
             $class_changed = (bool)$obj->isDefaultClass() != empty($attribs['is_logic']);
 
             $obj->isHidden(!empty($attribs['is_hidden']));
+            $obj->isDraft(!empty($attribs['is_draft']));
+            $obj->isMandatory(!empty($attribs['is_mandatory']));
+            $obj->isProperty(!empty($attribs['is_property']));
+            $obj->isRelative(!empty($attribs['is_relative']));
             $obj->isLink(!empty($attribs['is_link']));
             $obj->isDefaultClass(empty($attribs['is_logic']));
 
@@ -153,6 +157,10 @@ class Attribs extends Widget
             'order' => $obj->order(),
             'is_logic' => (bool)$obj->isDefaultClass() != self::ENTITY_ID,//['is_logic'],
             'is_hidden' => (bool)$obj->isHidden(null, false),
+            'is_draft' => (bool)$obj->isDraft(null, false),
+            'is_mandatory' => (bool)$obj->isMandatory(),
+            'is_property' => (bool)$obj->isProperty(),
+            'is_relative' => (bool)$obj->isRelative(),
             'is_link' => (bool)$obj->isLink(),
             'class' => get_class($obj),
             'class_self' => trim(str_replace('/', '\\', $obj->dir().$obj->name()), '\\')

@@ -188,6 +188,9 @@
             .on('change-attrib:is_link', function(value){
                 form.find('input[name="attrib[is_link]"]:first').prop("checked", value);
             })
+            .on('change-attrib:is_relative', function(value){
+                form.find('input[name="attrib[is_relative]"]:first').prop("checked", value);
+            })
             .on('change-attrib:is_logic', function(value){
                 form.find('input[name="attrib[is_logic]"]:first').prop("checked", value);
             })
@@ -199,6 +202,15 @@
             })
             .on('change-attrib:is_hidden', function(value){
                 form.find('input[name="attrib[is_hidden]"]:first').prop("checked", value);
+            })
+            .on('change-attrib:is_draft', function(value){
+                form.find('input[name="attrib[is_draft]"]:first').prop("checked", value);
+            })
+            .on('change-attrib:is_mandatory', function(value){
+                form.find('input[name="attrib[is_mandatory]"]:first').prop("checked", value);
+            })
+            .on('change-attrib:is_property', function(value){
+                form.find('input[name="attrib[is_property]"]:first').prop("checked", value);
             })
             .on('change-attrib:override', function(value){
                 form.find('input[name="attrib[override]"]:first').prop("checked", value);
