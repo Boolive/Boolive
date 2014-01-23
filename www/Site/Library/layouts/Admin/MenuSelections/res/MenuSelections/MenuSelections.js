@@ -26,6 +26,12 @@
                 if ('select' in change){
                     self.element.find('.MenuSelections__item_active').removeClass('MenuSelections__item_active');
                     self.element.find('.MenuSelections__item[data-name="'+state.select+'"]').addClass('MenuSelections__item_active');
+
+                }
+                if (state.selected.length > 1 || _.first(state.selected) !== state.object){
+                    self.element.addClass('MenuSelections_not-active');
+                }else{
+                    self.element.removeClass('MenuSelections_not-active');
                 }
             }
         }
