@@ -16,7 +16,7 @@
         },
         "description": {
             "is_default_value": true,
-            "value": "",
+            "value": "Для отображения свойств объекта соответствующими виджетом из списка",
             "proto": "/Library/menus/TopMenu/item_view/views/part_item/description",
             "is_mandatory": true,
             "is_property": true,

@@ -26,3 +26,8 @@
             .Menu ul li ul{
 
             }
+            .Menu__item_icon{
+                margin: -2px 3px 0 0;
+                display: inline-block;
+                vertical-align: middle;
+            }

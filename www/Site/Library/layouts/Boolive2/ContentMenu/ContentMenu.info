@@ -31,7 +31,7 @@
             "order": 3
         },
         "cache": {
-            "value": 1,
+            "value": 0,
             "proto": "/Library/menus/Menu/cache",
             "is_mandatory": true,
             "is_property": true,

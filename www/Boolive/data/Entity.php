@@ -936,7 +936,7 @@ class Entity implements ITrace
                     'from' => $this->_attribs['parent'],
                     'comment' => 'read parent',
                     'cache' => 2
-                ));
+                ), false);
                 if (!$this->_parent->isExist()){
                     $this->_parent = null;
                 }
@@ -1570,7 +1570,7 @@ class Entity implements ITrace
         if (isset($for)) $obj->parent($for);
         $obj->proto($this);
         $obj->isHidden($this->isHidden());
-        $obj->isDraft($draft);
+        $obj->isDraft($draft || $this->isDraft(null, false));
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;

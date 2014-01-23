@@ -43,6 +43,8 @@ class Item extends Widget
         if ($v['value_short'] != $v['value']){
             $v['value_short'].= '...';
         }
+        $icon = $obj->icon->inner();
+        $v['icon'] = $icon->isFile() && !$icon->isHidden(null, false) && !$icon->isDraft(null, false)? $icon->file() : false;
         $v['diff'] = $obj->diff();
         return parent::show($v,$commands, $input);
     }

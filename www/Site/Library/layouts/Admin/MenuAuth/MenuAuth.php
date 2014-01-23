@@ -21,6 +21,10 @@ class MenuAuth extends Widget{
             $v['name'] = $user->title->value();
         }
         $v['userlink'] = $user->uri();
+        $icon = $user->icon->inner();
+        if ($icon->isFile()){
+            $v['usericon'] = $icon->file();
+        }
         return parent::show($v, $commands, $input);
     }
 }

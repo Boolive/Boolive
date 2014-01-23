@@ -3,14 +3,13 @@
     position: absolute;
     }
     .Bookmarks__title-wrap{
-        height: 1px;
+        height: 0;
         margin: 20px 0 10px 10px;
-        font-size: 8pt;
         padding: 0 10px;
-        background-color: #e6e6e6;
         text-align: center;
         position: relative;
-
+        border-bottom: 1px dotted #d9d9d9;
+        font-size: 12px;
         }
         .Bookmarks__title{
             line-height: 20px;
@@ -46,7 +45,7 @@
                 display: inline-block;
                 vertical-align: middle;
                 margin: 0 5px;
-                max-width: 125px;
+                max-width: 105px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 }
@@ -62,8 +61,12 @@
             .Bookmarks__item-icon{
                 max-width: 16px;
                 max-height: 16px;
-                margin: 0;
+                margin: 0 -5px 0 5px;
                 vertical-align: middle;
+                opacity: 0.5;
+            }
+            :hover > .Bookmarks__item-icon{
+                opacity: 0.8;
             }
             .Bookmarks__item-remove{
                 padding: 0px 3px;
@@ -99,6 +102,9 @@
 		.Bookmarks__item.active > .Bookmarks__item-link{
 			color: #fff;
 			}
+        .Bookmarks__item.active > .Bookmarks__item-link .Bookmarks__item-icon{
+            opacity: 0.9;
+        }
 .Bookmarks__toolitem{
     text-align: center;
     margin: 10px 0;

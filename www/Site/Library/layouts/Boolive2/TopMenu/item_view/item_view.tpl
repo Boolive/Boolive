@@ -1,6 +1,6 @@
 <?php if ($v['show-item']->bool()):?>
 <li class="<?php echo $v['item_class'];?>"><a href="<?php echo $v['item_href']; ?>" title="<?php echo $v['item_title']; ?>"><?php
-        if ($v['item_icon']->bool()):?><img class="Menu__item_icon" src="<?php echo $v['item_icon']->uri();?>" alt="" width="16" height="16"><?php endif;
+        if ($v['item_icon']->bool()):?><img class="Menu__item_icon TopMenu__item_icon" src="<?php echo $v['item_icon']->uri();?>" alt="" width="16" height="16"><?php endif;
         ?><span><?php echo $v['item_text']; ?></span></a>
 <?php endif; ?>
 <?php

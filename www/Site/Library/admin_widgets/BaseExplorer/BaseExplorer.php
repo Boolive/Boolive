@@ -74,33 +74,38 @@ class BaseExplorer extends AutoWidgetList2
             switch ($this->_input['REQUEST']['select']){
                 case null:
                 case 'structure':
-                    $v['empty_description'] = 'У объекта нет подчиненных или они не соответсятвуют фильтру';
+//                    $v['empty_description'] = 'У объекта нет подчиненных или они не соответсятвуют фильтру';
                     $v['empty_other'] = array(
                         'title' => 'Свойства',
                         'select' => 'property'
                     );
+                    $v['empty'] = 'Структуры нет';
                     break;
                 case 'property':
-                    $v['empty_description'] = 'У объекта нет свойств или они не соответсятвуют фильтру';
+//                    $v['empty_description'] = 'У объекта нет свойств или они не соответсятвуют фильтру';
                     $v['empty_other'] = array(
                         'title' => 'Структра',
                         'select' => 'structure'
                     );
+                    $v['empty'] = 'Свойств нет';
                     break;
                 case 'heirs':
-                    $v['empty_description'] = 'У объекта нет наследников или они не соответсятвуют фильтру';
+//                    $v['empty_description'] = 'Объект никто не использует (не наследует) или они не соответсятвуют фильтру';
                     $v['empty_other'] = array(
                         'title' => 'Структра',
                         'select' => 'structure'
                     );
+                    $v['empty'] = 'Наследников нет';
                     break;
                 case 'protos':
-                    $v['empty_description'] = 'У объекта нет прототипов или они не соответсятвуют фильтру';
+//                    $v['empty_description'] = 'Объект никого не наследует - у него нет прототиров или они не соответсятвуют фильтру';
                     $v['empty_other'] = array(
                         'title' => 'Структра',
                         'select' => 'structure'
                     );
+                    $v['empty'] = 'Прототипов нет';
                     break;
+
                 default:
                     $v['empty_description'] = '';
             }

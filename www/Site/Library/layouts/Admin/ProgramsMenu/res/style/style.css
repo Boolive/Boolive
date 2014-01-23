@@ -66,16 +66,16 @@
 				}
 
     .ProgramsMenu ul li.group{
-        font-size: 8pt;
+        font-size: 12px;
         margin: 20px 0;
         }
         .ProgramsMenu ul li.group .group-title{
-            height: 1px;
+            height: 0;
             margin: 0 10px 20px 0;
             padding: 0 10px;
-            background-color: #d9d9d9;
             text-align: center;
             position: relative;
+            border-bottom: 1px dotted #d9d9d9;
             }
             .ProgramsMenu ul li.group .group-title > .title{
                 line-height: 20px;

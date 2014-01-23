@@ -14,7 +14,7 @@ class Editor extends BaseExplorer
     function startRule()
     {
         $rule = parent::startRule();
-        $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in(null, 'structure', 'property')->required();
+        $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in(null, 'property')->required();
         return $rule;
     }
 

@@ -14,16 +14,22 @@
 		}
 		.TopMenu > ul > li {
 			float: left;
-			max-width: 140px;
+			max-width: 200px;
 			text-align: center;
 			/*height: 40px;*/
 			display: block;
+			position: relative;
 			}
 			.TopMenu > ul > li:hover{
                 background-color: #E4EEF9;
 				}
             .TopMenu > ul > li:first-child a{
                 /*padding-left: 20px;*/
+            }
+            .TopMenu__item_icon{
+                margin: -2px 3px 0 0;
+                display: inline-block;
+                vertical-align: middle;
             }
 			.TopMenu > ul > li > a{
 				display: table-cell;

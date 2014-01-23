@@ -73,6 +73,21 @@
                     "order": 1
                 }
             }
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 9,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

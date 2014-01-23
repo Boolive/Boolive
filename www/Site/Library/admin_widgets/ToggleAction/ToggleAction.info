@@ -7,7 +7,7 @@
     "order": 2,
     "children": {
         "title": {
-            "value": "Действие-переключатель",
+            "value": "Действие переключатель",
             "proto": "/Library/views/Widget/title",
             "is_mandatory": true,
             "is_property": true,

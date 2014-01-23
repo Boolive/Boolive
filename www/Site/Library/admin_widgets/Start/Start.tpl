@@ -7,7 +7,7 @@
         <div class="Start__grid">
             <div class="Start__row">
                 <div class="Start__col0">
-                    <a class="Start__btn Start__show-object" href="options"><img class="Start__btn-icon" src="/Site/Library/admin_widgets/BaseExplorer/res/base_style/attr.png" width="16" height="16" alt=""/><span class="Start__btn-title">Настроить сайт</span></a>
+                    <a class="Start__btn Start__show-object" href="options"><img class="Start__btn-icon" src="/Site/Library/admin_widgets/BaseExplorer/res/base_style/uri-link.png" width="16" height="16" alt=""/><span class="Start__btn-title">Настроить сайт</span></a>
                 </div>
                 <div class="Start__col100">
                     <p>Смените название и описание сайта, загрузите логотип и иконку.</p>

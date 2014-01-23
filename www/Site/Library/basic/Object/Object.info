@@ -24,7 +24,7 @@
             }
         },
         "description": {
-            "value": "Простейший объект для создания новых с нуля",
+            "value": "Простейший объект",
             "value_type": 2,
             "proto": "/Library/basic/Text",
             "is_property": true,
@@ -42,6 +42,23 @@
                     "proto": "/Library/basic/Text/description",
                     "is_property": true,
                     "order": 2
+                }
+            }
+        },
+        "icon": {
+            "is_default_value": true,
+            "value": "Image.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_draft": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
                 }
             }
         }

@@ -55,8 +55,9 @@ class item_view extends AutoWidgetList2
             $v['item_descript'] = $obj->description->inner()->value();
             $v['item_title'] = $v['item_text'];
             // Иконка
-            if ($real->icon->isExist()){
-                $v['item_icon'] = $real->icon->/*resize(0,30,Image::FIT_OUTSIDE_LEFT_TOP)->*/file();
+            $icon = $real->icon->inner();
+            if ($icon->isFile()){
+                $v['item_icon'] = $icon->/*resize(0,30,Image::FIT_OUTSIDE_LEFT_TOP)->*/file();
             }
 
 

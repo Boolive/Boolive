@@ -38,9 +38,12 @@
                     background-position: 10px center;
                     }
                 .MenuAuth ul.buttons li.userlink a{
-                    background-image: url('img/user.png');
-
+                    background: none;
+                    padding: 8px 10px 8px 12px;
                     }
+                .MenuAuth__userlink-icon{
+                    margin: 0px 3px -3px 0;
+                }
                 .MenuAuth ul.buttons li.exit a{
                     background-image: url('img/exit.png');
                     }

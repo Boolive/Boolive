@@ -11,11 +11,26 @@
             "order": 1
         },
         "description": {
-            "value": "Группировка публикаций (страниц, статей, новостей)",
+            "value": "Сгруппированные публикации (страницы, статьи, новости)",
             "value_type": 2,
             "proto": "/Library/basic/Object/description",
             "is_property": true,
             "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Image",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/Library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

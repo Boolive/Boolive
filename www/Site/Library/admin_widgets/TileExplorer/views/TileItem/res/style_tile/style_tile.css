@@ -1,6 +1,7 @@
 .TileItem{
     display: inline-block;
     margin: 5px;
+    vertical-align: top;
     }
     .TileItem__main{
         height: 95px;
@@ -9,6 +10,9 @@
         }
     .TileItem__title-wrap{
         margin-bottom: -5px;
+    }
+    .TileItem__icon{
+        margin: -15px 2px 0 0;
     }
     .TileItem__title{
         font-size: 29px;

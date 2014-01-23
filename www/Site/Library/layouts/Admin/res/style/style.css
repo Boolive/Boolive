@@ -1,5 +1,4 @@
 .Admin{
-	/*position: absolute;*/
 	min-height: 100%;
 	padding: 0 180px;
 	overflow: hidden;
@@ -15,73 +14,23 @@
 		z-index: 2;
 		overflow:auto;
 		}
-        .Admin > .left .shadow{
-            position: absolute;
-            width: 100%;
-            top: 0;
-            bottom: 0;
-            box-shadow: inset -1px 0px 0px 0px #D8D8D8,
-					inset -5px 0px 5px -5px #E0E0E0;
-		    -webkit-box-shadow: inset -1px 0px 0px 0px #D8D8D8,
-					inset -5px 0px 5px -5px #E0E0E0;
-            }
-		.maximize-left .Admin > .left{
-			width: 48px;
-			}
     .Admin > .right{
 		width: 180px;
 		right: 0;
 		bottom: 0;
 		position: fixed;
 		z-index: 3;
-		/*overflow-y:hidden;*/
 		padding: 0;
         top: 32px;
 		}
-        .Admin > .right .shadow{
-            position: absolute;
-            width: 100%;
-            top: 0;
-            bottom: 0;
-            box-shadow: inset 1px 0 0 0 #D8D8D8,
-					inset 5px 0 5px -5px #E0E0E0;
-		    -webkit-box-shadow: inset 1px 0 0 0 #D8D8D8,
-					inset 5px 0 5px -5px #E0E0E0;
-            }
-		.maximize-right .Admin > .right{
-			width: 48px;
-			}
     .Admin > .center{
-        /*position: absolute;*/
         margin: 0 auto;
-        /*max-width: 920px;*/
-
         padding: 32px 0 36px;
-        /*top: 32px;
-        left: 150px;
-		right: 200px;
-        bottom: 0;*/
 		z-index: 1;
-        /*overflow: hidden;*/
         position: relative;
         }
-        .maximize-left .Admin > .center,
-        .maximize-left .Admin > .top{
-			left: 48px;
-			}
-        .maximize-right .Admin .center,
-        .maximize-right .Admin .top{
-			right: 48px;
-			}
         .Admin .center > div{
-            /*position: absolute;*/
-            /*left: 0;
-            right: 0;*/
             height: 100%;
-            /*box-shadow: -1px 0 0 0 #DDDDDD,
-					5px 0 5px 5px #E0E0E0;
-		    -webkit-box-shadow: 1px 0 0 0 #D8D8D8,
-					5px 0 5px -5px #E0E0E0;*/
             }
 	.Admin .top{
         height: 32px;
@@ -96,7 +45,6 @@
             right: 0;
             display: block;
             height: 32px;
-            /*width: 270px;*/
             padding: 0;
             margin: 0;
             z-index: 110;
@@ -106,7 +54,6 @@
         }
     .Admin .bottom{
         position: fixed;
-        /*height: 40px;*/
         left: 0;
         right: 0;
         bottom: 0;

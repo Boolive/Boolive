@@ -31,6 +31,10 @@
     .Item__select img{
         vertical-align: middle;
         }
+.Item__icon{
+    margin: -3px -5px 0 10px;
+    vertical-align: middle;
+    }
 .Item__title{
     font-size: 16px;
     padding: 0 10px;

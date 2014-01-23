@@ -66,7 +66,6 @@
         color: #ddd;
         font-size: 11px;
         line-height: 11px;
-        margin: 0;
         padding: 0;
         display: block;
         margin: 1px;
@@ -81,6 +80,7 @@
         }
     textarea.Field__input{
         border: none;
+        font: normal 14px/1.1 Arial, Helvetica, sans-serif;
         background-color: transparent;
     }
     .Field__input[type="text"],

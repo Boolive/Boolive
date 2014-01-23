@@ -18,6 +18,13 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/Library/basic/Object/icon",
+            "is_property": true,
+            "order": 3
         }
     }
 }

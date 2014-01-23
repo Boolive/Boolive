@@ -397,7 +397,7 @@ label{
     /*display: inline-block;*/
     background-color: #F5F5F5;
     color: #999;
-    padding: 5px 5px 4px 5px;
+    padding: 5px 5px 4px;
     border: 1px #E0E0E0 solid;
     /*border-bottom: 1px #E0E0E0 solid;
     border-left: 1px #E0E0E0 solid;*/
@@ -411,6 +411,7 @@ label{
 
 .tag-link{
     cursor: pointer;
+    padding: 4px 5px 3px;
     }
     .tag-link:hover{
         background-color: #f2f9ff;

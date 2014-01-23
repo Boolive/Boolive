@@ -715,8 +715,9 @@ class MySQLStore extends Entity
 
             }catch (\Exception $e){
                 $this->db->rollBack();
-                $q = $this->db->query('SHOW ENGINE INNODB STATUS');
-                trace($q->fetchAll(DB::FETCH_ASSOC));
+//                $q = $this->db->query('SHOW ENGINE INNODB STATUS');
+//                trace($q->fetchAll(DB::FETCH_ASSOC));
+                trace($e);
                 throw $e;
             }
         }else{

@@ -19,10 +19,12 @@
             .Menu ul li:hover a{
 
                 }
-            .Menu ul li a img{
+            .Menu__item_icon{
                 vertical-align: middle;
                 margin: 0 2px 0 0;
+                width: 16px;
+                height: 16px;
                 }
-                .Menu ul li a img[src='']{
+                .Menu__item_icon[src='']{
                     display: none;
                 }

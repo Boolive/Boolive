@@ -21,7 +21,7 @@
             var self = this;
             this.element.on('click', '.BaseExplorer__proto', function(e){
                 e.preventDefault();
-                self.callParents('setState', [{object:  $(this).attr('data-o')}]);
+                self.callParents('setState', [{object:  $(this).attr('data-o'), select: 'property'}]);
             });
             this.element.on('click', '.BaseExplorer__show-entity', function(e){
                 e.preventDefault();

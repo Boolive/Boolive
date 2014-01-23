@@ -5,7 +5,7 @@
             <?php if ($v['proto-uri']!='//0'):?>
             <a class="BaseExplorer__proto" href="<?=ltrim($v['proto-uri']->escape(),'/')?>" title="Прототип объекта" data-o="<?=$v['proto-uri']?>"><?=$v['proto-title']?></a>
             <?php endif;?>
-            <div class="BaseExplorer__attribs-btn" title="Атрибуты объекта"><img src="/Site/Library/admin_widgets/BaseExplorer/res/base_style/attr.png" width="16" height="16" alt=""/></div>
+            <div class="BaseExplorer__attribs-btn" title="Изменить адрес (URI) объекта"><img src="/Site/Library/admin_widgets/BaseExplorer/res/base_style/uri-link.png" width="16" height="16" alt=""/></div>
         </div>
         <div class="BaseExplorer__head-right">
             <?=$v->FilterTool->string()?>
@@ -39,7 +39,7 @@
             <div class="BaseExplorer__empty"><?=$v['empty']?>
                 <div class="BaseExplorer__empty-explain">
                 <?php if ($v['select'] == 'structure'):?>
-                У объекта нет подчиненных или они не соответсятвуют фильтру.<br/>
+                У объекта нет самостоятельных подчиненных или они не соответсятвуют фильтру.<br/>
                 Их можно добавить или перейдите к просмотру свойств или других сведений об объекте с помощью нижнего меню.<br/>
                 <a href="<?=ltrim($v['object'],'/')?>&select=property" class="BaseExplorer__show-entity" data-select="property">Свойства</a>
                 <?php elseif($v['select'] == 'property'):?>
