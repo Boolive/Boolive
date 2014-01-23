@@ -300,18 +300,21 @@
             var object_str1 = this._state.object;
             // Смена выбора (что об объекте показывать)
             if ('select' in state){
-                this._state.select = state.select;
-                this._remember_select[object_str1] = this._state.select;
-                change['select'] = true;
+//                this._state.select = state.select;
+                this._remember_select[object_str1] = state.select;
+//                change['select'] = true;
             }else
             if ('object' in change && /*this._state.select != 'structure' && */!('view_name' in state)){
 
                 if (object_str1 in this._remember_select){
-                    this._state.select = this._remember_select[object_str1];
+                    state.select = this._remember_select[object_str1];
                 }else{
-                    this._state.select = 'structure';
+                    state.select = 'structure';
                 }
+            }
+            if ('select' in state && state.select !== this._state.select){
                 change['select'] = true;
+                this._state.select = state.select;
             }
 
             // Выбор вида, если указан новый или сменился объект или режим выбора объекта
