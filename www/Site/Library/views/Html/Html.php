@@ -30,6 +30,7 @@ class Html extends Widget
             return true;
         }
         $v['head'] = '';
+        $js = '';
         $this->_commands->htmlHead('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB), true);
         // Meta
         $site = Data::read();
@@ -59,13 +60,19 @@ class Html extends Widget
                 $attr = '';
                 foreach ($com[1] as $name => $value) $attr.=' '.$name.'="'.$value.'"';
                 if ($text === false){
-                    $v['head'].= '<'.$com[0].$attr."/>\n";
+                    $tag = '<'.$com[0].$attr."/>\n";
                 }else{
-                    $v['head'].= '<'.$com[0].$attr.'>'.$text.'</'.$com[0].">\n";
+                    $tag = '<'.$com[0].$attr.'>'.$text.'</'.$com[0].">\n";
+                }
+                if ($com[0] == 'script'){
+                    $js.=$tag;
+                }else{
+                    $v['head'].=$tag;
                 }
                 $uniq[$com[0]] = true;
             }
         }
+        $v['head'].=$js;
         return parent::show($v, $commands, $input);
     }
 }
