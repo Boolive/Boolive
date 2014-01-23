@@ -33,9 +33,9 @@
                 self.call_cancel();
                 self._change();
             });
-            self.element.on('focus', 'input', function(e){
-                self._select();
-            })
+//            self.element.on('focus', 'input', function(e){
+//                self._select();
+//            })
         },
 
         _isChanged: function(){

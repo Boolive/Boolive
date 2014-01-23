@@ -17,7 +17,10 @@
     }
 ?>
 <div class="Item<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item" title="<?=$v['uri']?>">
-    <div class="Item__main">
+    <div class="Item__main Item__select-area">
+        <?php if ($v['icon']->bool()):?>
+        <img class="Item__icon" src="<?=$v['icon']?>" alt="" width="16" height="16">
+        <?php endif;?>
         <a class="Item__title" href="<?=ltrim($v['link'],'/')?>"><?=$v['title']?></a>
         <div class="Item__description"><?=$v['description']?></div>
         <a class="Item__link" title="Структура ссылки" href="<?php echo ltrim($v['uri'],'/');?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>

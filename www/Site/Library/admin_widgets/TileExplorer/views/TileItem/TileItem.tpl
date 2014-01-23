@@ -26,10 +26,16 @@
         $title_min = mb_substr($title_big, $pos);
         $title_big = mb_substr($title_big, 0, $pos);
     }
-    $width = max(118, round((mb_strlen($title_big)*18+18)/50)*50+18);
-?><div class="Item TileItem<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item">
-    <div class="Item__main TileItem__main" style="min-width:<?=$width?>px; <?=$v['icon-style']?>">
-        <div class="TileItem__title-wrap"><a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
+    $icon_width = $v['icon']->bool()?37:0;
+    $width = max(118, round((mb_strlen($title_big)*18+18+$icon_width)/50)*50+18);
+?><div class="Item TileItem <?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item">
+    <div class="Item__main TileItem__main Item__select-area" style="min-width:<?=$width?>px; <?=$v['icon-style']?>">
+
+        <div class="TileItem__title-wrap">
+            <?php if ($v['icon']->bool()):?>
+        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="32" height="32">
+        <?php endif;?>
+            <a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
         <?php if (!empty($title_min)) :?><div class="TileItem__title-min"><?=$title_min?></div><?php endif; ?>
         <div class="Item__description TileItem__description"><?=$v['description']?></div>
         <div class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?php echo $v['is_default_value']->bool()?' Item__default-value':'';?> TileItem__value" title="<?=$v['value_full']?>"><?=$v['value_short']?></div>

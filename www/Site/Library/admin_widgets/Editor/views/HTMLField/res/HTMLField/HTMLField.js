@@ -25,12 +25,12 @@
                 self._change(e);
             });
             self._editor.editor.on('contentDom', function(e) {
-                this.document.on('click', function(event){
-                    var s = self.callParents('getState');
-                    if (_.size(s.selected)>1 || _.indexOf(s.selected, self.options.object)==-1){
-                        self.callParents('setState', [{selected: self.options.object}]);
-                    }
-                });
+//                this.document.on('click', function(event){
+//                    var s = self.callParents('getState');
+//                    if (_.size(s.selected)>1 || _.indexOf(s.selected, self.options.object)==-1){
+//                        self.callParents('setState', [{selected: self.options.object}]);
+//                    }
+//                });
             });
         },
 

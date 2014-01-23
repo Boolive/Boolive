@@ -47,17 +47,17 @@
                 self.callParents('setState', [{selected: self.options.object, select_type: 'toggle'}]);
             });
             // Выделение объекта
-            self.element.on('click', function(e){
+            self.element.on('click', '.Item__select-area', function(e){
                 e.stopPropagation();
                 //e.preventDefault();
                 self._select();
             });
 
-            self.element.on('focus', 'input', function(e){
-                self._select();
-            }).on('focus', 'textarea', function(e){
-                self._select();
-            });
+//            self.element.on('focus', 'input', function(e){
+//                self._select();
+//            }).on('focus', 'textarea', function(e){
+//                self._select();
+//            });
         },
 
         _select: function(){
