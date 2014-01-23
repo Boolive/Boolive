@@ -29,7 +29,8 @@
                 var self = this;
                 if ('selected' in change || 'select' in change){
                     var obj = (state.selected.length == 1)? _.first(state.selected) : state.selected;
-                    self.reload({object:obj, select: state.select}, function(){
+                    var have_selected = obj !== state.object;
+                    self.reload({object:obj, have_selection:have_selected, select: state.select}, function(){
                         self._select(state);
                     });
                 }else

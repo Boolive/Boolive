@@ -1,6 +1,6 @@
 <?php
 /**
- * Добавить2
+ * Добавить
  * Выберите объекты, которые хотите добавить
  * @version 1.0
  */
@@ -11,12 +11,13 @@ use Library\admin_widgets\SelectObject\SelectObject;
 
 class Add extends SelectObject
 {
-     function startRule()
-     {
-         $rule = parent::startRule();
-         $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in(null, 'structure', 'property')->required();
-         return $rule;
-     }
+    function startRule()
+    {
+        $rule = parent::startRule();
+        $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in(null, 'structure', 'property')->required();
+        $rule->arrays[0]['REQUEST']->arrays[0]['have_selection'] = Rule::not('true')->required();
+        return $rule;
+    }
 
     protected function selected()
     {
@@ -28,9 +29,6 @@ class Add extends SelectObject
             foreach ($protos as $proto){
                 /** @var $proto \Boolive\data\Entity */
                 $obj = $proto->birth($parent);
-//                if ($proto->uri() == '/Library/basic/Object'){
-//                    $obj->proto(false);
-//                }
                 if ($this->_input['REQUEST']['is_link']){
                     $obj->isLink(true);
                 }
