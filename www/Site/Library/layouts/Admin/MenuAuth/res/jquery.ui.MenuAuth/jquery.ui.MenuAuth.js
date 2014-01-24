@@ -11,7 +11,8 @@
             this.element.find('.userlink a').click(function(e){
                 e.preventDefault();
                 self.callParents('setState', [{
-                    object: $(this).attr('data-o')
+                    object: $(this).attr('data-o'),
+                    select: 'property'
                 }]);
             });
             this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {object: true});
