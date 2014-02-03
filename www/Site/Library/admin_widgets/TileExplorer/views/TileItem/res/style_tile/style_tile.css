@@ -48,20 +48,26 @@
         line-height: normal;
         white-space: normal;
         }
-    .TileItem__value{
+    .TileItem__value_wrap{
         display: block;
-        font-size: 11px;
         overflow: hidden;
-        height: 20px;
-        line-height: 25px;
-        padding: 0 0 8px 0;
-        text-align: left;
-        white-space: nowrap;
+
         position: absolute;
         right: 15px;
         left: 15px;
         bottom: 0;
-        /*font-weight: bold;*/
+
+        text-align: left;
+    }
+    .TileItem__value{
+        display: inline;
+        font-size: 11px;
+        float: none;
+        padding: 0 0 5px 0;
+        /*height: 20px;*/
+        line-height: 25px;
+        text-align: left;
+        white-space: nowrap;
         }
     .TileItem__select{
 

@@ -15,6 +15,7 @@
             $class .= ' Item_diff-delete';
             break;
     }
+    $url = ltrim($v['uri'],'/');
 ?>
 <div class="Item<?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item" title="<?=$v['uri']?>">
     <div class="Item__main Item__select-area">
@@ -23,9 +24,11 @@
         <?php endif;?>
         <a class="Item__title" href="<?=ltrim($v['link'],'/')?>"><?=$v['title']?></a>
         <div class="Item__description"><?=$v['description']?></div>
-        <a class="Item__link" title="Структура ссылки" href="<?php echo ltrim($v['uri'],'/');?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
-        <a class="Item__prop" title="Изменение свойств" href="<?php echo ltrim($v['uri'],'/').'&select=property';?>">Изменить</a>
-        <div class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?php echo $v['is_default_value']->bool()?' Item__default-value':'';?>" title="<?=$v['value_full']?>"><?=$v['value_short']?></div>
+
+        <a class="Item__link" title="Структура ссылки" href="<?=$url?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
+        <a class="Item__prop" title="Изменение свойств" href="<?=$url.'&select=property';?>">Свойства</a>
+        <a class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?=$v['is_default_value']->bool()?' Item__default-value':'';?>" title="<?=$v['value_full']?>" href="<?=$url.'&select=file';?>"><?=$v['value_short']?></a>
+
     </div>
     <div class="Item__select"><img width="16" height="16" src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
 </div>

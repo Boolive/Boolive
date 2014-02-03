@@ -15,6 +15,7 @@
             $class .= ' Item_diff-delete';
             break;
     }
+    $url = ltrim($v['uri'],'/');
     // Разделение длинных заголовков на два и округление ширены плитки
     $title_big = $v['title']->escape();
     $l = mb_strlen($title_big);
@@ -38,9 +39,11 @@
             <a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
         <?php if (!empty($title_min)) :?><div class="TileItem__title-min"><?=$title_min?></div><?php endif; ?>
         <div class="Item__description TileItem__description"><?=$v['description']?></div>
-        <div class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?php echo $v['is_default_value']->bool()?' Item__default-value':'';?> TileItem__value" title="<?=$v['value_full']?>"><?=$v['value_short']?></div>
+        <div class="TileItem__value_wrap">
+            <a class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?php echo $v['is_default_value']->bool()?' Item__default-value':'';?> TileItem__value" title="<?=$v['value_full']?>" href="<?=$url.'&select=file';?>"><?=$v['value_short']?></a>
+        </div>
     </div>
     <div class="Item__select TileItem__select"><img width="16" height="16" src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
-    <a class="Item__link TileItem__link" title="Структура ссылки" href="<?php echo ltrim($v['uri'],'/');?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
-    <a class="Item__prop TileItem__prop" title="Изменение свойств" href="<?php echo ltrim($v['uri'],'/').'&select=property';?>">Изменить</a>
+    <a class="Item__link TileItem__link" title="Структура ссылки" href="<?=$url?>"><img src="/Site/Library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
+    <a class="Item__prop TileItem__prop" title="Изменение свойств" href="<?=$url.'&select=property';?>">Свойства</a>
 </div>
