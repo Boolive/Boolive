@@ -1,7 +1,7 @@
 .BooleanField{
     margin: 5px 0;
-    background-color: #F1F1F1;
-    border: 1px solid #EDEDED;
+    background-color: transparent;
+    border: 1px solid transparent;
     border-radius: 5px;
 }
 .BooleanField__input-wrap{
@@ -23,4 +23,7 @@
     }
 .Item_selected .BooleanField__title{
     color: #fff;
+    }
+.BooleanField:hover{
+    background-color: transparent;
     }
