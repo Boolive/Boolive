@@ -46,6 +46,13 @@
             });
             // Выбор родителя
             this.element.on('click', '.BaseExplorer__attribs-uri-parent', function(e){
+
+                var selected = self.model.attrib['parent']!='null'?self.model.attrib['parent']:'';
+                var object = selected;
+                if (selected.length > 0){
+                    object = self.getDir(selected);
+                }
+
                 e.preventDefault();
                 e.stopPropagation();
                 self.callParents('openWindow', [null,
@@ -53,7 +60,8 @@
                         url: "/",
                         data: {
                             direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
-                            object: self.model.attrib['parent']!='null'?self.model.attrib['parent']:'' //какой объект показать
+                            object: object,
+                            selected: [selected]
                         }
                     },
                     function(result, params){
