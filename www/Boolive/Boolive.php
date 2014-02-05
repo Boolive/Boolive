@@ -326,7 +326,7 @@ namespace Boolive
             if (!is_writable($file)){
                 $requirements[] = 'Установите права на запись для файла <code>'.$file.'</code>. Необходимо для автоматической записи настроек системы';
             }
-            if (!is_writable(DIR_SERVER)){
+            if (!is_writable(DIR_SERVER_PROJECT)){
                 $requirements[] = 'Установите права на запись для директории <code>'.DIR_SERVER_PROJECT.'</code> и всех её вложенных директорий и файлов';
             }
             if (!extension_loaded('mbstring')){
