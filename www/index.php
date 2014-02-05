@@ -21,7 +21,3 @@ if (Boolive\Boolive::activate()){
     include DIR_SERVER_ENGINE.'installer/Installer.php';
     Boolive\installer\Installer::start();
 }
-//if (GLOBAL_TRACE){
-//    \Boolive\develop\Trace::groups()->group('Benchmark')->set(\Boolive\develop\Benchmark::stop('all', true));
-//    \Boolive\develop\Trace::groups()->out();
-////}
