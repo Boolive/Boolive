@@ -301,8 +301,8 @@ namespace Boolive
             if ($memory_limit < 32 * 1048576){
                 $requirements[] = 'В настройках PHP увеличьте лимит оперативной памяти до 32 Мегабайт <code>memory_limit 32MB</code>';
             }
-            if (!ini_get('short_open_tag')){
-                $requirements[] = 'В настройках PHP включите параметр "короткие теги" <code>short_open_tag On</code>';
+            if (!ini_get('short_open_tag') && version_compare(PHP_VERSION, "5.4.0", "<")){
+                $requirements[] = 'В настройках PHP включите параметр "короткие теги" <code>short_open_tag On</code> или используйте php 5.4 и новее';
             }
             if (ini_get('register_globals')){
                 $requirements[] = 'В настройках PHP отключите "регистрацию глобальных переменных" <code>register_globals Off</code>';
