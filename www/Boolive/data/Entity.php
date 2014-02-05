@@ -150,7 +150,7 @@ class Entity implements ITrace
     {
         return Rule::arrays(array(
             'id'           => Rule::uri(), // Сокращенный или полный URI
-            'name'         => Rule::string()->regexp('|^[a-z0-9_-]*$|ui')/*->regexp('|^[^/@:#\\\\]*$|')*/->min(IS_INSTALL?1:0)->max(50)->required(), // Имя объекта без символов /@:#\
+            'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(50)->required(), // Имя объекта без символов /@:#\
             'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
             'date'		   => Rule::int(), // Дата создания в секундах
             'parent'       => Rule::uri(), // URI родителя
