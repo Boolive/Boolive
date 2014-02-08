@@ -60,6 +60,8 @@ class BaseExplorer extends AutoWidgetList2
             $v['proto-title'] = 'Сущность';
             $v['proto-description'] = $obj->description->inner()->value();
         }
+        $v['description'] = mb_substr(strip_tags($v['description']),0,100);
+
         if (!$obj->isExist()){
             $v['empty'] = 'Не найден';
             $v['empty_description'] = 'Объект, к которому вы обращаетесь отсутсвует';
