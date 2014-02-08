@@ -18,11 +18,11 @@ class HTMLBlockPreview extends HtmlBlock
         $len = mb_strlen($text);
         // массив, в который записываем кол-во открытых тэгов
         $tags = array();
-        $r = preg_split('/(<[^>]+[^\/]>)/im', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $r = preg_split('/(<[^>]+>)/im', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         // счетчик длины строки
         $c = 0;
         // макс. длина текста
-        $mx = 622;//mb_strpos($text,'<a class="more"> </a>')>0 ? mb_strpos($text,'<a class="more"> </a>') : $len;
+        $mx = mb_strpos($text,'<a class="more"> </a>')>0 ? mb_strpos($text,'<a class="more"> </a>') : $len;
         // достигли ли макс. - можно заменить на ($mx>$c)
         $cw = true;
         // результат
@@ -62,8 +62,8 @@ class HTMLBlockPreview extends HtmlBlock
                 }
             }
         }
-        $output = $res;
-        $v['object'] = $output;
+
+        $v['object'] = $res;
         return Widget::show($v, $commands, $input);
     }
 }
