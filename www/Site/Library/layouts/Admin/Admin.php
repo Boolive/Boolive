@@ -13,17 +13,17 @@ use Library\layouts\Layout\Layout,
 
 class Admin extends Layout
 {
-    function startRule()
-    {
-        return Rule::arrays(array(
-            'REQUEST' => Rule::arrays(array(
-                'path' => Rule::string(),//regexp('|^/admin|'),
-            )),
-            'PATH' => Rule::arrays(array(
-                0 => Rule::eq('admin')->required()
-            ))
-        ));
-    }
+function startRule()
+{
+    return Rule::arrays(array(
+        'REQUEST' => Rule::arrays(array(
+            'path' => Rule::string(),//regexp('|^/admin|'),
+        )),
+        'PATH' => Rule::arrays(array(
+            0 => Rule::eq('admin')->required()
+        ))
+    ));
+}
 
     function startInitChild($input)
     {

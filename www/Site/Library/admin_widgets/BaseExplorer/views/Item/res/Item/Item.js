@@ -40,6 +40,13 @@
                 // Теперь входим
                 self.callParents('setState', [{object:  self.options.object, select: 'property'}]);
             });
+            // Переход к значению
+            self.element.find('.Item__value').click(function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                // Теперь входим
+                self.callParents('setState', [{object:  self.options.object, select: 'file'}]);
+            });
             // Множественное выделение объекта
             self.element.find('.Item__select').click(function(e){
                 e.stopPropagation();

@@ -303,12 +303,21 @@
             on('click', '.item-proto [data-name="proto-uri"]', function(e){
                 e.preventDefault();
                 e.stopPropagation();
+                var selected = self.model.attrib['proto']!='null'?self.model.attrib['proto']:'';
+                var object = selected;
+                if (selected.length > 0){
+                    object = self.getDir(selected);
+                }else{
+                    selected = '/Library';
+                    object = '/Library';
+                }
                 self.callParents('openWindow', [null,
                     {
                         url: "/",
                         data: {
                             direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
-                            object: self.model.attrib['proto']!='null'?self.model.attrib['proto']:'/Library' //какой объект показать
+                            object: object, //какой объект показать
+                            selected:[selected]
                         }
                     },
                     function(result, params){
@@ -327,12 +336,18 @@
             on('click', '.item-parent [data-name="parent-uri"]', function(e){
                 e.preventDefault();
                 e.stopPropagation();
+                var selected = self.model.attrib['parent']!='null'?self.model.attrib['parent']:'';
+                var object = selected;
+                if (selected.length > 0){
+                    object = self.getDir(selected);
+                }
                 self.callParents('openWindow', [null,
                     {
                         url: "/",
                         data: {
                             direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
-                            object: self.model.attrib['parent']!='null'?self.model.attrib['parent']:'' //какой объект показать
+                            object: object, //какой объект показать
+                            selected: [selected]
                         }
                     },
                     function(result, params){

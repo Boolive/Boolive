@@ -7,7 +7,7 @@
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
-            self.element.find('.remove').on('click', function(e){
+            self.element.find('.Keyword__remove').on('click', function(e){
                 e.preventDefault();
                 var result = self.callServer('Delete', {
                     object: self.options.object

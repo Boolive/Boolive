@@ -351,6 +351,10 @@
                 this.options.object = this.options.object.replace(args.uri, args.new_uri);
                 this.element.attr('data-o', this.options.object);
             }
+        },
+
+        getDir: function(path){
+            return path.substring(0,path.lastIndexOf('/'));
         }
     });
 })(jQuery, _, window);

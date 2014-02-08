@@ -7,6 +7,10 @@ html, body{
 a{
     color: #3467C1;
 }
+img{
+    border: 0;
+    outline: 0;
+}
 .layout{
     /*height: auto;*/
     margin-top: -42px;
