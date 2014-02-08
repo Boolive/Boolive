@@ -28,7 +28,7 @@
             "order": 3
         },
         "cache": {
-            "value": 1,
+            "value": 0,
             "proto": "/Library/views/AutoWidget2/cache",
             "is_mandatory": true,
             "is_property": true,
