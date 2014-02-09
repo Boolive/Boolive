@@ -55,8 +55,8 @@ class F
     /**
      * Разрезание строки на одномерный массив по разделительной строке.
      * Если $lim отрицателен, то разрезание происходит с конца строки
-     * @param $delim Разделительная строка
-     * @param $str Строка, которую нужно разрезать
+     * @param string$delim Разделительная строка
+     * @param string$str Строка, которую нужно разрезать
      * @param int $lim Максимальное количество частей
      * @return array
      */
@@ -73,53 +73,35 @@ class F
     /**
      * Разделение строки на две части используя строку-разделитель
      * Поиск разделителя выполняется с конца
-     * @param $delim Разделитель
-     * @param $str Строка, которая делится
-     * @param bool $single Если в троке встречаются подряд идущие символы-разделители, то не считать их разделителями.
+     * @param string $delim Разделитель
+     * @param string $str Строка, которая делится
+     * @param bool $single Если в cтроке встречаются подряд идущие символы-разделители, то не считать их разделителями.
      * @return array Массив строк. Если разделитель не найден, то первая строка = null, вторая = $str
      */
     static function splitRight($delim, $str, $single = false)
     {
-
-//        if ($single){
-//            // Только для ASCII символов!!!
-//            preg_match_all('/'.preg_quote($delim,'/').'+/ui', $str, $m, PREG_OFFSET_CAPTURE);
-//            $i=count($m[0])-1;
-//            $pos = false;
-//            while ($i>=0){
-//                if ($m[0][$i][0] === $delim){
-//                    $pos = $m[0][$i][1];
-//                    $i = -1;
-//                }else{
-//                    $i--;
-//                }
-//            }
-//        }else{
-//            $pos = mb_strrpos($str, $delim);
-//        }
-//        if ($pos === false) return array(null, $str);
-//        return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+mb_strlen($delim)));
-
         if ($single){
-            $all_pos = array();
-            mb_regex_encoding("UTF-32");
-            mb_ereg_search_init(mb_convert_encoding($str, "UTF-32", "UTF-8"), mb_convert_encoding($delim.'+', "UTF-32", "UTF-8"));
-            while ($r = mb_ereg_search_pos()) $all_pos[] = array($r[0]/4, $r[1]/4);
-            mb_regex_encoding("UTF-8");
-            $i = count($all_pos)-1;
+            $delim_length = mb_strlen($delim);
             $pos = false;
-            while ($i >= 0){
-                if (mb_substr($str, $all_pos[$i][0], $all_pos[$i][1]) === $delim){
-                    $pos = $all_pos[$i][0];
-                    $i = -1;
-                }else{
-                    $i--;
-                }
+            $tmp_str = $str;
+            if ($delim_length && mb_strlen($str) >= $delim_length){
+                do{
+                    $pos = mb_strrpos($tmp_str, $delim);
+                    $repeated = false;
+                    // Не повторяется ли символ далее. Проверяем, так как нужно найти одиночный фрагмент
+                    while ($pos!==false && ($next = mb_strrpos($tmp_str = mb_substr($tmp_str, 0, $pos+$delim_length-1), $delim)) >= $pos-$delim_length && $next!==false){
+                        $pos = $next;
+                        $repeated = true;
+                    }
+                    if ($repeated){
+                        $pos = false;
+                    }
+                }while ($repeated && $tmp_str);
             }
         }else{
             $pos = mb_strrpos($str, $delim);
         }
-        if ($pos === false) return array(null, $str);
+        if ($pos === false) return array(null, $str );
         return array(mb_substr($str, 0, $pos), mb_substr($str, $pos+mb_strlen($delim)));
     }
 
