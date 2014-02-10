@@ -5,22 +5,22 @@
     position: relative;
     box-sizing: border-box;
     font: normal 13px/1 Arial,"sans-serif";
-    margin: 5px 0;
+    margin: 4px 0;
     }
 .Item__main{
-    height: 32px;
+    height: 25px;
     margin: 0 30px 0 0;
     white-space: nowrap;
     word-wrap:break-word;
     overflow: hidden;
-    line-height: 32px;
+    line-height: 25px;
     cursor: default;
     }
 .Item__select{
     cursor: pointer;
     width: 30px;
     position: absolute;
-    line-height: 30px;
+    line-height: 24px;
     right: 0;
     top: 0;
     text-align: center;
@@ -29,12 +29,12 @@
         vertical-align: middle;
         }
 .Item__icon{
-    margin: -3px -5px 0 10px;
+    margin: -1px -8px 0 8px;
     vertical-align: middle;
     }
 .Item__title{
-    font-size: 16px;
-    padding: 0 10px;
+    font-size: 14px;
+    padding: 0 8px;
     text-decoration: none;
     color: #000;
     display: inline-block;
@@ -47,12 +47,12 @@
         }
 
 .Item__description{
-    font-size: 12px;
+    font-size: 11px;
     color: #888;
     display: inline-block;
     }
 .Item__prop{
-    font-size: 14px;
+    font-size: 12px;
     display: block;
     float: right;
     position: relative;
@@ -66,7 +66,7 @@
         color: #0085cc;
         }
 .Item__link{
-    font-size: 14px;
+    font-size: 12px;
     color: #333;
     display: none;
     float: right;
@@ -86,7 +86,7 @@
         }
 
 .Item__value{
-    font-size: 14px;
+    font-size: 13px;
     color: #4d433d;
     text-align: right;
     display: block;
