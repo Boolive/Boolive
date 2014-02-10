@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/views/FormHandler",
+    "proto": "/library/views/FormHandler",
     "is_link": true,
     "order": 8
 }

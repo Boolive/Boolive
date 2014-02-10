@@ -1,0 +1,38 @@
+{
+    "value": "HTMLField.tpl",
+    "value_type": 3,
+    "proto": "/library/admin_widgets/Editor/views/TextField",
+    "order": 10,
+    "children": {
+        "title": {
+            "value": "Поле HTML текста",
+            "proto": "/library/admin_widgets/Editor/views/TextField/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Поле формы для текстовых значений с HTML форматированием. ",
+            "value_type": 2,
+            "proto": "/library/admin_widgets/Editor/views/TextField/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/admin_widgets/Editor/views/TextField/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "object_rule": {
+            "value": "is(/library/basic/HTMLText)",
+            "proto": "/library/admin_widgets/Editor/views/TextField/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        }
+    }
+}

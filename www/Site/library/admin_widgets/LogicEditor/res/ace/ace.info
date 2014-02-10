@@ -1,0 +1,17 @@
+{
+    "is_default_value": true,
+    "value": "ace.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/ace",
+    "order": 2,
+    "children": {
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/ace/depends",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

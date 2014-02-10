@@ -1,0 +1,71 @@
+{
+    "value": "AutoWidget2.tpl",
+    "value_type": 3,
+    "proto": "/library/views/Widget",
+    "is_default_class": false,
+    "order": 24,
+    "children": {
+        "title": {
+            "value": "Виджет автоотображения объекта",
+            "proto": "/library/views/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "description": {
+            "value": "Отображает объект одним из подчиненных видом. Выбор вида выполняется по условию работы вида. ",
+            "proto": "/library/views/Widget/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/Widget/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/Widget/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "views": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/ViewSingle",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Список видов",
+                    "proto": "/library/views/ViewSingle/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Из этого списка автоматически выбирается один \"вид\" для отображения объекта",
+                    "value_type": 2,
+                    "proto": "/library/views/ViewSingle/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/views/Widget/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7
+        }
+    }
+}

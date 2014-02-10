@@ -1,0 +1,132 @@
+{
+    "value": "Part.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/Page",
+    "is_default_class": false,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Раздел",
+            "proto": "/library/content_widgets/Page/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "description": {
+            "value": "Виджета для отображения элементов раздела в виде списка. Используется для лент, галерей, каталогов. ",
+            "proto": "/library/content_widgets/Page/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_widgets/Page/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/content_widgets/Page/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "object_rule": {
+            "value": "is(/library/content_samples/Part)",
+            "proto": "/library/content_widgets/Page/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 13
+        },
+        "views": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_widgets/Page/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 14,
+            "children": {
+                "TitleView": {
+                    "is_default_value": true,
+                    "value": "TitleView.tpl",
+                    "value_type": 3,
+                    "proto": "/library/content_widgets/Page/views/TitleView",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
+                },
+                "Keywords": {
+                    "is_default_value": true,
+                    "value": "Keywords.tpl",
+                    "value_type": 3,
+                    "proto": "/library/content_widgets/Page/views/Keywords",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4
+                },
+                "PagePreview": {
+                    "is_default_value": true,
+                    "value": "PagePreview.tpl",
+                    "value_type": 3,
+                    "proto": "/library/content_widgets/PagePreview",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 5
+                },
+                "PartPreview": {
+                    "is_default_value": true,
+                    "value": "PartPreview.tpl",
+                    "value_type": 3,
+                    "proto": "/library/content_widgets/PartPreview",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 6
+                }
+            }
+        },
+        "count_per_page": {
+            "value": "8",
+            "proto": "/library/basic/Number",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 15,
+            "children": {
+                "title": {
+                    "value": "Количество объектов содержимого на странице.",
+                    "proto": "/library/basic/Number/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "pagesnum": {
+            "is_default_value": true,
+            "value": "PageNavigation.tpl",
+            "value_type": 3,
+            "proto": "/library/menus/PageNavigation",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 16
+        },
+        "NextPrevNavigation": {
+            "is_default_value": true,
+            "value": "NextPrevNavigation.tpl",
+            "value_type": 3,
+            "proto": "/library/content_widgets/Page/NextPrevNavigation",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 19
+        }
+    }
+}

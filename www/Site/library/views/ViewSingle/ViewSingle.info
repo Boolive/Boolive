@@ -1,0 +1,25 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Единственный вид",
+            "proto": "/library/views/View/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Базовый объект для создания элементов интерфейса",
+            "value_type": 2,
+            "proto": "/library/views/View/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

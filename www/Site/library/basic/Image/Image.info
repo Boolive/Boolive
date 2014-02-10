@@ -1,0 +1,39 @@
+{
+    "value": "Image.png",
+    "value_type": 3,
+    "proto": "/library/basic/File",
+    "is_default_class": false,
+    "order": 28,
+    "children": {
+        "title": {
+            "value": "Изображение",
+            "proto": "/library/basic/File/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Файл изображения",
+            "value_type": 2,
+            "proto": "/library/basic/File/description",
+            "is_property": true,
+            "order": 4
+        },
+        "extentions": {
+            "value": "*.png *.jpg *.gif *.ico",
+            "proto": "/library/basic/File/extentions",
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Допустимые расширения",
+                    "proto": "/library/basic/File/extentions/title",
+                    "is_hidden": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

@@ -48,7 +48,7 @@ class Data
      *                 array('attr', 'value', '<', 100),
      *             ))
      *         )),
-     *         array('is', '/Library/object')          // Кем объект является? Проверка наследования (прототипирования)
+     *         array('is', '/library/object')          // Кем объект является? Проверка наследования (прототипирования)
      *     ),
      *     'order' => array(                           // Сортировка
      *         array('uri', 'DESC'),                   // по атрибуту uri
@@ -72,7 +72,7 @@ class Data
      *               attr(value,lt,100)
      *           ))
      *       ),
-     *       is(/Library/object)
+     *       is(/library/object)
      *   ))
      *   order((uri,desc),(childname,value,asc))
      *   limit(10,15)
@@ -91,7 +91,7 @@ class Data
      *               attr(value,lt,100)
      *           ))
      *       ),
-     *       is(/Library/object)
+     *       is(/library/object)
      *   )&
      *   order=(uri,desc),(childname,value,asc)&
      *   limit=10,15
@@ -677,8 +677,8 @@ class Data
     /**
      * Преобразование условия из URL формата в массив
      * Пример:
-     *  Условие: from=/main/&where=is(/Library/Comment)&limit=0,10
-     *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /Library/Comment (можно не писать "from=")
+     *  Условие: from=/main/&where=is(/library/Comment)&limit=0,10
+     *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /library/Comment (можно не писать "from=")
      * @param string $uri Условие поиска в URL формате
      * @return array
      */
@@ -805,8 +805,8 @@ class Data
     /**
      * Преобразование строкового условия в массив
      * Пример:
-     *  Условие: select(children)from(/main)where(is(/Library/Comment))limit(0,10)
-     *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /Library/Comment (можно не писать "from=")
+     *  Условие: select(children)from(/main)where(is(/library/Comment))limit(0,10)
+     *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /library/Comment (можно не писать "from=")
      * @param $cond
      * @return array
      */

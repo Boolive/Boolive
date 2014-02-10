@@ -1,11 +1,11 @@
 {
     "value": "",
-    "proto": "/Library/content_samples/Page",
+    "proto": "/library/content_samples/Page",
     "order": 4,
     "children": {
         "title": {
             "value": "Вторая новость",
-            "proto": "/Library/content_samples/Page/title",
+            "proto": "/library/content_samples/Page/title",
             "is_mandatory": true,
             "is_property": true,
             "order": 1
@@ -13,7 +13,7 @@
         "text": {
             "value": "<p>Текст <strong>второй</strong> новости как у любой страницы может содержать картинки, таблицы, иметь всяческое <strong>форматирование</strong> и другие.<a class=\"more\"> </a><img alt=\"\" src=\"/Site/contents/news/news2/text/Image/Image.jpg\" style=\"height:346px; width:500px\" /> Приветмой </p>\nBODY\n<p> </p>\n",
             "value_type": 2,
-            "proto": "/Library/content_samples/Page/text",
+            "proto": "/library/content_samples/Page/text",
             "is_mandatory": true,
             "is_property": true,
             "order": 3,
@@ -21,7 +21,7 @@
                 "Image": {
                     "value": "Image.jpg",
                     "value_type": 3,
-                    "proto": "/Library/basic/Image",
+                    "proto": "/library/basic/Image",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 3,
@@ -29,7 +29,7 @@
                         "title": {
                             "is_default_value": true,
                             "value": "Изображение",
-                            "proto": "/Library/basic/Image/title",
+                            "proto": "/library/basic/Image/title",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 1
@@ -38,7 +38,7 @@
                             "is_default_value": true,
                             "value": "Файл изображения",
                             "value_type": 2,
-                            "proto": "/Library/basic/Image/description",
+                            "proto": "/library/basic/Image/description",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 2
@@ -51,7 +51,7 @@
             "is_default_value": true,
             "value": "Публикация на сайте - страница, статья, новость или другое",
             "value_type": 2,
-            "proto": "/Library/content_samples/Page/description",
+            "proto": "/library/content_samples/Page/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 4
@@ -59,7 +59,7 @@
         "keywords": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/content_samples/Page/keywords",
+            "proto": "/library/content_samples/Page/keywords",
             "is_mandatory": true,
             "is_property": true,
             "order": 5

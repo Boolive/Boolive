@@ -1,0 +1,44 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Член :)",
+            "proto": "/library/basic/Object/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Базовый объект для пользователей и групп",
+            "proto": "/library/basic/Object/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "rights": {
+            "value": "",
+            "proto": "/library/basic/Object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Права доступа",
+                    "proto": "/library/basic/Object/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Содержит роли, которыми определяются допустимые действия на сайте ",
+                    "value_type": 2,
+                    "proto": "/library/basic/Object/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

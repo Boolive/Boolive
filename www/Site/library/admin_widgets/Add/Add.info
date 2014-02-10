@@ -1,0 +1,111 @@
+{
+    "is_default_value": true,
+    "value": "SelectObject.tpl",
+    "value_type": 3,
+    "proto": "/library/admin_widgets/SelectObject",
+    "is_default_class": false,
+    "order": 29,
+    "children": {
+        "title": {
+            "value": "Добавить",
+            "proto": "/library/admin_widgets/SelectObject/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Добавление нового объекта",
+            "proto": "/library/admin_widgets/SelectObject/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "submit_title": {
+            "is_default_value": true,
+            "value": "Выбрать",
+            "proto": "/library/admin_widgets/SelectObject/submit_title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cancel_title": {
+            "is_default_value": true,
+            "value": "Отмена",
+            "proto": "/library/admin_widgets/SelectObject/cancel_title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/admin_widgets/SelectObject/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "programs": {
+            "is_default_value": true,
+            "value": "Programs.tpl",
+            "value_type": 3,
+            "proto": "/library/admin_widgets/SelectObject/programs",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Изображение",
+                    "proto": "/library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "short_select": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/admin_widgets/SelectObject/short_select",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Быстрый выбор",
+                    "proto": "/library/admin_widgets/SelectObject/short_select/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/admin_widgets/SelectObject/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/admin_widgets/SelectObject/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 10
+        }
+    }
+}

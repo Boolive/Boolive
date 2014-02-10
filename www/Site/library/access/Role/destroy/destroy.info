@@ -1,0 +1,21 @@
+{
+    "value": "",
+    "proto": "/library/access/Action",
+    "is_mandatory": true,
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Удаление",
+            "proto": "/library/access/Action/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Безвозвратное удаление объекта с его файлами и подчиненными объектами.",
+            "value_type": 2,
+            "proto": "/library/access/Action/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Ключевое слово",
+            "proto": "/library/basic/Object/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "is_default_value": true,
+    "value": "Css.css",
+    "value_type": 3,
+    "proto": "/library/views/HtmlBlock/res/Css",
+    "is_mandatory": true,
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "CSS подсветки кода",
+            "proto": "/library/views/HtmlBlock/res/Css/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

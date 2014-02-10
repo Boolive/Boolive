@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/views/RESTful",
+    "proto": "/library/views/RESTful",
     "is_link": true,
     "order": 11
 }

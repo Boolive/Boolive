@@ -1,13 +1,13 @@
 {
     "value": "",
-    "proto": "/Library/views/Html/body",
+    "proto": "/library/views/Html/body",
     "is_mandatory": true,
     "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Основная область вставки",
-            "proto": "/Library/views/Html/body/title",
+            "proto": "/library/views/Html/body/title",
             "is_mandatory": true,
             "is_property": true,
             "order": 1
@@ -16,7 +16,7 @@
             "is_default_value": true,
             "value": "Автоматически исполняет и отображает все подчиненные объекты",
             "value_type": 2,
-            "proto": "/Library/views/Html/body/description",
+            "proto": "/library/views/Html/body/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 2
@@ -25,7 +25,7 @@
             "is_default_value": true,
             "value": "Admin.tpl",
             "value_type": 3,
-            "proto": "/Library/layouts/Admin",
+            "proto": "/library/layouts/Admin",
             "is_link": true,
             "is_property": true,
             "order": 4
@@ -34,14 +34,14 @@
             "is_default_value": true,
             "value": "FormAuth.tpl",
             "value_type": 3,
-            "proto": "/Library/forms/FormAuth",
+            "proto": "/library/forms/FormAuth",
             "is_property": true,
             "order": 10,
             "children": {
                 "title": {
                     "is_default_value": true,
                     "value": "Аутентификация",
-                    "proto": "/Library/forms/FormAuth/title",
+                    "proto": "/library/forms/FormAuth/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 5
@@ -49,7 +49,7 @@
                 "description": {
                     "is_default_value": true,
                     "value": "Для аутентификации пользователя перед доступом к закрытым разделам сайта",
-                    "proto": "/Library/forms/FormAuth/description",
+                    "proto": "/library/forms/FormAuth/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 6
@@ -57,7 +57,7 @@
                 "res": {
                     "is_default_value": true,
                     "value": "",
-                    "proto": "/Library/forms/FormAuth/res",
+                    "proto": "/library/forms/FormAuth/res",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 7
@@ -65,14 +65,14 @@
                 "object": {
                     "is_default_value": true,
                     "value": "",
-                    "proto": "/Library/forms/FormAuth/object",
+                    "proto": "/library/forms/FormAuth/object",
                     "is_property": true,
                     "order": 8,
                     "children": {
                         "title": {
                             "is_default_value": true,
                             "value": "Модель авторизации",
-                            "proto": "/Library/forms/FormAuth/object/title",
+                            "proto": "/library/forms/FormAuth/object/title",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 1
@@ -82,14 +82,14 @@
                 "views": {
                     "is_default_value": true,
                     "value": "",
-                    "proto": "/Library/forms/FormAuth/views",
+                    "proto": "/library/forms/FormAuth/views",
                     "is_property": true,
                     "order": 9
                 },
                 "cache": {
                     "is_default_value": true,
                     "value": 0,
-                    "proto": "/Library/forms/FormAuth/cache",
+                    "proto": "/library/forms/FormAuth/cache",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 10
@@ -98,14 +98,14 @@
                     "is_default_value": true,
                     "value": "",
                     "value_type": 2,
-                    "proto": "/Library/forms/FormAuth/object_rule",
+                    "proto": "/library/forms/FormAuth/object_rule",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 11
                 },
                 "path_rule": {
                     "value": "/^\\/(admin|login)(\\/|$)/",
-                    "proto": "/Library/forms/FormAuth/path_rule",
+                    "proto": "/library/forms/FormAuth/path_rule",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 12

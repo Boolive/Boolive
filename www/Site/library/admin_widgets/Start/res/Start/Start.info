@@ -1,0 +1,15 @@
+{
+    "value": "Start.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/Widget",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive Start",
+            "proto": "/library/javascripts/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "value": "значение 2",
+    "proto": "/library/basic/String",
+    "is_mandatory": true,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Вариант 2",
+            "proto": "/library/basic/String/title",
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

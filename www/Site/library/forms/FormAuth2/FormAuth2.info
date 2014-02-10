@@ -1,0 +1,56 @@
+{
+    "value": "FormAuth2.tpl",
+    "value_type": 3,
+    "proto": "/library/forms/SimpleForm",
+    "is_default_class": false,
+    "order": 23,
+    "children": {
+        "title": {
+            "value": "Вход",
+            "proto": "/library/forms/SimpleForm/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "description": {
+            "value": "Форма авторизации пользователя",
+            "proto": "/library/forms/SimpleForm/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/SimpleForm/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/forms/SimpleForm/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/forms/SimpleForm/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/SimpleForm/path_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9
+        }
+    }
+}

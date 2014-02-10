@@ -1,0 +1,46 @@
+{
+    "is_default_value": true,
+    "value": "jquery.slides.js",
+    "value_type": 3,
+    "proto": "/library/content_widgets/Slider/res/jquery.slides",
+    "is_mandatory": true,
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "SlidesJS",
+            "proto": "/library/content_widgets/Slider/res/jquery.slides/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "v3.0 http://slidesjs.com/",
+            "proto": "/library/content_widgets/Slider/res/jquery.slides/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_widgets/Slider/res/jquery.slides/depends",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "jquery": {
+                    "is_default_value": true,
+                    "value": "jquery.js",
+                    "value_type": 3,
+                    "proto": "/library/content_widgets/Slider/res/jquery.slides/depends/jquery",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
+                }
+            }
+        }
+    }
+}

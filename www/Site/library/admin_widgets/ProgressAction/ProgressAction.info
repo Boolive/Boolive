@@ -1,0 +1,90 @@
+{
+    "value": "ProgressAction.tpl",
+    "value_type": 3,
+    "proto": "/library/views/Widget",
+    "is_default_class": false,
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Действие с прогрессом выполнения",
+            "proto": "/library/views/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Действие над объектами с подтверждением и прогрессом выполнения.",
+            "proto": "/library/views/Widget/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/Widget/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/Widget/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/views/Widget/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "submit_title": {
+            "value": "Выполнить",
+            "proto": "/library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Название действия",
+                    "proto": "/library/basic/String/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "color": {
+            "value": "#499DF2",
+            "proto": "/library/basic/Color",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Цвет",
+                    "proto": "/library/basic/Color/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Код цвета в HEX формате. Например #FF0099",
+                    "value_type": 2,
+                    "proto": "/library/basic/Color/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

@@ -1,12 +1,12 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/access/Role",
+    "proto": "/library/access/Role",
     "order": 2,
     "children": {
         "title": {
             "value": "Роль гостя",
-            "proto": "/Library/access/Role/title",
+            "proto": "/library/access/Role/title",
             "is_hidden": true,
             "is_property": true,
             "order": 1
@@ -15,7 +15,7 @@
             "is_default_value": true,
             "value": "Сгруппированные права доступа по действиям над объектами.",
             "value_type": 2,
-            "proto": "/Library/access/Role/description",
+            "proto": "/library/access/Role/description",
             "is_hidden": true,
             "is_property": true,
             "order": 2
@@ -23,7 +23,7 @@
         "read": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/read",
+            "proto": "/library/access/Role/read",
             "is_mandatory": true,
             "is_property": true,
             "order": 3
@@ -31,7 +31,7 @@
         "write": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/write",
+            "proto": "/library/access/Role/write",
             "is_mandatory": true,
             "is_property": true,
             "order": 4
@@ -39,7 +39,7 @@
         "destroy": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/destroy",
+            "proto": "/library/access/Role/destroy",
             "is_mandatory": true,
             "is_property": true,
             "order": 5
@@ -47,7 +47,7 @@
         "call": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/call",
+            "proto": "/library/access/Role/call",
             "is_mandatory": true,
             "is_property": true,
             "order": 6

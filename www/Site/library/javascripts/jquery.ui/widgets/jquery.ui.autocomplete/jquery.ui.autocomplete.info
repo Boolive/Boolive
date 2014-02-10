@@ -1,0 +1,21 @@
+{
+    "value": "jquery.ui.autocomplete.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/JavaScript",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "jquery.ui.autocomplete",
+            "proto": "/library/javascripts/JavaScript/title",
+            "is_property": true,
+            "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/JavaScript/depends",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

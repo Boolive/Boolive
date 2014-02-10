@@ -1,0 +1,19 @@
+{
+    "is_default_value": true,
+    "value": "jquery.ui.autocomplete.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete",
+    "is_link": true,
+    "is_mandatory": true,
+    "order": 8,
+    "children": {
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/jquery.ui/widgets/jquery.ui.autocomplete/depends",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

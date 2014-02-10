@@ -1,0 +1,23 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 28,
+    "children": {
+        "title": {
+            "value": "Обработчик форм",
+            "proto": "/library/views/View/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Принимает запросы от форм. Во входящих данных должен быть параметр widget с uri виджета (форма). Клиенту отвечает редиректом на текущий запрос без парметров",
+            "proto": "/library/views/View/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

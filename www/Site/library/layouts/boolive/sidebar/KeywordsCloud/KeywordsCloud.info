@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "KeywordsCloud.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/KeywordsCloud",
+    "is_link": true,
+    "is_mandatory": true,
+    "order": 5
+}

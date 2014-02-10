@@ -1,0 +1,109 @@
+{
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Виджет",
+            "proto": "/library/views/View/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Элемент пользовательского интерфейса. Отображает данные с помощью шаблонизации.",
+            "value_type": 2,
+            "proto": "/library/views/View/description",
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "value": "",
+            "proto": "/library/views/ViewGroup",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "value": "Ресурсы",
+                    "proto": "/library/views/ViewGroup/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Автоматически подключаемые ресурсы, например CSS, JavaScript",
+                    "value_type": 2,
+                    "proto": "/library/views/ViewGroup/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "cache": {
+            "value": 0,
+            "proto": "/library/basic/Boolean",
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Кэшировать?",
+                    "proto": "/library/basic/Boolean/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Признак, кэшировать или нет работу виджета?",
+                    "value_type": 2,
+                    "proto": "/library/basic/Boolean/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "object_rule": {
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/basic/Text",
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Правило на объект",
+                    "proto": "/library/basic/Text/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Правило на отображаемый объект. Если объект не соответствует правилу, то виджет не работает.",
+                    "value_type": 2,
+                    "proto": "/library/basic/Text/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "path_rule": {
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "value": "Правило на URL (http)",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Регулярное выражение на адрес запроса, например ^news(/|$)",
+                    "value_type": 2,
+                    "proto": "/library/basic/String/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

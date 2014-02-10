@@ -1,0 +1,21 @@
+{
+    "value": "jquery.ui.menu.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/JavaScript",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "jquery.ui.menu",
+            "proto": "/library/javascripts/JavaScript/title",
+            "is_property": true,
+            "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/JavaScript/depends",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "value": "",
+    "proto": "/library/basic/Package",
+    "order": 56,
+    "children": {
+        "title": {
+            "value": "Библиотека",
+            "proto": "/library/basic/Package/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Готовые для использования объекты",
+            "value_type": 2,
+            "proto": "/library/basic/Package/description",
+            "is_property": true,
+            "order": 2
+        },
+        "icon-150": {
+            "value": "icon-150.png",
+            "value_type": 3,
+            "proto": "/library/basic/Image",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

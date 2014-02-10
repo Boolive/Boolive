@@ -1,0 +1,14 @@
+{
+    "value": 1,
+    "proto": "/library/basic/Boolean",
+    "is_mandatory": true,
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Обязательные",
+            "proto": "/library/basic/Boolean/title",
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

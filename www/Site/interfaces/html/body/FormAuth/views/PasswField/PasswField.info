@@ -2,13 +2,13 @@
     "is_default_value": true,
     "value": "PasswField.tpl",
     "value_type": 3,
-    "proto": "/Library/forms/FormAuth/views/PasswField",
+    "proto": "/library/forms/FormAuth/views/PasswField",
     "order": 4,
     "children": {
         "title": {
             "is_default_value": true,
             "value": "Поле формы",
-            "proto": "/Library/forms/FormAuth/views/PasswField/title",
+            "proto": "/library/forms/FormAuth/views/PasswField/title",
             "is_mandatory": true,
             "is_property": true,
             "order": 1
@@ -16,7 +16,7 @@
         "description": {
             "is_default_value": true,
             "value": "Эталон поля ввода строки",
-            "proto": "/Library/forms/FormAuth/views/PasswField/description",
+            "proto": "/library/forms/FormAuth/views/PasswField/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 2
@@ -24,7 +24,7 @@
         "res": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/forms/FormAuth/views/PasswField/res",
+            "proto": "/library/forms/FormAuth/views/PasswField/res",
             "is_mandatory": true,
             "is_property": true,
             "order": 3
@@ -32,7 +32,7 @@
         "object_rule": {
             "is_default_value": true,
             "value": "attr(name,=,passw)",
-            "proto": "/Library/forms/FormAuth/views/PasswField/object_rule",
+            "proto": "/library/forms/FormAuth/views/PasswField/object_rule",
             "is_mandatory": true,
             "is_property": true,
             "order": 4

@@ -1,0 +1,46 @@
+{
+    "value": "TitleView.tpl",
+    "value_type": 3,
+    "proto": "/library/views/Widget",
+    "is_default_class": false,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Название",
+            "proto": "/library/views/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Виджет для отображения названия страницы",
+            "proto": "/library/views/Widget/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/Widget/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/Widget/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "object_rule": {
+            "value": "attr(name,=,title)",
+            "proto": "/library/views/Widget/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        }
+    }
+}

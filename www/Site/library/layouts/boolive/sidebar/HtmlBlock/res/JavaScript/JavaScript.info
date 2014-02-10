@@ -1,0 +1,26 @@
+{
+    "is_default_value": true,
+    "value": "JavaScript.js",
+    "value_type": 3,
+    "proto": "/library/views/HtmlBlock/res/JavaScript",
+    "is_mandatory": true,
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "JavaScript подсветки кода",
+            "proto": "/library/views/HtmlBlock/res/JavaScript/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/HtmlBlock/res/JavaScript/depends",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

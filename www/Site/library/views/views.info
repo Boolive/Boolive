@@ -1,0 +1,14 @@
+{
+    "value": "",
+    "proto": "/library/basic/Package",
+    "order": 14,
+    "children": {
+        "title": {
+            "value": "Представления",
+            "proto": "/library/basic/Package/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

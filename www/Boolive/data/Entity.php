@@ -1368,7 +1368,7 @@ class Entity implements ITrace
      *                 array('attr', 'value', '<', 100),
      *             ))
      *         )),
-     *         array('is', '/Library/object')          // кем объект является? проверка наследования
+     *         array('is', '/library/object')          // кем объект является? проверка наследования
      *     ),
      *     'order' => array(                           // сортировка
      *         array('uri', 'DESC'),                   // по атрибуту uri
@@ -1489,7 +1489,7 @@ class Entity implements ITrace
                      // Если создаётся история, то нужна новая дата
                     if (empty($this->_attribs['date']) && !$this->isExist()) $this->_attribs['date'] = time();
 
-//                    if ($this->_attribs['uri'] == '/Library/layouts/Admin/Bookmarks/item_view/views/page_item'){
+//                    if ($this->_attribs['uri'] == '/library/layouts/Admin/Bookmarks/item_view/views/page_item'){
                     if ($this->_proto instanceof Entity && !$this->_proto->isExist()){
                         if ($this->_attribs['is_default_class'] == Entity::ENTITY_ID){
                             $this->isDefaultClass(true);
@@ -1663,7 +1663,7 @@ class Entity implements ITrace
      *             array('attr', 'value', '<', 100),
      *         ))
      *     )),
-     *     array('is', '/Library/object')          // кем объект является? проверка наследования
+     *     array('is', '/library/object')          // кем объект является? проверка наследования
      * )
      * @param array|string $cond Условие как для поиска
      * @throws \Exception

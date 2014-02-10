@@ -1,0 +1,21 @@
+{
+    "value": "http://site.com",
+    "proto": "/library/basic/String",
+    "is_default_class": false,
+    "order": 15,
+    "children": {
+        "title": {
+            "value": "URL",
+            "proto": "/library/basic/String/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Абсолютный URL, например http://site.ru",
+            "value_type": 2,
+            "proto": "/library/basic/String/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

@@ -1,31 +1,31 @@
 {
     "value": "",
-    "proto": "/Library/views/ViewGroup",
+    "proto": "/library/views/ViewGroup",
     "order": 47,
     "children": {
         "title": {
             "value": "Интерфейс",
-            "proto": "/Library/views/ViewGroup/title",
+            "proto": "/library/views/ViewGroup/title",
             "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Вид сайта, сервисы, API",
             "value_type": 2,
-            "proto": "/Library/views/ViewGroup/description",
+            "proto": "/library/views/ViewGroup/description",
             "is_property": true,
             "order": 2
         },
         "icon-150": {
             "value": "icon-150.png",
             "value_type": 3,
-            "proto": "/Library/basic/Image",
+            "proto": "/library/basic/Image",
             "is_property": true,
             "order": 3,
             "children": {
                 "title": {
                     "value": "Иконка",
-                    "proto": "/Library/basic/Image/title",
+                    "proto": "/library/basic/Image/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1

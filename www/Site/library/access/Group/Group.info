@@ -1,0 +1,35 @@
+{
+    "value": "",
+    "proto": "/library/access/Member",
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Группа пользователей",
+            "proto": "/library/access/Member/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Содержит пользователей и подгруппы с возможностью назначить им общие права",
+            "value_type": 2,
+            "proto": "/library/access/Member/description",
+            "is_property": true,
+            "order": 2
+        },
+        "rights": {
+            "value": "",
+            "proto": "/library/access/Member/rights",
+            "is_property": true,
+            "order": 3
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Object/icon",
+            "is_property": true,
+            "order": 4
+        }
+    }
+}

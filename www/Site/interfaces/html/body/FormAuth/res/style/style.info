@@ -1,7 +1,7 @@
 {
     "value": "style.css",
     "value_type": 3,
-    "proto": "/Library/forms/FormAuth/res/style",
+    "proto": "/library/forms/FormAuth/res/style",
     "is_mandatory": true,
     "order": 1
 }

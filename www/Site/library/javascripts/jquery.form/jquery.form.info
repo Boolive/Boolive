@@ -1,0 +1,40 @@
+{
+    "value": "jquery.form.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/patterns/jQueryScript",
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "Отправка форм по AJAX",
+            "proto": "/library/javascripts/patterns/jQueryScript/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отправка форм",
+            "value_type": 2,
+            "proto": "/library/javascripts/patterns/jQueryScript/description",
+            "is_property": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/patterns/jQueryScript/depends",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "jquery": {
+                    "is_default_value": true,
+                    "value": "jquery.js",
+                    "value_type": 3,
+                    "proto": "/library/javascripts/patterns/jQueryScript/depends/jquery",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
+                }
+            }
+        }
+    }
+}

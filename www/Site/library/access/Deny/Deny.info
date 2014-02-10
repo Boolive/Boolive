@@ -1,0 +1,21 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Запрет",
+            "proto": "/library/basic/Object/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Объекты, к которым запрещен доступ. Способ проверки может быть in, is, eq и указывается в значении запрета.",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

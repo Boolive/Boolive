@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/library/admin_widgets/Hiding",
+    "is_link": true,
+    "is_draft": true,
+    "order": 23
+}

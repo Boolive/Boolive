@@ -1,0 +1,21 @@
+{
+    "value": "",
+    "value_type": 2,
+    "proto": "/library/basic/Text",
+    "order": 12,
+    "children": {
+        "title": {
+            "value": "HTML текст",
+            "proto": "/library/basic/Text/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Текст с HTML тегами и длиной до 65535 символов (64Кбайт)",
+            "value_type": 2,
+            "proto": "/library/basic/Text/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

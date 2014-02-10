@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "boolive.tpl",
     "value_type": 3,
-    "proto": "/Library/layouts/boolive",
+    "proto": "/library/layouts/boolive",
     "is_link": true,
     "order": 14
 }

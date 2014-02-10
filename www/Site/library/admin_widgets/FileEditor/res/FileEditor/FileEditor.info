@@ -1,0 +1,15 @@
+{
+    "value": "FileEditor.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/Widget",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive FileEditor",
+            "proto": "/library/javascripts/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

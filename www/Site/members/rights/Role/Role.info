@@ -1,13 +1,13 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/access/Role",
+    "proto": "/library/access/Role",
     "order": 2,
     "children": {
         "read": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/read",
+            "proto": "/library/access/Role/read",
             "is_mandatory": true,
             "is_property": true,
             "order": 1
@@ -15,7 +15,7 @@
         "write": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/write",
+            "proto": "/library/access/Role/write",
             "is_mandatory": true,
             "is_property": true,
             "order": 2,
@@ -23,7 +23,7 @@
                 "create": {
                     "is_default_value": true,
                     "value": "",
-                    "proto": "/Library/access/Role/write/create",
+                    "proto": "/library/access/Role/write/create",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
@@ -31,7 +31,7 @@
                 "change": {
                     "is_default_value": true,
                     "value": "",
-                    "proto": "/Library/access/Role/write/change",
+                    "proto": "/library/access/Role/write/change",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2,
@@ -39,7 +39,7 @@
                         "add_child": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/add_child",
+                            "proto": "/library/access/Role/write/change/add_child",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 1
@@ -47,7 +47,7 @@
                         "value": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/value",
+                            "proto": "/library/access/Role/write/change/value",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 2
@@ -55,7 +55,7 @@
                         "name": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/name",
+                            "proto": "/library/access/Role/write/change/name",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 3
@@ -63,7 +63,7 @@
                         "parent": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/parent",
+                            "proto": "/library/access/Role/write/change/parent",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 4
@@ -71,7 +71,7 @@
                         "proto": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/proto",
+                            "proto": "/library/access/Role/write/change/proto",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 5
@@ -79,7 +79,7 @@
                         "is_draft": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/is_draft",
+                            "proto": "/library/access/Role/write/change/is_draft",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 6
@@ -87,7 +87,7 @@
                         "is_hidden": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/is_hidden",
+                            "proto": "/library/access/Role/write/change/is_hidden",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 7
@@ -95,7 +95,7 @@
                         "is_link": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/is_link",
+                            "proto": "/library/access/Role/write/change/is_link",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 8
@@ -103,7 +103,7 @@
                         "is_default_class": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/is_default_class",
+                            "proto": "/library/access/Role/write/change/is_default_class",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 9
@@ -111,7 +111,7 @@
                         "is_mandatory": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/is_mandatory",
+                            "proto": "/library/access/Role/write/change/is_mandatory",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 10
@@ -119,7 +119,7 @@
                         "diff": {
                             "is_default_value": true,
                             "value": "",
-                            "proto": "/Library/access/Role/write/change/diff",
+                            "proto": "/library/access/Role/write/change/diff",
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 11
@@ -131,7 +131,7 @@
         "destroy": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/destroy",
+            "proto": "/library/access/Role/destroy",
             "is_mandatory": true,
             "is_property": true,
             "order": 3
@@ -139,7 +139,7 @@
         "call": {
             "is_default_value": true,
             "value": "",
-            "proto": "/Library/access/Role/call",
+            "proto": "/library/access/Role/call",
             "is_mandatory": true,
             "is_property": true,
             "order": 4,
@@ -147,7 +147,7 @@
                 "title": {
                     "is_default_value": true,
                     "value": "Исполнение",
-                    "proto": "/Library/access/Role/call/title",
+                    "proto": "/library/access/Role/call/title",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 1
@@ -156,7 +156,7 @@
                     "is_default_value": true,
                     "value": "Вызов методов объекта",
                     "value_type": 2,
-                    "proto": "/Library/access/Role/call/description",
+                    "proto": "/library/access/Role/call/description",
                     "is_mandatory": true,
                     "is_property": true,
                     "order": 2

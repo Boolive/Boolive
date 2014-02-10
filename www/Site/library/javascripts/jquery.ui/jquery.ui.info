@@ -1,0 +1,28 @@
+{
+    "value": "jquery.ui.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/JavaScript",
+    "order": 8,
+    "children": {
+        "title": {
+            "value": "jQueryUI",
+            "proto": "/library/javascripts/JavaScript/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "JavaScript-библиотека для пользовательского интерфейса на основе jQuery",
+            "value_type": 2,
+            "proto": "/library/javascripts/JavaScript/description",
+            "is_property": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/JavaScript/depends",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

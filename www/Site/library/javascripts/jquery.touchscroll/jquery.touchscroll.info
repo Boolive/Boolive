@@ -1,0 +1,85 @@
+{
+    "value": "jquery.touchscroll.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/patterns/jQueryScript",
+    "order": 16,
+    "children": {
+        "title": {
+            "value": "Прокрутка пальцем и мышкой",
+            "proto": "/library/javascripts/patterns/jQueryScript/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "jQuery плагин для активации прокрутки пальцем и мышкой для любого элемента",
+            "value_type": 2,
+            "proto": "/library/javascripts/patterns/jQueryScript/description",
+            "is_property": true,
+            "order": 2
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/patterns/jQueryScript/depends",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "jquery": {
+                    "is_default_value": true,
+                    "value": "jquery.js",
+                    "value_type": 3,
+                    "proto": "/library/javascripts/patterns/jQueryScript/depends/jquery",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "jquery.mousewheel": {
+                    "value": "jquery.mousewheel.js",
+                    "value_type": 3,
+                    "proto": "/library/javascripts/patterns/jQueryScript",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2,
+                    "children": {
+                        "title": {
+                            "value": "MouseWheel",
+                            "proto": "/library/javascripts/patterns/jQueryScript/title",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 1
+                        },
+                        "description": {
+                            "value": "Плагин добавляющий jQuery события прокрутки колесом мышки",
+                            "value_type": 2,
+                            "proto": "/library/javascripts/patterns/jQueryScript/description",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 2
+                        },
+                        "depends": {
+                            "is_default_value": true,
+                            "value": "",
+                            "proto": "/library/javascripts/patterns/jQueryScript/depends",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 3,
+                            "children": {
+                                "jquery": {
+                                    "is_default_value": true,
+                                    "value": "jquery.js",
+                                    "value_type": 3,
+                                    "proto": "/library/javascripts/patterns/jQueryScript/depends/jquery",
+                                    "is_link": true,
+                                    "is_mandatory": true,
+                                    "is_property": true,
+                                    "order": 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

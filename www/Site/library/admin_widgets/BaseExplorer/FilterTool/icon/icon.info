@@ -1,0 +1,14 @@
+{
+    "value": "icon.png",
+    "value_type": 3,
+    "proto": "/library/basic/Image",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Иконка",
+            "proto": "/library/basic/Image/title",
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

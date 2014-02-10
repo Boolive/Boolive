@@ -1,0 +1,16 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/basic/Package",
+    "is_draft": true,
+    "order": 32,
+    "children": {
+        "title": {
+            "value": "Виджеты страницы",
+            "proto": "/library/basic/Package/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

@@ -1,31 +1,31 @@
 {
     "value": "",
-    "proto": "/Library/views/Site",
+    "proto": "/library/views/Site",
     "order": 10,
     "children": {
         "title": {
             "value": "Мой сайт",
-            "proto": "/Library/views/Site/title",
+            "proto": "/library/views/Site/title",
             "is_property": true,
             "order": 57
         },
         "description": {
             "value": "Мой самый любимый сайт!",
             "value_type": 2,
-            "proto": "/Library/views/Site/description",
+            "proto": "/library/views/Site/description",
             "is_property": true,
             "order": 58
         },
         "site_logo": {
             "value": "site_logo.png",
             "value_type": 3,
-            "proto": "/Library/basic/Image",
+            "proto": "/library/basic/Image",
             "is_property": true,
             "order": 59,
             "children": {
                 "title": {
                     "value": "Логотип",
-                    "proto": "/Library/basic/Image/title",
+                    "proto": "/library/basic/Image/title",
                     "is_property": true,
                     "order": 1
                 }
@@ -34,26 +34,26 @@
         "favicon": {
             "value": "favicon.png",
             "value_type": 3,
-            "proto": "/Library/basic/Image",
+            "proto": "/library/basic/Image",
             "is_property": true,
             "order": 60,
             "children": {
                 "title": {
                     "value": "Favicon",
-                    "proto": "/Library/basic/Image/title",
+                    "proto": "/library/basic/Image/title",
                     "is_property": true,
                     "order": 1
                 },
                 "description": {
                     "value": "Иконка в строке адреса браузера",
                     "value_type": 2,
-                    "proto": "/Library/basic/Image/description",
+                    "proto": "/library/basic/Image/description",
                     "is_property": true,
                     "order": 2
                 },
                 "extentions": {
                     "value": "*.png *.ico",
-                    "proto": "/Library/basic/Image/extentions",
+                    "proto": "/library/basic/Image/extentions",
                     "is_hidden": true,
                     "is_property": true,
                     "order": 3,
@@ -61,7 +61,7 @@
                         "title": {
                             "is_default_value": true,
                             "value": "Допустимые расширения",
-                            "proto": "/Library/basic/Image/extentions/title",
+                            "proto": "/library/basic/Image/extentions/title",
                             "is_hidden": true,
                             "is_mandatory": true,
                             "is_property": true,

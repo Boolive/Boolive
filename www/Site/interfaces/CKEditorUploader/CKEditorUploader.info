@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Library/views/CKEditorUploader",
+    "proto": "/library/views/CKEditorUploader",
     "is_link": true,
     "order": 12
 }

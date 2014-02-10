@@ -1,0 +1,44 @@
+{
+    "value": "JavaScript.js",
+    "value_type": 3,
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "JavaScript",
+            "proto": "/library/views/View/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Эталон для всех скриптов на языке JavaScript",
+            "value_type": 2,
+            "proto": "/library/views/View/description",
+            "is_property": true,
+            "order": 2
+        },
+        "depends": {
+            "value": "",
+            "proto": "/library/views/ViewGroup",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Используемые скрипты",
+                    "proto": "/library/views/ViewGroup/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Скрипты и любые другие объекты, необходиыме для работы",
+                    "value_type": 2,
+                    "proto": "/library/views/ViewGroup/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

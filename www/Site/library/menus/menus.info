@@ -1,0 +1,23 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/basic/Package",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Навигация",
+            "proto": "/library/basic/Package/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Коллекция виджетов для навигации по сайту",
+            "value_type": 2,
+            "proto": "/library/basic/Package/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

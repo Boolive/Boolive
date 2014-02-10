@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/access/Action",
+    "is_mandatory": true,
+    "order": 17,
+    "children": {
+        "title": {
+            "value": "Обязательность",
+            "proto": "/library/access/Action/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Изменение принадлежности объекта к его родителю (обязательный/дополнительный)",
+            "value_type": 2,
+            "proto": "/library/access/Action/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}
