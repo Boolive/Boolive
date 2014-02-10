@@ -20,7 +20,7 @@
             "order": 2
         },
         "object_rule": {
-            "value": "is(/Library/basic/String)",
+            "value": "is(/library/basic/String)",
             "value_type": 2,
             "proto": "/library/admin_widgets/Editor/views/Item/object_rule",
             "is_mandatory": true,

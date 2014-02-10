@@ -43,7 +43,7 @@
             }
         },
         "object_rule": {
-            "value": "is(/Library/basic/Text)",
+            "value": "is(/library/basic/Text)",
             "value_type": 2,
             "proto": "/library/views/Widget/object_rule",
             "is_mandatory": true,

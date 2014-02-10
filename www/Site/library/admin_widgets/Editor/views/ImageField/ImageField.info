@@ -29,7 +29,7 @@
             "order": 3
         },
         "object_rule": {
-            "value": "is(/Library/basic/Image)",
+            "value": "is(/library/basic/Image)",
             "value_type": 2,
             "proto": "/library/admin_widgets/Editor/views/Field/object_rule",
             "is_mandatory": true,

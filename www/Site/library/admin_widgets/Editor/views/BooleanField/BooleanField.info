@@ -20,7 +20,7 @@
             "order": 2
         },
         "object_rule": {
-            "value": "is(/Library/basic/Boolean)",
+            "value": "is(/library/basic/Boolean)",
             "value_type": 2,
             "proto": "/library/admin_widgets/Editor/views/Field/object_rule",
             "is_mandatory": true,
