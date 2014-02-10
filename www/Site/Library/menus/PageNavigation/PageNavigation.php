@@ -26,7 +26,7 @@ class PageNavigation extends Widget
     {
         $obj = $this->_input['REQUEST']['object'];
         $v['uri'] = $obj->uri();
-        if (substr($v['uri'],0,10)=='/Contents/') $v['uri'] = mb_substr($v['uri'],9);
+        if (substr($v['uri'],0,10)=='/contents/') $v['uri'] = mb_substr($v['uri'],9);
         $v['count'] = $this->_input['REQUEST']['page_count'];
         $v['current'] = min($v['count'], $this->_input['REQUEST']['page']);
         return parent::show($v, $commands, $input);

@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Contents",
+    "proto": "/contents",
     "is_link": true,
     "order": 2
 }

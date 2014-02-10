@@ -39,7 +39,7 @@ class Layout extends Widget
         // объект по умолчанию - первый в /contents не являющейся свойством
         if (empty($uri) && ($object = Data::read(array(
                 'select' => 'children',
-                'from' => '/Contents',
+                'from' => '/contents',
                 'where' => array(
                     array('attr', 'is_hidden', '=', 0),
                     array('attr', 'is_property', '=', 0)
@@ -52,8 +52,8 @@ class Layout extends Widget
             )))){
             $object = reset($object);
         }
-        // Ищем в /Contents
-        if (!$object && !empty($uri)) $object = Data::read('/Contents'.$uri.'&comment=read default page');
+        // Ищем в /contents
+        if (!$object && !empty($uri)) $object = Data::read('/contents'.$uri.'&comment=read default page');
         // Точное соответствие uri
         if (!$object->isExist()) $object = Data::read($uri);
         // Корень

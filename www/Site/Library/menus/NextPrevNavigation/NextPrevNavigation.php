@@ -94,7 +94,7 @@ class NextPrevNavigation extends Widget
                 $v['next'] = null;
             }else{
                 $v['next'] = array('title' => $next[0]->title->value());
-                if (substr($next[0]->uri(), 0, 10) == '/Contents/') {
+                if (substr($next[0]->uri(), 0, 10) == '/contents/') {
                     $v['next']['href'] = substr($next[0]->uri(), 10);
                 } else {
                     $v['next']['href'] = $next[0]->uri();
@@ -105,7 +105,7 @@ class NextPrevNavigation extends Widget
                 $v['prev'] = null;
             }else{
                 $v['prev'] = array('title' => $prev[0]->title->value());
-                if (substr($prev[0]->uri(), 0, 10) == '/Contents/') {
+                if (substr($prev[0]->uri(), 0, 10) == '/contents/') {
                     $v['prev']['href'] = substr($prev[0]->uri(), 10);
                 } else {
                     $v['prev']['href'] = $prev[0]->uri();

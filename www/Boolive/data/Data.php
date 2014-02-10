@@ -60,7 +60,7 @@ class Data
      * </code>
      * <h2>Условие строкой:</h2><pre>
      * $cond = "
-     *   from(/Contents)
+     *   from(/contents)
      *   select(children)
      *   depth(max)
      *   where(all(

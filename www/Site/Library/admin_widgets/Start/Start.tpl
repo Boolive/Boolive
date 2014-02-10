@@ -15,7 +15,7 @@
             </div>
             <div class="Start__row">
                 <div class="Start__col0">
-                    <a class="Start__btn Start__add-object" href="" data-parent="/Contents" data-proto="/Library/content_samples/Page"><img class="Start__btn-icon" src="/Site/Library/admin_widgets/Add/icon/icon.png" width="16" height="16" alt=""/><span class="Start__btn-title">Добавить страницу</span></a>
+                    <a class="Start__btn Start__add-object" href="" data-parent="/contents" data-proto="/Library/content_samples/Page"><img class="Start__btn-icon" src="/Site/Library/admin_widgets/Add/icon/icon.png" width="16" height="16" alt=""/><span class="Start__btn-title">Добавить страницу</span></a>
                 </div>
                 <div class="Start__col100">
                     <p>Создайте страницу сайта, например «о компании».</p>
@@ -23,7 +23,7 @@
             </div>
             <div class="Start__row">
                 <div class="Start__col0">
-                    <a class="Start__btn Start__add-object" href="" data-parent="/Contents" data-proto="/Library/content_samples/Part"><img class="Start__btn-icon" src="/Site/Library/admin_widgets/Add/icon/icon.png" width="16" height="16" alt=""/><span class="Start__btn-title">Добавить раздел</span></a>
+                    <a class="Start__btn Start__add-object" href="" data-parent="/contents" data-proto="/Library/content_samples/Part"><img class="Start__btn-icon" src="/Site/Library/admin_widgets/Add/icon/icon.png" width="16" height="16" alt=""/><span class="Start__btn-title">Добавить раздел</span></a>
                 </div>
                 <div class="Start__col100">
                     <p> Создайте раздел для группировки публикаций. Раздел может использоваться в качестве ленты новостей,
@@ -37,7 +37,7 @@
         <div class="Start__grid">
         <div class="Start__col33">
             <p>Для изменения структуры сайта, создания и редактирования страниц, разделов и других публикаций, перейдите
-            по закладке «<a class="Start__show-object" href="Contents">Содержимое</a>».</p>
+            по закладке «<a class="Start__show-object" href="contents">Содержимое</a>».</p>
             <p>Закладки находятся в <strong>левом меню</strong> и служат для быстрого перехода к объекту.</p>
 
         </div>

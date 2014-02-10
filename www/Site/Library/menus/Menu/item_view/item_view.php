@@ -43,7 +43,7 @@ class item_view extends AutoWidgetList2
 
             // Ссылка
             $real = $obj->linked();
-            if ($this->_cut_contents_url && substr($real->uri(), 0, 10) == '/Contents/'){
+            if ($this->_cut_contents_url && substr($real->uri(), 0, 10) == '/contents/'){
                 $v['item_href'] = substr($real->uri(), 9);
             }else{
                 $v['item_href'] = $real->uri();

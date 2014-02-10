@@ -41,7 +41,7 @@ class SearchResult extends Part
                 $search = preg_replace('/(\s+|$)/u','*$1',$search);
             }
             $cond = array(
-                'from' => '/Contents',
+                'from' => '/contents',
                 'select' => 'children',
                 'depth' => 'max',
                 'where' => array('all', array(

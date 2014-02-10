@@ -1,0 +1,14 @@
+{
+    "value": "1",
+    "proto": "/Library/content_samples/Keyword",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "PHP",
+            "proto": "/Library/content_samples/Keyword/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

@@ -85,7 +85,7 @@
                 },
                 "object_rule": {
                     "is_default_value": true,
-                    "value": "is(/Contents)",
+                    "value": "is(/contents)",
                     "proto": "/Library/menus/Menu/item_view/object_rule",
                     "is_mandatory": true,
                     "is_property": true,

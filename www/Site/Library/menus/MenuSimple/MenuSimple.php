@@ -68,7 +68,7 @@ class MenuSimple extends Widget
                 if (empty($info['title'])) $info['title'] = $real->name();
             }
             // URL на содержимое сокращается
-            if (substr($real->uri(), 0, 10) == '/Contents/'){
+            if (substr($real->uri(), 0, 10) == '/contents/'){
                 $info['url'] = substr($real->uri(), 9);
             }
             if ($children){
