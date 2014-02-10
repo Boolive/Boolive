@@ -39,7 +39,7 @@ class FormAuth2 extends SimpleForm
     {
         $user = Data::read(array(
             'select' => 'children',
-            'from' => '/Members',
+            'from' => '/members',
             'depth' => 'max',
             'where' => array(
                 array('attr', 'is_link', '=', '0'),

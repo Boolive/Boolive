@@ -16,9 +16,9 @@ class Auth
     /** Эталон пользователей */
     const USER = '/Library/access/User';
     /** Группа гостей */
-    const GROUP_GUEST = '/Members/guests';
+    const GROUP_GUEST = '/members/guests';
     /** Группа зарегистрированных */
-    const GROUP_REGISTERED = '/Members/registered';
+    const GROUP_REGISTERED = '/members/registered';
     /** @var \Site\Library\access\User\User Текущий пользователь */
     static private $user;
 
@@ -70,7 +70,7 @@ class Auth
         // Если есть кука, то ищем пользователя в БД
         if ($hash){
             $result = Data::read(array(
-                'from' => '/Members',
+                'from' => '/members',
                 'select' => 'children',
                 'depth' => 'max',
                 'where' => array(

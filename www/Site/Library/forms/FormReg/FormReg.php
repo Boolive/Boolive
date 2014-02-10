@@ -59,7 +59,7 @@ class FormReg extends SimpleForm
         if (!$error){
             // Проверка уникальности логина
             $result = Data::read(array(
-                'from' =>  '/Members',
+                'from' =>  '/members',
                 'select' => array('exists','children'),
                 'depth' => 'max',
                 'where' => array(
@@ -73,7 +73,7 @@ class FormReg extends SimpleForm
             }
             // Проверка уникальности мыла
             $result = Data::read(array(
-                'from' =>  '/Members',
+                'from' =>  '/members',
                 'select' => array('exists','children'),
                 'depth' => 'max',
                 'where' => array(
@@ -126,7 +126,7 @@ class FormReg extends SimpleForm
     {
         // Созданание юзера
         $user = Auth::getUser();
-        $user->parent('/Members/registered');
+        $user->parent('/members/registered');
         $user->name($input['REQUEST']['login']);
         $user->title->value($input['REQUEST']['login']);
         $user->email->value($input['REQUEST']['email']);

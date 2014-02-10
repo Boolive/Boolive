@@ -386,7 +386,7 @@
 //                        url: "/",
 //                        data: {
 //                            direct: self.options.view+'/SelectObject', // uri выиджета выбора объекта
-//                            object: '/Members' //какой объект показать
+//                            object: '/members' //какой объект показать
 //                        }
 //                    },
 //                    function(result, params){
