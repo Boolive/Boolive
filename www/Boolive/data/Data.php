@@ -34,7 +34,7 @@ class Data
      * <h3>Пример условия в виде массива</h3>
      * <code>
      * $cond = array(
-     *     'from' => '/Interfaces',                     // Выбор объектов из /Interfaces
+     *     'from' => '/interfaces',                     // Выбор объектов из /interfaces
      *     'depth' => 3,                                // Глубина выбора из from. Если 0, то выбирается from, а не его подчиненные
      *     'select' => 'children',                      // Что выбирать?
      *     'where' => array(                            // Услвоия выборки объединенные логическим AND

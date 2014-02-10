@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/Interfaces",
+    "proto": "/interfaces",
     "is_link": true,
     "order": 1
 }
