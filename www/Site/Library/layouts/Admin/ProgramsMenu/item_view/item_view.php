@@ -6,12 +6,12 @@
  * @date 23.07.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\layouts\Admin\ProgramsMenu\item_view;
+namespace Site\Library\layouts\Admin\ProgramsMenu\item_view;
 
-use Library\views\AutoWidgetList2\AutoWidgetList2,
+use Site\Library\views\AutoWidgetList2\AutoWidgetList2,
     Boolive\values\Rule;
-use Library\views\View\View;
-use Library\views\Widget\Widget;
+use Site\Library\views\View\View;
+use Site\Library\views\Widget\Widget;
 
 class item_view extends AutoWidgetList2
 {

@@ -4,10 +4,10 @@
  * Обозреватель объектов в виде списка
  * @version 1.0
  */
-namespace Library\admin_widgets\ListExplorer;
+namespace Site\Library\admin_widgets\ListExplorer;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\BaseExplorer\BaseExplorer;
+use Site\Library\admin_widgets\BaseExplorer\BaseExplorer;
 
 class ListExplorer extends BaseExplorer
 {

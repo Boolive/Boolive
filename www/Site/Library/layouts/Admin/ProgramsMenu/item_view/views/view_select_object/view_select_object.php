@@ -4,10 +4,10 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\layouts\Admin\ProgramsMenu\item_view\views\view_select_object;
+namespace Site\Library\layouts\Admin\ProgramsMenu\item_view\views\view_select_object;
 
 use Boolive\data\Data;
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class view_select_object extends Widget

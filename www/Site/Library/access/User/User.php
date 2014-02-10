@@ -6,9 +6,9 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\access\User;
+namespace Site\Library\access\User;
 
-use Library\access\Member\Member;
+use Site\Library\access\Member\Member;
 
 class User extends Member
 {

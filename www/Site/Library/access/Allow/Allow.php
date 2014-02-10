@@ -8,7 +8,7 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\access\Allow;
+namespace Site\Library\access\Allow;
 
 use Boolive\data\Entity;
 

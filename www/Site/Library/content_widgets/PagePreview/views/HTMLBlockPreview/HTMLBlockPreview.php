@@ -4,10 +4,10 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\content_widgets\PagePreview\views\HTMLBlockPreview;
+namespace Site\Library\content_widgets\PagePreview\views\HTMLBlockPreview;
 
-use Library\views\Widget\Widget;
-use Library\views\HtmlBlock\HtmlBlock;
+use Site\Library\views\Widget\Widget;
+use Site\Library\views\HtmlBlock\HtmlBlock;
 
 class HTMLBlockPreview extends HtmlBlock
 {

@@ -4,10 +4,10 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\views\Widget;
+namespace Site\Library\views\Widget;
 
 use Boolive\template\Template,
-    Library\views\View\View,
+    Site\Library\views\View\View,
     Boolive\values\Rule;
 
 class Widget extends View

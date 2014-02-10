@@ -4,12 +4,12 @@
  *
  * @version 2.0
  */
-namespace Library\menus\Menu\item_view;
+namespace Site\Library\menus\Menu\item_view;
 
 use Boolive\data\Entity;
 use Boolive\values\Rule,
-    Library\views\AutoWidgetList2\AutoWidgetList2,
-    Library\basic\Image\Image;
+    Site\Library\views\AutoWidgetList2\AutoWidgetList2,
+    Site\Library\basic\Image\Image;
 
 class item_view extends AutoWidgetList2
 {

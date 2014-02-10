@@ -5,9 +5,9 @@
  * @date: 07.03.13
  *
  */
-namespace Library\layouts\Admin\MenuAuth;
+namespace Site\Library\layouts\Admin\MenuAuth;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\input\Input,
     Boolive\auth\Auth;
 

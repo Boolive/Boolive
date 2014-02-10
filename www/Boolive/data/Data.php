@@ -954,8 +954,8 @@ class Data
 		if (file_exists(DIR_SERVER.self::CONFIG_FILE) && !is_writable(DIR_SERVER.self::CONFIG_FILE)){
 			$requirements[] = 'Установите права на запись для файла: <code>'.DIR_SERVER.self::CONFIG_FILE.'</code>';
 		}
-		if (!file_exists(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE)){
-			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE.'</code>';
+		if (!file_exists(DIR_SERVER.'Boolive/data/tpl.'.self::CONFIG_FILE)){
+			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER.'Boolive/data/tpl.'.self::CONFIG_FILE.'</code>';
 		}
 		return $requirements;
 	}
@@ -1057,7 +1057,7 @@ class Data
         \Boolive\data\stores\MySQLStore::createStore($new_config, $errors);
 
         // Создание файла конфигурации из шаблона
-        $content = file_get_contents(DIR_SERVER_ENGINE.'data/tpl.'.self::CONFIG_FILE);
+        $content = file_get_contents(DIR_SERVER.'Boolive/data/tpl.'.self::CONFIG_FILE);
         $content = F::Parse($content, $new_config, '{', '}');
         $fp = fopen(DIR_SERVER.self::CONFIG_FILE, 'w');
         fwrite($fp, $content);

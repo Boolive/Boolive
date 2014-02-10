@@ -4,10 +4,10 @@
  * Абсолютный URL, например http://site.ru
  * @version 1.0
  */
-namespace Library\basic\Url;
+namespace Site\Library\basic\Url;
 
 use Boolive\values\Rule;
-use Library\basic\String\String;
+use Site\Library\basic\String\String;
 
 class Url extends String
 {

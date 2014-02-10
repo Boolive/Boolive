@@ -4,11 +4,11 @@
  * Смена признака "свойство" у объектов
  * @version 1.0
  */
-namespace Library\admin_widgets\isMandatory;
+namespace Site\Library\admin_widgets\isMandatory;
 
 use Boolive\errors\Error;
 use Boolive\values\Rule;
-use Library\admin_widgets\ToggleAction\ToggleAction;
+use Site\Library\admin_widgets\ToggleAction\ToggleAction;
 
 class isMandatory extends ToggleAction
 {

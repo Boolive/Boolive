@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Library\content_widgets\Page;
+namespace Site\Library\content_widgets\Page;
 
 use Boolive\data\Entity;
-use Library\views\AutoWidgetList2\AutoWidgetList2;
+use Site\Library\views\AutoWidgetList2\AutoWidgetList2;
 
 class Page extends AutoWidgetList2
 {

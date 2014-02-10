@@ -104,7 +104,7 @@ class HTTPStore extends Entity
     /**
      * Сохранение объекта
      * @param \Boolive\data\Entity $entity Сохраняемый объект
-     * @param $access Признак, проверять доступ или нет? (не используется хранищищем)
+     * @param bool $access Признак, проверять доступ или нет? (не используется хранищищем)
      * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
      * @throws \Exception Ошибки curl
      * @return bool Признак, сохранен объект или нет?
@@ -222,7 +222,7 @@ class HTTPStore extends Entity
 
     /**
      * Параметры запроса из многомерного массива для CURL
-     * @param $arrays Исходный массив
+     * @param array $arrays Исходный массив
      * @param array $new Используется функцией при рекурсивоном вызове. Преобразованный массив для CURL
      * @param null $prefix Используется функцией при рекурсивоном вызове. Префикс к ключам массива
      * @return array

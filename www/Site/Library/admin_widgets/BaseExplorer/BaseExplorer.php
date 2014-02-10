@@ -4,12 +4,12 @@
  * Используется для создания программ отображения объектов. Имеет базовые функции фильтра, сортировки, отображения, постраничной навигации и другие.  
  * @version 1.0
  */
-namespace Library\admin_widgets\BaseExplorer;
+namespace Site\Library\admin_widgets\BaseExplorer;
 
 use Boolive\data\Data;
 use Boolive\data\Entity;
 use Boolive\values\Rule;
-use Library\views\AutoWidgetList2\AutoWidgetList2;
+use Site\Library\views\AutoWidgetList2\AutoWidgetList2;
 
 class BaseExplorer extends AutoWidgetList2
 {

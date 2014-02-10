@@ -4,9 +4,9 @@
  * Используется при отображении списков с постраничным разделением вывода
  * @version 1.0
  */
-namespace Library\menus\PageNavigation;
+namespace Site\Library\menus\PageNavigation;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class PageNavigation extends Widget

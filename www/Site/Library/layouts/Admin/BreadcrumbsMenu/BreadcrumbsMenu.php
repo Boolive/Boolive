@@ -4,13 +4,13 @@
  * Отображает путь на текущий объект с возможностью перехода к его родителям
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\layouts\Admin\BreadcrumbsMenu;
+namespace Site\Library\layouts\Admin\BreadcrumbsMenu;
 
 use Boolive\data\Data,
     Boolive\data\Entity,
     Boolive\values\Check,
     Boolive\values\Rule,
-    Library\views\Widget\Widget,
+    Site\Library\views\Widget\Widget,
     Boolive\input\Input;
 
 class BreadcrumbsMenu extends Widget{

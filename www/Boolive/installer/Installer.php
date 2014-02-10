@@ -25,8 +25,8 @@ class Installer
                 Boolive::activate('\Boolive\file\File');
                 Boolive::activate('\Boolive\develop\Trace');
                 $modules_list = array(
-                    'engine' => self::sortClasses(self::scanClasses(DIR_SERVER_ENGINE)),
-                    'project' => self::scanInfo(DIR_SERVER_PROJECT)
+                    'engine' => self::sortClasses(self::scanClasses(DIR_SERVER.'Boolive/')),
+                    'project' => self::scanInfo(DIR_SERVER.'Site/')
                 );
                 $errors = self::checkClasses($modules_list['engine']);
             }catch (\Exception $e){
@@ -63,7 +63,7 @@ class Installer
 	private static function show($template, $v = array())
     {
 		ob_start();
-			$file = DIR_SERVER_ENGINE.'installer/tpl/'.$template.'.php';
+			$file = DIR_SERVER.'Boolive/installer/tpl/'.$template.'.php';
 			if (file_exists($file)){
 				include $file;
 			}else{
@@ -120,7 +120,7 @@ class Installer
                     if ($error = json_last_error()){
                         throw new \Exception('Ошибка в "'.$dir.$d.'"');
                     }
-                    $info['uri'] = trim(preg_replace('#\\\\#u','/', mb_substr($dir, mb_strlen(DIR_SERVER_PROJECT))), '/\\');
+                    $info['uri'] = trim(preg_replace('#\\\\#u','/', mb_substr($dir, mb_strlen(DIR_SERVER.'Site'))), '/\\');
                     if (!empty($info['uri'])) $info['uri'] = '/'.$info['uri'];
                     array_unshift($objects, $info);
                 }
@@ -426,9 +426,6 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
-                    if ($m['uri'] == '/Library/layouts/Admin/Bookmarks'){
-                        $a = 10;
-                    }
                     $entity = new Entity();
                     $entity->import($m);
                     $entity->save(true, false);

@@ -4,9 +4,9 @@
  * Действие над объектами с подтверждением и прогрессом выполнения.
  * @version 1.0
  */
-namespace Library\admin_widgets\ProgressAction;
+namespace Site\Library\admin_widgets\ProgressAction;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class ProgressAction extends Widget

@@ -5,12 +5,12 @@
  * @version 1.2
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\Html;
+namespace Site\Library\views\Html;
 
 use Boolive\data\Data;
 use Boolive\values\Rule,
     Boolive\input\Input,
-    Library\views\Widget\Widget;
+    Site\Library\views\Widget\Widget;
 
 class Html extends Widget
 {

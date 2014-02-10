@@ -5,9 +5,9 @@
  * @version 1.0
  * @autor Hitev Kirill <nomer_47@mail.ru>
  */
-namespace Library\content_widgets\KeywordsCloud;
+namespace Site\Library\content_widgets\KeywordsCloud;
 
-use \Library\views\Widget\Widget;
+use \Site\Library\views\Widget\Widget;
 
 class KeywordsCloud extends Widget
 {

@@ -16,7 +16,7 @@ use Boolive\events\Events;
 
 class Calls
 {
-    /** @var Многомерная очередь с информацией для вызова методов */
+    /** @var array Многомерная очередь с информацией для вызова методов */
     private static $commands = array();
     /** @var int Текущий уровень ожидания исполнения */
     private static $level = 0;

@@ -4,9 +4,9 @@
  * Логика виджета на стороне клиента (в браузере)
  * @version 1.0
  */
-namespace Library\javascripts\Widget;
+namespace Site\Library\javascripts\Widget;
 
-use Library\javascripts\JavaScript\JavaScript;
+use Site\Library\javascripts\JavaScript\JavaScript;
 
 class Widget extends JavaScript
 {

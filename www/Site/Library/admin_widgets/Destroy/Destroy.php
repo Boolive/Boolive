@@ -5,12 +5,12 @@
  * удаление навсегда (уничтожает) выбранных объектов и их подчиенных
  * @version 1.0
  */
-namespace Library\admin_widgets\Destroy;
+namespace Site\Library\admin_widgets\Destroy;
 
 use Boolive\data\Data,
     Boolive\errors\Error,
     Boolive\file\File,
-    Library\views\Widget\Widget,
+    Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 use Boolive\data\Entity;
 

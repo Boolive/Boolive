@@ -391,7 +391,7 @@ class Entity implements ITrace
                 $file = $proto->file(null, $root);
                 if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
                     $file_path = Data::convertAbsoluteToLocal($file, false);
-                    if (!is_file($f = DIR_SERVER_REMOTE.$file_path)){
+                    if (!is_file($f = DIR_SERVER.'Remote/'.$file_path)){
                         // Загрзка файла с сервера
                         $uri = F::splitRight('/', $file);
                         $file_content = Data::read($uri[0].'&file_content=1')->fileContent(false, true);
@@ -403,7 +403,7 @@ class Entity implements ITrace
                     if ($root){
                         $file = $f;
                     }else{
-                        $file = DIR_WEB_REMOTE.$file_path;
+                        $file = DIR_WEB.'Remote/'.$file_path;
                     }
                 }
                 return $file;
@@ -437,7 +437,7 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         if ($this->_attribs['is_default_class'] == Entity::ENTITY_ID){
-            $path = ($root ? DIR_SERVER_ENGINE : DIR_WEB_ENGINE).'data/Entity.php';
+            $path = ($root ? DIR_SERVER : DIR_WEB).'Boolive/data/Entity.php';
         }else
         if ($proto = $this->isDefaultClass(null, true)){
             $path = $proto->logic(null, $root);
@@ -457,9 +457,9 @@ class Entity implements ITrace
         $dir = $this->uri();
         if (Data::isAbsoluteUri($dir)) return $dir.'/';
         if ($root){
-            return DIR_SERVER_PROJECT.ltrim($dir.'/','/');
+            return DIR_SERVER.'Site'.$dir.'/';
         }else{
-            return DIR_WEB_PROJECT.ltrim($dir.'/','/');
+            return DIR_WEB.'Site'.$dir.'/';
         }
     }
 
@@ -2107,7 +2107,6 @@ class Entity implements ITrace
         $name = $this->name();
         if ($name === '') $name = 'Site';
         $namespace = str_replace('/','\\', trim($this->dir(false),'/'));
-        if (mb_substr($namespace, 0, 5) == 'Site\\') $namespace = mb_substr($namespace, 5);
         // Наследуемый класс
         if ($proto = $this->proto()){
             $extends = get_class($proto);

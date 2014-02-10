@@ -4,10 +4,10 @@
  * 
  * @version 1.0
  */
-namespace Library\admin_widgets\BaseExplorer\views\Item;
+namespace Site\Library\admin_widgets\BaseExplorer\views\Item;
 
 use Boolive\data\Entity;
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class Item extends Widget
 {

@@ -4,9 +4,9 @@
  * Отображение текста без форматирования
  * @version 1.0
  */
-namespace Library\content_widgets\TextWidget;
+namespace Site\Library\content_widgets\TextWidget;
 
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class TextWidget extends Widget
 {

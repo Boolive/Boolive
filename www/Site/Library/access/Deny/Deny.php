@@ -7,7 +7,7 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\access\Deny;
+namespace Site\Library\access\Deny;
 
 use Boolive\data\Entity;
 

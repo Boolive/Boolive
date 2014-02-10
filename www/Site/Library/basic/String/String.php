@@ -4,7 +4,7 @@
  * Строковое значение длиной 255 символов
  * @version 1.0
  */
-namespace Library\basic\String;
+namespace Site\Library\basic\String;
 
 use Boolive\data\Entity;
 

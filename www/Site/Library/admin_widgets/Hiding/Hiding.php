@@ -3,10 +3,10 @@
  * Действие скрытия/отмена скрытия объектов
  * @version 1.0
  */
-namespace Library\admin_widgets\Hiding;
+namespace Site\Library\admin_widgets\Hiding;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\ToggleAction\ToggleAction;
+use Site\Library\admin_widgets\ToggleAction\ToggleAction;
 
 class Hiding extends ToggleAction
 {

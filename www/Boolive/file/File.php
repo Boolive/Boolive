@@ -411,7 +411,7 @@ class File
 
     static function deleteEmptyDirs($path)
     {
-        $path = trim(DIR_SERVER_PROJECT,'/\\');
+        $path = DIR_SERVER.trim($path,'/\\');
         $empty = true;
         foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file){
             $empty &= is_dir($file) && self::deleteEmptyDirs($file);

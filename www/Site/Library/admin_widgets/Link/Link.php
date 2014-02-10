@@ -3,10 +3,10 @@
  * Действие-переключатель призанка is_link
  * @version 1.0
  */
-namespace Library\admin_widgets\Link;
+namespace Site\Library\admin_widgets\Link;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\ToggleAction\ToggleAction;
+use Site\Library\admin_widgets\ToggleAction\ToggleAction;
 
 class Link extends ToggleAction
 {

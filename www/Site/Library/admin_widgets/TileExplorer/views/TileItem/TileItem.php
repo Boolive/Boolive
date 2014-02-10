@@ -4,9 +4,9 @@
  * 
  * @version 1.0
  */
-namespace Library\admin_widgets\TileExplorer\views\TileItem;
+namespace Site\Library\admin_widgets\TileExplorer\views\TileItem;
 
-use Library\admin_widgets\BaseExplorer\views\Item\Item;
+use Site\Library\admin_widgets\BaseExplorer\views\Item\Item;
 
 class TileItem extends Item
 {

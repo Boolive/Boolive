@@ -7,13 +7,13 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\access\Member;
+namespace Site\Library\access\Member;
 
 use Boolive\data\Data;
 use Boolive\data\Entity,
     Boolive\functions\F;
 use Boolive\develop\Trace;
-use Library\access\Role\Role;
+use Site\Library\access\Role\Role;
 
 class Member extends Entity
 {

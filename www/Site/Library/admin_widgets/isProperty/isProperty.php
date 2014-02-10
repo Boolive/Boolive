@@ -4,10 +4,10 @@
  * Смена признака "свойство" у выделенных объектов в админке
  * @version 1.0
  */
-namespace Library\admin_widgets\isProperty;
+namespace Site\Library\admin_widgets\isProperty;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\ToggleAction\ToggleAction;
+use Site\Library\admin_widgets\ToggleAction\ToggleAction;
 
 class isProperty extends ToggleAction
 {

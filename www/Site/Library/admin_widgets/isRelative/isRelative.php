@@ -6,10 +6,10 @@
  * найдет относительно расположения нового объекта. Относительность позволяет создавать наследуемые циклические связи.
  * @version 1.0
  */
-namespace Library\admin_widgets\isRelative;
+namespace Site\Library\admin_widgets\isRelative;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\ToggleAction\ToggleAction;
+use Site\Library\admin_widgets\ToggleAction\ToggleAction;
 
 class isRelative extends ToggleAction
 {

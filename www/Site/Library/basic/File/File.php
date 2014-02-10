@@ -4,7 +4,7 @@
  * Объект ассоциируемый с файлом
  * @version 1.0
  */
-namespace Library\basic\File;
+namespace Site\Library\basic\File;
 
 use Boolive\data\Entity;
 use Boolive\values\Check;

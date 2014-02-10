@@ -6,9 +6,9 @@
  * действий со стороны клиента.
  * @version 1.0
  */
-namespace Library\views\DirectHandler;
+namespace Site\Library\views\DirectHandler;
 
-use Library\views\View\View,
+use Site\Library\views\View\View,
     Boolive\values\Rule;
 
 class DirectHandler extends View

@@ -6,11 +6,11 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\ViewSingle;
+namespace Site\Library\views\ViewSingle;
 
 use Boolive\cache\Cache;
 use Boolive\input\Input;
-use Library\views\View\View,
+use Site\Library\views\View\View,
     Boolive\values\Rule,
     Boolive\commands\Commands;
 

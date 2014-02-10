@@ -5,9 +5,9 @@
  * @date: 22.04.13
  *
  */
-namespace Library\admin_widgets\page_widgets\PageAuthorEditor;
+namespace Site\Library\admin_widgets\page_widgets\PageAuthorEditor;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class PageAuthorEditor extends Widget

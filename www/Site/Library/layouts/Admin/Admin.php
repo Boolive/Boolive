@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Library\layouts\Admin;
+namespace Site\Library\layouts\Admin;
 
-use Library\layouts\Layout\Layout,
+use Site\Library\layouts\Layout\Layout,
     Boolive\values\Rule,
     Boolive\data\Data,
     Boolive\input\Input;

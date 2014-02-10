@@ -4,7 +4,7 @@
  * Информационный объект обратной связи. Содержит параметры отправления и сообщение.
  * @version 1.0
  */
-namespace Library\content_samples\Feedback;
+namespace Site\Library\content_samples\Feedback;
 
 use Boolive\data\Entity,
     Boolive\mail\Mail,

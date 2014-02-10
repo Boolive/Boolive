@@ -4,9 +4,9 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\layouts\Admin\ProgramsMenu\item_view\views\view_toggle_action;
+namespace Site\Library\layouts\Admin\ProgramsMenu\item_view\views\view_toggle_action;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class view_toggle_action extends Widget

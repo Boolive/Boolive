@@ -4,11 +4,11 @@
  *
  * @version 1.0
  */
-namespace Library\admin_widgets\Programs;
+namespace Site\Library\admin_widgets\Programs;
 
 use Boolive\data\Data;
 use Boolive\data\Entity;
-use Library\views\AutoWidget2\AutoWidget2,
+use Site\Library\views\AutoWidget2\AutoWidget2,
     Boolive\values\Rule;
 
 class Programs extends AutoWidget2

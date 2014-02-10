@@ -4,11 +4,11 @@
  * 
  * @version 1.0
  */
-namespace Library\admin_widgets\LogicEditor;
+namespace Site\Library\admin_widgets\LogicEditor;
 
 use Boolive\data\Entity;
 use Boolive\values\Rule;
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class LogicEditor extends Widget
 {

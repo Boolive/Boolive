@@ -19,12 +19,12 @@ class Auth
     const GROUP_GUEST = '/Members/guests';
     /** Группа зарегистрированных */
     const GROUP_REGISTERED = '/Members/registered';
-    /** @var \Library\access\User\User Текущий пользователь */
+    /** @var \Site\Library\access\User\User Текущий пользователь */
     static private $user;
 
     /**
      * Текущий пользователь
-     * @return \Library\access\Member\Member
+     * @return \Site\Library\access\Member\Member
      */
     static function getUser()
     {
@@ -39,12 +39,12 @@ class Auth
      * Установка текущего пользователя
      * Используется при "ручной" аутентификации, например, формой входа. При этом поиск пользователя
      * по логину, паролю или другим параметрам выполняется моделью формы входа.
-     * @param null | \Library\access\User\User $user Авторизованный пользователь или NULL для отмены авторизации
+     * @param null | \Site\Library\access\User\User $user Авторизованный пользователь или NULL для отмены авторизации
      * @param int $duration Длительность в секундах запоминания пользователя. Если 0, то пользователь запоминается на период работы браузера
      */
     static function setUser($user, $duration = 0)
     {
-        if ($user instanceof \Library\access\User\User){
+        if ($user instanceof \Site\Library\access\User\User){
             self::$user = $user;
             self::remember($duration);
         }else{
@@ -57,7 +57,7 @@ class Auth
 
     /**
      * Вспомнить пользователя
-     * @return \Library\access\Member\Member
+     * @return \Site\Library\access\Member\Member
      */
     static function remind()
     {

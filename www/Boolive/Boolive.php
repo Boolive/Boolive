@@ -127,10 +127,10 @@ namespace Boolive
         /**
          * Обработчик ошбок PHP
          * Преобразование php ошибки в исключение для стандартизации их обработки
-         * @param $errno Код ошибки
-         * @param $errstr Сообщение
-         * @param $errfile Файл ошибки
-         * @param $errline Номер строки с ошибкой
+         * @param int $errno Код ошибки
+         * @param string $errstr Сообщение
+         * @param string $errfile Файл ошибки
+         * @param int $errline Номер строки с ошибкой
          * @throws ErrorException Если ошибка не игнорируется, то превращается в исключение
          * @return bool
          */
@@ -163,28 +163,32 @@ namespace Boolive
         }
 
         /**
-         * Путь на файл класса
+         * Путь на файл класса по стандарту PSR-0
          * @param string $class_name Имя класса с namespace
          * @return string Путь к файлу от корня сервера
          */
         public static function getClassFile($class_name)
         {
-            $names = explode('\\', $class_name, 2);
             $path = str_replace('\\', '/', $class_name);
-            if ($names[0] == 'Boolive') {
-                return DIR_SERVER_ENGINE.substr($path, 8).'.php';
-            }else
-            if ($names[0] == 'Remote'){
-                return  DIR_SERVER_REMOTE.substr($path, 7).'.php';
-            }else{
-                return DIR_SERVER_PROJECT.$path.'.php';
+            $names = explode('/', $path, 2);
+            if ($names[0] != 'Site' && $names[0] != 'Remote') {
+                $path = str_replace('_','/',$path);
             }
+            return DIR_SERVER.$path.'.php';
+//            if ($names[0] == 'Boolive') {
+//                return DIR_SERVER.$path.'.php';
+//            }else
+//            if ($names[0] == 'Remote'){
+//                return  DIR_SERVER_REMOTE.$path.'.php';
+//            }else{
+//                return DIR_SERVER_PROJECT.$path.'.php';
+//            }
         }
 
         /**
          * Загрузка внешнего класса
-         * @param $class_name Полное имя класса
-         * @param $class_path Путь, куда сохранять класс
+         * @param string $class_name Полное имя класса
+         * @param string $class_path Путь, куда сохранять класс
          * @return bool
          */
         public static function loadRemoteClass($class_name, $class_path)
@@ -326,8 +330,8 @@ namespace Boolive
             if (!is_writable($file)){
                 $requirements[] = 'Установите права на запись для файла <code>'.$file.'</code>. Необходимо для автоматической записи настроек системы';
             }
-            if (!is_writable(DIR_SERVER_PROJECT)){
-                $requirements[] = 'Установите права на запись для директории <code>'.DIR_SERVER_PROJECT.'</code> и всех её вложенных директорий и файлов';
+            if (!is_writable(DIR_SERVER.'Site')){
+                $requirements[] = 'Установите права на запись для директории <code>'.DIR_SERVER.'Site</code> и всех её вложенных директорий и файлов';
             }
             if (!extension_loaded('mbstring')){
                 $requirements[] = 'Требуется расширение <code>mbstring</code> для PHP';

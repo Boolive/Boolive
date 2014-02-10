@@ -4,11 +4,11 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\layouts\Admin\ProgramsMenu\item_view\views\view_radio_action;
+namespace Site\Library\layouts\Admin\ProgramsMenu\item_view\views\view_radio_action;
 
 use Boolive\values\Rule,
-    Library\admin_widgets\RadioAction\RadioAction,
-    Library\views\Widget\Widget;
+    Site\Library\admin_widgets\RadioAction\RadioAction,
+    Site\Library\views\Widget\Widget;
 
 class view_radio_action extends Widget
 {

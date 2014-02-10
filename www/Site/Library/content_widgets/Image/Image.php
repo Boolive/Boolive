@@ -4,15 +4,15 @@
  *
  * @version 1.0
  */
-namespace Library\content_widgets\Image;
+namespace Site\Library\content_widgets\Image;
 
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class Image extends Widget
 {
     function show($v = array(), $commands, $input)
     {
-        /** @var \Library\basic\Image\Image $obj */
+        /** @var \Site\Library\basic\Image\Image $obj */
         $obj = $this->_input['REQUEST']['object'];
         $v['file'] = $obj->file();
         $v['style'] = $obj->find(array('select'=>'tree', 'depth'=>array(1, 'max'), 'return'=>false, 'comment' => 'read tree of text element'));

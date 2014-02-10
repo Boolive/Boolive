@@ -4,10 +4,10 @@
  * Выберите объекты, которые хотите добавить
  * @version 1.0
  */
-namespace Library\admin_widgets\Add;
+namespace Site\Library\admin_widgets\Add;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\SelectObject\SelectObject;
+use Site\Library\admin_widgets\SelectObject\SelectObject;
 
 class Add extends SelectObject
 {

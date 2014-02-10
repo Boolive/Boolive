@@ -5,7 +5,7 @@
  *
  * @version 1.0
  */
-namespace Library\basic\Boolean;
+namespace Site\Library\basic\Boolean;
 
 use Boolive\data\Entity,
     Boolive\values\Rule;

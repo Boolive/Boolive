@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\Css;
+namespace Site\Library\views\Css;
 
-use Library\views\View\View;
+use Site\Library\views\View\View;
 
 class Css extends View
 {

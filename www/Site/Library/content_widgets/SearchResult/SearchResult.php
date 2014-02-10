@@ -4,11 +4,11 @@
  * Отображает форму и результаты поиска
  * @version 1.0
  */
-namespace Library\content_widgets\SearchResult;
+namespace Site\Library\content_widgets\SearchResult;
 
 use Boolive\data\Data;
 use Boolive\data\Entity;
-use Library\content_widgets\Part\Part,
+use Site\Library\content_widgets\Part\Part,
     Boolive\values\Rule;
 
 class SearchResult extends Part

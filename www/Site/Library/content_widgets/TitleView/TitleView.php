@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Library\content_widgets\TitleView;
+namespace Site\Library\content_widgets\TitleView;
 
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class TitleView extends Widget
 {

@@ -6,10 +6,10 @@
  * 2. По AJAX отдаёт атрибуты редактируемого объекта, проверяет и сохраняет объект
  * @version 1.0
  */
-namespace Library\admin_widgets\Attribs;
+namespace Site\Library\admin_widgets\Attribs;
 
 use Boolive\errors\Error,
-    Library\views\Widget\Widget,
+    Site\Library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\data\Data;
 

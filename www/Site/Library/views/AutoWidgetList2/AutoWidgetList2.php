@@ -5,9 +5,9 @@
  * Имеет настройки фильтра, какие свойства объекта отображать. (@todo)
  * @version 1.0
  */
-namespace Library\views\AutoWidgetList2;
+namespace Site\Library\views\AutoWidgetList2;
 
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class AutoWidgetList2 extends Widget
 {

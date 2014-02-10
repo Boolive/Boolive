@@ -4,12 +4,12 @@
  * Форма авторизации (входа) пользователя
  * @version 1.0
  */
-namespace Library\forms\FormAuth2;
+namespace Site\Library\forms\FormAuth2;
 
 use Boolive\auth\Auth;
 use Boolive\data\Data;
 use Boolive\errors\Error;
-use Library\forms\SimpleForm\SimpleForm,
+use Site\Library\forms\SimpleForm\SimpleForm,
     Boolive\values\Rule;
 
 class FormAuth2 extends SimpleForm

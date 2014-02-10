@@ -4,10 +4,10 @@
  * Редактирование свойств объекта  
  * @version 1.0
  */
-namespace Library\admin_widgets\Editor;
+namespace Site\Library\admin_widgets\Editor;
 
 use Boolive\values\Rule;
-use Library\admin_widgets\BaseExplorer\BaseExplorer;
+use Site\Library\admin_widgets\BaseExplorer\BaseExplorer;
 
 class Editor extends BaseExplorer
 {

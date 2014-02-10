@@ -4,11 +4,11 @@
  * Действие, которое отменяется повторным вызовом. Например, смена признака у объекта
  * @version 1.0
  */
-namespace Library\admin_widgets\Draft;
+namespace Site\Library\admin_widgets\Draft;
 
 use Boolive\errors\Error;
 use Boolive\values\Rule;
-use Library\admin_widgets\ToggleAction\ToggleAction;
+use Site\Library\admin_widgets\ToggleAction\ToggleAction;
 
 class Draft extends ToggleAction
 {

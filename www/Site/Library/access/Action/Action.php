@@ -4,7 +4,7 @@
  * Действие, на которое устанавливается правило доступа или запрета. Имя объекта соответствует названию действия.
  * @version 1.0
  */
-namespace Library\access\Action;
+namespace Site\Library\access\Action;
 
 use Boolive\data\Entity;
 

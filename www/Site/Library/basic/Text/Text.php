@@ -5,7 +5,7 @@
  *
  * @version 1.0
  */
-namespace Library\basic\Text;
+namespace Site\Library\basic\Text;
 
 use Boolive\data\Entity;
 

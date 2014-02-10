@@ -4,9 +4,9 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\layouts\boolive\sidebar\HtmlBlock;
+namespace Site\Library\layouts\boolive\sidebar\HtmlBlock;
 
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class HtmlBlock extends Widget
 {

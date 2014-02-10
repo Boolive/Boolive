@@ -7,9 +7,9 @@
  * Найденный объект и номер страницы помещаются во входящие данные для подчиненных виджетов.
  * @version 1.0
  */
-namespace Library\layouts\Layout;
+namespace Site\Library\layouts\Layout;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\data\Data,
     Boolive\values\Rule;
 

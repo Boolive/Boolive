@@ -5,9 +5,9 @@
  * @date: 28.03.13
  *
  */
-namespace Library\admin_widgets\Editor\views\KeywordsField\views\Keyword;
+namespace Site\Library\admin_widgets\Editor\views\KeywordsField\views\Keyword;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class Keyword extends Widget

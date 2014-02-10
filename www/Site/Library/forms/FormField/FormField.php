@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Library\forms\FormField;
+namespace Site\Library\forms\FormField;
 
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class FormField extends Widget
 {

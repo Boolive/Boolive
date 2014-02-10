@@ -6,13 +6,13 @@
  * @date 29.04.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\RESTful;
+namespace Site\Library\views\RESTful;
 
 use Boolive\data\Data,
     Boolive\data\Entity,
     Boolive\errors\Error,
     Boolive\functions\F,
-    Library\views\View\View,
+    Site\Library\views\View\View,
     Boolive\values\Rule;
 
 class RESTful extends View

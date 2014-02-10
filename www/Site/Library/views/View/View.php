@@ -5,7 +5,7 @@
  *
  * @version 1.0
  */
-namespace Library\views\View;
+namespace Site\Library\views\View;
 
 use Boolive\cache\Cache,
     Boolive\data\Entity,

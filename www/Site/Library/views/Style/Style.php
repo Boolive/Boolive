@@ -7,7 +7,7 @@
  * @date: 21.01.13
  *
  */
-namespace Library\views\Style;
+namespace Site\Library\views\Style;
 
 use Boolive\data\Entity;
 

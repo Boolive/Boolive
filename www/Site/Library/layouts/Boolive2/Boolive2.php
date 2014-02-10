@@ -4,9 +4,9 @@
  * Виджет для создания макетов (разметки html страницы).
  * @version 1.0
  */
-namespace Library\layouts\Boolive2;
+namespace Site\Library\layouts\Boolive2;
 
-use Library\layouts\Layout\Layout;
+use Site\Library\layouts\Layout\Layout;
 
 class Boolive2 extends Layout
 {

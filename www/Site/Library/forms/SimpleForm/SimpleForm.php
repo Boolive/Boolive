@@ -4,13 +4,13 @@
  * Эталон простейшей формы. Поля формы прописываются в шаблоне.
  * @version 1.0
  */
-namespace Library\forms\SimpleForm;
+namespace Site\Library\forms\SimpleForm;
 
 use Boolive\errors\Error;
 use Boolive\session\Session,
     Boolive\values\Check,
     Boolive\values\Rule,
-    Library\views\Widget\Widget;
+    Site\Library\views\Widget\Widget;
 
 class SimpleForm extends Widget
 {

@@ -6,10 +6,10 @@
  * @author Azat Galiev <AzatXaker@gmail.com>
  */
 
-namespace Library\menus\NextPrevNavigation;
+namespace Site\Library\menus\NextPrevNavigation;
 
 use Boolive\data\Entity;
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\values\Check,
     Boolive\errors\Error;

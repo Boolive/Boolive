@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\ViewGroup;
+namespace Site\Library\views\ViewGroup;
 
-use Library\views\View\View;
+use Site\Library\views\View\View;
 
 class ViewGroup extends View
 {

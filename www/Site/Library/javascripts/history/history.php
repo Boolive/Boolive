@@ -4,9 +4,9 @@
  * Библиотека эмулирует HTML5 History API в старых браузерах
  * @version 1.0
  */
-namespace Library\javascripts\history;
+namespace Site\Library\javascripts\history;
 
-use Library\javascripts\JavaScript\JavaScript;
+use Site\Library\javascripts\JavaScript\JavaScript;
 
 class history extends JavaScript
 {

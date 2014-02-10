@@ -4,14 +4,14 @@
  * Древовидное меню с однотипными пунктами
  * @version 1.0
  */
-namespace Library\menus\MenuSimple;
+namespace Site\Library\menus\MenuSimple;
 
 use Boolive\data\Data;
 use Boolive\data\Entity;
 use Boolive\values\Rule;
-use Library\basic\Image\Image;
-use Library\views\View\View;
-use Library\views\Widget\Widget;
+use Site\Library\basic\Image\Image;
+use Site\Library\views\View\View;
+use Site\Library\views\Widget\Widget;
 
 class MenuSimple extends Widget
 {

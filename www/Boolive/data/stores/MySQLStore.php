@@ -32,8 +32,8 @@ class MySQLStore extends Entity
 
     /**
      * Конструктор экземпляра хранилища
-     * @param array $key Ключ хранилища. Используется для формирования и распознования сокращенных URI
-     * @param $config Параметры подключения к базе данных
+     * @param string $key Ключ хранилища. Используется для формирования и распознования сокращенных URI
+     * @param array $config Параметры подключения к базе данных
      */
     function __construct($key, $config)
     {
@@ -52,7 +52,7 @@ class MySQLStore extends Entity
 
     /**
      * Чтение объектов
-     * @param $cond Условие на читаемые объекты.
+     * @param string|array $cond Условие на выбираемые объекты.
      * @param bool $index Признак, выполнять индексацию данных перед чтением или нет?
      * @return array|\Boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
      * @throws \Exception
@@ -447,10 +447,10 @@ class MySQLStore extends Entity
                         $this->makeParents($attr['id'], $attr['parent'], $dl, true);
                     }
 
-                    if (!empty($uri) && is_dir(DIR_SERVER_PROJECT.ltrim($uri, '/'))){
+                    if (!empty($uri) && is_dir(DIR_SERVER.'Site'.$uri)){
                         // Переименование/перемещение папки объекта
-                        $dir = DIR_SERVER_PROJECT.ltrim($uri_new, '/');
-                        File::rename(DIR_SERVER_PROJECT.ltrim($uri, '/'), $dir);
+                        $dir = DIR_SERVER.'Site'.$uri_new;
+                        File::rename(DIR_SERVER.'Site'.$uri, $dir);
                         if ($current['name'] !== $attr['name']){
                             // Переименование файла, если он есть
                             if ($current['value_type'] == Entity::VALUE_FILE && $current['is_default_value'] == $current['id']){
@@ -1833,8 +1833,8 @@ class MySQLStore extends Entity
 
     /**
      * Создание или обновление отношений между родителями объекта
-     * @param $entity Объект, для которого обновляются отношения с родителем
-     * @param $parent Новый родитель объекта
+     * @param Entity $entity Объект, для которого обновляются отношения с родителем
+     * @param int $parent Новый родитель объекта
      * @param int $dl Разница между новым и старым уровнем вложенности объекта
      * @param bool $remake Признак, отношения обновлять (при смене родителя) или создавать новые (новый объект)
      */
@@ -1881,8 +1881,8 @@ class MySQLStore extends Entity
 
     /**
      * Создание или обновление отношений с прототипами объекта
-     * @param $entity Объект, для которого обновляются отношения с прототипами
-     * @param $proto Новый прототип объекта
+     * @param Entity $entity Объект, для которого обновляются отношения с прототипами
+     * @param int $proto Новый прототип объекта
      * @param int $dl Разница между новым и старым уровнем вложенности объекта среди прототипов
      * @param bool $remake Признак, отношения обновлять (при смене прототипа) или создавать новые (новый объект)
      * @param bool $incomplete Признак, объект небыл сохранен, но его уже прототипировали?
@@ -2224,7 +2224,7 @@ class MySQLStore extends Entity
 
     /**
      * Название класса по идентификатору объекта для которого он определен
-     * @param $id Идентификатор объекта со своим классом
+     * @param string $id Идентификатор объекта со своим классом
      * @return string Название класса с пространством имен
      */
     private function getClassById($id)
@@ -2238,11 +2238,11 @@ class MySQLStore extends Entity
                 $q = $this->db->query('SELECT ids.* FROM ids JOIN objects ON objects.id = ids.id AND objects.is_default_class = 0');
                 $this->classes = array();
                 while ($row = $q->fetch(DB::FETCH_ASSOC)){
-                    if ($row['uri']!==''){
+                    if ($row['uri'] !== ''){
                         $names = F::splitRight('/', $row['uri'], true);
-                        $this->classes['//'.$row['id']] = str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                        $this->classes['//'.$row['id']] = '\\Site\\'.str_replace('/', '\\', trim($row['uri'],'/')).'\\'.$names[1];
                     }else{
-                        $this->classes['//'.$row['id']] = 'Site';
+                        $this->classes['//'.$row['id']] = '\\Site\\Site';
                     }
                 }
                 Cache::set('mysqlstore/classes', F::toJSON($this->classes, false));
@@ -2260,7 +2260,7 @@ class MySQLStore extends Entity
                         $row['uri'] = Data::convertAbsoluteToLocal($row['uri']);
                     }
                     $names = F::splitRight('/', $row['uri'], true);
-                    $this->classes[$id] = '\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                    $this->classes[$id] = '\\Site\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
                 }else{
                     $this->classes[$id] = '\\Boolive\\data\\Entity';
                 }

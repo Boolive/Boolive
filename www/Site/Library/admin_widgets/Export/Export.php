@@ -4,14 +4,14 @@
  * Сохраняет выбранные объекты в файловую систему
  * @version 1.0
  */
-namespace Library\admin_widgets\Export;
+namespace Site\Library\admin_widgets\Export;
 
 use Boolive\data\Data;
 use Boolive\data\Entity;
 use Boolive\develop\Trace;
 use Boolive\file\File;
 use Boolive\session\Session;
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class Export extends Widget

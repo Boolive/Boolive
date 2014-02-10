@@ -6,9 +6,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\views\Logout;
+namespace Site\Library\views\Logout;
 
-use Library\views\View\View,
+use Site\Library\views\View\View,
     Boolive\auth\Auth,
     Boolive\input\Input,
     Boolive\values\Rule;

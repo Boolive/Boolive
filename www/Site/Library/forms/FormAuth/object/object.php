@@ -5,7 +5,7 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\forms\FormAuth\object;
+namespace Site\Library\forms\FormAuth\object;
 
 use Boolive\data\Entity,
     Boolive\auth\Auth,

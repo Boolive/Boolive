@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Library\forms\FormAuth;
+namespace Site\Library\forms\FormAuth;
 
-use Library\views\AutoWidgetList2\AutoWidgetList2,
-    Library\views\Widget\Widget,
+use Site\Library\views\AutoWidgetList2\AutoWidgetList2,
+    Site\Library\views\Widget\Widget,
     Boolive\input\Input,
     Boolive\values\Rule;
 

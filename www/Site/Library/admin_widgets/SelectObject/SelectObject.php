@@ -4,9 +4,9 @@
  * Представляет собой обозреватель объектов с функцией выбора объекта.
  * @version 1.0
  */
-namespace Library\admin_widgets\SelectObject;
+namespace Site\Library\admin_widgets\SelectObject;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class SelectObject extends Widget

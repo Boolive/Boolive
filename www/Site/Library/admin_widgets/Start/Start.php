@@ -4,10 +4,10 @@
  * 
  * @version 1.0
  */
-namespace Library\admin_widgets\Start;
+namespace Site\Library\admin_widgets\Start;
 
 use Boolive\values\Rule;
-use Library\views\Widget\Widget;
+use Site\Library\views\Widget\Widget;
 
 class Start extends Widget
 {

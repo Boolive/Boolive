@@ -4,7 +4,7 @@
  * Flash клип в формате .swf
  * @version 1.0
  */
-namespace Library\basic\Flash;
+namespace Site\Library\basic\Flash;
 
 use Boolive\data\Entity;
 

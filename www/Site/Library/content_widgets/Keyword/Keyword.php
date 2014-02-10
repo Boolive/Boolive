@@ -6,9 +6,9 @@
  * @author Azat Galiev <AzatXaker@gmail.com>
  */
 
-namespace Library\content_widgets\Keyword;
+namespace Site\Library\content_widgets\Keyword;
 
-use \Library\views\Widget\Widget;
+use \Site\Library\views\Widget\Widget;
 
 class Keyword extends Widget
 {

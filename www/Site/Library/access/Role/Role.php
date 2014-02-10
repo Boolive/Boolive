@@ -7,7 +7,7 @@
  * @date 30.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\access\Role;
+namespace Site\Library\access\Role;
 
 use Boolive\data\Entity;
 

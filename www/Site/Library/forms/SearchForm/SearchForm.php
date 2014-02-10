@@ -4,9 +4,9 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Library\forms\SearchForm;
+namespace Site\Library\forms\SearchForm;
 
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class SearchForm extends Widget

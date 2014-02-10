@@ -4,11 +4,11 @@
  * @author: polinа Putrolaynen
  * @version 1.0
  */
-namespace Library\admin_widgets\Editor\views\KeywordsField;
+namespace Site\Library\admin_widgets\Editor\views\KeywordsField;
 
 use Boolive\data\Data;
 use Boolive\functions\F;
-use Library\views\AutoWidgetList2\AutoWidgetList2,
+use Site\Library\views\AutoWidgetList2\AutoWidgetList2,
     Boolive\values\Rule;
 
 class KeywordsField extends AutoWidgetList2

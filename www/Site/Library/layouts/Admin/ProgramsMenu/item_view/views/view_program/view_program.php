@@ -6,10 +6,10 @@
  * @date 23.07.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Library\layouts\Admin\ProgramsMenu\item_view\views\view_program;
+namespace Site\Library\layouts\Admin\ProgramsMenu\item_view\views\view_program;
 
 use Boolive\input\Input;
-use Library\views\Widget\Widget,
+use Site\Library\views\Widget\Widget,
     Boolive\values\Rule;
 
 class view_program extends Widget
