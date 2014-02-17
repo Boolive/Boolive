@@ -14,9 +14,11 @@ class item_view extends item_view_1
 
     function show($v = array(), $commands, $input)
     {
+        $obj = $this->_input['REQUEST']['object'];
         if ($this->_input['REQUEST']['show']){
-            $v['item_key'] = $this->_input['REQUEST']['object']->key();
+            $v['item_key'] = $obj->key();
         }
+        $v['item_href'] = $obj->proto()->uri();
         return parent::show($v, $commands, $input);
     }
 }
