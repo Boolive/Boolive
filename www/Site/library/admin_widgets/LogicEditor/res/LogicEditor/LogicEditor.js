@@ -23,6 +23,10 @@
             self._editor.getSession().setMode("ace/mode/php");
             self._editor.setFontSize(14);
             self._editor.setShowPrintMargin(false);
+            self._editor.renderer.on('afterRender', function(e) {
+                $('.ace_editor').css("opacity", self._is_default?"0.5":"1");
+//                self.element.css("background-color", self._is_default?"#f5f5f5":"#fff");
+            });
 
             var contents = this.element.find('.LogicEditor__contents');
             self._contents = {
