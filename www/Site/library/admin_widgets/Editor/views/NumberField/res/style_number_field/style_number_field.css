@@ -1,0 +1,13 @@
+.NumberField .inpt{
+    width:250px;
+}
+.NumberField__input[type="text"]{
+
+}
+.NumberField__unit{
+    position: absolute;
+    right: 30px;
+    line-height: 28px;
+    text-align: right;
+    top: 0;
+}
