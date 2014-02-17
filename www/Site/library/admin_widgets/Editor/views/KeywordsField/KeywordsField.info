@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/library/views/AutoWidgetList2",
     "is_default_class": false,
-    "order": 14,
+    "order": 17,
     "children": {
         "title": {
             "value": "Поле списка ключевых слов",

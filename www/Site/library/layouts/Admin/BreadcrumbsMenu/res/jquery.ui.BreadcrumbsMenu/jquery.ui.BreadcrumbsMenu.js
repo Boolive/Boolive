@@ -46,8 +46,21 @@
                 self.callParents('setState', [{
                     object: $(this).attr('data-o')
                 }]);
-			});
+			}).on('mouseover', 'li a', function(){
+//                console.log($(this));
+                $(this).data('max-width', $(this).find('span').css('max-width'));
+                $(this).find('span').css('max-width', 'none');
+            }).on('mouseout', 'li a', function(){
+                $(this).find('span').css('max-width', $(this).data('max-width'));
+            });
+            this.truncatePath();
 		},
+
+        truncatePath: function(){
+            var cnt = this.view.children().size();
+            var w = (($(window).width() - 420) / cnt) - 20 + 'px' ;
+            this.view.find('li a > span').css('max-width', w);
+        },
 
         /**
          * Установка курсора в конец строки
@@ -91,7 +104,7 @@
                             var cnt = data.result.length;
                             self.view.empty();
                             for (var i=0; i<cnt; i++){
-                                self.tab.css('z-index', i).children('a').attr('data-o', data.result[i]['uri']).attr('href', data.result[i]['url']).text(data.result[i]['title']);
+                                self.tab.css('z-index', i).children('a').attr('data-o', data.result[i]['uri']).attr('href', data.result[i]['url']).children('span').text(data.result[i]['title']);
                                 self.tab.removeClass();
                                 if (data.result[i]['class']){
                                     self.tab.addClass(data.result[i]['class']);
@@ -99,14 +112,17 @@
                                 self.view.prepend(self.tab.clone().show());
                             }
                         }
+                        self.truncatePath();
                     });
                 }else{
                     self.view.find('li').removeClass('active').removeClass('preactive').show();
                     item.parent().addClass('active');
+                    self.truncatePath();
                 }
                 //if (!self.inline.is(":visible")){
                     self.inline.find('input').val(uri);
                 //}
+
             }
         },
 

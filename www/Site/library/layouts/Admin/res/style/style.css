@@ -13,6 +13,7 @@
 		position: fixed;
 		z-index: 2;
 		overflow:auto;
+        border-right: 1px dotted #ccc;
 		}
     .Admin > .right{
 		width: 180px;
@@ -22,12 +23,18 @@
 		z-index: 3;
 		padding: 0;
         top: 32px;
+        border-left: 1px dotted #ccc;
 		}
     .Admin > .center{
         margin: 0 auto;
-        padding: 32px 0 36px;
+        padding: 32px 0 32px;
 		z-index: 1;
         position: relative;
+        min-height: 100%;
+        box-sizing: border-box;
+        /*border: 1px dotted #ccc;*/
+        /*border-top: 0;*/
+        /*border-bottom: 0;*/
         }
         .Admin .center > div{
             height: 100%;
@@ -39,6 +46,7 @@
 		right: 0;
         top: 0;
         z-index: 5;
+        background-color: #F5F5F5;
         }
         .Admin .top-right{
             position: absolute;
@@ -64,13 +72,15 @@
         box-shadow: inset 0px 1px 0px 0px #E5E5E5, inset 0px 3px 3px -2px #E5E5E5;
     }
     .Admin .window{
-        background-color: #ffffff;
+        /*background-color: #ffffff;*/
         border-top: 0px solid #CCC;
         border-bottom: 2px solid #CCC;
         border-left: 1px solid #CCC;
         border-right: 1px solid #CCC;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
         position: relative;
+        min-height: 100%;
+        box-sizing: border-box;
         }
     .Admin .window:first-child{
         border: none;

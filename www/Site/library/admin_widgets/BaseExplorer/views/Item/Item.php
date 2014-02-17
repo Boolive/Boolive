@@ -19,7 +19,10 @@ class Item extends Widget
         $v['title'] = $obj->title->inner()->value();
         if (empty($v['title'])) $v['title'] = $obj->name();
         $v['description'] = $obj->description->inner()->value();
-
+        $tl = mb_strlen($v['title']);
+        if (mb_strlen($v['description']) + $tl > 120){
+            $v['description'] = mb_substr($v['description'],0,110 - $tl).'...';
+        }
         // Атрибуты
         $v['name'] = $obj->name();
         $v['value'] = (string)$obj->value();

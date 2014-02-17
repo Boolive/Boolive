@@ -4,6 +4,9 @@
     border: 1px solid transparent;
     border-radius: 5px;
 }
+.BooleanField:hover{
+    border-color: transparent;
+}
 .BooleanField__input-wrap{
     vertical-align: middle;
     margin-left: 5px;
@@ -16,6 +19,9 @@
         font-size: 16px;
         font-weight: normal;
     }
+.BooleanField:hover{
+    background-color: transparent;
+    }
 .BooleanField.Item_selected{
     background-color: #61B0FF;
     border: 1px solid transparent;
@@ -23,7 +29,4 @@
     }
 .Item_selected .BooleanField__title{
     color: #fff;
-    }
-.BooleanField:hover{
-    background-color: transparent;
     }

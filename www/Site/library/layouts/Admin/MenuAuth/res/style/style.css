@@ -23,8 +23,8 @@
             }
         .MenuAuth ul.buttons li.active{
             background-color: #ffffff;
-            box-shadow: inset 1px 0px 0px 0px #DCDCDC;
-            -webkit-box-shadow: inset 1px 0px 0px 0px #DCDCDC;
+            box-shadow: inset 1px -1px 0px 0px #DCDCDC;
+            -webkit-box-shadow: inset 1px -1px 0px 0px #DCDCDC;
             }
             .MenuAuth ul.buttons li a{
                     margin: 0;

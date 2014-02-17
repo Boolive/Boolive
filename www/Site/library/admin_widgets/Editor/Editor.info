@@ -13,7 +13,8 @@
             "order": 1
         },
         "description": {
-            "value": "Редактирование свойств объекта  ",
+            "value": "Редактирование свойств объекта",
+            "value_type": 2,
             "proto": "/library/admin_widgets/BaseExplorer/description",
             "is_mandatory": true,
             "is_property": true,

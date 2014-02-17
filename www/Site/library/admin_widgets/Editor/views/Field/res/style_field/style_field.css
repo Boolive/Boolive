@@ -12,11 +12,13 @@
     .Field__title{
         font-size: 13px;
         font-weight: bold;
-        color: #888;
-        padding-left: 0;
+        color: #777;
+        padding: 0 2px 0 0px;
         display: inline-block;
         position: relative;
-        padding-right: 10px;
+        }
+        .Item_mandatory .Field__title{
+            padding: 0 10px 0 0px;
         }
         .Item_link .Field__title:after{
             content: '↝';
@@ -63,7 +65,7 @@
             background-color: #e67573;
             }
     .Field__description{
-        color: #ddd;
+        color: #999;
         font-size: 11px;
         line-height: 11px;
         padding: 0;
@@ -86,7 +88,7 @@
     .Field__input[type="text"],
     .Field__input[type="password"]
     {
-        font-size: 24px;
+        font-size: 18px;
         display: block;
         width: 100%;
         border: none;
@@ -113,7 +115,7 @@
         }
 /* Hover */
 .Field:hover .inpt{
-    border: 1px solid #95c1e6;
+    /*border: 1px solid #95c1e6;*/
     }
 /* Выделение */
 .Field.Item_selected{

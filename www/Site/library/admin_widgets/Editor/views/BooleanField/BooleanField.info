@@ -2,7 +2,7 @@
     "value": "BooleanField.tpl",
     "value_type": 3,
     "proto": "/library/admin_widgets/Editor/views/Field",
-    "order": 13,
+    "order": 16,
     "children": {
         "title": {
             "value": "Поле логического значения",

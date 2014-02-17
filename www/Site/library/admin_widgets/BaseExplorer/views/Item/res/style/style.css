@@ -1,6 +1,6 @@
 .Item{
-    background-color: #F1F1F1;
-    border: 1px solid #EDEDED;
+    background-color: #e9e9e9;
+    border: 1px solid #e5e5e5;
     border-radius: 5px;
     position: relative;
     box-sizing: border-box;
@@ -15,6 +15,7 @@
     overflow: hidden;
     line-height: 25px;
     cursor: default;
+    border-radius: 3px;
     }
 .Item__select{
     cursor: pointer;
@@ -34,18 +35,20 @@
     }
 .Item__title{
     font-size: 14px;
-    padding: 0 8px;
+    padding: 0 2px 0 8px;
     text-decoration: none;
-    color: #000;
+    color: #111;
     display: inline-block;
     position: relative;
     cursor: pointer;
     }
     .Item__title:hover{
         text-decoration: underline;
-        color: #0073e6;
+        color: #000;
         }
-
+    .Item_mandatory .Item__title{
+        padding: 0 10px 0 8px;
+    }
 .Item__description{
     font-size: 11px;
     color: #888;
@@ -59,7 +62,7 @@
     z-index: 1;
     text-decoration: none;
     color: #005380;
-    /*background-color: #F1F1F1;*/
+    /*background-color: #e9e9e9;*/
     }
     .Item__prop:hover{
         text-decoration: underline;
@@ -75,7 +78,7 @@
     position: relative;
     z-index: 1;
     text-decoration: none;
-    /*background-color: #F1F1F1;*/
+    /*background-color: #e9e9e9;*/
     }
     .Item__link > img{
         vertical-align: middle;
@@ -100,7 +103,7 @@
     position: relative;
     z-index: 1;
     cursor: pointer;
-    /*background-color: #F1F1F1;*/
+    /*background-color: #e9e9e9;*/
     }
     .Item__value:hover{
         text-decoration: underline;
@@ -137,6 +140,10 @@
         border: 1px dashed #E0E0E0;
         }
 .Item_link{
+
+    }
+    .Item_link .Item__title{
+        color: #0073bf;
     }
     .Item_link .Item__title:after{
         content: '↝';
@@ -152,10 +159,10 @@
     }
     .Item_mandatory .Item__title:before{
         content: '*';
-        font: normal 22px/16px "Times New Roman";
+        font: normal 22px/14px "Times New Roman";
         color: #bf028b;
         position: absolute;
-        right: -2px;
+        right: -3px;
         top: 50%;
         margin-top: -2px;
         text-decoration: none;

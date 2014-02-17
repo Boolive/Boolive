@@ -471,10 +471,10 @@
         review_windows: function(){
             var left = 0;
             var dl = 10;
-            this._windows.children().each(function(){
-                $(this).css('margin-left', left +'px');
-               left+=dl;
-            });
+//            this._windows.children().each(function(){
+//                $(this).css('margin-left', left +'px');
+//               left+=dl;
+//            });
         },
 
         /**
