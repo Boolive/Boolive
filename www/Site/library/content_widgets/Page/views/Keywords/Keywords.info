@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "Keywords.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/Keywords",
+    "is_link": true,
+    "is_mandatory": true,
+    "order": 5
+}

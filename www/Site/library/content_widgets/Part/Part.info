@@ -127,6 +127,13 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 19
+        },
+        "show_seo": {
+            "is_default_value": true,
+            "value": 1,
+            "proto": "/library/content_widgets/Page/show_seo",
+            "is_property": true,
+            "order": 20
         }
     }
 }

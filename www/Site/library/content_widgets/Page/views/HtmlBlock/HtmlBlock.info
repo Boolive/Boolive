@@ -1,0 +1,51 @@
+{
+    "is_default_value": true,
+    "value": "HtmlBlock.tpl",
+    "value_type": 3,
+    "proto": "/library/views/HtmlBlock",
+    "is_mandatory": true,
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Виджет HTML блока",
+            "proto": "/library/views/HtmlBlock/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Элемент пользовательского интерфейса. Отображает данные с помощью шаблонизации.",
+            "value_type": 2,
+            "proto": "/library/views/HtmlBlock/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "is(/library/basic/HTMLText)",
+            "proto": "/library/views/HtmlBlock/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/HtmlBlock/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/HtmlBlock/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9
+        }
+    }
+}

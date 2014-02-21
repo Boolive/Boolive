@@ -14,8 +14,10 @@ class Page extends AutoWidgetList2
     function show($v = array(), $commands, $input)
     {
         $page = $this->_input['REQUEST']['object'];
-        $this->_commands->htmlHead('title', array('text'=>$page->title->value()));
-        $this->_commands->htmlHead('meta', array('name'=>'description', 'content'=>$page->description->value()));
+        if ($this->show_seo->inner()->value()){
+            $this->_commands->htmlHead('title', array('text'=>$page->title->value()));
+            $this->_commands->htmlHead('meta', array('name'=>'description', 'content'=>$page->description->value()));
+        }
         return parent::show($v, $commands, $input);
     }
 

@@ -41,117 +41,7 @@
             "proto": "/library/views/AutoWidgetList2/views",
             "is_mandatory": true,
             "is_property": true,
-            "order": 9,
-            "children": {
-                "TitleView": {
-                    "is_default_value": true,
-                    "value": "TitleView.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/TitleView",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 3
-                },
-                "Feedback": {
-                    "is_default_value": true,
-                    "value": "Feedback.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/Feedback",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 4
-                },
-                "Keywords": {
-                    "is_default_value": true,
-                    "value": "Keywords.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/Keywords",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 5
-                },
-                "HtmlBlock": {
-                    "is_default_value": true,
-                    "value": "HtmlBlock.tpl",
-                    "value_type": 3,
-                    "proto": "/library/views/HtmlBlock",
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 6,
-                    "children": {
-                        "title": {
-                            "is_default_value": true,
-                            "value": "Виджет HTML блока",
-                            "proto": "/library/views/HtmlBlock/title",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 2
-                        },
-                        "description": {
-                            "is_default_value": true,
-                            "value": "Элемент пользовательского интерфейса. Отображает данные с помощью шаблонизации.",
-                            "value_type": 2,
-                            "proto": "/library/views/HtmlBlock/description",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 3
-                        },
-                        "object_rule": {
-                            "is_default_value": true,
-                            "value": "is(/library/basic/HTMLText)",
-                            "proto": "/library/views/HtmlBlock/object_rule",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 7
-                        },
-                        "res": {
-                            "is_default_value": true,
-                            "value": "",
-                            "proto": "/library/views/HtmlBlock/res",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 8
-                        },
-                        "cache": {
-                            "is_default_value": true,
-                            "value": 0,
-                            "proto": "/library/views/HtmlBlock/cache",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 9
-                        }
-                    }
-                },
-                "ViewViews": {
-                    "is_default_value": true,
-                    "value": "",
-                    "proto": "/library/views/View",
-                    "is_default_class": false,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 7,
-                    "children": {
-                        "title": {
-                            "value": "Вид видов",
-                            "proto": "/library/views/View/title",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 1
-                        },
-                        "description": {
-                            "value": "Для отображения виджетов и любых других видов, например, js",
-                            "value_type": 2,
-                            "proto": "/library/views/View/description",
-                            "is_mandatory": true,
-                            "is_property": true,
-                            "order": 2
-                        }
-                    }
-                }
-            }
+            "order": 9
         },
         "object_rule": {
             "value": "is(/library/content_samples/Page)",
@@ -169,6 +59,21 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 13
+        },
+        "show_seo": {
+            "value": 1,
+            "proto": "/library/basic/Boolean",
+            "is_draft": true,
+            "is_property": true,
+            "order": 14,
+            "children": {
+                "title": {
+                    "value": "Добавлять SEO в HTML",
+                    "proto": "/library/basic/Boolean/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }
