@@ -186,6 +186,7 @@ class BaseExplorer extends AutoWidgetList2
             }
         }
         $cond['group'] = true;
+        $cond['key'] = false;
         return parent::getList($cond);
     }
 

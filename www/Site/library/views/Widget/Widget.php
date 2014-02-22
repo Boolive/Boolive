@@ -6,6 +6,7 @@
  */
 namespace Site\library\views\Widget;
 
+use Boolive\template\php\PHPTemplateValues;
 use Boolive\template\Template,
     Site\library\views\View\View,
     Boolive\values\Rule;
@@ -68,7 +69,31 @@ class Widget extends View
         $this->startChild('res');
         $v['view_id'] = $this->key();
         $v['view_uri'] = $this->uri();
-        return Template::render($this, $v);
+        return $this->render($this, $v);
+    }
+
+    function render($entity, $v)
+    {
+        try{
+            if ($this->isFile()){
+                ob_start();
+                    // Массив $v достпуен в php-файле шаблона, подключамом ниже
+                    $v = new PHPTemplateValues($v, null, $this);
+                    include($this->file(null, true));
+                    $result = ob_get_contents();
+                ob_end_clean();
+                return $result;
+            }else{
+                return $this->value();
+            }
+        }catch (\Exception $e){
+            ob_end_clean();
+//          if ($e->getCode() == 2){
+//              echo "Template file '{$entity->file()}' not found";
+//          }else{
+                throw $e;
+//          }
+        }
     }
 
     function classTemplate($methods = array(), $use = array())
