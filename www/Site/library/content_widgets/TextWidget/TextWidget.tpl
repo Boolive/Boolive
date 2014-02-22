@@ -1,1 +1,1 @@
-<div class="Text"><?=mb_ereg_replace('\n','<br/>', $v['value']->string());?></div>
+<div class="Text"><?=mb_ereg_replace('\n','<br/>', $v['value']->escape());?></div>
