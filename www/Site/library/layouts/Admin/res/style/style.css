@@ -47,6 +47,8 @@
         top: 0;
         z-index: 5;
         background-color: #F5F5F5;
+        box-shadow: inset 0 -1px 0 0 #E0E0E0, inset 0 -3px 3px -2px #E5E5E5;
+	    -webkit-box-shadow: inset 0 -1px 0 0 #E0E0E0, inset 0 -3px 3px -2px #E5E5E5;
         }
         .Admin .top-right{
             position: absolute;
