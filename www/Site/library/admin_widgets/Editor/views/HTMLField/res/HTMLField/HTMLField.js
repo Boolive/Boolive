@@ -15,7 +15,9 @@
             self._error = '';
             self._input = self.element.find('.Field__input');
             self._value = self.getValue();
+            CKEDITOR.disableAutoInline = true;
             self._editor = self._input.ckeditor();
+
             // Проверка измененеий при визуальном редактировании
             self._editor.editor.on('change', function(e) {
                 self._change(e);

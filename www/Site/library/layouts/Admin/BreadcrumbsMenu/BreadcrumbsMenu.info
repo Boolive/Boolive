@@ -34,6 +34,15 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 4
+        },
+        "SelectObject": {
+            "is_default_value": true,
+            "value": "SelectObject.tpl",
+            "value_type": 3,
+            "proto": "/library/admin_widgets/SelectObject",
+            "is_link": true,
+            "is_property": true,
+            "order": 5
         }
     }
 }

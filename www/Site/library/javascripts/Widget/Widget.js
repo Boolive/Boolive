@@ -355,6 +355,11 @@
 
         getDir: function(path){
             return path.substring(0,path.lastIndexOf('/'));
+        },
+
+        getDirAndName: function(path){
+            var pos = path.lastIndexOf('/');
+            return {dir:path.substring(0,pos), name:path.substring(pos+1)};
         }
     });
 })(jQuery, _, window);

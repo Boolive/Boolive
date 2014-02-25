@@ -23,8 +23,8 @@
             }
         .MenuAuth ul.buttons li.active{
             background-color: #ffffff;
-            box-shadow: inset 1px -1px 0px 0px #DCDCDC;
-            -webkit-box-shadow: inset 1px -1px 0px 0px #DCDCDC;
+            box-shadow: inset 1px -1px 0 0 #DCDCDC;
+            -webkit-box-shadow: inset 1px -1px 0 0 #DCDCDC;
             }
             .MenuAuth ul.buttons li a{
                     margin: 0;
@@ -33,7 +33,8 @@
                     text-decoration: none;
                     color: #555;
                     display: block;
-                    padding: 8px 10px 8px 28px;
+                    height: 16px;
+                    padding: 8px 10px;
                     background-repeat: no-repeat;
                     background-position: 10px center;
                     }
@@ -45,19 +46,22 @@
                     margin: 0px 3px -3px 0;
                 }
                 .MenuAuth ul.buttons li.exit a{
-                    background-image: url('img/exit.png');
+                    /*background-image: url('img/exit.png');*/
                     }
                 .MenuAuth ul.buttons li.exit:hover{
                     background-color: #fff2f2;
                     }
                     .MenuAuth ul.buttons li.exit a:hover{
-                        background-image: url('img/exit-active.png');
+                        /*background-image: url('img/exit-active.png');*/
                         color: #ff1a1a;
                         }
                 .MenuAuth ul.buttons li.site a{
-                    background-image: url('img/arrow.png');
+                    /*background-image: url('img/arrow.png');*/
                     }
                 .MenuAuth ul.buttons li.site a:hover{
-                    background-image: url('img/arrow-active.png');
+                    /*background-image: url('img/arrow-active.png');*/
                     color: #1a8cff;
                     }
+    .MenuAuth__icon{
+        margin-bottom: -2px;
+    }

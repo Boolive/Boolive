@@ -57,11 +57,11 @@
             height: 32px;
             padding: 0;
             margin: 0;
-            z-index: 110;
+            z-index: 100;
             white-space: nowrap;
             text-align: right;
             vertical-align: top;
-        }
+            }
     .Admin .bottom{
         position: fixed;
         left: 0;
@@ -72,7 +72,7 @@
         border-top: 1px solid #ccc;
         padding: 0 180px;
         box-shadow: inset 0px 1px 0px 0px #E5E5E5, inset 0px 3px 3px -2px #E5E5E5;
-    }
+        }
     .Admin .window{
         /*background-color: #ffffff;*/
         border-top: 0px solid #CCC;
@@ -87,4 +87,4 @@
     .Admin .window:first-child{
         border: none;
         box-shadow: none;
-    }
+        }
