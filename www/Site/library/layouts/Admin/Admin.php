@@ -30,12 +30,6 @@ function startRule()
         parent::startInitChild($input);
         // По URL определяем объект и номер страницы
         $uri = $this->_input['REQUEST']['path'];
-        if (preg_match('|^(.*)/page-([0-9]+)$|u', $uri, $match)){
-            $uri = $match[1];
-            $this->_input_child['REQUEST']['page'] = $match[2];
-        }else{
-            $this->_input_child['REQUEST']['page'] = 1;
-        }
         //удаление "/admin"
         $uri = mb_substr($uri, 6);
         if (preg_match('/^\/[a-z]+:\/\//ui', $uri)){

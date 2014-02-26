@@ -165,6 +165,47 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 11
+        },
+        "PageNavigation": {
+            "value": "PageNavigation.tpl",
+            "value_type": 3,
+            "proto": "/library/menus/PageNavigation",
+            "is_property": true,
+            "order": 12,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Постраничная навигация",
+                    "proto": "/library/menus/PageNavigation/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "is_default_value": true,
+                    "value": "Отображает номера страниц в виде ссылок",
+                    "proto": "/library/menus/PageNavigation/description",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 2
+                },
+                "res": {
+                    "is_default_value": true,
+                    "value": "",
+                    "proto": "/library/menus/PageNavigation/res",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
+                },
+                "cache": {
+                    "is_default_value": true,
+                    "value": 0,
+                    "proto": "/library/menus/PageNavigation/cache",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4
+                }
+            }
         }
     }
 }

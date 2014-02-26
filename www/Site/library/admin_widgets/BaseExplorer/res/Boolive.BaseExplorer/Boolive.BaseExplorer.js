@@ -226,9 +226,11 @@
                     reload = reload || (this.element.find('[data-o="'+uri+'"]').size()==0);
                 }
                 if (reload){
+                    var s = self.callParents('getState');
                     this.reload({
                             object: this.options.object,
-                            select: self.callParents('getState').select
+                            select: s.select,
+                            page: s.page
                         }, {url:'/', success: function(){
                         self.init_sortable();
                     }});
@@ -238,7 +240,8 @@
 
         call_changeFilter: function(caller){
             var self = this;
-            this.reload({object: this.options.object, select: self.callParents('getState').select}, {
+            var s = self.callParents('getState');
+            this.reload({object: this.options.object, select: s.select}, {
                     success: function(){
                         self.afterReload();
                     },

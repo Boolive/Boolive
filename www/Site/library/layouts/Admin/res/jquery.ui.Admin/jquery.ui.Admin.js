@@ -27,6 +27,7 @@
         // Запоминание фида и типа выборки для объектов
         _remember_select: null,
         _remember_view: null,
+        _remember_page: null,
 
         _create: function() {
 			$.boolive.Widget.prototype._create.call(this);
@@ -98,6 +99,11 @@
                 //this._state.select = uri_args.object;
                 this._state.selected = [uri_args.object];
             }
+            if (typeof uri_args.page === 'string'){
+                this._state.page = uri_args.page;
+            }else{
+                this._state.page = 1;
+            }
             if (typeof uri_args.select === 'string'){
                 this._state.select = uri_args.select;
             }else{
@@ -110,9 +116,11 @@
             }
             this._remember_select = {};
             this._remember_view = {};
+            this._remember_page = {};
             if (/^views\//.test(this._state.view_name)){
                 this._remember_select[this._state.object] = this._state.select;
                 this._remember_view[this._state.object+'&'+this._state.select] = this._state.view_name;
+                this._remember_page[this._state.object+'&'+this._state.select] = this._state.page;
             }
             this._state.window = this._window_current.attr('id');
             this._state.history_o = 0; // начальный индекс истории текущего окна (необходимо для сброса истории браузера при закрытии окна)
@@ -300,12 +308,9 @@
             var object_str1 = this._state.object;
             // Смена выбора (что об объекте показывать)
             if ('select' in state){
-//                this._state.select = state.select;
                 this._remember_select[object_str1] = state.select;
-//                change['select'] = true;
             }else
-            if ('object' in change && /*this._state.select != 'structure' && */!('view_name' in state)){
-
+            if ('object' in change && !('view_name' in state)){
                 if (object_str1 in this._remember_select){
                     state.select = this._remember_select[object_str1];
                 }else{
@@ -337,6 +342,24 @@
                 if (/^views\//.test(this._state.view_name)){
                     this._remember_view[object_str] = this._state.view_name;
                 }
+            }
+
+
+            // Смена страницы
+            var object_str2 = this._state.object+'&'+this._state.select;
+            if ('page' in state){
+                this._remember_page[object_str2] = state.page;
+            }else
+            if ('object' in change || 'select' in change){
+                if (object_str2 in this._remember_page){
+                    state.page = this._remember_page[object_str2];
+                }else{
+                    state.page = 1;
+                }
+            }
+            if ('page' in state && state.page != this._state.page){
+                change['page'] = true;
+                this._state.page = state.page;
             }
 
             if (!$.isEmptyObject(change)){
@@ -414,6 +437,7 @@
                                 object: settings.data.object ? settings.data.object : '',
                                 view_name: settings.data.view_name ? settings.data.view_name : null,
                                 select: settings.data.select ? settings.data.select : 'structure',
+                                page: settings.data.page ? settings.data.page : 1,
                                 window: id,
                                 history_o: self._state.history_i,
                                 history_i: self._state.history_i+1
@@ -483,7 +507,7 @@
          * @private
          */
         refresh_state: function(all){
-            this.callChildren('setState', [this._state, {object: true, selected: true, view_name: true, select: true}], undefined, all);
+            this.callChildren('setState', [this._state, {object: true, selected: true, view_name: true, select: true, page: true}], undefined, all);
         },
 
         /**
@@ -518,6 +542,9 @@
             }
             if (state.select !== 'structure'){
                 uri = uri + '&select=' + state.select;
+            }
+            if (state.page > 1){
+                uri = uri + '&page=' + state.page;
             }
             return uri;
         },

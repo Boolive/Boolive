@@ -17,7 +17,7 @@ class PageNavigation extends Widget
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(), // объект, который отображается постранично
                 'page' => Rule::int()->default(1)->required(),
-                'page_count' => Rule::int()->default(1)->required()
+                'page_count' => Rule::int()->more(1)->required()
             ))
         ));
     }

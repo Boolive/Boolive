@@ -177,6 +177,15 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 11
+        },
+        "PageNavigation": {
+            "is_default_value": true,
+            "value": "PageNavigation.tpl",
+            "value_type": 3,
+            "proto": "/library/admin_widgets/BaseExplorer/PageNavigation",
+            "is_link": true,
+            "is_property": true,
+            "order": 12
         }
     }
 }

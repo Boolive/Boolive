@@ -57,4 +57,5 @@
             </div>
         <?php } ?>
     </div>
+    <?=$v->PageNavigation->string();?>
 </div>

@@ -4,6 +4,7 @@ Boolive Change Log
 Version 2.0.rc
 ----------------------------
 - new Ace editor is added to the library (VladimirShestakov)
+- new #77 Added page navigation in the admin panel (VladimirShestakov)
 - new #111 LogicEditor is added to the admin panel (VladimirShestakov)
 - new #157 Fast deleting bookmarks (VladimirShestakov)
 - new #161 Added the sign "property" for objects (VladimirShestakov)

@@ -19,6 +19,7 @@ class BaseExplorer extends AutoWidgetList2
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::entity()->required(),
                 'select' => Rule::string()->default('structure')->required(),
+                'page' => Rule::string()->default(1)->required(),
 //                'filter' => Rule::arrays(Rule::string()),
                 'call' => Rule::string(),
                 // Аргументы вызываемых методов (call)
@@ -168,9 +169,11 @@ class BaseExplorer extends AutoWidgetList2
         // Что выбирать
         $select = $this->_input['REQUEST']['select'];
         if ($select == 'property'){
+            $cond['select'] = 'children';
             $cond['where'][] = array('attr', 'is_property', '=', 1);
         }else
         if ($select == 'structure' || $select == null){
+            $cond['select'] = 'children';
             $cond['where'][] = array('attr', 'is_property', '=', 0);
         }else{
             if (in_array($select, array('protos', 'heirs', 'parents'))){
@@ -183,8 +186,16 @@ class BaseExplorer extends AutoWidgetList2
                     $cond['depth'] = array(1,Entity::MAX_DEPTH);
                     $cond['order'] = array('parent_cnt', 'asc');
                 }
+            }else{
+                $cond['select'] = 'children';
             }
         }
+        $count_per_page = 15;
+        $this->_input_child['REQUEST']['page_count'] = ceil($this->_input['REQUEST']['object']->find(array('select'=>array('count', $cond['select']), 'where'=>$cond['where']))/$count_per_page);
+        $cond['limit'] = array(
+            ($this->_input['REQUEST']['page']-1) * $count_per_page,
+            $count_per_page
+        );
         $cond['group'] = true;
         $cond['key'] = false;
         return parent::getList($cond);
