@@ -32,6 +32,13 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 23
+        },
+        "comments": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_samples/Page/comments",
+            "is_property": true,
+            "order": 24
         }
     }
 }

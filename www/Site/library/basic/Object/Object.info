@@ -5,6 +5,7 @@
         "title": {
             "value": "Объект",
             "proto": "/library/basic/String",
+            "is_mandatory": true,
             "is_property": true,
             "order": 4,
             "children": {

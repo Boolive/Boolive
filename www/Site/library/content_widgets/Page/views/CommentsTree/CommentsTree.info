@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "CommentsTree.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/CommentsTree",
+    "is_link": true,
+    "order": 8
+}

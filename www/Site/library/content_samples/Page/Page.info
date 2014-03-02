@@ -88,6 +88,21 @@
                     "order": 1
                 }
             }
+        },
+        "comments": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/Object",
+            "is_property": true,
+            "order": 10,
+            "children": {
+                "title": {
+                    "value": "Комментарии",
+                    "proto": "/library/basic/Object/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

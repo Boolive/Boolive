@@ -1253,6 +1253,7 @@ class Entity implements ITrace
             if (!$this->isExist()){
                 if (($p = $this->proto()) && $p->{$name}->isExist()){
                     $obj = $p->{$name}->birth($this);
+                    $obj->isProperty($p->{$name}->isProperty());
                     $obj->isDraft(false);
                 }else{
                     $obj = new Entity();

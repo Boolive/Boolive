@@ -84,7 +84,7 @@ class item_view extends AutoWidgetList2
     function getList($cond = array())
     {
         $cond['select'] = 'tree';
-        $cond['depth'] = array(1, 1); // выбрать из хранилища всё дерево меню
+        $cond['depth'] = array(1, Entity::MAX_DEPTH); // выбрать из хранилища всё дерево меню
         $cond['where'] = array('all', array(
                 array('attr', 'is_hidden', '=', 0),
                 array('attr', 'is_draft', '=', 0),
