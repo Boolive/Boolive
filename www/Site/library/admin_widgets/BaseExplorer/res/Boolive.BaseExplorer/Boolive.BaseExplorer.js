@@ -82,7 +82,8 @@
                 }
             })
             .on('change-attrib:name', function(value){
-                self.element.find('.BaseExplorer__attribs-uri-name').val(value);
+                var inp = self.element.find('.BaseExplorer__attribs-uri-name');
+                if (inp.val() !== value) inp.val(value);
             })
             .on('change-attrib', function(change){
                 if (change){
