@@ -205,17 +205,20 @@ class Input extends Values
      * @param int $shift С какого парметра пути текущего URL делать замену на $path
      * @param array $args Массив аргументов.
      * @param bool $append Добавлять ли текущие аргументы к новым?
-     * @param bool $host Добавлять ли адрес сайта (http://site.ru)
-     * @param string $shema Схема url. Указывается, если указан $host
+     * @param bool|string $host Добавлять ли адрес сайта. Если true, то добавляет адрес текущего сайта. Можно строкой указать другой сайт
+     * @param string $schema Схема url. Указывается, если указан $host
      * @return string
      */
-    static function url($path = null, $shift = 0, $args = null, $append = false, $host = false, $shema = 'http://')
+    static function url($path = null, $shift = 0, $args = array(), $append = false, $host = false, $schema = 'http://')
     {
         if (is_string($path)){
-			$path = explode('/',$path);
+			$path = explode('/',trim($path,'/'));
 		}
         if (!isset($path)) $path = array();
         $url = '';
+        if (isset($path[0]) && $path[0] == 'contents'){
+            array_shift($path);
+        }
         // Параметры
         // Текущие параметры (текщего адреса) заменяем на указанные в $params
         $cur_path = self::PATH()->getValue();
@@ -248,16 +251,16 @@ class Input extends Values
             }
         }
         if (isset($args['path'])) unset($args['path']);
-		if (is_array($args)){
-			foreach ($args as $name => $value){
-				$url .= '&'.$name.'='.$value;
-			}
-		}else
-        if (strlen($url) > 0){
+		if (strlen($url) > 0){
 			$url = trim($url,'//');
 		}
+        if (is_array($args)){
+			foreach ($args as $name => $value){
+				$url .= '&'.$name.($value!==''?'='.$value:'');
+			}
+		}
 		if ($host){
-			return $shema.HTTP_HOST.DIR_WEB.$url;
+			return $schema.($host===true?$schema.HTTP_HOST.DIR_WEB:$host).$url;
 		}else{
 			return DIR_WEB.$url;
 		}

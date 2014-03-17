@@ -30,7 +30,7 @@ class FormHandler extends View
         if ($redirect = $this->_commands->get('redirect')){
             header('Location: '.$redirect[0][0]);
         }else{
-            header('Location: '.Input::url(null,0,array()));//текущий адрес без параметров
+            header('Location: '.Input::url(null,0,null));//текущий адрес
         }
         if ($out != false){
             echo $out;
