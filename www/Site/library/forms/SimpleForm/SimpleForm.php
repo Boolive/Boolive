@@ -68,8 +68,8 @@ class SimpleForm extends Widget
     /**
      * Отображение формы
      * @param array $v Значения, подготавливаемые для вставки в шаблоне
-     * @param $commands Командв для родительских и подчиненных видов
-     * @param $input Отфильтрованные данные по startRule()
+     * @param \Boolive\commands\Commands $commands Командв для родительских и подчиненных видов
+     * @param array $input Отфильтрованные данные по startRule()
      * @param array $session Данные и ошибки формы от предыдущей отправки.
      * @return string
      */

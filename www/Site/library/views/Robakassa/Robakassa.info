@@ -1,0 +1,114 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 30,
+    "children": {
+        "title": {
+            "value": "Robokassa",
+            "proto": "/library/views/View/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Интерфейс online платежей через robokassa.ru",
+            "value_type": 2,
+            "proto": "/library/views/View/description",
+            "is_property": true,
+            "order": 2
+        },
+        "login": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Идентификатор магазина",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "pass1": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Пароль #1",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "pass2": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "value": "Пароль #2",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "url": {
+            "value": "http://test.robokassa.ru/Index.aspx",
+            "proto": "/library/basic/Url",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Адрес сервера",
+                    "proto": "/library/basic/Url/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Абсолютный URL, на который отправляется пользователь для оплаты. Робокасса предоставляет тестовый сервер и реальный, их адреса уточните в документации робокассы",
+                    "value_type": 2,
+                    "proto": "/library/basic/Url/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "path_rule": {
+            "value": "/^\\/robokassa&/",
+            "proto": "/library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Правило на URL",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "По какому адресу будет работать интерфейс робокассы? Соответсвующий адрес нужно указывать в панели управления магазина робокассы - ResulUrl, SuccessUrl, FailUrl",
+                    "value_type": 2,
+                    "proto": "/library/basic/String/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}
