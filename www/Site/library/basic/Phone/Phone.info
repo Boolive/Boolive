@@ -1,0 +1,21 @@
+{
+    "value": "",
+    "proto": "/library/basic/String",
+    "is_default_class": false,
+    "order": 31,
+    "children": {
+        "title": {
+            "value": "Телефон",
+            "proto": "/library/basic/String/title",
+            "is_property": true,
+            "order": 2
+        },
+        "description": {
+            "value": "Номер телефона. Примеры: +79997776655, (383)325-77-77, 86543",
+            "value_type": 2,
+            "proto": "/library/basic/String/description",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}
