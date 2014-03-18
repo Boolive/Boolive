@@ -22,6 +22,6 @@ class ViewViews extends View
 
     function work()
     {
-        return $this->_input['REQUEST']['object']->start($this->_commands, $this->_input_child);
+        return $this->_input['REQUEST']['object']->linked()->start($this->_commands, $this->_input_child);
     }
 }
