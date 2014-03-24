@@ -171,18 +171,11 @@ namespace Boolive
         {
             $path = str_replace('\\', '/', $class_name);
             $names = explode('/', $path, 2);
-            if ($names[0] != 'Site' && $names[0] != 'Remote') {
-                $path = str_replace('_','/',$path);
+            if ($names[0] != 'Site' && $names[0] != 'Remote' && $names[0] != 'Boolive') {
+                return DIR_SERVER.'Vendor/'.str_replace('_','/',$path).'.php';
+            }else{
+                return DIR_SERVER.$path.'.php';
             }
-            return DIR_SERVER.$path.'.php';
-//            if ($names[0] == 'Boolive') {
-//                return DIR_SERVER.$path.'.php';
-//            }else
-//            if ($names[0] == 'Remote'){
-//                return  DIR_SERVER_REMOTE.$path.'.php';
-//            }else{
-//                return DIR_SERVER_PROJECT.$path.'.php';
-//            }
         }
 
         /**
