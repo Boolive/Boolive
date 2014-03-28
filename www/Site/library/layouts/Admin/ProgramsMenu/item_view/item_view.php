@@ -47,7 +47,7 @@ class item_view extends AutoWidgetList2
             // Ссылка
             $real = $obj->linked();
             $v['title'] = $real->title->value();
-            $v['icon'] = $real->icon->file();
+            $v['icon'] = $real->icon->inner()->file();
             // Активность пункта
 //            $active = $this->_input['REQUEST']['active'];
 //            if ($real->eq($active)){
