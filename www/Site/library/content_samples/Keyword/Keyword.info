@@ -10,6 +10,36 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 1
+        },
+        "description": {
+            "value": "Простейший объект",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "freq": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/basic/Number",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Частотность",
+                    "proto": "/library/basic/Number/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Частота запроса в поисковых системах",
+                    "value_type": 2,
+                    "proto": "/library/basic/Number/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
         }
     }
 }
