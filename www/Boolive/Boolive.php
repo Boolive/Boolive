@@ -20,9 +20,8 @@ namespace Boolive
         static private $activated;
         /** @var array Список подключенных классов */
         static private $included;
-        /** @var Текущий уровень фиксации ошибок в настройках PHP */
+        /** @var int Текущий уровень фиксации ошибок в настройках PHP */
         static private $error_reporting;
-
         /**
          * Активация ядра, если вызван без параметров
          * Активация указанного в аргументах класса (модуля).
@@ -104,6 +103,20 @@ namespace Boolive
             mb_http_output('UTF-8');
         }
 
+        static function start()
+        {
+            $input = \Boolive\input\Input::getSource();
+            if (isset($input['ARG']['tasks'])){
+                // Обработка задач
+                \Boolive\tasks\Tasks::execute();
+            }else{
+                // Обработка запросов клиента. Запускается корневой объекта сайта
+                echo \Boolive\data\Data::read()->start(new \Boolive\commands\Commands(), $input);
+                // Фоновый запуск обработчика задач
+                \Boolive\tasks\Tasks::executeBackground();
+            }
+        }
+
         /**
          * Обработчик исключений
          * Вызывается автоматически при исключениях и ошибках
@@ -115,7 +128,8 @@ namespace Boolive
             // Если обработчики событий не вернут положительный результат, то
             // обрабатываем исключение по умолчанию
             if (!\Boolive\events\Events::trigger('Boolive::error', $e)->result){
-                error_log(get_class($e).' ['.$e->getCode().']: '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
+                trace_log(get_class($e).' ['.$e->getCode().']: '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
+                //trace_log()
                 if (isset($e->xdebug_message)){
                     echo '<table cellspacing="0" cellpadding="1" border="1" dir="ltr">'.$e->xdebug_message.'</table>';
                 }else{
@@ -362,5 +376,10 @@ namespace {
     function trace($var = null, $key = null)
     {
         return \Boolive\develop\Trace::groups('trace')->group($key)->set($var)->out();
+    }
+
+    function trace_log($var = null, $key = null)
+    {
+        \Boolive\develop\Trace::groups('trace')->group($key)->set($var)->log();
     }
 }
