@@ -13,6 +13,8 @@
  */
 namespace Boolive\develop;
 
+use Boolive\file\File;
+
 class Trace
 {
     /** @var \Boolive\develop\Trace Список всех объектов трассировки */
@@ -79,7 +81,8 @@ class Trace
      */
     function log()
     {
-        error_log(self::Format($this));
+        //error_log(self::Format($this, $trace_buf = array(), '  ', false));
+        File::create(date('Y.m.d G:i.s').' '.self::Format($this, $trace_buf = array(), '  ', false)."\r\n", DIR_SERVER_TEMP.'trace.log', true);
         return $this;
     }
 
@@ -153,7 +156,7 @@ class Trace
         $style='';
         if (is_string($var)){
             $style.='color:#008100;';
-            $var = '\''.htmlspecialchars($var, ENT_COMPAT, 'UTF-8').'\'';
+            $var = '\''.($html ? htmlspecialchars($var, ENT_COMPAT, 'UTF-8') : $var).'\'';
         }else
         if (is_numeric($var)||is_nan($var)){
             $style.='color:#FF0000;';
@@ -165,7 +168,7 @@ class Trace
         }else{
             return $var;
         }
-        return '<span style="'.$style.'">'.$var.'</span>';
+        return $html ? '<span style="'.$style.'">'.$var.'</span>' : $var;
     }
 
     /**
@@ -174,6 +177,7 @@ class Trace
      * @param mixed $var Значение для форматировния
      * @param array $trace_buf Буфер вывода (результата). Используется в рекурсии для предотвращения обратных ссылок
      * @param string $pfx Префикс для строки вывода. Для имитации иерархии
+     * @param bool $html Форматировать в html?
      * @return string
      */
     static function format($var, &$trace_buf = array(), $pfx = '  ', $html = true)
