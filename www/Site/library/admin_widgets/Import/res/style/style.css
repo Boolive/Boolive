@@ -1,0 +1,49 @@
+.Import{
+
+}
+.Import__form{
+    margin-top: 30px;
+}
+.Import__buttons{
+    padding: 30px 0;
+}
+.Import__h4{
+    font-weight: normal;
+    margin-top: 0;
+    color: #444;
+}
+.Import__clear{
+    font-size: 12px;
+}
+.Import__clear:hover{
+    color: #0080ff;
+}
+.Import__list{
+    margin: 0;
+    padding-left: 30px;
+}
+.Import__item{
+    font-size: 13px;
+}
+.Import__item-title{
+
+}
+.Import__item-status{
+    margin-left: 5px
+}
+.Import__item-status_0{
+    color: #0081cc;
+}
+.Import__item-status_1{
+    color: #ccb821;
+}
+.Import__item-status_2{
+    color: #f00
+}
+.Import__item-status_3{
+    color: #83b31d
+}
+
+
+
+

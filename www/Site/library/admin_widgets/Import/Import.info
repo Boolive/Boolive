@@ -1,0 +1,46 @@
+{
+    "value": "Import.tpl",
+    "value_type": 3,
+    "proto": "/library/views/Widget",
+    "is_default_class": false,
+    "order": 52,
+    "children": {
+        "title": {
+            "value": "Импорт",
+            "proto": "/library/views/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/Widget/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/views/Widget/icon",
+            "is_property": true,
+            "order": 3
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/views/Widget/object_rule",
+            "is_property": true,
+            "order": 4
+        },
+        "description": {
+            "value": "Импорт объектов из файла",
+            "value_type": 2,
+            "proto": "/library/views/Widget/description",
+            "is_property": true,
+            "order": 5
+        }
+    }
+}
