@@ -2,7 +2,7 @@
     $current = $v['current']->int();
     $count = $v['count']->int();
     $uri = ltrim($v['uri']->string(),'/');
-    $show = 3;
+    $show = $v['show']->int();
     // С какой страницы начинать
     $page_first = max(1, $current - $show);
 	if ($page_first <= $show) $page_first = 1;
@@ -12,7 +12,7 @@
 ?>
 <div class="PageNavigation" data-p="PageNavigation">
     <ul class="cf">
-        <li class="pageinfo">Страницы 1 до <?php echo $count?></li>
+        <li class="pageinfo">Страницы с 1 до <?php echo $count?></li>
         <?php
         if ($current > 1) echo '<li><a href="'.$uri.'&page='.($current-1).'" data-page="'.($current-1).'">←</a></li>';
 
