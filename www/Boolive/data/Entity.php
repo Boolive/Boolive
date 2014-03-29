@@ -150,7 +150,7 @@ class Entity implements ITrace
     {
         return Rule::arrays(array(
             'id'           => Rule::uri(), // Сокращенный или полный URI
-            'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(50)->required(), // Имя объекта без символов /@:#\
+            'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(100)->required(), // Имя объекта без символов /@:#\
             'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
             'date'		   => Rule::int(), // Дата создания в секундах
             'parent'       => Rule::uri(), // URI родителя
@@ -214,6 +214,7 @@ class Entity implements ITrace
         if (!isset($new_name) && $choose_unique) $new_name = $this->_attribs['name'];
         // Смена имени
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
+            $new_name = preg_replace('/\s/ui','_',$new_name);
             if (!isset($this->_current_name)) $this->_current_name = $this->_attribs['name'];
             //if ($choose_unique){
                 $this->_autoname = $new_name;
@@ -1250,7 +1251,15 @@ class Entity implements ITrace
         if (isset($this->_children[$name])){
             return $this->_children[$name];
         }else{
-            if (!$this->isExist()){
+            if ($this->isExist()){
+                $obj = Data::read(array(
+                    'from' => array($this, $name),
+                    'comment' => 'read property by name'
+                ));
+            }else{
+                $obj = null;
+            }
+            if (!$this->isExist() || (isset($obj) && !$obj->isExist())){
                 if (($p = $this->proto()) && $p->{$name}->isExist()){
                     $obj = $p->{$name}->birth($this);
                     $obj->isProperty($p->{$name}->isProperty());
@@ -1260,11 +1269,6 @@ class Entity implements ITrace
                 }
                 // Не подбирать уникальное имя, так как при сохранении родителя он проиндексируется и его свойства нужно будет обновить текущим, а не создавать новое
                 $obj->_autoname = false;
-            }else{
-                $obj = Data::read(array(
-                    'from' => array($this, $name),
-                    'comment' => 'read property by name'
-                ));
             }
             if (!$obj instanceof Entity){
                 throw new Exception($this->uri().'/'.$name);
@@ -1272,8 +1276,6 @@ class Entity implements ITrace
             if (!$obj->isExist()){
                 $obj->_attribs['name'] = $name;
                 $obj->_attribs['uri'] = $this->uri().'/'.$name;
-            }else{
-
             }
             $this->__set($name, $obj);
             if (!$obj->isExist()){
@@ -1388,6 +1390,9 @@ class Entity implements ITrace
     function find($cond = array(), $load = false, $index = true, $access = true)
     {
         $cond = Data::normalizeCond($cond, array('select' => array('children'), 'depth' => array(1,1)));
+        if (isset($cond['from'])){
+            $result = Data::read($cond, $access, $index);
+        }else
         if ($this->isExist()){
             $cond['from'] = $this;//->id();
             $result = Data::read($cond, $access, $index);
@@ -1406,6 +1411,7 @@ class Entity implements ITrace
         }else{
             return array();
         }
+
         // Установка выбранных подчиенных в свойства объекта
         if ($load && (($cond['select'][0] == 'children' && $cond['depth'][1] == 1) || $cond['select'][0] == 'tree')
             && empty($cond['select'][1]) && $cond['depth'][0] == 1)
@@ -1837,7 +1843,7 @@ class Entity implements ITrace
     function in($parent)
     {
         if ($this->eq($parent)) return true;
-        if ($parent->_attribs['uri'] == '' && !$parent->isExist()) return false;
+        if ($parent instanceof Entity && $parent->_attribs['uri'] == '' && !$parent->isExist()) return false;
         return $this->childOf($parent);
     }
 

@@ -6,8 +6,7 @@
  */
 namespace Site\library\views\Site;
 
-use Site\library\views\View\View,
-    Boolive\values\Rule;
+use Site\library\views\View\View;
 
 class Site extends View
 {
@@ -18,20 +17,10 @@ class Site extends View
         return $rule;
     }
 
-    function startRule()
-    {
-        return Rule::arrays(array(
-            'REQUEST' => Rule::arrays(array(
-                'path' => Rule::string(),
-            ))
-        ));
-    }
-
     function name($new_name = null, $choose_unique = false)
     {
         return parent::name($this->uri()==='/' ? null: $new_name, false);
     }
-
 
     function work()
     {

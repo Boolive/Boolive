@@ -7,6 +7,7 @@
 namespace Site\library\admin_widgets\Editor\views\KeywordsField;
 
 use Boolive\data\Data;
+use Boolive\data\Entity;
 use Boolive\functions\F;
 use Site\library\views\AutoWidgetList2\AutoWidgetList2,
     Boolive\values\Rule;
@@ -84,7 +85,7 @@ class KeywordsField extends AutoWidgetList2
         $obj = $this->_input['REQUEST']['object'];
         $key_title = $this->_input['REQUEST']['Keyword']['value'];
         $key_name = mb_strtolower(F::translit($key_title));
-        $keywords = Data::read('/contents/Keywords');
+        $keywords = Data::read('/contents/keywords');
         $key = $keywords->{$key_name};
         // Создание слова в общей коллекции ключевых слов
         if (!$key->isExist()){
@@ -144,16 +145,18 @@ class KeywordsField extends AutoWidgetList2
      */
     protected function callFind()
     {
-        $keywords = Data::read('/contents/Keywords');
+        $keywords = Data::read('/contents/keywords');
         $result = $keywords->find(array(
             'where' => array(
-                array("attr", "name", "like", $this->_input['REQUEST']['request'] . "%"),
-                array('attr', 'is_hidden', '<=', $keywords->_attribs['is_hidden'])
+                array('attr', 'is_property', '=', 0),
+                array('child','title',array(
+                    array("attr", "value", "like", $this->_input['REQUEST']['request']."%"),
+                ))
             )
         ));
         $suggetions = array();
         foreach ($result as $item){
-            $suggetions[] = $item->name();
+            $suggetions[] = $item->title->value();
         }
         return $suggetions;
     }

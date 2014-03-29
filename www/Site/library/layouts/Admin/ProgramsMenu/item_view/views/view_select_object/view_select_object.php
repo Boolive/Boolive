@@ -36,7 +36,7 @@ class view_select_object extends Widget
             $v['checked'] = $real->state();
             $v['title'] = $real->title->value();
             $v['description'] = $real->description->value();
-            $v['icon'] = $real->icon->file();
+            $v['icon'] = $real->icon->inner()->file();
             $v['show-item'] = true;
 
             $shorts = $real->short_select->find(array('where'=>

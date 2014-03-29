@@ -34,6 +34,27 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 5
+        },
+        "show_cnt": {
+            "value": 1000,
+            "proto": "/library/basic/Number",
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Сколько страниц показывать",
+                    "proto": "/library/basic/Number/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Количество страниц отображаемых в меню",
+                    "value_type": 2,
+                    "proto": "/library/basic/Number/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
         }
     }
 }

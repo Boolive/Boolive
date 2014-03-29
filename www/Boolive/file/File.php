@@ -21,9 +21,10 @@ class File
      * Создание файла
      * @param string $content Содержимое файла
      * @param string $to Путь к создаваемому файлу
+     * @param bool $append Добавлять в файл или пересоздавать его. По умолчанию пересоздаётся.
      * @return bool Признак, создан файл или нет
      */
-    static function create($content, $to)
+    static function create($content, $to, $append = false)
     {
         $to = self::makeVirtualDir($to);
         // Если папки нет, то создаем её
@@ -33,7 +34,7 @@ class File
         }
         $result = false;
         // Создание файла
-        if (($f = fopen($to, "w"))) {
+        if (($f = fopen($to, $append?'a':'w'))) {
             stream_set_write_buffer($f, 20);
             fwrite($f, $content);
             fclose($f);

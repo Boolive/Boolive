@@ -29,6 +29,7 @@ class PageNavigation extends Widget
         if (substr($v['uri'],0,10)=='/contents/') $v['uri'] = mb_substr($v['uri'],9);
         $v['count'] = $this->_input['REQUEST']['page_count'];
         $v['current'] = min($v['count'], $this->_input['REQUEST']['page']);
+        $v['show'] = $this->show_cnt->inner()->value();
         return parent::show($v, $commands, $input);
     }
 }

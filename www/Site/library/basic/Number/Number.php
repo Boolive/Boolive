@@ -20,4 +20,10 @@ class Number extends Entity
         $rule->arrays[0]['value'] = Rule::double();
         return $rule;
     }
+
+    function value($new_value = null)
+    {
+        $value = parent::value($new_value);
+        return doubleval($value);
+    }
 }

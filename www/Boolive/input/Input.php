@@ -76,7 +76,12 @@ class Input extends Values
             $values['REQUEST'] = array_replace_recursive($values['REQUEST'], $_POST);
         }
         // Аргументы из консоли (режим CLI)
-        if (empty($values['REQUEST']) && isset($_SERVER['argv'])) $values['REQUEST'] = $_SERVER['argv'];
+        if (isset($_SERVER['argv'])){
+            $values['REQUEST']['method'] = 'CLI';
+            $values['SERVER']['argv'] = $_SERVER['argv'];
+            $values['SERVER']['argc'] = $_SERVER['argc'];
+        }
+        $values['ARG'] = array_flip($values['SERVER']['argv']);
         // Метод запроса
         if (isset($values['SERVER']['REQUEST_METHOD']) && !isset($values['REQUEST']['method'])){
             $values['REQUEST']['method'] = $values['SERVER']['REQUEST_METHOD'];
@@ -149,7 +154,7 @@ class Input extends Values
     }
 
     /**
-     * Выбор исходных неотфильтрованных всех данных
+     * Выбор всех входящих данных без фильтрации
      * @return mixed
      */
     static function getSource()

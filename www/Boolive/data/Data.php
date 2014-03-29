@@ -839,7 +839,7 @@ class Data
     }
 
     /**
-     * Сравнене условий поиска в формате массива
+     * Сравнение условий поиска в формате массива
      * @param array $cond1 Первое условие
      * @param array $cond2 Второе условие
      * @param array $ignore Ключи условий, которые игнорировать при сравнении
@@ -852,6 +852,11 @@ class Data
             unset($cond2[$key]);
         }
         return json_encode($cond1) == json_encode($cond2);
+    }
+
+    static function unionCond($cond1, $cond2)
+    {
+
     }
 
     /**
@@ -927,7 +932,7 @@ class Data
 
     /**
      * Взвращает экземпляр хранилища
-     * @param $uri Путь на объект, для которого определяется хранилище
+     * @param string $uri Путь на объект, для которого определяется хранилище
      * @return \Boolive\data\stores\MySQLStore|null Экземпляр хранилища, если имеется или null, если нет
      */
     static function getStore($uri)

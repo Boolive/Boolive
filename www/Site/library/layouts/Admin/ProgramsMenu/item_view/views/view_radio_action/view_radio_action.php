@@ -28,7 +28,7 @@ class view_radio_action extends Widget
             /** @var RadioAction $obj */
             $obj = $this->_input['REQUEST']['program']->linked();
             $v['title'] = $obj->title->value();
-            $v['icon'] = $obj->icon->file();
+            $v['icon'] = $obj->icon->inner()->file();
             $v['list'] = $obj->radioItems();
             foreach ($v['list'] as $item){
                 if ($item['active']){
