@@ -11,6 +11,9 @@ define('IS_INSTALL', false);
 /** @const Версия системы Boolive */
 define('VERSION', '2.0.beta.2014.02.10');
 
+/** @const Путь до php интерпретатора */
+define('PHP', 'C:/SERVER/XAMPP/php/php.exe');
+
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
 
@@ -19,6 +22,9 @@ define('DIR_WEB', get_web_dir());
 
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */
 define('DIR_SERVER', DOCUMENT_ROOT.DIR_WEB);
+
+/** @const string Директория временных файлов на сервере. Слеш в конце обязателен! */
+define('DIR_SERVER_TEMP', DIR_SERVER.'_temp_/');
 
 // Адрес сайта, например: boolive.ru. Значение по умолчанию для CLI режима
 define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_HOST']);

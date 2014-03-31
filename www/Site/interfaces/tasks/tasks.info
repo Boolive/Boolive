@@ -1,7 +1,7 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/library/views/RESTful",
+    "proto": "/system/tasks",
     "is_link": true,
-    "order": 15
+    "order": 10
 }

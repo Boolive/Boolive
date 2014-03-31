@@ -3,7 +3,7 @@
     "value": "Html.tpl",
     "value_type": 3,
     "proto": "/library/views/Html",
-    "order": 14,
+    "order": 17,
     "children": {
         "title": {
             "is_default_value": true,
