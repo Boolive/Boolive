@@ -1,0 +1,58 @@
+{
+    "value": "0",
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 30,
+    "children": {
+        "title": {
+            "value": "Задача",
+            "proto": "/library/views/View/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Функции, выполняемые в фоновом режиме",
+            "value_type": 2,
+            "proto": "/library/views/View/description",
+            "is_property": true,
+            "order": 2
+        },
+        "percent": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/basic/Percent",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Процент выполнения",
+                    "proto": "/library/basic/Percent/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "report": {
+            "is_default_value": true,
+            "value": " ",
+            "value_type": 2,
+            "proto": "/library/basic/Text",
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Отчёт",
+                    "proto": "/library/basic/Text/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Отчёт об выполнении задачи. Обычно, информация об ошибках",
+                    "proto": "/library/basic/Text/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}
