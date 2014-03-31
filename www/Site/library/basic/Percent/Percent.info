@@ -1,0 +1,27 @@
+{
+    "is_default_value": true,
+    "value": 0,
+    "proto": "/library/basic/Number",
+    "order": 32,
+    "children": {
+        "title": {
+            "value": "Процент",
+            "proto": "/library/basic/Number/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Числовое значение",
+            "value_type": 2,
+            "proto": "/library/basic/Number/description",
+            "is_property": true,
+            "order": 2
+        },
+        "unit": {
+            "value": "%",
+            "proto": "/library/basic/Number/unit",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}
