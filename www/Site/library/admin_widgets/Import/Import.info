@@ -28,8 +28,7 @@
             "order": 3
         },
         "object_rule": {
-            "is_default_value": true,
-            "value": "",
+            "value": "in(/contents/keywords)",
             "value_type": 2,
             "proto": "/library/views/Widget/object_rule",
             "is_property": true,
@@ -41,6 +40,22 @@
             "proto": "/library/views/Widget/description",
             "is_property": true,
             "order": 5
+        },
+        "handlers": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/Object",
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Список обработчиков",
+                    "proto": "/library/basic/Object/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }

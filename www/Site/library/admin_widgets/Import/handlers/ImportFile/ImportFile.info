@@ -1,0 +1,72 @@
+{
+    "is_default_value": true,
+    "value": "0",
+    "proto": "/library/views/Task",
+    "is_default_class": false,
+    "is_draft": true,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Импорт файла",
+            "proto": "/library/views/Task/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Обрабатывает info файлы для любых объектов",
+            "value_type": 2,
+            "proto": "/library/views/Task/description",
+            "is_property": true,
+            "order": 2
+        },
+        "percent": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/Task/percent",
+            "is_property": true,
+            "order": 3
+        },
+        "report": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/views/Task/report",
+            "is_property": true,
+            "order": 4
+        },
+        "where": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/Object",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "value": "Куда импортировать",
+                    "proto": "/library/basic/Object/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "file": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/File",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Импортируемый файл",
+                    "proto": "/library/basic/File/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}
