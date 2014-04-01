@@ -6,9 +6,8 @@
  */
 namespace Site\library\admin_widgets\Import;
 
-use Boolive\file\File;
-use Boolive\functions\F;
-use Boolive\tasks\Tasks;
+use Boolive\data\Data;
+use Boolive\data\Entity;
 use Boolive\values\Rule;
 use Site\library\views\Widget\Widget;
 
@@ -45,30 +44,65 @@ class Import extends Widget
 
     function addTask($file, $object)
     {
-        $uniqname = uniqid().'_'.F::translit($file['name']);
-        File::upload($file['tmp_name'], DIR_SERVER_TEMP.'import/'.$uniqname);
-        return Tasks::add(1, $this->key().'::processTask', $object->key(), 'Импорт файла '.$file['name'], array(
-            'file'=>$uniqname,
-            'object'=>$object->key(),
-        ));
+        // @todo Найти подходящий эталон задачи импорта
+        $handlers = $this->handlers->inner()->find(array('where'=>array('attr','is_property','=',0)));
+        $find = false;
+        $i=-1;
+        $cnt=count($handlers);
+        $params = array(
+            'parent' => $object,
+            'file' => $file
+        );
+        while (!$find && ++$i<$cnt){
+            $find = $handlers[$i]->linked()->usageCheck($params);
+        }
+        if ($find){
+            /** @var Entity $proto */
+            $proto = $handlers[$i]->linked();
+            $tasks = Data::read('/system/tasks');
+            $task = $proto->birth($tasks, true);
+            $task->where->proto($object);
+            $task->file->file($file);
+            $task->save();
+            $task->isDraft(false);
+            $task->save(false, false);
+            return $task->id();
+        }
+        return false;
     }
 
     function getTasks($object)
     {
-        $list = Tasks::find($this->key().'::processTask', $object->key());
+        // Поиск задач прототипированных от InfoImport и со свойством where равным $object->key()
+        $tasks = Data::read(array(
+            'from' => '/system/tasks',
+            'select' => 'children',
+            'depth' => array(1,1),
+            'where' => array(
+                array('is','/library/admin_widgets/Import/handlers/ImportFile'),
+                array('child','where',array('is',$object->id()))
+            )
+        ));
         $have_process = false;
-        foreach ($list as $key => $item){
-            switch ($item['status']){
-                case Tasks::STATUS_WAIT: $list[$key]['status_msg'] = 'В очереди'; break;
-                case Tasks::STATUS_PROCESS: $list[$key]['status_msg'] = 'Выполняется'; break;
-                case Tasks::STATUS_ERROR: $list[$key]['status_msg'] = 'Ошибка'; break;
-                case Tasks::STATUS_SUCCESS: $list[$key]['status_msg'] = 'Выполнено'; break;
+        $list = array();
+        foreach ($tasks as $key => $item){
+            $list[$key] = array(
+                'title' => $item->title->value(),
+                'status' => $item->value(),
+                'status_msg' => ''
+            );
+            switch ($list[$key]['status']){
+                case 0: $list[$key]['status_msg'] = 'В очереди'; break;
+                case 1: $list[$key]['status_msg'] = 'Выполняется'; break;
+                case 2: $list[$key]['status_msg'] = 'Ошибка'; break;
+                case 3: $list[$key]['status_msg'] = 'Выполнено'; break;
             }
-            if ($item['report']) $list[$key]['status_msg'].=': '.$item['report'];
-            if ($item['status'] == Tasks::STATUS_PROCESS && $item['percent']>0){
-                $list[$key]['status_msg'].=' '.$item['percent'].'%';
+            $r = trim($item->report->value());
+            if ($r) $list[$key]['status_msg'].=': '.$r;
+            if ($list[$key]['status'] == 1 && $item->percent->value() > 0){
+                $list[$key]['status_msg'].=' '.intval($item->percent->value()).'%';
             }
-            $have_process = $have_process || $item['status'] < Tasks::STATUS_ERROR;
+            $have_process = $have_process || $list[$key]['status']< 2;
         }
         return array(
             'list' => array_reverse($list),
@@ -78,11 +112,20 @@ class Import extends Widget
 
     function clearTasks($object)
     {
-        return Tasks::clear(null, $this->key().'::processTask', $object->key());
-    }
-
-    function processTask($id, $params)
-    {
-
+        $tasks = Data::read(array(
+            'from' => '/system/tasks',
+            'select' => 'children',
+            'depth' => array(1,1),
+            'where' => array(
+                array('attr','value','in',array(2, 3)),
+                array('is','/library/admin_widgets/Import/handlers/ImportFile'),
+                array('child','where',array('is', $object->id()))
+            )
+        ));
+        foreach ($tasks as $t){
+            /** @var Entity $t */
+            $t->destroy();
+        }
+        return true;
     }
 }
