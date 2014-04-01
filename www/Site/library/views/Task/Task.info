@@ -34,7 +34,7 @@
         },
         "report": {
             "is_default_value": true,
-            "value": " ",
+            "value": "",
             "value_type": 2,
             "proto": "/library/basic/Text",
             "is_property": true,

@@ -10,5 +10,8 @@ use Site\library\views\View\View;
 
 class Task extends View
 {
+    function work()
+    {
 
+    }
 }
