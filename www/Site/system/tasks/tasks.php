@@ -20,6 +20,7 @@ class tasks extends View
     const STATUS_ERROR = 2;
     const STATUS_SUCCESS = 3;
     const execute_time_limit = 60;
+    const lock_time = 60;
     private $_lock = false;
 
     function __destruct()
@@ -66,7 +67,7 @@ class tasks extends View
                         array('attr', 'is_property', '=', 0),
                         array('attr', 'value', '=', self::STATUS_WAIT)
                     ),
-                    'limit' => array(0,3),
+                    'limit' => array(0,1),
                     'cache' => 0
                 ));
                 foreach ($tasks as $task){
@@ -76,7 +77,7 @@ class tasks extends View
                         $task->save(false, false);
                         $task->start($this->_commands, $this->_input_child);
                         $task->value(self::STATUS_SUCCESS);
-                        $task->report->value('Успешно выполнена');
+                        //$task->report->value('Успешно выполнена');
                     }catch (Error $e){
                         $task->value(self::STATUS_ERROR);
                         $task->report->value(F::toJSON($e->toArrayCompact(), true));
@@ -112,7 +113,8 @@ class tasks extends View
     private function is_lock()
     {
         if ($this->_lock) return true;
-        return (is_file(DIR_SERVER_TEMP.self::LOCK_FILE));
+        $f = DIR_SERVER_TEMP.self::LOCK_FILE;
+        return (is_file($f) && time()-filemtime($f) < self::lock_time);
     }
 
     /**
@@ -134,7 +136,7 @@ class tasks extends View
     private function unlock()
     {
         if ($this->_lock){
-            unlink(DIR_SERVER_TEMP.self::LOCK_FILE);
+            if (is_file($f = DIR_SERVER_TEMP.self::LOCK_FILE)) unlink($f);
             clearstatcache(DIR_SERVER_TEMP, self::LOCK_FILE);
             $this->_lock = false;
         }
