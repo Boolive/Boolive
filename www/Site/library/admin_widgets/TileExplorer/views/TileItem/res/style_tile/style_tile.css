@@ -10,10 +10,11 @@
     border-bottom-left-radius: 0;
 }
     .TileItem__main{
-        height: 95px;
-        padding: 10px;
+        height: 120px;
+        padding: 13px 13px;
         line-height: 32px;
         margin: 0;
+        box-sizing: border-box;
         }
     .TileItem__title-wrap{
         margin-bottom: -5px;
@@ -51,7 +52,7 @@
         }
     .TileItem__description{
         display: block;
-        font-size: 11px;
+        font-size: 10px;
         max-width: 218px;
         max-height: 30px;
         overflow: hidden;
