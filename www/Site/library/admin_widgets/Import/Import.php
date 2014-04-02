@@ -44,7 +44,6 @@ class Import extends Widget
 
     function addTask($file, $object)
     {
-        // @todo Найти подходящий эталон задачи импорта
         $handlers = $this->handlers->inner()->find(array('where'=>array('attr','is_property','=',0)));
         $find = false;
         $i=-1;
@@ -68,7 +67,9 @@ class Import extends Widget
             $task->save(false, false);
             return $task->id();
         }
-        return false;
+        return array(
+            'error' => 'Не найден обработчик для выбранного файла. Выберите другой тип файла'
+        );
     }
 
     function getTasks($object)

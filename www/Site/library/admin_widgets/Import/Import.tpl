@@ -8,6 +8,7 @@
             <div class="Import__buttons">
                 <a class="btn btn-primary Import__input-submit btn-disable" href="#">+ Добавить в очередь</a>
             </div>
+            <div class="Import__error"></div>
         </form>
         <h4 class="Import__h4">Очередь на импорт <a class="Import__clear" href="">Очистить завершенные</a></h4>
         <ul class="Import__list">
