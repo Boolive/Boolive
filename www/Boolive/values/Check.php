@@ -639,7 +639,7 @@ class Check
      */
     static function email($value, &$error, Rule $rule)
     {
-        if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_EMAIL)){
+        if (!is_string($value) || ($value!=='' && !filter_var($value, FILTER_VALIDATE_EMAIL))){
             $error = new Error('Некорректный email адрес', 'email');
         }
         return $value;
@@ -654,7 +654,7 @@ class Check
      */
     static function url($value, &$error, Rule $rule)
     {
-        if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_URL)){
+        if (!is_string($value) || ($value!=='' && !filter_var($value, FILTER_VALIDATE_URL))){
             $error = new Error('Некорректный URL', 'url');
         }
         return $value;
@@ -689,7 +689,7 @@ class Check
      */
     static function ip($value, &$error, Rule $rule)
     {
-        if (!is_string($value) || !filter_var($value, FILTER_VALIDATE_IP)){
+        if (!is_string($value) || ($value!=='' && !filter_var($value, FILTER_VALIDATE_IP))){
             $error = new Error('Некорректный IP адрес', 'ip');
         }
         return $value;
