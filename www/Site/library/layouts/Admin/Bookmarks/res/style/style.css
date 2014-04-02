@@ -73,26 +73,27 @@
             }
             .Bookmarks__item-remove{
                 position: absolute;
-                top: 6px;
-                right: 5px;
-                padding: 0px 4px;
-                font-size: 11px;
-                border-radius: 15px;
-                color: #444;
-                background-color: #fff;
-                border: 1px solid #cceaff;
-                display: none;
-                height: 15px;
+                top: 0;
+                right: 0;
+                display: block;
+                height: 27px;
+                width: 27px;
+                border: 0;
+                outline: 0;
+                opacity: 0;
+                text-align: center;
+                line-height: 32px;
                 }
                 .Bookmarks__item-remove:hover{
                     /*background-color: #FC4250;*/
-                    color: #FC4250;
+                    /*color: #FC4250;*/
+                    opacity: 1;
                     }
             :hover > .Bookmarks__item-remove{
-                display: inline-block;
+
             }
             .Bookmarks__item.active > .Bookmarks__item-link .Bookmarks__item-remove{
-                border: 1px solid #40b6ff;
+                /*border: 1px solid #40b6ff;*/
             }
     .Bookmarks__items-list .Bookmarks__items-list{
         margin: 0;/* 0 0 15px;*/
@@ -101,10 +102,10 @@
             padding-left:30px;
             }
             .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
-                padding-left:60px;
+                padding-left:50px;
                 }
                 .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
-                    padding-left:90px;
+                    padding-left:70px;
                     }
 	.Bookmarks__item.active > .Bookmarks__item-link{
         background-color: rgb(128, 200, 255);
