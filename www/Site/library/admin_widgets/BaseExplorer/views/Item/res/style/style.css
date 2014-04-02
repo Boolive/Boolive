@@ -1,7 +1,7 @@
 .Item{
     background-color: #e9e9e9;
     border: 1px solid #e5e5e5;
-    border-radius: 0px;
+    /*border-radius: 0px;*/
     position: relative;
     box-sizing: border-box;
     font: normal 13px/1 Arial,"sans-serif";
@@ -23,7 +23,7 @@
     overflow: hidden;
     line-height: 25px;
     cursor: default;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
     }
 .Item__select{
     cursor: pointer;

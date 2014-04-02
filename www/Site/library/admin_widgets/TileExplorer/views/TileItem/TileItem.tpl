@@ -29,16 +29,18 @@
     }else{
         $title_min = '';
     }
-    $icon_width = $v['icon']->bool()?40:0;
-    $width_big = max(200, round((mb_strlen($title_big)*19+$icon_width)/25)*25);
-    $width_min = max(200, round((mb_strlen($title_min)*11)/25)*25);
-    $width = max($width_big, $width_min);
+    $width = max(
+        mb_strlen($title_big)*19 + ($v['icon']->bool()?40:0) + ($v['is_link']->bool()?20:0) + 10,
+        mb_strlen($title_min)*11
+    );
+    $width = max(180, round($width/30)*30);
+
 ?><div class="Item TileItem <?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item">
     <div class="Item__main TileItem__main Item__select-area" style="width:<?=$width?>px; <?=$v['icon-style']?>">
 
         <div class="TileItem__title-wrap">
             <?php if ($v['icon']->bool()):?>
-        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="32" height="32">
+        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="25" height="25">
         <?php endif;?>
             <a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
         <?php if (!empty($title_min)) :?><div class="TileItem__title-min"><?=$title_min?></div><?php endif; ?>

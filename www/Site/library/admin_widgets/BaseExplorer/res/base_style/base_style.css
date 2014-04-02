@@ -67,7 +67,7 @@
     .BaseExplorer__description{
         font-size: 12px;
         padding: 0;
-        margin: 0 0 25px 0;
+        margin: 0 0 15px 0;
         color: #999;
         }
 
@@ -196,6 +196,7 @@
         }
 .BaseExplorer__item-placeholder{
     border: 1px dotted #1a8cff;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     display: inline-block;
+    margin: 3px;
 }
