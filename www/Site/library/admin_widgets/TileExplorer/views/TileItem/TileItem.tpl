@@ -40,7 +40,7 @@
 
         <div class="TileItem__title-wrap">
             <?php if ($v['icon']->bool()):?>
-        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="25" height="25">
+        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="32" height="32">
         <?php endif;?>
             <a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
         <?php if (!empty($title_min)) :?><div class="TileItem__title-min"><?=$title_min?></div><?php endif; ?>
