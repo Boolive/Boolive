@@ -28,7 +28,7 @@
             "order": 3
         },
         "object_rule": {
-            "value": "in(/contents/keywords)",
+            "value": "in(/contents/keywords,/contents/companies)",
             "value_type": 2,
             "proto": "/library/views/Widget/object_rule",
             "is_property": true,

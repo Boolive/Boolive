@@ -57,6 +57,10 @@
             });
         },
 
+        error: function(message){
+            this.element.find('.Import__error').text(message);
+        },
+
         loadTasks: function(){
             var self = this;
             this.callServer('get_tasks',{
@@ -104,9 +108,15 @@
                 success: function(responseText, statusText, xhr, $form){
                     self.reset();
                     self.change();
-                    self.loadTasks();
+                    if (responseText.out.error){
+                        self.error(responseText.out.error);
+                    }else{
+                        self.error('');
+                        self.loadTasks();
+                    }
                 },
                 error: function(jqXHR, textStatus){
+
 //                    var result = $.parseJSON(jqXHR.responseText);
 //                    if (typeof result.error !== 'undefined'){
 //                        var getErrorMessage = function(error){

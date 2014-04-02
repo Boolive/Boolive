@@ -16,7 +16,6 @@ include DIR_SERVER.'Boolive/Boolive.php';
 if (\Boolive\Boolive::activate()){
     // Запуск ядра, обработка запроса
     echo \Boolive\data\Data::read()->start(new \Boolive\commands\Commands(), \Boolive\input\Input::getSource());
-    //Boolive::start();
 }else{
     // Запуск установщика, если Boolive не активирован
     include DIR_SERVER.'Boolive/installer/Installer.php';

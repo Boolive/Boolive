@@ -1,7 +1,7 @@
 {
     "value": "",
     "proto": "/library/views/ViewGroup",
-    "order": 47,
+    "order": 48,
     "children": {
         "title": {
             "value": "Интерфейс",

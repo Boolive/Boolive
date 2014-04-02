@@ -242,6 +242,13 @@ class F
         return @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', str_replace(array_keys(self::$translit_table), array_values(self::$translit_table), $string));
     }
 
+    static function nameFilter($name)
+    {
+        $name = mb_strtolower(preg_replace('/\s/ui','_', F::translit($name)));
+        $name = preg_replace('/[^a-z0-9_-]/ui','',$name);
+        return $name;
+    }
+
     /**
      * Декодирование unicode-заменители в символы
      * @param $str

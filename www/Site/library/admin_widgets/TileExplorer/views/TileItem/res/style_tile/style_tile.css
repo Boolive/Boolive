@@ -10,8 +10,8 @@
     border-bottom-left-radius: 0;
 }
     .TileItem__main{
-        height: 120px;
-        padding: 13px 13px;
+        height: 115px;
+        padding: 10px 13px;
         line-height: 32px;
         margin: 0;
         box-sizing: border-box;
@@ -53,8 +53,8 @@
     .TileItem__description{
         display: block;
         font-size: 10px;
-        max-width: 218px;
-        max-height: 30px;
+        max-width: 210px;
+        max-height: 27px;
         overflow: hidden;
         line-height: normal;
         white-space: normal;
@@ -62,12 +62,10 @@
     .TileItem__value_wrap{
         display: block;
         overflow: hidden;
-
         position: absolute;
-        right: 15px;
-        left: 15px;
+        right: 13px;
+        left: 13px;
         bottom: 0;
-
         text-align: left;
     }
     .TileItem__value{

@@ -1,13 +1,13 @@
 .Admin{
 	min-height: 100%;
-	padding: 0 180px;
+	padding: 0 170px 0 210px;
 	overflow: hidden;
     background-color: #FFF;
     position: relative;
 	}
 	.Admin > .left{
 		height: 100%;
-		width: 180px;
+		width: 210px;
 		left: 0;
 		top: 32px;
 		position: fixed;
@@ -16,7 +16,7 @@
         border-right: 1px dotted #ccc;
 		}
     .Admin > .right{
-		width: 180px;
+		width: 170px;
 		right: 0;
 		bottom: 0;
 		position: fixed;
@@ -70,7 +70,7 @@
         z-index: 100;
         background: #F3F3F3;
         border-top: 1px solid #ccc;
-        padding: 0 180px;
+        padding: 0 170px 0 210px;
         box-shadow: inset 0px 1px 0px 0px #E5E5E5, inset 0px 3px 3px -2px #E5E5E5;
         }
     .Admin .window{

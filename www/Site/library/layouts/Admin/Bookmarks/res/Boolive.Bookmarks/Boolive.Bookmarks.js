@@ -11,7 +11,7 @@
         _create: function() {
             $.boolive.Widget.prototype._create.call(this);
             var self = this;
-
+            this.call_setState({target: this, direct: 'children'}, this.callParents('getState'), {object: true})
             // Enter
 			self.element.on('click', 'a', function(e){
                 e.preventDefault();
@@ -54,12 +54,9 @@
                         }
                     });
                     self._add((parent[0] === null ? self.options.object : parent[0]), proto, function(result, textStatus, jqXHR){
-                        console.log(result.result.id);
-                        console.log(sub_items);
                         if (sub_items.length){
                             var pull = [];
                             $.each(sub_items, function(i, item){
-    //                            console.log(item, result.result.id);
                                 pull.push(self._move(item, result.result.id));
                             });
                             $.when.apply($, pull).then(function(){
@@ -171,7 +168,18 @@
                 var self = this;
                 if ('object' in change){
                     self.element.find('.active').removeClass('active');
+                    self.element.find('.subactive').removeClass('subactive');
                     self.element.find('[data-l="'+state.object+'"]').addClass('active');
+                    var items = self.element.find('[data-l]');
+                    var cnt = items.size();
+                    var item;
+                    while (--cnt >= 0){
+                        item = $(items[cnt]);
+                        if (state.object.indexOf(item.attr('data-l')) == 0){
+                            if (!item.hasClass('active')) item.addClass('subactive');
+                            cnt = 0;
+                        }
+                    }
                 }
             }
         }

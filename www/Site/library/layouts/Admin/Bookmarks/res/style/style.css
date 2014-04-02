@@ -42,7 +42,7 @@
             cursor: pointer;
             /*line-height: 20px;*/
             font-size: 14px;
-            color: #008ee6;
+            color: #333;/*008ee6;*/
 			}
             .Bookmarks__item-title{
                 display: inline-block;
@@ -64,7 +64,7 @@
             .Bookmarks__item-icon{
                 max-width: 16px;
                 max-height: 16px;
-                margin: 0 -5px 0 5px;
+                margin: 0 -5px 0 0px;
                 vertical-align: middle;
                 opacity: 0.5;
             }
@@ -95,25 +95,32 @@
                 border: 1px solid #40b6ff;
             }
     .Bookmarks__items-list .Bookmarks__items-list{
-        margin: 0 0 0 15px;
+        margin: 0;/* 0 0 15px;*/
         }
         .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
-            font-size: 15px;
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
-        }
+            padding-left:30px;
+            }
+            .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
+                padding-left:60px;
+                }
+                .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
+                    padding-left:90px;
+                    }
 	.Bookmarks__item.active > .Bookmarks__item-link{
-        /*background-color: #c8f291;*/
-        /*background-color: #e6e6e6;*/
         background-color: rgb(128, 200, 255);
-        border-color: rgba(128, 200, 255, 0.3);
-		}
-		.Bookmarks__item.active > .Bookmarks__item-link{
-			color: #fff;
-			}
-        .Bookmarks__item.active > .Bookmarks__item-link .Bookmarks__item-icon{
+        background-color: rgb(115, 197, 255);
+        color: #fff;
+        }
+        .Bookmarks__item.active > .Bookmarks__item-link .Bookmarks__item-icon,
+        .Bookmarks__item.  subactive > .Bookmarks__item-link .Bookmarks__item-icon{
             opacity: 0.9;
         }
+    .Bookmarks__item.subactive > .Bookmarks__item-link{
+        background-color: rgb(153, 213, 255);
+        background-color: rgb(140, 209, 255);
+        color: #fff;
+		}
+
 .Bookmarks__toolitem{
     text-align: center;
     margin: 10px 0;
