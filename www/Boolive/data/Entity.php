@@ -219,6 +219,14 @@ class Entity implements ITrace
             //if ($choose_unique){
                 $this->_autoname = $new_name;
             //}
+            if ($this->_parent && !$choose_unique){
+                if (isset($this->_parent->_children[$this->_attribs['name']])){
+                    unset($this->_parent->_children[$this->_attribs['name']]);
+                }
+                if (isset($this->_parent->_children[$new_name])){
+                    $this->_parent->_children[$new_name] = $this;
+                }
+            }
             $this->_attribs['name'] = $new_name;
             $this->_changed = true;
             $this->_checked = false;
@@ -1254,7 +1262,8 @@ class Entity implements ITrace
             if ($this->isExist()){
                 $obj = Data::read(array(
                     'from' => array($this, $name),
-                    'comment' => 'read property by name'
+                    'comment' => 'read property by name',
+                    'cache' => 0
                 ));
             }else{
                 $obj = null;
