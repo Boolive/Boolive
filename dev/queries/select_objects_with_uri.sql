@@ -1,1 +1,0 @@
-SELECT * FROM ids, objects WHERE ids.id = objects.id

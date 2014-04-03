@@ -17,7 +17,7 @@ class TileItem extends Item
 
         if ($obj->{'icon-150'}->isExist()){
             $img = $obj->{'icon-150'};
-            $v['icon-style'] = 'background-image: url('.$img->file().'); background-repeat: no-repeat; background-position: right 15px;';
+            $v['icon-style'] = 'background-image: url('.$img->file().'); background-repeat: no-repeat; background-position: right bottom';
         }else{
             $v['icon-style'] = '';
         }
