@@ -19,8 +19,7 @@ class tasks extends View
     const STATUS_PROCESS = 1;
     const STATUS_ERROR = 2;
     const STATUS_SUCCESS = 3;
-    const execute_time_limit = 60;
-    const lock_time = 60;
+    const downtime = 30;
     private $_lock = false;
 
     function __destruct()
@@ -60,7 +59,7 @@ class tasks extends View
         if (!$this->is_lock()){
             $this->lock();
             $start = time();
-            while (time() - $start < self::execute_time_limit * 2){
+            while (time() - $start < self::downtime){
                 // Выбор задач из очереди
                 $tasks = $this->find(array(
                     'where' => array(
@@ -87,7 +86,7 @@ class tasks extends View
                     }
                     $task->save(true, false);
                 }
-                if (count($tasks) == 0) $start = 0;
+                if (count($tasks) == 0) sleep(1);
             }
             $this->unlock();
         }
@@ -98,7 +97,7 @@ class tasks extends View
      */
     private function executeBackground()
     {
-        if (!(/*$this->only_cron->value() || */$this->is_lock())){
+        if (AUTOSTART_TASKS && !$this->is_lock()){
             if (substr(php_uname(), 0, 7) == "Windows"){
                 pclose(popen("start /B ".PHP.' '.DIR_SERVER.'index.php tasks', "r"));
             }else{
@@ -114,7 +113,7 @@ class tasks extends View
     {
         if ($this->_lock) return true;
         $f = DIR_SERVER_TEMP.self::LOCK_FILE;
-        return (is_file($f) && time()-filemtime($f) < self::lock_time);
+        return (is_file($f) && (time()-filemtime($f)) < self::downtime);
     }
 
     /**
