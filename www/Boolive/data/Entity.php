@@ -1488,7 +1488,7 @@ class Entity implements ITrace
         if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;
-                if ($this->_changed){
+                if ($this->_changed || !$this->isExist()){
                     // Сохранение родителя, если не сохранен или требует переименования
                     if ($this->_parent){
                         if (!$this->_parent->isExist() || $this->_parent->_autoname){
