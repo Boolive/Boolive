@@ -1,6 +1,6 @@
 .TileItem{
     display: inline-block;
-    margin: 3px;
+    margin: 2px;
     vertical-align: top;
     }
 .TileItem:first-of-type{

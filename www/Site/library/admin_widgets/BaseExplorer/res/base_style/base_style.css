@@ -200,3 +200,17 @@
     display: inline-block;
     margin: 3px;
 }
+
+.BaseExplorer__select-all{
+    position: absolute;
+    right: 15px;
+    margin-top: -25px;
+    font-size: 12px;
+    color: #888;
+    border-bottom: 1px dotted #888;
+    cursor: pointer;
+}
+.BaseExplorer__select-all:hover{
+    border-bottom: 1px dotted #1a8cff;
+    color: #1a8cff;
+}

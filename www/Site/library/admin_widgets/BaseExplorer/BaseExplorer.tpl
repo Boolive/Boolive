@@ -29,7 +29,7 @@
         </div>
     </div>
     <p class="BaseExplorer__description"><?=$v['description']?></p>
-
+    <div class="BaseExplorer__select-all">Выделить всё</div>
     <div class="BaseExplorer__list">
     <?php
         $list = $v['views']->arrays(\Boolive\values\Rule::string());
