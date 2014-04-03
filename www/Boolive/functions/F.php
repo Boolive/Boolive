@@ -246,6 +246,9 @@ class F
     {
         $name = mb_strtolower(preg_replace('/\s/ui','_', F::translit($name)));
         $name = preg_replace('/[^a-z0-9_-]/ui','',$name);
+        if (mb_strlen($name)>100){
+            $name = mb_substr($name,0,100);
+        }
         return $name;
     }
 
