@@ -101,7 +101,7 @@ class Import extends Widget
             $r = trim($item->report->value());
             if ($r) $list[$key]['status_msg'].=': '.$r;
             if ($list[$key]['status'] == 1 && $item->percent->value() > 0){
-                $list[$key]['status_msg'].=' '.intval($item->percent->value()).'%';
+                $list[$key]['status_msg'].=' '.sprintf('%0.2f',$item->percent->value()).'%';
             }
             $have_process = $have_process || $list[$key]['status']< 2;
         }
