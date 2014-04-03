@@ -14,6 +14,9 @@ define('VERSION', '2.0.beta.2014.02.10');
 /** @const Путь до php интерпретатора */
 define('PHP', 'C:/SERVER/XAMPP/php/php.exe');
 
+/** @const Автоматически запускать обработчик задач в фоне в момент обработки запросов клиента */
+define('AUTOSTART_TASKS', true);
+
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
 
@@ -33,7 +36,7 @@ define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_H
 define('TIMESTAMP', '1');
 
 /* Признак, выводить всю трассировку?*/
-define('GLOBAL_TRACE', false);
+define('GLOBAL_TRACE', true);
 
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
