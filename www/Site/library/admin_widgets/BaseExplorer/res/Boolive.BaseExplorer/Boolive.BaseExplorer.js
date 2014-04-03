@@ -38,6 +38,16 @@
                 }
             });
 
+            this.element.on('click', '.BaseExplorer__select-all', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                var objects = [];
+                self.element.find('.Item[data-o]').each(function(){
+                    objects.push($(this).attr('data-o'));
+                });
+                self.callParents('setState', [{selected: objects}]);
+            });
+
             this.model = new BooliveModel();
 
             // Изменение в виде
