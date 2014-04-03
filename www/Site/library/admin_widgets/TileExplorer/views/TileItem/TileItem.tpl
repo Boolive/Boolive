@@ -33,7 +33,7 @@
         mb_strlen($title_big)*17 + ($v['icon']->bool()?40:0) + ($v['is_link']->bool()?20:0) + 26,
         mb_strlen($title_min)*10 + 26
     );
-    $width = max(180, round($width/30)*30);
+    $width = max(180, round($width/30)*30)-6;
 
 ?><div class="Item TileItem <?=$class?>" data-v="<?=$v['view_uri']?>" data-o="<?=$v['uri']?>" data-l="<?=$v['link']?>" data-nl="<?=$v['newlink']?>" data-p="Item">
     <div class="Item__main TileItem__main Item__select-area" style="width:<?=$width?>px; <?=$v['icon-style']?>">
