@@ -330,9 +330,9 @@
                     if (!/^views\//.test(this._state.view_name) || 'select' in change) state.view_name = null;
                 }
                 // Если не указан view_name, но он есть в истории
-                if (!('view_name' in state) && object_str in this._remember_view){
-                    state.view_name = this._remember_view[object_str];
-                }
+//                if (!('view_name' in state) && object_str in this._remember_view){
+//                    state.view_name = this._remember_view[object_str];
+//                }
                 // Смена view_name
                 if ('view_name' in state && state.view_name != this._state.view_name){
                     this._state.view_name = state.view_name;
