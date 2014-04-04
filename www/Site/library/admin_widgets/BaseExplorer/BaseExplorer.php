@@ -190,7 +190,7 @@ class BaseExplorer extends AutoWidgetList2
                 $cond['select'] = 'children';
             }
         }
-        $count_per_page = 30;
+        $count_per_page = 20;
         $this->_input_child['REQUEST']['page_count'] = ceil($this->_input['REQUEST']['object']->find(array('select'=>array('count', $cond['select']), 'where'=>$cond['where']))/$count_per_page);
         $cond['limit'] = array(
             ($this->_input['REQUEST']['page']-1) * $count_per_page,

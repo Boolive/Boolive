@@ -36,10 +36,11 @@ define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_H
 define('TIMESTAMP', '1');
 
 /* Признак, выводить всю трассировку?*/
-define('GLOBAL_TRACE', true);
+define('GLOBAL_TRACE', false);
 
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
+
 /**
  * Определение корневой директории сервера
  * @return string
