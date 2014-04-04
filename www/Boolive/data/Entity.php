@@ -1263,7 +1263,6 @@ class Entity implements ITrace
                 $obj = Data::read(array(
                     'from' => array($this, $name),
                     'comment' => 'read property by name',
-                    'cache' => 0
                 ));
             }else{
                 $obj = null;
