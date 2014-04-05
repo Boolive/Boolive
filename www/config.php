@@ -14,6 +14,9 @@ define('VERSION', '2.0.beta.2014.02.10');
 /** @const Путь до php интерпретатора */
 define('PHP', 'C:/SERVER/XAMPP/php/php.exe');
 
+/** @const Автоматически запускать обработчик задач в фоне в момент обработки запросов клиента */
+define('AUTOSTART_TASKS', true);
+
 /** @cont string Полный путь директории сайта на сервере. Без слеша на конце. */
 define('DOCUMENT_ROOT', get_root_dir());
 
@@ -37,6 +40,7 @@ define('GLOBAL_TRACE', false);
 
 /* Признак, профилировать запросы к модулю даных?*/
 define('PROFILE_DATA', false);
+
 /**
  * Определение корневой директории сервера
  * @return string
