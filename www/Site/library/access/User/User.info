@@ -73,7 +73,7 @@
         },
         "visit_time": {
             "is_default_value": true,
-            "value": "0",
+            "value": 0,
             "proto": "/library/basic/Number",
             "is_property": true,
             "order": 10,

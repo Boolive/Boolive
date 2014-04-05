@@ -35,7 +35,7 @@
             "order": 5
         },
         "min_font_size": {
-            "value": "8",
+            "value": 8,
             "proto": "/library/basic/Number",
             "is_mandatory": true,
             "is_property": true,
@@ -57,7 +57,7 @@
             }
         },
         "max_font_size": {
-            "value": "21",
+            "value": 21,
             "proto": "/library/basic/Number",
             "is_mandatory": true,
             "is_property": true,
