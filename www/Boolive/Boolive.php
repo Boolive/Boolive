@@ -103,20 +103,6 @@ namespace Boolive
             mb_http_output('UTF-8');
         }
 
-        static function start()
-        {
-            $input = \Boolive\input\Input::getSource();
-            if (isset($input['ARG']['tasks'])){
-                // Обработка задач
-                \Boolive\tasks\Tasks::execute();
-            }else{
-                // Обработка запросов клиента. Запускается корневой объекта сайта
-                echo \Boolive\data\Data::read()->start(new \Boolive\commands\Commands(), $input);
-                // Фоновый запуск обработчика задач
-                \Boolive\tasks\Tasks::executeBackground();
-            }
-        }
-
         /**
          * Обработчик исключений
          * Вызывается автоматически при исключениях и ошибках
