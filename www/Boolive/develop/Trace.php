@@ -103,7 +103,7 @@ class Trace
      */
     function group($key = null)
     {
-        if (empty($key)) $key = count($this->children);
+        if (empty($key)) $key = sizeof($this->children);
         if (!isset($this->children[$key])){
             $this->children[$key] = new Trace($key, null);
         }
@@ -194,7 +194,7 @@ class Trace
                 if (isset($var->value)){
                     $out.= $pfx.self::format($var->value, $trace_buf, $pfx, $html)."\n";
                 }
-                $cnt = count($var->children);
+                $cnt = sizeof($var->children);
                 foreach ($var->children as $var){
                     $cnt--;
                     $out.= $pfx.self::format($var, $trace_buf, ($cnt?$pfx.$sp:$pfx.$sp3), $html)."\n";
@@ -216,7 +216,7 @@ class Trace
         }else
         // если массив
         if (is_array($var)){
-            $cnt = count($var);
+            $cnt = sizeof($var);
             if ($cnt == 0){
                 $out.='{Array} ()';
             }else{
@@ -254,7 +254,7 @@ class Trace
                 if (!is_array($list)){
                     $out.= "\n".$pfx.self::format($list, $trace_buf, $pfx, $html);
                 }else{
-                    $cnt = count($list);
+                    $cnt = sizeof($list);
                     if ($cnt > 0){
                         foreach ($list as $name => $value){
                             $cnt--;
@@ -292,7 +292,7 @@ class Trace
         $result = array();
         while (list ($key, $value) = each($arr)){
             $keys = explode("\0", $key);
-            $clear_key = $keys[count($keys) - 1];
+            $clear_key = $keys[sizeof($keys) - 1];
             $result[$clear_key] = &$arr[$key];
         }
         return $result;

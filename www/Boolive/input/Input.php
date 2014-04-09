@@ -64,7 +64,7 @@ class Input extends Values
             $request_uri = preg_replace('#^'.preg_quote(DIR_WEB).'#u', '/', $_SERVER['REQUEST_URI'], 1);
             parse_str('path='.$request_uri, $values['REQUEST']);
             $values['SERVER']['argv'] = $values['REQUEST'];
-            $values['SERVER']['argc'] = count($values['REQUEST']);
+            $values['SERVER']['argc'] = sizeof($values['REQUEST']);
         }
         // Элементы пути URI
         if (isset($values['REQUEST']['path']) && ($values['REQUEST']['path'] = rtrim($values['REQUEST']['path'],'/ '))){
@@ -227,8 +227,8 @@ class Input extends Values
         // Параметры
         // Текущие параметры (текщего адреса) заменяем на указанные в $params
         $cur_path = self::PATH()->getValue();
-        $index = count($cur_path);
-        if (is_array($path) and count($path) > 0){
+        $index = sizeof($cur_path);
+        if (is_array($path) and sizeof($path) > 0){
             foreach ($path as $index => $value){
                 $cur_path[$index + $shift] = $value;
             }
