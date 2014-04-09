@@ -55,7 +55,7 @@ class MenuSimple extends Widget
                 'title' => $item->title->value(),
                 'icon' => false,
                 'url' => $real->uri(),
-                'active' => $active->eq($real)? 1 : 0
+                'active' => $active && $active->eq($real)? 1 : 0
             );
             // Иконка
             $icon = $item->icon->isExist() ? $item->icon : ($real->icon->isExist()? $real->icon : null);
