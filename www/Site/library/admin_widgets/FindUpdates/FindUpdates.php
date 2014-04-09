@@ -23,7 +23,7 @@ class FindUpdates extends ProgressAction
             'id' =>  uniqid('findUpdates'),
             'jobs' => array(),
             'jobs_step' => 0,
-            'jobs_count' => sizeof($objects)
+            'jobs_count' => count($objects)
         );
         foreach($objects as $obj){
             $info['jobs'][] = $obj->key();

@@ -55,7 +55,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
     function __construct($message = '', $code = 0, Error $previous = null)
     {
         if (is_array($message)){
-            if (count($message)>0){
+            if (sizeof($message)>0){
                 $m = array_shift($message);
                 if (!empty($message)){
                     if (is_array($message[0])){
@@ -413,7 +413,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
 		// Поиск сообщения в массиве загруженных
         $curr = null;
         $root = $this->getDictionary();
-        $cnt = count($keys);
+        $cnt = sizeof($keys);
 		$i = 0;
         while ($i<$cnt && !$curr){
             if (isset($root[$keys[$i]])){

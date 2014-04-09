@@ -209,7 +209,7 @@ class MySQLStore extends Entity
         if (!empty($need_text)){
             $q = $this->db->query('SELECT id, value FROM {text} WHERE id IN ('.implode(',', array_keys($need_text)).')');
             while ($row = $q->fetch(DB::FETCH_ASSOC)){
-                $cnt = count($need_text[$row['id']]);
+                $cnt = sizeof($need_text[$row['id']]);
                 for ($i=0; $i<$cnt; $i++) $need_text[$row['id']][$i]['value'] = $row['value'];
             }
         }
@@ -219,7 +219,7 @@ class MySQLStore extends Entity
             foreach ($tree_list as $key => $tree){
                 // Ручная сортиорвка по order
                 if (!($cond['depth'][0] == 1 && $cond['depth'][1] == 1) && empty($cond['select'][1]) && empty($cond['limit']) &&
-                                !empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                     $sort_kind = mb_strtolower($cond['order'][0][1]) == 'asc'?1:-1;
                     $sort = function($a, $b) use ($sort_kind){
                         if ($a['order'] == $b['order']) return 0;
@@ -535,7 +535,7 @@ class MySQLStore extends Entity
                 $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type',
                         'is_draft', 'is_hidden', 'is_link', 'is_mandatory', 'is_property', 'is_relative', 'is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt', 'update_time', 'diff', 'diff_from');
-                $cnt = count($attr_names);
+                $cnt = sizeof($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id
                 if (empty($current)){
@@ -885,7 +885,7 @@ class MySQLStore extends Entity
                         'file_content' => 1,
                         'cache' => 2
                     ), false, false, false);
-                    if (count($pchildren) < $step_size){
+                    if (sizeof($pchildren) < $step_size){
                         // В следующий раз обновление по новой
                         $entity->_attribs['update_step'] = 0;
                     }else{
@@ -1128,7 +1128,7 @@ class MySQLStore extends Entity
                     $f = $from->dir(true).$from->name().'.info';
                     if (is_file($f)){
                         $info = json_decode(file_get_contents($f), true);
-                        for ($i = count($path)-1; $i>=0; $i--){
+                        for ($i = sizeof($path)-1; $i>=0; $i--){
                             if (isset($info['children'][$path[$i]])){
                                 $info = $info['children'][$path[$i]];
                             }else{
@@ -1211,7 +1211,7 @@ class MySQLStore extends Entity
                 $what = $cond['select'][0];
             }
             if ($multy = is_array($cond['from'])){
-                $multy_cnt = count($cond['from']);
+                $multy_cnt = sizeof($cond['from']);
                 if ($what == 'self' || $cond['select'][0] == 'exists'){
                     $cond['limit'] = array(0,$multy_cnt);
                 }
@@ -1241,7 +1241,7 @@ class MySQLStore extends Entity
                             // Множественный выбор по идентификатору
                             $result['select'].= ', CONCAT("//", u.id) as `from` ';
                             $result['where'].= 'u.id IN ('.rtrim(str_repeat('?,', $multy_cnt),',').')';
-                            for ($i=0; $i<$multy_cnt; $i++){
+                            for ($i=0; $i<$multy_cnt; ++$i){
                                 $from_info = Data::parseUri($cond['from'][$i]);
                                 $result['binds'][] = array($from_info['id'], DB::PARAM_STR);
                             }
@@ -1255,14 +1255,14 @@ class MySQLStore extends Entity
                         if ($multy){
                             // Множественный выбор по родителю и имени объекта
                             $result['select'].= ', CONCAT("//", {obj}.parent, "/", {obj}.name) as `from` ';
-                            $w = '';
-                            for ($i=0; $i<$multy_cnt; $i++){
+                            $w = '{obj}.parent IN ('.rtrim(str_repeat('?,',$multy_cnt),',').') AND {obj}.name = ?';
+                            $name = '';
+                            for ($i=0; $i<$multy_cnt; ++$i){
                                 $from_info = Data::parseUri($cond['from'][$i]);
-                                if (!empty($w)) $w.=' OR ';
-                                $w.= '({obj}.parent = ? AND {obj}.name = ?)';
                                 $result['binds'][] = $from_info['id'];
-                                $result['binds'][] = ltrim($from_info['path'],'/');
+                                if (!$name) $name = ltrim($from_info['path'],'/');
                             }
+                            $result['binds'][] = $name;
                             $result['where'].='('.$w.')';
                             if ($calc) $result['group'] = ' GROUP BY `from`';
                         }else{
@@ -1277,7 +1277,7 @@ class MySQLStore extends Entity
                         // Множественный выбор по URI
                         $result['select'].= ', u.uri as `from` ';
                         $result['where'].= 'u.uri IN ('.rtrim(str_repeat('?,', $multy_cnt),',').')';
-                        for ($i=0; $i<$multy_cnt; $i++){
+                        for ($i=0; $i<$multy_cnt; ++$i){
                             $result['binds'][] = array($cond['from'][$i], DB::PARAM_STR);
                         }
                         if ($calc) $result['group'] = ' GROUP BY u.uri';
@@ -1288,6 +1288,7 @@ class MySQLStore extends Entity
                     }
                 }
             }else{
+                if ($multy) trace_log('MULTY SELECT!! on '.$what.' '.implode(', ',$cond['from']));
                 // Дополняем условие контролем доступа
                 if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read', $cond['from']))){
                     if (empty($cond['where'])){
@@ -1310,68 +1311,68 @@ class MySQLStore extends Entity
                     if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                         // Поиск по всей ветке
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",t.parent_id) as `from`';
-                            $result['from'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
-                            }
-                            if ($calc) $result['group'] = ' GROUP BY t.parent_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",t.parent_id) as `from`';
+//                            $result['from'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
+//                            }
+//                            if ($calc) $result['group'] = ' GROUP BY t.parent_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
-                        }
+//                        }
                         // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
                         if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-                            !empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                            !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                             $cond['order'] = false;
                         }
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Подчиненные объекты
                         $result['from'] = ' FROM {objects} obj USE INDEX(child) JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",obj.parent) as `from`';
-                            $result['where'].= 'obj.parent IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
-                            }
-                            if ($calc) $result['group'] = ' GROUP BY obj.parent';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",obj.parent) as `from`';
+//                            $result['where'].= 'obj.parent IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
+//                            }
+//                            if ($calc) $result['group'] = ' GROUP BY obj.parent';
+//                        }else{
                             // Сверка parent
                             $result['where'].= 'obj.parent = ? ';
                             $result['binds'][] = array($this->localId($cond['from'], false), DB::PARAM_INT);
-                        }
+//                        }
                         // Оптимизация сортировки по атрибуту order
-                        if (!empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
+                        if (!empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order' && strtoupper($cond['order'][0][1])=='ASC'){
                             $cond['order'] = false;
                         }
                     }else{
                         // Поиск по ветке с ограниченной глубиной
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",f.parent_id) as `from`';
-                            $w = '';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                if (!empty($w)) $w.=' OR ';
-                                $w.= "(f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                            }
-                            $result['from'].= "\n  JOIN {parents} f ON ((".$w.') AND f.is_delete=0)';
-                            if ($calc) $result['group'] = ' GROUP BY f.parent_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",f.parent_id) as `from`';
+//                            $w = '';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                if (!empty($w)) $w.=' OR ';
+//                                $w.= "(f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=?)";
+//                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+//                            }
+//                            $result['from'].= "\n  JOIN {parents} f ON ((".$w.') AND f.is_delete=0)';
+//                            if ($calc) $result['group'] = ' GROUP BY f.parent_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                             // сортировка по порядковому номеру будет выполнена после выборки, чтобы при выборке не использовалась файловая сортировка
                             if ($what == 'tree' && empty($cond['select'][1]) && empty($cond['limit']) &&
-                                !empty($cond['order']) && count($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
+                                !empty($cond['order']) && sizeof($cond['order'])== 1 && $cond['order'][0][0] == 'order'){
                                 $cond['order'] = false;
                             }
-                        }
+//                        }
                     }
                 }else
                 if ($what == 'parents'){
@@ -1380,38 +1381,38 @@ class MySQLStore extends Entity
                     if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                         // Поиск по всей ветке
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",t.object_id) as `from`';
-                            $result['from'].= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
-                            }
-                            if ($calc) $result['group'] = ' GROUP BY t.object_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",t.object_id) as `from`';
+//                            $result['from'].= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
+//                            }
+//                            if ($calc) $result['group'] = ' GROUP BY t.object_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
-                        }
+//                        }
                     }else{
                         // Поиск ограниченной глубиной (кол-ва родителей)
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",f.object_id) as `from`';
-                            $w = '';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                if (!empty($w)) $w.=' OR ';
-                                $w.= "(f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                            }
-                            $result['from'].= "\n  JOIN {parents} f ON ((".$w.') AND f.is_delete=0)';
-                            if ($calc) $result['group'] = ' GROUP BY f.object_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",f.object_id) as `from`';
+//                            $w = '';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                if (!empty($w)) $w.=' OR ';
+//                                $w.= "(f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
+//                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+//                            }
+//                            $result['from'].= "\n  JOIN {parents} f ON ((".$w.') AND f.is_delete=0)';
+//                            if ($calc) $result['group'] = ' GROUP BY f.object_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {parents} f ON (f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                        }
+//                        }
                     }
                 }else
                 if ($what == 'protos'){
@@ -1420,38 +1421,38 @@ class MySQLStore extends Entity
                     if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                         // Поиск по всей ветке
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",t.object_id) as `from`';
-                            $result['from'].= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
-                            }
-                            if ($calc) $result['group'] = ' GROUP BY t.object_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",t.object_id) as `from`';
+//                            $result['from'].= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
+//                            }
+//                            if ($calc) $result['group'] = ' GROUP BY t.object_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
-                        }
+//                        }
                     }else{
                         // Поиск ограниченной глубиной (кол-ва прототипов)
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",f.object_id) as `from`';
-                            $w = '';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                if (!empty($w)) $w.=' OR ';
-                                $w.= "(f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                            }
-                            $result['from'].= "\n  JOIN {protos} f ON ((".$w.') AND f.is_delete=0)';
-                            if ($calc) $result['group'] = ' GROUP BY f.object_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",f.object_id) as `from`';
+//                            $w = '';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                if (!empty($w)) $w.=' OR ';
+//                                $w.= "(f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
+//                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+//                            }
+//                            $result['from'].= "\n  JOIN {protos} f ON ((".$w.') AND f.is_delete=0)';
+//                            if ($calc) $result['group'] = ' GROUP BY f.object_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                        }
+//                        }
                     }
                 }else
                 if ($what == 'heirs'){
@@ -1460,54 +1461,54 @@ class MySQLStore extends Entity
                     if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                         // Поиск по всей ветке
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",t.proto_id) as `from`';
-                            $result['from'].= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.proto_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
-                            }
-                            if ($calc) $result['group'] = ' GROUP BY t.proto_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",t.proto_id) as `from`';
+//                            $result['from'].= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.proto_id IN (".rtrim(str_repeat('?,', $multy_cnt),',').')'.($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
+//                            for ($i=0; $i<$multy_cnt; $i++){
+//                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
+//                            }
+//                            if ($calc) $result['group'] = ' GROUP BY t.proto_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.proto_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
-                        }
+//                        }
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Прямые наследники
                         $result['from'] = ' FROM {objects} obj USE INDEX(child) JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",obj.proto) as `from`';
-                            $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
-                            }
-                            if ($calc) $result['group'] = ' GROUP BY obj.proto';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",obj.proto) as `from`';
+//                            $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                $result['binds'][] = array($this->localId($cond['from'][$i], false), DB::PARAM_STR);
+//                            }
+//                            if ($calc) $result['group'] = ' GROUP BY obj.proto';
+//                        }else{
                             // Сверка proto
                             $result['where'].= "obj.proto = ? ";
                             $result['binds'][] = array($this->localId($cond['from'], false), DB::PARAM_INT);
-                        }
+//                        }
                     }else{
                         // Поиск по ветке наследования с ограниченной глубиной
                         $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
-                        if ($multy){
-                            $result['select'].= ', CONCAT("//",f.proto_id) as `from`';
-                            $w = '';
-                            for ($i=0; $i<$multy_cnt; $i++){
-                                if (!empty($w)) $w.=' OR ';
-                                $w.= "(f.object_id = obj.id AND f.proto_id = ? AND f.level>=? AND f.level<=?)";
-                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                            }
-                            $result['from'].= "\n  JOIN {protos} f ON ((".$w.') AND f.is_delete=0)';
-                            if ($calc) $result['group'] = ' GROUP BY f.proto_id';
-                        }else{
+//                        if ($multy){
+//                            $result['select'].= ', CONCAT("//",f.proto_id) as `from`';
+//                            $w = '';
+//                            for ($i=0; $i<$multy_cnt; ++$i){
+//                                if (!empty($w)) $w.=' OR ';
+//                                $w.= "(f.object_id = obj.id AND f.proto_id = ? AND f.level>=? AND f.level<=?)";
+//                                $binds2[] = array($this->localId($cond['from'][$i], false), DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+//                                $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+//                            }
+//                            $result['from'].= "\n  JOIN {protos} f ON ((".$w.') AND f.is_delete=0)';
+//                            if ($calc) $result['group'] = ' GROUP BY f.proto_id';
+//                        }else{
                             $result['from'].= "\n  JOIN {protos} f ON (f.object_id = obj.id AND f.proto_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
                             $binds2[] = array($this->localId($cond['from'], false), DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                             $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                        }
+//                        }
                     }
                 }else{
                     throw new \Exception('Incorrect selection in condition: ("'.$cond['select'][0].'","'.$cond['select'][1].'")');
@@ -1515,13 +1516,13 @@ class MySQLStore extends Entity
             }
             // Сортировка
             if (!$calc && !empty($cond['order'])){
-                $cnt = count($cond['order']);
-                for ($i=0; $i<$cnt; $i++){
-                    if (($ocnt = count($cond['order'][$i])-2)>=0){
+                $cnt = sizeof($cond['order']);
+                for ($i=0; $i<$cnt; ++$i){
+                    if (($ocnt = sizeof($cond['order'][$i])-2)>=0){
                         $jtable = $pretabel = 'obj';
                         if ($ocnt>0){
                             // Сортировка по подчиненным объектами. Требуется слияние таблиц
-                            for ($o = 0; $o < $ocnt; $o++){
+                            for ($o = 0; $o < $ocnt; ++$o){
                                 $joins[$jtable = $jtable.'.'.$cond['order'][$i][$o]] = array($pretabel, $cond['order'][$i][$o]);
                             }
                         }
@@ -1551,12 +1552,12 @@ class MySQLStore extends Entity
                     $glue = $cond[0] == 'any'?' OR ':' AND ';
                     $cond = $cond[1];
                 }else
-                if (count($cond)>0 && !is_array($cond[0])){
+                if (sizeof($cond)>0 && !is_array($cond[0])){
                     $cond = array($cond);
                     $glue = ' AND ';
                 }
                 foreach ($cond as $i => $c){
-                    if (is_array($c) && !empty($c)){
+                    if (!empty($c) && is_array($c)){
                         $c[0] = strtolower($c[0]);
                         // AND
                         if ($c[0]=='all'){
@@ -1586,6 +1587,9 @@ class MySQLStore extends Entity
                                 }
                             }
                             // sql услвоие
+                            if ($c[2]=='eq'){
+                                $c[2] = '=';
+                            }
                             $cond[$i] = '`'.$table.'`.`'.$c[1].'` '.$c[2];
                             // Учитываем особенность синтаксиса условия IN
                             if (mb_strtolower($c[2]) == 'in'){
@@ -1593,7 +1597,7 @@ class MySQLStore extends Entity
                                 if (empty($c[3])){
                                     $cond[$i].='(NULL)';
                                 }else{
-                                    $cond[$i].='('.str_repeat('?,', count($c[3])-1).'?)';
+                                    $cond[$i].='('.str_repeat('?,', sizeof($c[3])-1).'?)';
                                     $result['binds'] = array_merge($result['binds'], $c[3]);
                                 }
                             }else{
@@ -1645,8 +1649,8 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
-                                $cond[$i] = '`'.$table.'`.`id` IN ('.str_repeat('?,', count($c)-1).'?)';
+                            if (sizeof($c)>0){
+                                $cond[$i] = '`'.$table.'`.`id` IN ('.str_repeat('?,', sizeof($c)-1).'?)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1660,9 +1664,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
+                            if (sizeof($c)>0){
                                 $alias = uniqid('in');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1676,9 +1680,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
+                            if (sizeof($c)>0){
                                 $alias = uniqid('is');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1694,8 +1698,8 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
-                                $of = rtrim(str_repeat('?,', count($c)), ',');
+                            if (sizeof($c)>0){
+                                $of = rtrim(str_repeat('?,', sizeof($c)), ',');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c, $c);
@@ -1710,9 +1714,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
+                            if (sizeof($c)>0){
                                 $alias = uniqid('in');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0 AND level>0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level>0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1726,9 +1730,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
+                            if (sizeof($c)>0){
                                 $alias = uniqid('is');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0 AND level > 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level > 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
@@ -1743,9 +1747,9 @@ class MySQLStore extends Entity
                             }else{
                                 unset($c[0]);
                             }
-                            if (count($c)>0){
+                            if (sizeof($c)>0){
                                 $alias = uniqid('heirs');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', count($c)), ',').') AND is_delete = 0)';
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{

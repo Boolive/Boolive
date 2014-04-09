@@ -147,7 +147,7 @@ class File
     static function deleteEmtyDir($dir)
     {
         $dir = self::makeVirtualDir($dir, false);
-        if (is_dir($dir) && count(scandir($dir)) == 2){
+        if (is_dir($dir) && sizeof(scandir($dir)) == 2){
             return @rmdir($dir);
         }
         self::deleteVirtualDir($dir);
@@ -189,7 +189,7 @@ class File
     {
         $path = str_replace('\\','/',$path);
         $list = F::explode('/', $path, -2);
-        if (count($list)<2){
+        if (sizeof($list)<2){
             array_unshift($list, '');
         }
         $info = array('dir'=>$list[0], 'name'=>$list[1], 'base'=> '', 'ext'=>'', 'back'=>false);
@@ -198,7 +198,7 @@ class File
         }
         $list = F::explode('.', $info['name'], -2);
         // Если $list имеет один элемент, то это не расширение
-        if (count($list)>1){
+        if (sizeof($list)>1){
             $info['ext'] = strtolower($list[1]);
         }else{
             $info['ext'] = '';
@@ -256,7 +256,7 @@ class File
     static function fileExtention($path)
     {
         $list = F::explode('.', $path, -2);
-        if (count($list)>1){
+        if (sizeof($list)>1){
             return strtolower($list[1]);
         }else{
             return '';

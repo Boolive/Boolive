@@ -52,7 +52,7 @@ class ProgressAction extends Widget
             $v['data-o'] = json_encode($v['data-o']);
             $v['title'] = $this->title->value();
             $v['description'] = mb_split('\n', $this->description->value());
-            if (sizeof($v['description'])<2) $v['description'][] = '';
+            if (count($v['description'])<2) $v['description'][] = '';
             $v['submit_title'] = $this->submit_title->value();
             return parent::show($v, $commands, $input);
         }

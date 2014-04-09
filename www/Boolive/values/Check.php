@@ -53,7 +53,7 @@ class Check
             if (isset($filters['default']))	unset($filters['default']);
             if (isset($filters['ignore'])){
                 $ignore = $filters['ignore'];
-                if (count($ignore) == 1 && is_array($ignore[0])) $ignore = $ignore[0];
+                if (sizeof($ignore) == 1 && is_array($ignore[0])) $ignore = $ignore[0];
                 unset($filters['ignore']);
             }else{
                 $ignore = array();
@@ -388,7 +388,7 @@ class Check
     {
         $rules = $rule->any;
         if (empty($rules)) return $value;
-        if (count($rules) == 1 && is_array(reset($rules))) $rules = reset($rules);
+        if (sizeof($rules) == 1 && is_array(reset($rules))) $rules = reset($rules);
         $result = null;
         foreach ($rules as $rule){
             $error = null;
@@ -416,7 +416,7 @@ class Check
             $result = mb_substr($value, 0, $max);
             if ($value != $result) $error = new Error(array('Требуется не больше %s символов(а)', $max), 'max');
         }else
-        if (is_array($value) && count($value) > $max){
+        if (is_array($value) && sizeof($value) > $max){
             $result = array_slice($value, 0, $max);
             if ($value != $result) $error = new Error(array('Требуется не больше %s элементов(а)', $max), 'max');
         }else{
@@ -443,7 +443,7 @@ class Check
         if (is_string($value) && mb_strlen($value) < $min){
             $error = new Error(array('Требуется не меньше %s символов(а)', $min), 'min');
         }else
-        if (is_array($value) && count($value) < $min){
+        if (is_array($value) && sizeof($value) < $min){
             $error = new Error(array('Длжно быть не меньше %s элементов(а)', $min), 'min');
         }
         return $result;
@@ -467,7 +467,7 @@ class Check
             $result = mb_substr($value, 0, $less - 1);
             if ($value != $result) $error = new Error(array('Требуется меньше %s символов(а)', $less), 'less');
         }else
-        if (is_array($value) && !(count($value) < $less)){
+        if (is_array($value) && !(sizeof($value) < $less)){
             $result = array_slice($value, 0, $less - 1);
             if ($value != $result) $error = new Error(array('Требуется меньше %s элементов(а)', $less), 'less');
         }else{
@@ -497,7 +497,7 @@ class Check
                 $error = new Error(array('Требуется больше %s символов(а)', $more), 'more');
             }
         }else
-        if (is_array($value) && !(count($value) > $more)){
+        if (is_array($value) && !(sizeof($value) > $more)){
             $error = new Error(array('Требуется больше %s элементов(а)', $more), 'more');
         }
         return $value;
@@ -548,7 +548,7 @@ class Check
     static function in($value, &$error, Rule $rule)
     {
         $list = $rule->in;
-        if (count($list) == 1 && is_array($list[0])) $list = $list[0];
+        if (sizeof($list) == 1 && is_array($list[0])) $list = $list[0];
         if (!in_array($value, $list)){
             $value = null;
             $error = new Error('Значение не в списке допустимых', 'in');
@@ -566,7 +566,7 @@ class Check
     static function not_in($value, &$error, Rule $rule)
     {
         $list = $rule->not_in;
-        if (count($list) == 1 && is_array($list[0])) $list = $list[0];
+        if (sizeof($list) == 1 && is_array($list[0])) $list = $list[0];
         if (in_array($value, $list)){
             $value = null;
             $error = new Error('Значение в списке запрещенных', 'not_in');
@@ -706,7 +706,7 @@ class Check
     {
         if (is_scalar($value)){
             $patterns = $rule->regexp;
-            if (count($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
+            if (sizeof($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
             foreach ($patterns as $pattern){
                 if (empty($pattern)) return $value;
                 if (preg_match($pattern, $value)) return $value;
@@ -727,7 +727,7 @@ class Check
     {
         if (is_scalar($value)){
             $patterns = $rule->ospatterns;
-            if (count($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
+            if (sizeof($patterns) == 1 && is_array($patterns[0])) $patterns = $patterns[0];
             foreach ($patterns as $pattern){
                 if (fnmatch($pattern, $value)) return $value;
             }
