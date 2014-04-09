@@ -44,7 +44,8 @@
             "order": 9
         },
         "object_rule": {
-            "value": "is(/library/content_samples/Page)",
+            "value": "all(in(/contents),attr(is_property,=,0))",
+            "value_type": 2,
             "proto": "/library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,
             "is_property": true,
@@ -74,6 +75,13 @@
                     "order": 1
                 }
             }
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidgetList2/path_rule",
+            "is_property": true,
+            "order": 15
         }
     }
 }
