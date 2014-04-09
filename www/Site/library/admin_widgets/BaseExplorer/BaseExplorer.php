@@ -191,7 +191,10 @@ class BaseExplorer extends AutoWidgetList2
             }
         }
         $count_per_page = 20;
-        $this->_input_child['REQUEST']['page_count'] = ceil($this->_input['REQUEST']['object']->find(array('select'=>array('count', $cond['select']), 'where'=>$cond['where']))/$count_per_page);
+        /** @var Entity $obj */
+        $obj = $this->_input['REQUEST']['object'];
+        $cnt = $obj->find(array('select'=>array('count', $cond['select']), 'where'=>$cond['where']));
+        $this->_input_child['REQUEST']['page_count'] = ceil($cnt/$count_per_page);
         $cond['limit'] = array(
             ($this->_input['REQUEST']['page']-1) * $count_per_page,
             $count_per_page

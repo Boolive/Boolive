@@ -19,10 +19,27 @@
             self.element.find('.Item__title').click(function(e){
                 e.stopPropagation();
                 e.preventDefault();
+                var s = self.callParents('getState');
+                if (s.select == 'structure'){
+                    var url = /^[a-z]+:\/\//i.test(self.options.object) ? self.options.object : window.location.protocol + '//' + window.location.host + self.options.object;
+                    $.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        accepts: {json: 'application/json'},
+                        url: url+'&select=(exists,children)&where=(attr(is_property,eq,0))',
+                        success: function(result, textStatus, jqXHR){
+                            if (result.result){
+                                self.callParents('setState', [{object:  self.options.link}]);
+                            }else{
+                                self.callParents('setState', [{object:  self.options.link, select:'property'}]);
+                            }
+                        }
+                    });
+                }
                 // Сначала выделяем себя
                 //self.callParents('setState', [{selected:  self.options.object}]);
                 // Теперь входим
-                self.callParents('setState', [{object:  self.options.link}]);
+                //self.callParents('setState', [{object:  self.options.link}]);
             });
             // Вход в объект-ссылку
             self.element.find('.Item__link').click(function(e){

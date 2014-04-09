@@ -112,7 +112,7 @@ class Data
         if ($cond == Entity::ENTITY_ID){
             return new Entity(array('uri'=>'/'.Entity::ENTITY_ID, 'id'=>Entity::ENTITY_ID));
         }
-        if ($cond == 'null' || !isset($cond)){
+        if ($cond === 'null' || !isset($cond)){
             return null;
         }
         $cond = self::normalizeCond($cond, array(), true, true);
@@ -156,7 +156,7 @@ class Data
         if ($cond['from'] instanceof Entity){
             $from_type = 'entity';
         }else
-        if (is_array($cond['from'])  && count($cond['from'])==2 && $cond['from'][0] instanceof Entity && is_string($cond['from'][1])){
+        if (is_array($cond['from'])  && sizeof($cond['from'])==2 && $cond['from'][0] instanceof Entity && is_string($cond['from'][1])){
             $from_type = 'entity/name';
         }else{
             $from_type = '';
@@ -179,23 +179,24 @@ class Data
                     }else{
                         if ($parent_cond['select'][0] == 'tree') $parent_cond['select'][0] = 'children';
                         $list = Buffer::getPlain($parent_cond);
-                        if (count($list)>1){
+                        if (sizeof($list)>1){
                             $key_from_group = $parent->key().'/'.$name;
                             $group_cond['from'] = array();
-                            $makefrom = function(&$group_cond, $list, $name) use (&$makefrom){
-                                foreach ($list as $from){
-                                    if (is_array($from)){
-                                        if (isset($from['class_name'])){
-                                            if (isset($from['id']) || isset($from['uri'])){
-                                                $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
-                                            }
-                                        }else{
-                                            $makefrom($group_cond, $from, $name);
-                                        }
-                                    }
-                                }
-                            };
-                            $makefrom($group_cond, $list, $name);
+//                            $makefrom1 = function(&$group_cond, $list, $name) use (&$makefrom){
+//                                foreach ($list as $from){
+//                                    if (is_array($from)){
+//                                        if (isset($from['class_name'])){
+//                                            if (isset($from['id']) || isset($from['uri'])){
+//                                                $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
+//                                            }
+//                                        }else{
+//                                            $makefrom($group_cond, $from, $name);
+//                                        }
+//                                    }
+//                                }
+//                            };
+                            self::makefrom1($group_cond, $list, $name);
+                            //$makefrom1($group_cond, $list, $name);
                         }
                     }
                 }
@@ -211,21 +212,22 @@ class Data
                 }else{
                     if ($from_cond['select'][0] == 'tree') $from_cond['select'][0] = 'children';
                     $list = Buffer::getPlain($from_cond);
-                    if (count($list)>1){
+                    if (sizeof($list)>1){
                         $key_from_group = $group_cond['from']->attr('is_link');
                         $group_cond['from'] = array();
-                        $makefrom = function(&$group_cond, $list) use (&$makefrom){
-                            foreach ($list as $from){
-                                if (is_array($from)){
-                                    if (isset($from['class_name'])){
-                                        if (!empty($from['is_link']) /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_link'];
-                                    }else{
-                                        $makefrom($group_cond, $from);
-                                    }
-                                }
-                            }
-                        };
-                        $makefrom($group_cond, $list);
+//                        $makefrom2 = function(&$group_cond, $list) use (&$makefrom){
+//                            foreach ($list as $from){
+//                                if (is_array($from)){
+//                                    if (isset($from['class_name'])){
+//                                        if (!empty($from['is_link']) /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_link'];
+//                                    }else{
+//                                        $makefrom2($group_cond, $from);
+//                                    }
+//                                }
+//                            }
+//                        };
+//                        $makefrom2($group_cond, $list);
+                        self::makefrom2($group_cond, $list);
                     }
                 }
             }else{
@@ -243,30 +245,33 @@ class Data
                 }else{
                     if ($from_cond['select'][0] == 'tree') $from_cond['select'][0] = 'children';
                     $list = Buffer::getPlain($from_cond);
-                    if (count($list)>1){
+                    if (sizeof($list)>1){
                         $key_from_group = $group_cond['from']->attr('is_default_value');
                         $group_cond['from'] = array();
-                        $makefrom = function(&$group_cond, $list) use (&$makefrom){
-                            foreach ($list as $from){
-                                if (is_array($from)){
-                                    if (isset($from['class_name'])){
-                                        if (isset($from['is_default_value']) && $from['is_default_value']!=$from['id'] /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_default_value'];
-                                    }else{
-                                        $makefrom($group_cond, $from);
-                                    }
-                                }
-                            }
-                        };
-                        $makefrom($group_cond, $list);
+//                        $makefrom3 = function(&$group_cond, $list) use (&$makefrom){
+//                            foreach ($list as $from){
+//                                if (is_array($from)){
+//                                    if (isset($from['class_name'])){
+//                                        if (isset($from['is_default_value']) && $from['is_default_value']!=$from['id'] /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_default_value'];
+//                                    }else{
+//                                        $makefrom3($group_cond, $from);
+//                                    }
+//                                }
+//                            }
+//                        };
+                        self::makefrom3($group_cond, $list);
+                        //$makefrom($group_cond, $list);
                     }
                 }
             }else{
                 $group_cond['from'] = $cond['from'] = $group_cond['from']->attr('is_default_value');
             }
             $group_cond['select'] = $cond['select'] = array('self');
-        }else
+        }else{
+           $group_cond = $cond;
+        }
         // Остальные выборки
-        if ($from_type == 'entity'){
+       /* if ($from_type == 'entity'){
             // Группировка по объектам, выбранных ранее вместе с текущим from
             if (($from_cond = $group_cond['from']->cond()) && isset(self::$group_cond[json_encode($from_cond)]) && ($from_cond['select'][0]!='self' || is_array($from_cond['from']))){
                 if (self::compareCond($from_cond, $group_cond, array('from', 'key'))){
@@ -274,33 +279,34 @@ class Data
                 }else{
                     if ($from_cond['select'][0] == 'tree') $from_cond['select'][0] = 'children';
                     $list = Buffer::getPlain($from_cond);
-                    if (count($list)>1){
+                    if (sizeof($list)>1){
                         $key_from_group = $group_cond['from']->id();
                         $group_cond['from'] = array();
-                        $makefrom = function(&$group_cond, $list) use (&$makefrom){
-                            foreach ($list as $from){
-                                if (is_array($from)){
-                                    if (isset($from['class_name'])){
-                                        if (isset($from['id'])) $group_cond['from'][] = $from['id'];
-                                    }else{
-                                        $makefrom($group_cond, $from);
-                                    }
-                                }
-                            }
-                        };
-                        $makefrom($group_cond, $list);
+//                        $makefrom4 = function(&$group_cond, $list) use (&$makefrom){
+//                            foreach ($list as $from){
+//                                if (is_array($from)){
+//                                    if (isset($from['class_name'])){
+//                                        if (isset($from['id'])) $group_cond['from'][] = $from['id'];
+//                                    }else{
+//                                        $makefrom4($group_cond, $from);
+//                                    }
+//                                }
+//                            }
+//                        };
+                        self::makefrom4($group_cond, $list);
+                        //$makefrom($group_cond, $list);
                     }
                 }
             }
-        }
+        }*/
         // Если автоматическая группировка, то по такому услвоию тоже группировать потом
         if (isset($key_from_group)){
-            $group_cond['from'] = self::normalizeFrom($group_cond['from'], false);
+            //$group_cond['from'] = self::normalizeFrom($group_cond['from'], false);
             self::$group_cond[json_encode($group_cond)] = true;
         }else{
             $group_cond['from'] = $cond['from'];
         }
-        // Если явно указано, что по текущему услвоию потом группировать
+        // Если явно указано, что по текущему условию группировать
         if ($group) self::$group_cond[json_encode($cond)] = true;
 
         // Из буфера сущностей
@@ -487,6 +493,60 @@ class Data
         }
     }
 
+    static private function makefrom1(&$group_cond, $list, $name)
+    {
+        foreach ($list as $from){
+            //if (is_array($from)){
+                if (isset($from['class_name'])){
+                    if (isset($from['id']) || isset($from['uri'])){
+                        $group_cond['from'][] = (isset($from['id'])?$from['id']:$from['uri']).'/'.$name;
+                    }
+                }else{
+                    if (is_array($from)) self::makefrom1($group_cond, $from, $name);
+                }
+            //}
+        }
+    }
+
+    static private function makefrom2(&$group_cond, $list)
+    {
+        foreach ($list as $from){
+            //if (is_array($from)){
+                if (isset($from['class_name'])){
+                    if (!empty($from['is_link']) /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_link'];
+                }else{
+                    if (is_array($from)) self::makefrom2($group_cond, $from);
+                }
+            //}
+        }
+    }
+
+    static private function makefrom3(&$group_cond, $list)
+    {
+        foreach ($list as $from){
+            //if (is_array($from)){
+                if (isset($from['class_name'])){
+                    if (isset($from['is_default_value']) && $from['is_default_value']!=$from['id'] /*&& $from['is_link']!=Entity::ENTITY_ID*/) $group_cond['from'][] = $from['is_default_value'];
+                }else{
+                    if (is_array($from)) self::makefrom3($group_cond, $from);
+                }
+            //}
+        }
+    }
+
+    static private function makefrom4(&$group_cond, $list)
+    {
+        foreach ($list as $from){
+            //if (is_array($from)){
+                if (isset($from['class_name'])){
+                    if (isset($from['id'])) $group_cond['from'][] = $from['id'];
+                }else{
+                    if (is_array($from)) self::makefrom4($group_cond, $from);
+                }
+            //}
+        }
+    }
+
     /**
      * Нормализация условия поиска.
      * Определяются пункты по умолчанию, корректируется структура.
@@ -500,9 +560,7 @@ class Data
      */
     static function normalizeCond($cond, $default = array(), $normalize = false, $entity_in_from = false)
     {
-        if (is_array($cond) && !empty($cond['correct'])){
-            return $cond;
-        }
+        if (!empty($cond['correct'])) return $cond;
         $result = array();
         // Услвоие - строка (uri + cond)
         if (is_string($cond)){
@@ -510,7 +568,7 @@ class Data
         }else
         if (is_array($cond)){
             // массив из объекта и строки. строка может состоять из uri, cond,
-            if (count($cond) == 2 && isset($cond[0]) && $cond[0] instanceof Entity && isset($cond[1]) && is_string($cond[1])){
+            if (sizeof($cond) == 2 && isset($cond[0]) && $cond[0] instanceof Entity && isset($cond[1]) && is_string($cond[1])){
                 $uri = $cond[1];
                 $entity = $cond[0];
             }else{
@@ -651,19 +709,21 @@ class Data
         if (!isset($from)){
             return '';
         }else
-        if (!is_array($from) || (count($from)==2 && $from[0] instanceof Entity && is_string($from[1]))){
+        if (!is_array($from) || (sizeof($from)==2 && $from[0] instanceof Entity && is_string($from[1]))){
             $from = array($from);
         }
-        foreach ($from as $i => $f){
-            if (!is_scalar($f)){
-                if ($f instanceof Entity){
-                    if (!$can_entity) $from[$i] = $f->id();
+        $cnt = sizeof($from);
+        for ($i=0; $i<$cnt; ++$i){
+        //foreach ($from as $i => $f){
+            if (!is_string($from[$i])){
+                if ($from[$i] instanceof Entity){
+                    if (!$can_entity) $from[$i] = $from[$i]->id();
                 }else
-                if (is_array($f)){
+                /*if (is_array($from[$i]))*/{
                     // Если from[0] сущность, а from[1] строка
-                    if (count($f)==2 && $f[0] instanceof Entity && is_string($f[1])){
-                        if (!$can_entity || mb_substr_count($f[1], '/')){
-                            $from[$i] = $f[0]->uri().'/'.$f[1];
+                    if (sizeof($from[$i])==2 && $from[$i][0] instanceof Entity && is_string($from[$i][1])){
+                        if (!$can_entity || mb_substr_count($from[$i][1], '/')){
+                            $from[$i] = $from[$i][0]->uri().'/'.$from[$i][1];
                         }
                     }else{
                         $from[$i] = '';
@@ -671,7 +731,7 @@ class Data
                 }
             }
         }
-        return (count($from)==1) ? $from[0] : $from;
+        return (sizeof($from)==1) ? $from[0] : $from;
     }
 
     /**
@@ -702,7 +762,7 @@ class Data
                 if (is_array($item)){
                     $k = array_shift($item);
                     unset($result[$key]);
-                    if (count($item)==1) $item = $item[0];
+                    if (sizeof($item)==1) $item = $item[0];
                     if ($item === 'false' || $item === '0') $item = false;
                     $result[$k] = $item;
                 }else{
@@ -732,7 +792,7 @@ class Data
                 }
             }
         }
-        if (count($cond['select']) == 1) $cond['select'] = $cond['select'][0];
+        if (sizeof($cond['select']) == 1) $cond['select'] = $cond['select'][0];
         if ($cond['select'] == 'self'){
             unset($cond['select'], $cond['depth']);
         }
@@ -917,14 +977,14 @@ class Data
         // Поиск элемента, с которого прототипы отличаются
         while (isset($proto_uri[$i]) && isset($proto_proto_uri[$i]) && $proto_uri[$i] == $proto_proto_uri[$i]) $i++;
         // Начальная часть пути берется от $obj
-        $l = count($obj_uri)-count($proto_uri)+$i;
+        $l = sizeof($obj_uri)-sizeof($proto_uri)+$i;
         if ($l>0){
             $new_proto = array_slice($obj_uri, 0, $l);
         }else{
             return false;
         }
         // Конечная часть пути добавляется от $proto_proto (его конец, отличающийся от $proto)
-        if ($i <= count($proto_proto_uri)){
+        if ($i <= sizeof($proto_proto_uri)){
             $new_proto = array_merge($new_proto, array_slice($proto_proto_uri, $i));
         }
         return implode('/', $new_proto);

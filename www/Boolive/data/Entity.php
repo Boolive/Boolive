@@ -894,55 +894,59 @@ class Entity implements ITrace
      * Родитель объекта
      * @param null|Entity $new_parent Новый родитель. Чтобы удалить родителя, указывается false
      * @param bool $load Загрузить родителя из хранилща, если ещё не загружен?
+     * @throws \Boolive\errors\Error
      * @return Entity|null
      */
     function parent($new_parent = null, $load = true)
     {
-        if (is_string($new_parent)) $new_parent = Data::read($new_parent);
-        // Смена родителя
-        if (isset($new_parent) && (empty($new_parent)&&!empty($this->_attribs['parent']) || !$new_parent->eq($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1)){
-            $is_draft = $this->isDraft(null, false);
-            $is_hidden = $this->isHidden(null, false);
-            if (empty($new_parent)){
-                // Удаление родителя
-                $this->_attribs['parent'] = null;
-                $this->_attribs['parent_cnt'] = 0;
-                $this->_parent = null;
-                //$this->updateURI($this->name());
-            }else{
-                // Новый родитель не должен быть свойстовм объекта
-                if ($new_parent->in($this)){
-                    $errors = new Error('Неверный объект', $this->uri());
-                    if ($new_parent->eq($this)){
-                        $errors->_attribs->parent = 'Объект не может сам для себя стать родителем';
-                    }else{
-                        $errors->_attribs->parent = 'Свойство не может стать родителем для объекта';
+        if (isset($new_parent)){
+            if (is_string($new_parent)) $new_parent = Data::read($new_parent);
+            // Смена родителя
+            if (empty($new_parent) && !empty($this->_attribs['parent']) || !$new_parent->eq($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1){
+                $is_draft = $this->isDraft(null, false);
+                $is_hidden = $this->isHidden(null, false);
+                if (empty($new_parent)){
+                    // Удаление родителя
+                    $this->_attribs['parent'] = null;
+                    $this->_attribs['parent_cnt'] = 0;
+                    $this->_parent = null;
+                    //$this->updateURI($this->name());
+                }else{
+                    // Новый родитель не должен быть свойстовм объекта
+                    if ($new_parent->in($this)){
+                        $errors = new Error('Неверный объект', $this->uri());
+                        if ($new_parent->eq($this)){
+                            $errors->_attribs->parent = 'Объект не может сам для себя стать родителем';
+                        }else{
+                            $errors->_attribs->parent = 'Свойство не может стать родителем для объекта';
+                        }
+                        throw $errors;
                     }
-                    throw $errors;
+                    // Смена родителя
+                    $this->_parent = $new_parent;
+                    $this->_attribs['parent'] = $new_parent->key();
+                    $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
+                    $this->_attribs['order'] = Entity::MAX_ORDER;
+                    // Установка атрибутов, зависимых от прототипа
+                    //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
+                    // Обновление доступа
+                    if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
+                   // $this->updateURI($new_parent->uri().'/'.$this->name());
                 }
-                // Смена родителя
-                $this->_parent = $new_parent;
-                $this->_attribs['parent'] = $new_parent->key();
-                $this->_attribs['parent_cnt'] = $new_parent->parentCount() + 1;
-                $this->_attribs['order'] = Entity::MAX_ORDER;
-                // Установка атрибутов, зависимых от прототипа
-                //if ($new_parent->isLink() || !isset($this->_attribs['is_link'])) $this->_attribs['is_link'] = 1;
-                // Обновление доступа
-                if (!$new_parent->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_parent->isAccessible();
-               // $this->updateURI($new_parent->uri().'/'.$this->name());
+                if ($this->isExist()) $this->name(null, true);
+                // Обновление зависимых от родителя признаков
+                $this->isDraft($is_draft);
+                $this->isHidden($is_hidden);
+                $this->_changed = true;
+                $this->_checked = false;
             }
-            if ($this->isExist()) $this->name(null, true);
-            // Обновление зависимых от родителя признаков
-            $this->isDraft($is_draft);
-            $this->isHidden($is_hidden);
-            $this->_changed = true;
-            $this->_checked = false;
         }
         // Возврат объекта-родителя
         if ($this->_parent === false && $load){
             if (isset($this->_attribs['parent'])){
                 $this->_parent = Data::read(array(
                     'from' => $this->_attribs['parent'],
+                    'select' => 'self',
                     'comment' => 'read parent',
                     'cache' => 2
                 ), false);
@@ -1008,69 +1012,73 @@ class Entity implements ITrace
      * Прототип объекта
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
      * @param bool $load Загрузить прототип из хранилща, если ещё не загружен?
+     * @param bool $reload
+     * @throws \Boolive\errors\Error
      * @throws \Exception
      * @return Entity|null|bool
      */
     function proto($new_proto = null, $load = true, $reload = false)
     {
-        if (is_string($new_proto)) $new_proto = Data::read($new_proto);
-        // Смена прототипа
-        if (isset($new_proto) && ((empty($new_proto)&&!empty($this->_attribs['proto'])) || !$new_proto->eq($this->proto()))){
-            if (empty($new_proto)){
-                // Удаление прототипа
-                $this->_attribs['proto'] = null;
-                $this->_attribs['proto_cnt'] = 0;
-                $this->_attribs['is_default_value'] = $this->_attribs['id'];
-                if ($this->_attribs['is_default_class'] != 0){
-                    $this->_attribs['is_default_class'] = self::ENTITY_ID;
-                }
-                if ($this->_attribs['is_link'] != 0){
-                    $this->_attribs['is_link'] = self::ENTITY_ID;
-                }
-                $this->_proto = null;
-            }else{
-                // Новый родитель не должен быть свойстовм объекта
-                if ($this->isExist() && $new_proto->is($this)){
-                    $errors = new Error('Неверный объект', $this->uri());
-                    if ($new_proto->eq($this)){
-                        $errors->_attribs->proto = 'Объект не может сам для себя стать прототипом';
-                    }else{
-                        $errors->_attribs->proto = 'Наследник не может стать прототипом для объекта';
+        if (isset($new_proto)){
+            if (is_string($new_proto)) $new_proto = Data::read($new_proto);
+            // Смена прототипа
+            if (empty($new_proto) && !empty($this->_attribs['proto']) || !$new_proto->eq($this->proto())){
+                if (empty($new_proto)){
+                    // Удаление прототипа
+                    $this->_attribs['proto'] = null;
+                    $this->_attribs['proto_cnt'] = 0;
+                    $this->_attribs['is_default_value'] = $this->_attribs['id'];
+                    if ($this->_attribs['is_default_class'] != 0){
+                        $this->_attribs['is_default_class'] = self::ENTITY_ID;
                     }
-                    throw $errors;
-                }
-                // Наследование значения
-                if ($this->isDefaultValue()){
-                    $this->_attribs['value'] = $new_proto->value();
-                    $this->_attribs['value_type'] = $new_proto->valueType();
-                    if ($vp = $new_proto->isDefaultValue(null, true)){
-                        $this->_attribs['is_default_value'] = $vp->key();
-                    }else{
-                        $this->_attribs['is_default_value'] = $new_proto->key();
+                    if ($this->_attribs['is_link'] != 0){
+                        $this->_attribs['is_link'] = self::ENTITY_ID;
                     }
-                }
-                // Смена прототипа
-                if ($new_proto->store() != $this->store()){
-                    $this->_attribs['proto'] = $new_proto->uri();
+                    $this->_proto = null;
                 }else{
-                   $this->_attribs['proto'] = $new_proto->key();
-                }
-                $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
-                $this->_proto = $new_proto;
+                    // Новый родитель не должен быть свойстовм объекта
+                    if ($this->isExist() && $new_proto->is($this)){
+                        $errors = new Error('Неверный объект', $this->uri());
+                        if ($new_proto->eq($this)){
+                            $errors->_attribs->proto = 'Объект не может сам для себя стать прототипом';
+                        }else{
+                            $errors->_attribs->proto = 'Наследник не может стать прототипом для объекта';
+                        }
+                        throw $errors;
+                    }
+                    // Наследование значения
+                    if ($this->isDefaultValue()){
+                        $this->_attribs['value'] = $new_proto->value();
+                        $this->_attribs['value_type'] = $new_proto->valueType();
+                        if ($vp = $new_proto->isDefaultValue(null, true)){
+                            $this->_attribs['is_default_value'] = $vp->key();
+                        }else{
+                            $this->_attribs['is_default_value'] = $new_proto->key();
+                        }
+                    }
+                    // Смена прототипа
+                    if ($new_proto->store() != $this->store()){
+                        $this->_attribs['proto'] = $new_proto->uri();
+                    }else{
+                       $this->_attribs['proto'] = $new_proto->key();
+                    }
+                    $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
+                    $this->_proto = $new_proto;
 
-                // Если объект ссылка или новый прототип ссылка, то обновление ссылки
-                if ($this->isLink() || $new_proto->isLink()){
-                    $this->isLink(true); //также обновляется класс
-                }else
-                // Обновление наследуемого класса
-                if ($this->isDefaultClass()){
-                    $this->isDefaultClass(true);
+                    // Если объект ссылка или новый прототип ссылка, то обновление ссылки
+                    if ($this->isLink() || $new_proto->isLink()){
+                        $this->isLink(true); //также обновляется класс
+                    }else
+                    // Обновление наследуемого класса
+                    if ($this->isDefaultClass()){
+                        $this->isDefaultClass(true);
+                    }
+                    // Обновление доступа
+                    if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
                 }
-                // Обновление доступа
-                if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
+                $this->_changed = true;
+                $this->_checked = false;
             }
-            $this->_changed = true;
-            $this->_checked = false;
         }
         // Возврат объекта-прототипа
         $reload = $reload && $this->_proto instanceof Entity && !$this->_proto->isExist() && isset($this->_attribs['proto']);
@@ -1263,6 +1271,7 @@ class Entity implements ITrace
                 $obj = Data::read(array(
                     'from' => array($this, $name),
                     'comment' => 'read property by name',
+                    ///'group' => true
                 ));
             }else{
                 $obj = null;
@@ -1417,7 +1426,7 @@ class Entity implements ITrace
                 $result[$key] = $obj->birth($this);
             }
         }else{
-            return array();
+            return in_array($cond['select'], array('self', 'children', 'parents', 'tree', 'protos', 'heirs'))? array() : 0;
         }
 
         // Установка выбранных подчиенных в свойства объекта
@@ -1699,7 +1708,7 @@ class Entity implements ITrace
                 foreach ($cond[1] as $c){
                     if ($this->verify($c)) return true;
                 }
-                return !count($cond[1]);
+                return !sizeof($cond[1]);
             case 'not':
                 return !$this->verify($cond[1]);
             case 'attr':

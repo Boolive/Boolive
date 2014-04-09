@@ -14,12 +14,12 @@ use Site\library\views\Widget\Widget;
 
 class FileEditor extends Widget
 {
-    function startRule()
-    {
-        $rule = parent::startRule();
-        $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in('file')->required();
-        return $rule;
-    }
+    // function startRule()
+    // {
+    //     $rule = parent::startRule();
+    //     $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in('file')->required();
+    //     return $rule;
+    // }
 
     function startCheck(Commands $commands, $input)
     {

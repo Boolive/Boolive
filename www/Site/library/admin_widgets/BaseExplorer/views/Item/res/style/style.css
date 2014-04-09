@@ -126,6 +126,9 @@
         height: 12px;
         margin-right: 2px;
         }
+    .Item__file{
+        margin-left: -2px;
+    }
     .Item__default-value{
         color: #8040A0;
         }

@@ -2,26 +2,21 @@
 Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
-
 body
 {
 	/* Font */
 	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
 	font-size: 12px;
-
-	/* Text color */
 	color: #333;
-
 	/* Remove the background color to make it transparent */
 	background-color: #fff;
-
 	margin: 20px;
 }
 
 .cke_editable
 {
-	font-size: 13px;
-	line-height: 1.6em;
+	font-size: 14px;
+	line-height: 1.48;
 }
 
 blockquote
@@ -63,9 +58,31 @@ ol,ul,dl
 
 h1,h2,h3,h4,h5,h6
 {
-	font-weight: normal;
-	line-height: 1.2em;
+	/*line-height: 1.2em;*/
 }
+/*h1, h2, h3, h4, h6 {*/
+	/*font-weight: normal;*/
+	/*}*/
+/*h5 {*/
+	/*font-weight: bold;*/
+	/*}*/
+/*h1 {*/
+	/*font-size: 24pt;*/
+	/*}*/
+/*h2 {*/
+	/*font-size: 19pt;*/
+	/*}*/
+/*h3 {*/
+	/*font-size: 14pt;*/
+	/*}*/
+/*h4 {*/
+	/*font-size: 11pt;*/
+    /*font-weight: bold;*/
+	/*}*/
+/*h5, h6 {*/
+	/*font-size: 9pt;*/
+    /*font-style: italic;*/
+	/*}*/
 
 hr
 {

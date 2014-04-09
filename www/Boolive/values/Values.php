@@ -307,7 +307,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     function count()
     {
         $value = $this->getValue();
-        return is_array($value) ? count($value) : 1;
+        return is_array($value) ? sizeof($value) : 1;
     }
 
     /**

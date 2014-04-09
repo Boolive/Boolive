@@ -65,8 +65,8 @@ class F
         if ($lim > -2) return explode($delim, $str, abs($lim));
         $lim = -$lim;
         $out = explode($delim, $str);
-        if ($lim >= count($out)) return $out;
-        $out = array_chunk($out, count($out) - $lim + 1);
+        if ($lim >= sizeof($out)) return $out;
+        $out = array_chunk($out, sizeof($out) - $lim + 1);
         return array_merge(array(implode($delim, $out[0])), $out[1]);
     }
 
