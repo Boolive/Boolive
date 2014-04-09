@@ -82,7 +82,7 @@ class Events
     {
         $r = new EventResult();
         if (isset(self::$handlers[$event_name])){
-            $cnt = count(self::$handlers[$event_name]);
+            $cnt = sizeof(self::$handlers[$event_name]);
             for ($i = 0; $i < $cnt; $i++){
                 if (!is_array($params)){
                     $params = array($params);
@@ -121,7 +121,7 @@ class Events
         $list = self::$handlers;
         foreach ($list as $event => $handlers){
             $content[$event] = array();
-            $cnt = count($handlers);
+            $cnt = sizeof($handlers);
             for ($i = 0; $i < $cnt; $i++){
                 // Если не указано о сохранени или явно указано сохранять
                 if (!isset($handlers[$i]['save']) || !empty($handlers[$i]['save'])){

@@ -6,7 +6,7 @@
 	<?php endif;?>
 	<?php
 		if (isset($v['fields'])){
-			$cnt = count($v['fields']);
+			$cnt = sizeof($v['fields']);
 			for ($i=0; $i<$cnt; $i++){
 				echo $v['fields'][$i];
 			}
