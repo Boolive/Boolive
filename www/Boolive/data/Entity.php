@@ -1199,7 +1199,8 @@ class Entity implements ITrace
                 $parents[] = $p;
             }
             for ($i = sizeof($protos)-1; $i>0; $i--){
-                $protos[$i-1] = $protos[$i]->birth($parents[$i-1], false);
+                $protos[$i-1] = $protos[$i]->birth($parents[$i-1]);
+                $protos[$i-1]->isDraft($protos[$i]->isDraft(null,false));
                 $protos[$i-1]->_is_inner = true;
             }
             return $protos[0];
@@ -1697,14 +1698,23 @@ class Entity implements ITrace
     {
         if (empty($cond)) return true;
         if (is_string($cond)) $cond = Data::parseCond($cond);
+        if (count($cond)==1) $cond = $cond[0];
         if (is_array($cond[0])) $cond = array('all', $cond);
         switch (strtolower($cond[0])){
             case 'all':
+                if (count($cond)>2){
+                    unset($cond[0]);
+                    $cond[1] = $cond;
+                }
                 foreach ($cond[1] as $c){
                     if (!$this->verify($c)) return false;
                 }
                 return true;
             case 'any':
+                if (count($cond)>2){
+                    unset($cond[0]);
+                    $cond[1] = $cond;
+                }
                 foreach ($cond[1] as $c){
                     if ($this->verify($c)) return true;
                 }
