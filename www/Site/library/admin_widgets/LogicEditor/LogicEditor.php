@@ -12,12 +12,12 @@ use Site\library\views\Widget\Widget;
 
 class LogicEditor extends Widget
 {
-    function startRule()
-    {
-        $rule = parent::startRule();
-        $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in('logic')->required();
-        return $rule;
-    }
+    // function startRule()
+    // {
+    //     $rule = parent::startRule();
+    //     $rule->arrays[0]['REQUEST']->arrays[0]['select'] = Rule::in('logic')->required();
+    //     return $rule;
+    // }
 
     function show($v = array(), $commands, $input)
     {
