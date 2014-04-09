@@ -1426,7 +1426,7 @@ class Entity implements ITrace
                 $result[$key] = $obj->birth($this);
             }
         }else{
-            return array();
+            return in_array($cond['select'], array('self', 'children', 'parents', 'tree', 'protos', 'heirs'))? array() : 0;
         }
 
         // Установка выбранных подчиенных в свойства объекта
