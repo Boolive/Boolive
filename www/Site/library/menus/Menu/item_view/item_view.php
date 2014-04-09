@@ -7,6 +7,7 @@
 namespace Site\library\menus\Menu\item_view;
 
 use Boolive\data\Entity;
+use Boolive\input\Input;
 use Boolive\values\Rule,
     Site\library\views\AutoWidgetList2\AutoWidgetList2,
     Site\library\basic\Image\Image;
@@ -44,8 +45,8 @@ class item_view extends AutoWidgetList2
             // Ссылка
             $real = $obj->linked();
             if (!isset($v['item_href'])){
-                if ($this->_cut_contents_url && substr($real->uri(), 0, 10) == '/contents/'){
-                    $v['item_href'] = substr($real->uri(), 9);
+                if ($this->_cut_contents_url){
+                    $v['item_href'] = Input::url($real->uri());
                 }else{
                     $v['item_href'] = $real->uri();
                 }

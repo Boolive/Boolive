@@ -9,6 +9,7 @@
 namespace Site\library\menus\NextPrevNavigation;
 
 use Boolive\data\Entity;
+use Boolive\input\Input;
 use Site\library\views\Widget\Widget,
     Boolive\values\Rule,
     Boolive\values\Check,
@@ -94,22 +95,14 @@ class NextPrevNavigation extends Widget
                 $v['next'] = null;
             }else{
                 $v['next'] = array('title' => $next[0]->title->value());
-                if (substr($next[0]->uri(), 0, 10) == '/contents/') {
-                    $v['next']['href'] = substr($next[0]->uri(), 10);
-                } else {
-                    $v['next']['href'] = $next[0]->uri();
-                }
+                $v['next']['href'] = Input::url($next[0]->uri());
             }
             // Инфо предыдущей страницы
             if (empty($prev)){
                 $v['prev'] = null;
             }else{
                 $v['prev'] = array('title' => $prev[0]->title->value());
-                if (substr($prev[0]->uri(), 0, 10) == '/contents/') {
-                    $v['prev']['href'] = substr($prev[0]->uri(), 10);
-                } else {
-                    $v['prev']['href'] = $prev[0]->uri();
-                }
+                $v['prev']['href'] = Input::url($prev[0]->uri());
             }
             return parent::show($v, $commands, $input);
         }

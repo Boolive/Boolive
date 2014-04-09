@@ -11,6 +11,11 @@ use Site\library\views\AutoWidgetList2\AutoWidgetList2;
 
 class Page extends AutoWidgetList2
 {
+    function startInit($input)
+    {
+        return parent::startInit($input);
+    }
+
     function show($v = array(), $commands, $input)
     {
         $page = $this->_input['REQUEST']['object'];

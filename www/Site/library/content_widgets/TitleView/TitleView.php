@@ -6,6 +6,7 @@
  */
 namespace Site\library\content_widgets\TitleView;
 
+use Boolive\input\Input;
 use Site\library\views\Widget\Widget;
 
 class TitleView extends Widget
@@ -14,10 +15,7 @@ class TitleView extends Widget
     {
         $v['value'] = $this->_input['REQUEST']['object']->value();
         if ($parent = $this->_input['REQUEST']['object']->parent()){
-            $v['parent_uri'] = $parent->uri();
-            if (mb_substr($v['parent_uri'],0,10)=='/contents/'){
-                $v['parent_uri'] = mb_substr($v['parent_uri'],10);
-            }
+            $v['parent_uri'] = Input::url($parent->uri());
         }else{
             $v['parent_uri'] = '';
         }
