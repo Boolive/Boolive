@@ -1587,6 +1587,9 @@ class MySQLStore extends Entity
                                 }
                             }
                             // sql услвоие
+                            if ($c[2]=='eq'){
+                                $c[2] = '=';
+                            }
                             $cond[$i] = '`'.$table.'`.`'.$c[1].'` '.$c[2];
                             // Учитываем особенность синтаксиса условия IN
                             if (mb_strtolower($c[2]) == 'in'){
