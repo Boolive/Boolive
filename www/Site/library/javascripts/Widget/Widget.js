@@ -224,27 +224,27 @@
             settings.data.direct = self.options.view;
             settings.dataType = 'json';
             settings.success = function(result, textStatus, jqXHR){
+                // Название корневого тега
+                var expr = new RegExp('<[a-z]+.*data-v=[\'"]'+self.options.view+'[\'"].*>');
+                var tag = expr.exec(result.out);
+                if (tag && tag.length==1){
+                    tag = tag[0];
+                    // Оставляем только вложенные теги
+                    expr = new RegExp(tag+'([\\s\\S]*)<\/div>[\\s\\S]*');
+                    var html = result.out.replace(expr, '$1');
+                    // Обратный вызов перед очисткой элемента
+                    if ('empty' in settings && _.isFunction(settings.empty)){
+                        settings.empty();
+                    }
+                    self.element.html(html);
+                }
                 // Подключение файлов css и js. После их подключения обновляется HTML виджета
                 if (!result.links) result.links = [];
                 $.include(result.links, function(){
-                    // Название корневого тега
-                    var expr = new RegExp('<[a-z]+.*data-v=[\'"]'+self.options.view+'[\'"].*>');
-                    var tag = expr.exec(result.out);
-                    if (tag && tag.length==1){
-                        tag = tag[0];
-                        // Оставляем только вложенные теги
-                        expr = new RegExp(tag+'([\\s\\S]*)<\/div>[\\s\\S]*');
-                        var html = result.out.replace(expr, '$1');
-                        // Обратный вызов перед очисткой элемента
-                        if ('empty' in settings && _.isFunction(settings.empty)){
-                            settings.empty();
-                        }
-                        self.element.html(html);
-                        // Вызов события изменения HTML. Будут подключаться jquery плагины к загруженному html
-                        $(document).trigger('load-html', [self.element]);
-                        // Обратный вызов при удачном обновлении виджета
-                        if (success) success(result, textStatus, jqXHR);
-                    }
+                    // Вызов события изменения HTML. Будут подключаться jquery плагины к загруженному html
+                    $(document).trigger('load-html', [self.element]);
+                    // Обратный вызов при удачном обновлении виджета
+                    if (success) success(result, textStatus, jqXHR);
                 });
             };
             $.ajax(settings);
