@@ -29,6 +29,9 @@ class Add extends SelectObject
             foreach ($protos as $proto){
                 /** @var $proto \Boolive\data\Entity */
                 $obj = $proto->birth($parent);
+                if ($proto->parent()->eq($parent->proto())){
+                    $obj->order($proto->order());
+                }
                 $obj->isDraft(false);
                 if ($this->_input['REQUEST']['is_link']){
                     $obj->isLink(true);
