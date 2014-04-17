@@ -1475,7 +1475,7 @@ class MySQLStore extends Entity
                     }else
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                         // Прямые наследники
-                        $result['from'] = ' FROM {objects} obj USE INDEX(child) JOIN {ids} u ON (u.id = obj.id)';
+                        $result['from'] = ' FROM {objects} obj JOIN {ids} u ON (u.id = obj.id)';
 //                        if ($multy){
 //                            $result['select'].= ', CONCAT("//",obj.proto) as `from`';
 //                            $result['where'].= 'obj.proto IN ('.rtrim(str_repeat('?,', $multy_cnt),',').') ';
