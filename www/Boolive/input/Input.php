@@ -257,7 +257,8 @@ class Input extends Values
         }
         if (isset($args['path'])) unset($args['path']);
 		if (strlen($url) > 0){
-			$url = trim($url,'//');
+            if (mb_substr($url,0,1)=='/') $url = mb_substr($url,1);
+			$url = rtrim($url,'/');
 		}
         if (is_array($args)){
 			foreach ($args as $name => $value){
@@ -265,7 +266,7 @@ class Input extends Values
 			}
 		}
 		if ($host){
-			return $schema.($host===true?$schema.HTTP_HOST.DIR_WEB:$host).$url;
+			return $schema.($host===true?HTTP_HOST.DIR_WEB:$host).$url;
 		}else{
 			return DIR_WEB.$url;
 		}
