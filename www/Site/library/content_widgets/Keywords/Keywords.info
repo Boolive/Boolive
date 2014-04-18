@@ -2,6 +2,7 @@
     "value": "Keywords.tpl",
     "value_type": 3,
     "proto": "/library/views/AutoWidgetList2",
+    "is_default_class": false,
     "order": 10,
     "children": {
         "title": {
