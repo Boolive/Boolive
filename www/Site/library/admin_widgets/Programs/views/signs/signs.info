@@ -1,7 +1,7 @@
 {
     "value": "access(write/change)",
     "proto": "/library/views/ViewSingle",
-    "order": 17,
+    "order": 20,
     "children": {
         "title": {
             "value": "Признаки",

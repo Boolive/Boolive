@@ -6,7 +6,7 @@
     "order": 50,
     "children": {
         "title": {
-            "value": "Редактор логики",
+            "value": "Логика",
             "proto": "/library/views/Widget/title",
             "is_mandatory": true,
             "is_property": true,

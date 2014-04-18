@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/library/views/ViewSingle",
-    "order": 19,
+    "order": 22,
     "children": {
         "title": {
             "value": "Дополнительно",

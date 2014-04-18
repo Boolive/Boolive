@@ -2,7 +2,7 @@
     "is_default_value": true,
     "value": "",
     "proto": "/library/views/ViewSingle",
-    "order": 15,
+    "order": 16,
     "children": {
         "title": {
             "value": "Операции",

@@ -27,6 +27,23 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 3
+        },
+        "items": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/Object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 12,
+            "children": {
+                "title": {
+                    "value": "Пункты",
+                    "proto": "/library/basic/Object/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
         }
     }
 }
