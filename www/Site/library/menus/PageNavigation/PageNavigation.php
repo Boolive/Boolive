@@ -6,6 +6,7 @@
  */
 namespace Site\library\menus\PageNavigation;
 
+use Boolive\input\Input;
 use Site\library\views\Widget\Widget,
     Boolive\values\Rule;
 
@@ -25,8 +26,7 @@ class PageNavigation extends Widget
     function show($v = array(), $commands, $input)
     {
         $obj = $this->_input['REQUEST']['object'];
-        $v['uri'] = $obj->uri();
-        if (substr($v['uri'],0,10)=='/contents/') $v['uri'] = mb_substr($v['uri'],9);
+        $v['uri'] = Input::url($obj->uri());
         $v['count'] = $this->_input['REQUEST']['page_count'];
         $v['current'] = min($v['count'], $this->_input['REQUEST']['page']);
         $v['show'] = $this->show_cnt->inner()->value();

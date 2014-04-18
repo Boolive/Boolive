@@ -8,6 +8,7 @@ namespace Site\library\menus\MenuSimple;
 
 use Boolive\data\Data;
 use Boolive\data\Entity;
+use Boolive\input\Input;
 use Boolive\values\Rule;
 use Site\library\basic\Image\Image;
 use Site\library\views\View\View;
@@ -54,7 +55,7 @@ class MenuSimple extends Widget
             $info = array(
                 'title' => $item->title->value(),
                 'icon' => false,
-                'url' => $real->uri(),
+                'url' => Input::url($real->is_main->value()? '/' : $real->uri()),
                 'active' => $active && $active->eq($real)? 1 : 0
             );
             // Иконка
@@ -66,10 +67,6 @@ class MenuSimple extends Widget
             if (empty($info['title'])){
                 $info['title'] = $real->title->value();
                 if (empty($info['title'])) $info['title'] = $real->name();
-            }
-            // URL на содержимое сокращается
-            if (substr($real->uri(), 0, 10) == '/contents/'){
-                $info['url'] = substr($real->uri(), 9);
             }
             if ($children){
                 $info['children'] = $this->itemsToArray($children, $active, $sub_active);
