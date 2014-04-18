@@ -9,6 +9,7 @@ namespace Site\library\forms\FormAuth2;
 use Boolive\auth\Auth;
 use Boolive\data\Data;
 use Boolive\errors\Error;
+use Boolive\input\Input;
 use Site\library\forms\SimpleForm\SimpleForm,
     Boolive\values\Rule;
 

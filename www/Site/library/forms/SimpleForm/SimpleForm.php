@@ -7,6 +7,7 @@
 namespace Site\library\forms\SimpleForm;
 
 use Boolive\errors\Error;
+use Boolive\input\Input;
 use Boolive\session\Session,
     Boolive\values\Check,
     Boolive\values\Rule,
@@ -38,7 +39,14 @@ class SimpleForm extends Widget
             if (!$error){
                 Session::remove('form');
                 try{
-                    return $this->process($this->_commands, $input);
+                    $result = $this->process($this->_commands, $input);
+                    if (!($redirect = $this->_commands->get('redirect'))){
+                        $redirect = $this->redirect->inner();
+                        if (!$redirect->isDraft() && $redirect->value()!=''){
+                            $this->_commands->redirect(Input::url($redirect->value()));
+                        }
+                    }
+                    return $result;
                 }catch (Error $error){}
             }
             if ($error){

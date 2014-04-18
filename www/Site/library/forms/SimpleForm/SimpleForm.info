@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/library/views/Widget",
     "is_default_class": false,
-    "order": 24,
+    "order": 25,
     "children": {
         "title": {
             "value": "Форма простая",
@@ -51,6 +51,27 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 6
+        },
+        "redirect": {
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Редирект",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Адрес страницы, на которую перейти после успешной обработки формы",
+                    "value_type": 2,
+                    "proto": "/library/basic/String/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
         }
     }
 }
