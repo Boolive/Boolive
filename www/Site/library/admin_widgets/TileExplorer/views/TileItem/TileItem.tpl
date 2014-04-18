@@ -30,7 +30,7 @@
         $title_min = '';
     }
     $width = max(
-        mb_strlen($title_big)*17 + ($v['icon']->bool()?40:0) + ($v['is_link']->bool()?20:0) + 26,
+        mb_strlen($title_big)*17 + ($v['icon']->bool()?34:0) + ($v['is_link']->bool()?20:0)+ ($v['is_mandatory']->bool()?15:0) + 26,
         mb_strlen($title_min)*10 + 26
     );
     $width = max(180, round($width/30)*30)-6;
@@ -40,7 +40,7 @@
 
         <div class="TileItem__title-wrap">
             <?php if ($v['icon']->bool()):?>
-        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="25" height="25">
+        <img class="Item__icon TileItem__icon" src="<?=$v['icon']?>" alt="" width="32" height="32">
         <?php endif;?>
             <a class="Item__title TileItem__title" href="<?=ltrim($v['link'],'/')?>"><?=$title_big?></a></div>
         <?php if (!empty($title_min)) :?><div class="TileItem__title-min"><?=$title_min?></div><?php endif; ?>

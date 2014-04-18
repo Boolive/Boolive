@@ -28,6 +28,9 @@
         display: inline-block;
         /*color: #333;*/
         }
+        .Item_mandatory .TileItem__title{
+            padding-left: 0;
+        }
         .TileItem__title:hover{
             /*color: #000;*/
         }
