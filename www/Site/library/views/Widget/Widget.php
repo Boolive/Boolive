@@ -100,7 +100,7 @@ class Widget extends View
     {
 //        $use[] = 'Boolive\values\Rule';
 //        $methods['startRule'] =
-//<<<code
+//<<<php
 //    /**
 //     * Правило на входящие данные - условие работы виджета
 //     * @return null|\Boolive\values\Rule
@@ -114,16 +114,25 @@ class Widget extends View
 //            ))
 //        ));
 //    }';
-//code;
+//php;
         if (!isset($methods['show'])){
             $methods['show'] =
-<<<code
+<<<php
     function show(\$v = array(), \$commands, \$input)
     {
         return parent::show(\$v,\$commands, \$input);
     }
-code;
+php;
         }
         return parent::classTemplate($methods, $use);
+    }
+
+
+    function fileTemplate()
+    {
+        $name = $this->name();
+        return <<<html
+<div class="{$name}">{$this->title->inner()->value()}</div>
+html;
     }
 }
