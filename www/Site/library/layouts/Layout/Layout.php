@@ -37,27 +37,30 @@ class Layout extends Widget
 //        }
         $object = null;
         // объект по умолчанию - первый в /contents не являющейся свойством
-        if (empty($uri) && ($object = Data::read(array(
+        if (empty($uri)){
+            if ($object = Data::read(array(
                 'select' => 'children',
                 'from' => '/contents',
                 'where' => array(
                     array('attr', 'is_hidden', '=', 0),
-                    array('attr', 'is_property', '=', 0)
+                    array('attr', 'is_property', '=', 0),
+                    array('child', 'is_main', array('attr','value','=',1))
                 ),
-                'order' => array(
-                    array('order', 'ASC')
-                ),
+//                'order' => array(
+//                    array('order', 'ASC')
+//                ),
                 'limit' => array(0,1),
-                'comment' => 'read default page'
-            )))){
-            $object = reset($object);
+                //'comment' => 'read default page'
+            ))){
+                $object = reset($object);
+            }
+        }else{
+            if ($uri === '/Site/') $object = Data::read('');
+            // Ищем в /contents
+            if (!$object) $object = Data::read('/contents'.$uri.'&comment=read default page');
+            // Точное соответствие uri
+            if ((!$object || !$object->isExist())) $object = Data::read($uri);
         }
-        // Ищем в /contents
-        if (!$object && !empty($uri)) $object = Data::read('/contents'.$uri.'&comment=read default page');
-        // Точное соответствие uri
-        if (!$object->isExist()) $object = Data::read($uri);
-        // Корень
-        if (!$object->isExist() && $uri == '/Site/') $object = Data::read('');
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = $object;
     }

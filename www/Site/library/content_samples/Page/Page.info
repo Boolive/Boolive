@@ -103,6 +103,28 @@
                     "order": 1
                 }
             }
+        },
+        "is_main": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/basic/Boolean",
+            "is_property": true,
+            "order": 11,
+            "children": {
+                "title": {
+                    "value": "Главная страница?",
+                    "proto": "/library/basic/Boolean/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Показывать на главной? В этом случаи страница будет доступно по адресу сайта",
+                    "value_type": 2,
+                    "proto": "/library/basic/Boolean/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
         }
     }
 }
