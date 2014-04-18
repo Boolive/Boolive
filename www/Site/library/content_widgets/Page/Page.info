@@ -74,6 +74,13 @@
                     "order": 1
                 }
             }
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidgetList2/path_rule",
+            "is_property": true,
+            "order": 15
         }
     }
 }
