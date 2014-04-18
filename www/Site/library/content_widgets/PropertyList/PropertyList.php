@@ -21,6 +21,7 @@ class PropertyList extends Widget
         foreach ($list as $item){
             $v['list'][] = $item->value();
         }
+        if (empty($v['list'])) return false;
         return parent::show($v,$commands, $input);
     }
 }
