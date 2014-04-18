@@ -39,6 +39,7 @@
             "is_default_value": true,
             "value": "",
             "proto": "/library/views/AutoWidget2/views",
+            "is_default_class": false,
             "is_mandatory": true,
             "is_property": true,
             "order": 7,

@@ -50,7 +50,7 @@
                 var sel = null;
                 // Если view_name не указан, то выделяется первая закладка
                 if (!state.view_name){
-                    sel = this.element.find('> ul > li:first-child');
+                    sel = this.element.find('> ul > li a[data-program^="views/"]:first').parent();
                     if (sel.hasClass('group')){
                         sel = sel.find('li:first-child');
                     }
