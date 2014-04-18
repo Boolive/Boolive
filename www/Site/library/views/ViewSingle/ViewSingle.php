@@ -26,7 +26,7 @@ class ViewSingle extends View
                     Rule::arrays(Rule::entity($this->value())),
                     Rule::entity($this->value())
                 )->required(),
-                'view_name' => Rule::string()->default('')->required(), // имя виджета, которым отображать принудительно
+                'view_name' => Rule::string()->more(0)->default('')->required(), // имя виджета, которым отображать принудительно
             ))
         ));
     }
