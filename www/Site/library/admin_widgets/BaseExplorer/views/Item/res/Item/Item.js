@@ -20,7 +20,7 @@
                 e.stopPropagation();
                 e.preventDefault();
                 var s = self.callParents('getState');
-                if (s.select == 'structure'){
+
                     var url = /^[a-z]+:\/\//i.test(self.options.object) ? self.options.object : window.location.protocol + '//' + window.location.host + self.options.object;
                     $.ajax({
                         type: 'GET',
@@ -35,7 +35,7 @@
                             }
                         }
                     });
-                }
+
                 // Сначала выделяем себя
                 //self.callParents('setState', [{selected:  self.options.object}]);
                 // Теперь входим
