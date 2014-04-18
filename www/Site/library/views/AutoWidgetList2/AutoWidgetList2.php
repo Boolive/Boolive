@@ -16,6 +16,8 @@ class AutoWidgetList2 extends Widget
         $list = $this->getList();
         $i = 1;
         $v['views'] = array();
+        $v['props'] = array();
+        $v['children'] = array();
         if (is_array($list)){
             foreach ($list as $key => $object){
                 $this->_input_child['REQUEST']['object'] = $object;
@@ -23,6 +25,11 @@ class AutoWidgetList2 extends Widget
                 $result = $this->startChild('views');
                 if ($result !== false){
                     $v['views'][$key] = $result;
+                    if ($object->isProperty()){
+                        $v['props'][$key] = $result;
+                    }else{
+                        $v['children'][$key] = $result;
+                    }
                     $i++;
                 }
             }
@@ -36,7 +43,7 @@ class AutoWidgetList2 extends Widget
         if (!isset($cond['key'])){
             $cond['key'] = 'name';
         }
-        $cond['comment'] = 'read list of objects in the AutoWidgetList2';
+        //$cond['comment'] = 'read list of objects in the AutoWidgetList2';
         return $this->_input['REQUEST']['object']->find($cond, true);
     }
 }
