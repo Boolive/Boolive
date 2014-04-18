@@ -17,15 +17,16 @@
     .KeywordsField .ui-autocomplete{
         padding: 0;
         position: absolute;
+        z-index: 1000;
         }
         .KeywordsField .ui-autocomplete .ui-menu-item{
             border: 1px solid #ccc;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
+            /*border-bottom-left-radius: 5px;*/
+            /*border-bottom-right-radius: 5px;*/
             border-top: none;
             background-color: #fff;
-            margin: 4px 0 0 0;
-            box-shadow: 0 2px 2px #ccc;
+            /*margin: 4px 0 0 0;*/
+            /*box-shadow: 0 2px 2px #ccc;*/
             padding: 0;
             list-style: none;
             }
