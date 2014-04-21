@@ -93,7 +93,7 @@
             }
         },
         "count_per_page": {
-            "value": "8",
+            "value": 8,
             "proto": "/library/basic/Number",
             "is_mandatory": true,
             "is_property": true,

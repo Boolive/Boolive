@@ -3,7 +3,7 @@
     "value": "",
     "proto": "/library/views/View",
     "is_default_class": false,
-    "order": 30,
+    "order": 31,
     "children": {
         "title": {
             "value": "Robokassa",

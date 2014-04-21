@@ -12,6 +12,7 @@
             "order": 1
         },
         "description": {
+            "is_default_value": true,
             "value": "Простейший объект",
             "value_type": 2,
             "proto": "/library/basic/Object/description",

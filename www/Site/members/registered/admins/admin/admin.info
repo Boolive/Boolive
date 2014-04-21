@@ -25,7 +25,7 @@
             "order": 6
         },
         "visit_time": {
-            "value": "1368016086",
+            "value": 1368016086,
             "proto": "/library/access/User/visit_time",
             "is_mandatory": true,
             "is_property": true,

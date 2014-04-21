@@ -27,6 +27,7 @@
                 "title": {
                     "value": "Иконка",
                     "proto": "/library/basic/Image/title",
+                    "is_draft": true,
                     "is_property": true,
                     "order": 1
                 }
