@@ -19,10 +19,10 @@
     // Разделение длинных заголовков на два и округление ширены плитки
     $title_big = $v['title']->escape();
     $l = mb_strlen($title_big);
-    $pos = mb_strpos($title_big, ' ', min(8, $l));
-    if ($l>15 && ($pos > 15 || !$pos)){
-        $pos = mb_strpos($title_big, ' ');
-    }
+    $pos = mb_strpos($title_big, ' ', min(max(8,round($title_big/3)), $l));
+    //if ($l>15 && ($pos > 15 || !$pos)){
+    //    $pos = mb_strpos($title_big, ' ');
+    //}
     if ($pos){
         $title_min = mb_substr($title_big, $pos);
         $title_big = mb_substr($title_big, 0, $pos);
@@ -30,8 +30,8 @@
         $title_min = '';
     }
     $width = max(
-        mb_strlen($title_big)*19 + ($v['icon']->bool()?40:0) + ($v['is_link']->bool()?20:0) + 10,
-        mb_strlen($title_min)*11
+        mb_strlen($title_big)*17 + ($v['icon']->bool()?40:0) + ($v['is_link']->bool()?20:0) + 26,
+        mb_strlen($title_min)*10 + 26
     );
     $width = max(180, round($width/30)*30);
 
