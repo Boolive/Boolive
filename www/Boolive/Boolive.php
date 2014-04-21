@@ -11,6 +11,7 @@
  */
 namespace Boolive
 {
+    use Boolive\errors\Error;
     use Exception,
         ErrorException;
 
@@ -101,20 +102,6 @@ namespace Boolive
             mb_internal_encoding('UTF-8');
             mb_regex_encoding('UTF-8');
             mb_http_output('UTF-8');
-        }
-
-        static function start()
-        {
-            $input = \Boolive\input\Input::getSource();
-            if (isset($input['ARG']['tasks'])){
-                // Обработка задач
-                \Boolive\tasks\Tasks::execute();
-            }else{
-                // Обработка запросов клиента. Запускается корневой объекта сайта
-                echo \Boolive\data\Data::read()->start(new \Boolive\commands\Commands(), $input);
-                // Фоновый запуск обработчика задач
-                \Boolive\tasks\Tasks::executeBackground();
-            }
         }
 
         /**
@@ -347,10 +334,55 @@ namespace Boolive
         }
 
         /**
+         * Запрашиваемые данные для установки модуля
+         * @return array
+         */
+        static function installPrepare()
+        {
+            return array(
+                'title' => 'Настройка фоновых задач',
+                'descript' => 'Для выполнения фоновых задач необходим прямой доступ к интерпретатору PHP',
+                'fields' => array(
+                    'php' => array(
+                        'label' => 'Путь к PHP CLI',
+                        'descript' => 'Укажите полный путь до php.exe (php на *nix)',
+                        'value' => PHP,
+                        'input' => 'text',
+                        'style' => 'big',
+                        'required' => true,
+                    )
+                )
+            );
+        }
+
+        /**
          * Установка ядра
          */
-        static function install()
+        static function install($input)
         {
+            // Параметры доступа к БД
+            $errors = new Error('Некоректные параметры', 'boolive');
+            $new_config = $input->REQUEST->get(\Boolive\values\Rule::arrays(array(
+                'php'	 => \Boolive\values\Rule::string()->more(0)->max(255)->required()
+            )), $sub_errors);
+            // Если ошибочные данные от юзера
+            if ($sub_errors){
+                $errors->add($sub_errors->children());
+                throw $errors;
+            }
+            if (!is_executable($new_config['php'])){
+                $errors->php->not_exec = "Not executable";
+                throw $errors;
+            }
+            $file = DIR_SERVER.'config.php';
+            if (is_writable($file)){
+                $content = file_get_contents($file);
+                $content = preg_replace('/["\']PHP[\'"],[^)]+/u', "'PHP', '".$new_config['php']."'", $content);
+                $fp = fopen($file, 'w');
+                fwrite($fp, $content);
+                fclose($fp);
+            }
+
             $file = DIR_SERVER.'.htaccess';
             if (is_writable($file)){
                 $content = file_get_contents($file);

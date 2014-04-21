@@ -100,7 +100,7 @@ class Input extends Values
     }
 
     /**
-     * POST данные
+     * GET и POST данные
      * @return \Boolive\values\Values
      */
     static function REQUEST()

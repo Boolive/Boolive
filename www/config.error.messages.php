@@ -5,6 +5,12 @@
  * @var array
  */
 $messages = array(
+    'boolive' => array(
+        'default' => '',//Введены ошибочные данные',
+		'php' => array(
+            'not_exec' => 'Не является исполняемым. Возможно, ошибочный путь'
+        )
+    ),
 	'db' => array(
 		'default' => '',//Введены ошибочные данные',
 		'common' => array(
