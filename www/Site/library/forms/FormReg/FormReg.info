@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/library/forms/SimpleForm",
     "is_default_class": false,
-    "order": 22,
+    "order": 23,
     "children": {
         "title": {
             "value": "Регистрация",
@@ -43,6 +43,13 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 5
+        },
+        "redirect": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/SimpleForm/redirect",
+            "is_property": true,
+            "order": 6
         }
     }
 }

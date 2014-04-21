@@ -1186,7 +1186,7 @@ class Entity implements ITrace
      */
     function inner()
     {
-        if (!$this->isExist() && !$this->_attribs['proto'] && ($p = $this->parent())){
+        if (!$this->isExist() && /*!$this->_attribs['proto'] && */($p = $this->parent())){
             // У прототипов родителя найти свойство с именем $this->name()
             $find = false;
             $name = $this->name();
@@ -1279,9 +1279,9 @@ class Entity implements ITrace
             }
             if (!$this->isExist() || (isset($obj) && !$obj->isExist())){
                 if (($p = $this->proto()) && $p->{$name}->isExist()){
-                    $obj = $p->{$name}->birth($this);
+                    $obj = $p->{$name}->birth($this, false);
+                    $obj->order($p->{$name}->order());
                     $obj->isProperty($p->{$name}->isProperty());
-                    $obj->isDraft(false);
                 }else{
                     $obj = new Entity();
                 }
@@ -1497,10 +1497,11 @@ class Entity implements ITrace
         if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;
-                if ($this->_changed/* || !$this->isExist()*/){
+                if ($this->_changed){
                     // Сохранение родителя, если не сохранен или требует переименования
                     if ($this->_parent){
                         if (!$this->_parent->isExist() || $this->_parent->_autoname){
+                            $this->_changed = true;
                             $this->_parent->save(false, $access);
                         }
                         $this->_attribs['parent'] = $this->_parent->key();
@@ -1594,8 +1595,9 @@ class Entity implements ITrace
         $obj->name(null, true); // Уникальность имени
         if (isset($for)) $obj->parent($for);
         $obj->proto($this);
-        $obj->isHidden($this->isHidden());
+        $obj->isHidden($this->isHidden(null, false));
         $obj->isDraft($draft || $this->isDraft(null, false));
+        $obj->isProperty($this->isProperty());
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;

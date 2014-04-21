@@ -97,7 +97,7 @@
                     "order": 1
                 },
                 "description": {
-                    "value": "Регулярное выражение на адрес запроса, например /^news(/|$)/",
+                    "value": "Регулярное выражение на адрес запроса, например #^/news(/|$)#",
                     "value_type": 2,
                     "proto": "/library/basic/String/description",
                     "is_property": true,
@@ -110,7 +110,6 @@
             "value": "icon.png",
             "value_type": 3,
             "proto": "/library/views/View/icon",
-            "is_draft": true,
             "is_property": true,
             "order": 9
         }

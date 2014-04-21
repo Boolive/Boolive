@@ -1,5 +1,6 @@
 {
     "value": "Значение",
     "proto": "/library/basic/String",
+    "is_draft": true,
     "order": 10
 }

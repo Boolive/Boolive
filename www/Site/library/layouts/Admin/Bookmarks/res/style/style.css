@@ -3,7 +3,7 @@
     position: absolute;
     }
     .Bookmarks__title-wrap{
-        height: 0px;
+        height: 0;
         margin: 20px 0 0px 0px;
         padding: 0 10px;
         text-align: center;
@@ -102,10 +102,10 @@
             padding-left:30px;
             }
             .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
-                padding-left:50px;
+                padding-left:60px;
                 }
                 .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__items-list .Bookmarks__item-link{
-                    padding-left:70px;
+                    padding-left:90px;
                     }
 	.Bookmarks__item.active > .Bookmarks__item-link{
         background-color: rgb(128, 200, 255);

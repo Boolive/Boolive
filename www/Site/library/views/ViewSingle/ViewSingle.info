@@ -13,8 +13,7 @@
             "order": 1
         },
         "description": {
-            "is_default_value": true,
-            "value": "Базовый объект для создания элементов интерфейса",
+            "value": "Отображает только один из подчиненных видов",
             "value_type": 2,
             "proto": "/library/views/View/description",
             "is_mandatory": true,

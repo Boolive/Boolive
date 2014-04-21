@@ -26,8 +26,7 @@ class PageNavigation extends Widget
     function show($v = array(), $commands, $input)
     {
         $obj = $this->_input['REQUEST']['object'];
-        $v['uri'] = $obj->uri();
-        $v['uri'] = Input::url($v['uri']);
+        $v['uri'] = Input::url($obj->uri());
         $v['count'] = $this->_input['REQUEST']['page_count'];
         $v['current'] = min($v['count'], $this->_input['REQUEST']['page']);
         $v['show'] = $this->show_cnt->inner()->value();

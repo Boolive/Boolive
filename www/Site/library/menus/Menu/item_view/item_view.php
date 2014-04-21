@@ -45,11 +45,7 @@ class item_view extends AutoWidgetList2
             // Ссылка
             $real = $obj->linked();
             if (!isset($v['item_href'])){
-                if ($this->_cut_contents_url){
-                    $v['item_href'] = Input::url($real->uri());
-                }else{
-                    $v['item_href'] = $real->uri();
-                }
+                $v['item_href'] = Input::url($real->is_main->value()? '/' : $real->uri());
             }
             // Название пункта
 //            $v['item_text'] = $obj->title->value();

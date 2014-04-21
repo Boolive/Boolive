@@ -1,23 +1,25 @@
 {
-    "value": "FormAuth2.tpl",
+    "is_default_value": true,
+    "value": "SimpleForm.tpl",
     "value_type": 3,
     "proto": "/library/forms/SimpleForm",
-    "is_default_class": false,
-    "order": 20,
+    "order": 3,
     "children": {
         "title": {
-            "value": "Аутентификация (2)",
+            "is_default_value": true,
+            "value": "Форма простая",
             "proto": "/library/forms/SimpleForm/title",
             "is_mandatory": true,
             "is_property": true,
-            "order": 4
+            "order": 1
         },
         "description": {
-            "value": "Форма авторизации пользователя",
+            "is_default_value": true,
+            "value": "Эталон простейшей формы. Поля формы прописываются в шаблоне.",
             "proto": "/library/forms/SimpleForm/description",
             "is_mandatory": true,
             "is_property": true,
-            "order": 5
+            "order": 2
         },
         "res": {
             "is_default_value": true,
@@ -25,7 +27,7 @@
             "proto": "/library/forms/SimpleForm/res",
             "is_mandatory": true,
             "is_property": true,
-            "order": 6
+            "order": 3
         },
         "cache": {
             "is_default_value": true,
@@ -33,7 +35,7 @@
             "proto": "/library/forms/SimpleForm/cache",
             "is_mandatory": true,
             "is_property": true,
-            "order": 7
+            "order": 4
         },
         "object_rule": {
             "is_default_value": true,
@@ -42,7 +44,7 @@
             "proto": "/library/forms/SimpleForm/object_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 8
+            "order": 5
         },
         "path_rule": {
             "is_default_value": true,
@@ -50,14 +52,7 @@
             "proto": "/library/forms/SimpleForm/path_rule",
             "is_mandatory": true,
             "is_property": true,
-            "order": 9
-        },
-        "redirect": {
-            "is_default_value": true,
-            "value": "",
-            "proto": "/library/forms/SimpleForm/redirect",
-            "is_property": true,
-            "order": 10
+            "order": 6
         }
     }
 }

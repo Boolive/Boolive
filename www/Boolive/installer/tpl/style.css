@@ -243,7 +243,8 @@ html, body{
 			.form-list textarea.big,
 			.form-list select.big,
 			.form-list .item div.big{
-				width:600px;
+				width:100%;
+                box-sizing: border-box;
 			}
 			.form-list input.medium,
 			.form-list textarea.medium,
@@ -279,4 +280,3 @@ html, body{
 					margin-left: 0;
 					color:#2591fa;
 					}
-

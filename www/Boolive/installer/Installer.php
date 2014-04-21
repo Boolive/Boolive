@@ -11,7 +11,8 @@ namespace Boolive\installer;
 use Boolive\Boolive,
     Boolive\data\Entity,
     Boolive\errors\Error,
-    Boolive\session\Session;
+    Boolive\session\Session,
+    Boolive\file\File;
 
 class Installer
 {
@@ -24,6 +25,9 @@ class Installer
                 Boolive::activate('\Boolive\functions\F');
                 Boolive::activate('\Boolive\file\File');
                 Boolive::activate('\Boolive\develop\Trace');
+                if (is_dir(DIR_SERVER_TEMP)){
+                    File::clearDir(DIR_SERVER_TEMP);
+                }
                 $modules_list = array(
                     'engine' => self::sortClasses(self::scanClasses(DIR_SERVER.'Boolive/')),
                     'project' => self::scanInfo(DIR_SERVER.'Site/')
@@ -415,6 +419,7 @@ class Installer
                             }
                         }else{
                             $install['step']++;
+                            unset(\Boolive\input\Input::REQUEST()->install_request);
                         }
                     }else
                     if (is_array($info)){

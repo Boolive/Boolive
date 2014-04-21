@@ -47,12 +47,15 @@ class DBStatementDebug
             Benchmark::start('sql');
             $result = $this->stmt->execute($params);
             //Trace::groups('Data')->group('')->set($this->stmt->queryString);
+            $bm = Benchmark::stop('sql', true);
+            if ($bm['time']>0.1){
             Trace::groups('DB')->group('query')->group($this->stmt->queryString)->group()->set(array(
                 'sql' => $this->stmt->queryString,
                 'values' => $params?$params:$this->values,
-                'benchmark' => Benchmark::stop('sql', true)
+                'benchmark' => $bm
                 )
             );
+            }
         }else{
             $result = $this->stmt->execute($params);
         }

@@ -1,5 +1,6 @@
 {
     "value": "Логика",
     "proto": "/library/basic/String",
+    "is_draft": true,
     "order": 9
 }

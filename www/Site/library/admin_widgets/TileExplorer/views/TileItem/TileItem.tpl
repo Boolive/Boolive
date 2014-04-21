@@ -30,7 +30,7 @@
         $title_min = '';
     }
     $width = max(
-        mb_strlen($title_big)*17 + ($v['icon']->bool()?40:0) + ($v['is_link']->bool()?20:0) + 26,
+        mb_strlen($title_big)*17 + ($v['icon']->bool()?34:0) + ($v['is_link']->bool()?20:0)+ ($v['is_mandatory']->bool()?15:0) + 26,
         mb_strlen($title_min)*10 + 26
     );
     $width = max(180, round($width/30)*30)-6;

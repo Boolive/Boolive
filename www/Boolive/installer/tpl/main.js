@@ -81,7 +81,7 @@ $(document).ready(function(){
 	 */
 	var process_input = function(html){
 		panel_form.html(html);
-		//panel_progress.hide();
+		panel_progress.hide();
 		$(window).resize();
 		panel_form.fadeIn(500);
 

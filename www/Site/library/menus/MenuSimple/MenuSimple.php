@@ -55,7 +55,7 @@ class MenuSimple extends Widget
             $info = array(
                 'title' => $item->title->value(),
                 'icon' => false,
-                'url' => $real->uri(),
+                'url' => Input::url($real->is_main->value()? '/' : $real->uri()),
                 'active' => $active && $active->eq($real)? 1 : 0
             );
             // Иконка
@@ -68,8 +68,6 @@ class MenuSimple extends Widget
                 $info['title'] = $real->title->value();
                 if (empty($info['title'])) $info['title'] = $real->name();
             }
-            // URL на содержимое сокращается
-            $info['url'] = Input::url($real->uri());
             if ($children){
                 $info['children'] = $this->itemsToArray($children, $active, $sub_active);
                 if (!$info['active'] && $sub_active){

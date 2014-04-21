@@ -365,7 +365,7 @@ class Data
             }
             foreach ($result as $gi => $gitem){
                 if (isset($gitem['class_name'])){
-                    $gitem['cond'] = $group_cond;
+                    if ($group) $gitem['cond'] = $group_cond;
                     try{
                         $result[$gi] = new $gitem['class_name']($gitem, $children_depth);
                     }catch (\Exception $e){
@@ -376,7 +376,7 @@ class Data
                     if ($children_depth===false || $children_depth > 0){
                         foreach ($result[$gi] as $item){
                             if (isset($item['class_name'])){
-                                $item['cond'] = $cond;
+                                if ($group) $item['cond'] = $cond;
                                 try{
                                     $obj = new $item['class_name']($item, $children_depth);
                                 }catch (\Exception $e){

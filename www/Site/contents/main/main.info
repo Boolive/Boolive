@@ -3,12 +3,18 @@
     "proto": "/library/content_samples/Page",
     "order": 8,
     "children": {
+        "is_main": {
+            "value": 1,
+            "proto": "/library/content_samples/Page/is_main",
+            "is_property": true,
+            "order": 11
+        },
         "title": {
             "value": "Главная",
             "proto": "/library/content_samples/Page/title",
             "is_mandatory": true,
             "is_property": true,
-            "order": 11
+            "order": 12
         },
         "text": {
             "value": "<h2>Привет!</h2>\n\n<p>Система управления сайтом Boolive 2 успешно установлена.<br />\nРаздел администрирования находится по адресу <a href=\"/admin\">/admin</a> Логин: <strong>admin</strong> Пароль: <strong>padmin</strong></p>\n\n<p> </p>\n",
@@ -16,7 +22,7 @@
             "proto": "/library/content_samples/Page/text",
             "is_mandatory": true,
             "is_property": true,
-            "order": 13
+            "order": 14
         },
         "description": {
             "value": "Главная страница первого простейшего сайта",
@@ -24,21 +30,21 @@
             "proto": "/library/content_samples/Page/description",
             "is_mandatory": true,
             "is_property": true,
-            "order": 22
+            "order": 23
         },
         "keywords": {
             "value": "",
             "proto": "/library/content_samples/Page/keywords",
             "is_mandatory": true,
             "is_property": true,
-            "order": 23
+            "order": 24
         },
         "comments": {
             "is_default_value": true,
             "value": "",
             "proto": "/library/content_samples/Page/comments",
             "is_property": true,
-            "order": 24
+            "order": 25
         }
     }
 }
