@@ -61,6 +61,7 @@ class Layout extends Widget
             // Точное соответствие uri
             if ((!$object || !$object->isExist())) $object = Data::read($uri);
         }
+        if ((!$object || !$object->isExist())) $object = Data::read('/contents');
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = $object;
     }
