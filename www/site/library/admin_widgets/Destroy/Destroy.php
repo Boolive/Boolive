@@ -5,14 +5,14 @@
  * удаление навсегда (уничтожает) выбранных объектов и их подчиенных
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Destroy;
+namespace site\library\admin_widgets\Destroy;
 
-use Boolive\data\Data,
-    Boolive\errors\Error,
-    Boolive\file\File,
-    Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
-use Boolive\data\Entity;
+use boolive\data\Data,
+    boolive\errors\Error,
+    boolive\file\File,
+    site\library\views\Widget\Widget,
+    boolive\values\Rule;
+use boolive\data\Entity;
 
 class Destroy extends Widget
 {
@@ -37,7 +37,7 @@ class Destroy extends Widget
         if ($this->_input['REQUEST']['call'] == 'destroy'){
             $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
             foreach ($objects as $o){
-                /** @var \Boolive\data\Entity $o */
+                /** @var \boolive\data\Entity $o */
                 // Уничтожение с проверкой доступа и целостностью данных
                 try{
                     if ($this->_input['REQUEST']['select'] == 'heirs'){

@@ -4,10 +4,10 @@
  * Действие над объектами с подтверждением и прогрессом выполнения.
  * @version 1.0
  */
-namespace Site\library\admin_widgets\ProgressAction;
+namespace site\library\admin_widgets\ProgressAction;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class ProgressAction extends Widget
 {

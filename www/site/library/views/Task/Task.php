@@ -4,9 +4,9 @@
  * Функции, выполняемые в фоновом режиме
  * @version 1.0
  */
-namespace Site\library\views\Task;
+namespace site\library\views\Task;
 
-use Site\library\views\View\View;
+use site\library\views\View\View;
 
 class Task extends View
 {

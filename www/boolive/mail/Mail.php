@@ -4,7 +4,7 @@
  *
  * @version	1.0
  */
-namespace Boolive\mail;
+namespace boolive\mail;
 
 class Mail
 {

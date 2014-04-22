@@ -9,9 +9,9 @@
  * @version 1.1
  */
 
-namespace Site\library\views\Logo;
+namespace site\library\views\Logo;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class Logo extends Widget
 {

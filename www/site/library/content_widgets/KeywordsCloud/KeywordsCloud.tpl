@@ -1,7 +1,7 @@
 <div class="keywordsCloud">
     <h2><?php echo $v['title']; ?></h2>
     <?php
-    use \Boolive\values\Rule;
+    use \boolive\values\Rule;
     $keywords = $v['list']->arrays(Rule::arrays(array(
         'title' => Rule::string(),
         'value' => Rule::int(),

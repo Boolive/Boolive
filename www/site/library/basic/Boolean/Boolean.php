@@ -5,10 +5,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\Boolean;
+namespace site\library\basic\Boolean;
 
-use Boolive\data\Entity,
-    Boolive\values\Rule;
+use boolive\data\Entity,
+    boolive\values\Rule;
 
 class Boolean extends Entity
 {

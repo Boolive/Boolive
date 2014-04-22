@@ -4,13 +4,13 @@
  * @author: polinа Putrolaynen
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Editor\views\KeywordsField;
+namespace site\library\admin_widgets\Editor\views\KeywordsField;
 
-use Boolive\data\Data;
-use Boolive\data\Entity;
-use Boolive\functions\F;
-use Site\library\views\AutoWidgetList2\AutoWidgetList2,
-    Boolive\values\Rule;
+use boolive\data\Data;
+use boolive\data\Entity;
+use boolive\functions\F;
+use site\library\views\AutoWidgetList2\AutoWidgetList2,
+    boolive\values\Rule;
 
 class KeywordsField extends AutoWidgetList2
 {
@@ -44,7 +44,7 @@ class KeywordsField extends AutoWidgetList2
                 $this->_input['REQUEST']['saveOrder']['nextUri']
             );
         }
-        /** @var $obj \Boolive\data\Entity */
+        /** @var $obj \boolive\data\Entity */
         $obj = $this->_input['REQUEST']['object'];
         // Заголовк и описание объекта
         $v['title'] = $obj->title->inner()->value();

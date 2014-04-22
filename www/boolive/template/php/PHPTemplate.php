@@ -5,7 +5,7 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\template\php;
+namespace boolive\template\php;
 
 class PHPTemplate
 {
@@ -13,7 +13,7 @@ class PHPTemplate
      * Создание текста из шаблона
      * В шаблон вставляются переданные значения
      * При обработки шаблона могут довыбираться значения из $entity и создаваться команды в $commands
-     * @param \Boolive\data\Entity $entity Виджет, чей вывод формируется
+     * @param \boolive\data\Entity $entity Виджет, чей вывод формируется
      * @param array $v Значения для шаблона
      * @throws \Exception
      * @return string

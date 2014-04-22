@@ -7,9 +7,9 @@
  * @date: 21.01.13
  *
  */
-namespace Site\library\views\Style;
+namespace site\library\views\Style;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Style  extends Entity
 {

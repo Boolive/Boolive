@@ -4,12 +4,12 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Site\library\views\Widget;
+namespace site\library\views\Widget;
 
-use Boolive\template\php\PHPTemplateValues;
-use Boolive\template\Template,
-    Site\library\views\View\View,
-    Boolive\values\Rule;
+use boolive\template\php\PHPTemplateValues;
+use boolive\template\Template,
+    site\library\views\View\View,
+    boolive\values\Rule;
 
 class Widget extends View
 {
@@ -40,7 +40,7 @@ class Widget extends View
 
     /**
      * Правило на входящие данные - условие работы виджета
-     * @return null|\Boolive\values\Rule
+     * @return null|\boolive\values\Rule
      */
     function startRule()
     {
@@ -98,12 +98,12 @@ class Widget extends View
 
     function classTemplate($methods = array(), $use = array())
     {
-//        $use[] = 'Boolive\values\Rule';
+//        $use[] = 'boolive\values\Rule';
 //        $methods['startRule'] =
 //<<<php
 //    /**
 //     * Правило на входящие данные - условие работы виджета
-//     * @return null|\Boolive\values\Rule
+//     * @return null|\boolive\values\Rule
 //     */
 //    function startRule()
 //    {

@@ -5,7 +5,7 @@
             <?php if ($v['proto-uri']!='//0'):?>
             <a class="BaseExplorer__proto" href="<?=ltrim($v['proto-uri']->escape(),'/')?>" title="Прототип объекта" data-o="<?=$v['proto-uri']?>"><?=$v['proto-title']?></a>
             <?php endif;?>
-            <div class="BaseExplorer__attribs-btn" title="Изменить адрес (URI) объекта"><img src="/Site/library/admin_widgets/BaseExplorer/res/base_style/uri-link.png" width="16" height="16" alt=""/></div>
+            <div class="BaseExplorer__attribs-btn" title="Изменить адрес (URI) объекта"><img src="/site/library/admin_widgets/BaseExplorer/res/base_style/uri-link.png" width="16" height="16" alt=""/></div>
         </div>
         <div class="BaseExplorer__head-right">
             <?=$v->FilterTool->string()?>
@@ -31,7 +31,7 @@
     <p class="BaseExplorer__description"><?=$v['description']?></p>
     <div class="BaseExplorer__select-all">Выделить всё</div>
     <div class="BaseExplorer__list TileExplorer__list"><?php
-        $list = $v['views']->arrays(\Boolive\values\Rule::string());
+        $list = $v['views']->arrays(\boolive\values\Rule::string());
         if(!empty($list)){
             foreach ($list as $item) echo $item;
         }else{?>

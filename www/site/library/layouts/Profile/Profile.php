@@ -4,10 +4,10 @@
  * Элемент пользовательского интерфейса. Отображает данные с помощью шаблонизации.
  * @version 1.0
  */
-namespace Site\library\layouts\Profile;
+namespace site\library\layouts\Profile;
 
-use Boolive\values\Rule;
-use Site\library\views\Widget\Widget;
+use boolive\values\Rule;
+use site\library\views\Widget\Widget;
 
 class Profile extends Widget
 {

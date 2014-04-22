@@ -4,12 +4,12 @@
  * Отображает дерево комментариев
  * @version 1.0
  */
-namespace Site\library\content_widgets\CommentsTree;
+namespace site\library\content_widgets\CommentsTree;
 
-use Boolive\auth\Auth;
-use Boolive\data\Data;
-use Boolive\values\Rule;
-use Site\library\views\AutoWidgetList2\AutoWidgetList2;
+use boolive\auth\Auth;
+use boolive\data\Data;
+use boolive\values\Rule;
+use site\library\views\AutoWidgetList2\AutoWidgetList2;
 
 class CommentsTree extends AutoWidgetList2
 {

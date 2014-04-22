@@ -5,10 +5,10 @@
  * @date: 28.03.13
  *
  */
-namespace Site\library\admin_widgets\Editor\views\KeywordsField\views\Keyword;
+namespace site\library\admin_widgets\Editor\views\KeywordsField\views\Keyword;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class Keyword extends Widget
 {

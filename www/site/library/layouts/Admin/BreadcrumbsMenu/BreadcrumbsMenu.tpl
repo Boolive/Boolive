@@ -12,9 +12,9 @@
                 </li>
             <?php endfor; ?>
         </ul>
-        <div class="BreadcrumbsMenu__btn BreadcrumbsMenu__btn-inline" title="Адрес строкой"><img width="16" height="16" alt="" src="/Site/library/layouts/Admin/BreadcrumbsMenu/res/style/img/pencil.png"/></div>
-<!--        <div class="BreadcrumbsMenu__btn BreadcrumbsMenu__btn-editor"><img width="16" height="16" alt="" src="/Site/library/layouts/Admin/BreadcrumbsMenu/res/style/img/pencil.png"/></div>-->
-        <a href="/<?=ltrim($v['current']->url(),'/')?>" target="_blank" class="BreadcrumbsMenu__btn BreadcrumbsMenu__btn-out" title="Просмотр на сайте"><img width="16" height="16" alt="" src="/Site/library/layouts/Admin/BreadcrumbsMenu/res/style/img/arrow-out.png"/></a>
+        <div class="BreadcrumbsMenu__btn BreadcrumbsMenu__btn-inline" title="Адрес строкой"><img width="16" height="16" alt="" src="/site/library/layouts/Admin/BreadcrumbsMenu/res/style/img/pencil.png"/></div>
+<!--        <div class="BreadcrumbsMenu__btn BreadcrumbsMenu__btn-editor"><img width="16" height="16" alt="" src="/site/library/layouts/Admin/BreadcrumbsMenu/res/style/img/pencil.png"/></div>-->
+        <a href="/<?=ltrim($v['current']->url(),'/')?>" target="_blank" class="BreadcrumbsMenu__btn BreadcrumbsMenu__btn-out" title="Просмотр на сайте"><img width="16" height="16" alt="" src="/site/library/layouts/Admin/BreadcrumbsMenu/res/style/img/arrow-out.png"/></a>
 	</div>
     <div class="BreadcrumbsMenu__inline" style="display: none;">
         <input class="BreadcrumbsMenu__list-inline-input" type="text" value="<?php echo $v['current'];?>">

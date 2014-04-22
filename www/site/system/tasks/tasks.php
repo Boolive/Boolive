@@ -4,12 +4,12 @@
  * Планировщик задач. Выполняет в фоновом режиме задачи из списка.
  * @version 1.0
  */
-namespace Site\system\tasks;
+namespace site\system\tasks;
 
-use Boolive\errors\Error;
-use Boolive\functions\F;
-use Boolive\values\Rule;
-use Site\library\views\View\View;
+use boolive\errors\Error;
+use boolive\functions\F;
+use boolive\values\Rule;
+use site\library\views\View\View;
 
 class tasks extends View
 {
@@ -29,7 +29,7 @@ class tasks extends View
 
     /**
      * Правило на входящие данные - условие работы
-     * @return null|\Boolive\values\Rule
+     * @return null|\boolive\values\Rule
      */
     function startRule()
     {

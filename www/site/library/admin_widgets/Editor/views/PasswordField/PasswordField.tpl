@@ -5,13 +5,13 @@
     if($v['is_link']->bool()) $class .= ' Item_link';
     if($v['is_mandatory']->bool()) $class .= ' Item_mandatory';
 //    switch ($v['diff']->int()){
-//        case \Boolive\data\Entity::DIFF_CHANGE:
+//        case \boolive\data\Entity::DIFF_CHANGE:
 //            $class .= ' Item_diff-change';
 //            break;
-//        case \Boolive\data\Entity::DIFF_ADD:
+//        case \boolive\data\Entity::DIFF_ADD:
 //            $class .= ' Item_diff-add';
 //            break;
-//        case \Boolive\data\Entity::DIFF_DELETE:
+//        case \boolive\data\Entity::DIFF_DELETE:
 //            $class .= ' Item_diff-delete';
 //            break;
 //    }
@@ -22,7 +22,7 @@
         <div class="Field__input-wrap">
             <input class="Field__input" type="password" id="<?=$v['id']?>" value="<?=$v['password'];?>">
         </div>
-        <div class="Item__select Field__select"><img width="16" height="16" src="/Site/library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
+        <div class="Item__select Field__select"><img width="16" height="16" src="/site/library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
     </div>
     <div class="Item__description Field__description"><?=$v['description']?></div>
     <div class="Field__error"></div>

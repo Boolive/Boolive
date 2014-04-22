@@ -4,10 +4,10 @@
  * Выберите объекты, которые хотите добавить
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Add;
+namespace site\library\admin_widgets\Add;
 
-use Boolive\values\Rule;
-use Site\library\admin_widgets\SelectObject\SelectObject;
+use boolive\values\Rule;
+use site\library\admin_widgets\SelectObject\SelectObject;
 
 class Add extends SelectObject
 {
@@ -22,12 +22,12 @@ class Add extends SelectObject
     protected function selected()
     {
         $result = array();
-        /** @var $parent \Boolive\data\Entity */
+        /** @var $parent \boolive\data\Entity */
         $parent = $this->_input['REQUEST']['object'];
         $protos = is_array($this->_input['REQUEST']['selected'])? $this->_input['REQUEST']['selected'] : array($this->_input['REQUEST']['selected']);
         if ($protos){
             foreach ($protos as $proto){
-                /** @var $proto \Boolive\data\Entity */
+                /** @var $proto \boolive\data\Entity */
                 $obj = $proto->birth($parent);
                 if ($proto->parent()->eq($parent->proto())){
                     $obj->order($proto->order());

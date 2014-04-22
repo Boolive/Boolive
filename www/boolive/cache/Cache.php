@@ -6,10 +6,10 @@
  * @date 13.06.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\cache;
+namespace boolive\cache;
 
-use Boolive\data\Entity,
-    Boolive\functions\F;
+use boolive\data\Entity,
+    boolive\functions\F;
 
 class Cache
 {
@@ -64,7 +64,7 @@ class Cache
     /**
      * Взвращает экземпляр кэша
      * @param $key Путь на объект, для которого определяется хранилище
-     * @return \Boolive\data\stores\MySQLStore|null Экземпляр хранилища, если имеется или null, если нет
+     * @return \boolive\data\stores\MySQLStore|null Экземпляр хранилища, если имеется или null, если нет
      */
     static function getStore($key)
     {

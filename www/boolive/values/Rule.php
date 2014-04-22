@@ -1,75 +1,75 @@
 <?php
 /**
  * Правило для проверки и фильтра значений.
- * Правило указывает, каким должно быть значение. Проверку и фильтр выполняет класс \Boolive\values\Check
+ * Правило указывает, каким должно быть значение. Проверку и фильтр выполняет класс \boolive\values\Check
  *
  * @link http://boolive.ru/createcms/rules-for-filter
  * @version 3.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 
-namespace Boolive\values;
+namespace boolive\values;
 
-use Boolive\develop\ITrace;
+use boolive\develop\ITrace;
 
 /**
  * Стандартные фильтры к правилу.
  * Методы создания правила с указанием первого фильтра.
- * @method static \Boolive\values\Rule bool() Булево: false, 'false', 'off', 'no', '', '0' => false, иначе true
- * @method static \Boolive\values\Rule int() Целое число в диапазоне от -2147483648 до 2147483647
- * @method static \Boolive\values\Rule double() Действительное число в диапазоне от -1.7976931348623157E+308 до 1.7976931348623157E+308
- * @method static \Boolive\values\Rule string() Строка любой длины
- * @method static \Boolive\values\Rule scalar() Строка, число, булево
- * @method static \Boolive\values\Rule null() Неопределенное значение. При этом проверяемый элемент должен существовать!
- * @method static \Boolive\values\Rule arrays() Массив
- * @method static \Boolive\values\Rule object() Объект указываемого класса
- * @method static \Boolive\values\Rule entity() Объект класса \Boolive\data\Entity или URI объекта, который можно получить из БД. В аргументе фильтра указывается условие на объект в виде массива.
- * @method static \Boolive\values\Rule values() Объект класса \Boolive\values\Values
- * @method static \Boolive\values\Rule any() Любое правило из перечисленных или любой тип значения, если не перечислены варианты правил
- * @method static \Boolive\values\Rule forbidden() Запрещенный. Требуется отсутствие элемента
- * @method static \Boolive\values\Rule eq() Равен указанному значению
- * @method static \Boolive\values\Rule not() Не равен указанному значению
- * @method static \Boolive\values\Rule in() Допустимые значения. Через запятую или массив
- * @method static \Boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
- * @method static \Boolive\values\Rule escape() Экранирование html символов
- * @method static \Boolive\values\Rule striptags() Вырезание html тегов
- * @method static \Boolive\values\Rule email() Email адрес
- * @method static \Boolive\values\Rule url() URL
- * @method static \Boolive\values\Rule uri() URI = URL + URN, возможно отсутсвие части URL или URN
- * @method static \Boolive\values\Rule ip() IP
- * @method static \Boolive\values\Rule regexp() Проверка на совпадение одному из регулярных выражений. Выражения через запятую или массив
- * @method static \Boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
- * @method static \Boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
- * @method static \Boolive\values\Rule lowercase() Преобразует строку в нижний регистр
- * @method static \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
- * @method static \Boolive\values\Rule condition() Условие поиска или валидации объекта
+ * @method static \boolive\values\Rule bool() Булево: false, 'false', 'off', 'no', '', '0' => false, иначе true
+ * @method static \boolive\values\Rule int() Целое число в диапазоне от -2147483648 до 2147483647
+ * @method static \boolive\values\Rule double() Действительное число в диапазоне от -1.7976931348623157E+308 до 1.7976931348623157E+308
+ * @method static \boolive\values\Rule string() Строка любой длины
+ * @method static \boolive\values\Rule scalar() Строка, число, булево
+ * @method static \boolive\values\Rule null() Неопределенное значение. При этом проверяемый элемент должен существовать!
+ * @method static \boolive\values\Rule arrays() Массив
+ * @method static \boolive\values\Rule object() Объект указываемого класса
+ * @method static \boolive\values\Rule entity() Объект класса \boolive\data\Entity или URI объекта, который можно получить из БД. В аргументе фильтра указывается условие на объект в виде массива.
+ * @method static \boolive\values\Rule values() Объект класса \boolive\values\Values
+ * @method static \boolive\values\Rule any() Любое правило из перечисленных или любой тип значения, если не перечислены варианты правил
+ * @method static \boolive\values\Rule forbidden() Запрещенный. Требуется отсутствие элемента
+ * @method static \boolive\values\Rule eq() Равен указанному значению
+ * @method static \boolive\values\Rule not() Не равен указанному значению
+ * @method static \boolive\values\Rule in() Допустимые значения. Через запятую или массив
+ * @method static \boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
+ * @method static \boolive\values\Rule escape() Экранирование html символов
+ * @method static \boolive\values\Rule striptags() Вырезание html тегов
+ * @method static \boolive\values\Rule email() Email адрес
+ * @method static \boolive\values\Rule url() URL
+ * @method static \boolive\values\Rule uri() URI = URL + URN, возможно отсутсвие части URL или URN
+ * @method static \boolive\values\Rule ip() IP
+ * @method static \boolive\values\Rule regexp() Проверка на совпадение одному из регулярных выражений. Выражения через запятую или массив
+ * @method static \boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
+ * @method static \boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
+ * @method static \boolive\values\Rule lowercase() Преобразует строку в нижний регистр
+ * @method static \boolive\values\Rule uppercase() Преобразует строку в верхний регистр
+ * @method static \boolive\values\Rule condition() Условие поиска или валидации объекта
  *
  * Методы добавления фильтра к объекту правила.
- * @method \Boolive\values\Rule max($max) Максимальное значение. Правая граница отрезка. Максимальный размер массива
- * @method \Boolive\values\Rule min($min) Минимальное значение. Левая граница отрезка. Минимальный размер массива
- * @method \Boolive\values\Rule less($less) Меньше указанного значения. Правая граница интервала. Размер массива меньше указанного
- * @method \Boolive\values\Rule more($more) Больше указанного значения. Левая граница интервала. Размер массива больше указанного
- * @method \Boolive\values\Rule eq() Равен указанному значению
- * @method \Boolive\values\Rule not() Не равен указанному значению
- * @method \Boolive\values\Rule in() Допустимые значения. Через запятую или массив
- * @method \Boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
- * @method \Boolive\values\Rule required() Должен существовать
- * @method \Boolive\values\Rule default($value) Значение по умолчанию, если есть ошибки. Ошибка удаляется
- * @method \Boolive\values\Rule ignore() Коды игнорируемых ошибок
- * @method \Boolive\values\Rule trim() Обрезание строки
- * @method \Boolive\values\Rule escape() Экранирование html символов
- * @method \Boolive\values\Rule striptags() Вырезание html тегов
- * @method \Boolive\values\Rule email() Email адрес
- * @method \Boolive\values\Rule url() URL
- * @method \Boolive\values\Rule uri() URI = URL + URN, возможно отсутсвие части URL или URN
- * @method \Boolive\values\Rule ip() IP
- * @method \Boolive\values\Rule regexp() Проверка на совпадение одному из регулярных выражений. Выражения через запятую или массив
- * @method \Boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
- * @method \Boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
- * @method \Boolive\values\Rule file_upload() Информация о загружаемом файле в виде массива
- * @method \Boolive\values\Rule lowercase() Преобразует строку в нижний регистр
- * @method \Boolive\values\Rule uppercase() Преобразует строку в верхний регистр
- * @method \Boolive\values\Rule condition() Условие поиска или валидации объекта
+ * @method \boolive\values\Rule max($max) Максимальное значение. Правая граница отрезка. Максимальный размер массива
+ * @method \boolive\values\Rule min($min) Минимальное значение. Левая граница отрезка. Минимальный размер массива
+ * @method \boolive\values\Rule less($less) Меньше указанного значения. Правая граница интервала. Размер массива меньше указанного
+ * @method \boolive\values\Rule more($more) Больше указанного значения. Левая граница интервала. Размер массива больше указанного
+ * @method \boolive\values\Rule eq() Равен указанному значению
+ * @method \boolive\values\Rule not() Не равен указанному значению
+ * @method \boolive\values\Rule in() Допустимые значения. Через запятую или массив
+ * @method \boolive\values\Rule not_in() Недопустимые значения. Через запятую или массив
+ * @method \boolive\values\Rule required() Должен существовать
+ * @method \boolive\values\Rule default($value) Значение по умолчанию, если есть ошибки. Ошибка удаляется
+ * @method \boolive\values\Rule ignore() Коды игнорируемых ошибок
+ * @method \boolive\values\Rule trim() Обрезание строки
+ * @method \boolive\values\Rule escape() Экранирование html символов
+ * @method \boolive\values\Rule striptags() Вырезание html тегов
+ * @method \boolive\values\Rule email() Email адрес
+ * @method \boolive\values\Rule url() URL
+ * @method \boolive\values\Rule uri() URI = URL + URN, возможно отсутсвие части URL или URN
+ * @method \boolive\values\Rule ip() IP
+ * @method \boolive\values\Rule regexp() Проверка на совпадение одному из регулярных выражений. Выражения через запятую или массив
+ * @method \boolive\values\Rule ospatterns() Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y". Паттерны запятую или массив
+ * @method \boolive\values\Rule color() HEX формат числа. Код цвета #FFFFFF. Возможны сокращения и опущение #
+ * @method \boolive\values\Rule file_upload() Информация о загружаемом файле в виде массива
+ * @method \boolive\values\Rule lowercase() Преобразует строку в нижний регистр
+ * @method \boolive\values\Rule uppercase() Преобразует строку в верхний регистр
+ * @method \boolive\values\Rule condition() Условие поиска или валидации объекта
  */
 class Rule implements ITrace
 {
@@ -84,7 +84,7 @@ class Rule implements ITrace
      * @example Rule::int();
      * @param string $method Название фильтра (метода)
      * @param $args Аргументы фильтра (метода)
-     * @return \Boolive\values\Rule Новый объект правила
+     * @return \boolive\values\Rule Новый объект правила
      */
     static function __callStatic($method, $args)
     {
@@ -99,7 +99,7 @@ class Rule implements ITrace
      * @example Rule::int()->max(10)->filter2($arg);
      * @param $name Имя фильтра
      * @param $args Аргументы фильтра
-     * @return \Boolive\values\Rule
+     * @return \boolive\values\Rule
      */
     function __call($name, $args)
     {

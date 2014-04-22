@@ -6,14 +6,14 @@
  * @author Azat Galiev <AzatXaker@gmail.com>
  */
 
-namespace Site\library\menus\NextPrevNavigation;
+namespace site\library\menus\NextPrevNavigation;
 
-use Boolive\data\Entity;
-use Boolive\input\Input;
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule,
-    Boolive\values\Check,
-    Boolive\errors\Error;
+use boolive\data\Entity;
+use boolive\input\Input;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule,
+    boolive\values\Check,
+    boolive\errors\Error;
 
 class NextPrevNavigation extends Widget
 {
@@ -40,7 +40,7 @@ class NextPrevNavigation extends Widget
 
     /**
      * Возвращает правило на входящие данные
-     * @return null|\Boolive\values\Rule
+     * @return null|\boolive\values\Rule
      */
     function startRule()
     {

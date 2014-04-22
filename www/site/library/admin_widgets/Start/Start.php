@@ -4,10 +4,10 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Start;
+namespace site\library\admin_widgets\Start;
 
-use Boolive\values\Rule;
-use Site\library\views\Widget\Widget;
+use boolive\values\Rule;
+use site\library\views\Widget\Widget;
 
 class Start extends Widget
 {
@@ -38,7 +38,7 @@ class Start extends Widget
     function addObject($parent, $proto, $is_link = false)
     {
         $result = array();
-        /** @var $proto \Boolive\data\Entity */
+        /** @var $proto \boolive\data\Entity */
         $obj = $proto->birth($parent);
         if ($is_link){
             $obj->isLink(true);

@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\content_samples\Page;
+namespace site\library\content_samples\Page;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Page extends Entity
 {

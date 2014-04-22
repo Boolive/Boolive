@@ -4,12 +4,12 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Import;
+namespace site\library\admin_widgets\Import;
 
-use Boolive\data\Data;
-use Boolive\data\Entity;
-use Boolive\values\Rule;
-use Site\library\views\Widget\Widget;
+use boolive\data\Data;
+use boolive\data\Entity;
+use boolive\values\Rule;
+use site\library\views\Widget\Widget;
 
 class Import extends Widget
 {

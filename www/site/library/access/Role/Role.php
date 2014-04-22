@@ -7,9 +7,9 @@
  * @date 30.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\access\Role;
+namespace site\library\access\Role;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Role extends Entity
 {

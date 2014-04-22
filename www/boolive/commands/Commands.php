@@ -15,7 +15,7 @@
  * @link http://boolive.ru/createcms/processing-request
  * @version 1.0
  */
-namespace Boolive\commands;
+namespace boolive\commands;
 /**
  * @method null redirect($url) HTTP редирект на указанный http url адрес
  * @method null htmlHead($tag, $args = array(), $unique = false) Добавление тега в &lt;head&gt; Содержимое тега указывается аргументом "text"

@@ -4,12 +4,12 @@
  *
  * @version 1.0
  */
-namespace Site\library\content_widgets\Feedback;
+namespace site\library\content_widgets\Feedback;
 
-use Site\library\views\AutoWidgetList2\AutoWidgetList2,
-    Boolive\values\Rule,
-    Site\library\views\Widget\Widget,
-    Boolive\input\Input;
+use site\library\views\AutoWidgetList2\AutoWidgetList2,
+    boolive\values\Rule,
+    site\library\views\Widget\Widget,
+    boolive\input\Input;
 
 class Feedback extends AutoWidgetList2
 {

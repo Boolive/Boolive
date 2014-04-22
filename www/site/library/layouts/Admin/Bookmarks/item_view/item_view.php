@@ -4,9 +4,9 @@
  * Для отображения свойств объекта соответствующими виджетом из списка
  * @version 1.0
  */
-namespace Site\library\layouts\Admin\Bookmarks\item_view;
+namespace site\library\layouts\Admin\Bookmarks\item_view;
 
-use Site\library\menus\Menu\item_view\item_view as item_view_1;
+use site\library\menus\Menu\item_view\item_view as item_view_1;
 
 class item_view extends item_view_1
 {

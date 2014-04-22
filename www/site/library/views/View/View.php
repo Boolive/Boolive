@@ -5,13 +5,13 @@
  *
  * @version 1.0
  */
-namespace Site\library\views\View;
+namespace site\library\views\View;
 
-use Boolive\cache\Cache,
-    Boolive\data\Entity,
-    Boolive\commands\Commands,
-    Boolive\values\Check,
-    Boolive\values\Rule;
+use boolive\cache\Cache,
+    boolive\data\Entity,
+    boolive\commands\Commands,
+    boolive\values\Check,
+    boolive\values\Rule;
 
 class View extends Entity
 {
@@ -22,11 +22,11 @@ class View extends Entity
     protected $_input;
     /** @var Rule Правило на входящие данные */
     protected $_input_rule;
-    /** @var \Boolive\errors\Error Ошибки при проверки входящих данных */
+    /** @var \boolive\errors\Error Ошибки при проверки входящих данных */
     protected $_input_error;
     /** @var mixed Входящие данные для подчиненных объектов */
     protected $_input_child;
-    /** @var \Boolive\commands\Commands Команды, передающиеся по всем исполняемым объектам. Инициализируется в методе start() */
+    /** @var \boolive\commands\Commands Команды, передающиеся по всем исполняемым объектам. Инициализируется в методе start() */
     protected $_commands;
 
     /**
@@ -67,7 +67,7 @@ class View extends Entity
 
     /**
      * Запуск для обработки запроса и формирования ответа (вида)
-     * @param \Boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
+     * @param \boolive\commands\Commands $commands Команды для исполнения в соответствующих сущностях
      * @param mixed $input Входящие данные
      * @return null|string Результат выполнения контроллера
      */
@@ -108,8 +108,8 @@ class View extends Entity
     /**
      * Проверка возможности работы.
      * По умолчанию проверяются отсутствие ошибок во входящих данных по правилу на входящие данные
-     * @param \Boolive\commands\Commands $commands Входящие и исходящие команды
-     * @param \Boolive\input\Input $input Входящие данные
+     * @param \boolive\commands\Commands $commands Входящие и исходящие команды
+     * @param \boolive\input\Input $input Входящие данные
      * @return bool Признак, может ли работать вид или нет
      */
     function startCheck(Commands $commands, $input)
@@ -162,7 +162,7 @@ class View extends Entity
     {
         $list = $this->find(array('key'=>'name', 'comment' => 'read views for startChildren'));
         foreach ($list as $key => $child){
-            /** @var $child \Boolive\data\Entity */
+            /** @var $child \boolive\data\Entity */
             $child = $child->linked(true);
             if ($child instanceof View){
                 if (!isset($result[$key])){

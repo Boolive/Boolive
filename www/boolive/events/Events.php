@@ -6,9 +6,9 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @todo При установке проверить возмоэжность записи в файл конфига
  */
-namespace Boolive\events;
+namespace boolive\events;
 
-use Boolive\Boolive;
+use boolive\Boolive;
 
 class Events
 {
@@ -25,7 +25,7 @@ class Events
     static function activate()
     {
         self::load();
-        self::on('Boolive::deactivate', '\Boolive\events\Events', 'deactivate', false);
+        self::on('Boolive::deactivate', '\boolive\events\Events', 'deactivate', false);
     }
 
     /**
@@ -108,7 +108,7 @@ class Events
      */
     private static function load()
     {
-        $content = file_get_contents(DIR_SERVER.'Boolive/events/'.self::CONFIG_FILE);
+        $content = file_get_contents(DIR_SERVER.'boolive/events/'.self::CONFIG_FILE);
         self::$handlers = json_decode($content, true);
     }
 
@@ -131,7 +131,7 @@ class Events
             if (empty($content[$event])) unset($content[$event]);
         }
         $content = json_encode($content);
-        if ($f = fopen(DIR_SERVER.'Boolive/events/'.self::CONFIG_FILE, 'w')){
+        if ($f = fopen(DIR_SERVER.'boolive/events/'.self::CONFIG_FILE, 'w')){
             fwrite($f, $content);
             fclose($f);
         }

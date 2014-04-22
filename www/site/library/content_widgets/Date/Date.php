@@ -4,9 +4,9 @@
  * Отображение даны
  * @version 1.0
  */
-namespace Site\library\content_widgets\Date;
+namespace site\library\content_widgets\Date;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class Date extends Widget
 {

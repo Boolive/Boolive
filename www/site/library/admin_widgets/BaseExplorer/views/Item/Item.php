@@ -4,16 +4,16 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\BaseExplorer\views\Item;
+namespace site\library\admin_widgets\BaseExplorer\views\Item;
 
-use Boolive\data\Entity;
-use Site\library\views\Widget\Widget;
+use boolive\data\Entity;
+use site\library\views\Widget\Widget;
 
 class Item extends Widget
 {
     function show($v = array(), $commands, $input)
     {
-        /** @var $obj \Boolive\data\Entity */
+        /** @var $obj \boolive\data\Entity */
         $obj = $this->_input['REQUEST']['object'];
         // Заголовк и описание объекта
         $v['title'] = $obj->title->inner()->value();

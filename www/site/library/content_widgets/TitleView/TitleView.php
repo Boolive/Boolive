@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\content_widgets\TitleView;
+namespace site\library\content_widgets\TitleView;
 
-use Boolive\input\Input;
-use Site\library\views\Widget\Widget;
+use boolive\input\Input;
+use site\library\views\Widget\Widget;
 
 class TitleView extends Widget
 {

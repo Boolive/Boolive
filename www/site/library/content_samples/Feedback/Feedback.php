@@ -4,12 +4,12 @@
  * Информационный объект обратной связи. Содержит параметры отправления и сообщение.
  * @version 1.0
  */
-namespace Site\library\content_samples\Feedback;
+namespace site\library\content_samples\Feedback;
 
-use Boolive\data\Entity,
-    Boolive\mail\Mail,
-    Boolive\values\Check,
-    Boolive\values\Rule;
+use boolive\data\Entity,
+    boolive\mail\Mail,
+    boolive\values\Check,
+    boolive\values\Rule;
 
 class Feedback extends Entity
 {

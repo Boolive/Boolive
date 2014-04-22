@@ -11,26 +11,26 @@
  * @version 3.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\values;
+namespace boolive\values;
 
 use ArrayAccess,
     IteratorAggregate,
     ArrayIterator,
     Countable,
-    Boolive\errors\Error,
-    Boolive\develop\ITrace;
+    boolive\errors\Error,
+    boolive\develop\ITrace;
 
 class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
 {
     /** @var mixed|array Значение */
     private $_value;
-    /** @var \Boolive\values\Rule Правило по умолчанию для значения */
+    /** @var \boolive\values\Rule Правило по умолчанию для значения */
     protected $_rule;
     /** @var bool Признак, отфильтрованы значения (true) или нет (false)? */
     protected $_filtered;
-    /** @var array Объекты \Boolive\values\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
+    /** @var array Объекты \boolive\values\Values для возвращения элементов при обращении к ним, если $this->_value массив*/
     protected $_interfaces;
-    /** @var \Boolive\values\Values Родитель объекта для оповещения об изменениях значения */
+    /** @var \boolive\values\Values Родитель объекта для оповещения об изменениях значения */
     protected $_maker;
     /** @var string Имя для элемента в родителе */
     protected $_name;
@@ -38,7 +38,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     /**
      * Конструктор
      * @param null|mixed $value Значение
-     * @param null|\Boolive\values\Rule $rule Правило проверки значений по умолчанию
+     * @param null|\boolive\values\Rule $rule Правило проверки значений по умолчанию
      */
     function __construct($value = null, $rule = null)
     {
@@ -75,7 +75,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Правило проверки по умолчанию
      * Правило используется если в аргументах методов не указывается правило
      * @param null $name Ключ элемента, для которого требуется правило. Если не указан, то возвращается общее правило
-     * @return \Boolive\values\Rule
+     * @return \boolive\values\Rule
      */
     function getRule($name = null)
     {
@@ -141,7 +141,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
 
     /**
      * Выбор значения с применением правила
-     * @param null|\Boolive\values\Rule $rule
+     * @param null|\boolive\values\Rule $rule
      * @param null $error
      * @return mixed
      */
@@ -181,8 +181,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
 
     /**
      * Проверка значения
-     * @param \Boolive\values\Rule $rule Правило проверки
-     * @param \Boolive\errors\Error | null $error Ошибки после проверки
+     * @param \boolive\values\Rule $rule Правило проверки
+     * @param \boolive\errors\Error | null $error Ошибки после проверки
      * @return bool
      */
     function check($rule = null, &$error = null)
@@ -198,7 +198,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * @example
      * 1. choose(array('name1', 'name2'));
      * 2. choose('name1', 'name2', 'name3');
-     * @return \Boolive\values\Values Ссылка на себя
+     * @return \boolive\values\Values Ссылка на себя
      */
     function choose()
     {
@@ -241,8 +241,8 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
 
     /**
      * Создание копии с указанием нового правила по умолчанию
-     * @param null|\Boolive\values\Rule $rule
-     * @return \Boolive\values\Values
+     * @param null|\boolive\values\Rule $rule
+     * @return \boolive\values\Values
      */
     function getCopy($rule = null)
     {
@@ -315,7 +315,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Если значение не являются массивом, то оно будет заменено на пустой массив.
      * Если элемента с указанным именем нет, то он будет создан со значением null
      * @param mixed $name Ключ элемента
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     function offsetGet($name)
     {
@@ -461,7 +461,7 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
      * Всегда возвращется Values, даже если нет запрашиваемого элемента (Values будет пустым тогда)
      * @example $v = $values->v1;
      * @param string $name Ключ элемента
-     * @return array|\Boolive\values\Values
+     * @return array|\boolive\values\Values
      */
     function __get($name)
     {

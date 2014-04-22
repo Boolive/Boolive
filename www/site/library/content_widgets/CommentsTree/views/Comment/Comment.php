@@ -4,10 +4,10 @@
  * Отображает комментарий и ветку подчиненных комментариев (ответы)
  * @version 1.0
  */
-namespace Site\library\content_widgets\CommentsTree\views\Comment;
+namespace site\library\content_widgets\CommentsTree\views\Comment;
 
-use Boolive\data\Entity;
-use Site\library\views\AutoWidgetList2\AutoWidgetList2;
+use boolive\data\Entity;
+use site\library\views\AutoWidgetList2\AutoWidgetList2;
 
 class Comment extends AutoWidgetList2
 {

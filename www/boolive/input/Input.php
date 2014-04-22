@@ -13,22 +13,22 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\input;
+namespace boolive\input;
 
-use Boolive\values\Values,
-    Boolive\functions\F;
+use boolive\values\Values,
+    boolive\functions\F;
 
 /**
- * @property \Boolive\values\Values path Элементы пути URI
- * @property \Boolive\values\Values REQUEST = GET+POST+argv данные или аргументы командной строки
- * @property \Boolive\values\Values FILES Загруженные файлы
- * @property \Boolive\values\Values COOKIE Куки
- * @property \Boolive\values\Values RAW Неформатированные данные
- * @property \Boolive\values\Values SERVER Информация о сервере и среде исполнения
+ * @property \boolive\values\Values path Элементы пути URI
+ * @property \boolive\values\Values REQUEST = GET+POST+argv данные или аргументы командной строки
+ * @property \boolive\values\Values FILES Загруженные файлы
+ * @property \boolive\values\Values COOKIE Куки
+ * @property \boolive\values\Values RAW Неформатированные данные
+ * @property \boolive\values\Values SERVER Информация о сервере и среде исполнения
  */
 class Input extends Values
 {
-    /** @var \Boolive\input\Input Общий контейнер всех входящих данных */
+    /** @var \boolive\input\Input Общий контейнер всех входящих данных */
     private static $input;
 
     /**
@@ -92,7 +92,7 @@ class Input extends Values
 
     /**
      * Элементы пути URI
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     static function PATH()
     {
@@ -101,7 +101,7 @@ class Input extends Values
 
     /**
      * GET и POST данные
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     static function REQUEST()
     {
@@ -110,7 +110,7 @@ class Input extends Values
 
     /**
      * Загруженные файлы
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     static function FILES()
     {
@@ -119,7 +119,7 @@ class Input extends Values
 
     /**
      * Куки
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     static function COOKIE()
     {
@@ -128,7 +128,7 @@ class Input extends Values
 
     /**
      * Неформатированные данные
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     static function RAW()
     {
@@ -137,7 +137,7 @@ class Input extends Values
 
     /**
      * Информация о сервере и среде исполнения
-     * @return \Boolive\values\Values
+     * @return \boolive\values\Values
      */
     static function SERVER()
     {
@@ -146,7 +146,7 @@ class Input extends Values
 
     /**
      * Все входящие данные
-     * @return \Boolive\input\Input
+     * @return \boolive\input\Input
      */
     static function ALL()
     {

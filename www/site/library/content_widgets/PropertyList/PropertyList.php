@@ -4,9 +4,9 @@
  * Отображает списком свойства объекта
  * @version 1.0
  */
-namespace Site\library\content_widgets\PropertyList;
+namespace site\library\content_widgets\PropertyList;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class PropertyList extends Widget
 {

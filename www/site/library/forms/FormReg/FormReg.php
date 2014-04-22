@@ -4,14 +4,14 @@
  * Форма регистрации пользователя
  * @version 1.0
  */
-namespace Site\library\forms\FormReg;
+namespace site\library\forms\FormReg;
 
-use Boolive\auth\Auth;
-use Boolive\commands\Commands;
-use Boolive\data\Data;
-use Boolive\errors\Error;
-use Boolive\values\Rule,
-    Site\library\forms\SimpleForm\SimpleForm;
+use boolive\auth\Auth;
+use boolive\commands\Commands;
+use boolive\data\Data;
+use boolive\errors\Error;
+use boolive\values\Rule,
+    site\library\forms\SimpleForm\SimpleForm;
 
 class FormReg extends SimpleForm
 {

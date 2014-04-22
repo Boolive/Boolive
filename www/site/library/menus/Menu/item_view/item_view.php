@@ -4,13 +4,13 @@
  *
  * @version 2.0
  */
-namespace Site\library\menus\Menu\item_view;
+namespace site\library\menus\Menu\item_view;
 
-use Boolive\data\Entity;
-use Boolive\input\Input;
-use Boolive\values\Rule,
-    Site\library\views\AutoWidgetList2\AutoWidgetList2,
-    Site\library\basic\Image\Image;
+use boolive\data\Entity;
+use boolive\input\Input;
+use boolive\values\Rule,
+    site\library\views\AutoWidgetList2\AutoWidgetList2,
+    site\library\basic\Image\Image;
 
 class item_view extends AutoWidgetList2
 {
@@ -38,7 +38,7 @@ class item_view extends AutoWidgetList2
     function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
-            /** @var \Boolive\data\Entity $obj */
+            /** @var \boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['object'];//->linked();
 
 

@@ -4,10 +4,10 @@
  *
  * @version 2.0
  */
-namespace Site\library\menus\Menu;
+namespace site\library\menus\Menu;
 
-use Site\library\views\View\View;
-use Site\library\views\Widget\Widget;
+use site\library\views\View\View;
+use site\library\views\Widget\Widget;
 
 class Menu extends Widget
 {

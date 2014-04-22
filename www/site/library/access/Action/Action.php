@@ -4,9 +4,9 @@
  * Действие, на которое устанавливается правило доступа или запрета. Имя объекта соответствует названию действия.
  * @version 1.0
  */
-namespace Site\library\access\Action;
+namespace site\library\access\Action;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Action extends Entity
 {

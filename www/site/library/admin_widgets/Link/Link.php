@@ -3,10 +3,10 @@
  * Действие-переключатель призанка is_link
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Link;
+namespace site\library\admin_widgets\Link;
 
-use Boolive\values\Rule;
-use Site\library\admin_widgets\ToggleAction\ToggleAction;
+use boolive\values\Rule;
+use site\library\admin_widgets\ToggleAction\ToggleAction;
 
 class Link extends ToggleAction
 {
@@ -19,7 +19,7 @@ class Link extends ToggleAction
     
     protected function initState()
     {
-        /** @var \Boolive\data\Entity $object */
+        /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
         $this->_state = $object->isLink();
     }
@@ -33,7 +33,7 @@ class Link extends ToggleAction
             $result['changes'] = array();
             $link = !$first->isLink();
             foreach ($objects as $o){
-                /** @var \Boolive\data\Entity $o */
+                /** @var \boolive\data\Entity $o */
                 $o->isLink($link);
                 // @todo Обрабатывать ошибки
                 $o->save();

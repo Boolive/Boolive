@@ -5,9 +5,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\Text;
+namespace site\library\basic\Text;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Text extends Entity
 {

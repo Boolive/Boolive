@@ -4,10 +4,10 @@
  * 
  * @version 1.0
  */
-namespace Site\library\layouts\Admin\MenuSelections;
+namespace site\library\layouts\Admin\MenuSelections;
 
-use Boolive\values\Rule;
-use Site\library\views\Widget\Widget;
+use boolive\values\Rule;
+use site\library\views\Widget\Widget;
 
 class MenuSelections extends Widget
 {

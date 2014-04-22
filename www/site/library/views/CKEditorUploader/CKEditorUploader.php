@@ -4,12 +4,12 @@
  * Загрузчик файлов для WYSIWYG редактора CKEditor 4
  * @version 1.0
  */
-namespace Site\library\views\CKEditorUploader;
+namespace site\library\views\CKEditorUploader;
 
-use Boolive\data\Data,
-    Boolive\errors\Error,
-    Site\library\views\View\View,
-    Boolive\values\Rule;
+use boolive\data\Data,
+    boolive\errors\Error,
+    site\library\views\View\View,
+    boolive\values\Rule;
 
 class CKEditorUploader extends View
 {

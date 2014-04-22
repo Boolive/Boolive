@@ -6,12 +6,12 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\views\Logout;
+namespace site\library\views\Logout;
 
-use Site\library\views\View\View,
-    Boolive\auth\Auth,
-    Boolive\input\Input,
-    Boolive\values\Rule;
+use site\library\views\View\View,
+    boolive\auth\Auth,
+    boolive\input\Input,
+    boolive\values\Rule;
 
 class Logout extends View
 {

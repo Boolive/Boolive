@@ -4,9 +4,9 @@
  * Виджет для отображения всех ключевых слов страницы или другого содержимого
  * @version 1.0
  */
-namespace Site\library\content_widgets\Keywords;
+namespace site\library\content_widgets\Keywords;
 
-use Site\library\views\AutoWidgetList2\AutoWidgetList2;
+use site\library\views\AutoWidgetList2\AutoWidgetList2;
 
 class Keywords extends AutoWidgetList2
 {

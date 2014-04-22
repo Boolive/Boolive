@@ -5,13 +5,13 @@
     if($v['is_link']->bool()) $class .= ' Item_link';
     if($v['is_mandatory']->bool()) $class .= ' Item_mandatory';
 //    switch ($v['diff']->int()){
-//        case \Boolive\data\Entity::DIFF_CHANGE:
+//        case \boolive\data\Entity::DIFF_CHANGE:
 //            $class .= ' Item_diff-change';
 //            break;
-//        case \Boolive\data\Entity::DIFF_ADD:
+//        case \boolive\data\Entity::DIFF_ADD:
 //            $class .= ' Item_diff-add';
 //            break;
-//        case \Boolive\data\Entity::DIFF_DELETE:
+//        case \boolive\data\Entity::DIFF_DELETE:
 //            $class .= ' Item_diff-delete';
 //            break;
 //    }
@@ -25,10 +25,10 @@
         <a class="Item__title" href="<?=ltrim($v['link'],'/')?>"><?=$v['title']?></a>
         <div class="Item__description"><?=$v['description']?></div>
 
-        <a class="Item__link" title="Структура ссылки" href="<?=$url?>"><img src="/Site/library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
+        <a class="Item__link" title="Структура ссылки" href="<?=$url?>"><img src="/site/library/admin_widgets/BaseExplorer/views/Item/res/style/img/enter.png" width="16" height="16" alt=""/></a>
 <!--        <a class="Item__prop" title="Изменение свойств" href="--><?//=$url.'&select=property';?><!--">Свойства</a>-->
         <a class="Item__value <?=($v['is_file']->bool()?'Item__file':'')?><?=$v['is_default_value']->bool()?' Item__default-value':'';?>" title="<?=$v['value_full']?>" href="<?=$url.'&select=file';?>"><?=$v['value_short']?></a>
 
     </div>
-    <div class="Item__select"><img width="16" height="16" src="/Site/library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
+    <div class="Item__select"><img width="16" height="16" src="/site/library/admin_widgets/BaseExplorer/views/Item/res/style/img/touch.png" alt=""/></div>
 </div>

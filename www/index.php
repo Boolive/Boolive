@@ -11,13 +11,13 @@
 // Подключение конфигурации путей
 include 'config.php';
 // Подключение движка Boolive
-include DIR_SERVER.'Boolive/Boolive.php';
+include DIR_SERVER.'boolive/Boolive.php';
 // Активация Boolive
-if (\Boolive\Boolive::activate()){
+if (boolive\Boolive::activate()){
     // Запуск ядра, обработка запроса
-    echo \Boolive\data\Data::read()->start(new \Boolive\commands\Commands(), \Boolive\input\Input::getSource());
+    echo boolive\data\Data::read()->start(new boolive\commands\Commands(), boolive\input\Input::getSource());
 }else{
     // Запуск установщика, если Boolive не активирован
-    include DIR_SERVER.'Boolive/installer/Installer.php';
-    \Boolive\installer\Installer::start();
+    include DIR_SERVER.'boolive/installer/Installer.php';
+    boolive\installer\Installer::start();
 }

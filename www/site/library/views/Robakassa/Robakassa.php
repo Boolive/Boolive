@@ -4,10 +4,10 @@
  * Интерфейс online платежей через robokassa.ru
  * @version 1.0
  */
-namespace Site\library\views\Robakassa;
+namespace site\library\views\Robakassa;
 
-use Boolive\values\Rule;
-use Site\library\views\View\View;
+use boolive\values\Rule;
+use site\library\views\View\View;
 
 class Robakassa extends View
 {

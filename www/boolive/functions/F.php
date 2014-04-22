@@ -5,7 +5,7 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\functions;
+namespace boolive\functions;
 
 class F
 {

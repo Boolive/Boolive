@@ -6,10 +6,10 @@
  * найдет относительно расположения нового объекта. Относительность позволяет создавать наследуемые циклические связи.
  * @version 1.0
  */
-namespace Site\library\admin_widgets\isRelative;
+namespace site\library\admin_widgets\isRelative;
 
-use Boolive\values\Rule;
-use Site\library\admin_widgets\ToggleAction\ToggleAction;
+use boolive\values\Rule;
+use site\library\admin_widgets\ToggleAction\ToggleAction;
 
 class isRelative extends ToggleAction
 {
@@ -22,7 +22,7 @@ class isRelative extends ToggleAction
     
     protected function initState()
     {
-        /** @var \Boolive\data\Entity $object */
+        /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
         $this->_state = $object->isRelative();
     }
@@ -37,7 +37,7 @@ class isRelative extends ToggleAction
             $prop = !$first->isRelative();
             foreach ($objects as $o){
                 try{
-                    /** @var \Boolive\data\Entity $o */
+                    /** @var \boolive\data\Entity $o */
                     $o->isRelative($prop);
                     // @todo Обрабатывать ошибки
                     $o->save();

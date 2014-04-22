@@ -4,9 +4,9 @@
  * Отображает значение объекта
  * @version 1.0
  */
-namespace Site\library\content_widgets\SimpleValue;
+namespace site\library\content_widgets\SimpleValue;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class SimpleValue extends Widget
 {

@@ -6,11 +6,11 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\data;
+namespace boolive\data;
 
-use Boolive\functions\F,
-    Boolive\errors\Error,
-    Boolive\develop\Trace;
+use boolive\functions\F,
+    boolive\errors\Error,
+    boolive\develop\Trace;
 
 class Data
 {
@@ -410,7 +410,7 @@ class Data
      * Сохранение объекта
      * @param Entity $entity Сохраняемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      * @return bool Признак, сохранен или нет объект?
      */
     static function write($entity, $access = true)
@@ -432,7 +432,7 @@ class Data
      * @param Entity $entity Уничтожаемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
      * @param bool $integrity Признак, проверять целостность данных?
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      * @return bool Признак, был уничтожен объект или нет?
      */
     static function delete($entity, $access = true, $integrity = true)
@@ -460,7 +460,7 @@ class Data
      * @param int $step_size Количество проверяемых подчиненных за раз
      * @param int $depth Глубина обновления
      * @param bool $from_file Признак, проверять или нет изменения в .info файлах
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      */
     static function findUpdates($entity, $step_size = 50, $depth = 1, $from_file = true)
     {
@@ -478,7 +478,7 @@ class Data
     /**
      * Применение ранее найденных обновлдений для объекта
      * @param Entity $entity Объект, для которого применяются обновления
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      */
     static function applyUpdates($entity)
     {
@@ -956,7 +956,7 @@ class Data
         if (preg_match('/^[a-z]+:\/\/([^\/]+)(.*)$/u', $absolute_uri, $match)){
             $match[1] = str_replace('.','_',$match[1]);
             $match[1] = str_replace('-','__',$match[1]);
-            return ($add_remote?'Remote/':'').$match[1].$match[2];
+            return ($add_remote?'remote/':'').$match[1].$match[2];
         }
         return $absolute_uri;
     }
@@ -993,7 +993,7 @@ class Data
     /**
      * Взвращает экземпляр хранилища
      * @param string $uri Путь на объект, для которого определяется хранилище
-     * @return \Boolive\data\stores\MySQLStore|null Экземпляр хранилища, если имеется или null, если нет
+     * @return \boolive\data\stores\MySQLStore|null Экземпляр хранилища, если имеется или null, если нет
      */
     static function getStore($uri)
     {
@@ -1019,8 +1019,8 @@ class Data
 		if (file_exists(DIR_SERVER.self::CONFIG_FILE) && !is_writable(DIR_SERVER.self::CONFIG_FILE)){
 			$requirements[] = 'Установите права на запись для файла: <code>'.DIR_SERVER.self::CONFIG_FILE.'</code>';
 		}
-		if (!file_exists(DIR_SERVER.'Boolive/data/tpl.'.self::CONFIG_FILE)){
-			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER.'Boolive/data/tpl.'.self::CONFIG_FILE.'</code>';
+		if (!file_exists(DIR_SERVER.'boolive/data/tpl.'.self::CONFIG_FILE)){
+			$requirements[] = 'Отсутствует установочный файл <code>'.DIR_SERVER.'boolive/data/tpl.'.self::CONFIG_FILE.'</code>';
 		}
 		return $requirements;
 	}
@@ -1097,19 +1097,19 @@ class Data
 
     /**
      * Установка
-     * @param \Boolive\input\Input $input Параметры доступа к БД
-     * @throws \Boolive\errors\Error
+     * @param \boolive\input\Input $input Параметры доступа к БД
+     * @throws \boolive\errors\Error
      */
 	static function install($input)
     {
 		// Параметры доступа к БД
 		$errors = new Error('Некоректные параметры доступа к СУБД', 'db');
-		$new_config = $input->REQUEST->get(\Boolive\values\Rule::arrays(array(
-			'dbname'	 => \Boolive\values\Rule::regexp('/^[0-9a-zA-Z_-]+$/u')->more(0)->max(50)->required(),
-			'user' 		 => \Boolive\values\Rule::string()->more(0)->max(50)->required(),
-			'password'	 => \Boolive\values\Rule::string()->max(50)->required(),
-			'host' 		 => \Boolive\values\Rule::string()->more(0)->max(255)->default('localhost')->required(),
-			'port' 		 => \Boolive\values\Rule::int()->min(1)->default(3306)->required(),
+		$new_config = $input->REQUEST->get(\boolive\values\Rule::arrays(array(
+			'dbname'	 => \boolive\values\Rule::regexp('/^[0-9a-zA-Z_-]+$/u')->more(0)->max(50)->required(),
+			'user' 		 => \boolive\values\Rule::string()->more(0)->max(50)->required(),
+			'password'	 => \boolive\values\Rule::string()->max(50)->required(),
+			'host' 		 => \boolive\values\Rule::string()->more(0)->max(255)->default('localhost')->required(),
+			'port' 		 => \boolive\values\Rule::int()->min(1)->default(3306)->required(),
 			//'prefix'	 => Rule::regexp('/^[0-9a-zA-Z_-]+$/u')->max(50)->default('')
 		)), $sub_errors);
 		$new_config['prefix'] = '';
@@ -1119,10 +1119,10 @@ class Data
             throw $errors;
         }
 		// Создание MySQL хранилища
-        \Boolive\data\stores\MySQLStore::createStore($new_config, $errors);
+        \boolive\data\stores\MySQLStore::createStore($new_config, $errors);
 
         // Создание файла конфигурации из шаблона
-        $content = file_get_contents(DIR_SERVER.'Boolive/data/tpl.'.self::CONFIG_FILE);
+        $content = file_get_contents(DIR_SERVER.'boolive/data/tpl.'.self::CONFIG_FILE);
         $content = F::Parse($content, $new_config, '{', '}');
         $fp = fopen(DIR_SERVER.self::CONFIG_FILE, 'w');
         fwrite($fp, $content);

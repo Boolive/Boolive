@@ -6,10 +6,10 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @todo При смене значения/файла удалять сохраненные трансформации изображения.
  */
-namespace Site\library\basic\Image;
+namespace site\library\basic\Image;
 
-use Boolive\functions\F,
-    Site\library\basic\File\File;
+use boolive\functions\F,
+    site\library\basic\File\File;
 
 class Image extends File
 {

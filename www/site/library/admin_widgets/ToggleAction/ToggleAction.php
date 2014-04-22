@@ -4,10 +4,10 @@
  * Базовый объект для создания элементов интерфейса
  * @version 1.0
  */
-namespace Site\library\admin_widgets\ToggleAction;
+namespace site\library\admin_widgets\ToggleAction;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class ToggleAction extends Widget
 {

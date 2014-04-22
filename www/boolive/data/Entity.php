@@ -6,17 +6,17 @@
  * @link http://boolive.ru/createcms/data-and-entity
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\data;
+namespace boolive\data;
 
 use Exception,
-    Boolive\values\Values,
-    Boolive\errors\Error,
-    Boolive\file\File,
-    Boolive\develop\ITrace,
-    Boolive\values\Rule,
-    Boolive\functions\F,
-    Boolive\auth\Auth,
-    Boolive\Boolive;
+    boolive\values\Values,
+    boolive\errors\Error,
+    boolive\file\File,
+    boolive\develop\ITrace,
+    boolive\values\Rule,
+    boolive\functions\F,
+    boolive\auth\Auth,
+    boolive\Boolive;
 
 class Entity implements ITrace
 {
@@ -131,7 +131,7 @@ class Entity implements ITrace
             if ($children_depth > 0){
                 if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
                 foreach ($attribs['children'] as $name => $child){
-                    $class = isset($child['class_name'])? $child['class_name'] : '\Boolive\data\Entity';
+                    $class = isset($child['class_name'])? $child['class_name'] : '\boolive\data\Entity';
                     $child['cond'] = $this->_cond;
                     $this->_children[$name] = new $class($child, $children_depth);
                 }
@@ -400,19 +400,19 @@ class Entity implements ITrace
                 $file = $proto->file(null, $root);
                 if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
                     $file_path = Data::convertAbsoluteToLocal($file, false);
-                    if (!is_file($f = DIR_SERVER.'Remote/'.$file_path)){
+                    if (!is_file($f = DIR_SERVER.'remote/'.$file_path)){
                         // Загрзка файла с сервера
                         $uri = F::splitRight('/', $file);
                         $file_content = Data::read($uri[0].'&file_content=1')->fileContent(false, true);
                         if (isset($file_content['content'])){
                             $content = base64_decode($file_content['content']);
-                            \Boolive\file\File::create($content, $f);
+                            \boolive\file\File::create($content, $f);
                         }
                     }
                     if ($root){
                         $file = $f;
                     }else{
-                        $file = DIR_WEB.'Remote/'.$file_path;
+                        $file = DIR_WEB.'remote/'.$file_path;
                     }
                 }
                 return $file;
@@ -446,7 +446,7 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         if ($this->_attribs['is_default_class'] == Entity::ENTITY_ID){
-            $path = ($root ? DIR_SERVER : DIR_WEB).'Boolive/data/Entity.php';
+            $path = ($root ? DIR_SERVER : DIR_WEB).'boolive/data/Entity.php';
         }else
         if ($proto = $this->isDefaultClass(null, true)){
             $path = $proto->logic(null, $root);
@@ -466,9 +466,9 @@ class Entity implements ITrace
         $dir = $this->uri();
         if (Data::isAbsoluteUri($dir)) return $dir.'/';
         if ($root){
-            return DIR_SERVER.'Site'.$dir.'/';
+            return DIR_SERVER.'site'.$dir.'/';
         }else{
-            return DIR_WEB.'Site'.$dir.'/';
+            return DIR_WEB.'site'.$dir.'/';
         }
     }
 
@@ -512,7 +512,7 @@ class Entity implements ITrace
                 $this->_attribs['class_content'] = false;
             }else{
                 $class = get_class($this);
-                if ($class != 'Boolive\data\Entity'){
+                if ($class != 'boolive\data\Entity'){
                     $f = Boolive::getClassFile($class);
                     $c = file_get_contents($f);
                     $this->_attribs['class_content'] = array(
@@ -811,7 +811,7 @@ class Entity implements ITrace
             }else{
                 $this->_attribs['is_default_class'] = 0;
                 // Если файла класса нет, то создаём его программный код
-                if (IS_INSTALL && !is_file($this->dir(true).($this->currentName()===''?'Site':$this->currentName()).'.php')){
+                if (IS_INSTALL && !is_file($this->dir(true).($this->currentName()===''?'site':$this->currentName()).'.php')){
                     $this->logic(array(
                         'content' => $this->classTemplate()
                     ));
@@ -894,7 +894,7 @@ class Entity implements ITrace
      * Родитель объекта
      * @param null|Entity $new_parent Новый родитель. Чтобы удалить родителя, указывается false
      * @param bool $load Загрузить родителя из хранилща, если ещё не загружен?
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      * @return Entity|null
      */
     function parent($new_parent = null, $load = true)
@@ -1013,7 +1013,7 @@ class Entity implements ITrace
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
      * @param bool $load Загрузить прототип из хранилща, если ещё не загружен?
      * @param bool $reload
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      * @throws \Exception
      * @return Entity|null|bool
      */
@@ -1660,7 +1660,7 @@ class Entity implements ITrace
      * Возможно обращение к родителям выше уровнем, чтобы объект проверялся в ещё более глобальном окружении,
      * например для проверки уникальности значения по всему разделу/базе.
      * @param Entity $child Проверяемый подчиненный
-     * @param \Boolive\errors\Error $error Объект ошибок подчиненного
+     * @param \boolive\errors\Error $error Объект ошибок подчиненного
      * @return bool Признак, корректен объект (true) или нет (false)
      */
     protected function checkChild(Entity $child, Error $error)
@@ -2020,7 +2020,7 @@ class Entity implements ITrace
         if ($save_to_file && !$this->isProperty()){
             $content = F::toJSON($export);
             $name = $this->name();
-            if ($this->uri() === '') $name = 'Site';
+            if ($this->uri() === '') $name = 'site';
             $file = $this->dir(true).$name.'.info';
             File::create($content, $file);
         }
@@ -2141,13 +2141,13 @@ class Entity implements ITrace
         $description = $this->description->value();
         // Название
         $name = $this->name();
-        if ($name === '') $name = 'Site';
+        if ($name === '') $name = 'site';
         $namespace = str_replace('/','\\', trim($this->dir(false),'/'));
         // Наследуемый класс
         if ($proto = $this->proto()){
             $extends = get_class($proto);
         }else{
-            $extends = 'Boolive\\data\\Entity';
+            $extends = 'boolive\\data\\Entity';
         }
         array_unshift($use, $extends);
         $use = array_unique($use);

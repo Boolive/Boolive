@@ -4,12 +4,12 @@
  * Установка новых объектов и обновлений
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Installer;
+namespace site\library\admin_widgets\Installer;
 
-use Boolive\data\Data,
-    Boolive\data\Entity,
-    Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use boolive\data\Data,
+    boolive\data\Entity,
+    site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class Installer extends Widget
 {

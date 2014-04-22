@@ -8,9 +8,9 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\access\Allow;
+namespace site\library\access\Allow;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Allow extends Entity
 {

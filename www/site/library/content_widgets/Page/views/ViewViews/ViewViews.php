@@ -4,10 +4,10 @@
  * Для отображения виджетов и любых других видов, например, js
  * @version 1.0
  */
-namespace Site\library\content_widgets\Page\views\ViewViews;
+namespace site\library\content_widgets\Page\views\ViewViews;
 
-use Boolive\values\Rule;
-use Site\library\views\View\View;
+use boolive\values\Rule;
+use site\library\views\View\View;
 
 class ViewViews extends View
 {

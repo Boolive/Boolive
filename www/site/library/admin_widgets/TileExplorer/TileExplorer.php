@@ -4,10 +4,10 @@
  * Обозреватель объектов в виде плитки
  * @version 1.0
  */
-namespace Site\library\admin_widgets\TileExplorer;
+namespace site\library\admin_widgets\TileExplorer;
 
-use Boolive\values\Rule;
-use Site\library\admin_widgets\BaseExplorer\BaseExplorer;
+use boolive\values\Rule;
+use site\library\admin_widgets\BaseExplorer\BaseExplorer;
 
 class TileExplorer extends BaseExplorer
 {

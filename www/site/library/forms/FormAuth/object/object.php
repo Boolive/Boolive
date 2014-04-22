@@ -5,11 +5,11 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\forms\FormAuth\object;
+namespace site\library\forms\FormAuth\object;
 
-use Boolive\data\Entity,
-    Boolive\auth\Auth,
-    Boolive\data\Data;
+use boolive\data\Entity,
+    boolive\auth\Auth,
+    boolive\data\Data;
 
 class object extends Entity
 {

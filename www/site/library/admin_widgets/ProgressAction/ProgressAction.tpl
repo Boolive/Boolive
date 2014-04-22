@@ -7,7 +7,7 @@
             <div class="layout-middle">
                 <ul class="entity-list">
                 <?php
-                    $list = $v['objects'];//->arrays(\Boolive\values\Rule::any());
+                    $list = $v['objects'];//->arrays(\boolive\values\Rule::any());
                     foreach ($list as $item):
                 ?>
                     <li>
