@@ -9,7 +9,7 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  * @version 2.0
  */
-namespace Boolive
+namespace boolive
 {
     use Boolive\errors\Error;
     use Exception,

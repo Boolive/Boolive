@@ -6,10 +6,10 @@
  * @date 10.01.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\session;
+namespace boolive\session;
 
-use Boolive\auth\Auth,
-    Boolive\events\Events;
+use boolive\auth\Auth,
+    boolive\events\Events;
 
 class Session
 {
