@@ -4,15 +4,15 @@
  * Обрабатывает info файлы для любых объектов
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Import\handlers\ImportExcelKeywords;
+namespace site\library\admin_widgets\Import\handlers\ImportExcelKeywords;
 
-use Boolive\data\Data;
-use Boolive\errors\Error;
-use Boolive\file\File;
-use Boolive\functions\F;
-use Boolive\values\Check;
-use Boolive\values\Rule;
-use Site\library\admin_widgets\Import\handlers\ImportFile\ImportFile;
+use boolive\data\Data;
+use boolive\errors\Error;
+use boolive\file\File;
+use boolive\functions\F;
+use boolive\values\Check;
+use boolive\values\Rule;
+use site\library\admin_widgets\Import\handlers\ImportFile\ImportFile;
 
 class ImportExcelKeywords extends ImportFile
 {

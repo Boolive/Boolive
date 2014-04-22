@@ -4,9 +4,9 @@
  * Отображает любой объект в соответсвии с установленными вараинтами
  * @version 1.0
  */
-namespace Site\library\views\AutoWidget2;
+namespace site\library\views\AutoWidget2;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class AutoWidget2 extends Widget
 {

@@ -3,12 +3,6 @@
     "proto": "/library/content_samples/Page",
     "order": 8,
     "children": {
-        "is_main": {
-            "value": 1,
-            "proto": "/library/content_samples/Page/is_main",
-            "is_property": true,
-            "order": 11
-        },
         "title": {
             "value": "Главная",
             "proto": "/library/content_samples/Page/title",
@@ -37,14 +31,20 @@
             "proto": "/library/content_samples/Page/keywords",
             "is_mandatory": true,
             "is_property": true,
-            "order": 24
+            "order": 25
+        },
+        "is_main": {
+            "value": 1,
+            "proto": "/library/content_samples/Page/is_main",
+            "is_property": true,
+            "order": 26
         },
         "comments": {
             "is_default_value": true,
             "value": "",
             "proto": "/library/content_samples/Page/comments",
             "is_property": true,
-            "order": 25
+            "order": 27
         }
     }
 }

@@ -10,8 +10,8 @@
     <body>
         <?php echo $v['body']->string(); ?>
         <?php if (GLOBAL_TRACE){
-            \Boolive\develop\Trace::groups()->group('Benchmark')->set(\Boolive\develop\Benchmark::stop('all', true));
-            \Boolive\develop\Trace::groups()->out();
+            \boolive\develop\Trace::groups()->group('Benchmark')->set(\boolive\develop\Benchmark::stop('all', true));
+            \boolive\develop\Trace::groups()->out();
         }
         ?>
     </body>

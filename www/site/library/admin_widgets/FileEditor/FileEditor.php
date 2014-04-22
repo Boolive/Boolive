@@ -4,13 +4,13 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\FileEditor;
+namespace site\library\admin_widgets\FileEditor;
 
-use Boolive\commands\Commands;
-use Boolive\data\Entity;
-use Boolive\file\File;
-use Boolive\values\Rule;
-use Site\library\views\Widget\Widget;
+use boolive\commands\Commands;
+use boolive\data\Entity;
+use boolive\file\File;
+use boolive\values\Rule;
+use site\library\views\Widget\Widget;
 
 class FileEditor extends Widget
 {

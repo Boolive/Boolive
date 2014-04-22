@@ -4,7 +4,7 @@
  * Указывается маска расширения и соответсвующей ей класс шаблонизатора
  */
 $config = array(
-    '*.tpl' => '\Boolive\template\php\PHPTemplate',
-    '*.txt' => '\Boolive\template\text\TextTemplate',
-    '*' => '\Boolive\template\php\PHPTemplate',
+    '*.tpl' => '\boolive\template\php\PHPTemplate',
+    '*.txt' => '\boolive\template\text\TextTemplate',
+    '*' => '\boolive\template\php\PHPTemplate',
 );

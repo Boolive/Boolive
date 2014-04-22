@@ -6,7 +6,7 @@
  * @date 13.06.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\cache\stores;
+namespace boolive\cache\stores;
 
 class FileCache
 {

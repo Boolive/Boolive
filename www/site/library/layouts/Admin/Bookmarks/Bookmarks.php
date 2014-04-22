@@ -4,10 +4,10 @@
  * Меню на объекты в админке
  * @version 1.0
  */
-namespace Site\library\layouts\Admin\Bookmarks;
+namespace site\library\layouts\Admin\Bookmarks;
 
-use Boolive\values\Rule;
-use Site\library\menus\Menu\Menu;
+use boolive\values\Rule;
+use site\library\menus\Menu\Menu;
 
 class Bookmarks extends Menu
 {

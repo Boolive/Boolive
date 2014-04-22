@@ -4,11 +4,11 @@
  * Используется при отображении списков с постраничным разделением вывода
  * @version 1.0
  */
-namespace Site\library\menus\PageNavigation;
+namespace site\library\menus\PageNavigation;
 
-use Boolive\input\Input;
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use boolive\input\Input;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class PageNavigation extends Widget
 {

@@ -4,15 +4,15 @@
  * Сохраняет выбранные объекты в файловую систему
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Export;
+namespace site\library\admin_widgets\Export;
 
-use Boolive\data\Data;
-use Boolive\data\Entity;
-use Boolive\develop\Trace;
-use Boolive\file\File;
-use Boolive\session\Session;
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use boolive\data\Data;
+use boolive\data\Entity;
+use boolive\develop\Trace;
+use boolive\file\File;
+use boolive\session\Session;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class Export extends Widget
 {
@@ -81,7 +81,7 @@ class Export extends Widget
             'jobs_step' => 0,
             'jobs_count' => 0
         );
-        /** @var \Boolive\data\Entity $obj  */
+        /** @var \boolive\data\Entity $obj  */
         foreach ($objects as $obj){
             $info['jobs'][] = array(
                 'count' => Data::read(array(

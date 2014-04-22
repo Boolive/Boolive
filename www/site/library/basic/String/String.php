@@ -4,9 +4,9 @@
  * Строковое значение длиной 255 символов
  * @version 1.0
  */
-namespace Site\library\basic\String;
+namespace site\library\basic\String;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class String extends Entity
 {

@@ -5,10 +5,10 @@
  * @version 1.0
  * @autor Pavel ishodnikov <gpavellog@gmail.com>
  */
-namespace Site\library\views\HtmlBlock;
+namespace site\library\views\HtmlBlock;
 
-use \Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use \site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class HtmlBlock extends Widget
 {

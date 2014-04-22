@@ -6,12 +6,12 @@
  * 2. По AJAX отдаёт атрибуты редактируемого объекта, проверяет и сохраняет объект
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Attribs;
+namespace site\library\admin_widgets\Attribs;
 
-use Boolive\errors\Error,
-    Site\library\views\Widget\Widget,
-    Boolive\values\Rule,
-    Boolive\data\Data;
+use boolive\errors\Error,
+    site\library\views\Widget\Widget,
+    boolive\values\Rule,
+    boolive\data\Data;
 
 class Attribs extends Widget
 {
@@ -59,7 +59,7 @@ class Attribs extends Widget
             // Если запрос действителен, то его пустота из-за лимита post_max_size
             $v['error']['value'] = 'Превышен допустимый размер отправляемых данных';
         }else{
-            /** @var $obj \Boolive\data\Entity */
+            /** @var $obj \boolive\data\Entity */
             $obj  = $this->_input['REQUEST']['object'];
 
             $attribs = $this->_input['REQUEST']['attrib'];
@@ -123,7 +123,7 @@ class Attribs extends Widget
 //                $v['error'] = array();
 //                if ($error->isExist('_attribs')){
 //                    foreach ($error->_attribs as $key => $e){
-//                        /** @var $e \Boolive\errors\Error */
+//                        /** @var $e \boolive\errors\Error */
 //                        $v['error'][$key] = $e->getUserMessage(true,' ');
 //                    }
 //                    $error->delete('_attribs');
@@ -140,7 +140,7 @@ class Attribs extends Widget
      */
     protected function callLoad()
     {
-        /** @var $obj \Boolive\data\Entity */
+        /** @var $obj \boolive\data\Entity */
         $obj  = $this->_input['REQUEST']['object'];
         $v = array(
             'id' => $obj->id(),
@@ -165,7 +165,7 @@ class Attribs extends Widget
             'class' => get_class($obj),
             'class_self' => trim(str_replace('/', '\\', $obj->dir().$obj->name()), '\\')
         );
-        if (empty($v['class_self'])) $v['class_self'] = 'Site';
+        if (empty($v['class_self'])) $v['class_self'] = 'site';
         return $v;
     }
 }

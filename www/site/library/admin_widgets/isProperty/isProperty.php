@@ -4,10 +4,10 @@
  * Смена признака "свойство" у выделенных объектов в админке
  * @version 1.0
  */
-namespace Site\library\admin_widgets\isProperty;
+namespace site\library\admin_widgets\isProperty;
 
-use Boolive\values\Rule;
-use Site\library\admin_widgets\ToggleAction\ToggleAction;
+use boolive\values\Rule;
+use site\library\admin_widgets\ToggleAction\ToggleAction;
 
 class isProperty extends ToggleAction
 {
@@ -20,7 +20,7 @@ class isProperty extends ToggleAction
 
     protected function initState()
     {
-        /** @var \Boolive\data\Entity $object */
+        /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
         $this->_state = $object->isProperty();
     }
@@ -35,7 +35,7 @@ class isProperty extends ToggleAction
             $prop = !$first->isProperty();
             foreach ($objects as $o){
                 try{
-                    /** @var \Boolive\data\Entity $o */
+                    /** @var \boolive\data\Entity $o */
                     $o->isProperty($prop);
                     // @todo Обрабатывать ошибки
                     $o->save();

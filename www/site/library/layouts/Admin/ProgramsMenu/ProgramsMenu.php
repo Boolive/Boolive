@@ -4,10 +4,10 @@
  * Меню автоматически формируется в зависимости от отображаемого объекта и доступного для него программ
  * @version 2.0
  */
-namespace Site\library\layouts\Admin\ProgramsMenu;
+namespace site\library\layouts\Admin\ProgramsMenu;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class ProgramsMenu extends Widget
 {

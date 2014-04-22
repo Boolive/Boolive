@@ -5,10 +5,10 @@
  * @date: 24.04.13
  *
  */
-namespace Site\library\content_widgets\PagePreview;
+namespace site\library\content_widgets\PagePreview;
 
-use Boolive\input\Input;
-use Site\library\views\AutoWidgetList2\AutoWidgetList2;
+use boolive\input\Input;
+use site\library\views\AutoWidgetList2\AutoWidgetList2;
 
 class PagePreview extends AutoWidgetList2{
 

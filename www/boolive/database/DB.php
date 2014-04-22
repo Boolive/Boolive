@@ -16,13 +16,13 @@
  * @link http://boolive.ru/createcms/working-with-databases
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\database;
+namespace boolive\database;
 
 use PDO,
     PDOStatement,
-    Boolive\errors\Error,
-    Boolive\develop\Trace,
-    Boolive\develop\Benchmark;
+    boolive\errors\Error,
+    boolive\develop\Trace,
+    boolive\develop\Benchmark;
 
 class DB extends PDO
 {

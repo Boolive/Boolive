@@ -6,10 +6,10 @@
  * @date 24.04.2013
  * @author Polina Shestakova <paulinep@yandex.ru>
  */
-namespace Site\library\basic\Password;
+namespace site\library\basic\Password;
 
-use Boolive\auth\Auth,
-    Boolive\data\Entity;
+use boolive\auth\Auth,
+    boolive\data\Entity;
 
 class Password extends Entity
 {

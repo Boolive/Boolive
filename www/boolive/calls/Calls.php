@@ -10,9 +10,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\calls;
+namespace boolive\calls;
 
-use Boolive\events\Events;
+use boolive\events\Events;
 
 class Calls
 {
@@ -27,7 +27,7 @@ class Calls
     static function activate()
     {
         // Регистрация на событие системной ошибки
-        Events::on('Boolive::error', '\\Boolive\\calls\\Calls', 'onError');
+        Events::on('Boolive::error', '\\boolive\\calls\\Calls', 'onError');
     }
     /**
      * Перовод в состояние ожидания.

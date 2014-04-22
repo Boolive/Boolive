@@ -5,9 +5,9 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\javascripts\JavaScript;
+namespace site\library\javascripts\JavaScript;
 
-use Site\library\views\View\View;
+use site\library\views\View\View;
 
 class JavaScript extends View
 {

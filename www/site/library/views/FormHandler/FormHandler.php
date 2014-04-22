@@ -5,11 +5,11 @@
  * Клиенту отвечает по умолчанию редиректом на текущий запрос
  * @version 1.0
  */
-namespace Site\library\views\FormHandler;
+namespace site\library\views\FormHandler;
 
-use Boolive\input\Input,
-    Site\library\views\View\View,
-    Boolive\values\Rule;
+use boolive\input\Input,
+    site\library\views\View\View,
+    boolive\values\Rule;
 
 class FormHandler extends View
 {

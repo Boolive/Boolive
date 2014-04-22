@@ -4,17 +4,17 @@
         <div class="confirm">
             <ul class="entity-list">
             <?php
-                $list = $v['objects'];//->arrays(\Boolive\values\Rule::any());
+                $list = $v['objects'];//->arrays(\boolive\values\Rule::any());
                 foreach ($list as $item):
                     $diff_class = '';
                     switch ($item['diff']->int()){
-                        case \Boolive\data\Entity::DIFF_CHANGE:
+                        case \boolive\data\Entity::DIFF_CHANGE:
                             $diff_class = ' change';
                             break;
-                        case \Boolive\data\Entity::DIFF_ADD:
+                        case \boolive\data\Entity::DIFF_ADD:
                             $diff_class = ' add';
                             break;
-                        case \Boolive\data\Entity::DIFF_DELETE:
+                        case \boolive\data\Entity::DIFF_DELETE:
                             $diff_class = ' delete';
                             break;
                     }

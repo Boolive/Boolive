@@ -5,22 +5,22 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\data\stores;
+namespace boolive\data\stores;
 
-use Boolive\auth\Auth,
-    Boolive\cache\Cache,
-    Boolive\database\DB,
-    Boolive\data\Entity,
-    Boolive\data\Data,
-    Boolive\functions\F,
-    Boolive\file\File,
-    Boolive\errors\Error,
-    Boolive\events\Events,
-    Boolive\develop\Trace;
+use boolive\auth\Auth,
+    boolive\cache\Cache,
+    boolive\database\DB,
+    boolive\data\Entity,
+    boolive\data\Data,
+    boolive\functions\F,
+    boolive\file\File,
+    boolive\errors\Error,
+    boolive\events\Events,
+    boolive\develop\Trace;
 
 class MySQLStore extends Entity
 {
-    /** @var \Boolive\database\DB */
+    /** @var \boolive\database\DB */
     public $db;
     /** @var string Ключ хранилища, по которому хранилище выбирается для объектов и создаются короткие URI */
     private $key;
@@ -54,7 +54,7 @@ class MySQLStore extends Entity
      * Чтение объектов
      * @param string|array $cond Условие на выбираемые объекты.
      * @param bool $index Признак, выполнять индексацию данных перед чтением или нет?
-     * @return array|\Boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
+     * @return array|\boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
      * @throws \Exception
      */
     function read($cond, $index = false)
@@ -170,7 +170,7 @@ class MySQLStore extends Entity
                         }else{
                             $group_result[$key] = array(
                                 'uri'=>$row['uri'],
-                                'class_name' => '\\Boolive\\data\\Entity',
+                                'class_name' => '\\boolive\\data\\Entity',
                             );
                         }
                     }
@@ -243,7 +243,7 @@ class MySQLStore extends Entity
         if ($cond['select'][0] == 'self'){
             foreach ($group_result as $key => $obj){
                 if (!isset($obj)){
-                    $obj = array('class_name' => '\\Boolive\\data\\Entity');
+                    $obj = array('class_name' => '\\boolive\\data\\Entity');
                     $uri = ($key===0)? $cond['from'] : $key;
                     if (!Data::isShortUri($uri)){
                         $names = F::splitRight('/', $uri, true);
@@ -259,9 +259,9 @@ class MySQLStore extends Entity
 
     /**
      * Сохранение объекта
-     * @param \Boolive\data\Entity $entity Сохраняемый объект
+     * @param \boolive\data\Entity $entity Сохраняемый объект
      * @param bool $access Признак, проверять доступ или нет?
-     * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
      * @throws
      * @throws \Exception Системные ошибки
      */
@@ -447,10 +447,10 @@ class MySQLStore extends Entity
                         $this->makeParents($attr['id'], $attr['parent'], $dl, true);
                     }
 
-                    if (!empty($uri) && is_dir(DIR_SERVER.'Site'.$uri)){
+                    if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
                         // Переименование/перемещение папки объекта
-                        $dir = DIR_SERVER.'Site'.$uri_new;
-                        File::rename(DIR_SERVER.'Site'.$uri, $dir);
+                        $dir = DIR_SERVER.'site'.$uri_new;
+                        File::rename(DIR_SERVER.'site'.$uri, $dir);
                         if ($current['name'] !== $attr['name']){
                             // Переименование файла, если он есть
                             if ($current['value_type'] == Entity::VALUE_FILE && $current['is_default_value'] == $current['id']){
@@ -518,7 +518,7 @@ class MySQLStore extends Entity
                 }
                 // Загрузка/обновление класса
                 if (isset($attr['class'])){
-                    $path = $entity->dir(true).($attr['name']===''?'Site':$attr['name']).'.php';
+                    $path = $entity->dir(true).($attr['name']===''?'site':$attr['name']).'.php';
                     if (isset($attr['class']['content'])){
                         File::create($attr['class']['content'], $path);
                     }else{
@@ -730,7 +730,7 @@ class MySQLStore extends Entity
      * @param Entity $entity Уничтожаемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
      * @param bool $integrity Признак, проверять целостность данных?
-     * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
      * @return bool
      */
     function delete($entity, $access, $integrity)
@@ -1068,7 +1068,7 @@ class MySQLStore extends Entity
     /**
      * Применение ранее найденных обновлдений для объекта
      * @param Entity $entity Объект, для которого применяются обновления
-     * @throws \Boolive\errors\Error
+     * @throws \boolive\errors\Error
      */
     function applyUpdates($entity)
     {
@@ -1224,7 +1224,7 @@ class MySQLStore extends Entity
             if ($what == 'self'){
                 // Выбор from
                 // Контроль доступа
-                if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read'))){
+                if (!empty($cond['access']) && IS_INSTALL && ($acond = \boolive\auth\Auth::getUser()->getAccessCond('read'))){
                     $acond = $this->getCondSQL(array('where'=>$acond), true);
                     $result['select'].= ', IF('.$acond['where'].',1,0) is_accessible';
                     $result['joins'].=$acond['joins'];
@@ -1290,7 +1290,7 @@ class MySQLStore extends Entity
             }else{
                 if ($multy) trace_log('MULTY SELECT!! on '.$what.' '.implode(', ',$cond['from']));
                 // Дополняем условие контролем доступа
-                if (!empty($cond['access']) && IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond('read', $cond['from']))){
+                if (!empty($cond['access']) && IS_INSTALL && ($acond = \boolive\auth\Auth::getUser()->getAccessCond('read', $cond['from']))){
                     if (empty($cond['where'])){
                         $cond['where'] = array($acond);
                     }else{
@@ -1757,7 +1757,7 @@ class MySQLStore extends Entity
                             }
                         }else
                         if ($c[0] == 'access'){
-                            if (IS_INSTALL && ($acond = \Boolive\auth\Auth::getUser()->getAccessCond($c[1]))){
+                            if (IS_INSTALL && ($acond = \boolive\auth\Auth::getUser()->getAccessCond($c[1]))){
                                 $acond = $store->getCondSQL(array('where'=>$acond), true);
 
                                 $cond[$i] = $acond['where'];
@@ -2073,7 +2073,7 @@ class MySQLStore extends Entity
                 WHERE object_id = :parent
                 UNION SELECT :obj,:obj,0
             ');
-            while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
+            while ($row = $q->fetch(\boolive\database\DB::FETCH_ASSOC)){
                 $make_ref->execute(array(':obj'=>$row['id'], ':parent'=>$row['parent']));
             }
             $this->db->commit();
@@ -2102,7 +2102,7 @@ class MySQLStore extends Entity
                 WHERE object_id = :proto
                 UNION SELECT :obj,:obj,0
             ');
-            while ($row = $q->fetch(\Boolive\database\DB::FETCH_ASSOC)){
+            while ($row = $q->fetch(\boolive\database\DB::FETCH_ASSOC)){
                 $make_ref->execute(array(':obj'=>$row['id'], ':proto'=>$row['proto']));
             }
             $this->db->commit();
@@ -2214,7 +2214,7 @@ class MySQLStore extends Entity
         $attribs['diff_from'] = intval($attribs['diff_from']);
         unset($attribs['valuef']);
         // Свой класс
-        $attribs['class_name'] = '\\Boolive\\data\\Entity';
+        $attribs['class_name'] = '\\boolive\\data\\Entity';
         if ($attribs['diff'] != Entity::DIFF_ADD){
             if (empty($attribs['is_default_class'])){
                 $attribs['class_name'] = $this->getClassById($attribs['id']);
@@ -2244,9 +2244,9 @@ class MySQLStore extends Entity
                 while ($row = $q->fetch(DB::FETCH_ASSOC)){
                     if ($row['uri'] !== ''){
                         $names = F::splitRight('/', $row['uri'], true);
-                        $this->classes['//'.$row['id']] = '\\Site\\'.str_replace('/', '\\', trim($row['uri'],'/')).'\\'.$names[1];
+                        $this->classes['//'.$row['id']] = '\\site\\'.str_replace('/', '\\', trim($row['uri'],'/')).'\\'.$names[1];
                     }else{
-                        $this->classes['//'.$row['id']] = '\\Site\\Site';
+                        $this->classes['//'.$row['id']] = '\\site\\site';
                     }
                 }
                 Cache::set('mysqlstore/classes', F::toJSON($this->classes, false));
@@ -2264,15 +2264,15 @@ class MySQLStore extends Entity
                         $row['uri'] = Data::convertAbsoluteToLocal($row['uri']);
                     }
                     $names = F::splitRight('/', $row['uri'], true);
-                    $this->classes[$id] = '\\Site\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                    $this->classes[$id] = '\\site\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
                 }else{
-                    $this->classes[$id] = '\\Boolive\\data\\Entity';
+                    $this->classes[$id] = '\\boolive\\data\\Entity';
                 }
                 Cache::set('mysqlstore/classes', F::toJSON($this->classes, false));
                 return $this->classes[$id];
             }
         }
-        return '\\Boolive\\data\\Entity';
+        return '\\boolive\\data\\Entity';
     }
 
     /**
@@ -2334,12 +2334,12 @@ class MySQLStore extends Entity
      * Создание хранилища
      * @param $connect
      * @param null $errors
-     * @throws \Boolive\errors\Error|null
+     * @throws \boolive\errors\Error|null
      */
     static function createStore($connect, &$errors = null)
     {
         try{
-            if (!$errors) $errors = new \Boolive\errors\Error('Некоректные параметры доступа к СУБД', 'db');
+            if (!$errors) $errors = new \boolive\errors\Error('Некоректные параметры доступа к СУБД', 'db');
             // Проверка подключения и базы данных
             $db = new DB('mysql:host='.$connect['host'].';port='.$connect['port'], $connect['user'], $connect['password'], array(DB::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'), $connect['prefix']);
             $db_auto_create = false;

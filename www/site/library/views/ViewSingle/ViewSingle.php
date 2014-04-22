@@ -6,13 +6,13 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\views\ViewSingle;
+namespace site\library\views\ViewSingle;
 
-use Boolive\cache\Cache;
-use Boolive\input\Input;
-use Site\library\views\View\View,
-    Boolive\values\Rule,
-    Boolive\commands\Commands;
+use boolive\cache\Cache;
+use boolive\input\Input;
+use site\library\views\View\View,
+    boolive\values\Rule,
+    boolive\commands\Commands;
 
 class ViewSingle extends View
 {

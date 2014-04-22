@@ -4,7 +4,7 @@
         ?><span><?php echo $v['item_text']; ?></span></a>
 <?php endif; ?>
 <?php
-    $list = $v['views']->arrays(\Boolive\values\Rule::string());
+    $list = $v['views']->arrays(\boolive\values\Rule::string());
     if ($list){
         echo '<ul>';
         foreach ($list as $item)  echo $item;

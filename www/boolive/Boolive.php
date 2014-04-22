@@ -11,7 +11,7 @@
  */
 namespace boolive
 {
-    use Boolive\errors\Error;
+    use boolive\errors\Error;
     use Exception,
         ErrorException;
 
@@ -39,7 +39,7 @@ namespace boolive
                 if (IS_INSTALL){
                     self::init();
                     // При необходимости, каждый класс может автоматически подключиться и активироваться, обработав событие START.
-                    \Boolive\events\Events::trigger('Boolive::activate');
+                    \boolive\events\Events::trigger('Boolive::activate');
                 }else{
                     // Ядро не инициализировано
                     return false;
@@ -53,8 +53,8 @@ namespace boolive
                     if (is_file($class_path)){
                         include_once($class_path);
                     }else
-                    if (mb_substr($class_name,0,7)=='Remote\\' && self::loadRemoteClass($class_name, $class_path)){
-                        // Если класс из Remote и его получилось загрузить с его сервера
+                    if (mb_substr($class_name,0,7)=='remote\\' && self::loadRemoteClass($class_name, $class_path)){
+                        // Если класс из remote и его получилось загрузить с его сервера
                         include_once($class_path);
                     }else{
                         throw new ErrorException('Class "'.$class_name.'" not found', 2);
@@ -80,7 +80,7 @@ namespace boolive
          */
         static function deactivate()
         {
-            \Boolive\events\Events::trigger('Boolive::deactivate');
+            \boolive\events\Events::trigger('Boolive::deactivate');
         }
 
         /**
@@ -89,13 +89,13 @@ namespace boolive
         static function init()
         {
             // Регистрация метода-обработчика автозагрузки классов
-            spl_autoload_register(array('\Boolive\Boolive', 'activate'));
+            spl_autoload_register(array('\boolive\Boolive', 'activate'));
             // Регистрация метода-обработчка завершения выполнения системы
-            register_shutdown_function(array('\Boolive\Boolive', 'deactivate'));
+            register_shutdown_function(array('\boolive\Boolive', 'deactivate'));
             // Регистрация обработчика исключений
-            set_exception_handler(array('\Boolive\Boolive', 'exception'));
+            set_exception_handler(array('\boolive\Boolive', 'exception'));
             // Регистрация обработчика ошибок
-            set_error_handler(array('\Boolive\Boolive', 'error'));
+            set_error_handler(array('\boolive\Boolive', 'error'));
             // Временая зона
             date_default_timezone_set('UTC');
             // Настройка кодировки
@@ -114,7 +114,7 @@ namespace boolive
         {
             // Если обработчики событий не вернут положительный результат, то
             // обрабатываем исключение по умолчанию
-            if (!\Boolive\events\Events::trigger('Boolive::error', $e)->result){
+            if (!\boolive\events\Events::trigger('Boolive::error', $e)->result){
                 trace_log(get_class($e).' ['.$e->getCode().']: '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
                 //trace_log()
                 if (isset($e->xdebug_message)){
@@ -172,8 +172,8 @@ namespace boolive
         {
             $path = str_replace('\\', '/', $class_name);
             $names = explode('/', $path, 2);
-            if ($names[0] != 'Site' && $names[0] != 'Remote' && $names[0] != 'Boolive') {
-                return DIR_SERVER.'Vendor/'.str_replace('_','/',$path).'.php';
+            if ($names[0] != 'site' && $names[0] != 'remote' && $names[0] != 'boolive') {
+                return DIR_SERVER.'vendor/'.str_replace('_','/',$path).'.php';
             }else{
                 return DIR_SERVER.$path.'.php';
             }
@@ -187,20 +187,20 @@ namespace boolive
          */
         public static function loadRemoteClass($class_name, $class_path)
         {
-            $names = \Boolive\functions\F::splitRight('\\', $class_name, true);
-            if (preg_match('/^Remote\\\\([^\\\\]+)(.*)$/u', $names[0], $match)){
-                $namespace_pfx = 'Remote\\'.$match[1].'\\';
+            $names = \boolive\functions\F::splitRight('\\', $class_name, true);
+            if (preg_match('/^remote\\\\([^\\\\]+)(.*)$/u', $names[0], $match)){
+                $namespace_pfx = 'remote\\'.$match[1].'\\';
                 $match[1] = str_replace('__','-',$match[1]);
                 $match[1] = str_replace('_','.',$match[1]);
                 $match[2] = str_replace('\\','/',$match[2]);
                 $uri = 'http://'.$match[1].$match[2].'&class_content=1';
-                $remote = \Boolive\data\Data::read($uri);
+                $remote = \boolive\data\Data::read($uri);
                 $class = $remote->classContent();
                 if (isset($class['content'])){
                     $content = base64_decode($class['content']);
                     // Название классов и пространств имен не ядра переименовываются - добавляется префикс
                     $content = preg_replace_callback('/((?:[A-Za-a0-9_]+\\\\)+[A-Za-a0-9_]+)/ui', function($m) use ($namespace_pfx){
-                        if (mb_substr($m[1], 0, 8) == 'Boolive\\' || mb_substr($m[1], 0, 7) == 'Remote\\'){
+                        if (mb_substr($m[1], 0, 8) == 'boolive\\' || mb_substr($m[1], 0, 7) == 'remote\\'){
                             return $m[1];
                         }else{
                             return $namespace_pfx.$m[1];
@@ -209,7 +209,7 @@ namespace boolive
                     // Название классов как строковые значения в коде
                     $content = preg_replace_callback('/(\'|")(?:\\\\\\\\?[\w_]+)+(\'|")/ui', function($m) use ($namespace_pfx){
                         $x = trim($m[0],'\\\'"');
-                        if (mb_substr($x, 0, 8) == 'Boolive\\' || mb_substr($m[1], 0, 7) == 'Remote\\'){
+                        if (mb_substr($x, 0, 8) == 'boolive\\' || mb_substr($m[1], 0, 7) == 'remote\\'){
                             return $m[1].$x.$m[2];
                         }else{
                             return $m[1].'\\'.$namespace_pfx.$x.$m[2];
@@ -217,7 +217,7 @@ namespace boolive
                     }, $content);
                     // Корневые namespace (без \)
                     $content = preg_replace('/namespace\s+([a-zA-Z_]+)([\s;$]+)/ui', 'namespace '.$namespace_pfx.'\\$1$2', $content);
-                    \Boolive\file\File::create($content, $class_path);
+                    \boolive\file\File::create($content, $class_path);
                     return true;
                 }
             }
@@ -324,8 +324,8 @@ namespace boolive
             if (!is_writable($file)){
                 $requirements[] = 'Установите права на запись для файла <code>'.$file.'</code>. Необходимо для автоматической записи настроек системы';
             }
-            if (!is_writable(DIR_SERVER.'Site')){
-                $requirements[] = 'Установите права на запись для директории <code>'.DIR_SERVER.'Site</code> и всех её вложенных директорий и файлов';
+            if (!is_writable(DIR_SERVER.'site')){
+                $requirements[] = 'Установите права на запись для директории <code>'.DIR_SERVER.'site</code> и всех её вложенных директорий и файлов';
             }
             if (!extension_loaded('mbstring')){
                 $requirements[] = 'Требуется расширение <code>mbstring</code> для PHP';
@@ -362,8 +362,8 @@ namespace boolive
         {
             // Параметры доступа к БД
             $errors = new Error('Некоректные параметры', 'boolive');
-            $new_config = $input->REQUEST->get(\Boolive\values\Rule::arrays(array(
-                'php'	 => \Boolive\values\Rule::string()->more(0)->max(255)->required()
+            $new_config = $input->REQUEST->get(\boolive\values\Rule::arrays(array(
+                'php'	 => \boolive\values\Rule::string()->more(0)->max(255)->required()
             )), $sub_errors);
             // Если ошибочные данные от юзера
             if ($sub_errors){
@@ -403,15 +403,15 @@ namespace {
      * Сделано из-за лени обращаться к классу Trace :)
      * @param mixed $var Значение для трассировки
      * @param null $key
-     * @return \Boolive\develop\Trace Объект трассировки
+     * @return \boolive\develop\Trace Объект трассировки
      */
     function trace($var = null, $key = null)
     {
-        return \Boolive\develop\Trace::groups('trace')->group($key)->set($var)->out();
+        return \boolive\develop\Trace::groups('trace')->group($key)->set($var)->out();
     }
 
     function trace_log($var = null, $key = null)
     {
-        \Boolive\develop\Trace::groups('trace')->group($key)->set($var)->log();
+        \boolive\develop\Trace::groups('trace')->group($key)->set($var)->log();
     }
 }

@@ -7,13 +7,13 @@
 $stores = array(
     // Внешнее хранилище
     'http:' => array(
-        'class' => '\Boolive\data\stores\HTTPStore',
+        'class' => '\boolive\data\stores\HTTPStore',
         'connect' => array(
         )
     ),
     // Главное локальное хранилище
     '' => array(
-        'class' => '\Boolive\data\stores\MySQLStore',
+        'class' => '\boolive\data\stores\MySQLStore',
         'connect' => array(
             // Имя источника данных
             'dsn' => array(

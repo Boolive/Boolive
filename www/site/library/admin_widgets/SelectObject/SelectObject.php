@@ -4,16 +4,16 @@
  * Представляет собой обозреватель объектов с функцией выбора объекта.
  * @version 1.0
  */
-namespace Site\library\admin_widgets\SelectObject;
+namespace site\library\admin_widgets\SelectObject;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class SelectObject extends Widget
 {
     /**
      * Возвращает правило на входящие данные
-     * @return null|\Boolive\values\Rule
+     * @return null|\boolive\values\Rule
      */
     function startRule()
     {

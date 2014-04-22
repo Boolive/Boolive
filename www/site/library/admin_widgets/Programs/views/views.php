@@ -4,9 +4,9 @@
  * Из этого списка автоматически выбирается один "вид" для отображения объекта
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Programs\views;
+namespace site\library\admin_widgets\Programs\views;
 
-use Site\library\views\ViewSingle\ViewSingle;
+use site\library\views\ViewSingle\ViewSingle;
 
 class views extends ViewSingle
 {

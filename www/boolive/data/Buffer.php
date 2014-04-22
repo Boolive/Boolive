@@ -6,7 +6,7 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\data;
+namespace boolive\data;
 
 class Buffer
 {
@@ -46,7 +46,7 @@ class Buffer
 //            $key = json_encode($ocond);
 //            if (isset(self::$list_plain[$key]) || array_key_exists($key, self::$list_plain)){
 //                if (!isset(self::$list_plain[$key][$names[1]])){
-//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'class_name' => '\\Boolive\\data\\Entity');
+//                    return array('name'=>$names[1], 'uri'=>$cond['from'], 'class_name' => '\\boolive\\data\\Entity');
 //                }else{
 //                    return self::$list_plain[$key][$names[1]];
 //                }

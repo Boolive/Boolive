@@ -5,7 +5,7 @@
  * @author Azat Galiev <AzatGaliev@live.ru>
  * @version 2.0
  */
-namespace Boolive\develop;
+namespace boolive\develop;
 
 interface ITrace
 {

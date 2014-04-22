@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\Number;
+namespace site\library\basic\Number;
 
-use Boolive\data\Entity,
-    Boolive\values\Rule;
+use boolive\data\Entity,
+    boolive\values\Rule;
 
 class Number extends Entity
 {

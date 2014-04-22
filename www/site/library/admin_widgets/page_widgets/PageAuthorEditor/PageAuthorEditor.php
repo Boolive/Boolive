@@ -5,10 +5,10 @@
  * @date: 22.04.13
  *
  */
-namespace Site\library\admin_widgets\page_widgets\PageAuthorEditor;
+namespace site\library\admin_widgets\page_widgets\PageAuthorEditor;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class PageAuthorEditor extends Widget
 {

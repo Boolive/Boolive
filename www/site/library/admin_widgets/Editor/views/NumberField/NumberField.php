@@ -4,9 +4,9 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Editor\views\NumberField;
+namespace site\library\admin_widgets\Editor\views\NumberField;
 
-use Site\library\admin_widgets\BaseExplorer\views\Item\Item;
+use site\library\admin_widgets\BaseExplorer\views\Item\Item;
 
 class NumberField extends Item
 {

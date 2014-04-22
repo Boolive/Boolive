@@ -12,22 +12,22 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\template\php;
+namespace boolive\template\php;
 
-use Boolive\values\Values,
-    Boolive\values\Rule;
+use boolive\values\Values,
+    boolive\values\Rule;
 
 class PHPTemplateValues extends Values
 {
-    /** @var \Boolive\data\Entity Сущность, к которой обращаться за недостающими значениями*/
+    /** @var \boolive\data\Entity Сущность, к которой обращаться за недостающими значениями*/
     private $_entity;
 
     /**
      * Конструктор
      * Все вложенные массивы преобразуются в объект TemplatePHPValues
      * @param null $value Массив значений любого типа
-     * @param null|\Boolive\values\Rule $rule Правило проверки значений по умолчанию
-     * @param \Boolive\data\Entity|null $entity Сущность, к которой обращаться за недостающими значениями
+     * @param null|\boolive\values\Rule $rule Правило проверки значений по умолчанию
+     * @param \boolive\data\Entity|null $entity Сущность, к которой обращаться за недостающими значениями
      */
     function __construct($value = null, $rule = null, $entity = null)
     {

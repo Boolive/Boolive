@@ -14,10 +14,10 @@
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
 
-namespace Boolive\errors;
+namespace boolive\errors;
 
 use Exception,
-    Boolive\develop\ITrace,
+    boolive\develop\ITrace,
     IteratorAggregate,
     ArrayIterator;
 

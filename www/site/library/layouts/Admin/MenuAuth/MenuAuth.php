@@ -5,11 +5,11 @@
  * @date: 07.03.13
  *
  */
-namespace Site\library\layouts\Admin\MenuAuth;
+namespace site\library\layouts\Admin\MenuAuth;
 
-use Site\library\views\Widget\Widget,
-    Boolive\input\Input,
-    Boolive\auth\Auth;
+use site\library\views\Widget\Widget,
+    boolive\input\Input,
+    boolive\auth\Auth;
 
 class MenuAuth extends Widget{
 

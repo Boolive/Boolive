@@ -4,9 +4,9 @@
  * Логика корневого объекта. При исполнении запускает интерфейс.
  * @version 1.0
  */
-namespace Site\library\views\Site;
+namespace site\library\views\Site;
 
-use Site\library\views\View\View;
+use site\library\views\View\View;
 
 class Site extends View
 {

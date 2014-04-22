@@ -5,9 +5,9 @@
  * @version 1.0
  * @autor Hitev Kirill <nomer_47@mail.ru>
  */
-namespace Site\library\content_widgets\KeywordsCloud;
+namespace site\library\content_widgets\KeywordsCloud;
 
-use \Site\library\views\Widget\Widget;
+use \site\library\views\Widget\Widget;
 
 class KeywordsCloud extends Widget
 {
@@ -25,7 +25,7 @@ class KeywordsCloud extends Widget
         $min_value = 0;
         $i=0;
         foreach ($list as $name => $item){
-            /** @var $item \Boolive\data\Entity */
+            /** @var $item \boolive\data\Entity */
             if($item->value()!=0){
                 $v['list'][$i]['href'] = $item->uri();
                 $v['list'][$i]['title'] = $name;

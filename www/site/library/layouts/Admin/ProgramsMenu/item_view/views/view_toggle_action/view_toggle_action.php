@@ -4,10 +4,10 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Site\library\layouts\Admin\ProgramsMenu\item_view\views\view_toggle_action;
+namespace site\library\layouts\Admin\ProgramsMenu\item_view\views\view_toggle_action;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class view_toggle_action extends Widget
 {
@@ -26,7 +26,7 @@ class view_toggle_action extends Widget
     function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
-            /** @var \Boolive\data\Entity $obj */
+            /** @var \boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['program'];//->linked();
             // Ссылка
             $real = $obj->linked();

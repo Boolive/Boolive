@@ -4,15 +4,15 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\TileExplorer\views\TileItem;
+namespace site\library\admin_widgets\TileExplorer\views\TileItem;
 
-use Site\library\admin_widgets\BaseExplorer\views\Item\Item;
+use site\library\admin_widgets\BaseExplorer\views\Item\Item;
 
 class TileItem extends Item
 {
     function show($v = array(), $commands, $input)
     {
-        /** @var $obj \Boolive\data\Entity */
+        /** @var $obj \boolive\data\Entity */
         $obj = $this->_input['REQUEST']['object'];
 
         if ($obj->{'icon-150'}->isExist()){

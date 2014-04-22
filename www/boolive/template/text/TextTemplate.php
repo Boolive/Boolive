@@ -5,9 +5,9 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\template\text;
+namespace boolive\template\text;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class TextTemplate
 {
@@ -15,7 +15,7 @@ class TextTemplate
      * Создание текста из шаблона
      * В шаблон вставляются переданные значения
      * При обработки шаблона могут довыбираться значения из $entity и создаваться команды в $commands
-     * @param \Boolive\data\Entity $entity
+     * @param \boolive\data\Entity $entity
      * @param array $v
      * @throws \Exception
      * @return string

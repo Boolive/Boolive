@@ -4,11 +4,11 @@
  * Действие над объектами с подтверждением и прогрессом выполнения.
  * @version 1.0
  */
-namespace Site\library\admin_widgets\FindUpdates;
+namespace site\library\admin_widgets\FindUpdates;
 
-use Boolive\data\Data;
-use Site\library\admin_widgets\ProgressAction\ProgressAction,
-    Boolive\session\Session;
+use boolive\data\Data;
+use site\library\admin_widgets\ProgressAction\ProgressAction,
+    boolive\session\Session;
 
 class FindUpdates extends ProgressAction
 {

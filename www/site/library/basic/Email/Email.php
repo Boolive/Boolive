@@ -4,10 +4,10 @@
  *
  * @version 1.0
  */
-namespace Site\library\basic\Email;
+namespace site\library\basic\Email;
 
-use Boolive\values\Rule;
-use Site\library\basic\String\String;
+use boolive\values\Rule;
+use site\library\basic\String\String;
 
 class Email extends String
 {

@@ -6,12 +6,12 @@
  * @date 23.07.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\layouts\Admin\ProgramsMenu\item_view;
+namespace site\library\layouts\Admin\ProgramsMenu\item_view;
 
-use Site\library\views\AutoWidgetList2\AutoWidgetList2,
-    Boolive\values\Rule;
-use Site\library\views\View\View;
-use Site\library\views\Widget\Widget;
+use site\library\views\AutoWidgetList2\AutoWidgetList2,
+    boolive\values\Rule;
+use site\library\views\View\View;
+use site\library\views\Widget\Widget;
 
 class item_view extends AutoWidgetList2
 {
@@ -42,7 +42,7 @@ class item_view extends AutoWidgetList2
     function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
-            /** @var \Boolive\data\Entity $obj */
+            /** @var \boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['program'];//->linked();
             // Ссылка
             $real = $obj->linked();
@@ -65,7 +65,7 @@ class item_view extends AutoWidgetList2
         $list = $this->getList();
         $v['views'] = array();
         if (is_array($list)){
-            $c = new \Boolive\commands\Commands();
+            $c = new \boolive\commands\Commands();
             foreach ($list as $obj){
                 $this->_input_child['REQUEST']['program'] = $obj;
                 if ($obj->linked() instanceof View && $obj->linked()->startCheck($c, $this->_input_child)){

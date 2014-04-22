@@ -4,12 +4,12 @@
  *
  * @version 1.0
  */
-namespace Site\library\layouts\Admin;
+namespace site\library\layouts\Admin;
 
-use Site\library\layouts\Layout\Layout,
-    Boolive\values\Rule,
-    Boolive\data\Data,
-    Boolive\input\Input;
+use site\library\layouts\Layout\Layout,
+    boolive\values\Rule,
+    boolive\data\Data,
+    boolive\input\Input;
 
 class Admin extends Layout
 {

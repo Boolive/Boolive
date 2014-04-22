@@ -4,9 +4,9 @@
  *
  * @version 1.0
  */
-namespace Site\library\forms\FormField;
+namespace site\library\forms\FormField;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class FormField extends Widget
 {
@@ -25,7 +25,7 @@ class FormField extends Widget
         $v['error'] = '';
         if (isset($this->_input['REQUEST']['input'])){
             $this->_input['REQUEST']['object']->value($this->_input['REQUEST']['input']);
-            /** @var $error \Boolive\errors\Error */
+            /** @var $error \boolive\errors\Error */
             $error = null;
             if (!$this->_input['REQUEST']['object']->check($error)){
                 $v['error'] = $error->getUserMessage(true);

@@ -4,9 +4,9 @@
  * Flash клип в формате .swf
  * @version 1.0
  */
-namespace Site\library\basic\Flash;
+namespace site\library\basic\Flash;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Flash extends Entity
 {

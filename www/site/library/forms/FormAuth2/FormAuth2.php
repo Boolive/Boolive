@@ -4,14 +4,14 @@
  * Форма авторизации (входа) пользователя
  * @version 1.0
  */
-namespace Site\library\forms\FormAuth2;
+namespace site\library\forms\FormAuth2;
 
-use Boolive\auth\Auth;
-use Boolive\data\Data;
-use Boolive\errors\Error;
-use Boolive\input\Input;
-use Site\library\forms\SimpleForm\SimpleForm,
-    Boolive\values\Rule;
+use boolive\auth\Auth;
+use boolive\data\Data;
+use boolive\errors\Error;
+use boolive\input\Input;
+use site\library\forms\SimpleForm\SimpleForm,
+    boolive\values\Rule;
 
 class FormAuth2 extends SimpleForm
 {
@@ -32,7 +32,7 @@ class FormAuth2 extends SimpleForm
 
     /**
      * Выполнение действия, если форма корректна
-     * @param \Boolive\commands\Commands $commands
+     * @param \boolive\commands\Commands $commands
      * @param array $input
      * @return bool|string
      */

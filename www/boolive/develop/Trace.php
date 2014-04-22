@@ -11,13 +11,13 @@
  * @version 1.3
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\develop;
+namespace boolive\develop;
 
-use Boolive\file\File;
+use boolive\file\File;
 
 class Trace
 {
-    /** @var \Boolive\develop\Trace Список всех объектов трассировки */
+    /** @var \boolive\develop\Trace Список всех объектов трассировки */
     static private $trace;
     /** @var mixed Трассируемое значение */
     private $value;
@@ -44,7 +44,7 @@ class Trace
      * Установка трассируемого значения.
      * @param mixed $value Значения для трассировки
      * @param bool $clone Признак, клонировать значение, если является объектом?
-     * @return \Boolive\develop\Trace
+     * @return \boolive\develop\Trace
      */
     function set($value, $clone = true)
     {
@@ -77,7 +77,7 @@ class Trace
 
     /**
      * Запись форматированного значения в лог файл
-     * @return \Boolive\develop\Trace
+     * @return \boolive\develop\Trace
      */
     function log()
     {
@@ -88,7 +88,7 @@ class Trace
 
     /**
      * Вывод форматированного значения в HTML
-     * @return \Boolive\develop\Trace $this
+     * @return \boolive\develop\Trace $this
      */
     function out()
     {
@@ -99,7 +99,7 @@ class Trace
     /**
      * Получения вложенного объекта трассировки
      * @param string|null $key Ключ трассировки. Если не существует, то создаётся новый объект трассировки.
-     * @return \Boolive\develop\Trace Объект трассировки
+     * @return \boolive\develop\Trace Объект трассировки
      */
     function group($key = null)
     {
@@ -113,7 +113,7 @@ class Trace
     /**
      * Получения вложенного объекта трассировки
      * @param string|null $key Ключ трассировки, если null, то создаётся новый объект трассировки с целочисленным ключом
-     * @return \Boolive\develop\Trace Объект трассировки
+     * @return \boolive\develop\Trace Объект трассировки
      */
     function __get($key = null)
     {
@@ -134,7 +134,7 @@ class Trace
     /**
      * Корневой объект трассировки
      * @param null $key Ключ подчиенного объекта трассировки. Если отсутствует, то будет создан
-     * @return \Boolive\develop\Trace
+     * @return \boolive\develop\Trace
      */
     static function groups($key = null)
     {
@@ -236,7 +236,7 @@ class Trace
         if (is_object($var)){
             $class_name = get_class($var);
             if (isset($trace_buf[spl_object_hash($var)])){
-                //if ($var instanceof \Boolive\data\Entity){
+                //if ($var instanceof \boolive\data\Entity){
                 //	$list = array('id' => $var['id'], 'name'=> $var->name());
                 //}else{
                 //	$list = array();

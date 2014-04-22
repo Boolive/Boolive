@@ -6,11 +6,11 @@
  * @date 23.07.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\layouts\Admin\ProgramsMenu\item_view\views\view_program;
+namespace site\library\layouts\Admin\ProgramsMenu\item_view\views\view_program;
 
-use Boolive\input\Input;
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use boolive\input\Input;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class view_program extends Widget
 {
@@ -29,7 +29,7 @@ class view_program extends Widget
     function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
-            /** @var \Boolive\data\Entity $obj */
+            /** @var \boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['program'];//->linked();
             // Ссылка
             $real = $obj->linked();

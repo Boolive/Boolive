@@ -4,9 +4,9 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\file;
+namespace boolive\file;
 
-use Boolive\functions\F;
+use boolive\functions\F;
 
 class File
 {

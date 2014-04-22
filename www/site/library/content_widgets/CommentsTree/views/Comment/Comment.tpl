@@ -10,7 +10,7 @@
     </div>
     <div class="Comment__sub">
     <?php
-        $list = $v['views']->arrays(\Boolive\values\Rule::string());
+        $list = $v['views']->arrays(\boolive\values\Rule::string());
         foreach ($list as $item){
             echo $item;
         }

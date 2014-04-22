@@ -7,13 +7,13 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\access\Member;
+namespace site\library\access\Member;
 
-use Boolive\data\Data;
-use Boolive\data\Entity,
-    Boolive\functions\F;
-use Boolive\develop\Trace;
-use Site\library\access\Role\Role;
+use boolive\data\Data;
+use boolive\data\Entity,
+    boolive\functions\F;
+use boolive\develop\Trace;
+use site\library\access\Role\Role;
 
 class Member extends Entity
 {
@@ -22,7 +22,7 @@ class Member extends Entity
     /**
      * Проверка доступа к указанному объекту
      * @param string $action_kind Вид действия
-     * @param \Boolive\data\Entity $object Объект, к которому проверяется доступ
+     * @param \boolive\data\Entity $object Объект, к которому проверяется доступ
      * @return bool
      */
     function checkAccess($action_kind, $object)

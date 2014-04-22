@@ -3,10 +3,10 @@
  * Действие скрытия/отмена скрытия объектов
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Hiding;
+namespace site\library\admin_widgets\Hiding;
 
-use Boolive\values\Rule;
-use Site\library\admin_widgets\ToggleAction\ToggleAction;
+use boolive\values\Rule;
+use site\library\admin_widgets\ToggleAction\ToggleAction;
 
 class Hiding extends ToggleAction
 {
@@ -19,7 +19,7 @@ class Hiding extends ToggleAction
 
     protected function initState()
     {
-        /** @var \Boolive\data\Entity $object */
+        /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
         $this->_state = $object->isHidden(null, false);
     }
@@ -33,7 +33,7 @@ class Hiding extends ToggleAction
             $result['changes'] = array();
             $hide = !$first->isHidden(null, false);
             foreach ($objects as $o){
-                /** @var \Boolive\data\Entity $o */
+                /** @var \boolive\data\Entity $o */
                 $o->isHidden($hide);
                 // @todo Обрабатывать ошибки
                 $o->save();

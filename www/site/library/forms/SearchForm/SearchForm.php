@@ -4,10 +4,10 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Site\library\forms\SearchForm;
+namespace site\library\forms\SearchForm;
 
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class SearchForm extends Widget
 {

@@ -4,9 +4,9 @@
  * Поле формы для редактирования изображения
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Editor\views\ImageField;
+namespace site\library\admin_widgets\Editor\views\ImageField;
 
-use Site\library\admin_widgets\BaseExplorer\views\Item\Item;
+use site\library\admin_widgets\BaseExplorer\views\Item\Item;
 
 class ImageField extends Item
 {

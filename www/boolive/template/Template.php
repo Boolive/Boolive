@@ -6,10 +6,10 @@
  * @version 2.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\template;
+namespace boolive\template;
 
-use Boolive\errors\Error,
-    Boolive\functions\F;
+use boolive\errors\Error,
+    boolive\functions\F;
 
 class Template
 {
@@ -27,7 +27,7 @@ class Template
 
     /**
      * Возвращает шаблонизатор для указанного объекта (контроллера/виджета)
-     * @param \Boolive\data\Entity $entity
+     * @param \boolive\data\Entity $entity
      * @return
      */
     static function getEngine($entity)
@@ -48,7 +48,7 @@ class Template
      * Создание текста из шаблона
      * В шаблон вставляются переданные значения
      * При обработки шаблона могут довыбираться значения из $entity и создаваться команды в $commands
-     * @param \Boolive\data\Entity $entity
+     * @param \boolive\data\Entity $entity
      * @param array $v
      * @throws Error
      * @return string

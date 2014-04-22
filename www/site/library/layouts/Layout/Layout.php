@@ -7,11 +7,11 @@
  * Найденный объект и номер страницы помещаются во входящие данные для подчиненных виджетов.
  * @version 1.0
  */
-namespace Site\library\layouts\Layout;
+namespace site\library\layouts\Layout;
 
-use Site\library\views\Widget\Widget,
-    Boolive\data\Data,
-    Boolive\values\Rule;
+use site\library\views\Widget\Widget,
+    boolive\data\Data,
+    boolive\values\Rule;
 
 class Layout extends Widget
 {
@@ -55,7 +55,7 @@ class Layout extends Widget
                 $object = reset($object);
             }
         }else{
-            if ($uri === '/Site/') $object = Data::read('');
+            if ($uri === '/site/') $object = Data::read('');
             // Ищем в /contents
             if (!$object) $object = Data::read('/contents'.$uri.'&comment=read default page');
             // Точное соответствие uri

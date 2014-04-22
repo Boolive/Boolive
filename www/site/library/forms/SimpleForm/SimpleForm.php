@@ -4,14 +4,14 @@
  * Эталон простейшей формы. Поля формы прописываются в шаблоне.
  * @version 1.0
  */
-namespace Site\library\forms\SimpleForm;
+namespace site\library\forms\SimpleForm;
 
-use Boolive\errors\Error;
-use Boolive\input\Input;
-use Boolive\session\Session,
-    Boolive\values\Check,
-    Boolive\values\Rule,
-    Site\library\views\Widget\Widget;
+use boolive\errors\Error;
+use boolive\input\Input;
+use boolive\session\Session,
+    boolive\values\Check,
+    boolive\values\Rule,
+    site\library\views\Widget\Widget;
 
 class SimpleForm extends Widget
 {
@@ -76,7 +76,7 @@ class SimpleForm extends Widget
     /**
      * Отображение формы
      * @param array $v Значения, подготавливаемые для вставки в шаблоне
-     * @param \Boolive\commands\Commands $commands Командв для родительских и подчиненных видов
+     * @param \boolive\commands\Commands $commands Командв для родительских и подчиненных видов
      * @param array $input Отфильтрованные данные по startRule()
      * @param array $session Данные и ошибки формы от предыдущей отправки.
      * @return string
@@ -142,7 +142,7 @@ class SimpleForm extends Widget
 
     function classTemplate($methods = array(), $use = array())
     {
-        $use[] = 'Boolive\values\Rule';
+        $use[] = 'boolive\values\Rule';
         if (!isset($methods['processRule'])){
             $methods['processRule'] = <<<code
     /**
@@ -165,7 +165,7 @@ code;
             $methods['process'] = <<<code
     /**
      * Выполнение действия, если форма корректна
-     * @param \Boolive\commands\Commands \$commands
+     * @param \boolive\commands\Commands \$commands
      * @param array \$input
      * @return bool|string
      */

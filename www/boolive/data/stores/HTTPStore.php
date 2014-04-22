@@ -6,12 +6,12 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\data\stores;
+namespace boolive\data\stores;
 
-use Boolive\data\Data,
-    Boolive\data\Entity,
-    Boolive\errors\Error,
-    Boolive\file\File;
+use boolive\data\Data,
+    boolive\data\Entity,
+    boolive\errors\Error,
+    boolive\file\File;
 
 class HTTPStore extends Entity
 {
@@ -49,7 +49,7 @@ class HTTPStore extends Entity
      * Чтение объектов
      * @param $cond Условие на читаемые объекты.
      * @param bool $index Признак, выполнять индексацию данных перед чтением или нет?
-     * @return array|\Boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
+     * @return array|\boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
      * @throws \Exception Ошибки curl
      */
     function read($cond, $index = false)
@@ -103,9 +103,9 @@ class HTTPStore extends Entity
 
     /**
      * Сохранение объекта
-     * @param \Boolive\data\Entity $entity Сохраняемый объект
+     * @param \boolive\data\Entity $entity Сохраняемый объект
      * @param bool $access Признак, проверять доступ или нет? (не используется хранищищем)
-     * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
      * @throws \Exception Ошибки curl
      * @return bool Признак, сохранен объект или нет?
      */
@@ -195,7 +195,7 @@ class HTTPStore extends Entity
      * @param Entity $entity Уничтожаемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта? (не используется хранилщем)
      * @param bool $integrity Признак, проверять целостность данных? (не используется хранилищем)
-     * @throws \Boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
      * @throws \Exception Ошибки curl
      * @return bool
      */
@@ -266,7 +266,7 @@ class HTTPStore extends Entity
         }
         if (!empty($attribs['is_default_class']) && $attribs['is_default_class']!=Entity::ENTITY_ID) $attribs['is_default_class'] = $this->absoluteURI($attribs['is_default_class'], $base_url);
         //$attribs['is_default_class'] = Entity::ENTITY_ID;
-        $attribs['class_name'] = '\Boolive\data\Entity';
+        $attribs['class_name'] = '\boolive\data\Entity';
         return $attribs;
     }
 

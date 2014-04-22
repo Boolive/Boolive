@@ -4,11 +4,11 @@
  *
  * @version 1.0
  */
-namespace Site\library\content_widgets\Part;
+namespace site\library\content_widgets\Part;
 
-use Boolive\data\Entity;
-use Site\library\content_widgets\Page\Page,
-    Boolive\values\Rule;
+use boolive\data\Entity;
+use site\library\content_widgets\Page\Page,
+    boolive\values\Rule;
 
 class Part extends Page
 {

@@ -6,10 +6,10 @@
  * @version 1.0
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\auth;
+namespace boolive\auth;
 
-use Boolive\data\Data,
-    Boolive\input\Input;
+use boolive\data\Data,
+    boolive\input\Input;
 
 class Auth
 {
@@ -19,12 +19,12 @@ class Auth
     const GROUP_GUEST = '/members/guests';
     /** Группа зарегистрированных */
     const GROUP_REGISTERED = '/members/registered';
-    /** @var \Site\library\access\User\User Текущий пользователь */
+    /** @var \site\library\access\User\User Текущий пользователь */
     static private $user;
 
     /**
      * Текущий пользователь
-     * @return \Site\library\access\Member\Member
+     * @return \site\library\access\Member\Member
      */
     static function getUser()
     {
@@ -39,12 +39,12 @@ class Auth
      * Установка текущего пользователя
      * Используется при "ручной" аутентификации, например, формой входа. При этом поиск пользователя
      * по логину, паролю или другим параметрам выполняется моделью формы входа.
-     * @param null | \Site\library\access\User\User $user Авторизованный пользователь или NULL для отмены авторизации
+     * @param null | \site\library\access\User\User $user Авторизованный пользователь или NULL для отмены авторизации
      * @param int $duration Длительность в секундах запоминания пользователя. Если 0, то пользователь запоминается на период работы браузера
      */
     static function setUser($user, $duration = 0)
     {
-        if ($user instanceof \Site\library\access\User\User){
+        if ($user instanceof \site\library\access\User\User){
             self::$user = $user;
             self::remember($duration);
         }else{
@@ -52,12 +52,12 @@ class Auth
             Input::COOKIE()->offsetUnset('ID');
             self::remind();
         }
-        \Boolive\events\Events::trigger('Auth::setUser', array(self::getUser()));
+        \boolive\events\Events::trigger('Auth::setUser', array(self::getUser()));
     }
 
     /**
      * Вспомнить пользователя
-     * @return \Site\library\access\Member\Member
+     * @return \site\library\access\Member\Member
      */
     static function remind()
     {

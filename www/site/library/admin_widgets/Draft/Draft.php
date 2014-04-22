@@ -4,11 +4,11 @@
  * Действие, которое отменяется повторным вызовом. Например, смена признака у объекта
  * @version 1.0
  */
-namespace Site\library\admin_widgets\Draft;
+namespace site\library\admin_widgets\Draft;
 
-use Boolive\errors\Error;
-use Boolive\values\Rule;
-use Site\library\admin_widgets\ToggleAction\ToggleAction;
+use boolive\errors\Error;
+use boolive\values\Rule;
+use site\library\admin_widgets\ToggleAction\ToggleAction;
 
 class Draft extends ToggleAction
 {
@@ -21,7 +21,7 @@ class Draft extends ToggleAction
 
     protected function initState()
     {
-        /** @var \Boolive\data\Entity $object */
+        /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
         $this->_state = $object->isDraft(null, false);
     }
@@ -36,7 +36,7 @@ class Draft extends ToggleAction
             $draft = !$first->isDraft(null, false);
             foreach ($objects as $o){
                 try{
-                    /** @var \Boolive\data\Entity $o */
+                    /** @var \boolive\data\Entity $o */
                     $o->isDraft($draft);
                     // @todo Обрабатывать ошибки
                     $o->save();

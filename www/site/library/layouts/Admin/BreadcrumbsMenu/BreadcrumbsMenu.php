@@ -4,20 +4,20 @@
  * Отображает путь на текущий объект с возможностью перехода к его родителям
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\layouts\Admin\BreadcrumbsMenu;
+namespace site\library\layouts\Admin\BreadcrumbsMenu;
 
-use Boolive\data\Data,
-    Boolive\data\Entity,
-    Boolive\values\Check,
-    Boolive\values\Rule,
-    Site\library\views\Widget\Widget,
-    Boolive\input\Input;
+use boolive\data\Data,
+    boolive\data\Entity,
+    boolive\values\Check,
+    boolive\values\Rule,
+    site\library\views\Widget\Widget,
+    boolive\input\Input;
 
 class BreadcrumbsMenu extends Widget{
 
 	function show($v = array(), $commands, $input)
     {
-        /** @var $obj \Boolive\data\Entity */
+        /** @var $obj \boolive\data\Entity */
 		$obj = $this->_input['REQUEST']['object'];
         $v['current'] = $obj->uri();
         $v['items'] = $this->getItems($obj);

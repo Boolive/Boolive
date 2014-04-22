@@ -4,11 +4,11 @@
  * Объект ассоциируемый с файлом
  * @version 1.0
  */
-namespace Site\library\basic\File;
+namespace site\library\basic\File;
 
-use Boolive\data\Entity;
-use Boolive\values\Check;
-use Boolive\values\Rule;
+use boolive\data\Entity;
+use boolive\values\Check;
+use boolive\values\Rule;
 
 class File extends Entity
 {
@@ -41,7 +41,7 @@ class File extends Entity
 
     function ext()
     {
-        return \Boolive\file\File::fileExtention($this->_attribs['value']);
+        return \boolive\file\File::fileExtention($this->_attribs['value']);
     }
 
     function mime()

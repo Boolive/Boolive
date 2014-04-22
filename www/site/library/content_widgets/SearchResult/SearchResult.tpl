@@ -6,7 +6,7 @@
         </div>
     </form>
     <?php
-    $list = $v['views']->arrays(\Boolive\values\Rule::string());
+    $list = $v['views']->arrays(\boolive\values\Rule::string());
     if (count($list)){ ?>
         <h2>Результаты поиска</h2>
         <div class="result"><?php foreach ($list as $item) echo $item;?></div>

@@ -4,9 +4,9 @@
  * Отображает фрагмент текста вместо всего
  * @version 1.0
  */
-namespace Site\library\content_widgets\TextPreview;
+namespace site\library\content_widgets\TextPreview;
 
-use Site\library\views\Widget\Widget;
+use site\library\views\Widget\Widget;
 
 class TextPreview extends Widget
 {

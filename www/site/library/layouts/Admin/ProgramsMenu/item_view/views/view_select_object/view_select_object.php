@@ -4,11 +4,11 @@
  * Формирует результат работы спомощью шаблонизации. Шаблоном является значение виджета
  * @version 1.0
  */
-namespace Site\library\layouts\Admin\ProgramsMenu\item_view\views\view_select_object;
+namespace site\library\layouts\Admin\ProgramsMenu\item_view\views\view_select_object;
 
-use Boolive\data\Data;
-use Site\library\views\Widget\Widget,
-    Boolive\values\Rule;
+use boolive\data\Data;
+use site\library\views\Widget\Widget,
+    boolive\values\Rule;
 
 class view_select_object extends Widget
 {
@@ -29,7 +29,7 @@ class view_select_object extends Widget
     function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['show']){
-            /** @var \Boolive\data\Entity $obj */
+            /** @var \boolive\data\Entity $obj */
             $obj = $this->_input['REQUEST']['program'];//->linked();
             // Ссылка
             $real = $obj->linked();

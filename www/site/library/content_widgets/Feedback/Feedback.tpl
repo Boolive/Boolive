@@ -13,7 +13,7 @@
         <input type="hidden" name="0" value="">
         <input type="hidden" name="1" value="">
         <?php
-        $list = $v['views']->arrays(\Boolive\values\Rule::string());
+        $list = $v['views']->arrays(\boolive\values\Rule::string());
         foreach ($list as $item){
             echo $item;
         }

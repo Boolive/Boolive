@@ -7,7 +7,7 @@
 $stores = array(
     // Модуль кэширования по умолчанию для всех
     '' => array(
-        'class' => '\Boolive\cache\stores\FileCache',
+        'class' => '\boolive\cache\stores\FileCache',
         'connect' => array(
             'dir' => DIR_SERVER_TEMP.'cache/'
         )

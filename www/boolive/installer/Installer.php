@@ -6,13 +6,13 @@
  * @date 28.03.2013
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Boolive\installer;
+namespace boolive\installer;
 
-use Boolive\Boolive,
-    Boolive\data\Entity,
-    Boolive\errors\Error,
-    Boolive\session\Session,
-    Boolive\file\File;
+use boolive\Boolive,
+    boolive\data\Entity,
+    boolive\errors\Error,
+    boolive\session\Session,
+    boolive\file\File;
 
 class Installer
 {
@@ -22,15 +22,15 @@ class Installer
             // Подготовка к установки системы
             $errors = array();
             try{
-                Boolive::activate('\Boolive\functions\F');
-                Boolive::activate('\Boolive\file\File');
-                Boolive::activate('\Boolive\develop\Trace');
+                Boolive::activate('\boolive\functions\F');
+                Boolive::activate('\boolive\file\File');
+                Boolive::activate('\boolive\develop\Trace');
                 if (is_dir(DIR_SERVER_TEMP)){
                     File::clearDir(DIR_SERVER_TEMP);
                 }
                 $modules_list = array(
-                    'engine' => self::sortClasses(self::scanClasses(DIR_SERVER.'Boolive/')),
-                    'project' => self::scanInfo(DIR_SERVER.'Site/')
+                    'engine' => self::sortClasses(self::scanClasses(DIR_SERVER.'boolive/')),
+                    'project' => self::scanInfo(DIR_SERVER.'site/')
                 );
                 $errors = self::checkClasses($modules_list['engine']);
             }catch (\Exception $e){
@@ -60,14 +60,14 @@ class Installer
 
     /**
 	 * Шаблонизация страниц установки
-	 * @param string $template Имя шаблона. По имени определяется файл шаблона из Boolive/installer/tpl
+	 * @param string $template Имя шаблона. По имени определяется файл шаблона из boolive/installer/tpl
 	 * @param array $v Значаения, передаваемые в шаблон
 	 * @return string Результат шаблонизации
 	 */
 	private static function show($template, $v = array())
     {
 		ob_start();
-			$file = DIR_SERVER.'Boolive/installer/tpl/'.$template.'.php';
+			$file = DIR_SERVER.'boolive/installer/tpl/'.$template.'.php';
 			if (file_exists($file)){
 				include $file;
 			}else{
@@ -124,7 +124,7 @@ class Installer
                     if ($error = json_last_error()){
                         throw new \Exception('Ошибка в "'.$dir.$d.'"');
                     }
-                    $info['uri'] = trim(preg_replace('#\\\\#u','/', mb_substr($dir, mb_strlen(DIR_SERVER.'Site'))), '/\\');
+                    $info['uri'] = trim(preg_replace('#\\\\#u','/', mb_substr($dir, mb_strlen(DIR_SERVER.'site'))), '/\\');
                     if (!empty($info['uri'])) $info['uri'] = '/'.$info['uri'];
                     array_unshift($objects, $info);
                 }
@@ -404,22 +404,22 @@ class Installer
                         $info = false;
                     }
                     // Обработка запрошенных данных
-                    if (\Boolive\input\Input::REQUEST()->install_request->string() == 'submit' || !$info){
+                    if (\boolive\input\Input::REQUEST()->install_request->string() == 'submit' || !$info){
                         if (method_exists($class_name, 'install')){
                             try{
-                                call_user_func(array($class_name, 'install'), \Boolive\input\Input::ALL());
+                                call_user_func(array($class_name, 'install'), \boolive\input\Input::ALL());
                                 $install['step']++;
-                            }catch(\Boolive\errors\Error $e){
+                            }catch(\boolive\errors\Error $e){
                                 if ($info){
-                                    $input = \Boolive\input\Input::getSource();
+                                    $input = \boolive\input\Input::getSource();
                                     $result['html'] = self::MakeForm($info, $input['REQUEST'], $e);
                                 }else{
-                                    $result['error'] = '<b>Ошибка при установке модуля "'.$m['path'].'"</b><pre>'.\Boolive\develop\Trace::format($e).'</pre>';//->getUserMessage(true);
+                                    $result['error'] = '<b>Ошибка при установке модуля "'.$m['path'].'"</b><pre>'.\boolive\develop\Trace::format($e).'</pre>';//->getUserMessage(true);
                                 }
                             }
                         }else{
                             $install['step']++;
-                            unset(\Boolive\input\Input::REQUEST()->install_request);
+                            unset(\boolive\input\Input::REQUEST()->install_request);
                         }
                     }else
                     if (is_array($info)){

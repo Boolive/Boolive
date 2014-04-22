@@ -4,12 +4,12 @@
  *
  * @version 1.0
  */
-namespace Site\library\forms\FormAuth;
+namespace site\library\forms\FormAuth;
 
-use Site\library\views\AutoWidgetList2\AutoWidgetList2,
-    Site\library\views\Widget\Widget,
-    Boolive\input\Input,
-    Boolive\values\Rule;
+use site\library\views\AutoWidgetList2\AutoWidgetList2,
+    site\library\views\Widget\Widget,
+    boolive\input\Input,
+    boolive\values\Rule;
 
 class FormAuth extends AutoWidgetList2
 {

@@ -7,9 +7,9 @@
  * @date 29.12.2012
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace Site\library\access\Deny;
+namespace site\library\access\Deny;
 
-use Boolive\data\Entity;
+use boolive\data\Entity;
 
 class Deny extends Entity
 {

@@ -4,11 +4,11 @@
  * 
  * @version 1.0
  */
-namespace Site\library\admin_widgets\BaseExplorer\FilterTool;
+namespace site\library\admin_widgets\BaseExplorer\FilterTool;
 
-use Boolive\session\Session;
-use Boolive\values\Rule;
-use Site\library\views\Widget\Widget;
+use boolive\session\Session;
+use boolive\values\Rule;
+use site\library\views\Widget\Widget;
 
 class FilterTool extends Widget
 {
@@ -48,7 +48,7 @@ class FilterTool extends Widget
         $filters = $this->filter->linked()->find(array('key'=>'name', 'cache'=>2), true);
         $v['filters'] = array();
         foreach ($filters as $name => $f) {
-            if ($f instanceof \Site\library\basic\Boolean\Boolean) {
+            if ($f instanceof \site\library\basic\Boolean\Boolean) {
                 $v['filters'][$name] = array('title' => $f->title->inner()->value(), 'value' => $f->value());
             }
         }

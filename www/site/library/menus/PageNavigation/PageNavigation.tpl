@@ -1,5 +1,5 @@
 <?php
-    use \Boolive\input\Input;
+    use \boolive\input\Input;
     $current = $v['current']->int();
     $count = $v['count']->int();
     $uri = $v['uri']->string();
