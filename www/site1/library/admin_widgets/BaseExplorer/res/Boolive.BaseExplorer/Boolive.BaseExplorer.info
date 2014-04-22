@@ -1,0 +1,23 @@
+{
+    "value": "Boolive.BaseExplorer.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/Widget",
+    "is_mandatory": true,
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive BaseExplorer",
+            "proto": "/library/javascripts/patterns/Boolive.Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/Widget/depends",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

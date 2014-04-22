@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/access/Action",
+    "is_mandatory": true,
+    "order": 11,
+    "children": {
+        "title": {
+            "value": "Родитель",
+            "proto": "/library/access/Action/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Перемещение - смена родителя объекта (изменение URI, кроме последней его части)",
+            "value_type": 2,
+            "proto": "/library/access/Action/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

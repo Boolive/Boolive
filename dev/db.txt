@@ -1,0 +1,120 @@
+1) Получение localId для родителя, прототипа, default_class, default_value, link
+2) Подбор уникального имени
+    2.1) Проврка уникальности:
+    SELECT 1 FROM {objects} WHERE parent=? AND `name`=? LIMIT 0,1
+    2.2) Побор префикса:
+    SELECT `name` FROM {objects} WHERE parent=? AND `name` REGEXP ? ORDER BY CAST((SUBSTRING_INDEX(`name`, "_", -1)+1) AS SIGNED) DESC LIMIT 0,1
+3) Выбор текущей записи:
+    SELECT {objects}.*, {ids}.uri FROM {objects}, {ids} WHERE {ids}.id=? AND {objects}.id={ids}.id LIMIT 0,1
+4) Проверка доступа. Выборка условий на добвление или изменение каждого атрибута и проверка условия
+5) Изменение имени или родителя
+    5.1) Обновление URI подчиненных и своего:
+        UPDATE {ids}, {parents} SET {ids}.uri = CONCAT(?, SUBSTRING(uri, ?)) WHERE {parents}.parent_id = ? AND {parents}.object_id = {ids}.id AND {parents}.is_delete=0
+    5.2) Обновление количества родителей у всех подчиненных:
+        UPDATE {objects}, {parents} SET parent_cnt = parent_cnt + ? WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0
+    5.3) Обновление отношений в таблице parents
+        5.3.1) Удаление старых отношений:
+            UPDATE {parents} p, (
+                SELECT c.object_id, c.parent_id FROM {parents} p
+                JOIN {parents} c ON c.object_id = p.object_id AND c.object_id!=c.parent_id AND c.parent_id IN (SELECT parent_id FROM {parents} WHERE object_id = :obj AND object_id!=parent_id)
+                WHERE p.parent_id = :obj)p2
+            SET p.is_delete = 1
+            WHERE p.object_id = p2.object_id AND p.parent_id = p2.parent_id
+        5.3.2) Выбор всех своих подчиненных:
+            SELECT object_id, `level` FROM {parents} WHERE parent_id = :obj ORDER BY level
+        5.3.2) Для каждого подчиненного добавить (обновить) отношения копированием от родителя
+            INSERT {parents} (object_id, parent_id, `level`)
+            SELECT :obj, parent_id, `level`+1+:l FROM {parents}
+            WHERE object_id = :parent AND is_delete = 0
+            UNION SELECT :obj,:obj,0
+            ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+6) Уникальность order для новых объектов или если order изменен
+    6.1) Если order < MAX_ORDER
+        6.1.1) Проверка, не занят ли order
+                SELECT 1 FROM {objects} WHERE `parent`=? AND `order`=?
+        6.1.2) Сдвиг order текущих записей, чтобы освободить себе место
+                UPDATE {objects} SET `order` = `order`+1
+                WHERE `parent`=? AND `order`>=?'
+    6.2) Если order == MAX_ORDER, то определение самого большого текущего order
+        SELECT MAX(`order`) m FROM {objects} WHERE parent=?
+7) Вставка или обновление объекта в таблице objects
+    7.1) Если нет текущей записи
+        INSERT INTO {objects} (`'.implode('`, `', $attr_names).'`)
+        VALUES ('.str_repeat('?,', $cnt-1).'?)
+        ON DUPLICATE KEY UPDATE `'.implode('`=?, `', $attr_names).'`=?
+    7.2) Если есть текущая запись
+        UPDATE {objects} SET `'.implode('`=?, `', $attr_names).'`=? WHERE id = ?
+8) Вставка или обновление текстового значения
+    INSERT INTO {text} (`id`, `value`)
+    VALUES (:id, :value)
+    ON DUPLICATE KEY UPDATE `value` = :value
+9) Если новый объект - создание отношений в родителях и прототипах
+    9.1) В родителях копируются записи родителького объекта с добавленем своей записи
+        INSERT {parents} (object_id, parent_id, `level`)
+        SELECT :obj, parent_id, `level`+1 FROM {parents}
+        WHERE object_id = :parent AND is_delete = 0
+        UNION SELECT :obj,:obj,0
+        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+    9.2) Отношения с прототипами
+        9.2.1) Если нет своего прототипа
+            INSERT {protos} (object_id, proto_id, `level`)
+            VALUES  (:obj,:obj,0)
+            ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+        9.2.2) Если есть, то проверка, есть ли отношения прототипа в таблице прототипов (так как прототип может ещё не полностью создан)
+            SELECT 1 FROM {protos} WHERE object_id=? and is_delete=0 LIMIT 0,1
+        9.2.3) Если отношения прототипа есть, то добавляем текущему объекту копированием их
+            INSERT {protos} (object_id, proto_id, `level`)
+            SELECT :obj, proto_id, `level`+1 FROM {protos}
+            WHERE object_id = :proto AND is_delete = 0
+            UNION SELECT :obj,:obj,0
+            ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+
+        // Тут дофига ещё всяких услвоностей из-за непоследовательного создания прототипов и внешних прототипов
+
+10) Обновление даты изменения у родителей
+    UPDATE {objects}, {parents} SET {objects}.date=? WHERE {parents}.object_id = ? AND {parents}.parent_id = {objects}.id
+11) Если изменился прототип, то обновление отношений в таблице protos
+    11.1) Удаление старых отношений
+        UPDATE {protos} p, (
+            SELECT c.object_id, c.proto_id FROM {protos} p
+            JOIN {protos} c ON c.object_id = p.object_id AND c.proto_id!=:obj AND c.object_id!=c.proto_id AND c.proto_id IN (SELECT proto_id FROM {protos} WHERE object_id = :obj  AND object_id!=proto_id)
+            WHERE p.proto_id = :obj)p2
+        SET p.is_delete = 1
+        WHERE p.object_id = p2.object_id AND p.proto_id = p2.proto_id
+    11.2) Выбор всех наслдников
+        SELECT object_id, `level` FROM {protos} WHERE proto_id = :obj AND is_delete = 0 ORDER BY `level`
+    11.3) Для каждого наследника добавить новые отношения
+        INSERT {protos} (object_id, proto_id, `level`)
+        SELECT :obj, proto_id, `level`+1+:l FROM {protos}
+        WHERE object_id = :proto AND is_delete = 0
+        UNION SELECT :obj,:obj,0
+        ON DUPLICATE KEY UPDATE `level` = VALUES(level), is_delete = 0
+12) Обновление значения и других атрибутов у наследников
+    UPDATE {objects}, {protos} SET
+        `value` = IF(is_default_value=:vproto, :value, value),
+        `valuef` = IF(is_default_value=:vproto, :valuef, valuef),
+        `value_type` = IF(is_default_value=:vproto, :value_type, value_type),
+        `is_default_value` = IF((is_default_value=:vproto  || is_default_value=:max_id), :proto, is_default_value),
+        `is_default_class` = IF((is_default_class=:cclass AND ((is_link>0)=:is_link)), :cproto, is_default_class),
+        `proto_cnt` = `proto_cnt`+:dp
+    WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id AND {protos}.is_delete=0
+      AND {protos}.proto_id != {protos}.object_id
+13) Если признак ссылки изменен, то обновить поля link у наследников
+    UPDATE {objects}, {protos} SET
+        `is_default_class` = IF(({objects}.is_link > 0) = :is_link,
+            IF(is_default_class=:max_id, :cproto, is_default_class),
+            IF(is_default_class=:cproto, :max_id, is_default_class)
+        ),
+        `is_link` = IF((is_link=:clink || is_link=:max_id), :nlink, is_link)
+    WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id AND {protos}.is_delete=0
+      AND {protos}.proto_id != {protos}.object_id
+14) Поиск обновлений (наследование свойств)
+    14.1) У прототипа выбираются N подчиненных
+    14.2) Выбрать подчиненные, которые прототипированы от выбранных в 14.1
+    14.3) Для каждого найденного подчиенного запустить findUpdates()
+    14.4) От протототипов которые не используются создать новые свойства
+    14.5) Обновление времени индексации объекта
+
+
+
+

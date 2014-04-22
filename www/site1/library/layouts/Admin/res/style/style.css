@@ -1,0 +1,90 @@
+.Admin{
+	min-height: 100%;
+	padding: 0 170px 0 210px;
+	overflow: hidden;
+    background-color: #FFF;
+    position: relative;
+	}
+	.Admin > .left{
+		height: 100%;
+		width: 210px;
+		left: 0;
+		top: 32px;
+		position: fixed;
+		z-index: 2;
+		overflow:auto;
+        border-right: 1px dotted #ccc;
+		}
+    .Admin > .right{
+		width: 170px;
+		right: 0;
+		bottom: 0;
+		position: fixed;
+		z-index: 3;
+		padding: 0;
+        top: 32px;
+        border-left: 1px dotted #ccc;
+		}
+    .Admin > .center{
+        margin: 0 auto;
+        padding: 32px 0 32px;
+		z-index: 1;
+        position: relative;
+        min-height: 100%;
+        box-sizing: border-box;
+        /*border: 1px dotted #ccc;*/
+        /*border-top: 0;*/
+        /*border-bottom: 0;*/
+        }
+        .Admin .center > div{
+            height: 100%;
+            }
+	.Admin .top{
+        height: 32px;
+        position: fixed;
+        left: 0;
+		right: 0;
+        top: 0;
+        z-index: 5;
+        background-color: #F5F5F5;
+        box-shadow: inset 0 -1px 0 0 #E0E0E0, inset 0 -3px 3px -2px #E5E5E5;
+	    -webkit-box-shadow: inset 0 -1px 0 0 #E0E0E0, inset 0 -3px 3px -2px #E5E5E5;
+        }
+        .Admin .top-right{
+            position: absolute;
+            right: 0;
+            display: block;
+            height: 32px;
+            padding: 0;
+            margin: 0;
+            z-index: 100;
+            white-space: nowrap;
+            text-align: right;
+            vertical-align: top;
+            }
+    .Admin .bottom{
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 100;
+        background: #F3F3F3;
+        border-top: 1px solid #ccc;
+        padding: 0 170px 0 210px;
+        box-shadow: inset 0px 1px 0px 0px #E5E5E5, inset 0px 3px 3px -2px #E5E5E5;
+        }
+    .Admin .window{
+        /*background-color: #ffffff;*/
+        border-top: 0px solid #CCC;
+        border-bottom: 2px solid #CCC;
+        border-left: 1px solid #CCC;
+        border-right: 1px solid #CCC;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+        position: relative;
+        min-height: 100%;
+        box-sizing: border-box;
+        }
+    .Admin .window:first-child{
+        border: none;
+        box-shadow: none;
+        }

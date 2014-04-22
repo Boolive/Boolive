@@ -1,0 +1,36 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 27,
+    "children": {
+        "title": {
+            "value": "Файл",
+            "proto": "/library/basic/Object/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Объект, значением которого является файл. ",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_property": true,
+            "order": 2
+        },
+        "extentions": {
+            "value": "*.*",
+            "proto": "/library/basic/String",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Допустимые расширения",
+                    "proto": "/library/basic/String/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

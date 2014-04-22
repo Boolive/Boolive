@@ -1,0 +1,23 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/views/ViewSingle",
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Центр",
+            "proto": "/library/views/ViewSingle/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает только один из подчиненных виджетов",
+            "value_type": 2,
+            "proto": "/library/views/ViewSingle/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

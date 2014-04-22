@@ -1,0 +1,5 @@
+{
+    "value": "eq",
+    "proto": "/library/access/Deny",
+    "order": 1
+}

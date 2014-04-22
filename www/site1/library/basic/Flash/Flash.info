@@ -1,0 +1,37 @@
+{
+    "value": "",
+    "proto": "/library/basic/File",
+    "order": 29,
+    "children": {
+        "title": {
+            "value": "Flash файл",
+            "proto": "/library/basic/File/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Flash файл в формате .swf",
+            "value_type": 2,
+            "proto": "/library/basic/File/description",
+            "is_property": true,
+            "order": 2
+        },
+        "extentions": {
+            "value": "*.swf",
+            "proto": "/library/basic/File/extentions",
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Допустимые расширения",
+                    "proto": "/library/basic/File/extentions/title",
+                    "is_hidden": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

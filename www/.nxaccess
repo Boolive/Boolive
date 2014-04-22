@@ -1,0 +1,7 @@
+location / {
+    index  index.php;
+    error_page 404 = @rewrite;
+}
+location @rewrite {
+   rewrite ^(.*)$ /index.php last;
+}

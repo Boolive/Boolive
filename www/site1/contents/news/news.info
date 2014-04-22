@@ -1,0 +1,14 @@
+{
+    "value": "",
+    "proto": "/library/content_samples/Part",
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Новости",
+            "proto": "/library/content_samples/Part/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

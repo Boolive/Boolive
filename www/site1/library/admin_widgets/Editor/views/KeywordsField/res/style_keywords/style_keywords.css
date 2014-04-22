@@ -1,0 +1,48 @@
+.KeywordsField{
+    }
+    .KeywordsField__keywords{
+        height: auto;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        }
+        .KeywordsField__keywords-old{
+            display: inline;
+            }
+        .KeywordsField__keywords-value{
+            border: 0;
+            margin: 4px;
+            height: 20px;
+            }
+    .KeywordsField .ui-autocomplete{
+        padding: 0;
+        position: absolute;
+        z-index: 1000;
+        }
+        .KeywordsField .ui-autocomplete .ui-menu-item{
+            border: 1px solid #ccc;
+            /*border-bottom-left-radius: 5px;*/
+            /*border-bottom-right-radius: 5px;*/
+            border-top: none;
+            background-color: #fff;
+            /*margin: 4px 0 0 0;*/
+            /*box-shadow: 0 2px 2px #ccc;*/
+            padding: 0;
+            list-style: none;
+            }
+            .KeywordsField .ui-autocomplete .ui-menu-item a {
+                text-decoration: none;
+                display: block;
+                padding: 2px .4em;
+                line-height: 1.5;
+                min-height: 0;
+                font-weight: normal;
+                color: #222222;
+                cursor: pointer;
+                }
+                .KeywordsField .ui-autocomplete .ui-menu-item a.ui-state-focus {
+                    background: #CCE6FF;
+                    }
+    .KeywordsField .ui-helper-hidden-accessible{
+        display: none;
+        }

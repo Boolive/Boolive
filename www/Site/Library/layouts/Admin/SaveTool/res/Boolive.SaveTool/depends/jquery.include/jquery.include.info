@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "jquery.include.js",
-    "is_file": true,
-    "proto": "/Library/javascripts/patterns/Boolive.Widget/depends/jquery.include",
-    "is_link": true,
-    "order": 5
-}

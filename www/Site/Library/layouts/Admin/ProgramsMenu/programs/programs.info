@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "Programs.tpl",
-    "is_file": true,
-    "proto": "/Library/layouts/Admin/Programs",
-    "is_link": true,
-    "order": 5
-}

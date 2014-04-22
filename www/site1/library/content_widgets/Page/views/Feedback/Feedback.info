@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "Feedback.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/Feedback",
+    "is_link": true,
+    "is_mandatory": true,
+    "order": 4
+}

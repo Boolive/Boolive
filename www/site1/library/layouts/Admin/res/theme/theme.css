@@ -1,0 +1,474 @@
+html, body {
+	margin: 0;
+    height: 100%;
+	background-repeat: repeat;
+	background-color: #f5f5f5;
+	}
+body,td,th,input {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	color: #000;
+	}
+/* Ссылки */
+a, a:active{
+	color: #006ad6;
+	outline: none;
+	}
+	a:hover {
+		color: #0063bf;
+		}
+a.internal{
+    cursor: pointer;
+    text-decoration: none;
+    border-bottom: 1px dashed #006ad6;
+    }
+    a.internal:hover{
+        text-decoration: none;
+        border-bottom: 1px dashed #0065c9;
+        }
+p{
+    font-size: 11pt;
+    color: #222;
+    margin: 5px 0;
+    padding: 0;
+    }
+    p.mini{
+        font-size: 10pt;
+        color: #555;
+        }
+img{
+    /*max-width: 150%;*/
+    border: none;
+    outline: none;
+    }
+/* Область содержимого */
+.content{
+    padding: 30px;
+    }
+/* Главный заголовок - название */
+h1 {
+    font-size: 30pt;
+    font-weight: normal;
+    margin-top: 0;
+    /*padding: 0;*/
+    }
+h2 {
+    font-size: 22pt;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #444;
+    }
+h3 {
+    font-size: 17pt;
+    font-weight: normal;
+    /*margin-top: 0;*/
+    /*margin-bottom: 15px;*/
+    color: #444;
+    }
+h4{
+    font-size: 14pt;
+}
+
+.layout-main{
+    padding: 30px;
+    }
+    .layout-top{
+
+    }
+    .layout-middle{
+        margin: 24px 0;
+    }
+    .layout-bottom{
+
+    }
+
+/* Общий фон */
+.common_background{
+    background: #FFF;
+}
+/* Кнопки */
+.btn, .btn-min {
+    display: inline-block;
+    height: 22px;
+    margin: -1px 8px;
+    padding: 6px 14px 2px 14px;
+    min-width: 51px;
+    font-size: 11pt;
+    cursor: pointer;
+    overflow: hidden;
+    text-decoration: none;
+    text-align: center;
+    color: #787878;
+    background-color: #F1F1F1;
+    border: 1px solid #e6e6e6;
+    }
+    .btn:hover, .btn-min:hover{
+        color: #FFF;
+        background-color: #418dd9;
+        border: 1px solid #3f8ad4;
+        }
+    .btn:active, .btn-min:active,
+    .btn:focus, .btn-min:focus{
+        padding: 7px 14px 1px 14px;
+        }
+    .btn:first-child, .btn-min:first-child{
+        margin-left: 0;
+    }
+    .btn:last-child, .btn-min:last-child{
+        margin-right: 0;
+    }
+
+.btn-min{
+    font-size: 10pt;
+    padding: 3px 5px;
+    margin: 0 2px;
+    height: 16px;
+    }
+    .btn-min:active,
+    .btn-min:focus{
+        padding: 4px 5px 2px 5px;
+        }
+/* Кнопка негативного действия */
+.btn-primary {
+    color: #FFF;
+    background-color: #499df2;
+    border: 1px solid #499aeb;
+    }
+    .btn-primary:hover,
+    .btn-primary:focus{
+        color: #FFF;
+        background-color: #418dd9;
+        border: 1px solid #3f8ad4;
+        }
+/* Кнопка позитивного действия */
+.btn-success {
+    color: #FFF;
+    background-color: #93D740;
+    border: 1px solid #88c73c;
+    }
+    .btn-success:hover,
+    .btn-success:focus{
+        color: #FFF;
+        background-color: #76d600;
+        border: 1px solid #71c700;
+        }
+/* Кнопка негативного действия */
+.btn-danger {
+    color: #FFF;
+    background-color: #FF5752;
+    border: 1px solid #e64e4c;
+    }
+    .btn-danger:hover,
+    .btn-danger:focus{
+        color: #FFF;
+        background-color: #ff0c08;
+        border: 1px solid #e60909;
+        }
+/* Неактивная кнопка*/
+.btn-disable, .btn-disable:hover, .btn-disable:active, .btn-disable:focus{
+    background-color: #F5F5F5;
+    border: #ebebeb 1px solid;
+    color: #cccccc;
+    cursor: default;
+    padding: 6px 14px 2px 14px;
+    }
+.btn-frozen, .btn-frozen:hover, .btn-frozen:active, .btn-frozen:focus {
+    cursor: default;
+    padding: 6px 14px 2px 14px;
+}
+
+.btn-icon, .btn-icon-delete {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-bottom: -3px;
+    }
+.btn-icon-delete{
+    background: url(img/delete.png) no-repeat center;
+}
+.toolbar{
+    height: 32px;
+    padding: 5px 0;
+    clear: both;
+    }
+.label-tool{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 11pt;
+    height: 18px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 4px 8px 4px 6px;
+    margin: 4px 0 0 0;
+    position: relative;
+    text-decoration: none;
+    color: #777;
+}
+.btn-tool{
+    display: inline-block;
+    vertical-align: top;
+    font-size: 11pt;
+    height: 18px;
+    /*background-color: rgba(241, 241, 241, 0.5);*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 4px 8px 4px 6px;
+    margin: 4px 0 0 0;
+    position: relative;
+    text-decoration: none;
+    color: #555;
+    border-radius: 3px;
+    }
+    .btn-tool:hover, .btn-group:hover > .btn-tool{
+        box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.1);
+        background-color: rgba(241, 241, 241, 0.5);
+        color: #000;
+        }
+    .btn-tool.selected{
+        box-shadow: 0 0 1px 1px #999, inset 1px 2px 2px #DDD, inset -1px -2px 2px #FFF;
+    }
+.btn-divider-vertical{
+    border-left: 1px solid #CCC;
+    margin: 4px 5px;
+    width: 1px;
+    display: inline-block;
+    vertical-align: bottom;
+    height: 16px;
+    }
+.btn-tool-square{
+    padding: 4px 8px 4px 6px;
+    width: 12px;
+    text-align: center;
+    }
+    .btn-tool-square img{
+        vertical-align: middle;
+    }
+.btn-tool-circle{
+    padding: 4px 4px 4px 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 0px;
+}
+
+.btn-group{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    text-align: left;
+    }
+    .btn-group:hover > .btn-tool{
+        background-color: rgba(241, 241, 241, 0.5);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.1);
+        /*height: 19px;*/
+        }
+
+.dropdown-menu{
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    z-index: 10000;
+    display: none;
+    float: left;
+    min-width: 70px;
+    padding: 1px;
+    margin: 0;
+    list-style: none;
+    background-color: #ffffff;
+    border-top: 1px solid #CCC;
+    border-bottom: 2px solid #CCC;
+    border-left: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    font-size: 11pt;
+    border-top-right-radius: 2px;
+    -moz-box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.15);
+        box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.15);
+}
+:hover > .dropdown-menu{
+    display: block;
+}
+.dropdown-menu > li > a {
+    display: block;
+    padding: 5px 15px 5px 30px;
+    clear: both;
+    font-weight: normal;
+    line-height: 20px;
+    color: #333333;
+    white-space: nowrap;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    background-position: 8px center;
+}
+
+.dropdown-menu > .selected > a {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #499df2;
+    outline: none;
+    background-image: url(img/select-invert.png);
+}
+
+.dropdown-menu > li > a:hover,
+/*.dropdown-menu > li > a:focus,*/
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #418dd9;
+}
+
+.dropdown-menu > .disabled > a,
+/*.dropdown-menu > .disabled > a:hover,*/
+.dropdown-menu > .disabled > a:focus {
+    color: #999999;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+    text-decoration: none;
+    cursor: default;
+    background-color: transparent;
+}
+.dropdown-menu.pull-right {
+    right: -1px;
+    left: auto;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+}
+/* Элементы формы */
+.inpt{
+    border: 1px #999999 solid;
+    background-color: #FFF;
+    width: 100%;
+    color: #000;
+    font-size: 11pt;
+    padding: 2px 4px;
+    max-width: 100%;
+    margin: 0;
+    box-shadow: inset -1px 1px 0 1px #f5f5f5;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    outline: none;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    }
+    .inpt *{
+        outline: none;
+    }
+
+label{
+    font-size: 11pt;
+    color: #666;
+    }
+
+
+.txt-primary{
+    font-size: 14pt;
+    display: inline-block;
+    /*vertical-align: middle;*/
+    color: #1e7fff;
+    /*padding: 5px 0px;*/
+    margin: 0;
+    border-radius: 3px;
+}
+.txt-tag{
+    font-family: Verdana;
+    font-size: 9pt;
+    /*margin: 0 5px;*/
+    display: inline-block;
+    text-shadow: 1px 1px 0px #999;
+    background-color: #AAA;
+    color: #FFF;
+    padding: 1px 5px 2px 5px;
+    border-radius: 3px;
+    vertical-align: text-top;
+    text-decoration: none;
+    }
+    a.txt-tag:hover{
+        color: #FFF;
+        text-shadow: 1px 1px 0px #707070;
+        background-color: #808080;
+    }
+.input-pfx{
+    font-size: 9pt;
+    /*display: inline-block;*/
+    background-color: #F5F5F5;
+    color: #999;
+    padding: 5px 5px 4px;
+    border: 1px #E0E0E0 solid;
+    /*border-bottom: 1px #E0E0E0 solid;
+    border-left: 1px #E0E0E0 solid;*/
+    border-radius: 3px;
+   /* border-bottom-left-radius: 3px;*/
+    /*height: 17px;*/
+    line-height: 26px;
+    min-width: 1px;
+    font-family: Verdana;
+}
+
+.tag-link{
+    cursor: pointer;
+    padding: 4px 5px 3px;
+    }
+    .tag-link:hover{
+        background-color: #f2f9ff;
+        color: #999;
+        border: 1px #E0E0E0 solid;
+        }
+
+.hide{
+    display: none;
+    }
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+
+.progress{
+	/*text-align: center;*/
+	}
+	.progress .prgressbar{
+		/*margin: 0 auto;*/
+		height: 24px;
+		width: 500px;
+		background-color: #FFF;
+		border: 1px solid #5DABEC;
+		padding: 3px;
+		border-radius: 3px;
+		-moz-border-radius: 3px;
+		box-shadow: inset 0px 0px 3px 1px #CCE6FF;
+		}
+		.progress .prgressbar .bar{
+			height: 100%;
+			width: 30%;
+			background-color: #2e97ee;
+			text-align: right;
+			border-radius: 3px;
+			-moz-border-radius: 3px;
+			}
+	.progress .message{
+		/*margin: 0 auto;*/
+		padding: 5px 3px;
+		font-size: 10pt;
+		color: #999;
+		width: 500px;
+		text-align: left
+	}
+
+.entity-list{
+    list-style-type: decimal;
+    font-size: 10pt;
+    color: #999;
+    margin: 15px 0;
+    padding: 0;
+    list-style-position: inside;
+    }
+    .entity-list li{
+        margin: 1px 0;
+        vertical-align: top;
+    }

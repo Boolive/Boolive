@@ -1,0 +1,188 @@
+.Attribs{
+    font-size: 12pt;
+    margin: 15px 15px 30px;
+    }
+    .Attribs__head{
+        position: relative;
+        }
+     .Attribs__title{
+        font-size: 28px;
+        padding: 0;
+        color: #444;
+        margin: 0;
+        text-decoration: none;
+        display: inline;
+        }
+    .Attribs__description{
+        font-size: 12px;
+        padding: 0;
+        margin: 0 0 25px 0;
+        color: #999;
+        }
+    /* Пункт формы */
+    .Attribs .item{
+        margin: 1px 0;
+        min-height: 29px;
+        line-height: 1.15;
+        }
+        /*Колонки*/
+        .Attribs .item > .col1{
+            display: block;
+            float: left;
+            padding: 5px 15px 5px 0;
+            /**text-align: right;*/
+            width: 150px;
+            }
+        .Attribs .item > .col2{
+            margin: 0 0 0 165px;
+            padding: 5px;
+            border-radius: 3px;
+            }
+        /* Сообщение об ошибке по умолчанию */
+        .Attribs .item .error-message{
+            display: none;
+            }
+        .Attribs .item .description{
+            color: #999;
+            font-size: 10pt;
+            /*display: inline-block;*/
+            }
+
+        .Attribs .item > .item-date{
+            margin-top: 10px;
+            color: #444;
+            font-size: 11pt;
+            }
+    /* Пункт с ошибкой */
+    .Attribs .error{
+        background-color: #FF514C;
+        }
+        .Attribs .error .error-message{
+            display: inline-block;
+            margin: 2px 0 0 0;
+            color: #FFF;
+            font-size: 10pt;
+            }
+        .Attribs .error .description{
+           display: none;
+        }
+
+        /*Поля*/
+        .Attribs .item input.name {
+            margin-left: -2px;
+            width: 150px;
+            }
+        .Attribs .item input.order{
+            width: 80px;
+            text-align: right;
+            }
+        .Attribs .item input[type=checkbox] + label{
+            color: #000;
+            font-size: 12pt;
+            }
+        .Attribs .item .value{
+            position: relative;
+            display: block;
+            }
+            .Attribs .item .value textarea{
+                margin: 0;
+                padding: 0;
+                min-width: 100%;
+                max-width: 100%;
+                width: 100%;
+                border: none;
+                font-size: 12pt;
+                }
+            .Attribs .item .value .tags{
+                padding: 2px 0 0 0;
+                height: 22px;
+                }
+            /* Теги значения*/
+            .Attribs .item .value .tag{
+                float: right;
+                margin: 0 0 0 2px;
+                padding: 3px 5px;
+                background-color: #F5F5F5;
+                color: #bfbfbf;
+                font-size: 10pt;
+                cursor: pointer;
+                }
+                .Attribs .item .value .tag:active{
+                    padding: 4px 5px 2px 5px;
+                    }
+                .Attribs .item .value .tag:hover{
+                    background-color: #4fa7ff;
+                    color: #FFF;
+                    }
+                /* Выбранный тег*/
+                .Attribs .item .value .tag.selected{
+                    background-color: #418dd9;
+                    color: #FFF;
+                    }
+                /** Тег значение по умолчанию */
+                .Attribs .item .value .default:hover{
+                    background-color: #9f52cc;
+                    color: #FFF;
+                }
+                .Attribs .item .value .default.selected{
+                    background-color: #8040A0;
+                    color: #FFF;
+                    }
+                /* Тег-поле выбора файла*/
+                .Attribs .item .value .fileupload{
+                    position: relative;
+                    overflow: hidden;
+                    }
+                    .Attribs .item .value .fileupload input{
+                        position: absolute;
+                        top: 0;
+                        right:0;
+                        margin: 0;
+                        padding: 0;
+                        border: none;
+                        font-size: 15pt;
+                        opacity: 0;
+                        filter: alpha(opacity:0);
+                        cursor:pointer;
+                        }
+                .Attribs .item .class_name,
+                .Attribs .item .class_name_self{
+                    /*color: #555;*/
+                    /*font-size: 10pt;*/
+                    /*font-family: courier;*/
+                }
+
+                .Attribs .item-is_link label::after {
+                    margin-left: 2px;
+                    color: #0073BF;
+                    content: "↝";
+                    text-decoration: none;
+                    font-family: "Times New Roman";
+                    line-height: 16px;
+                    }
+                .Attribs .item-is_mandatory label::after {
+                    margin: 4px 0 0 2px;
+                    position: absolute;
+
+                    content: '*';
+                    font: normal 18px/18px "Times New Roman";
+                    color: #bf028b;
+                    }
+
+        /* Кнопки */
+        .Attribs .submits{
+            margin: 15px 0 0 0;
+        }
+        .Attribs .btn {
+            float: left;
+            }
+        /* Сообщение*/
+        .Attribs .item .submit-message{
+            display: block;
+            float: right;
+            margin: 0px 5px 0 0;
+            padding: 8px 14px 0 14px;
+            height: 25px;
+            color: #FF514C;
+            font-style: italic;
+            }

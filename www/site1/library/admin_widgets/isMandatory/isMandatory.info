@@ -1,0 +1,49 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/library/admin_widgets/ToggleAction",
+    "is_default_class": false,
+    "order": 42,
+    "children": {
+        "title": {
+            "value": "Обязательный",
+            "proto": "/library/admin_widgets/ToggleAction/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Неотъемлемый объект? Всегда наследуется",
+            "proto": "/library/admin_widgets/ToggleAction/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Изображение",
+                    "proto": "/library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "object_rule": {
+            "value": "access(write/change/is_mandatory)",
+            "proto": "/library/admin_widgets/ToggleAction/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        }
+    }
+}

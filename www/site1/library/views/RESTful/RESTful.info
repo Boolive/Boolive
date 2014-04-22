@@ -1,0 +1,22 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/views/View",
+    "is_default_class": false,
+    "order": 23,
+    "children": {
+        "title": {
+            "value": "RESTful",
+            "proto": "/library/views/View/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Обработчик запросов на получение, создание, изменение и удаление объектов. ",
+            "value_type": 2,
+            "proto": "/library/views/View/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

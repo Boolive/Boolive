@@ -1,0 +1,22 @@
+{
+    "value": "",
+    "proto": "/library/basic/Package",
+    "order": 6,
+    "children": {
+        "title": {
+            "value": "Макеты",
+            "proto": "/library/basic/Package/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Коллекция макетов html и полноценных разделов для сайта",
+            "value_type": 2,
+            "proto": "/library/basic/Package/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

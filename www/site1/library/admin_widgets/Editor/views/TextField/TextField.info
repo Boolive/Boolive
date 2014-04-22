@@ -1,0 +1,38 @@
+{
+    "value": "TextField.tpl",
+    "value_type": 3,
+    "proto": "/library/admin_widgets/Editor/views/Field",
+    "order": 13,
+    "children": {
+        "title": {
+            "value": "Текстовое поле",
+            "proto": "/library/admin_widgets/Editor/views/Field/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Поле формы для текстовых значений",
+            "value_type": 2,
+            "proto": "/library/views/Widget/description",
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/admin_widgets/Editor/views/Field/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "object_rule": {
+            "value": "is(/library/basic/Text)",
+            "value_type": 2,
+            "proto": "/library/admin_widgets/Editor/views/Field/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        }
+    }
+}

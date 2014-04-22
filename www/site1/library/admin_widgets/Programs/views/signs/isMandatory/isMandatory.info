@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/library/admin_widgets/isMandatory",
+    "is_link": true,
+    "order": 25
+}

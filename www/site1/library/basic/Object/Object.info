@@ -1,0 +1,67 @@
+{
+    "value": "",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Объект",
+            "proto": "/library/basic/String",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Название",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Название должно содержать смысл и быть коротким",
+                    "value_type": 2,
+                    "proto": "/library/basic/String/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "description": {
+            "value": "Простейший объект",
+            "value_type": 2,
+            "proto": "/library/basic/Text",
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "title": {
+                    "value": "Описание",
+                    "proto": "/library/basic/Text/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Краткое описание, дополняющее название",
+                    "value_type": 2,
+                    "proto": "/library/basic/Text/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "icon": {
+            "is_default_value": true,
+            "value": "Image.png",
+            "value_type": 3,
+            "proto": "/library/basic/Image",
+            "is_draft": true,
+            "is_property": true,
+            "order": 6,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/library/basic/Image/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

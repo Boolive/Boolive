@@ -1,0 +1,14 @@
+.FormAuth2{
+
+    }
+    .FormAuth2 .error-text{
+        display: none;
+        color: #f00;
+        font-size: 12px;
+        }
+    .FormAuth2 .item.error > .error-text{
+        display: block;
+        }
+    .FormAuth2 .item.error input{
+        border: 1px solid #f00;
+        }

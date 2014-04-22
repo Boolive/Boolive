@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "jquery.touchscroll.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/jquery.touchscroll",
+    "is_link": true,
+    "order": 4
+}

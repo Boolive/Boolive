@@ -1,0 +1,87 @@
+{
+    "value": "Page.tpl",
+    "value_type": 3,
+    "proto": "/library/views/AutoWidgetList2",
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Страница",
+            "proto": "/library/views/AutoWidgetList2/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Виджет для отображения страницы. Свойства страницы отображаются подходящими виджетами из списка видов.",
+            "proto": "/library/views/AutoWidgetList2/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/AutoWidgetList2/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidgetList2/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7
+        },
+        "views": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidgetList2/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9
+        },
+        "object_rule": {
+            "value": "all(in(/contents),attr(is_property,=,0))",
+            "value_type": 2,
+            "proto": "/library/views/AutoWidgetList2/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 10
+        },
+        "NextPrevNavigation": {
+            "is_default_value": true,
+            "value": "NextPrevNavigation.tpl",
+            "value_type": 3,
+            "proto": "/library/menus/NextPrevNavigation",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 13
+        },
+        "show_seo": {
+            "value": 1,
+            "proto": "/library/basic/Boolean",
+            "is_draft": true,
+            "is_property": true,
+            "order": 14,
+            "children": {
+                "title": {
+                    "value": "Добавлять SEO в HTML",
+                    "proto": "/library/basic/Boolean/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidgetList2/path_rule",
+            "is_property": true,
+            "order": 15
+        }
+    }
+}

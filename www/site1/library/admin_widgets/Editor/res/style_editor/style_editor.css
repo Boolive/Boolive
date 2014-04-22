@@ -1,0 +1,6 @@
+.Editor{
+    position: relative;
+    min-height: 100%;
+    box-sizing: border-box;
+    background: #f8f8f8;
+}

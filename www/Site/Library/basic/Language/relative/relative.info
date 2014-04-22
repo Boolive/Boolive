@@ -1,7 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "Язык",
-    "proto": "/Library/basic/Language/title",
-    "is_relative": true,
-    "order": 4
-}

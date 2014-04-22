@@ -1,0 +1,112 @@
+.TileItem{
+    display: inline-block;
+    margin: 2px;
+    vertical-align: top;
+    }
+.TileItem:first-of-type{
+    border-top-right-radius: 0;
+}
+.TileItem:last-of-type{
+    border-bottom-left-radius: 0;
+}
+    .TileItem__main{
+        height: 115px;
+        padding: 10px 13px;
+        line-height: 32px;
+        margin: 0;
+        box-sizing: border-box;
+        }
+    .TileItem__title-wrap{
+        margin-bottom: -5px;
+    }
+    .TileItem__icon{
+        margin: -15px 2px 0 0;
+    }
+    .TileItem__title{
+        font-size: 25px;
+        padding-left: 0;
+        display: inline-block;
+        /*color: #333;*/
+        }
+        .Item_mandatory .TileItem__title{
+            padding-left: 0;
+        }
+        .TileItem__title:hover{
+            /*color: #000;*/
+        }
+    .Item_link .TileItem__title{
+        /*color: #0073bf;*/
+    }
+    .Item_link .TileItem__title:after{
+        font-size: 30px;
+        line-height: 20px;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .Item_mandatory .TileItem__title:before{
+        font-size: 30px;
+        right: -6px;
+    }
+    .TileItem__title-min{
+        display: block;
+        font-size: 18px;
+        line-height: 18px;
+        margin-bottom: 3px;
+        }
+    .TileItem__description{
+        display: block;
+        font-size: 10px;
+        max-width: 210px;
+        max-height: 27px;
+        overflow: hidden;
+        line-height: normal;
+        white-space: normal;
+        }
+    .TileItem__value_wrap{
+        display: block;
+        overflow: hidden;
+        position: absolute;
+        right: 13px;
+        left: 12px;
+        bottom: 0;
+        text-align: left;
+    }
+    .TileItem__value{
+        display: inline;
+        font-size: 11px;
+        float: none;
+        padding: 0 0 5px 0;
+        /*height: 20px;*/
+        line-height: 25px;
+        text-align: left;
+        white-space: nowrap;
+        }
+    .TileItem__select{
+
+        }
+    .TileItem__prop{
+        cursor: pointer;
+        /*width: 30px;*/
+        position: absolute;
+        line-height: 30px;
+        right: 10px;
+        bottom: 0;
+        font-size: 14px;
+        /*text-align: center;*/
+        }
+    .Item_link .TileItem__prop{
+        right: 30px;
+    }
+    .TileItem__link{
+        cursor: pointer;
+        width: 30px;
+        position: absolute;
+        line-height: 30px;
+        right: 0;
+        bottom: 0;
+        font-size: 14px;
+        text-align: center;
+        }
+.Item_selected .TileItem__title{
+    color: #fff;
+}

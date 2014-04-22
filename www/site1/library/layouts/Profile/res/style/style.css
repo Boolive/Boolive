@@ -1,0 +1,14 @@
+.Profile{
+    
+}
+.Profile__left{
+    float: left;
+    width: 200px;
+    background: #eee;
+    min-height: 400px;
+}
+.Profile__main{
+    margin: 0 0 0 200px;
+    background: #ddd;
+    min-height: 500px;
+}

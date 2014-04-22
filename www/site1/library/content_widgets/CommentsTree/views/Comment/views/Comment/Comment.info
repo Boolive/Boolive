@@ -1,0 +1,10 @@
+{
+    "is_default_value": true,
+    "value": "Comment.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/CommentsTree/views/Comment",
+    "is_link": true,
+    "is_mandatory": true,
+    "is_relative": true,
+    "order": 2
+}

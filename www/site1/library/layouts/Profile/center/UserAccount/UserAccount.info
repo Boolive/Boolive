@@ -1,0 +1,58 @@
+{
+    "is_default_value": true,
+    "value": "SimpleForm.tpl",
+    "value_type": 3,
+    "proto": "/library/forms/SimpleForm",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Форма простая",
+            "proto": "/library/forms/SimpleForm/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Эталон простейшей формы. Поля формы прописываются в шаблоне.",
+            "proto": "/library/forms/SimpleForm/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/SimpleForm/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/forms/SimpleForm/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/forms/SimpleForm/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "path_rule": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/SimpleForm/path_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        }
+    }
+}

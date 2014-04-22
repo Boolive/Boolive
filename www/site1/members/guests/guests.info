@@ -1,0 +1,29 @@
+{
+    "value": "",
+    "proto": "/library/access/Group",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Гости",
+            "proto": "/library/access/Group/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Незарегистрированные, но сохраненные пользователи",
+            "value_type": 2,
+            "proto": "/library/access/Group/description",
+            "is_property": true,
+            "order": 2
+        },
+        "rights": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Group/rights",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

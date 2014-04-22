@@ -1,0 +1,30 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Вид",
+            "proto": "/library/basic/Object/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Базовый объект для создания элементов интерфейса",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Object/icon",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

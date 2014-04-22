@@ -1,0 +1,24 @@
+.Keywords{
+
+    }
+.Keywords__title{
+    font-size: 16px;
+}
+    .Keywords__list{
+        margin: 10px 0;
+        list-style: none;
+        padding: 0;
+        }
+        .Keywords__item{
+            /*padding: 5px;*/
+            margin: 0 2px;
+            font-size: 10pt;
+            display: inline-block;
+            }
+            .Keywords__item a{
+                text-decoration: none;
+                color: grey;
+                }
+            .Keywords__item a:hover{
+                text-decoration: underline;
+                }

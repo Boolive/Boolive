@@ -1,0 +1,34 @@
+{
+    "is_default_value": true,
+    "value": "Html.tpl",
+    "value_type": 3,
+    "proto": "/library/views/Html",
+    "order": 17,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "HTML разметка",
+            "proto": "/library/views/Html/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Определяет заголовки HTML документа, подключая необходимые теги в <HEAD>, требуемые виджетами",
+            "value_type": 2,
+            "proto": "/library/views/Html/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/Html/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

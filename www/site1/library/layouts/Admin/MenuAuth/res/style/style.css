@@ -1,0 +1,67 @@
+.MenuAuth{
+    display: inline-block;
+    vertical-align: top;
+    }
+    .MenuAuth ul.buttons {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        text-align: right;
+        }
+        .MenuAuth ul.buttons li{
+            display: inline-block;
+            list-style: none;
+            margin: 0 0;
+
+            /*height: 32px;*/
+            background-color: #f9f9f9;
+            box-shadow: inset 1px -1px 0 0 #E5E5E5, inset 0 -3px 3px -2px #E5E5E5;
+	        -webkit-box-shadow: inset 1px -1px 0 0 #E5E5E5, inset 0 -3px 3px -2px #E5E5E5;
+            }
+        .MenuAuth ul.buttons li:hover{
+            background-color: #f2f9ff;
+            }
+        .MenuAuth ul.buttons li.active{
+            background-color: #ffffff;
+            box-shadow: inset 1px -1px 0 0 #DCDCDC;
+            -webkit-box-shadow: inset 1px -1px 0 0 #DCDCDC;
+            }
+            .MenuAuth ul.buttons li a{
+                    margin: 0;
+                    vertical-align: middle;
+                    font-size: 10pt;
+                    text-decoration: none;
+                    color: #555;
+                    display: block;
+                    height: 16px;
+                    padding: 8px 10px;
+                    background-repeat: no-repeat;
+                    background-position: 10px center;
+                    }
+                .MenuAuth ul.buttons li.userlink a{
+                    background: none;
+                    padding: 8px 10px 8px 12px;
+                    }
+                .MenuAuth__userlink-icon{
+                    margin: 0px 3px -3px 0;
+                }
+                .MenuAuth ul.buttons li.exit a{
+                    /*background-image: url('img/exit.png');*/
+                    }
+                .MenuAuth ul.buttons li.exit:hover{
+                    background-color: #fff2f2;
+                    }
+                    .MenuAuth ul.buttons li.exit a:hover{
+                        /*background-image: url('img/exit-active.png');*/
+                        color: #ff1a1a;
+                        }
+                .MenuAuth ul.buttons li.site a{
+                    /*background-image: url('img/arrow.png');*/
+                    }
+                .MenuAuth ul.buttons li.site a:hover{
+                    /*background-image: url('img/arrow-active.png');*/
+                    color: #1a8cff;
+                    }
+    .MenuAuth__icon{
+        margin-bottom: -2px;
+    }

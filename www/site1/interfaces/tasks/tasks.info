@@ -1,0 +1,7 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/system/tasks",
+    "is_link": true,
+    "order": 10
+}

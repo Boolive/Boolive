@@ -1,0 +1,57 @@
+.LogicEditor{
+    padding: 0;
+    position: relative;
+    }
+    .LogicEditor__head{
+        display: table;
+        width: 100%;
+        height: 30px;
+        padding: 10px 10px;
+        -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+        table-layout: fixed;
+        position: relative;
+        }
+        .LogicEditor__head-left{
+            display: table-cell;
+            vertical-align: top;
+        }
+        .LogicEditor__head-right{
+            display: table-cell;
+            text-align: right;
+            vertical-align: top;
+            position: relative;
+            width: 170px;
+            }
+    .LogicEditor__title{
+        font-size: 28px;
+        padding: 0;
+        color: #85cc02;
+        margin: 0;
+        text-decoration: none;
+        display: inline;
+        }
+        .LogicEditor__title-name{
+            color: #333;
+            /*font-size: 20px;*/
+        }
+    .LogicEditor__description{
+        font-size: 12px;
+        padding: 0;
+        margin: 0;
+        color: #999;
+        }
+.LogicEditor__text{
+    width: 100%;
+    height: 500px;
+    border: none;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+.LogicEditor__btn_selected{
+    color: #FFF;
+    background-color: #418dd9;
+    border: 1px solid #3f8ad4;
+    }

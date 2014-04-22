@@ -1,0 +1,51 @@
+.LinkField{
+    margin: 5px 0;
+    /*background-color: transparent;*/
+    /*border: 1px solid transparent;*/
+    border-radius: 5px;
+}
+.LinkField:hover{
+    border-color: transparent;
+}
+.LinkField__input-wrap{
+    vertical-align: middle;
+    }
+    .LinkField__select{
+        /*line-height: 22px;*/
+    }
+    .LinkField__title{
+        color: #333;
+        font-size: 15px;
+        font-weight: normal;
+    }
+    .LinkField__proto-choice{
+        background: #ccc;
+        /*color: #fff;*/
+        /*font-size: 10px;*/
+        padding: 0 5px 8px;
+        border-radius: 10px;
+        display: inline-block;
+        height: 10px;
+        /*line-height: 9px;*/
+        cursor: pointer;
+        vertical-align: middle;
+        /*margin-top: -1px;*/
+        font: normal 17px/16px "Times New Roman";
+        /*color: #;*/
+        color: #fff;
+    }
+    .LinkField__proto-choice:hover{
+        background: #1988f7;
+        color: #fff;
+    }
+.LinkField:hover{
+    /*background-color: transparent;*/
+    }
+.LinkField.Item_selected{
+    background-color: #61B0FF;
+    /*border: 1px solid transparent;*/
+    color: #fff;
+    }
+.Item_selected .LinkField__title{
+    color: #fff;
+    }

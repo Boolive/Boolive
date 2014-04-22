@@ -6,4 +6,5 @@
 $config = array(
     '*.tpl' => '\Boolive\template\php\PHPTemplate',
     '*.txt' => '\Boolive\template\text\TextTemplate',
+    '*' => '\Boolive\template\php\PHPTemplate',
 );

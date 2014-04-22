@@ -1,0 +1,33 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/access/Role",
+    "is_draft": true,
+    "order": 2,
+    "children": {
+        "read": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/read",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "write": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/write",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "destroy": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/destroy",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "value": "2",
+    "proto": "/library/content_samples/Keyword",
+    "order": 8,
+    "children": {
+        "title": {
+            "value": "CMS",
+            "proto": "/library/content_samples/Keyword/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

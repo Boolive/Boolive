@@ -1,0 +1,21 @@
+.FormReg{
+
+}
+.FormReg .item{
+
+}
+
+.error{
+
+}
+.error-text{
+    display: none;
+    color: #f00;
+    font-size: 12px;
+}
+.item.error > .error-text{
+    display: block;
+}
+.item.error input{
+    border: 1px solid #f00;
+}

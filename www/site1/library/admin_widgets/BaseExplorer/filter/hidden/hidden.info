@@ -1,0 +1,14 @@
+{
+    "value": 1,
+    "proto": "/library/basic/Boolean",
+    "is_mandatory": true,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Скрытые",
+            "proto": "/library/basic/Boolean/title",
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

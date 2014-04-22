@@ -1,0 +1,87 @@
+{
+    "is_default_value": true,
+    "value": "Slider.tpl",
+    "value_type": 3,
+    "proto": "/library/content_widgets/Slider",
+    "is_mandatory": true,
+    "order": 6,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Слайдер",
+            "proto": "/library/content_widgets/Slider/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Показывает содержимое слайдами. Возможность их листать",
+            "proto": "/library/content_widgets/Slider/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_widgets/Slider/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/content_widgets/Slider/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "views": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_widgets/Slider/views",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5,
+            "children": {
+                "Image": {
+                    "is_default_value": true,
+                    "value": "",
+                    "proto": "/library/content_widgets/Slider/views/Image",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 3
+                },
+                "Page": {
+                    "is_default_value": true,
+                    "value": "",
+                    "proto": "/library/content_widgets/Slider/views/Page",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 4
+                }
+            }
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/content_widgets/Slider/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "object": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_widgets/Slider/object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7
+        }
+    }
+}

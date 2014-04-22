@@ -1,0 +1,21 @@
+{
+    "value": "underscore.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/JavaScript",
+    "order": 13,
+    "children": {
+        "title": {
+            "value": "Underscore",
+            "proto": "/library/javascripts/JavaScript/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Библиотека функций JavaScript для работы с объектами, массивами, функциями и коллекциями",
+            "value_type": 2,
+            "proto": "/library/javascripts/JavaScript/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

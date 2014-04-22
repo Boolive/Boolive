@@ -1,0 +1,60 @@
+{
+    "is_default_value": true,
+    "value": "history.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/history",
+    "is_link": true,
+    "is_mandatory": true,
+    "order": 5,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "HTML5 History API",
+            "proto": "/library/javascripts/history/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Библиотека эмулирует HTML5 History API в старых браузерах.",
+            "value_type": 2,
+            "proto": "/library/javascripts/history/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "basepath": {
+            "is_default_value": true,
+            "value": "/admin/",
+            "proto": "/library/javascripts/history/basepath",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "type": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/history/type",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "redirect": {
+            "is_default_value": true,
+            "value": 1,
+            "proto": "/library/javascripts/history/redirect",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "depends": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/javascripts/history/depends",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7
+        }
+    }
+}

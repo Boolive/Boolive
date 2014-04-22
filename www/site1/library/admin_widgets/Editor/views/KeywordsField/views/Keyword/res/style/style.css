@@ -1,0 +1,16 @@
+.Keyword{
+    background-color: #CCE6FF;
+    border-radius: 5px;
+    width: auto;
+    height: 16px;
+    float: left;
+    margin: 2px;
+    line-height: 16px;
+    padding: 5px;
+    cursor: default;
+    font-size: 12px;
+    }
+    .Keyword__remove{
+        text-decoration: none;
+        vertical-align: middle;
+      }

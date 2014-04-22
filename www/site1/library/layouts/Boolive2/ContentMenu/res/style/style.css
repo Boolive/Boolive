@@ -1,0 +1,33 @@
+.Menu{
+    padding: 10px 10px 15px;
+    background: #efefef;
+    margin: 10px 0;
+    border: 1px solid #e8e8e8;
+    }
+    .Menu .title{
+        font-size: 12pt;
+        display: none;
+        }
+    .Menu ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        }
+        .Menu ul li{
+            margin: 10px 5px 10px 0;
+	        padding: 0 0 0 19px;
+            }
+            .Menu ul li a{
+
+                }
+            .Menu ul li > a:hover{
+                color: #000;
+                }
+            .Menu ul li ul{
+
+            }
+            .Menu__item_icon{
+                margin: -2px 3px 0 0;
+                display: inline-block;
+                vertical-align: middle;
+            }

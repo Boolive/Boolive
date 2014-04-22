@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "PageEditor.tpl",
-    "is_file": true,
-    "proto": "/Library/admin_widgets/PageEditor",
-    "is_link": true,
-    "order": 5
-}

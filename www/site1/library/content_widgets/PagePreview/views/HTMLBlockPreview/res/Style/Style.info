@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "Style.css",
+    "value_type": 3,
+    "proto": "/library/views/HtmlBlock/res/Style",
+    "is_mandatory": true,
+    "order": 3
+}

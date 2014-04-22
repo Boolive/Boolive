@@ -1,0 +1,82 @@
+{
+    "value": "KeywordsCloud.tpl",
+    "value_type": 3,
+    "proto": "/library/views/Widget",
+    "is_default_class": false,
+    "order": 41,
+    "children": {
+        "title": {
+            "value": "Облако тегов",
+            "proto": "/library/views/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отображает все используемые на сайте ключевые слова",
+            "proto": "/library/views/Widget/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "value": "",
+            "proto": "/library/views/Widget/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "object": {
+            "value": "",
+            "proto": "/contents/keywords",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "min_font_size": {
+            "value": 8,
+            "proto": "/library/basic/Number",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8,
+            "children": {
+                "title": {
+                    "value": "Минимальный размер шрифта",
+                    "proto": "/library/basic/Number/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "unit": {
+                    "value": "px",
+                    "proto": "/library/basic/Number/unit",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        },
+        "max_font_size": {
+            "value": 21,
+            "proto": "/library/basic/Number",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9,
+            "children": {
+                "title": {
+                    "value": "Максимальный размер шрифта",
+                    "proto": "/library/basic/Number/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "unit": {
+                    "value": "px",
+                    "proto": "/library/basic/Number/unit",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

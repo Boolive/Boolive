@@ -1,0 +1,62 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/basic/Object",
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Комментарий",
+            "proto": "/library/basic/Object/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Отдельное сообщение пользователя, которое могут комментировать другие пользователи",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_property": true,
+            "order": 2
+        },
+        "message": {
+            "is_default_value": true,
+            "value": "",
+            "value_type": 2,
+            "proto": "/library/basic/Text",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Сообщение",
+                    "proto": "/library/basic/Text/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "author": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/User",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "Автор",
+                    "proto": "/library/basic/String",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Object/icon",
+            "is_property": true,
+            "order": 5
+        }
+    }
+}

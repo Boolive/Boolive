@@ -1,0 +1,39 @@
+{
+    "value": "",
+    "proto": "/library/content_samples/Page",
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Первая новость",
+            "proto": "/library/content_samples/Page/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "text": {
+            "value": "<p>Чуток текста и он в таблице текста</p>\n",
+            "value_type": 2,
+            "proto": "/library/content_samples/Page/text",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Публикация на сайте - страница, статья, новость или другое",
+            "value_type": 2,
+            "proto": "/library/content_samples/Page/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "keywords": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/content_samples/Page/keywords",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        }
+    }
+}

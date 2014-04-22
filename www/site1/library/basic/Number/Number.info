@@ -1,0 +1,43 @@
+{
+    "value": 0,
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 9,
+    "children": {
+        "title": {
+            "value": "Число",
+            "proto": "/library/basic/Object/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Числовое значение любой величины и с единицей измерения",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_property": true,
+            "order": 2
+        },
+        "unit": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "Единица измерения",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Строковое значение длиной до 255 символов",
+                    "value_type": 2,
+                    "proto": "/library/basic/String/description",
+                    "is_property": true,
+                    "order": 2
+                }
+            }
+        }
+    }
+}

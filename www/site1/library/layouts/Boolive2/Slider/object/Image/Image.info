@@ -1,0 +1,25 @@
+{
+    "value": "Image.jpg",
+    "value_type": 3,
+    "proto": "/library/basic/Image",
+    "order": 3,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Изображение",
+            "proto": "/library/basic/Image/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Файл изображения",
+            "value_type": 2,
+            "proto": "/library/basic/Image/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

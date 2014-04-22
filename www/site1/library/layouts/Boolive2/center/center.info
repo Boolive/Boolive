@@ -1,0 +1,41 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/views/ViewSingle",
+    "is_mandatory": true,
+    "order": 14,
+    "children": {
+        "title": {
+            "value": "Центр",
+            "proto": "/library/views/ViewSingle/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Центральная область вставки",
+            "proto": "/library/views/ViewSingle/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "SearchResult": {
+            "is_default_value": true,
+            "value": "SearchResult.tpl",
+            "value_type": 3,
+            "proto": "/library/content_widgets/SearchResult",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "ContentView": {
+            "value": "",
+            "proto": "/library/content_widgets/Content",
+            "is_link": true,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        }
+    }
+}

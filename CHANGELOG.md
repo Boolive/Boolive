@@ -1,7 +1,36 @@
 Boolive Change Log
 ==================
 
-Version 2.0.alpha work in progress
+Version 2.0.rc
+----------------------------
+- new Ace editor is added to the library (VladimirShestakov)
+- new #77 Added page navigation in the admin panel (VladimirShestakov)
+- new #111 LogicEditor is added to the admin panel (VladimirShestakov)
+- new #157 Fast deleting bookmarks (VladimirShestakov)
+- new #161 Added the sign "property" for objects (VladimirShestakov)
+- new #165 FileEditor is added to the admin panel (VladimirShestakov)
+- new #170 The MenuSelections is added in the bottom of admin panel (VladimirShestakov)
+
+Version 2.0.beta December, 31 2013
+----------------------------
+- new #28 Added functions of transformation of the image to the /Library/basic/Image (VladimirShestakov)
+- new #102 Создано меню закладок "Bookmarks" в админке (VladimirShestakov)
+- new #107 Added convenient method of adding link to the object (VladimirShestakov)
+- new #149 Added the panel for fast editing of the address of object - renaming and relocation (VladimirShestakov)
+- new #154 The table "text" is used for values with a length more than 255 characters (VladimirShestakov)
+- new #155 Added fulltext search of objects (VladimirShestakov)
+- new #156 Added widgets for searching in the contents of the site (VladimirShestakov)
+- new Added start page in the admin panel (VladimirShestakov)
+- new Added BaseExplorer for creating other explorers (VladimirShestakov)
+- new Added the common Editor for all objects (VladimirShestakov)
+- new Widgets and other views can be added to the site pages and sections (VladimirShestakov)
+- new Добавлена программа isRelative в админке для смены признака относительности прототипа (VladimirShestakov)
+- enh #151 Attribute is_delete is renamed to is_draft, Entity->isDelete() to Entity->isDragt() (VladimirShestakov)
+- enh #152 By default all new objects are drafts (VladimirShestakov)
+- enh #160 Primary rights (prohibitions) for all users is configured (VladimirShestakov)
+
+
+Version 2.0.alpha September, 30 2013
 ----------------------------
 - new Added the rule for check a conditions for reading or verifying objects (VladimirShestakov)
 - new Added support of conditions of string type (VladimirShestakov)

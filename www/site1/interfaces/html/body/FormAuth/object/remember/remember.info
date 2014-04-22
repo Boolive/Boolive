@@ -1,0 +1,25 @@
+{
+    "is_default_value": true,
+    "value": 0,
+    "proto": "/library/forms/FormAuth/object/remember",
+    "order": 4,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Запомнить",
+            "proto": "/library/forms/FormAuth/object/remember/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Логическое значение ДА или НЕТ",
+            "value_type": 2,
+            "proto": "/library/forms/FormAuth/object/remember/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "value": "",
+    "proto": "/library/basic/String",
+    "is_default_class": false,
+    "order": 16,
+    "children": {
+        "title": {
+            "value": "Email",
+            "proto": "/library/basic/String/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Адрес электронной почты",
+            "value_type": 2,
+            "proto": "/library/basic/String/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

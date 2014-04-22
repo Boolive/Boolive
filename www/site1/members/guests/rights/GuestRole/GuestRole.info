@@ -1,0 +1,56 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/access/Role",
+    "order": 2,
+    "children": {
+        "title": {
+            "value": "Роль гостя",
+            "proto": "/library/access/Role/title",
+            "is_hidden": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Сгруппированные права доступа по действиям над объектами.",
+            "value_type": 2,
+            "proto": "/library/access/Role/description",
+            "is_hidden": true,
+            "is_property": true,
+            "order": 2
+        },
+        "read": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/read",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "write": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/write",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "destroy": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/destroy",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 5
+        },
+        "call": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/access/Role/call",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        }
+    }
+}

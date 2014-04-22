@@ -1,0 +1,28 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "order": 20,
+    "children": {
+        "title": {
+            "value": "Пакет",
+            "proto": "/library/basic/Object/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Коллекция объектов",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_property": true,
+            "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Object/icon",
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

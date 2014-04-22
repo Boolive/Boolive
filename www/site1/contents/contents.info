@@ -1,0 +1,36 @@
+{
+    "value": "",
+    "proto": "/library/content_samples/Part",
+    "order": 45,
+    "children": {
+        "title": {
+            "value": "Содержимое",
+            "proto": "/library/content_samples/Part/title",
+            "is_property": true,
+            "order": 3
+        },
+        "description": {
+            "value": "Структура сайта, страницы, разделы...",
+            "value_type": 2,
+            "proto": "/library/content_samples/Part/description",
+            "is_property": true,
+            "order": 6
+        },
+        "icon-150": {
+            "value": "icon-150.png",
+            "value_type": 3,
+            "proto": "/library/basic/Image",
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Иконка",
+                    "proto": "/library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

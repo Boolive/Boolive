@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "PageKeywordsEditor.tpl",
-    "is_file": true,
-    "proto": "/Library/admin_widgets/page_widgets/PageKeywordsEditor",
-    "is_link": true,
-    "order": 5
-}

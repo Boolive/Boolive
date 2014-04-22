@@ -1,0 +1,20 @@
+{
+    "value": "",
+    "proto": "/library/basic/Package",
+    "order": 5,
+    "children": {
+        "title": {
+            "value": "Простые",
+            "proto": "/library/basic/Package/title",
+            "is_property": true,
+            "order": 5
+        },
+        "description": {
+            "value": "Коллекция простых объектов",
+            "value_type": 2,
+            "proto": "/library/basic/Package/description",
+            "is_property": true,
+            "order": 6
+        }
+    }
+}
