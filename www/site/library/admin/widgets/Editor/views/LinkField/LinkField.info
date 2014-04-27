@@ -1,0 +1,33 @@
+{
+    "value": "LinkField.tpl",
+    "value_type": 3,
+    "proto": "/library/admin/widgets/Editor/views/Field",
+    "is_default_class": false,
+    "is_draft": true,
+    "order": 7,
+    "children": {
+        "title": {
+            "value": "Поле объекта по ссылке",
+            "proto": "/library/admin/widgets/Editor/views/Field/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/admin/widgets/Editor/views/Field/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "object_rule": {
+            "value": "attr(is_link,=,1)",
+            "value_type": 2,
+            "proto": "/library/admin/widgets/Editor/views/Field/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        }
+    }
+}

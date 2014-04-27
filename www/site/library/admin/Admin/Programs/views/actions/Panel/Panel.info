@@ -1,0 +1,9 @@
+{
+    "is_default_value": true,
+    "value": "Panel.tpl",
+    "value_type": 3,
+    "proto": "/library/admin/widgets/Panel",
+    "is_link": true,
+    "is_draft": true,
+    "order": 26
+}

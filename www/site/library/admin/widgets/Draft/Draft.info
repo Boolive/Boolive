@@ -1,0 +1,49 @@
+{
+    "is_default_value": true,
+    "value": "Widget.tpl",
+    "value_type": 3,
+    "proto": "/library/admin/widgets/ToggleAction",
+    "is_default_class": false,
+    "order": 38,
+    "children": {
+        "title": {
+            "value": "Черновик",
+            "proto": "/library/admin/widgets/ToggleAction/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Не полностью созданный объект? Доступен только в админке",
+            "proto": "/library/admin/widgets/ToggleAction/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "icon": {
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/basic/Image",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Изображение",
+                    "proto": "/library/basic/Image/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "object_rule": {
+            "value": "access(write/change/is_draft)",
+            "proto": "/library/admin/widgets/ToggleAction/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        }
+    }
+}

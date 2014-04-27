@@ -1,0 +1,15 @@
+{
+    "value": "ItemPanel.js",
+    "value_type": 3,
+    "proto": "/library/javascripts/Widget",
+    "order": 1,
+    "children": {
+        "title": {
+            "value": "jQueryUI Boolive ItemPanel",
+            "proto": "/library/javascripts/Widget/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

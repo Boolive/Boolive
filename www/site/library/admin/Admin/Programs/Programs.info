@@ -1,0 +1,57 @@
+{
+    "value": "Programs.tpl",
+    "value_type": 3,
+    "proto": "/library/views/AutoWidget2",
+    "is_default_class": false,
+    "order": 14,
+    "children": {
+        "title": {
+            "value": "Программы",
+            "proto": "/library/views/AutoWidget2/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Виджеты, которые использовать для отображения и редактирования объектов в админке",
+            "value_type": 2,
+            "proto": "/library/views/AutoWidget2/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidget2/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4
+        },
+        "cache": {
+            "is_default_value": true,
+            "value": 0,
+            "proto": "/library/views/AutoWidget2/cache",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 6
+        },
+        "views": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/views/AutoWidget2/views",
+            "is_default_class": false,
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 7,
+            "children": {
+                "title": {
+                    "value": "Список программ",
+                    "proto": "/library/views/AutoWidget2/views/title",
+                    "is_property": true,
+                    "order": 11
+                }
+            }
+        }
+    }
+}

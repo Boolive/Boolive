@@ -48,49 +48,7 @@
             "proto": "/library/content_widgets/Page/views",
             "is_mandatory": true,
             "is_property": true,
-            "order": 14,
-            "children": {
-                "TitleView": {
-                    "is_default_value": true,
-                    "value": "TitleView.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/Page/views/TitleView",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 3
-                },
-                "Keywords": {
-                    "is_default_value": true,
-                    "value": "Keywords.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/Page/views/Keywords",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 4
-                },
-                "PagePreview": {
-                    "is_default_value": true,
-                    "value": "PagePreview.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/PagePreview",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 5
-                },
-                "PartPreview": {
-                    "is_default_value": true,
-                    "value": "PartPreview.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/PartPreview",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 6
-                }
-            }
+            "order": 14
         },
         "count_per_page": {
             "value": 8,

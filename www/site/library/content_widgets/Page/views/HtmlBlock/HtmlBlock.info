@@ -4,7 +4,7 @@
     "value_type": 3,
     "proto": "/library/views/HtmlBlock",
     "is_mandatory": true,
-    "order": 6,
+    "order": 7,
     "children": {
         "title": {
             "is_default_value": true,

@@ -11,8 +11,7 @@
             "order": 1
         },
         "text": {
-            "is_default_value": true,
-            "value": "",
+            "value": "<p>Третья новость! Тра ля ла лу!</p>\n",
             "value_type": 2,
             "proto": "/library/content_samples/Page/text",
             "is_mandatory": true,

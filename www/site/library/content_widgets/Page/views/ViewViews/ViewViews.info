@@ -4,7 +4,7 @@
     "proto": "/library/views/View",
     "is_default_class": false,
     "is_mandatory": true,
-    "order": 7,
+    "order": 8,
     "children": {
         "title": {
             "value": "Вид видов",

@@ -1,0 +1,48 @@
+.Sidebar{
+       
+}
+.Sidebar__views{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    border-left: 1px dotted #ccc;
+    margin-bottom: 35px;
+    box-sizing: border-box;
+}
+.Sidebar__view{
+    display: none;
+}
+.Sidebar__view_active{
+    display: block;
+}
+
+.Sidebar__tabs{
+    height: 35px;
+    width: 100%;
+    white-space: nowrap;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: #F3F3F3;
+    border-top: 1px solid #ccc;
+    box-shadow: inset 0px 1px 0px 0px #E5E5E5, inset 0px 3px 3px -2px #E5E5E5;
+}
+.Sidebar__tab{
+    display: block;
+    float: left;
+    width: 40px;
+    height: 36px;
+    margin: -1px 0 0 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-top: none;
+    border-bottom: none;
+}
+.Sidebar__tab_active{
+    background: #fff;
+    cursor: default;
+    border-color: #d4d4d4;
+    /*border-top-color: #fff;*/
+    box-shadow: 0 1px 0 0 #E5E5E5, 0 2px 2px 1px #E5E5E5;
+}

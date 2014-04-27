@@ -1,0 +1,8 @@
+{
+    "is_default_value": true,
+    "value": "Attribs.tpl",
+    "value_type": 3,
+    "proto": "/library/admin/widgets/Attribs",
+    "is_link": true,
+    "order": 32
+}

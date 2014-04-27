@@ -2,6 +2,24 @@
     "is_default_value": true,
     "value": "",
     "proto": "/library/content_widgets/Page/views/ViewViews",
-    "is_link": true,
-    "order": 8
+    "order": 8,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Вид видов",
+            "proto": "/library/content_widgets/Page/views/ViewViews/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "is_default_value": true,
+            "value": "Для отображения виджетов и любых других видов, например, js",
+            "value_type": 2,
+            "proto": "/library/content_widgets/Page/views/ViewViews/description",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        }
+    }
 }

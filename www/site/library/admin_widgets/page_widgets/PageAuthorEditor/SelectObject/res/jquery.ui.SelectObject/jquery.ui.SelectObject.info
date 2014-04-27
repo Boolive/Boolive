@@ -1,8 +1,0 @@
-{
-    "is_default_value": true,
-    "value": "jquery.ui.SelectObject.js",
-    "value_type": 3,
-    "proto": "/library/admin_widgets/SelectObject/res/jquery.ui.SelectObject",
-    "is_mandatory": true,
-    "order": 4
-}

@@ -50,16 +50,6 @@
                     "is_property": true,
                     "order": 1
                 },
-                "Page": {
-                    "is_default_value": true,
-                    "value": "Page.tpl",
-                    "value_type": 3,
-                    "proto": "/library/content_widgets/Page",
-                    "is_link": true,
-                    "is_mandatory": true,
-                    "is_property": true,
-                    "order": 3
-                },
                 "Part": {
                     "is_default_value": true,
                     "value": "Part.tpl",
@@ -70,13 +60,23 @@
                     "is_property": true,
                     "order": 4
                 },
+                "Page": {
+                    "is_default_value": true,
+                    "value": "Page.tpl",
+                    "value_type": 3,
+                    "proto": "/library/content_widgets/Page",
+                    "is_link": true,
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 5
+                },
                 "ViewViews": {
                     "is_default_value": true,
                     "value": "",
                     "proto": "/library/content_widgets/Page/views/ViewViews",
                     "is_link": true,
                     "is_property": true,
-                    "order": 5
+                    "order": 6
                 }
             }
         },

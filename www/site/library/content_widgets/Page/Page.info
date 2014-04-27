@@ -44,7 +44,7 @@
             "order": 9
         },
         "object_rule": {
-            "value": "all(in(/contents),attr(is_property,=,0))",
+            "value": "attr(is_property,=,0)",
             "value_type": 2,
             "proto": "/library/views/AutoWidgetList2/object_rule",
             "is_mandatory": true,

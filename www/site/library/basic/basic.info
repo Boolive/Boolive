@@ -4,7 +4,7 @@
     "order": 5,
     "children": {
         "title": {
-            "value": "Простые",
+            "value": "Основные",
             "proto": "/library/basic/Package/title",
             "is_property": true,
             "order": 5

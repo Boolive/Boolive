@@ -1,0 +1,1 @@
+<div class="Panel">Панель настроек</div>

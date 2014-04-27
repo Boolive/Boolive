@@ -19,8 +19,9 @@
             });
 //            if (self.css('overflow-y')=='hidden'){
 
-                self.on('mousewheel', function(event, delta){
-                   $(this).scrollTop($(this).scrollTop()-delta*50);
+                self.on('mousewheel', function(e, delta){
+                   $(this).scrollTop($(this).scrollTop()-delta*10);
+                    e.preventDefault();
                 });
 
 //            }
