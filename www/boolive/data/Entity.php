@@ -66,7 +66,8 @@ class Entity implements ITrace
         'is_relative'  => 0,
         'is_default_value' => null, // по умолчанию равен id
         'is_default_class' => 0,
-        'is_accessible'    => 1,
+        'is_completed' => 0,
+        'is_accessible'=> 1,
         'is_exist'     => 0,
         'author'	   => null,
         'update_step'  => 0,
@@ -165,6 +166,7 @@ class Entity implements ITrace
             'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
             'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё?
             'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
+            'is_completed' => Rule::bool()->int(), // Признак, дополнен объект свойствами прототипа или нет?
             'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
             'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
             'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
@@ -670,6 +672,21 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         return !empty($this->_attribs['is_property']);
+    }
+
+    /**
+     * Признак, дополнен объект свойствами прототипа или нет?
+     * @param null|bool $is_completed Новое значение, если не null
+     * @return bool
+     */
+    function isCompleted($is_completed = null)
+    {
+        if (isset($is_completed) && (empty($this->_attribs['is_completed']) == $is_completed)){
+            $this->_attribs['is_completed'] = $is_completed;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_completed']);
     }
 
     /**
@@ -1605,6 +1622,20 @@ class Entity implements ITrace
     }
 
     /**
+     * Дополнение объекта обязательными свойствами от прототипов
+     * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
+     * @return bool
+     */
+    function complete($access = true)
+    {
+        if ($this->isExist()){
+            return Data::complete($this, $access);
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * Хранилище объекта
      * Где объект сохранен или будет сохранен?
      * @return stores\MySQLStore|null
@@ -1964,6 +1995,7 @@ class Entity implements ITrace
         if ($this->isMandatory()) $export['is_mandatory'] = true;
         if ($this->isRelative()) $export['is_relative'] = true;
         if ($this->isProperty()) $export['is_property'] = true;
+        if (!$this->isCompleted()) $export['is_completed'] = false;
         $export['order'] = $this->order();
         // Расширенный импорт
         if ($more_info){
@@ -1979,6 +2011,7 @@ class Entity implements ITrace
             if (!$this->isRelative()) $export['is_relative'] = false;
             if (!$this->isMandatory()) $export['is_mandatory'] = false;
             if (!$this->isProperty()) $export['is_property'] = false;
+            if ($this->isCompleted()) $export['is_completed'] = true;
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
             if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
             if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
@@ -2058,6 +2091,7 @@ class Entity implements ITrace
         if (!empty($info['is_relative'])) $this->isRelative(true);
         if (!empty($info['is_mandatory'])) $this->isMandatory(true);
         if (!empty($info['is_property'])) $this->isProperty(true);
+        if (isset($info['is_completed']) && empty($info['is_completed'])) $this->isCompleted(true);
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);
@@ -2084,7 +2118,7 @@ class Entity implements ITrace
      * @param null|bool $is_change Установка признака, если не null
      * @return bool
      */
-    function isChenged($is_change = null)
+    function isChanged($is_change = null)
     {
         if (isset($is_change)){
             $this->_changed = $is_change;
