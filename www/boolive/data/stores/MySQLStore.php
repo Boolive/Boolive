@@ -707,9 +707,9 @@ class MySQLStore extends Entity
                 }
                 $this->db->commit();
 
-                if ($prototype_children){
-                    $this->findUpdates($entity, 100, 1, false, false);
-                }
+//                if ($prototype_children){
+//                    $this->findUpdates($entity, 100, 1, false, false);
+//                }
 
                 $this->afterWrite($attr, empty($current)?array():$current);
 
@@ -794,6 +794,74 @@ class MySQLStore extends Entity
         File::clearDir($entity->dir(true), true);
         Cache::delete('mysqlstore/localids');
         return $q->rowCount() > 0;
+    }
+
+    /**
+     * Дополнение объекта
+     * @param \boolive\data\Entity $entity Сохраняемый объект
+     * @param bool $access Признак, проверять доступ или нет?
+     * @return bool
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \Exception Системные ошибки
+     */
+    function complete($entity, $access)
+    {
+        if ($access && IS_INSTALL && !$entity->isAccessible('write')){
+            $error = new Error('Запрещенное действие над объектом', $entity->uri());
+            $error->access = new Error('Нет доступа на запись', 'write');
+            throw $error;
+        }
+        $entity->isCompleted(true);
+        $proto = $entity->proto();
+        if ($proto && $proto->isCompleted() && $entity->isLink() == $proto->isLink()){
+            // С учётом update_step выбрать $step_size подчиненных прототипа.
+            $complete_size = 50;
+            $complete_step = 0;
+            do{
+                $proto_children = $proto->find(array(
+                    'select' => array('children'),
+                    'where' => array('attr', 'is_mandatory','=',1),
+                    'limit' => array($complete_step * $complete_size, $complete_size),
+                    'key' => 'uri',
+                    'file_content' => 1,
+                    'cache' => 2
+                ), false, false, false);
+
+                // Прототипы, по которым не были найдены подчиненные использовать для создания новых подчиненных с diff = add
+                foreach ($proto_children as $proto){
+                    /** @var $proto Entity */
+                    $c = $entity->{$proto->name()};
+                    if (!$c->isExist()){
+                        // Если прототип относительный, то проверить наличие свойства в объекте с именем этого прототипа
+                        // если есть, то создавать его не надо
+                        if (!$proto->isRelative() || !$c->isRelative()){
+                            $child = $proto->birth($entity, false);
+                            $child->isMandatory($proto->isMandatory());
+                            $child->order($proto->order());
+                            $this->write($child, false);
+                            // После сохранения, когда получает уникальное имя, меняем прототип, если он должен быть относительным
+                            if ($proto->isRelative() && ($p = $proto->proto())){
+                                $new_proto = Data::getRelativeProto($child->uri(), $proto->uri(), $p->uri());
+                                if ($new_proto!==false){
+                                    $new_proto = Data::read(array(
+                                        'from' => $new_proto,
+                                        'select' => 'self',
+                                        'cache' => 0
+                                    ));
+                                    $child->proto($new_proto);
+                                    $child->isRelative(true);
+                                    $this->write($child, false);
+                                }
+                            }
+                        }
+                    }
+                }
+                $complete_step++;
+            }while($complete_size == count($proto_children));
+        }
+        $q = $this->db->query('UPDATE {objects} SET is_completed = 1 WHERE id = ?');
+        $q->execute(array($this->localId($entity->id(), false)));
+        return true;
     }
 
     /**
@@ -2207,6 +2275,7 @@ class MySQLStore extends Entity
         if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
         if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
         $attribs['is_mandatory'] = intval($attribs['is_mandatory']);
+        $attribs['is_completed'] = intval($attribs['is_completed']);
         $attribs['is_property'] = intval($attribs['is_property']);
         $attribs['update_step'] = intval($attribs['update_step']);
         $attribs['update_time'] = intval($attribs['update_time']);
@@ -2416,6 +2485,7 @@ class MySQLStore extends Entity
                   `is_relative` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',
                   `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор прототипа, чьё значение наследуется (если не наследуется, то свой id)',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
+                  `is_completed` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Дополнен свйствами прототипа или нет (0 - нет, 1 - да)?',
                   `update_step` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Шаг обновления. Если не 0, то обновление не закончено',
                   `update_time` INT(11) NOT NULL DEFAULT '0' COMMENT 'Время последней проверки изменений',
                   `diff` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Код обнаруженных изменений. Коды различиый - Entity::DIFF_*',
