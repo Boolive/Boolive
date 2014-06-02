@@ -43,10 +43,10 @@ class FormAuth2 extends SimpleForm
             'from' => '/members',
             'depth' => 'max',
             'where' => array(
-                array('attr', 'is_link', '=', '0'),
-                array('attr', 'name', '=', $input['REQUEST']['login']),
+                array('is_link', '=', '0'),
+                array('name', '=', $input['REQUEST']['login']),
                 array('child', 'passw', array(
-                    array('attr', 'value', '=', Auth::getHash($input['REQUEST']['passw']))
+                    array('value', '=', Auth::getHash($input['REQUEST']['passw']))
                 )),
             ),
             'limit' => array(0,1)

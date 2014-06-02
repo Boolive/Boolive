@@ -15,7 +15,7 @@ class PropertyList extends Widget
         $obj = $this->_input['REQUEST']['object'];
         $v['title'] = $obj->title->value();
         $list = $obj->find(array(
-            'where' => array('attr','is_property','=',0)
+            'where' => array('is_property','=',0)
         ));
         $v['list'] = array();
         foreach ($list as $item){

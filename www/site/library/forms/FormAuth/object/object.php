@@ -22,13 +22,13 @@ class object extends Entity
                 'from' => '/members',
                 'depth' => 'max',
                 'where' => array(
-                    array('attr', 'is_link', '=', '0'),
-                    array('attr', 'name', '=', $this->name->value()),
+                    array('is_link', '=', '0'),
+                    array('name', '=', $this->name->value()),
 //                    array('child', 'email', array(
-//                        array('attr', 'value', '=', $this->email->value())
+//                        array('value', '=', $this->email->value())
 //                    )),
                     array('child', 'passw', array(
-                        array('attr', 'value', '=', Auth::getHash($this->passw->value()))
+                        array('value', '=', Auth::getHash($this->passw->value()))
                     )),
                 ),
                 'limit' => array(0,1)

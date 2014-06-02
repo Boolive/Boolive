@@ -47,7 +47,7 @@ class view_select_object extends Widget
 
             $v['shorts'] = array();
             foreach ($shorts as $short){
-                $objects = $short->find(array('attr','is_link','>',0));
+                $objects = $short->find(array('is_link','>',0));
                 foreach ($objects as $o){
                     $r = $o->linked();
                     $v['shorts'][] = array(

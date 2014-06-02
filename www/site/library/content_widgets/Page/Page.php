@@ -30,10 +30,10 @@ class Page extends AutoWidgetList2
     {
         if (!isset($cond['where'])){
             $cond['where'] = array('all', array(
-                array('attr', 'is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
-                array('attr', 'is_draft', '=', 0),
-                array('attr', 'is_property', '=', 1),
-                array('attr', 'diff', '!=', Entity::DIFF_ADD)
+                array('is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
+                array('is_draft', '=', 0),
+                array('is_property', '=', 1),
+                array('diff', '!=', Entity::DIFF_ADD)
             ));
         }
         return parent::getList($cond);

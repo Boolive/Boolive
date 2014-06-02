@@ -89,9 +89,9 @@ class Export extends Widget
                     'from' => $obj,
                     'depth' => 'max',
                     'where'=> array(
-                        array('attr', 'is_draft', '>=', 0),
-                        array('attr', 'is_hidden', '>=', 0),
-                        array('attr', 'is_property', '=', 0)
+                        array('is_draft', '>=', 0),
+                        array('is_hidden', '>=', 0),
+                        array('is_property', '=', 0)
                     )
                 ))+1,
                 'step' => 0,
@@ -124,9 +124,9 @@ class Export extends Widget
                     'from' => $info['jobs'][$j]['obj'],
                     'depth' => 'max',
                     'where'=> array(
-                        array('attr', 'is_draft', '>=', 0),
-                        array('attr', 'is_hidden', '>=', 0),
-                        array('attr', 'is_property', '=', 0)
+                        array('is_draft', '>=', 0),
+                        array('is_hidden', '>=', 0),
+                        array('is_property', '=', 0)
                     ),
                     'order'=> array(array('id', 'asc')),
                     'limit' => array($info['jobs'][$j]['step'], $cnt)

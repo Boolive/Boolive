@@ -46,10 +46,10 @@ class Member extends Entity
             $cond = null;
             $curr = null;
             if ($this->isExist()){
-                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
+                $parents = $this->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
             }
             else{
-                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
+                $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
                 //array_unshift($parents, $this);
             }
 

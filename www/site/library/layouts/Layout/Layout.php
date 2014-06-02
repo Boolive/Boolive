@@ -42,9 +42,9 @@ class Layout extends Widget
                 'select' => 'children',
                 'from' => '/contents',
                 'where' => array(
-                    array('attr', 'is_hidden', '=', 0),
-                    array('attr', 'is_property', '=', 0),
-                    array('child', 'is_main', array('attr','value','=',1))
+                    array('is_hidden', '=', 0),
+                    array('is_property', '=', 0),
+                    array('child', 'is_main', array('value','=',1))
                 ),
 //                'order' => array(
 //                    array('order', 'ASC')

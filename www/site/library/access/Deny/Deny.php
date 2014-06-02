@@ -18,7 +18,7 @@ class Deny extends Entity
         $ids = array();
         $objects = $this->find(array(
             'where' => array(
-                array('attr', 'is_link', '>', 0)
+                array('is_link', '>', 0)
             ),
             'comment' => 'read deny linked objects'
         ));

@@ -129,35 +129,35 @@ class BaseExplorer extends AutoWidgetList2
         // Обычные объекты. У которых все признаки false
         if ($filters['real']->value()) {
             $any[] = array('all', array(
-                array('attr', 'is_hidden', '=', $obj['is_hidden']),
-                array('attr', 'is_draft', '=', $obj['is_draft']),
-                array('attr', 'is_mandatory', '=', 0),
-                array('attr', 'diff', '!=', Entity::DIFF_ADD)
+                array('is_hidden', '=', $obj['is_hidden']),
+                array('is_draft', '=', $obj['is_draft']),
+                array('is_mandatory', '=', 0),
+                array('diff', '!=', Entity::DIFF_ADD)
             ));
         }
         // Скрытые объекты
         if (isset($filters['hidden']) && $filters['hidden']->value()) {
-            $any[] = array('attr', 'is_hidden', '!=', $obj['is_hidden']);
+            $any[] = array('is_hidden', '!=', $obj['is_hidden']);
         }else{
-            $cond['where'][] = array('attr', 'is_hidden', '=', $obj['is_hidden']);
+            $cond['where'][] = array('is_hidden', '=', $obj['is_hidden']);
         }
         // Черновики
         if (isset($filters['draft']) && $filters['draft']->value()) {
-            $any[] = array('attr', 'is_draft', '!=', $obj['is_draft']);
+            $any[] = array('is_draft', '!=', $obj['is_draft']);
         }else{
-            $cond['where'][] = array('attr', 'is_draft', '=', $obj['is_draft']);
+            $cond['where'][] = array('is_draft', '=', $obj['is_draft']);
         }
         // Обязательные
         if (isset($filters['mandatory']) && $filters['mandatory']->value()) {
-            $any[] = array('attr', 'is_mandatory', '!=', 0);
+            $any[] = array('is_mandatory', '!=', 0);
         }else{
-            $cond['where'][] = array('attr', 'is_mandatory', '=', 0);
+            $cond['where'][] = array('is_mandatory', '=', 0);
         }
         // Дополнения
         if (isset($filters['updates']) && $filters['updates']->value()) {
-            $any[] = array('attr', 'diff', '!=', Entity::DIFF_NO);
+            $any[] = array('diff', '!=', Entity::DIFF_NO);
         }else{
-            $cond['where'][] = array('attr', 'diff', '!=', Entity::DIFF_ADD);
+            $cond['where'][] = array('diff', '!=', Entity::DIFF_ADD);
         }
         // Никакие
         if (empty($any)) {
@@ -170,11 +170,11 @@ class BaseExplorer extends AutoWidgetList2
         $select = $this->_input['REQUEST']['select'];
         if ($select == 'property'){
             $cond['select'] = 'children';
-            $cond['where'][] = array('attr', 'is_property', '=', 1);
+            $cond['where'][] = array('is_property', '=', 1);
         }else
         if ($select == 'structure' || $select == null){
             $cond['select'] = 'children';
-            $cond['where'][] = array('attr', 'is_property', '=', 0);
+            $cond['where'][] = array('is_property', '=', 0);
         }else{
             if (in_array($select, array('protos', 'heirs', 'parents'))){
                 $cond['select'] = $select;

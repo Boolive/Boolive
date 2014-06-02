@@ -74,8 +74,8 @@ class Auth
                 'select' => 'children',
                 'depth' => 'max',
                 'where' => array(
-                    array('attr', 'value', '=', $hash),
-                    array('attr', 'is_link', '=', '0')
+                    array('value', '=', $hash),
+                    array('not','is_link')
                 ),
                 'key' => false,
                 'limit' => array(0, 1),

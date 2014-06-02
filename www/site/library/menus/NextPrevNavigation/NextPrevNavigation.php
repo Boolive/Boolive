@@ -59,11 +59,11 @@ class NextPrevNavigation extends Widget
         // Следующая страницы
         $next = $object->parent()->find(array(
                 'where' => array(
-                    array('attr', 'order', '>', $object->order()),
-                    array('attr', 'is_hidden', '=', 0),
-                    array('attr', 'is_draft', '=', 0),
-                    array('attr', 'is_property', '=', 0),
-                    array('attr', 'diff', '!=', Entity::DIFF_ADD),
+                    array('order', '>', $object->order()),
+                    array('is_hidden', '=', 0),
+                    array('is_draft', '=', 0),
+                    array('is_property', '=', 0),
+                    array('diff', '!=', Entity::DIFF_ADD),
                     array('is', $object_types)
                 ),
                 'order' => array(
@@ -75,11 +75,11 @@ class NextPrevNavigation extends Widget
         // Предыдущая страница
         $prev = $object->parent()->find(array(
             'where' => array(
-                    array('attr', 'order', '<', $object->order()),
-                    array('attr', 'is_hidden', '=', 0),
-                    array('attr', 'is_draft', '=', 0),
-                    array('attr', 'is_property', '=', 0),
-                    array('attr', 'diff', '!=', Entity::DIFF_ADD),
+                    array('order', '<', $object->order()),
+                    array('is_hidden', '=', 0),
+                    array('is_draft', '=', 0),
+                    array('is_property', '=', 0),
+                    array('diff', '!=', Entity::DIFF_ADD),
                     array('is', $object_types)
                 ),
                 'order' => array(

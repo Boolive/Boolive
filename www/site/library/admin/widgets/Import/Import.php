@@ -44,7 +44,7 @@ class Import extends Widget
 
     function addTask($file, $object)
     {
-        $handlers = $this->handlers->inner()->find(array('where'=>array('attr','is_property','=',0)));
+        $handlers = $this->handlers->inner()->find(array('where'=>array('is_property','=',0)));
         $find = false;
         $i=-1;
         $cnt=count($handlers);
@@ -118,7 +118,7 @@ class Import extends Widget
             'select' => 'children',
             'depth' => array(1,1),
             'where' => array(
-                array('attr','value','in',array(2, 3)),
+                array('value','in',array(2, 3)),
                 array('is','/library/admin/widgets/Import/handlers/ImportFile'),
                 array('child','where',array('is', $object->id()))
             )

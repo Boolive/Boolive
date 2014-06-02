@@ -88,7 +88,7 @@ class MenuSimple extends Widget
      */
     function getItems($cond = array())
     {
-        $is_list = $this->is->find(array('where'=>array('attr','is_link','!=',0), 'group'=>true));
+        $is_list = $this->is->find(array('where'=>array('is_link','!=',0), 'group'=>true));
         foreach ($is_list as $key => $is){
             $is_list[$key] = $is->linked()->id();
         }
@@ -96,10 +96,9 @@ class MenuSimple extends Widget
         $cond['from'] = $this->object;
         $cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
         $cond['where'] = array('all', array(
-            array('attr', 'is_hidden', '=', 0),
-            array('attr', 'is_draft', '=', 0),
-            array('attr', 'is_property', '=', 0),
-            array('attr', 'diff', '!=', Entity::DIFF_ADD),
+            array('is_hidden', '=', 0),
+            array('is_draft', '=', 0),
+            array('is_property', '=', 0),
             array('is', $is_list)
         ));
         $cond['group'] = true; // Для выбранных объектов выполнять подвыборки

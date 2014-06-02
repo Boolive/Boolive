@@ -148,7 +148,7 @@ class KeywordsField extends AutoWidgetList2
         $keywords = Data::read('/contents/keywords');
         $result = $keywords->find(array(
             'where' => array(
-                array('attr', 'is_property', '=', 0),
+                array('is_property', '=', 0),
                 array('child','title',array(
                     array("attr", "value", "like", $this->_input['REQUEST']['request']."%"),
                 ))

@@ -13,7 +13,7 @@ class MenuSelections extends Widget
 {
     function show($v = array(), $commands, $input)
     {
-        $choices = $this->items->find(array('where'=>array('attr','is_property','=',0)));
+        $choices = $this->items->find(array('where'=>array('is_property','=',0)));
         $active = reset($choices);
         foreach ($choices as $ch){
             $v['choices'][$ch->name()] = array(

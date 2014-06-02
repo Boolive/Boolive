@@ -18,8 +18,8 @@ class Installer extends Widget
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::any(
-                    Rule::arrays(Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))),
-                    Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))
+                    Rule::arrays(Rule::entity(array('diff', '!=', Entity::DIFF_NO))),
+                    Rule::entity(array('diff', '!=', Entity::DIFF_NO))
                 )->required(),
                 'call' => Rule::string()->default('')->required(),
             ))

@@ -64,8 +64,8 @@ class tasks extends View
                 // Выбор задач из очереди
                 $tasks = $this->find(array(
                     'where' => array(
-                        array('attr', 'is_property', '=', 0),
-                        array('attr', 'value', '=', self::STATUS_WAIT)
+                        array('is_property', '=', 0),
+                        array('value', '=', self::STATUS_WAIT)
                     ),
                     'limit' => array(0,1),
                     'cache' => 0

@@ -13,7 +13,7 @@ class Sidebar extends Widget
 {
     function show($v = array(), $commands, $input)
     {
-        $list = $this->find(array('where'=>array('attr','is_property','=',0), 'key'=>'name','group'=>true));
+        $list = $this->find(array('where'=>array('is_property','=',0), 'key'=>'name','group'=>true));
         $v['tabs'] = array();
         $have_active = false;
         foreach ($list as $key => $lchild){

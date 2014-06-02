@@ -64,7 +64,7 @@ class FormReg extends SimpleForm
                 'depth' => 'max',
                 'where' => array(
                     array('is', '/library/access/User'),
-                    array('attr','name','=',$input['REQUEST']['login'])
+                    array('name','=',$input['REQUEST']['login'])
                 )
             ), false);
             if ($result){
@@ -79,7 +79,7 @@ class FormReg extends SimpleForm
                 'where' => array(
                     array('is', '/library/access/User'),
                     array('child','email',array(
-                        array('attr','value','=',$input['REQUEST']['email'])
+                        array('value','=',$input['REQUEST']['email'])
                     ))
                 )
             ), false);
