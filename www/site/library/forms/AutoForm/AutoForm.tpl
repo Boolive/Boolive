@@ -12,6 +12,7 @@
     <form action="" method="POST" enctype="multipart/form-data">
         <!-- Идентификатор формы -->
         <input type="hidden" name="form" value="<?=$v['view_id']?>">
+        <input type="hidden" name="object" value="<?=$v['object']?>">
         <!-- Поля -->
         <?php
         $list = $v['views']->arrays(\boolive\values\Rule::string());

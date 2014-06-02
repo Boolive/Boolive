@@ -1,0 +1,51 @@
+{
+    "is_default_value": true,
+    "value": "SelectField.tpl",
+    "value_type": 3,
+    "proto": "/library/forms/fields/SelectField",
+    "order": 2,
+    "children": {
+        "title": {
+            "is_default_value": true,
+            "value": "Выбор из списка",
+            "proto": "/library/forms/fields/SelectField/title",
+            "is_property": true,
+            "order": 1
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/fields/SelectField/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 2
+        },
+        "object_rule": {
+            "is_default_value": true,
+            "value": "attr(is_link,>,0)",
+            "value_type": 2,
+            "proto": "/library/forms/fields/SelectField/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "list": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/fields/SelectField/list",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "is_default_value": true,
+                    "value": "Список",
+                    "proto": "/library/forms/fields/SelectField/list/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}
