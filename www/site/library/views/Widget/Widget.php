@@ -89,9 +89,9 @@ class Widget extends View
         }catch (\Exception $e){
             ob_end_clean();
 //          if ($e->getCode() == 2){
-              echo "Error in template:".$e->getMessage();
+              //echo "Error in template:".$e->getMessage();
 //          }else{
-//                throw $e;
+                throw $e;
 //          }
         }
     }
@@ -132,7 +132,7 @@ php;
     {
         $name = $this->name();
         if ($this->isFile() && ($file = $this->fileContent())){
-            return preg_replace('/(<[a-z]+[^>]+class=("|\')([^"\']+)?)/ui', '$1 '.htmlspecialchars($name), $file['content'], 1);
+            return preg_replace('/(<[a-z]+[^>]+class="([^"]+)?)/ui', '$1 '.htmlspecialchars($name), $file['content'], 1);
         }
         return <<<html
 <div class="{$name}">{$this->title->inner()->value()}</div>

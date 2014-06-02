@@ -43,7 +43,7 @@ class isProperty extends ToggleAction
                             'is_relative' => $o->isProperty()
                         );
                     }else{
-                        $result['errors'][$o->uri()] = $o->error()->getUserMessage(true);
+                        $result['errors'][$o->uri()] = $o->errors()->getUserMessage(true);
                     }
 //                }catch (Error $e){
 

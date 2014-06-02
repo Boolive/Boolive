@@ -180,14 +180,14 @@ class HTTPStore extends Entity
                     File::delete($path);
                 }
                 if (isset($response['error'])){
-                    $entity->error()->add(Error::createFromArray($response['error'])->children());
+                    $entity->errors()->add(Error::createFromArray($response['error'])->children());
                 }
             }catch (\Exception $e){
-                $entity->error()->fatal = $e;
+                $entity->errors()->fatal = $e;
                 //throw $e;
             }
         }else{
-            //throw $this->error();
+            //throw $this->errors();
         }
         return false;
     }

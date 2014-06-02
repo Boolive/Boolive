@@ -44,7 +44,7 @@ class Draft extends ToggleAction
                             'is_draft' => $o->isDraft(null, false)
                         );
                     }else{
-                        $result['errors'][$o->uri()] = $o->error()->getUserMessage(true);
+                        $result['errors'][$o->uri()] = $o->errors()->getUserMessage(true);
                     }
 //                }catch (Error $e){
 //                    $result['errors'][$o->uri()] = $e->getUserMessage(true);

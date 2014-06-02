@@ -269,8 +269,8 @@ class MySQLStore extends Entity
     {
         if ($access && IS_INSTALL && !$entity->isAccessible('write')){
             ///$error = new Error('Запрещенное действие над объектом', $entity->uri());
-            $entity->error()->access->write = 'Нет доступа на запись';
-            //throw $this->error();
+            $entity->errors()->access->write = 'Нет доступа на запись';
+            //throw $this->errors();
         }else
         if ($entity->check(/*$error*/)){
             try{
@@ -319,7 +319,7 @@ class MySQLStore extends Entity
                 }
 
                 // Локальный идентификатор объекта
-                if (empty($attr['id'])){
+                if (empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID){
                     $attr['id'] = $this->localId($attr['uri'], true, $new_id);
                 }else{
                     $attr['id'] = $this->localId($attr['id'], true, $new_id);
@@ -370,58 +370,58 @@ class MySQLStore extends Entity
                 if ($access && IS_INSTALL){
                     //$error = new Error('Запрещенное действие над объектом', $entity->uri());
                     if ((empty($current) || $current['parent']!=$attr['parent']) && !$entity->isAccessible('write/change/add_child')){
-                        $entity->error()->access->{'write/change/add_child'} = 'Нет доступа на добавление подчиненных';
+                        $entity->errors()->access->{'write/change/add_child'} = 'Нет доступа на добавление подчиненных';
                     }else
                     if ((empty($current) || $current['proto']!=$attr['proto']) && !$entity->isAccessible('write/create')){
-                        $entity->error()->access->{'write/create'} = 'Нет доступа на использование выбранного прототипа (создания объекта)';
+                        $entity->errors()->access->{'write/create'} = 'Нет доступа на использование выбранного прототипа (создания объекта)';
                     }else
                     if (!empty($current)){
                         if ($current['is_hidden'] != $attr['is_hidden'] && !$entity->isAccessible('write/change/is_hidden')){
-                            $entity->error()->access->{'write/change/is_hidden'} = 'Нет доступа на смену признака "скрытый"';
+                            $entity->errors()->access->{'write/change/is_hidden'} = 'Нет доступа на смену признака "скрытый"';
                         }else
                         if ($current['is_draft'] != $attr['is_draft'] && !$entity->isAccessible('write/change/is_draft')){
-                            $entity->error()->access->{'write/change/is_draft'} = 'Нет доступа на смену признака "черновик"';
+                            $entity->errors()->access->{'write/change/is_draft'} = 'Нет доступа на смену признака "черновик"';
                         }else
                         if ($current['is_link'] != $attr['is_link'] && !$entity->isAccessible('write/change/is_link')){
-                            $entity->error()->access->{'write/change/is_link'} = 'Нет доступа на смену признака "ссылка"';
+                            $entity->errors()->access->{'write/change/is_link'} = 'Нет доступа на смену признака "ссылка"';
                         }else
                         if ($current['is_relative'] != $attr['is_relative'] && !$entity->isAccessible('write/change/proto')){
-                            $entity->error()->access->{'write/change/proto'} = 'Нет доступа на смену признака "относительный прототип"';
+                            $entity->errors()->access->{'write/change/proto'} = 'Нет доступа на смену признака "относительный прототип"';
                         }else
                         if (($current['value'] != $attr['value'] ||
                              $current['value_type'] != $attr['value_type'] ||
                              $current['is_default_value'] != $attr['is_default_value'] ||
                              !empty($attr['file'])) &&
                              !$entity->isAccessible('write/change/value')){
-                            $entity->error()->access->{'write/change/value'} = 'Нет доступа на изменение значения';
+                            $entity->errors()->access->{'write/change/value'} = 'Нет доступа на изменение значения';
                         }else
                         if ($current['name'] != $attr['name'] && !$entity->isAccessible('write/change/name')){
-                            $entity->error()->access->{'write/change/name'} = 'Нет доступа на смену имени';
+                            $entity->errors()->access->{'write/change/name'} = 'Нет доступа на смену имени';
                         }else
                         if ($current['parent'] != $attr['parent'] && !$entity->isAccessible('write/change/parent')){
-                            $entity->error()->access->{'write/change/pare'} = 'Нет доступа на смену родителя (перемещения)';
+                            $entity->errors()->access->{'write/change/pare'} = 'Нет доступа на смену родителя (перемещения)';
                         }else
                         if ($current['proto'] != $attr['proto'] && !$entity->isAccessible('write/change/proto')){
-                            $entity->error()->access->{'write/change/proto'} = 'Нет доступа на смену прототипа';
+                            $entity->errors()->access->{'write/change/proto'} = 'Нет доступа на смену прототипа';
                         }else
                         if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
-                            $entity->error()->access->{'write/change/is_default_class'} = 'Нет доступа на смену признака "своя логика"';
+                            $entity->errors()->access->{'write/change/is_default_class'} = 'Нет доступа на смену признака "своя логика"';
                         }else
                         if ($current['is_mandatory'] != $attr['is_mandatory'] && !$entity->isAccessible('write/change/is_mandatory')){
-                            $entity->error()->access->{'write/change/is_mandatory'} = 'Нет доступа на смену признака "обязательный"';
+                            $entity->errors()->access->{'write/change/is_mandatory'} = 'Нет доступа на смену признака "обязательный"';
                         }else
                         if ($current['is_property'] != $attr['is_property'] && !$entity->isAccessible('write/change/is_property')){
-                            $entity->error()->access->{'write/change/is_property'} = 'Нет доступа на смену признака "свойство"';
+                            $entity->errors()->access->{'write/change/is_property'} = 'Нет доступа на смену признака "свойство"';
                         }else
                         if ($current['diff'] != $attr['diff'] && $attr['diff'] == Entity::DIFF_NO && !$entity->isAccessible('write/change/diff')){
-                            $entity->error()->access->{'write/change/diff'} = 'Нет доступа на установку обновлений';
+                            $entity->errors()->access->{'write/change/diff'} = 'Нет доступа на установку обновлений';
                         }
     //                    else
     //                    if ($current['order'] != $attr['order'] && ($p = $entity->parent()) && !$p->isAccessible('order')){
-    //                        $entity->error()->access->order = 'Нет доступа на упорядочивание подчиненных';
+    //                        $entity->errors()->access->order = 'Нет доступа на упорядочивание подчиненных';
     //                    }
                     }
-                    if ($entity->error()->isExist()) return false;
+                    if ($entity->errors()->isExist()) return false;
                 }
 
                 $this->db->beginTransaction();
@@ -745,7 +745,7 @@ class MySQLStore extends Entity
             );
             if ($not_access){
                 //$error = new Error('Запрещенное действие над объектом', $entity->uri());
-                $entity->error()->access->delete = 'Нет доступа на уничтожение объекта или его подчиненных';
+                $entity->errors()->access->delete = 'Нет доступа на уничтожение объекта или его подчиненных';
                 return false;
             }
         }
@@ -764,8 +764,8 @@ class MySQLStore extends Entity
             $rows = $q->fetchAll(DB::FETCH_COLUMN, 0);
             if ($rows){
                 $uris = implode(', ', $rows);
-                $error = new Error('Недопустимое действие над объектом', $entity->uri());
-                $entity->error()->integrity->add(new Error(array('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов (%s)', $uris),'heirs-exists'));
+                //$error = new Error('Недопустимое действие над объектом', $entity->uri());
+                $entity->errors()->integrity->add(new Error(array('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов (%s)', $uris),'heirs-exists'));
                 return false;
             }
         }
@@ -867,12 +867,12 @@ class MySQLStore extends Entity
                     if ($diff == Entity::DIFF_NO){
                         // Искать только обязательные свойства, которые не черновики и не скрыты
                         $where = array(
-                            array('attr', 'is_mandatory', '=', 1),
-                            array('attr', 'is_hidden', '>=', 0)
+                            array('is_mandatory', '=', 1),
+                            array('is_hidden', '>=', 0)
                         );
                     }else{
                         // Искать любые свойства, кроме черновиков и скрытый
-                        $where = array('attr', 'is_hidden', '>=', 0);
+                        $where = array('is_hidden', '>=', 0);
                     }
                     // С учётом update_step выбрать $step_size подчиненных прототипа. Если выбрано меньше $step_size, то update_step = 0, иначе +50. Сохранить объект с новым update_step
                     $pchildren = $proto->find(array(
@@ -901,10 +901,10 @@ class MySQLStore extends Entity
                     // У объекта выбрать подчиненные, которые прототипируются от выбранных $step_size подчиненных прототипа.
                     $ochildren = $entity->find(array(
                         'where' => array(
-                                array('attr', 'proto', 'in', $pids),
-                                array('attr', 'is_draft', '>=', 0), // учитывать черновики
-                                array('attr', 'is_hidden', '>=', 0),
-                                array('attr', 'diff', '!=', Entity::DIFF_DELETE)
+                                array('proto', 'in', $pids),
+                                array('is_draft', '>=', 0), // учитывать черновики
+                                array('is_hidden', '>=', 0),
+                                array('diff', '!=', Entity::DIFF_DELETE)
                         )
                     ), false, false, false);
                     // Для выбранных по прототипам подчиненных выполнить findUpdate с $depth-1
@@ -1078,8 +1078,8 @@ class MySQLStore extends Entity
             // Выбрать все подчиненные с DIFF_ADD и is_mandatory и установить им DIFF_NO
             $new_children = $entity->find(array(
                 'where' => array(
-                    array('attr', 'diff', '=', Entity::DIFF_ADD),
-                    array('attr', 'is_hidden', '>=', 0)
+                    array('diff', '=', Entity::DIFF_ADD),
+                    array('is_hidden', '>=', 0)
                 )
             ));
             foreach ($new_children as $child){
@@ -1555,7 +1555,8 @@ class MySQLStore extends Entity
                     $glue = ' AND ';
                 }
                 foreach ($cond as $i => $c){
-                    if (!empty($c) && is_array($c)){
+                    if (!is_array($c)) $c = array($c);
+                    if (!empty($c)){
                         $c[0] = strtolower($c[0]);
                         // AND
                         if ($c[0]=='all'){
@@ -1568,43 +1569,6 @@ class MySQLStore extends Entity
                         // NOT - отрицание условий
                         if ($c[0]=='not'){
                             $cond[$i] = 'NOT('.$convert($c[1], ' AND ', $table, $level, $attr_exists).')';
-                        }else
-                        // Атрибут
-                        if ($c[0]=='attr'){
-                            // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
-                            if ($c[1] == 'value'){
-                                $c[1] = is_numeric($c[3]) ? 'valuef': 'value';
-                            }
-                            if ($c[1] == 'parent' || $c[1] == 'proto' || $c[1] == 'uri'){
-                                if (is_array($c[3])){
-                                    foreach ($c[3] as $ci => $cv){
-                                        $c[3][$ci] = $store->localId($cv, false);
-                                    }
-                                }else{
-                                    $c[3] = $store->localId($c[3], false);
-                                }
-                            }
-                            // sql услвоие
-                            if ($c[2]=='eq'){
-                                $c[2] = '=';
-                            }
-                            $cond[$i] = '`'.$table.'`.`'.$c[1].'` '.$c[2];
-                            // Учитываем особенность синтаксиса условия IN
-                            if (mb_strtolower($c[2]) == 'in'){
-                                if (!is_array($c[3])) $c[3] = array($c[3]);
-                                if (empty($c[3])){
-                                    $cond[$i].='(NULL)';
-                                }else{
-                                    $cond[$i].='('.str_repeat('?,', sizeof($c[3])-1).'?)';
-                                    $result['binds'] = array_merge($result['binds'], $c[3]);
-                                }
-                            }else{
-                                $cond[$i].= '?';
-                                $result['binds'][] = $c[3];
-                            }
-                            if ($c[1] == 'is_draft' || $c[1] == 'diff' || $c[1] == 'is_hidden'){
-                                $attr_exists[$c[1]] = true;
-                            }
                         }else
                         if ($c[0]=='match'){
                             $alias = uniqid('text');
@@ -1737,7 +1701,6 @@ class MySQLStore extends Entity
                                 $cond[$i] = '1';
                             }
                         }else
-
                         // Условие на наличие наследника.
                         if ($c[0]=='heirs'){
                             if (is_array($c[1])){
@@ -1764,10 +1727,52 @@ class MySQLStore extends Entity
                             }else{
                                 $cond[$i] = '1';
                             }
-                        }
+                        }else
+                        // Атрибут
+                        /*if ($c[0]=='attr')*/{
+                            if ($c[0]=='attr') array_shift($c);
+                            if (sizeof($c) < 2){
+                                $c[1] = '!=';
+                                $c[2] = 0;
+                            }
+                            // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
+                            if ($c[0] == 'value'){
+                                $c[0] = is_numeric($c[2]) ? 'valuef': 'value';
+                            }
+                            if ($c[0] == 'parent' || $c[0] == 'proto' || $c[0] == 'uri'){
+                                if (is_array($c[2])){
+                                    foreach ($c[2] as $ci => $cv){
+                                        $c[2][$ci] = $store->localId($cv, false);
+                                    }
+                                }else{
+                                    $c[2] = $store->localId($c[3], false);
+                                }
+                            }
+                            // sql услвоие
+                            if ($c[1]=='eq'){
+                                $c[1] = '=';
+                            }
+                            $cond[$i] = '`'.$table.'`.`'.$c[0].'` '.$c[1];
+                            // Учитываем особенность синтаксиса условия IN
+                            if (mb_strtolower($c[1]) == 'in'){
+                                if (!is_array($c[2])) $c[2] = array($c[2]);
+                                if (empty($c[2])){
+                                    $cond[$i].='(NULL)';
+                                }else{
+                                    $cond[$i].='('.str_repeat('?,', sizeof($c[2])-1).'?)';
+                                    $result['binds'] = array_merge($result['binds'], $c[2]);
+                                }
+                            }else{
+                                $cond[$i].= '?';
+                                $result['binds'][] = $c[2];
+                            }
+                            if ($c[0] == 'is_draft' || $c[0] == 'diff' || $c[0] == 'is_hidden'){
+                                $attr_exists[$c[0]] = true;
+                            }
+                        //}
                         // Не поддерживаемые условия игнорируем
-                        else{
-                            $cond[$i] = '0';
+//                        else{
+//                            $cond[$i] = '0';
                         }
                     }else{
                         unset($cond[$i]);

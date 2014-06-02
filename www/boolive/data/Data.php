@@ -38,14 +38,14 @@ class Data
      *     'depth' => 3,                                // Глубина выбора из from. Если 0, то выбирается from, а не его подчиненные
      *     'select' => 'children',                      // Что выбирать?
      *     'where' => array(                            // Услвоия выборки объединенные логическим AND
-     *         array('attr', 'uri', '=', '?'),          // Сравнение атрибута
+     *         array('uri', '=', '?'),          // Сравнение атрибута
      *         array('not', array(                      // Отрицание всех условий
-     *             array('attr', 'value', '=', '%?%')
+     *             array('value', '=', '%?%')
      *         )),
      *         array('any', array(                      // Услвоия, объединенные логическим OR
      *             array('child', array(                // Условия на подчиненный объект
-     *                 array('attr', 'value', '>', 10),
-     *                 array('attr', 'value', '<', 100),
+     *                 array('value', '>', 10),
+     *                 array('value', '<', 100),
      *             ))
      *         )),
      *         array('is', '/library/object')          // Кем объект является? Проверка наследования (прототипирования)
@@ -419,7 +419,7 @@ class Data
             if ($store = self::getStore($entity->key())){
                 return $store->write($entity, $access);
             }else{
-                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
         return false;
@@ -440,7 +440,7 @@ class Data
                 return $store->delete($entity, $access, $integrity);
             }else{
                 $error = new Error('Невозможно удалить объект', $entity->uri());
-                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
         return false;
@@ -465,7 +465,7 @@ class Data
             if ($store = self::getStore($entity->key())){
                 $store->findUpdates($entity, $step_size, $depth, $from_file);
             }else{
-                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
     }
@@ -481,7 +481,7 @@ class Data
             if ($store = self::getStore($entity->key())){
                 $store->applyUpdates($entity);
             }else{
-                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
     }

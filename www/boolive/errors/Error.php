@@ -52,7 +52,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
      * @param int|string $code Код исключения
      * @param Error $previous Предыдущее исключение. Используется при создания цепочки исключений
      */
-    function __construct($message = '', $code = 0, Error $previous = null)
+    function __construct($message = '', $code = 0, Error $previous = null, $is_temp = false)
     {
         if (is_array($message)){
             if (sizeof($message)>0){
@@ -74,18 +74,19 @@ class Error extends Exception implements ITrace, IteratorAggregate
         $this->parent = null;
         $this->children = array();
         $this->temps = array();
-        $this->is_temp = false;
+        $this->is_temp = $is_temp;
     }
 
     function __destruct()
     {
         if ($this->parent){
             if ($this->is_temp){
-                unset($this->parent->temps[$this->code]);
+                //$this->parent->temps[$this->code] = null;
+                //unset($this->parent->temps);
             }else{
-                unset($this->parent->children[$this->code]);
+                //$this->parent->children[$this->code] = null;
+                //unset($this->parent->children);
             }
-            $this->parent = null;
         }
     }
 
@@ -143,7 +144,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
     function add($error, $message = '', $is_temp = false)
     {
         // Если был временным
-        if (!$is_temp) $this->untemp();
+        if (!$is_temp || ($error instanceof Error && !$error->is_temp)) $this->untemp();
         // Добавление подчиненного
         if (is_array($error)){
             foreach ($error as $e){
@@ -151,7 +152,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
             }
         }else{
             if (!$error instanceof Error) $error = new Error($message, $error);
-            if ($is_temp){
+            if ($is_temp || $error->is_temp){
                 $this->temps[$error->code] = $error;
                 $this->temps[$error->code]->is_temp = true;
                 $this->temps[$error->code]->parent = $this;
@@ -203,7 +204,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
         if (isset($name)){
             return isset($this->children[$name]);
         }
-        return !empty($this->children);
+        return !$this->is_temp;
     }
 
     /**
@@ -260,7 +261,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
     function getUserMessage($all_sub = false, $postfix = "")
     {
         // Объединение сообщений подчиненных исключений
-        if ($all_sub && $this->isExist()){
+        if ($all_sub && !empty($this->children)){
             $message = '';
             foreach ($this->children as $e){
                 /** @var $e Error */
@@ -314,7 +315,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
      * @param bool $user_message Признак, возвращать пользовательские сообщения или программные?
      * @return array Многомерный массив с информацией об исключени
      */
-    function toArray($user_message = true)
+    function toArray($user_message = true, $ignore = array())
     {
         $result = array(
             'code' => $this->code,
@@ -322,14 +323,16 @@ class Error extends Exception implements ITrace, IteratorAggregate
             'children' => array()
         );
         foreach ($this->children as $name => $e){
-            if ($e instanceof Error){
-                $result['children'][$name] = $e->toArray($user_message);
-            }else{
-                /** @var $e Exception */
-                $result['children'][$name] = array(
-                    'code' => $this->getCode(),
-                    'message' => $this->getMessage(),
-                );
+            if (!in_array($name, $ignore, true)){
+                if ($e instanceof Error){
+                    $result['children'][$name] = $e->toArray($user_message);
+                }else{
+                    /** @var $e Exception */
+                    $result['children'][$name] = array(
+                        'code' => $this->getCode(),
+                        'message' => $this->getMessage(),
+                    );
+                }
             }
         }
         return $result;
@@ -380,16 +383,18 @@ class Error extends Exception implements ITrace, IteratorAggregate
      */
     protected function untemp()
     {
-        if ($this->is_temp){
+        //if ($this->is_temp){
             $this->is_temp = false;
             if (isset($this->parent)){
-                // В родитле пермещаем себя в основной список
-                $this->parent->children[$this->code] = $this;
-                unset($this->parent->temps[$this->code]);
+                if (isset($this->parent->temps[$this->code])){
+                    // В родитле пермещаем себя в основной список
+                    $this->parent->children[$this->code] = $this;
+                    unset($this->parent->temps[$this->code]);
+                }
                 // Возможно, родитель тоже временный
                 $this->parent->untemp();
             }
-        }
+        //}
     }
 
     function trace()

@@ -144,15 +144,7 @@ class Entity implements ITrace
         $this->_attribs = array_replace($this->_attribs, $attribs);
     }
 
-    function __destruct()
-    {
-        if ($this->_parent){
-            if (isset($this->_parent->_children[$this->_attribs['name']])){
-                unset($this->_parent->_children[$this->_attribs['name']]);
-            }
-            $this->_parent = null;
-        }
-    }
+    function __destruct(){}
 
     /**
      * Правило на атрибуты
@@ -291,7 +283,7 @@ class Entity implements ITrace
      */
     function key()
     {
-        return isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
+        return isset($this->_attribs['id']) ? $this->_attribs['id'] : Entity::ENTITY_ID;
     }
 
     /**
@@ -619,11 +611,11 @@ class Entity implements ITrace
                     if ($p = $proto->isLink(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
-                    if ($proto->store() != $this->store()){
-                        $this->_attribs['is_link'] = $proto->uri();
-                    }else{
+//                    if ($proto->store() != $this->store()){
+//                        $this->_attribs['is_link'] = $proto->uri();
+//                    }else{
                        $this->_attribs['is_link'] = $proto->key();
-                    }
+//                    }
                 }else{
                     $this->_attribs['is_link'] = self::ENTITY_ID;
                 }
@@ -638,6 +630,16 @@ class Entity implements ITrace
         }
         // Возвращение признака или объекта, на которого ссылается данный объект
         if (!empty($this->_attribs['is_link']) && $return_link){
+            // Если прототип-ссылка ещё не сохранен
+            if ($this->_attribs['is_link'] == self::ENTITY_ID){
+                if ($proto = $this->proto()){
+                    if ($link = $proto->isLink(null, true)){
+                        $this->_link = $link;
+                    }else{
+                        $this->_link = $proto;
+                    }
+                }
+            }else
             if ($this->_link === false){
                 $this->_link = Data::read(array(
                     'from' => $this,
@@ -741,11 +743,11 @@ class Entity implements ITrace
                     if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
                 }
                 if ($proto instanceof Entity && $proto->isExist()){
-                    if ($proto->store() != $this->store()){
-                        $this->_attribs['is_default_value'] = $proto->uri();
-                    }else{
+//                    if ($proto->store() != $this->store()){
+//                        $this->_attribs['is_default_value'] = $proto->uri();
+//                    }else{
                         $this->_attribs['is_default_value'] = $proto->key();
-                    }
+//                    }
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['value_type'] = $proto->valueType();
                 }else{
@@ -812,11 +814,11 @@ class Entity implements ITrace
                     $proto = null;
                 }
                 if ($proto instanceof Entity && $proto->isExist()){
-                    if ($proto->store() != $this->store()){
-                        $this->_attribs['is_default_class'] = $proto->uri();
-                    }else{
+//                    if ($proto->store() != $this->store()){
+//                        $this->_attribs['is_default_class'] = $proto->uri();
+//                    }else{
                        $this->_attribs['is_default_class'] = $proto->key();
-                    }
+//                    }
                 }else{
                     $this->_attribs['is_default_class'] = self::ENTITY_ID;
                 }
@@ -1069,11 +1071,12 @@ class Entity implements ITrace
                         }
                     }
                     // Смена прототипа
-                    if ($new_proto->store() != $this->store()){
-                        $this->_attribs['proto'] = $new_proto->uri();
-                    }else{
+
+//                    if ($new_proto->store() != $this->store()){
+//                        $this->_attribs['proto'] = $new_proto->uri();
+//                    }else{
                        $this->_attribs['proto'] = $new_proto->key();
-                    }
+//                    }
                     $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
                     $this->_proto = $new_proto;
 
@@ -1094,7 +1097,7 @@ class Entity implements ITrace
         }
         // Возврат объекта-прототипа
         $reload = $reload && $this->_proto instanceof Entity && !$this->_proto->isExist() && isset($this->_attribs['proto']);
-        if (($this->_proto === false && $load) || $reload){
+        if ((($this->_proto === false && $load) || $reload) && $this->_attribs['proto']!=Entity::ENTITY_ID){
             if (isset($this->_attribs['proto'])){
                 $this->_proto = Data::read(array(
                     'from' => $this->_attribs['proto'],
@@ -1147,11 +1150,11 @@ class Entity implements ITrace
                 $this->_attribs['author'] = null;
                 $this->_author = null;
             }else{
-                if ($new_author->store() != $this->store()){
-                    $this->_attribs['author'] = $new_author->uri();
-                }else{
+//                if ($new_author->store() != $this->store()){
+//                    $this->_attribs['author'] = $new_author->uri();
+//                }else{
                    $this->_attribs['author'] = $new_author->key();
-                }
+//                }
                 $this->_author = $new_author;
             }
             $this->_changed = true;
@@ -1227,7 +1230,7 @@ class Entity implements ITrace
     {
         if ($next = $this->parent()->find(array(
                 'where' => array(
-                    array('attr', 'order', '>', $this->order()),
+                    array('order', '>', $this->order()),
                 ),
                 'order' => array(
                     array('order', 'ASC')
@@ -1248,7 +1251,7 @@ class Entity implements ITrace
     {
         if ($prev = $this->parent()->find(array(
                 'where' => array(
-                    array('attr', 'order', '<', $this->order()),
+                    array('order', '<', $this->order()),
                 ),
                 'order' => array(
                     array('order', 'DESC')
@@ -1391,14 +1394,14 @@ class Entity implements ITrace
      * <code>
      * $cond = array(
      *     'where' => array(                            // услвоия поиска объединенные логическим AND
-     *         array('attr', 'uri', '=', '?'),          // сравнение атрибута
+     *         array('uri', '=', '?'),          // сравнение атрибута
      *         array('not', array(                      // отрицание всех условий
-     *             array('attr', 'value', '=', '%?%')
+     *             array('value', '=', '%?%')
      *         )),
      *         array('any', array(                      // услвоия объединенные логическим OR
      *             array('child', array(                // проверка свойства искомого объекта
-     *                 array('attr', 'value', '>', 10),
-     *                 array('attr', 'value', '<', 100),
+     *                 array('value', '>', 10),
+     *                 array('value', '<', 100),
      *             ))
      *         )),
      *         array('is', '/library/object')          // кем объект является? проверка наследования
@@ -1446,13 +1449,14 @@ class Entity implements ITrace
         if ($load && (($cond['select'][0] == 'children' && $cond['depth'][1] == 1) || $cond['select'][0] == 'tree')
             && empty($cond['select'][1]) && $cond['depth'][0] == 1)
         {
-            if (isset($cond['key']) && $cond['key'] == 'name'){
-                $this->_children = $result;
-            }else{
+//            if (isset($cond['key']) && $cond['key'] == 'name'){
+//                $this->_children = $result;
+//            }else{
                 foreach ($result as $obj){
                     $this->_children[$obj->name()] = $obj;
+                    $obj->_parent = $this;
                 }
-            }
+//            }
         }
         return $result;
     }
@@ -1547,19 +1551,20 @@ class Entity implements ITrace
                     $this->_current_name = null;
                 }
                 // Сохранение подчиненных
-                if ($children && !$this->error()->isExist()){
+                if ($children && !$this->errors()->isExist()){
                     $children = $this->children();
                     foreach ($children as $child){
                         /** @var Entity $child */
                         $child->save(true, $access);
                     }
-                    if ($this->error()->isExist()) throw $errors;
                 }
-                $this->_is_saved = false;
-                return true;
+                if (!$this->errors()->isExist()){
+                    $this->_is_saved = false;
+                    return true;
+                }
             }catch (Exception $e){
                 $this->_is_saved = false;
-                $this->error()->fatal = $e;
+                $this->errors()->fatal = $e;
             }
         }
         return false;
@@ -1640,7 +1645,7 @@ class Entity implements ITrace
         /** @var $error Error */
         if ($error){
             //$errors->_attribs->add($error->children());
-            $this->error()->_attribs->add($error->children());
+            $this->errors()->_attribs->add($error->children());
         }else{
             $this->_attribs = $filtered;
         }
@@ -1651,14 +1656,14 @@ class Entity implements ITrace
                 /** @var Entity $child */
                 if (!$child->check(/*$error*/)){
                     //$errors->_children->add($error);
-                    $this->error()->_children->add($child->error());
+                    $this->errors()->_children->add($child->errors());
                 }
             }
         }
         // Проверка родителем.
         if ($p = $this->parent()) $p->checkChild($this);
         // Если ошибок нет, то удаляем контейнер для них
-        if (!$this->error()->isExist()){
+        if (!$this->errors()->isExist()){
             //$errors = null;
             return $this->_checked = true;
         }
@@ -1676,9 +1681,9 @@ class Entity implements ITrace
     {
         /** @example
          * if ($child->name() == 'bad_name'){
-         *     // Так как ошибка из-за атрибута, то добавляем в $child->error()->_attribs
-         *     // Если бы проверяли подчиненного у $child, то ошибку записывали бы в $child->error()->_children
-         *	   $child->error()->_attribs->name = new Error('Недопустимое имя', 'impossible');
+         *     // Так как ошибка из-за атрибута, то добавляем в $child->errors()->_attribs
+         *     // Если бы проверяли подчиненного у $child, то ошибку записывали бы в $child->errors()->_children
+         *	   $child->errors()->_attribs->name = new Error('Недопустимое имя', 'impossible');
          *     return false;
          * }
          */
@@ -1689,14 +1694,14 @@ class Entity implements ITrace
      * Проверка объекта соответствию указанному условию
      * <code>
      * array(                                      // услвоия поиска объединенные логическим AND
-     *    array('attr', 'uri', '=', '?'),          // сравнение атрибута
+     *    array('uri', '=', '?'),          // сравнение атрибута
      *    array('not', array(                      // отрицание всех условий
-     *         array('attr', 'value', '=', '%?%')
+     *         array('value', '=', '%?%')
      *    )),
      *    array('any', array(                      // услвоия объединенные логическим OR
      *         array('child', array(               // проверка свойства искомого объекта
-     *             array('attr', 'value', '>', 10),
-     *             array('attr', 'value', '<', 100),
+     *             array('value', '>', 10),
+     *             array('value', '<', 100),
      *         ))
      *     )),
      *     array('is', '/library/object')          // кем объект является? проверка наследования
@@ -1732,58 +1737,6 @@ class Entity implements ITrace
                 return !sizeof($cond[1]);
             case 'not':
                 return !$this->verify($cond[1]);
-            case 'attr':
-                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
-                    $value = $this->{$cond[1]}();
-                }else
-                if ($cond[1] == 'is_hidden'){
-                    $value = $this->isHidden(null, empty($cond[4]));
-                }else
-                if ($cond[1] == 'is_draft'){
-                    $value = $this->isDraft(null, empty($cond[4]));
-                }else
-                if ($cond[1] == 'is_file'){
-                    $value = $this->isFile();
-                }else
-                if ($cond[1] == 'value_type'){
-                    $value = $this->valueType();
-                }else
-                if ($cond[1] == 'is_link'){
-                    $value = $this->isLink();
-                }else
-                if ($cond[1] == 'is_relative'){
-                    $value = $this->isRelative();
-                }else
-                if ($cond[1] == 'is_mandatory'){
-                    $value = $this->isMandatory();
-                }else
-                if ($cond[1] == 'is_property'){
-                    $value = $this->isProperty();
-                }else
-                if ($cond[1] == 'parent_cnt'){
-                    $value = $this->parentCount();
-                }else
-                if ($cond[1] == 'proto_cnt'){
-                    $value = $this->protoCount();
-                }else{
-                    $value = null;
-                }
-                switch ($cond[2]){
-                    case '=': return $value == $cond[3];
-                    case '<': return $value < $cond[3];
-                    case '>': return $value > $cond[3];
-                    case '>=': return $value >= $cond[3];
-                    case '<=': return $value <= $cond[3];
-                    case '!=':
-                    case '<>': return $value != $cond[3];
-                    case 'like':
-                        $pattern = strtr($cond[3], array('%' => '*', '_' => '?'));
-                        return fnmatch($pattern, $value);
-                    case 'in':
-                        if (!is_array($cond[3])) $cond[3] = array($cond[3]);
-                        return in_array($value, $cond[3]);
-                }
-                return false;
             case 'match':
                 throw new Exception('Expression "match" for fulltext search is not supported in function verify()');
                 break;
@@ -1869,7 +1822,63 @@ class Entity implements ITrace
                 return false;
             case 'access':
                 return $this->isAccessible($cond[1]);
-            default: return false;
+            default:
+                if ($cond[0] == 'attr') array_shift($cond);
+                if (sizeof($cond) < 2){
+                    $cond[1] = '!=';
+                    $cond[2] = 0;
+                }
+                if (in_array($cond[0], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
+                    $value = $this->{$cond[0]}();
+                }else
+                if ($cond[0] == 'is_hidden'){
+                    $value = $this->isHidden(null, empty($cond[3]));
+                }else
+                if ($cond[0] == 'is_draft'){
+                    $value = $this->isDraft(null, empty($cond[3]));
+                }else
+                if ($cond[0] == 'is_file'){
+                    $value = $this->isFile();
+                }else
+                if ($cond[0] == 'value_type'){
+                    $value = $this->valueType();
+                }else
+                if ($cond[0] == 'is_link'){
+                    $value = $this->isLink();
+                }else
+                if ($cond[0] == 'is_relative'){
+                    $value = $this->isRelative();
+                }else
+                if ($cond[0] == 'is_mandatory'){
+                    $value = $this->isMandatory();
+                }else
+                if ($cond[0] == 'is_property'){
+                    $value = $this->isProperty();
+                }else
+                if ($cond[0] == 'parent_cnt'){
+                    $value = $this->parentCount();
+                }else
+                if ($cond[0] == 'proto_cnt'){
+                    $value = $this->protoCount();
+                }else{
+                    $value = null;
+                }
+                switch ($cond[1]){
+                    case '=': return $value == $cond[2];
+                    case '<': return $value < $cond[2];
+                    case '>': return $value > $cond[2];
+                    case '>=': return $value >= $cond[2];
+                    case '<=': return $value <= $cond[2];
+                    case '!=':
+                    case '<>': return $value != $cond[2];
+                    case 'like':
+                        $pattern = strtr($cond[2], array('%' => '*', '_' => '?'));
+                        return fnmatch($pattern, $value);
+                    case 'in':
+                        if (!is_array($cond[2])) $cond[2] = array($cond[2]);
+                        return in_array($value, $cond[2]);
+                }
+                return false;
         }
     }
 
@@ -1880,8 +1889,8 @@ class Entity implements ITrace
      */
     function in($parent)
     {
+        if (!$this->isExist() || ($parent instanceof Entity && !$parent->isExist())) return false;
         if ($this->eq($parent)) return true;
-        if ($parent instanceof Entity && $parent->_attribs['uri'] == '' && !$parent->isExist()) return false;
         return $this->childOf($parent);
     }
 
@@ -1999,9 +2008,9 @@ class Entity implements ITrace
             $export['children'] = array();
             $children = $this->find(array(
                 'where' => array(
-                    array('attr', 'is_draft', '>=', 0),
-                    array('attr', 'is_hidden', '>=', 0),
-                    array('attr', 'is_property', '=', 1)
+                    array('is_draft'),
+                    array('is_hidden'),
+                    array('is_property')
                 ),
                 'comment' => 'read property for export'
             ), false, false);
@@ -2223,14 +2232,14 @@ $methods
      * Объект ошибок
      * @return Error|null
      */
-    function error()
+    function errors()
     {
         if (!$this->_errors){
-            $this->_errors = new Error('Ошибки', $this->name());
-        }
-        // Связывание с ошибками родительского объекта. Образуется целостная иерархия ошибок
-        if ($this->_parent){
-            $this->_parent->error()->_children->add($this->_errors, '', true);
+            $this->_errors = new Error('Ошибки', $this->name(), null, true);
+            // Связывание с ошибками родительского объекта. Образуется целостная иерархия ошибок
+            if ($this->_parent){
+                $this->_parent->errors()->_children->add($this->_errors, '', true);
+            }
         }
         return $this->_errors;
     }
@@ -2245,6 +2254,65 @@ $methods
     function __toString()
     {
         return (string)$this->value();
+    }
+
+    /**
+     * Экспорт в массив для серриализации
+     * @return array
+     */
+    function toArray()
+    {
+        $result = array(
+            '_attribs' => $this->_attribs,
+            '_children' => array(),
+            '_is_inner' => $this->_is_inner,
+            '_is_saved' => $this->_is_saved,
+            '_changed' => $this->_changed,
+            '_checked' => $this->_checked,
+            '_errors' => $this->_errors && $this->_errors->isExist() ? $this->_errors->toArray(false, array('_children')) : $this->_errors,
+            '_autoname' => $this->_autoname,
+            '_current_name' => $this->_current_name,
+            'class' => get_class($this)
+        );
+        foreach ($this->_children as $key => $child){
+            $result['_children'][$key] = $child->toArray();
+        }
+        return $result;
+    }
+
+    /**
+     * Востановление экземпляра из массива
+     * @param $array
+     * @return array|Entity|mixed|null
+     */
+    static function fromArray($array)
+    {
+        if (isset($array['_attribs']['id'])){
+            $obj = Data::read($array['_attribs']['id']);
+        }else{
+            if (!isset($array['class'])) $array['class'] = '\boolive\data\Entity';
+            $obj = new $array['class']();
+        }
+        if (!empty($array['_errors'])){
+            $obj->_errors = Error::createFromArray($array['_errors']);
+        }
+        if (isset($array['_children'])){
+            foreach ($array['_children'] as $key => $child){
+                $obj->_children[$key] = self::fromArray($child);
+                $obj->_children[$key]->_parent = $obj;
+                if ($obj->_children[$key]->_errors){
+                    $obj->errors()->_children->add($obj->_children[$key]->_errors);
+                }
+            }
+        }
+        $obj->_attribs =$array['_attribs'];
+        $obj->_is_inner = $array['_is_inner'];
+        $obj->_is_saved = $array['_is_saved'];
+        $obj->_changed = $array['_changed'];
+        $obj->_checked = $array['_checked'];
+        $obj->_autoname = $array['_autoname'];
+        $obj->_current_name = $array['_current_name'];
+        return $obj;
     }
 
     /**

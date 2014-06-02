@@ -19,8 +19,8 @@ class Destroy extends Widget
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::any(
-                    Rule::arrays(Rule::entity(/*array('access', 'destroy')/*array('attr','is_draft','=',1)*/)),
-                    Rule::entity(/*array('access', 'destroy')/*array('attr','is_draft','=',1)*/)
+                    Rule::arrays(Rule::entity(/*array('access', 'destroy')/*array('is_draft','=',1)*/)),
+                    Rule::entity(/*array('access', 'destroy')/*array('is_draft','=',1)*/)
                 )->required(),
                 'call' => Rule::string()->default('')->required(),
                 'select' => Rule::in(null, 'structure', 'property', 'heirs')->required()
@@ -46,7 +46,7 @@ class Destroy extends Widget
                 //}catch (Error $e){
                 if ($v['result'] === false){
                     if (empty($v['error'])) $v['error'] = '';
-                    $v['error'].= $o->error()->getUserMessage(true);
+                    $v['error'].= $o->errors()->getUserMessage(true);
                 }
                 //}
             }
@@ -91,10 +91,10 @@ class Destroy extends Widget
     function deleteHeirs($obj)
     {
         $heirs = $obj->find(array('select'=>'heirs', 'depth'=>array(1,1), 'where'=>array(
-            array('attr', 'is_hidden', '>=', 0),
-            array('attr', 'is_draft', '>=', 0),
-            array('attr', 'is_mandatory', '>=', 0),
-            array('attr', 'diff', '>=', Entity::DIFF_NO)
+            array('is_hidden', '>=', 0),
+            array('is_draft', '>=', 0),
+            array('is_mandatory', '>=', 0),
+            array('diff', '>=', Entity::DIFF_NO)
         )));
         foreach ($heirs as $h) $this->deleteHeirs($h);
         $obj->destroy(true, true);

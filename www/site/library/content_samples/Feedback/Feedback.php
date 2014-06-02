@@ -24,7 +24,7 @@ class Feedback extends Entity
                     $this->email_from->value()
                 );
             }catch (\Exception $e){
-                $this->error()->fatal = $e;
+                $this->errors()->fatal = $e;
             }
         }
         return false;

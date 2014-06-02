@@ -46,7 +46,7 @@ class CKEditorUploader extends View
                 if ($file->save()){
                     $file_url = $file->file(null, false);
                 }else{
-                    $error = $file->error()->getUserMessage();
+                    $error = $file->errors()->getUserMessage();
                 }
             }else{
                 $error = 'Пожалуйста, сохраните текст перед загрузкой в него картинки';

@@ -118,7 +118,7 @@ class Attribs extends Widget
                 }
                 $v['attrib'] = $this->callLoad();
             }else{
-                $v['error'] = $this->_input['REQUEST']['object']->error()->toArray();
+                $v['error'] = $this->_input['REQUEST']['object']->errors()->toArray();
             }
         }
         return $v;

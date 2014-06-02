@@ -75,7 +75,7 @@ class RESTful extends View
                         header("HTTP/1.1 204 No Content");
                     }else{
                         header("HTTP/1.1 403 Forbidden");
-                        echo F::toJSON(array('error' => $obj->error()->toArray()));
+                        echo F::toJSON(array('error' => $obj->errors()->toArray()));
                     }
                 }else{
                     header("HTTP/1.1 404 Not Found");
@@ -182,7 +182,7 @@ class RESTful extends View
         }else{
             header("HTTP/1.1 400 Bad Request");
             header('Content-Type: application/json; charset=utf-8');
-            echo F::toJSON(array('error'=>$error->toArray(true), 'result'=>$obj->export(false, true, false)));
+            echo F::toJSON(array('error'=>$obj->errors()->toArray(true), 'result'=>$obj->export(false, true, false)));
         }
     }
 
@@ -232,7 +232,7 @@ class RESTful extends View
         }else{
             header("HTTP/1.1 400 Bad Request");
             header('Content-Type: application/json; charset=UTF-8');
-            echo F::toJSON(array('error'=>$obj->error()->toArray(true), 'result'=>$obj->export(false, true, false)));
+            echo F::toJSON(array('error'=>$obj->errors()->toArray(true), 'result'=>$obj->export(false, true, false)));
         }
     }
 
