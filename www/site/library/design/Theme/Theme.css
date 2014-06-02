@@ -9,19 +9,34 @@
     font-weight: normal;
     font-size: 16px;
     }
+.form__result{
+    padding: 10px 20px;
+    margin: 15px 0;
+    border: 1px dotted #999;
+    }
+.form__result_error{
+    border-color: #f00;
+    background: #ffe6e6;
+    color: #f00;
+    }
+.form__result_ok{
+    border-color: #31baf5;
+    background: #f0f9fc;
+    color: #337acc;
+    }
 /* Пункт формы */
-.item{
+.field{
     margin: 15px 0;
     }
-    .item_state_error{
+    .field_state_error{
 
     }
-.item__label{
+.field__label{
     display: block;
     margin: 5px 0;
     font-size: 12px;
     }
-.item__input{
+.field__input{
     box-sizing: border-box;
     padding: 5px;
     width: 166px;
@@ -32,12 +47,12 @@
     font-size: 14px;
     }
 /* Текст ошибки показывается, когда пункт формы со статусом error*/
-.item__error{
+.field__error{
     display: none;
     color: #f00;
     font-size: 12px;
     }
-    .item_state_error .item__error{
+    .field_state_error .field__error{
         display: block;
         }
 /* Кнопки */
@@ -78,4 +93,10 @@
 .input_size_medium{
     width: 400px;
     max-width: 100%;
+    }
+
+.input_type_textarea{
+    width: 100%;
+    min-height: 100px;
+    font-family: Arial, Helvetica, sans-serif;
     }
