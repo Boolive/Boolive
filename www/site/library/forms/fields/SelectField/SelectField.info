@@ -1,0 +1,63 @@
+{
+    "value": "SelectField.tpl",
+    "value_type": 3,
+    "proto": "/library/forms/fields/Field",
+    "is_default_class": false,
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Выбор из списка",
+            "proto": "/library/forms/fields/Field/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Выбор объекта, на которого ссылаться",
+            "value_type": 2,
+            "proto": "/library/forms/fields/Field/description",
+            "is_property": true,
+            "order": 2
+        },
+        "res": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/forms/fields/Field/res",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 3
+        },
+        "object_rule": {
+            "value": "attr(is_link,>,0)",
+            "value_type": 2,
+            "proto": "/library/forms/fields/Field/object_rule",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 8
+        },
+        "list": {
+            "is_default_value": true,
+            "value": "",
+            "proto": "/library/basic/Object",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 9,
+            "children": {
+                "title": {
+                    "value": "Список",
+                    "proto": "/library/basic/Object/title",
+                    "is_mandatory": true,
+                    "is_property": true,
+                    "order": 1
+                },
+                "description": {
+                    "value": "Объекты для выбора",
+                    "value_type": 2,
+                    "proto": "/library/basic/Object/description",
+                    "is_property": true,
+                    "order": 5
+                }
+            }
+        }
+    }
+}
