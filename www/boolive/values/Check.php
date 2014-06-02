@@ -338,6 +338,9 @@ class Check
     {
         $cond = isset($rule->entity[0])? $rule->entity[0] : false;
         if (!is_object($value)){
+            if (is_string($value) && substr($value, 0,1) == '{'){
+                $value = json_decode($value, true);
+            }
             if (is_string($value)){
                 // Пробуем получить объект по uri
                 $value = Data::read($value.'&cache=2');
