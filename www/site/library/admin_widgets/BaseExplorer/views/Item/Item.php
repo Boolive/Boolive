@@ -48,7 +48,6 @@ class Item extends Widget
         }
         $icon = $obj->icon->inner();
         $v['icon'] = $icon->isFile() && !$icon->isHidden(null, false) && !$icon->isDraft(null, false)? $icon->file() : false;
-        $v['diff'] = $obj->diff();
         return parent::show($v,$commands, $input);
     }
 }

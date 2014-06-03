@@ -1,7 +1,7 @@
 <div class="layout">
     <div class="header">
         <div class="wrapper">
-            <?php echo $v->Logo->string();?>
+<!--            --><?php //echo $v->Logo->string();?>
             <?php echo $v->TopMenu->string();?>
             <?php echo $v->SearchForm->string();?>
         </div>
