@@ -272,6 +272,8 @@ class MySQLStore extends Entity
                 // Прототип и уровень наследования
                 $attr['proto'] = isset($attr['proto']) ? $this->localId($attr['proto']) : 0;
                 $attr['proto_cnt'] = $entity->protoCount();
+                // Автор
+                $attr['author'] = isset($attr['author']) ? $this->localId($attr['author']) : $this->localId(Auth::getUser()->key());
                 // Числовое значение
                 $attr['valuef'] = floatval($attr['value']);
                 // Переопределено ли значение и кем
@@ -2096,6 +2098,7 @@ class MySQLStore extends Entity
                   `value` VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'Строковое значение',
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
                   `value_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'Тип значения. 1 - строка, 2 - текст, 3 - файл',
+                  `author` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор автора',
                   `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Черновик или нет? Значение зависит от родителя',
                   `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
