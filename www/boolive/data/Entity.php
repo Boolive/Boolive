@@ -27,15 +27,6 @@ class Entity implements ITrace
     /** @const int Максимальная глубина для поиска */
     const MAX_DEPTH = 4294967295;
 
-    /** @const int У объекта нет отличий */
-    const DIFF_NO = 0;
-    /** @const int Объекты отличаются атрибутами */
-    const DIFF_CHANGE = 1;
-    /** @const int Объет удален */
-    const DIFF_DELETE = 2;
-    /** @const int Объект добавлен */
-    const DIFF_ADD = 3;
-
     /** @const int Автоматический выбор типа значения */
     const VALUE_AUTO = 0;
     /** @const int Простой тип. Строка до 255 символов */
@@ -70,10 +61,6 @@ class Entity implements ITrace
         'is_accessible'=> 1,
         'is_exist'     => 0,
         'author'	   => null,
-        'update_step'  => 0,
-        'update_time'  => 0,
-        'diff'         => Entity::DIFF_NO,
-        'diff_from'    => 0
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
@@ -168,8 +155,6 @@ class Entity implements ITrace
             'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
             'is_completed' => Rule::bool()->int(), // Признак, дополнен объект свойствами прототипа или нет?
             'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
-            'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
-            'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
             // Сведения о загружаемом файле. Не является атрибутом объекта, но используется в общей обработке
             'file'	=> Rule::arrays(array(
                 'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -400,7 +385,7 @@ class Entity implements ITrace
         if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
             if (($proto = $this->isDefaultValue(null, true)) && $proto->isExist()){
                 $file = $proto->file(null, $root);
-                if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
+                if ($cache_remote && Data::isAbsoluteUri($file)){
                     $file_path = Data::convertAbsoluteToLocal($file, false);
                     if (!is_file($f = DIR_SERVER.'remote/'.$file_path)){
                         // Загрзка файла с сервера
@@ -849,36 +834,6 @@ class Entity implements ITrace
         }else{
             return !empty($this->_attribs['is_default_class']);
         }
-    }
-
-    /**
-     * Найденные отличия в объекте
-     * @param null|int $diff
-     * @return int Код отличия
-     */
-    function diff($diff = null)
-    {
-        if (isset($diff)){
-            $this->_attribs['diff'] = $diff;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return $this->_attribs['diff'];
-    }
-
-    /**
-     * От куда найдены отличия в объекте?
-     * @param null|int $diff_from
-     * @return int Код, от куда обновления
-     */
-    function diff_from($diff_from = null)
-    {
-        if (isset($diff_from)){
-            $this->_attribs['diff_from'] = $diff_from;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return $this->_attribs['diff_from'];
     }
 
     /**
@@ -1755,7 +1710,7 @@ class Entity implements ITrace
             case 'not':
                 return !$this->verify($cond[1]);
             case 'attr':
-                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
+                if (in_array($cond[1], array('is', 'name', 'uri', 'key', 'date', 'order', 'value'))){
                     $value = $this->{$cond[1]}();
                 }else
                 if ($cond[1] == 'is_hidden'){
@@ -2105,8 +2060,6 @@ class Entity implements ITrace
         if (!empty($info['children']) && is_array($info['children'])){
             foreach ($info['children'] as $name => $child){
                 //$child['uri'] = $this->uri().'/'.$name;
-                if ($this->diff() == Entity::DIFF_ADD) $this->{$name}->diff(Entity::DIFF_ADD);
-                if ($this->diff_from() < 1) $this->{$name}->diff_from($this->diff_from()-1);
                 $this->{$name}->import($child);
                 $this->{$name}->isDraft(!empty($child['is_draft']));
             }

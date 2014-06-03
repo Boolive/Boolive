@@ -131,8 +131,7 @@ class BaseExplorer extends AutoWidgetList2
             $any[] = array('all', array(
                 array('attr', 'is_hidden', '=', $obj['is_hidden']),
                 array('attr', 'is_draft', '=', $obj['is_draft']),
-                array('attr', 'is_mandatory', '=', 0),
-                array('attr', 'diff', '!=', Entity::DIFF_ADD)
+                array('attr', 'is_mandatory', '=', 0)
             ));
         }
         // Скрытые объекты
@@ -152,12 +151,6 @@ class BaseExplorer extends AutoWidgetList2
             $any[] = array('attr', 'is_mandatory', '!=', 0);
         }else{
             $cond['where'][] = array('attr', 'is_mandatory', '=', 0);
-        }
-        // Дополнения
-        if (isset($filters['updates']) && $filters['updates']->value()) {
-            $any[] = array('attr', 'diff', '!=', Entity::DIFF_NO);
-        }else{
-            $cond['where'][] = array('attr', 'diff', '!=', Entity::DIFF_ADD);
         }
         // Никакие
         if (empty($any)) {
