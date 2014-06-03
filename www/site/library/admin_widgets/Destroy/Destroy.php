@@ -93,8 +93,7 @@ class Destroy extends Widget
         $heirs = $obj->find(array('select'=>'heirs', 'depth'=>array(1,1), 'where'=>array(
             array('attr', 'is_hidden', '>=', 0),
             array('attr', 'is_draft', '>=', 0),
-            array('attr', 'is_mandatory', '>=', 0),
-            array('attr', 'diff', '>=', Entity::DIFF_NO)
+            array('attr', 'is_mandatory', '>=', 0)
         )));
         foreach ($heirs as $h) $this->deleteHeirs($h);
         $obj->destroy(true, true);

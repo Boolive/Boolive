@@ -38,32 +38,6 @@
             margin-top: -2px;
             text-decoration: none;
             }
-        .Item_diff-add .Field__title:before,
-        .Item_diff-change .Field__title:before,
-        .Item_diff-delete .Field__title:before{
-            vertical-align: middle;
-            font: normal 12px/8px "Times New Roman";
-            color: #FFF;
-            font-weight: bold;
-            margin-right: 4px;
-            text-decoration: none;
-            border-radius: 10px;
-            padding: 0px 4px;
-            position: static;
-        }
-        .Item_diff-add .Field__title:before{
-            content: '+';
-            background-color: #85cc29;
-            }
-        .Item_diff-change .Field__title:before{
-            content: '!';
-            background-color: #9352cc;
-            padding: 0 7px;
-            }
-        .Item_diff-delete .Field__title:before{
-            content: '×';
-            background-color: #e67573;
-            }
     .Field__description{
         color: #999;
         font-size: 11px;

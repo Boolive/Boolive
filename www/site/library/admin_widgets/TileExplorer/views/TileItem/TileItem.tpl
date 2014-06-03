@@ -4,17 +4,6 @@
     if($v['is_draft']->bool()) $class .= ' Item_draft';
     if($v['is_link']->bool()) $class .= ' Item_link';
     if($v['is_mandatory']->bool()) $class .= ' Item_mandatory';
-//    switch ($v['diff']->int()){
-//        case \boolive\data\Entity::DIFF_CHANGE:
-//            $class .= ' Item_diff-change';
-//            break;
-//        case \boolive\data\Entity::DIFF_ADD:
-//            $class .= ' Item_diff-add';
-//            break;
-//        case \boolive\data\Entity::DIFF_DELETE:
-//            $class .= ' Item_diff-delete';
-//            break;
-//    }
     $url = ltrim($v['uri'],'/');
     // Разделение длинных заголовков на два и округление ширены плитки
     $title_big = $v['title']->escape();

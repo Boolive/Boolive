@@ -99,7 +99,6 @@ class MenuSimple extends Widget
             array('attr', 'is_hidden', '=', 0),
             array('attr', 'is_draft', '=', 0),
             array('attr', 'is_property', '=', 0),
-            array('attr', 'diff', '!=', Entity::DIFF_ADD),
             array('is', $is_list)
         ));
         $cond['group'] = true; // Для выбранных объектов выполнять подвыборки
