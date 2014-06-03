@@ -395,6 +395,9 @@ class MySQLStore extends Entity
                         if ($current['proto'] != $attr['proto'] && !$entity->isAccessible('write/change/proto')){
                             $error->access = new Error('Нет доступа на смену прототипа', 'write/change/proto');
                         }else
+                        if ($current['author'] != $attr['author'] && !$entity->isAccessible('write/change/author')){
+                            $error->access = new Error('Нет доступа на смену авторства', 'write/change/author');
+                        }else
                         if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
                             $error->access = new Error('Нет доступа на смену признака "своя логика"', 'write/change/is_default_class');
                         }else
@@ -520,7 +523,7 @@ class MySQLStore extends Entity
                     }
                     unset($attr['class']);
                 }
-                $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type',
+                $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type', 'author',
                         'is_draft', 'is_hidden', 'is_link', 'is_mandatory', 'is_property', 'is_relative', 'is_default_value', 'is_default_class',
                         'proto_cnt', 'parent_cnt');
                 $cnt = sizeof($attr_names);
@@ -823,6 +826,7 @@ class MySQLStore extends Entity
                             $child = $proto->birth($entity, false);
                             $child->isMandatory($proto->isMandatory());
                             $child->order($proto->order());
+                            $child->author($entity->author());
                             $this->write($child, false);
                             // После сохранения, когда получает уникальное имя, меняем прототип, если он должен быть относительным
                             if ($proto->isRelative() && ($p = $proto->proto())){
@@ -1889,6 +1893,7 @@ class MySQLStore extends Entity
         $attribs['id'] = $this->key.'//'.$attribs['id'];
         $attribs['parent'] = $attribs['parent'] == 0 ? null : $this->key.'//'.$attribs['parent'];
         $attribs['proto'] = $attribs['proto'] == 0 ? null : $this->key.'//'.$attribs['proto'];
+        $attribs['author'] = $attribs['author'] == 0 ? null : $this->key.'//'.$attribs['author'];
         $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
         $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_default_class'] : $attribs['is_default_class'];
         $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_link'] : $attribs['is_link'];
