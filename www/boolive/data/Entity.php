@@ -1943,6 +1943,7 @@ class Entity implements ITrace
         //}
         if ($this->valueType() > Entity::VALUE_SIMPLE) $export['value_type'] = $this->valueType();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
+        if ($this->author()) $export['author'] = $this->author()->uri();
         if ($this->isLink()) $export['is_link'] = true;
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
         if ($this->isHidden(null, false)) $export['is_hidden'] = true;
@@ -2039,6 +2040,8 @@ class Entity implements ITrace
         if (!empty($info['value_type'])) $this->valueType($info['value_type']);
         // Прототип
         if (isset($info['proto'])) $this->proto($info['proto']);
+        // Автор
+        if (isset($info['author'])) $this->author($info['author']);
         // Признаки
         $this->isLink(!empty($info['is_link']));
         if (!empty($info['is_hidden'])) $this->isHidden(true);
@@ -2046,7 +2049,7 @@ class Entity implements ITrace
         if (!empty($info['is_relative'])) $this->isRelative(true);
         if (!empty($info['is_mandatory'])) $this->isMandatory(true);
         if (!empty($info['is_property'])) $this->isProperty(true);
-        if (!isset($info['is_completed']) || empty($info['is_completed'])) $this->isCompleted(true);
+        if (!isset($info['is_completed']) || $info['is_completed']) $this->isCompleted(true);
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);

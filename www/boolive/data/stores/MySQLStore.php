@@ -273,7 +273,7 @@ class MySQLStore extends Entity
                 $attr['proto'] = isset($attr['proto']) ? $this->localId($attr['proto']) : 0;
                 $attr['proto_cnt'] = $entity->protoCount();
                 // Автор
-                $attr['author'] = isset($attr['author']) ? $this->localId($attr['author']) : $this->localId(Auth::getUser()->key());
+                $attr['author'] = isset($attr['author']) ? $this->localId($attr['author']) : (IS_INSTALL ? $this->localId(Auth::getUser()->key()): 0);
                 // Числовое значение
                 $attr['valuef'] = floatval($attr['value']);
                 // Переопределено ли значение и кем
@@ -525,7 +525,7 @@ class MySQLStore extends Entity
                 }
                 $attr_names = array('id', 'name', 'order', 'date', 'parent', 'proto', 'value', 'valuef', 'value_type', 'author',
                         'is_draft', 'is_hidden', 'is_link', 'is_mandatory', 'is_property', 'is_relative', 'is_default_value', 'is_default_class',
-                        'proto_cnt', 'parent_cnt');
+                        'is_completed', 'proto_cnt', 'parent_cnt');
                 $cnt = sizeof($attr_names);
                 // Запись объекта (создание или обновление при наличии)
                 // Объект идентифицируется по id
