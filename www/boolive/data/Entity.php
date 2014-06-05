@@ -1686,7 +1686,9 @@ class Entity implements ITrace
     {
         if (empty($cond)) return true;
         if (is_string($cond)) $cond = Data::parseCond($cond);
-        if (count($cond)==1) $cond = $cond[0];
+        if (count($cond)==1 && is_array($cond[0])){
+            $cond = $cond[0];
+        }
         if (is_array($cond[0])) $cond = array('all', $cond);
         switch (strtolower($cond[0])){
             case 'all':
@@ -1802,7 +1804,6 @@ class Entity implements ITrace
                     if ($this->in($parent)) return true;
                 }
                 return false;
-                break;
             case 'is':
                 if (is_array($cond[1])){
                     $cond = $cond[1];
@@ -1833,7 +1834,6 @@ class Entity implements ITrace
                     if ($this->childOf($parent)) return true;
                 }
                 return false;
-                break;
             case 'heirof':
                 if (is_array($cond[1])){
                     $cond = $cond[1];
@@ -1844,6 +1844,40 @@ class Entity implements ITrace
                     if ($this->heirOf($proto)) return true;
                 }
                 return false;
+            case 'ismy':
+                return $this->isMy();
+            case 'ishidden':
+                if (!isset($cond[1])){
+                    $cond[1] = true;
+                }else
+                if ($cond[1] === 'false'){
+                    $cond[1] = false;
+                }
+                return $this->isHidden(null, $cond[1]);
+            case 'isdraft':
+                if (!isset($cond[1])){
+                    $cond[1] = true;
+                }else
+                if ($cond[1] === 'false'){
+                    $cond[1] = false;
+                }
+                return $this->isDraft(null, !(isset($cond[1])&&$cond[1]==false));
+            case 'ismandatory':
+                return $this->isMandatory();
+            case 'isproperty':
+                return $this->isCompleted();
+            case 'isfile':
+                return $this->isFile();
+            case 'isinner':
+                return $this->isInner();
+            case 'islink':
+                return $this->isLink();
+            case 'isrelative':
+                return $this->isRelative();
+            case 'isdefaultvalue':
+                return $this->isDefaultValue();
+            case 'isdefaultclass':
+                return $this->isDefaultClass();
             case 'access':
                 return $this->isAccessible($cond[1]);
             default: return false;
@@ -1921,6 +1955,18 @@ class Entity implements ITrace
     function heirOf($object)
     {
         return ($p = $this->proto()) ? $p->is($object) : false;
+    }
+
+    /**
+     * Проверка авторства объекта у текущего пользователя
+     * @return bool
+     */
+    function isMy()
+    {
+        if ($author = $this->author()){
+            return $author->eq(Auth::getUser());
+        }
+        return false;
     }
 
     /**
