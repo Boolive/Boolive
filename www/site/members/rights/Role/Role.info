@@ -115,6 +115,14 @@
                             "is_mandatory": true,
                             "is_property": true,
                             "order": 10
+                        },
+                        "diff": {
+                            "is_default_value": true,
+                            "value": "",
+                            "proto": "/library/access/Role/write/change/diff",
+                            "is_mandatory": true,
+                            "is_property": true,
+                            "order": 11
                         }
                     }
                 }

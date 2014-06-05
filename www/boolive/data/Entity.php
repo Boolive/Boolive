@@ -49,6 +49,7 @@ class Entity implements ITrace
         'proto_cnt'    => 0,
         'value'	 	   => '',
         'value_type'   => Entity::VALUE_AUTO,
+        'author'	   => null,
         'is_draft'	   => 0,
         'is_hidden'	   => 0,
         'is_link'      => 0,
@@ -60,7 +61,6 @@ class Entity implements ITrace
         'is_completed' => 0,
         'is_accessible'=> 1,
         'is_exist'     => 0,
-        'author'	   => null,
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
@@ -145,6 +145,7 @@ class Entity implements ITrace
             'proto'        => Rule::uri(), // URI прототипа
             'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
             'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения. Определяет способ хранения (0=авто, 1=простое, 2=текст, 3=файл)
+            'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
             'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
             'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
             'is_link'      => Rule::uri(), // Ссылка или нет?
@@ -154,7 +155,6 @@ class Entity implements ITrace
             'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё?
             'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
             'is_completed' => Rule::bool()->int(), // Признак, дополнен объект свойствами прототипа или нет?
-            'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
             // Сведения о загружаемом файле. Не является атрибутом объекта, но используется в общей обработке
             'file'	=> Rule::arrays(array(
                 'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -2046,7 +2046,7 @@ class Entity implements ITrace
         if (!empty($info['is_relative'])) $this->isRelative(true);
         if (!empty($info['is_mandatory'])) $this->isMandatory(true);
         if (!empty($info['is_property'])) $this->isProperty(true);
-        if (isset($info['is_completed']) && empty($info['is_completed'])) $this->isCompleted(true);
+        if (!isset($info['is_completed']) || empty($info['is_completed'])) $this->isCompleted(true);
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);

@@ -599,7 +599,9 @@ class MySQLStore extends Entity
                     $this->makeProtos($attr['id'], $attr['proto'], 0, false, $incomplete, $attr['proto']?$entity->proto()->uri():null);
                 }
                 // Обновить дату изменения у родителей
-                $this->updateDate($attr['id'], $attr['date']);
+                if ($is_write){
+                    $this->updateDate($attr['id'], $attr['date']);
+                }
 
                 if (!empty($current)){
                     // Обновление признаков у подчиненных
