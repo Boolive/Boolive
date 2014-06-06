@@ -23,7 +23,7 @@ class Draft extends ToggleAction
     {
         /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
-        $this->_state = $object->isDraft(null, false);
+        $this->_state = $object->isDraft();
     }
 
     function toggle()
@@ -33,7 +33,7 @@ class Draft extends ToggleAction
         $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
         if ($first = reset($objects)){
             $result['changes'] = array();
-            $draft = !$first->isDraft(null, false);
+            $draft = !$first->isDraft();
             foreach ($objects as $o){
                 try{
                     /** @var \boolive\data\Entity $o */
@@ -41,13 +41,13 @@ class Draft extends ToggleAction
                     // @todo Обрабатывать ошибки
                     $o->save();
                     $result['changes'][$o->uri()] = array(
-                        'is_draft' => $o->isDraft(null, false)
+                        'is_draft' => $o->isDraft()
                     );
                 }catch (Error $e){
                     $result['errors'][$o->uri()] = $e->getUserMessage(true);
                 }
             }
-            $result['state'] = $first->isDraft(null, false);
+            $result['state'] = $first->isDraft();
         }
         return $result;
     }

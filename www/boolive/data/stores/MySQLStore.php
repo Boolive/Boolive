@@ -315,6 +315,7 @@ class MySQLStore extends Entity
                 }else{
                     $attr['id'] = $this->localId($attr['id'], true, $new_id);
                 }
+
                 // Своё значение
                 if (is_null($attr['is_default_value'])){
                     $attr['is_default_value'] = $attr['id'];
@@ -326,6 +327,7 @@ class MySQLStore extends Entity
                     $attr['value'] = mb_substr($attr['value'],0,255);
                     $attr['value_type'] = Entity::VALUE_TEXT;
                 }
+
                 // Если значение файл, то подготовливаем для него имя
                 if (isset($attr['file'])){
                     $attr['value_type'] = Entity::VALUE_FILE;
@@ -407,10 +409,10 @@ class MySQLStore extends Entity
                         if ($current['is_property'] != $attr['is_property'] && !$entity->isAccessible('write/change/is_property')){
                             $error->access = new Error('Нет доступа на смену признака "свойство"', 'write/change/is_property');
                         }
-    //                    else
-    //                    if ($current['order'] != $attr['order'] && ($p = $entity->parent()) && !$p->isAccessible('order')){
-    //                        $error->access = new Error('Нет доступа на упорядочивание подчиненных', 'order');
-    //                    }
+//                        else
+//                        if ($current['order'] != $attr['order'] && ($p = $entity->parent()) && !$p->isAccessible('order')){
+//                            $error->access = new Error('Нет доступа на упорядочивание подчиненных', 'order');
+//                        }
                     }
                     if ($error->isExist()) throw $error;
                 }
@@ -437,7 +439,6 @@ class MySQLStore extends Entity
                         // Обновление отношений
                         $this->makeParents($attr['id'], $attr['parent'], $dl, true);
                     }
-
                     if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
                         // Переименование/перемещение папки объекта
                         $dir = DIR_SERVER.'site'.$uri_new;
@@ -604,23 +605,6 @@ class MySQLStore extends Entity
                 }
 
                 if (!empty($current)){
-                    // Обновление признаков у подчиненных
-                    $u = array(
-                        'sql' => '',
-                        'binds' => array(':obj'=>$attr['id'])
-                    );
-                    foreach (array('is_draft', 'is_hidden') as $key){
-                        $d = $attr[$key] - $current[$key];
-                        if ($d != 0){
-                            $u['sql'].=' {objects}.'.$key.' = {objects}.'.$key.' + :d'.$key.',';
-                            $u['binds'][':d'.$key] = $d;
-                        }
-                    }
-                    if (!empty($u['sql'])){
-                        $q = $this->db->prepare('UPDATE {objects}, {parents} SET '.trim($u['sql'],',').' WHERE {parents}.parent_id = :obj AND {parents}.object_id = {objects}.id AND {parents}.level > 0 AND {parents}.is_delete = 0');
-                        $q->execute($u['binds']);
-                    }
-                    unset($u);
                     // Обновление наследников
                     $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
                     if (!$incomplete && $current['proto'] != $attr['proto']){
@@ -690,17 +674,14 @@ class MySQLStore extends Entity
                 $entity->_attribs['name'] = $attr['name'];
                 $entity->_attribs['value'] = $value_src;
                 $entity->_attribs['value_type'] = $attr['value_type'];
-                $entity->_attribs['is_exist'] = 1;
+                $entity->_attribs['is_exist'] = true;
+                $entity->_attribs['order'] = $attr['order'];
                 $entity->_changed = false;
                 $entity->_autoname = false;
                 if ($entity->_attribs['uri'] != $curr_uri){
                     $entity->updateURI();
                 }
                 $this->db->commit();
-
-//                if ($prototype_children){
-//                    $this->findUpdates($entity, 100, 1, false, false);
-//                }
 
                 $this->afterWrite($attr, empty($current)?array():$current);
 
@@ -850,7 +831,7 @@ class MySQLStore extends Entity
                 $complete_step++;
             }while($complete_size == count($proto_children));
         }
-        $q = $this->db->query('UPDATE {objects} SET is_completed = 1 WHERE id = ?');
+        $q = $this->db->prepare('UPDATE {objects} SET is_completed = 1 WHERE id = ?');
         $q->execute(array($this->localId($entity->id(), false)));
         return true;
     }
@@ -1899,18 +1880,21 @@ class MySQLStore extends Entity
         $attribs['is_default_value'] = $this->key.'//'.$attribs['is_default_value'];
         $attribs['is_default_class'] = ($attribs['is_default_class'] !== '0' && $attribs['is_default_class'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_default_class'] : $attribs['is_default_class'];
         $attribs['is_link'] = ($attribs['is_link'] !== '1' && $attribs['is_link'] !== '0' && $attribs['is_link'] != Entity::ENTITY_ID)? $this->key.'//'.$attribs['is_link'] : $attribs['is_link'];
-        $attribs['is_accessible'] = isset($attribs['is_accessible'])? $attribs['is_accessible'] : 1;
-        $attribs['is_exist'] = 1;
         $attribs['order'] = intval($attribs['order']);
         $attribs['date'] = intval($attribs['date']);
         $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
         $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
         $attribs['value_type'] = intval($attribs['value_type']);
-        if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = intval($attribs['is_draft']);
-        if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = intval($attribs['is_hidden']);
-        $attribs['is_mandatory'] = intval($attribs['is_mandatory']);
-        $attribs['is_completed'] = intval($attribs['is_completed']);
-        $attribs['is_property'] = intval($attribs['is_property']);
+        if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = true;
+        if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = true;
+        if (empty($attribs['is_mandatory'])) unset($attribs['is_mandatory']); else $attribs['is_mandatory'] = true;
+        if (empty($attribs['is_completed'])) unset($attribs['is_completed']); else $attribs['is_completed'] = true;
+        if (empty($attribs['is_property'])) unset($attribs['is_property']); else $attribs['is_property'] = true;
+        if (empty($attribs['is_relative'])) unset($attribs['is_relative']); else $attribs['is_relative'] = true;
+        if (isset($attribs['is_accessible'])){
+            if (!empty($attribs['is_accessible'])) unset($attribs['is_accessible']); else $attribs['is_accessible'] = false;
+        }
+        $attribs['is_exist'] = true;
         unset($attribs['valuef']);
         // Свой класс
         $attribs['class_name'] = '\\boolive\\data\\Entity';
@@ -2106,8 +2090,8 @@ class MySQLStore extends Entity
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
                   `value_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'Тип значения. 1 - строка, 2 - текст, 3 - файл',
                   `author` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор автора',
-                  `is_draft` INT(10) NOT NULL DEFAULT '0' COMMENT 'Черновик или нет? Значение зависит от родителя',
-                  `is_hidden` INT(10) NOT NULL DEFAULT '0' COMMENT 'Скрыт или нет? Значение зависит от родителя',
+                  `is_draft` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Черновик (1) или нет (0)?',
+                  `is_hidden` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Скрыт (1) или нет (0)?',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
                   `is_mandatory` INT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Обязательный (1) или нет (0)? ',
                   `is_property` INT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Свойство (1) или нет (0)? ',

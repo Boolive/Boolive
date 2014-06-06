@@ -27,7 +27,7 @@ class Part extends Page
         $obj = $this->_input['REQUEST']['object'];
         $count_per_page = max(1, $this->count_per_page->value());
         $where = array('all', array(
-            array('attr', 'is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
+            array('attr', 'is_hidden', '=', 0),
             array('attr', 'is_draft', '=', 0),
             array('attr', 'is_property', '=', 0)
         ));

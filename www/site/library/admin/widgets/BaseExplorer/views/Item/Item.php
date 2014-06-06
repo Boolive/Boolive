@@ -28,8 +28,8 @@ class Item extends Widget
         $v['value'] = (string)$obj->value();
         $v['uri'] = $obj->uri(false, true);
         $v['id'] = $obj->key();
-        $v['is_hidden'] = $obj->isHidden(null, false);
-        $v['is_draft'] = $obj->isDraft(null, false);
+        $v['is_hidden'] = $obj->isHidden();
+        $v['is_draft'] = $obj->isDraft();
         $v['is_file'] = $obj->isFile();
         $v['is_link'] = $obj->isLink();
         $v['is_mandatory'] = $obj->isMandatory();
@@ -47,7 +47,7 @@ class Item extends Widget
             $v['value_short'].= '...';
         }
         $icon = $obj->icon->inner();
-        $v['icon'] = $icon->isFile() && !$icon->isHidden(null, false) && !$icon->isDraft(null, false)? $icon->file() : false;
+        $v['icon'] = $icon->isFile() && !$icon->isHidden() && !$icon->isDraft()? $icon->file() : false;
         return parent::show($v,$commands, $input);
     }
 }
