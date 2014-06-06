@@ -10,9 +10,14 @@ namespace boolive\auth;
 
 use boolive\data\Data,
     boolive\input\Input;
+use boolive\functions\F;
 
 class Auth
 {
+    /** @const  Файл конфигурации */
+    const CONFIG_FILE = 'config.auth.php';
+    /** @var array Конфигурация */
+    private static $config_auth;
     /** Эталон пользователей */
     const USER = '/library/access/User';
     /** Группа гостей */
@@ -21,6 +26,12 @@ class Auth
     const GROUP_REGISTERED = '/members/registered';
     /** @var \site\library\access\User\User Текущий пользователь */
     static private $user;
+
+    static function activate()
+    {
+        // Конфиг хранилищ
+        self::$config_auth = F::loadConfig(DIR_SERVER.self::CONFIG_FILE, 'config');
+    }
 
     /**
      * Текущий пользователь
@@ -137,4 +148,9 @@ class Auth
     {
 		return hash('sha256', uniqid(rand(), true).serialize($_SERVER));
 	}
+
+    static function isSuperAdmin()
+    {
+        return in_array(self::getUser()->uri(), self::$config_auth['super-admins']);
+    }
 }

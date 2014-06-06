@@ -9,6 +9,7 @@
  */
 namespace site\library\access\Member;
 
+use boolive\auth\Auth;
 use boolive\data\Data;
 use boolive\data\Entity,
     boolive\functions\F;
@@ -34,12 +35,13 @@ class Member extends Entity
      * Условие доступа к объектам
      * Родитель и глубина указывается для оптимизации условия
      * @param string $action_kind Вид действия
-     * @param $object Объект, к которому проверяется доступ
+     * @param Entity $object Объект, к которому проверяется доступ
      * @return array
      */
     function getAccessCond($action_kind, $object = null)
     {
         if (!isset($this->_rights[$action_kind])){
+            if (Auth::isSuperAdmin()) return $this->_rights[$action_kind] = array();
             //Trace::groups('Data')->group('START getAccess');
             $this->_rights[$action_kind] = array();
             $cond = null;
@@ -51,7 +53,6 @@ class Member extends Entity
                 $parents = $this->parent()->find(array('select'=>'parents', 'depth' => array(0,'max'), 'where'=>array('attr', 'parent_cnt', '>', 0), 'order' => array('parent_cnt', 'asc'), 'group'=>true), false, true, false);
                 //array_unshift($parents, $this);
             }
-
             $obj = reset($parents);
             // Выбор ролей члена и всех его групп (родителей)
             do{
