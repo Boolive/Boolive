@@ -1,20 +1,20 @@
 {
     "value": "normalize.css",
     "value_type": 3,
-    "proto": "/library/design/CSS",
+    "proto": "/library/design/Css",
     "is_mandatory": true,
     "order": 3,
     "children": {
         "title": {
             "value": "Normalize.css",
-            "proto": "/library/design/CSS/title",
+            "proto": "/library/design/Css/title",
             "is_mandatory": true,
             "is_property": true,
             "order": 1
         },
         "description": {
             "value": "Makes browsers render all elements more consistently and in line with modern standards",
-            "proto": "/library/design/CSS/description",
+            "proto": "/library/design/Css/description",
             "is_mandatory": true,
             "is_property": true,
             "order": 2

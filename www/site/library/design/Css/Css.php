@@ -5,11 +5,11 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace site\library\design\CSS;
+namespace site\library\design\Css;
 
 use site\library\views\View\View;
 
-class CSS extends View
+class Css extends View
 {
     protected function rule()
     {
