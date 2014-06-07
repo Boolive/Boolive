@@ -426,6 +426,27 @@ class Data
     }
 
     /**
+     * Дополнение объекта обязательными свойствами от прототипов
+     * @param Entity $entity Дополняемый объект
+     * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
+     * @return bool
+     * @throws \boolive\errors\Error
+     */
+    static function complete($entity, $access = true)
+    {
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore($entity->key())){
+                return $store->complete($entity, $access);
+            }else{
+                $error = new Error('Невозможно дополнить объект', $entity->uri());
+                $error->store = new Error('Неопределено хранилище для объекта', 'not-exist');
+                throw $error;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Уничтожение объекта и его подчиенных
      * @param Entity $entity Уничтожаемый объект
      * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?

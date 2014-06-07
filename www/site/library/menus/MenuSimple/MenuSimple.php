@@ -96,9 +96,9 @@ class MenuSimple extends Widget
         $cond['from'] = $this->object;
         $cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
         $cond['where'] = array('all', array(
-            array('is_hidden', '=', 0),
-            array('is_draft', '=', 0),
-            array('is_property', '=', 0),
+            array('attr', 'is_hidden', '=', 0),
+            array('attr', 'is_draft', '=', 0),
+            array('attr', 'is_property', '=', 0),
             array('is', $is_list)
         ));
         $cond['group'] = true; // Для выбранных объектов выполнять подвыборки

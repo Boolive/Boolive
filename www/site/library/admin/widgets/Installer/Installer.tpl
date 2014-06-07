@@ -7,17 +7,17 @@
                 $list = $v['objects'];//->arrays(\boolive\values\Rule::any());
                 foreach ($list as $item):
                     $diff_class = '';
-                    switch ($item['diff']->int()){
-                        case \boolive\data\Entity::DIFF_CHANGE:
-                            $diff_class = ' change';
-                            break;
-                        case \boolive\data\Entity::DIFF_ADD:
-                            $diff_class = ' add';
-                            break;
-                        case \boolive\data\Entity::DIFF_DELETE:
-                            $diff_class = ' delete';
-                            break;
-                    }
+//                    switch ($item['diff']->int()){
+//                        case \boolive\data\Entity::DIFF_CHANGE:
+//                            $diff_class = ' change';
+//                            break;
+//                        case \boolive\data\Entity::DIFF_ADD:
+//                            $diff_class = ' add';
+//                            break;
+//                        case \boolive\data\Entity::DIFF_DELETE:
+//                            $diff_class = ' delete';
+//                            break;
+//                    }
             ?>
                 <li>
                 <span class="txt-primary"><?php echo $item['title'];?></span>

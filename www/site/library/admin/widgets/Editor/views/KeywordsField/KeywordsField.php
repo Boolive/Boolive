@@ -55,8 +55,8 @@ class KeywordsField extends AutoWidgetList2
         $v['name'] = $obj->name();
         $v['value'] = (string)$obj->value();
         $v['uri'] = $obj->uri(false, true);
-        $v['is_hidden'] = $obj->isHidden(null, false);
-        $v['is_draft'] = $obj->isDraft(null, false);
+        $v['is_hidden'] = $obj->isHidden();
+        $v['is_draft'] = $obj->isDraft();
         $v['is_file'] = $obj->isFile();
         $v['is_link'] = $obj->isLink();
         $v['is_mandatory'] = $obj->isMandatory();

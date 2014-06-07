@@ -119,45 +119,36 @@ class BaseExplorer extends AutoWidgetList2
 
     protected function getList($cond = array())
     {
-        $obj = array(
-            'is_hidden' => $this->_input['REQUEST']['object']->attr('is_hidden'),
-            'is_draft' => $this->_input['REQUEST']['object']->attr('is_draft'),
-        );
         // Выбор свойств отображаемого объекта с учётом текущего фильтра
         $filters = $this->filter->linked()->find(array('key'=>'name', 'cache'=>2));
         $any = array();
         // Обычные объекты. У которых все признаки false
         if ($filters['real']->value()) {
             $any[] = array('all', array(
-                array('is_hidden', '=', $obj['is_hidden']),
-                array('is_draft', '=', $obj['is_draft']),
-                array('is_mandatory', '=', 0),
-                array('diff', '!=', Entity::DIFF_ADD)
+                array('attr', 'is_hidden', '=', 0),
+                array('attr', 'is_draft', '=', 0),
+                array('attr', 'is_mandatory', '=', 0)
             ));
         }
         // Скрытые объекты
         if (isset($filters['hidden']) && $filters['hidden']->value()) {
-            $any[] = array('is_hidden', '!=', $obj['is_hidden']);
+            $any[] = array('attr', 'is_hidden', '=', 1);
         }else{
-            $cond['where'][] = array('is_hidden', '=', $obj['is_hidden']);
+            $cond['where'][] = array('attr', 'is_hidden', '=', 0);
         }
         // Черновики
         if (isset($filters['draft']) && $filters['draft']->value()) {
-            $any[] = array('is_draft', '!=', $obj['is_draft']);
+            $any[] = array('attr', 'is_draft', '=', 1);
         }else{
-            $cond['where'][] = array('is_draft', '=', $obj['is_draft']);
+            $cond['where'][] = array('attr', 'is_draft', '=', 0);
         }
         // Обязательные
         if (isset($filters['mandatory']) && $filters['mandatory']->value()) {
-            $any[] = array('is_mandatory', '!=', 0);
+            $any[] = array('attr', 'is_mandatory', '=', 1);
         }else{
             $cond['where'][] = array('is_mandatory', '=', 0);
         }
-        // Дополнения
-        if (isset($filters['updates']) && $filters['updates']->value()) {
-            $any[] = array('diff', '!=', Entity::DIFF_NO);
-        }else{
-            $cond['where'][] = array('diff', '!=', Entity::DIFF_ADD);
+            $cond['where'][] = array('attr', 'is_mandatory', '=', 0);
         }
         // Никакие
         if (empty($any)) {

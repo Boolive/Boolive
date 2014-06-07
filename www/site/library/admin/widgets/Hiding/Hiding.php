@@ -21,7 +21,7 @@ class Hiding extends ToggleAction
     {
         /** @var \boolive\data\Entity $object */
         $object = is_array($this->_input['REQUEST']['object'])? reset($this->_input['REQUEST']['object']) : $this->_input['REQUEST']['object'];
-        $this->_state = $object->isHidden(null, false);
+        $this->_state = $object->isHidden();
     }
 
     function toggle()
@@ -31,17 +31,17 @@ class Hiding extends ToggleAction
         $objects = is_array($this->_input['REQUEST']['object'])? $this->_input['REQUEST']['object'] : array($this->_input['REQUEST']['object']);
         if ($first = reset($objects)){
             $result['changes'] = array();
-            $hide = !$first->isHidden(null, false);
+            $hide = !$first->isHidden();
             foreach ($objects as $o){
                 /** @var \boolive\data\Entity $o */
                 $o->isHidden($hide);
                 // @todo Обрабатывать ошибки
                 $o->save();
                 $result['changes'][$o->uri()] = array(
-                    'is_hidden' => $o->isHidden(null, false)
+                    'is_hidden' => $o->isHidden()
                 );
             }
-            $result['state'] = $first->isHidden(null, false);
+            $result['state'] = $first->isHidden();
         }
         return $result;
     }

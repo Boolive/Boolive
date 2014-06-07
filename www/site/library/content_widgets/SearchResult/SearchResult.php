@@ -45,10 +45,9 @@ class SearchResult extends Part
                 'select' => 'children',
                 'depth' => 'max',
                 'where' => array('all', array(
-                    array('is_hidden', '=', 0),
-                    array('is_draft', '=', 0),
-                    array('diff', '!=', Entity::DIFF_ADD),
-                    array('is_property', '=', 0),
+                    array('attr', 'is_hidden', '=', 0),
+                    array('attr', 'is_draft', '=', 0),
+                    array('attr', 'is_property', '=', 0),
                     array('any', array(
                         array('child', 'title', array(array('match',$search,1))),
                         array('child', 'text', array(array('match',$search,1)))

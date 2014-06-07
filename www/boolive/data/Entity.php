@@ -27,15 +27,6 @@ class Entity implements ITrace
     /** @const int Максимальная глубина для поиска */
     const MAX_DEPTH = 4294967295;
 
-    /** @const int У объекта нет отличий */
-    const DIFF_NO = 0;
-    /** @const int Объекты отличаются атрибутами */
-    const DIFF_CHANGE = 1;
-    /** @const int Объет удален */
-    const DIFF_DELETE = 2;
-    /** @const int Объект добавлен */
-    const DIFF_ADD = 3;
-
     /** @const int Автоматический выбор типа значения */
     const VALUE_AUTO = 0;
     /** @const int Простой тип. Строка до 255 символов */
@@ -58,21 +49,18 @@ class Entity implements ITrace
         'proto_cnt'    => 0,
         'value'	 	   => '',
         'value_type'   => Entity::VALUE_AUTO,
-        'is_draft'	   => 0,
-        'is_hidden'	   => 0,
+        'author'	   => null,
+        'is_draft'	   => false,
+        'is_hidden'	   => false,
+        'is_mandatory' => false,
+        'is_property'  => false,
+        'is_relative'  => false,
         'is_link'      => 0,
-        'is_mandatory' => 0,
-        'is_property'  => 0,
-        'is_relative'  => 0,
         'is_default_value' => null, // по умолчанию равен id
         'is_default_class' => 0,
-        'is_accessible'    => 1,
-        'is_exist'     => 0,
-        'author'	   => null,
-        'update_step'  => 0,
-        'update_time'  => 0,
-        'diff'         => Entity::DIFF_NO,
-        'diff_from'    => 0
+        'is_completed' => false,
+        'is_accessible'=> true,
+        'is_exist'     => false,
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
@@ -161,17 +149,16 @@ class Entity implements ITrace
             'proto'        => Rule::uri(), // URI прототипа
             'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
             'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения. Определяет способ хранения (0=авто, 1=простое, 2=текст, 3=файл)
-            'is_draft'	   => Rule::int(), // В черновике или нет с учётом признака родителя (сумма)?
-            'is_hidden'	   => Rule::int(), // Скрытый или нет с учётом признака родителя (сумма)?
-            'is_link'      => Rule::uri(), // Ссылка или нет?
-            'is_mandatory' => Rule::bool()->int(), // Признак, обязательный или дополненый?
-            'is_property'  => Rule::bool()->int(), // Признак, свойство или самостоятельный объект?
-            'is_relative'  => Rule::bool()->int(), // Прототип относительный или нет?
-            'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё?
-            'is_default_class' => Rule::uri(), // Используется класс прототипа или свой?
             'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
-            'diff'         => Rule::int()->min(0)->max(3), // Код обнаруженных обновлений
-            'diff_from'    => Rule::int(), // От куда обновления. 1 - от прототипа. 0 и меньше от info файла (кодируется относительное расположение файла)
+            'is_draft'	   => Rule::bool(), // Признак, в черновике или нет?
+            'is_hidden'	   => Rule::bool(), // Признак, скрытый или нет?
+            'is_mandatory' => Rule::bool(), // Признак, обязательный или дополненый?
+            'is_property'  => Rule::bool(), // Признак, свойство или самостоятельный объект?
+            'is_relative'  => Rule::bool(), // Прототип относительный или нет?
+            'is_completed' => Rule::bool(), // Признак, дополнен объект свойствами прототипа или нет?
+            'is_link'      => Rule::uri(), // Ссылка или нет?
+            'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё? Идентификатор прототипа или свой
+            'is_default_class' => Rule::uri(), // Используется класс прототипа или свой? Идентификатор прототипа или 0
             // Сведения о загружаемом файле. Не является атрибутом объекта, но используется в общей обработке
             'file'	=> Rule::arrays(array(
                 'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -402,7 +389,7 @@ class Entity implements ITrace
         if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
             if (($proto = $this->isDefaultValue(null, true)) && $proto->isExist()){
                 $file = $proto->file(null, $root);
-                if ($cache_remote && Data::isAbsoluteUri($file) && $this->diff()!=Entity::DIFF_ADD){
+                if ($cache_remote && Data::isAbsoluteUri($file)){
                     $file_path = Data::convertAbsoluteToLocal($file, false);
                     if (!is_file($f = DIR_SERVER.'remote/'.$file_path)){
                         // Загрзка файла с сервера
@@ -551,48 +538,32 @@ class Entity implements ITrace
 
     /**
      * Признак, объект в черновике или нет?
-     * @param null|bool $draft Новое значение, если не null
-     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то черновик родителя не влияет на данный объект
+     * @param null|bool $is_draft Новое значение, если не null
      * @return bool
      */
-    function isDraft($draft = null, $inherit_parent = true)
+    function isDraft($is_draft = null)
     {
-        // Какой признак у родителя (чтобы его вычесть из своего)
-        if ((!$inherit_parent || isset($draft)) && ($parent = $this->parent())){
-            $p = $parent->_attribs['is_draft'];
-        }else{
-            $p = 0;
-        }
-        // Смена своего признака
-        if (isset($draft) && ($this->_attribs['is_draft']-$p != ($draft = intval((bool)$draft)))){
-            $this->_attribs['is_draft'] = $draft + $p;
+        if (isset($is_draft) && (empty($this->_attribs['is_draft']) == $is_draft)){
+            $this->_attribs['is_draft'] = $is_draft;
             $this->_changed = true;
             $this->_checked = false;
         }
-        return $inherit_parent ? !empty($this->_attribs['is_draft']) : ($this->_attribs['is_draft']-$p != 0);
+        return !empty($this->_attribs['is_draft']);
     }
 
     /**
      * Признак, скрытый объект или нет?
-     * @param null|bool $hide Новое значение, если не null
-     * @param bool $inherit_parent Учитывать или нет признак родителя. Если нет, то скрытие родителя не влияет на данный объект
+     * @param null|bool $is_hidden Новое значение, если не null
      * @return bool
      */
-    function isHidden($hide = null, $inherit_parent = true)
+    function isHidden($is_hidden = null)
     {
-        // Какой признак у родителя (чтобы его вычесть из своего)
-        if ((!$inherit_parent || isset($hide)) && ($parent = $this->parent())){
-            $p = $parent->_attribs['is_hidden'];
-        }else{
-            $p = 0;
-        }
-        // Смена своего признака
-        if (isset($hide) && ($this->_attribs['is_hidden']-$p != ($hide = intval((bool)$hide)))){
-            $this->_attribs['is_hidden'] = $hide + $p;
+        if (isset($is_hidden) && (empty($this->_attribs['is_hidden']) == $is_hidden)){
+            $this->_attribs['is_hidden'] = $is_hidden;
             $this->_changed = true;
             $this->_checked = false;
         }
-        return $inherit_parent ? !empty($this->_attribs['is_hidden']) : ($this->_attribs['is_hidden']-$p != 0);
+        return !empty($this->_attribs['is_hidden']);
     }
 
     /**
@@ -684,6 +655,21 @@ class Entity implements ITrace
             $this->_checked = false;
         }
         return !empty($this->_attribs['is_property']);
+    }
+
+    /**
+     * Признак, дополнен объект свойствами прототипа или нет?
+     * @param null|bool $is_completed Новое значение, если не null
+     * @return bool
+     */
+    function isCompleted($is_completed = null)
+    {
+        if (isset($is_completed) && (empty($this->_attribs['is_completed']) == $is_completed)){
+            $this->_attribs['is_completed'] = $is_completed;
+            $this->_changed = true;
+            $this->_checked = false;
+        }
+        return !empty($this->_attribs['is_completed']);
     }
 
     /**
@@ -849,36 +835,6 @@ class Entity implements ITrace
     }
 
     /**
-     * Найденные отличия в объекте
-     * @param null|int $diff
-     * @return int Код отличия
-     */
-    function diff($diff = null)
-    {
-        if (isset($diff)){
-            $this->_attribs['diff'] = $diff;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return $this->_attribs['diff'];
-    }
-
-    /**
-     * От куда найдены отличия в объекте?
-     * @param null|int $diff_from
-     * @return int Код, от куда обновления
-     */
-    function diff_from($diff_from = null)
-    {
-        if (isset($diff_from)){
-            $this->_attribs['diff_from'] = $diff_from;
-            $this->_changed = true;
-            $this->_checked = false;
-        }
-        return $this->_attribs['diff_from'];
-    }
-
-    /**
      * Все атрибуты объекта
      * @return array
      */
@@ -917,8 +873,6 @@ class Entity implements ITrace
             if (is_string($new_parent)) $new_parent = Data::read($new_parent);
             // Смена родителя
             if (empty($new_parent) && !empty($this->_attribs['parent']) || !$new_parent->eq($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1){
-                $is_draft = $this->isDraft(null, false);
-                $is_hidden = $this->isHidden(null, false);
                 if (empty($new_parent)){
                     // Удаление родителя
                     $this->_attribs['parent'] = null;
@@ -949,8 +903,6 @@ class Entity implements ITrace
                 }
                 if ($this->isExist()) $this->name(null, true);
                 // Обновление зависимых от родителя признаков
-                $this->isDraft($is_draft);
-                $this->isHidden($is_hidden);
                 $this->_changed = true;
                 $this->_checked = false;
             }
@@ -1215,7 +1167,7 @@ class Entity implements ITrace
             }
             for ($i = sizeof($protos)-1; $i>0; $i--){
                 $protos[$i-1] = $protos[$i]->birth($parents[$i-1]);
-                $protos[$i-1]->isDraft($protos[$i]->isDraft(null,false));
+                $protos[$i-1]->isDraft($protos[$i]->isDraft());
                 $protos[$i-1]->_is_inner = true;
             }
             return $protos[0];
@@ -1606,13 +1558,27 @@ class Entity implements ITrace
         $obj->name(null, true); // Уникальность имени
         if (isset($for)) $obj->parent($for);
         $obj->proto($this);
-        $obj->isHidden($this->isHidden(null, false));
-        $obj->isDraft($draft || $this->isDraft(null, false));
+        $obj->isHidden($this->isHidden());
+        $obj->isDraft($draft || $this->isDraft());
         $obj->isProperty($this->isProperty());
         $obj->isDefaultValue(true);
         $obj->isDefaultClass(true);
         if ($this->isLink()) $this->_attribs['is_link'] = 1;
         return $obj;
+    }
+
+    /**
+     * Дополнение объекта обязательными свойствами от прототипов
+     * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
+     * @return bool
+     */
+    function complete($access = true)
+    {
+        if ($this->isExist()){
+            return Data::complete($this, $access);
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -1714,7 +1680,9 @@ class Entity implements ITrace
     {
         if (empty($cond)) return true;
         if (is_string($cond)) $cond = Data::parseCond($cond);
-        if (count($cond)==1) $cond = $cond[0];
+        if (count($cond)==1 && is_array($cond[0])){
+            $cond = $cond[0];
+        }
         if (is_array($cond[0])) $cond = array('all', $cond);
         switch (strtolower($cond[0])){
             case 'all':
@@ -1778,7 +1746,6 @@ class Entity implements ITrace
                     if ($this->in($parent)) return true;
                 }
                 return false;
-                break;
             case 'is':
                 if (is_array($cond[1])){
                     $cond = $cond[1];
@@ -1809,7 +1776,6 @@ class Entity implements ITrace
                     if ($this->childOf($parent)) return true;
                 }
                 return false;
-                break;
             case 'heirof':
                 if (is_array($cond[1])){
                     $cond = $cond[1];
@@ -1820,6 +1786,8 @@ class Entity implements ITrace
                     if ($this->heirOf($proto)) return true;
                 }
                 return false;
+            case 'ismy':
+                return $this->isMy();
             case 'access':
                 return $this->isAccessible($cond[1]);
             default:
@@ -1956,6 +1924,18 @@ class Entity implements ITrace
     }
 
     /**
+     * Проверка авторства объекта у текущего пользователя
+     * @return bool
+     */
+    function isMy()
+    {
+        if ($author = $this->author()){
+            return $author->eq(Auth::getUser());
+        }
+        return false;
+    }
+
+    /**
      * Экпорт объекта в массив с возможностью сохраненить в файл .info в формате JSON в директории объекта
      * Экспортирует атрибуты объекта и свойства
      * @param bool $save_to_file Признак, сохранять в файл?
@@ -1975,13 +1955,15 @@ class Entity implements ITrace
         //}
         if ($this->valueType() > Entity::VALUE_SIMPLE) $export['value_type'] = $this->valueType();
         if ($this->proto()) $export['proto'] = $this->proto()->uri();
+        if ($this->author()) $export['author'] = $this->author()->uri();
         if ($this->isLink()) $export['is_link'] = true;
         if (!$this->isDefaultClass()) $export['is_default_class'] = false;
-        if ($this->isHidden(null, false)) $export['is_hidden'] = true;
-        if ($this->isDraft(null, false)) $export['is_draft'] = true;
+        if ($this->isHidden()) $export['is_hidden'] = true;
+        if ($this->isDraft()) $export['is_draft'] = true;
         if ($this->isMandatory()) $export['is_mandatory'] = true;
         if ($this->isRelative()) $export['is_relative'] = true;
         if ($this->isProperty()) $export['is_property'] = true;
+        if (!$this->isCompleted()) $export['is_completed'] = false;
         $export['order'] = $this->order();
         // Расширенный импорт
         if ($more_info){
@@ -1997,6 +1979,7 @@ class Entity implements ITrace
             if (!$this->isRelative()) $export['is_relative'] = false;
             if (!$this->isMandatory()) $export['is_mandatory'] = false;
             if (!$this->isProperty()) $export['is_property'] = false;
+            if ($this->isCompleted()) $export['is_completed'] = true;
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
             if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
             if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
@@ -2008,9 +1991,9 @@ class Entity implements ITrace
             $export['children'] = array();
             $children = $this->find(array(
                 'where' => array(
-                    array('is_draft'),
-                    array('is_hidden'),
-                    array('is_property')
+                    array('attr', 'is_draft', '>=', 0), // Отмена условия по умолчания - не учитывать признак is_draft и is_hidden
+                    array('attr', 'is_hidden', '>=', 0),
+                    array('attr', 'is_property', '=', 1)
                 ),
                 'comment' => 'read property for export'
             ), false, false);
@@ -2069,6 +2052,8 @@ class Entity implements ITrace
         if (!empty($info['value_type'])) $this->valueType($info['value_type']);
         // Прототип
         if (isset($info['proto'])) $this->proto($info['proto']);
+        // Автор
+        if (isset($info['author'])) $this->author($info['author']);
         // Признаки
         $this->isLink(!empty($info['is_link']));
         if (!empty($info['is_hidden'])) $this->isHidden(true);
@@ -2076,6 +2061,7 @@ class Entity implements ITrace
         if (!empty($info['is_relative'])) $this->isRelative(true);
         if (!empty($info['is_mandatory'])) $this->isMandatory(true);
         if (!empty($info['is_property'])) $this->isProperty(true);
+        if (!isset($info['is_completed']) || $info['is_completed']) $this->isCompleted(true);
         // Свой класс?
         if (isset($info['is_default_class']) && empty($info['is_default_class'])){
             $this->isDefaultClass(false);
@@ -2089,8 +2075,6 @@ class Entity implements ITrace
         if (!empty($info['children']) && is_array($info['children'])){
             foreach ($info['children'] as $name => $child){
                 //$child['uri'] = $this->uri().'/'.$name;
-                if ($this->diff() == Entity::DIFF_ADD) $this->{$name}->diff(Entity::DIFF_ADD);
-                if ($this->diff_from() < 1) $this->{$name}->diff_from($this->diff_from()-1);
                 $this->{$name}->import($child);
                 $this->{$name}->isDraft(!empty($child['is_draft']));
             }
@@ -2102,7 +2086,7 @@ class Entity implements ITrace
      * @param null|bool $is_change Установка признака, если не null
      * @return bool
      */
-    function isChenged($is_change = null)
+    function isChanged($is_change = null)
     {
         if (isset($is_change)){
             $this->_changed = $is_change;

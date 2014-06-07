@@ -18,8 +18,8 @@ class Installer extends Widget
         return Rule::arrays(array(
             'REQUEST' => Rule::arrays(array(
                 'object' => Rule::any(
-                    Rule::arrays(Rule::entity(array('diff', '!=', Entity::DIFF_NO))),
-                    Rule::entity(array('diff', '!=', Entity::DIFF_NO))
+//                    Rule::arrays(Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))),
+//                    Rule::entity(array('attr', 'diff', '!=', Entity::DIFF_NO))
                 )->required(),
                 'call' => Rule::string()->default('')->required(),
             ))
@@ -43,26 +43,26 @@ class Installer extends Widget
                 $item['title'] = $o->name();
             }
             $item['uri'] = $o->uri();
-            $item['diff'] = $o->diff();
-            switch ($item['diff']){
-                case Entity::DIFF_CHANGE:
-                    $item['diff_message'] = 'Изменен ';
-                    break;
-                case Entity::DIFF_ADD:
-                    $item['diff_message'] = 'Добавлен ';
-                    break;
-                case Entity::DIFF_DELETE:
-                    $item['diff_message'] = 'Уничтожен ';
-                    break;
-            }
-            if ($o->diff_from() == 1){
-                $item['diff_message'].=' в прототипе';
-            }else{
-                $item['diff_message'].=' в файле';
-                if ($o->diff_from()<0){
-                    $item['diff_message'].=' родителя';
-                }
-            }
+//            $item['diff'] = $o->diff();
+//            switch ($item['diff']){
+//                case Entity::DIFF_CHANGE:
+//                    $item['diff_message'] = 'Изменен ';
+//                    break;
+//                case Entity::DIFF_ADD:
+//                    $item['diff_message'] = 'Добавлен ';
+//                    break;
+//                case Entity::DIFF_DELETE:
+//                    $item['diff_message'] = 'Уничтожен ';
+//                    break;
+//            }
+//            if ($o->diff_from() == 1){
+//                $item['diff_message'].=' в прототипе';
+//            }else{
+//                $item['diff_message'].=' в файле';
+//                if ($o->diff_from()<0){
+//                    $item['diff_message'].=' родителя';
+//                }
+//            }
             $v['objects'][] = $item;
             $v['data-o'][]=$item['uri'];
         }

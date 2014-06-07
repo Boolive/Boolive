@@ -27,10 +27,9 @@ class Part extends Page
         $obj = $this->_input['REQUEST']['object'];
         $count_per_page = max(1, $this->count_per_page->value());
         $where = array('all', array(
-            array('is_hidden', '=', $this->_input['REQUEST']['object']->attr('is_hidden')),
-            array('is_draft', '=', 0),
-            array('is_property', '=', 0),
-            array('diff', '!=', Entity::DIFF_ADD)
+            array('attr', 'is_hidden', '=', 0),
+            array('attr', 'is_draft', '=', 0),
+            array('attr', 'is_property', '=', 0)
         ));
         $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count', 'where'=>$where))/$count_per_page);
         $cond = array(
