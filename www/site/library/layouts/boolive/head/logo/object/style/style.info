@@ -1,6 +1,6 @@
 {
     "is_default_value": true,
     "value": "",
-    "proto": "/library/views/Style",
+    "proto": "/library/design/Style",
     "order": 2
 }

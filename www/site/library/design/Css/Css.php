@@ -5,11 +5,11 @@
  * @version 1.1
  * @author Vladimir Shestakov <boolive@yandex.ru>
  */
-namespace site\library\views\Css;
+namespace site\library\design\CSS;
 
 use site\library\views\View\View;
 
-class Css extends View
+class CSS extends View
 {
     protected function rule()
     {
@@ -30,5 +30,12 @@ class Css extends View
         if ($file = $this->file()){
             $this->_commands->htmlHead('link', array('rel'=>"stylesheet", 'type'=>"text/css", 'href'=>$file.'?'.TIMESTAMP));
         }
+    }
+
+    function birth($for = null, $draft = true)
+    {
+        $obj = parent::birth($for, $draft);
+        $obj->name(mb_strtolower($obj->name()), true);
+        return $obj;
     }
 }

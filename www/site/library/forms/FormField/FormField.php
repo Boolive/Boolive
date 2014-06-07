@@ -27,8 +27,8 @@ class FormField extends Widget
             $this->_input['REQUEST']['object']->value($this->_input['REQUEST']['input']);
             /** @var $error \boolive\errors\Error */
             $error = null;
-            if (!$this->_input['REQUEST']['object']->check($error)){
-                $v['error'] = $error->getUserMessage(true);
+            if (!$this->_input['REQUEST']['object']->check()){
+                $v['error'] = $this->_input['REQUEST']['object']->error()->getUserMessage(true);
             }
         }
         $v['uri'] = $this->_input['REQUEST']['object']->uri();

@@ -37,16 +37,18 @@ class Destroy extends Widget
             foreach ($objects as $o){
                 /** @var \boolive\data\Entity $o */
                 // Уничтожение с проверкой доступа и целостностью данных
-                try{
+                //try{
                     if ($this->_input['REQUEST']['select'] == 'heirs'){
-                        $this->deleteHeirs($o);
+                        $v['result'] = $this->deleteHeirs($o);
                     }else{
-                        $o->destroy(true, true);
+                        $v['result'] = $o->destroy(true, true);
                     }
-                }catch (Error $e){
+                //}catch (Error $e){
+                if ($v['result'] === false){
                     if (empty($v['error'])) $v['error'] = '';
-                    $v['error'].= $e->getUserMessage(true);
+                    $v['error'].= $o->error()->getUserMessage(true);
                 }
+                //}
             }
             $v['result'] = true;
             return $v;

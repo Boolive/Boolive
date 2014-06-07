@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/library/views/View",
     "is_default_class": false,
-    "order": 22,
+    "order": 2,
     "children": {
         "title": {
             "value": "CSS",

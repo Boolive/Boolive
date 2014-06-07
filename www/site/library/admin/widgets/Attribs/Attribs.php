@@ -109,8 +109,7 @@ class Attribs extends Widget
             $obj->isDefaultClass(empty($attribs['is_logic']));
 
             // Сохранение
-            try{
-                $obj->save(false);
+            if ($obj->save(false)){
                 if ($class_changed){
                     $this->_input['REQUEST']['object'] = Data::read(array(
                         'from' => $obj->id(),
@@ -118,17 +117,8 @@ class Attribs extends Widget
                     ), true);
                 }
                 $v['attrib'] = $this->callLoad();
-            }catch (Error $error){
-                $v['error'] = $error->toArray();
-//                $v['error'] = array();
-//                if ($error->isExist('_attribs')){
-//                    foreach ($error->_attribs as $key => $e){
-//                        /** @var $e \boolive\errors\Error */
-//                        $v['error'][$key] = $e->getUserMessage(true,' ');
-//                    }
-//                    $error->delete('_attribs');
-//                }
-//                $v['error']['_other_'] = $error->getUserMessage(true);
+            }else{
+                $v['error'] = $this->_input['REQUEST']['object']->error()->toArray();
             }
         }
         return $v;

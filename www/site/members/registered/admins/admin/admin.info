@@ -11,7 +11,7 @@
             "order": 1
         },
         "email": {
-            "value": "boolive@yandex.com",
+            "value": "boolive@yandex.ru",
             "proto": "/library/access/User/email",
             "is_mandatory": true,
             "is_property": true,

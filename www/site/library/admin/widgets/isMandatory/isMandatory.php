@@ -35,17 +35,20 @@ class isMandatory extends ToggleAction
             $result['changes'] = array();
             $prop = !$first->isMandatory();
             foreach ($objects as $o){
-                try{
+                //try{
                     /** @var \boolive\data\Entity $o */
                     $o->isMandatory($prop);
                     // @todo Обрабатывать ошибки
-                    $o->save();
-                    $result['changes'][$o->uri()] = array(
-                        'is_mandatory' => $o->isMandatory()
-                    );
-                }catch (Error $e){
-                    $result['errors'][$o->uri()] = $e->getUserMessage(true);
-                }
+                    if ($o->save()){
+                        $result['changes'][$o->uri()] = array(
+                            'is_mandatory' => $o->isMandatory()
+                        );
+                    }else{
+                        $result['errors'][$o->uri()] = $o->error()->getUserMessage(true);
+                    }
+//                }catch (Error $e){
+//
+//                }
             }
             $result['state'] = $first->isMandatory();
         }

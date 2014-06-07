@@ -77,6 +77,19 @@ class Error extends Exception implements ITrace, IteratorAggregate
         $this->is_temp = false;
     }
 
+    function __destruct()
+    {
+        if ($this->parent){
+            if ($this->is_temp){
+                unset($this->parent->temps[$this->code]);
+            }else{
+                unset($this->parent->children[$this->code]);
+            }
+            $this->parent = null;
+        }
+    }
+
+
     /**
      * Перегрузка метода получения исключения. @example $e = $error->user->min;
      * Всегда возвращется Error, даже если нет запрашиваемого исключения (возвратитя временный Error)
@@ -124,28 +137,29 @@ class Error extends Exception implements ITrace, IteratorAggregate
      * Добавление исключения
      * @param Error|array|string $error Объект исключения, массив вложенных исключений или код исключения
      * @param string $message Сообщение исключения.
+     * @param bool $is_temp Временная ошибка или нет?
      * @return array|Error |Error
      */
-    function add($error, $message = '')
+    function add($error, $message = '', $is_temp = false)
     {
         // Если был временным
-        $this->untemp();
+        if (!$is_temp) $this->untemp();
         // Добавление подчиненного
-        if (is_scalar($error)){
-            $this->children[$error] = new Error($message, $error);
-            $this->children[$error]->parent = $this;
-            return $this->children[$error];
-        }else
         if (is_array($error)){
             foreach ($error as $e){
-                $this->add($e);
+                $this->add($e, $message, $is_temp);
             }
-        }else
-        if ($error instanceof Error){
-            $this->children[$error->code] = $error;
-            $this->children[$error->code]->parent = $this;
+        }else{
+            if (!$error instanceof Error) $error = new Error($message, $error);
+            if ($is_temp){
+                $this->temps[$error->code] = $error;
+                $this->temps[$error->code]->is_temp = true;
+                $this->temps[$error->code]->parent = $this;
+            }else{
+                $this->children[$error->code] = $error;
+                $this->children[$error->code]->parent = $this;
+            }
             if ($message) $error->message = $message;
-            return $this->children[$error->code];
         }
         return $this;
     }
@@ -158,18 +172,16 @@ class Error extends Exception implements ITrace, IteratorAggregate
     function get($name)
     {
         if (isset($this->children[$name])){
-            $this->children[$name];
+            return $this->children[$name];
         }else
         if (isset($this->temps[$name])){
-            $this->temps[$name];
+            return $this->temps[$name];
         }else{
-            // Делавем временный подчиненный список исключений
             $this->temps[$name] = new Error('Ошибки', $name);
             $this->temps[$name]->is_temp = true;
             $this->temps[$name]->parent = $this;
             return $this->temps[$name];
         }
-        return $this->children[$name];
     }
 
     /**

@@ -24,6 +24,10 @@ class Number extends Entity
     function value($new_value = null)
     {
         $value = parent::value($new_value);
-        return doubleval($value);
+        if ($this->_checked){
+            return doubleval($value);
+        }else{
+            return $value;
+        }
     }
 }

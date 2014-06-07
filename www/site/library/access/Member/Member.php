@@ -39,6 +39,7 @@ class Member extends Entity
      */
     function getAccessCond($action_kind, $object = null)
     {
+        return array();
         if (!isset($this->_rights[$action_kind])){
             //Trace::groups('Data')->group('START getAccess');
             $this->_rights[$action_kind] = array();

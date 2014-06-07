@@ -36,17 +36,20 @@ class isRelative extends ToggleAction
             $result['changes'] = array();
             $prop = !$first->isRelative();
             foreach ($objects as $o){
-                try{
+                //try{
                     /** @var \boolive\data\Entity $o */
                     $o->isRelative($prop);
                     // @todo Обрабатывать ошибки
-                    $o->save();
-                    $result['changes'][$o->uri()] = array(
-                        'is_relative' => $o->isRelative()
-                    );
-                }catch (Error $e){
-                    $result['errors'][$o->uri()] = $e->getUserMessage(true);
-                }
+                    if ($o->save()){
+                        $result['changes'][$o->uri()] = array(
+                            'is_relative' => $o->isRelative()
+                        );
+                    }else{
+                        $result['errors'][$o->uri()] = $o->error()->getUserMessage(true);
+                    }
+                //}catch (Error $e){
+
+                //}
             }
             $result['state'] = $first->isRelative();
         }

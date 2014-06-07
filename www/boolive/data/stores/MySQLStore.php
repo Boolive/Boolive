@@ -268,11 +268,11 @@ class MySQLStore extends Entity
     function write($entity, $access)
     {
         if ($access && IS_INSTALL && !$entity->isAccessible('write')){
-            $error = new Error('Запрещенное действие над объектом', $entity->uri());
-            $error->access = new Error('Нет доступа на запись', 'write');
-            throw $error;
-        }
-        if ($entity->check($error)){
+            ///$error = new Error('Запрещенное действие над объектом', $entity->uri());
+            $entity->error()->access->write = 'Нет доступа на запись';
+            //throw $this->error();
+        }else
+        if ($entity->check(/*$error*/)){
             try{
                 // Атрибуты отфильтрованы, так как нет ошибок
                 $attr = $entity->_attribs;
@@ -368,60 +368,60 @@ class MySQLStore extends Entity
                 }
                 // Проверка доступов
                 if ($access && IS_INSTALL){
-                    $error = new Error('Запрещенное действие над объектом', $entity->uri());
+                    //$error = new Error('Запрещенное действие над объектом', $entity->uri());
                     if ((empty($current) || $current['parent']!=$attr['parent']) && !$entity->isAccessible('write/change/add_child')){
-                        $error->access = new Error('Нет доступа на добавление подчиненных', 'write/change/add_child');
+                        $entity->error()->access->{'write/change/add_child'} = 'Нет доступа на добавление подчиненных';
                     }else
                     if ((empty($current) || $current['proto']!=$attr['proto']) && !$entity->isAccessible('write/create')){
-                        $error->access = new Error('Нет доступа на использование выбранного прототипа (создания объекта)', 'write/create');
+                        $entity->error()->access->{'write/create'} = 'Нет доступа на использование выбранного прототипа (создания объекта)';
                     }else
                     if (!empty($current)){
                         if ($current['is_hidden'] != $attr['is_hidden'] && !$entity->isAccessible('write/change/is_hidden')){
-                            $error->access = new Error('Нет доступа на смену признака "скрытый"', 'write/change/is_hidden');
+                            $entity->error()->access->{'write/change/is_hidden'} = 'Нет доступа на смену признака "скрытый"';
                         }else
                         if ($current['is_draft'] != $attr['is_draft'] && !$entity->isAccessible('write/change/is_draft')){
-                            $error->access = new Error('Нет доступа на смену признака "черновик"', 'write/change/is_draft');
+                            $entity->error()->access->{'write/change/is_draft'} = 'Нет доступа на смену признака "черновик"';
                         }else
                         if ($current['is_link'] != $attr['is_link'] && !$entity->isAccessible('write/change/is_link')){
-                            $error->access = new Error('Нет доступа на смену признака "ссылка"', 'write/change/is_link');
+                            $entity->error()->access->{'write/change/is_link'} = 'Нет доступа на смену признака "ссылка"';
                         }else
                         if ($current['is_relative'] != $attr['is_relative'] && !$entity->isAccessible('write/change/proto')){
-                            $error->access = new Error('Нет доступа на смену признака "относительный прототип"', 'write/change/proto');
+                            $entity->error()->access->{'write/change/proto'} = 'Нет доступа на смену признака "относительный прототип"';
                         }else
                         if (($current['value'] != $attr['value'] ||
                              $current['value_type'] != $attr['value_type'] ||
                              $current['is_default_value'] != $attr['is_default_value'] ||
                              !empty($attr['file'])) &&
                              !$entity->isAccessible('write/change/value')){
-                            $error->access = new Error('Нет доступа на изменение значения', 'write/change/value');
+                            $entity->error()->access->{'write/change/value'} = 'Нет доступа на изменение значения';
                         }else
                         if ($current['name'] != $attr['name'] && !$entity->isAccessible('write/change/name')){
-                            $error->access = new Error('Нет доступа на смену имени', 'write/change/name');
+                            $entity->error()->access->{'write/change/name'} = 'Нет доступа на смену имени';
                         }else
                         if ($current['parent'] != $attr['parent'] && !$entity->isAccessible('write/change/parent')){
-                            $error->access = new Error('Нет доступа на смену родителя (перемещения)', 'write/change/parent');
+                            $entity->error()->access->{'write/change/pare'} = 'Нет доступа на смену родителя (перемещения)';
                         }else
                         if ($current['proto'] != $attr['proto'] && !$entity->isAccessible('write/change/proto')){
-                            $error->access = new Error('Нет доступа на смену прототипа', 'write/change/proto');
+                            $entity->error()->access->{'write/change/proto'} = 'Нет доступа на смену прототипа';
                         }else
                         if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
-                            $error->access = new Error('Нет доступа на смену признака "своя логика"', 'write/change/is_default_class');
+                            $entity->error()->access->{'write/change/is_default_class'} = 'Нет доступа на смену признака "своя логика"';
                         }else
                         if ($current['is_mandatory'] != $attr['is_mandatory'] && !$entity->isAccessible('write/change/is_mandatory')){
-                            $error->access = new Error('Нет доступа на смену признака "обязательный"', 'write/change/is_mandatory');
+                            $entity->error()->access->{'write/change/is_mandatory'} = 'Нет доступа на смену признака "обязательный"';
                         }else
                         if ($current['is_property'] != $attr['is_property'] && !$entity->isAccessible('write/change/is_property')){
-                            $error->access = new Error('Нет доступа на смену признака "свойство"', 'write/change/is_property');
+                            $entity->error()->access->{'write/change/is_property'} = 'Нет доступа на смену признака "свойство"';
                         }else
                         if ($current['diff'] != $attr['diff'] && $attr['diff'] == Entity::DIFF_NO && !$entity->isAccessible('write/change/diff')){
-                            $error->access = new Error('Нет доступа на установку обновлений', 'write/change/diff');
+                            $entity->error()->access->{'write/change/diff'} = 'Нет доступа на установку обновлений';
                         }
     //                    else
     //                    if ($current['order'] != $attr['order'] && ($p = $entity->parent()) && !$p->isAccessible('order')){
-    //                        $error->access = new Error('Нет доступа на упорядочивание подчиненных', 'order');
+    //                        $entity->error()->access->order = 'Нет доступа на упорядочивание подчиненных';
     //                    }
                     }
-                    if ($error->isExist()) throw $error;
+                    if ($entity->error()->isExist()) return false;
                 }
 
                 $this->db->beginTransaction();
@@ -712,17 +712,15 @@ class MySQLStore extends Entity
                 }
 
                 $this->afterWrite($attr, empty($current)?array():$current);
-
+                return true;
             }catch (\Exception $e){
                 $this->db->rollBack();
 //                $q = $this->db->query('SHOW ENGINE INNODB STATUS');
 //                trace($q->fetchAll(DB::FETCH_ASSOC));
                 trace($e);
-                throw $e;
             }
-        }else{
-            throw $error;
         }
+        return false;
     }
 
     /**
@@ -746,9 +744,9 @@ class MySQLStore extends Entity
                 ),array(), true), false
             );
             if ($not_access){
-                $error = new Error('Запрещенное действие над объектом', $entity->uri());
-                $error->access = new Error('Нет доступа на уничтожение объекта или его подчиненных', 'delete');
-                throw $error;
+                //$error = new Error('Запрещенное действие над объектом', $entity->uri());
+                $entity->error()->access->delete = 'Нет доступа на уничтожение объекта или его подчиненных';
+                return false;
             }
         }
         $id = $this->localId($entity->key(), false);
@@ -767,8 +765,8 @@ class MySQLStore extends Entity
             if ($rows){
                 $uris = implode(', ', $rows);
                 $error = new Error('Недопустимое действие над объектом', $entity->uri());
-                $error->integrity = new Error(array('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов (%s)', $uris), 'heirs-exists');
-                throw $error;
+                $entity->error()->integrity->add(new Error(array('Уничтожение невозможно. Объект используется в качесвте прототипа для других объектов (%s)', $uris),'heirs-exists'));
+                return false;
             }
         }
         // Обновить дату изменения у родителей

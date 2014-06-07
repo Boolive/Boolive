@@ -20,9 +20,7 @@ class AutoWidgetList2 extends Widget
         $v['children'] = array();
         if (is_array($list)){
             foreach ($list as $key => $object){
-                $this->_input_child['REQUEST']['object'] = $object;
-                $this->_input_child['REQUEST']['number'] = $i;
-                $result = $this->startChild('views');
+                $result = $this->showObject($object, $i);
                 if ($result !== false){
                     $v['views'][$key] = $result;
                     if ($object->isProperty()){
@@ -36,6 +34,13 @@ class AutoWidgetList2 extends Widget
         }
         $this->_input_child['REQUEST']['object'] = $this->_input['REQUEST']['object'];
         return parent::show($v, $commands, $input);
+    }
+
+    function showObject($object, $number = 1)
+    {
+        $this->_input_child['REQUEST']['object'] = $object;
+        $this->_input_child['REQUEST']['number'] = $number;
+        return $this->startChild('views');
     }
 
     protected function getList($cond = array())

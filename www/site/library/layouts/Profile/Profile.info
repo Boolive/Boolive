@@ -23,6 +23,7 @@
         "path_rule": {
             "value": "#^/profile(/|$)#",
             "proto": "/library/views/Widget/path_rule",
+            "is_mandatory": true,
             "is_property": true,
             "order": 8
         }

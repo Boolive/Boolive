@@ -83,6 +83,7 @@ class SimpleForm extends Widget
      */
     function show($v = array(), $commands, $input, $session = array())
     {
+        $v['title'] = $this->title->inner()->value();
         return parent::show($v, $commands, $input);
     }
 
@@ -151,12 +152,12 @@ class SimpleForm extends Widget
      */
     function processRule()
     {
-//        return Rule::arrays(array(
-//            'REQUEST' => Rule::arrays(array(
-//                'field1' => Rule::string()->more(0)->max(250)->required(),
-//                // другие поля..
-//            ))
-//        ));
+        return Rule::arrays(array(
+            'REQUEST' => Rule::arrays(array(
+                'name' => Rule::string()->more(0)->max(250)->required(),
+                // другие поля..
+            ))
+        ));
         return parent::processRule();
     }
 code;

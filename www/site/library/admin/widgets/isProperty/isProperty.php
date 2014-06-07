@@ -34,17 +34,20 @@ class isProperty extends ToggleAction
             $result['changes'] = array();
             $prop = !$first->isProperty();
             foreach ($objects as $o){
-                try{
+//                try{
                     /** @var \boolive\data\Entity $o */
                     $o->isProperty($prop);
                     // @todo Обрабатывать ошибки
-                    $o->save();
-                    $result['changes'][$o->uri()] = array(
-                        'is_relative' => $o->isProperty()
-                    );
-                }catch (Error $e){
-                    $result['errors'][$o->uri()] = $e->getUserMessage(true);
-                }
+                    if ($o->save()){
+                        $result['changes'][$o->uri()] = array(
+                            'is_relative' => $o->isProperty()
+                        );
+                    }else{
+                        $result['errors'][$o->uri()] = $o->error()->getUserMessage(true);
+                    }
+//                }catch (Error $e){
+
+//                }
             }
             $result['state'] = $first->isProperty();
         }

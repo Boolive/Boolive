@@ -43,13 +43,14 @@ class CKEditorUploader extends View
                 $file = $proto->birth($text, false);
                 $file->isDraft(false);
                 $file->file($this->_input['FILES']['upload']);
-                $file->save();
-                $file_url = $file->file(null, false);
+                if ($file->save()){
+                    $file_url = $file->file(null, false);
+                }else{
+                    $error = $file->error()->getUserMessage();
+                }
             }else{
                 $error = 'Пожалуйста, сохраните текст перед загрузкой в него картинки';
             }
-        }catch (Error $e){
-            $error = $e->getUserMessage();
         }catch(\Exception $e){
             $error = $e->getMessage();
         }

@@ -7,7 +7,7 @@
  * @date: 21.01.13
  *
  */
-namespace site\library\views\Style;
+namespace site\library\design\Style;
 
 use boolive\data\Entity;
 
@@ -29,5 +29,12 @@ class Style  extends Entity
             }
         }
         return $str;
+    }
+
+    function birth($for = null, $draft = true)
+    {
+        $obj = parent::birth($for, $draft);
+        $obj->name(mb_strtolower($obj->name()), true);
+        return $obj;
     }
 }

@@ -35,17 +35,20 @@ class Draft extends ToggleAction
             $result['changes'] = array();
             $draft = !$first->isDraft(null, false);
             foreach ($objects as $o){
-                try{
+//                try{
                     /** @var \boolive\data\Entity $o */
                     $o->isDraft($draft);
                     // @todo Обрабатывать ошибки
-                    $o->save();
-                    $result['changes'][$o->uri()] = array(
-                        'is_draft' => $o->isDraft(null, false)
-                    );
-                }catch (Error $e){
-                    $result['errors'][$o->uri()] = $e->getUserMessage(true);
-                }
+                    if ($o->save()){
+                        $result['changes'][$o->uri()] = array(
+                            'is_draft' => $o->isDraft(null, false)
+                        );
+                    }else{
+                        $result['errors'][$o->uri()] = $o->error()->getUserMessage(true);
+                    }
+//                }catch (Error $e){
+//                    $result['errors'][$o->uri()] = $e->getUserMessage(true);
+//                }
             }
             $result['state'] = $first->isDraft(null, false);
         }

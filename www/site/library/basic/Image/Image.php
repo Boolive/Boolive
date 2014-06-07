@@ -49,6 +49,7 @@ class Image extends File
     function __destruct()
     {
         $this->reset();
+        parent::__destruct();
     }
 
     /**

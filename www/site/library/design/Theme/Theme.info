@@ -1,0 +1,21 @@
+{
+    "value": "Theme.css",
+    "value_type": 3,
+    "proto": "/library/design/CSS",
+    "order": 4,
+    "children": {
+        "title": {
+            "value": "Тема CSS",
+            "proto": "/library/design/CSS/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Заготовка css правил для оформления основных элементов макета сайта. Описанные css-классы предполагается использовать во всех шаблонах как базовые для быстрой смены оформления сайта.",
+            "value_type": 2,
+            "proto": "/library/design/CSS/description",
+            "is_property": true,
+            "order": 2
+        }
+    }
+}

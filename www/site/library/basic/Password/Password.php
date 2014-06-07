@@ -20,4 +20,12 @@ class Password extends Entity
         }
         return parent::value($new_value);
     }
+
+    function isValueEq($value)
+    {
+        if(isset($value) && mb_strlen($value)!=64){
+            $value = Auth::getHash($value);
+        }
+        return $value === $this->value();
+    }
 }

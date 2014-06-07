@@ -24,6 +24,11 @@ class Boolean extends Entity
 
     function value($new_value = null)
     {
-        return intval(parent::value($new_value));
+        $value = intval(parent::value($new_value));
+        if ($this->_checked){
+            return intval($value);
+        }else{
+            return $value;
+        }
     }
 }

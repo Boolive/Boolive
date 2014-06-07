@@ -1,0 +1,15 @@
+{
+    "is_default_value": true,
+    "value": "",
+    "proto": "/library/basic/Package",
+    "order": 19,
+    "children": {
+        "title": {
+            "value": "Оформление",
+            "proto": "/library/basic/Package/title",
+            "is_mandatory": true,
+            "is_property": true,
+            "order": 1
+        }
+    }
+}

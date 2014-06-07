@@ -96,6 +96,8 @@ class Entity implements ITrace
     protected $_checked = false;
     /** @var array Условие, которым был выбран объект */
     protected $_cond;
+    /** @var null|Error Ошибки после проверки объекта или выполнения каких-либо его функций */
+    protected $_errors = null;
     /**
      * Признак, требуется ли подобрать уникальное имя перед сохранением или нет?
      * Также означает, что текущее имя (uri) объекта временное
@@ -140,6 +142,16 @@ class Entity implements ITrace
         }
 
         $this->_attribs = array_replace($this->_attribs, $attribs);
+    }
+
+    function __destruct()
+    {
+        if ($this->_parent){
+            if (isset($this->_parent->_children[$this->_attribs['name']])){
+                unset($this->_parent->_children[$this->_attribs['name']]);
+            }
+            $this->_parent = null;
+        }
     }
 
     /**
@@ -1535,25 +1547,19 @@ class Entity implements ITrace
                     $this->_current_name = null;
                 }
                 // Сохранение подчиненных
-                if ($children){
+                if ($children && !$this->error()->isExist()){
                     $children = $this->children();
-                    // Ошибки свойств группируются
-                    $errors = new Error('Неверный объект', $this->uri());
                     foreach ($children as $child){
                         /** @var Entity $child */
-                        try{
-                            $child->save(true, $access);
-                        }catch (Error $e){
-                            $errors->_children->add($e);
-                        }
+                        $child->save(true, $access);
                     }
-                    if ($errors->isExist()) throw $errors;
+                    if ($this->error()->isExist()) throw $errors;
                 }
                 $this->_is_saved = false;
                 return true;
             }catch (Exception $e){
                 $this->_is_saved = false;
-                throw $e;
+                $this->error()->fatal = $e;
             }
         }
         return false;
@@ -1625,30 +1631,34 @@ class Entity implements ITrace
     function check(&$errors = null, $children = true)
     {
         // "Контейнер" для ошибок по атрибутам и подчиненным объектам
-        $errors = new Error('Неверный объект', $this->uri());
+        //$errors = new Error('Неверный объект', $this->uri());
         if ($this->_checked) return true;
 
         // Проверка и фильтр атрибутов
         $attribs = new Values($this->_attribs);
-        $this->_attribs = array_replace($this->_attribs, $attribs->get($this->rule(), $error));
+        $filtered = array_replace($this->_attribs, $attribs->get($this->rule(), $error));
         /** @var $error Error */
         if ($error){
-            $errors->_attribs->add($error->children());
+            //$errors->_attribs->add($error->children());
+            $this->error()->_attribs->add($error->children());
+        }else{
+            $this->_attribs = $filtered;
         }
         // Проверка подчиненных
         if ($children){
             foreach ($this->_children as $child){
                 $error = null;
                 /** @var Entity $child */
-                if (!$child->check($error)){
-                    $errors->_children->add($error);
+                if (!$child->check(/*$error*/)){
+                    //$errors->_children->add($error);
+                    $this->error()->_children->add($child->error());
                 }
             }
         }
         // Проверка родителем.
-        if ($p = $this->parent()) $p->checkChild($this, $errors);
+        if ($p = $this->parent()) $p->checkChild($this);
         // Если ошибок нет, то удаляем контейнер для них
-        if (!$errors->isExist()){
+        if (!$this->error()->isExist()){
             //$errors = null;
             return $this->_checked = true;
         }
@@ -1660,16 +1670,15 @@ class Entity implements ITrace
      * Возможно обращение к родителям выше уровнем, чтобы объект проверялся в ещё более глобальном окружении,
      * например для проверки уникальности значения по всему разделу/базе.
      * @param Entity $child Проверяемый подчиненный
-     * @param \boolive\errors\Error $error Объект ошибок подчиненного
      * @return bool Признак, корректен объект (true) или нет (false)
      */
-    protected function checkChild(Entity $child, Error $error)
+    protected function checkChild(Entity $child)
     {
         /** @example
          * if ($child->name() == 'bad_name'){
-         *     // Так как ошибка из-за атрибута, то добавляем в $error->_attribs
-         *     // Если бы проверяли подчиненного у $child, то ошибку записывали бы в $error->_children
-         *	   $error->_attribs->name = new Error('Недопустимое имя', 'impossible');
+         *     // Так как ошибка из-за атрибута, то добавляем в $child->error()->_attribs
+         *     // Если бы проверяли подчиненного у $child, то ошибку записывали бы в $child->error()->_children
+         *	   $child->error()->_attribs->name = new Error('Недопустимое имя', 'impossible');
          *     return false;
          * }
          */
@@ -2208,6 +2217,22 @@ $methods
             $this->_cond = $cond;
         }
         return $this->_cond;
+    }
+
+    /**
+     * Объект ошибок
+     * @return Error|null
+     */
+    function error()
+    {
+        if (!$this->_errors){
+            $this->_errors = new Error('Ошибки', $this->name());
+        }
+        // Связывание с ошибками родительского объекта. Образуется целостная иерархия ошибок
+        if ($this->_parent){
+            $this->_parent->error()->_children->add($this->_errors, '', true);
+        }
+        return $this->_errors;
     }
 
     /**

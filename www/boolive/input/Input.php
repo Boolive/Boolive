@@ -76,7 +76,7 @@ class Input extends Values
             $values['REQUEST'] = array_replace_recursive($values['REQUEST'], $_POST);
         }
         // Аргументы из консоли (режим CLI)
-        if (isset($_SERVER['argv'])){
+        if (php_sapi_name() == 'cli' && isset($_SERVER['argv'])){
             $values['REQUEST']['method'] = 'CLI';
             $values['SERVER']['argv'] = $_SERVER['argv'];
             $values['SERVER']['argc'] = $_SERVER['argc'];

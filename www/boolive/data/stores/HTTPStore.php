@@ -43,6 +43,7 @@ class HTTPStore extends Entity
     function __destruct()
     {
         curl_close($this->curl);
+        parent::__destruct();
     }
 
     /**
@@ -111,7 +112,7 @@ class HTTPStore extends Entity
      */
     function write($entity, $access)
     {
-        if ($entity->check($error)){
+        if ($entity->check(/*$error*/)){
             try{
                 $attr = $entity->export(false, true, false);
                 // Файл
@@ -179,13 +180,14 @@ class HTTPStore extends Entity
                     File::delete($path);
                 }
                 if (isset($response['error'])){
-                    throw Error::createFromArray($response['error']);
+                    $entity->error()->add(Error::createFromArray($response['error'])->children());
                 }
             }catch (\Exception $e){
-                throw $e;
+                $entity->error()->fatal = $e;
+                //throw $e;
             }
         }else{
-            throw $error;
+            //throw $this->error();
         }
         return false;
     }

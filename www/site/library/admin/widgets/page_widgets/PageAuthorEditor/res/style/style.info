@@ -1,13 +1,13 @@
 {
     "value": "style.css",
     "value_type": 3,
-    "proto": "/library/views/Css",
+    "proto": "/library/design/CSS",
     "is_mandatory": true,
     "order": 4,
     "children": {
         "title": {
             "value": "style",
-            "proto": "/library/views/Css/title",
+            "proto": "/library/design/CSS/title",
             "is_mandatory": true,
             "is_property": true,
             "order": 1

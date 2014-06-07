@@ -1,0 +1,81 @@
+/* Блок формы */
+.form{
+    padding: 15px 25px;
+    background: #fff;
+    box-shadow: -1px 1px 3px 0 #DCDCDC, inset -10px -5px 10px 0 #FEFEFE;
+    }
+.form__title{
+    margin: 15px 0;
+    font-weight: normal;
+    font-size: 16px;
+    }
+/* Пункт формы */
+.item{
+    margin: 15px 0;
+    }
+    .item_state_error{
+
+    }
+.item__label{
+    display: block;
+    margin: 5px 0;
+    font-size: 12px;
+    }
+.item__input{
+    box-sizing: border-box;
+    padding: 5px;
+    width: 166px;
+    height: 28px;
+    border: 1px solid #bbb;
+    box-shadow: inset 0 1px 3px #ddd;
+    vertical-align: top;
+    font-size: 14px;
+    }
+/* Текст ошибки показывается, когда пункт формы со статусом error*/
+.item__error{
+    display: none;
+    color: #f00;
+    font-size: 12px;
+    }
+    .item_state_error .item__error{
+        display: block;
+        }
+/* Кнопки */
+.btn{
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 3px 0;
+    padding: 5px 15px;
+    height: 30px;
+    border: 1px solid #c2c7cc;
+    border-radius: 3px;
+    background: #fefefe;
+    background: linear-gradient(to bottom, #fefefe 0, #e7e7e7 100%);
+    color: #546171;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    }
+    .btn:hover{
+        color: #f00;
+        }
+
+.btn_type_primary{
+    border: 1px solid #517bae;
+    background: #fefefe;
+    background: linear-gradient(to bottom, #80b2ed 0, #4170a8 100%);
+    color: #f0f0f0;
+    }
+    .btn_type_primary:hover{
+        background: linear-gradient(to bottom, #65acfc 0, #337acc 100%);
+        color: #fff;
+    }
+
+/* Размеры полей */
+.input_size_big{
+    width: 100%;
+    }
+.input_size_medium{
+    width: 400px;
+    max-width: 100%;
+    }

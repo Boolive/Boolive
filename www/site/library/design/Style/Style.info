@@ -1,0 +1,49 @@
+{
+    "value": "",
+    "proto": "/library/basic/Object",
+    "is_default_class": false,
+    "order": 3,
+    "children": {
+        "title": {
+            "value": "Стиль ",
+            "proto": "/library/basic/Object/title",
+            "is_property": true,
+            "order": 1
+        },
+        "description": {
+            "value": "Для оформления одного визуального элемента",
+            "value_type": 2,
+            "proto": "/library/basic/Object/description",
+            "is_property": true,
+            "order": 2
+        },
+        "width": {
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_property": true,
+            "order": 3,
+            "children": {
+                "title": {
+                    "value": "width",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        },
+        "height": {
+            "value": "",
+            "proto": "/library/basic/String",
+            "is_property": true,
+            "order": 4,
+            "children": {
+                "title": {
+                    "value": "height",
+                    "proto": "/library/basic/String/title",
+                    "is_property": true,
+                    "order": 1
+                }
+            }
+        }
+    }
+}

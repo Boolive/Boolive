@@ -1,6 +1,6 @@
 {
     "value": "style_tile.css",
     "value_type": 3,
-    "proto": "/library/views/Css",
+    "proto": "/library/design/CSS",
     "order": 2
 }

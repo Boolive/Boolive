@@ -25,6 +25,7 @@ class tasks extends View
     function __destruct()
     {
         $this->unlock();
+        parent::__destruct();
     }
 
     /**

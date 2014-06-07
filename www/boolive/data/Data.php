@@ -419,9 +419,7 @@ class Data
             if ($store = self::getStore($entity->key())){
                 return $store->write($entity, $access);
             }else{
-                $error = new Error('Невозможно сохранить объект', $entity->uri());
-                $error->store = new Error('Неопределено хранилище для объекта', 'not-exist');
-                throw $error;
+                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
         return false;
@@ -442,8 +440,7 @@ class Data
                 return $store->delete($entity, $access, $integrity);
             }else{
                 $error = new Error('Невозможно удалить объект', $entity->uri());
-                $error->store = new Error('Неопределено хранилище объекта', 'not-exist');
-                throw $error;
+                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
         return false;
@@ -468,9 +465,7 @@ class Data
             if ($store = self::getStore($entity->key())){
                 $store->findUpdates($entity, $step_size, $depth, $from_file);
             }else{
-                $error = new Error('Невозможно проверить обновления для объекта', $entity->uri());
-                $error->store = new Error('Неопределено хранилище объекта', 'not-exist');
-                throw $error;
+                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
     }
@@ -486,9 +481,7 @@ class Data
             if ($store = self::getStore($entity->key())){
                 $store->applyUpdates($entity);
             }else{
-                $error = new Error('Невозможно применить обновления для объекта', $entity->uri());
-                $error->store = new Error('Неопределено хранилище объекта', 'not-exist');
-                throw $error;
+                $entity->error()->store->{'not-exist'} = 'Неопределено хранилище объекта';
             }
         }
     }
