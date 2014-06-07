@@ -398,7 +398,7 @@ class MySQLStore extends Entity
                             $entity->errors()->access->{'write/change/proto'} = 'Нет доступа на смену прототипа';
                         }else
                         if ($current['author'] != $attr['author'] && !$entity->isAccessible('write/change/author')){
-                            $error->access = new Error('Нет доступа на смену авторства', 'write/change/author');
+                            $entity->errors()->access->{'write/change/author'} = 'Нет доступа на смену авторства';
                         }else
                         if ($current['is_default_class'] != $attr['is_default_class'] && !$entity->isAccessible('write/change/is_default_class')){
                             $entity->errors()->access->{'write/change/is_default_class'} = 'Нет доступа на смену признака "своя логика"';
@@ -408,9 +408,6 @@ class MySQLStore extends Entity
                         }else
                         if ($current['is_property'] != $attr['is_property'] && !$entity->isAccessible('write/change/is_property')){
                             $entity->errors()->access->{'write/change/is_property'} = 'Нет доступа на смену признака "свойство"';
-                        }else
-                        if ($current['diff'] != $attr['diff'] && $attr['diff'] == Entity::DIFF_NO && !$entity->isAccessible('write/change/diff')){
-                            $entity->errors()->access->{'write/change/diff'} = 'Нет доступа на установку обновлений';
                         }
     //                    else
     //                    if ($current['order'] != $attr['order'] && ($p = $entity->parent()) && !$p->isAccessible('order')){
@@ -1428,15 +1425,6 @@ class MySQLStore extends Entity
                             // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
                             if ($c[0] == 'value'){
                                 $c[0] = is_numeric($c[2]) ? 'valuef': 'value';
-                            }
-                            if ($c[0] == 'parent' || $c[0] == 'proto' || $c[0] == 'uri'){
-                                if (is_array($c[2])){
-                                    foreach ($c[2] as $ci => $cv){
-                                        $c[2][$ci] = $store->localId($cv, false);
-                                    }
-                                }else{
-                                    $c[2] = $store->localId($c[3], false);
-                                }
                             }
                             // sql услвоие
                             if ($c[1]=='eq'){

@@ -41,7 +41,7 @@ class Draft extends ToggleAction
                     // @todo Обрабатывать ошибки
                     if ($o->save()){
                         $result['changes'][$o->uri()] = array(
-                        'is_draft' => $o->isDraft()
+                            'is_draft' => $o->isDraft()
                         );
                     }else{
                         $result['errors'][$o->uri()] = $o->errors()->getUserMessage(true);

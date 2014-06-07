@@ -1796,38 +1796,8 @@ class Entity implements ITrace
                     $cond[1] = '!=';
                     $cond[2] = 0;
                 }
-                if (in_array($cond[0], array('is', 'name', 'uri', 'key', 'date', 'order', 'value', 'diff', 'diff_from'))){
-                    $value = $this->{$cond[0]}();
-                }else
-                if ($cond[0] == 'is_hidden'){
-                    $value = $this->isHidden(null, empty($cond[3]));
-                }else
-                if ($cond[0] == 'is_draft'){
-                    $value = $this->isDraft(null, empty($cond[3]));
-                }else
-                if ($cond[0] == 'is_file'){
-                    $value = $this->isFile();
-                }else
-                if ($cond[0] == 'value_type'){
-                    $value = $this->valueType();
-                }else
-                if ($cond[0] == 'is_link'){
-                    $value = $this->isLink();
-                }else
-                if ($cond[0] == 'is_relative'){
-                    $value = $this->isRelative();
-                }else
-                if ($cond[0] == 'is_mandatory'){
-                    $value = $this->isMandatory();
-                }else
-                if ($cond[0] == 'is_property'){
-                    $value = $this->isProperty();
-                }else
-                if ($cond[0] == 'parent_cnt'){
-                    $value = $this->parentCount();
-                }else
-                if ($cond[0] == 'proto_cnt'){
-                    $value = $this->protoCount();
+                if (isset($this->_attribs[$cond[0]]) || array_key_exists($cond[0], $this->_attribs)){
+                    $value = $this->_attribs[$cond[0]];
                 }else{
                     $value = null;
                 }
