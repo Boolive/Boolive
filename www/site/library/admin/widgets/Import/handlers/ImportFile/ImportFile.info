@@ -21,7 +21,7 @@
         },
         "percent": {
             "is_default_value": true,
-            "value": 0,
+            "value": "0",
             "proto": "/library/views/Task/percent",
             "is_property": true,
             "order": 3

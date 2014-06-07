@@ -74,6 +74,14 @@
             "is_mandatory": true,
             "is_property": true,
             "order": 8
+        },
+        "icon": {
+            "is_default_value": true,
+            "value": "icon.png",
+            "value_type": 3,
+            "proto": "/library/views/Widget/icon",
+            "is_property": true,
+            "order": 9
         }
     }
 }

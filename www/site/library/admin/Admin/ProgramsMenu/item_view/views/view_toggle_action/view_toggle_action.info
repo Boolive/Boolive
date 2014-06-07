@@ -3,7 +3,7 @@
     "value_type": 3,
     "proto": "/library/views/Widget",
     "is_default_class": false,
-    "order": 8,
+    "order": 9,
     "children": {
         "title": {
             "value": "Пункт действия-переключателя",

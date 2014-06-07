@@ -4,6 +4,6 @@
     "value_type": 3,
     "proto": "/library/admin/widgets/FindUpdates",
     "is_link": true,
-    "is_hidden": true,
+    "is_draft": true,
     "order": 23
 }

@@ -1,6 +1,6 @@
 {
     "is_default_value": true,
-    "value": 0,
+    "value": "0",
     "proto": "/library/basic/Number",
     "order": 32,
     "children": {

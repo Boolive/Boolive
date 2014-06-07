@@ -4,5 +4,6 @@
     "value_type": 3,
     "proto": "/library/admin/widgets/Installer",
     "is_link": true,
+    "is_draft": true,
     "order": 24
 }

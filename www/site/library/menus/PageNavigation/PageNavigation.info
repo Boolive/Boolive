@@ -36,7 +36,7 @@
             "order": 5
         },
         "show_cnt": {
-            "value": 1000,
+            "value": "1000",
             "proto": "/library/basic/Number",
             "is_property": true,
             "order": 6,

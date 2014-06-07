@@ -95,7 +95,7 @@
         },
         "count_per_page": {
             "is_default_value": true,
-            "value": 8,
+            "value": "8",
             "proto": "/library/content_widgets/Part/count_per_page",
             "is_mandatory": true,
             "is_property": true,

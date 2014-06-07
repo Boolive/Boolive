@@ -28,7 +28,7 @@
             "order": 3
         },
         "length": {
-            "value": 622,
+            "value": "622",
             "proto": "/library/basic/Number",
             "is_mandatory": true,
             "is_property": true,
