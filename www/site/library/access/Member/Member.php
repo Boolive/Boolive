@@ -40,7 +40,6 @@ class Member extends Entity
      */
     function getAccessCond($action_kind, $object = null)
     {
-        return array();
         if (!isset($this->_rights[$action_kind])){
             if (Auth::isSuperAdmin()) return $this->_rights[$action_kind] = array();
             //Trace::groups('Data')->group('START getAccess');

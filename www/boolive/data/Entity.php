@@ -270,7 +270,7 @@ class Entity implements ITrace
      */
     function key()
     {
-        return isset($this->_attribs['id']) ? $this->_attribs['id'] : Entity::ENTITY_ID;
+        return isset($this->_attribs['id']) ? $this->_attribs['id'] : /*Entity::ENTITY_ID*/ $this->uri();
     }
 
     /**
@@ -978,7 +978,7 @@ class Entity implements ITrace
      * Прототип объекта
      * @param null|Entity $new_proto Новый прототип. Чтобы удалить прототип, указывается false
      * @param bool $load Загрузить прототип из хранилща, если ещё не загружен?
-     * @param bool $reload
+     * @param bool $reload Перезагрузить из хрнаилища
      * @throws \boolive\errors\Error
      * @throws \Exception
      * @return Entity|null|bool
@@ -1049,8 +1049,9 @@ class Entity implements ITrace
         }
         // Возврат объекта-прототипа
         $reload = $reload && $this->_proto instanceof Entity && !$this->_proto->isExist() && isset($this->_attribs['proto']);
-        if ((($this->_proto === false && $load) || $reload) && $this->_attribs['proto']!=Entity::ENTITY_ID){
-            if (isset($this->_attribs['proto'])){
+        //
+        if ((($this->_proto === false && $load) || $reload)){
+            if (isset($this->_attribs['proto'])){ // can be null
                 $this->_proto = Data::read(array(
                     'from' => $this->_attribs['proto'],
                     'comment' => 'read proto',
@@ -1469,7 +1470,6 @@ class Entity implements ITrace
                     // Сохранение родителя, если не сохранен или требует переименования
                     if ($this->_parent){
                         if (!$this->_parent->isExist() || $this->_parent->_autoname){
-                            $this->_changed = true;
                             $this->_parent->save(false, $access);
                         }
                         $this->_attribs['parent'] = $this->_parent->key();

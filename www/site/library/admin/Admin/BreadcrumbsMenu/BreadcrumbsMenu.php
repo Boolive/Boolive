@@ -36,7 +36,6 @@ class BreadcrumbsMenu extends Widget{
             'depth' => array(0,'max'),
             'order' => array('parent_cnt', 'desc'),
             'where' => array(
-                array('diff', '>=', 0),
                 array('is_draft', '>=', 0),
                 array('is_hidden', '>=', 0)
             )

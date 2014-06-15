@@ -148,8 +148,6 @@ class BaseExplorer extends AutoWidgetList2
         }else{
             $cond['where'][] = array('is_mandatory', '=', 0);
         }
-            $cond['where'][] = array('attr', 'is_mandatory', '=', 0);
-        }
         // Никакие
         if (empty($any)) {
             return array();

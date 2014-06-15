@@ -6,24 +6,12 @@
             <?php
                 $list = $v['objects'];//->arrays(\boolive\values\Rule::any());
                 foreach ($list as $item):
-                    $diff_class = '';
-//                    switch ($item['diff']->int()){
-//                        case \boolive\data\Entity::DIFF_CHANGE:
-//                            $diff_class = ' change';
-//                            break;
-//                        case \boolive\data\Entity::DIFF_ADD:
-//                            $diff_class = ' add';
-//                            break;
-//                        case \boolive\data\Entity::DIFF_DELETE:
-//                            $diff_class = ' delete';
-//                            break;
-//                    }
             ?>
                 <li>
                 <span class="txt-primary"><?php echo $item['title'];?></span>
                 <?php if ($item['uri']->string()):?>
                 <span class="txt-tag"><?php echo $item['uri'];?></span>
-                <span class="diff<?php echo $diff_class;?>"><?php echo $item['diff_message'];?></span>
+                <span class="diff"></span>
                 <?php endif;?>
                 </li>
             <?php endforeach; ?>

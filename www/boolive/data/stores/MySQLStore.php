@@ -1444,7 +1444,7 @@ class MySQLStore extends Entity
                                 $cond[$i].= '?';
                                 $result['binds'][] = $c[2];
                             }
-                            if ($c[0] == 'is_draft' || $c[0] == 'diff' || $c[0] == 'is_hidden'){
+                            if ($c[0] == 'is_draft' || $c[0] == 'is_hidden'){
                                 $attr_exists[$c[0]] = true;
                             }
                         //}
