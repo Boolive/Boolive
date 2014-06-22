@@ -17,7 +17,7 @@ class Data2
     /** @const  Файл конфигурации хранилищ */
     const CONFIG_FILE = 'config.data2.php';
     /** @var array Конфигурация хранилищ */
-    private static $config;
+    public static $config;
     /** @var array Экземпляр хранилища */
     private static $store;
 
@@ -63,8 +63,6 @@ class Data2
     {
         $cond = self::normalizeCond($cond);
 
-        trace($cond);
-
         if ($store = self::getStore()){
             return $store->read($cond);
         }
@@ -77,10 +75,11 @@ class Data2
         //6. Создание экземпляров
     }
 
-    static function normalizeCond2($cond)
+    static function normalizeCond($cond)
     {
         if (!empty($cond['correct'])) return $cond;
 
+        return $cond;
     }
 
     /**

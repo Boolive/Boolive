@@ -20,7 +20,7 @@ $stores = array(
                 // Тип СУБД
                 'driver' => 'mysql',
                 // Имя базы данных
-                'dbname' => 'boolive',
+                'dbname' => 'boolive-test7',
                 // Адрес сервера
                 'host' => '127.0.0.1',
                 // Порт
