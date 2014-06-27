@@ -22,10 +22,4 @@ if (boolive\Boolive::activate()){
     boolive\installer\Installer::start();
 }
 
-trace(\boolive\data\Data2::$config);
-
-$err = null;
-
-\boolive\data\stores\MySQLStore2::createStore(\boolive\data\Data2::$config['connect'], $err);
-
-trace($err);
+trace(\boolive\data\Data2::getStore()->db);

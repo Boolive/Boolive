@@ -19,13 +19,13 @@ class F
      * @param string $tpl_right
      * @return string Подготовленный текст
      */
-    static function parse($text, $vars=array(), $tpl_left = '{', $tpl_right = '}')
+    static function parse($text, $vars=array(), $tpl_left = '{', $tpl_right = '}', $filter = FILTER_SANITIZE_SPECIAL_CHARS)
     {
-        $vars = filter_var_array($vars, FILTER_SANITIZE_SPECIAL_CHARS);
+        if ($filter) $vars = filter_var_array($vars, $filter);
         // По циклу проходимся по всем переменным заменяя значения в {} на значения в массиве
         if (is_array($vars)){
             foreach ($vars as $key => $value){
-                $text = str_replace($tpl_left.$key.$tpl_right, $value, $text);
+                if (is_scalar($value)) $text = str_replace($tpl_left.$key.$tpl_right, $value, $text);
             }
         }
         return $text;

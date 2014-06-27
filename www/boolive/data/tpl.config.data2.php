@@ -7,15 +7,15 @@ $store = array(
     'class' => '\boolive\data\stores\MySQLStore2',
     'connect' => array(
         // Имя базы данных
-        'dbname' => 'blv-data28',
+        'dbname' => '_dbname_',
         // Адрес сервера
-        'host' => '127.0.0.1',
+        'host' => '_host_',
         // Порт
-        'port' => '3306',
+        'port' => '_port_',
         // Имя пользователя для подключения к базе данных
-        'user' => 'root',
+        'user' => '_user_',
         // Пароль
-        'password' => '',
+        'password' => '_password_',
         // Опции подключения
         'options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'
@@ -28,8 +28,7 @@ $store = array(
         'trace_count' => false,
         // Настройка секционирования базы данных
         'sections' => array(
-            array('code' => 0, 'uri' => ''),
-            array('code' => 1, 'uri' => '/library')
+            _sections_
         )
     )
 );

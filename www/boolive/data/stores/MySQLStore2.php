@@ -29,6 +29,12 @@ class MySQLStore2 extends Entity
      */
     function __construct($config)
     {
+        $config['dsn'] = array(
+            'driver' => 'mysql',
+            'dbname' => $config['dbname'],
+            'host' => $config['host'],
+            'port' => $config['port']
+        );
         $this->db = DB::connect($config);
         Events::on('Boolive::deactivate', $this, 'deactivate');
     }
@@ -64,10 +70,10 @@ class MySQLStore2 extends Entity
         try{
             if (!$errors) $errors = new \boolive\errors\Error('Некоректные параметры доступа к СУБД', 'db');
             // Проверка подключения и базы данных
-            $db = new DB('mysql:host='.$connect['dsn']['host'].';port='.$connect['dsn']['port'], $connect['user'], $connect['password'], array(DB::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'), $connect['prefix']);
+            $db = new DB('mysql:host='.$connect['host'].';port='.$connect['port'], $connect['user'], $connect['password'], array(DB::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'), $connect['prefix']);
             $db_auto_create = false;
             try{
-                $db->exec('USE `'.$connect['dsn']['dbname'].'`');
+                $db->exec('USE `'.$connect['dbname'].'`');
             }catch (\Exception $e){
                 // Проверка исполнения команды USE
                 if ((int)$db->errorCode()){
@@ -80,9 +86,9 @@ class MySQLStore2 extends Entity
                     // Отсутсвует указанная бд?
                     if ($info[1] == '1049'){
                         // создаем
-                        $db->exec('CREATE DATABASE `'.$connect['dsn']['dbname'].'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
+                        $db->exec('CREATE DATABASE `'.$connect['dbname'].'` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci');
                         $db_auto_create = true;
-                        $db->exec('USE `'.$connect['dsn']['dbname'].'`');
+                        $db->exec('USE `'.$connect['dbname'].'`');
                     }
                 }
             }
@@ -189,13 +195,11 @@ class MySQLStore2 extends Entity
             $db->exec("
                 CREATE TABLE `text` (
                   `id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор объекта',
-                  `sec` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Код секции',
                   `value` TEXT NOT NULL DEFAULT '' COMMENT 'Текстовое значение',
-                  PRIMARY KEY (`id`, `sec`),
+                  PRIMARY KEY (`id`),
                   FULLTEXT KEY `fulltext` (`value`)
                 )
                 ENGINE=MYISAM DEFAULT CHARSET=utf8 COMMENT='Текстовые значения объектов'
-                PARTITION BY LIST(sec) ($sects)
             ");
         }catch (\PDOException $e){
 			// Ошибки подключения к СУБД
