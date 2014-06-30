@@ -49,7 +49,7 @@ function get_root_dir()
 {
     if (empty($_SERVER['DOCUMENT_ROOT'])){
         // Если переменной окружения нет, то вычисляем из пути на исполняемый файл
-        $_SERVER['DOCUMENT_ROOT'] = dirname($_SERVER['SCRIPT_FILENAME']);
+        $_SERVER['DOCUMENT_ROOT'] = __DIR__;
     }
     return rtrim($_SERVER['DOCUMENT_ROOT'],'/\\');
 }
@@ -60,8 +60,8 @@ function get_root_dir()
  */
 function get_web_dir()
 {
-    preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)index\.php$|', $_SERVER['SCRIPT_FILENAME'], $find);
-    if ($find[1] == null) {
+    preg_match('|^'.preg_quote(DOCUMENT_ROOT,'|').'(.*)config\.php$|', __FILE__, $find);
+    if (!isset($find[1])) {
         $find[1] = "/";
     }
     return $find[1];
