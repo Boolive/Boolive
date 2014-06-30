@@ -75,6 +75,25 @@ class Data2
         //6. Создание экземпляров
     }
 
+    /**
+     * Сохранение объекта
+     * @param Entity $entity Сохраняемый объект
+     * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
+     * @throws \boolive\errors\Error
+     * @return bool Признак, сохранен или нет объект?
+     */
+    static function write($entity, $access = true)
+    {
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore()){
+                return $store->write($entity, $access);
+            }else{
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище';
+            }
+        }
+        return false;
+    }
+
     static function normalizeCond($cond)
     {
         if (!empty($cond['correct'])) return $cond;

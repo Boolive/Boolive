@@ -262,6 +262,18 @@ class Entity implements ITrace
         return $this->_attribs['uri'];
     }
 
+    function uri2()
+    {
+        if (!isset($this->_attribs['uri'])){
+            if ($parent = $this->parent()){
+                return $parent->uri().'/'.$this->_attribs['name'];
+            }else{
+                return $this->_attribs['name'];
+            }
+        }
+        return $this->_attribs['uri'];
+    }
+
 
     /**
      * Ключ
