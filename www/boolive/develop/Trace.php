@@ -92,7 +92,11 @@ class Trace
      */
     function out()
     {
-        echo '<pre>'.self::Format($this).'</pre>';
+        if (php_sapi_name() == 'cli'){
+            echo self::Format($this, $trace_buf = array(), '  ', false);
+        }else{
+            echo '<pre>'.self::Format($this).'</pre>';
+        }
         return $this;
     }
 
