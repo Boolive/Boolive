@@ -73,10 +73,10 @@ class MySQLStore2 extends Entity
         $attr = $entity->_attribs;
         // Идентификатор объекта
         // Родитель и урвень вложенности
-        $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent']) : 0;
+        $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
         $attr['parent_cnt'] = $entity->parentCount();
         // Прототип и уровень наследования
-        $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto']) : 0;
+        $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
         $attr['proto_cnt'] = $entity->protoCount();
         // Автор
         $attr['author'] = isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
@@ -96,6 +96,40 @@ class MySQLStore2 extends Entity
 //        $curr_uri = $attr['uri'];
 
         $attr['sec'] = $this->getSection($entity->uri2());
+
+        $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
+
+        if (!$is_new){
+            $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
+            $q->execute(array($attr['id']));
+            $current = $q->fetch(DB::FETCH_ASSOC);
+        }
+
+        // Порядковый номер
+        if ($is_new){
+            if ($attr['order'] != Entity::MAX_ORDER){
+                $do = 1;
+                $between = array($attr['order'], Entity::MAX_ORDER);
+            }
+        }else
+        if ($attr['parent'] != $current['parent']){
+            // -1 в старом родителе
+            // +1 в новом родителе (как будто новый объект)
+        }else
+        if ($attr['order'] != $current['order']){
+            if ($attr['order'] < $current['order']){
+                $do = 1;
+                $between = array($attr['order'], $current['order']);
+            }else{
+                $do = -1;
+                $between = array($current['order'], $attr['order']);
+            }
+        }
+        if (isset($do)){
+            $q = $this->db->prepare('UPDATE {objects} SET `order`=`order`+? WHERE `sec`=? AND `parent`=? AND `order` BETWEEN ? AND ?');
+            $q->execute(array($attr['sec'], $attr['parent'], $between[0], $between[1]));
+        }
+
 
         // Подбор уникального имени, если указана необходимость в этом
         if ($entity->_autoname){
@@ -119,6 +153,12 @@ class MySQLStore2 extends Entity
 
         // Локальный идентификатор объекта
         if (empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID){
+
+            $attr['id'] = $this->reserveId();
+            if ($attr['order'] == Entity::MAX_ORDER){
+                $attr['order'] = $attr['id'];
+            }
+
             $attr_names = array(
                 'sec', 'is_draft', 'is_hidden', 'is_mandatory', 'is_property', 'is_relative', 'is_completed',
                 'date_create', 'date_update', 'order', 'name', 'parent', 'parent_cnt', 'proto', 'proto_cnt', 'author',
@@ -167,6 +207,14 @@ class MySQLStore2 extends Entity
         return $this->uri_sec[$uri];
     }
 
+    /**
+     * Определение идентификатора по URI
+     * МОжет создавать идентификатор для URI, если передать аргумент $create = true
+     * @param string $uri
+     * @param bool $create
+     * @param bool $is_created
+     * @return int
+     */
     function getId($uri, $create = false, &$is_created = false)
     {
         if (is_null($uri) || is_int($uri)) return $uri;
@@ -180,16 +228,16 @@ class MySQLStore2 extends Entity
                 $is_created = false;
             }else
             if ($create){
+                $this->uri_id[$uri] = $this->reserveId();
                 // Создание идентификатора для URI
                 $names = F::splitRight('/', $uri);
                 $parant = isset($names[0])? $this->getId($names[0], true) : 0;
                 $parant_cnt = mb_substr_count($uri, '/');
                 $q = $this->db->prepare('
-                    INSERT INTO {objects} (`sec`, `parent`, `parent_cnt`, `name`, `uri`)
-                    VALUES (?, ?, ?, ?, ?)
+                    INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `name`, `uri`)
+                    VALUES (?, ?, ?, ?, ?, ?)
                 ');
-                $q->execute(array($this->getSection($uri), $parant, $parant_cnt, $names[1], $uri));
-                $this->uri_id[$uri] = intval($this->db->lastInsertId('id'));
+                $q->execute(array($this->uri_id[$uri], $this->getSection($uri), $parant, $parant_cnt, $names[1], $uri));
                 $is_created = true;
             }else{
                 return 0;
@@ -198,10 +246,14 @@ class MySQLStore2 extends Entity
         return $this->uri_id[$uri];
     }
 
+    /**
+     * Резервирование идентификатора и его получение
+     * @return int
+     */
     function reserveId()
     {
         $this->db->exec('REPLACE {auto_increment} (`key`) VALUES (0)');
-        return $this->db->lastInsertId();
+        return intval($this->db->lastInsertId());
     }
 
     /**
@@ -304,10 +356,11 @@ class MySQLStore2 extends Entity
                   `valuef` DOUBLE NOT NULL DEFAULT '0' COMMENT 'Числовое значение для правильной сортировки и поиска',
                   `value_type` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'Тип значения. 1 - строка, 2 - текст, 3 - файл',
                   `uri` VARCHAR(1024) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-                  PRIMARY KEY (`id`,`sec`),
-                  UNIQUE KEY `name` (`parent`,`name`,`sec`),
-                  KEY `child` (`parent`,`order`,`name`,`value`,`valuef`,`sec`),
-                  KEY `uri` (`uri`(255))
+                    PRIMARY KEY (`id`,`sec`),
+                    UNIQUE KEY `name` (`sec`,`parent`,`name`),
+                    KEY `uri` (`uri`(255)),
+                    KEY `order` (`sec`,`parent`,`order`),
+                    KEY `child` (`sec`,`parent`,`name`,`value`(255),`valuef`)
                 )
                 ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'
                 PARTITION BY LIST(sec) ($sects)

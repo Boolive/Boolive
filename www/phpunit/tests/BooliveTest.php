@@ -8,7 +8,6 @@
 
 namespace phpunit\tests;
 
-
 use boolive\Boolive;
 use boolive\data\Data2;
 
@@ -30,15 +29,16 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         Boolive::activate();
     }
 
-    function _test()
+    function test_getId()
     {
         trace(Data2::getStore()->getId('/library1', true));
-        $this->assertTrue(true);
     }
 
-    function testId()
+    function _test_reserveId()
     {
-        echo \boolive\data\Data2::getStore()->reserveId()."\n";
+        for ($i=0; $i<1000; $i++){
+            echo \boolive\data\Data2::getStore()->reserveId()."\n";
+        }
     }
 }
  
