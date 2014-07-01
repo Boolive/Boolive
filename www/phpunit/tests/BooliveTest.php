@@ -30,10 +30,15 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         Boolive::activate();
     }
 
-    function test()
+    function _test()
     {
         trace(Data2::getStore()->getId('/library1', true));
         $this->assertTrue(true);
+    }
+
+    function testId()
+    {
+        echo \boolive\data\Data2::getStore()->reserveId()."\n";
     }
 }
  

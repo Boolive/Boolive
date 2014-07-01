@@ -198,8 +198,13 @@ class MySQLStore2 extends Entity
         return $this->uri_id[$uri];
     }
 
+    function reserveId()
+    {
+        $this->db->exec('REPLACE {auto_increment} (`key`) VALUES (0)');
+        return $this->db->lastInsertId();
+    }
 
-        /**
+    /**
      * Создание хранилища
      * @param $connect
      * @param null $errors
@@ -341,6 +346,14 @@ class MySQLStore2 extends Entity
                   FULLTEXT KEY `fulltext` (`value`)
                 )
                 ENGINE=MYISAM DEFAULT CHARSET=utf8 COMMENT='Текстовые значения объектов'
+            ");
+            $db->exec("
+                CREATE TABLE `auto_increment` (
+                  `key` TINYINT(1) NOT NULL,
+                  `value` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                  PRIMARY KEY (`key`),
+                  UNIQUE KEY `value` (`value`)
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8
             ");
         }catch (\PDOException $e){
 			// Ошибки подключения к СУБД
