@@ -21,5 +21,3 @@ if (boolive\Boolive::activate()){
     include DIR_SERVER.'boolive/installer/Installer.php';
     boolive\installer\Installer::start();
 }
-
-trace(\boolive\data\Data2::getStore()->db);

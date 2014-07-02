@@ -67,89 +67,196 @@ class MySQLStore2 extends Entity
      * @param Entity $entity
      * @param $access
      */
-    function write($entity, $access)
+    function write($entity, $access = true)
     {
-        // Атрибуты отфильтрованы, так как нет ошибок
-        $attr = $entity->_attribs;
-        // Идентификатор объекта
-        // Родитель и урвень вложенности
-        $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
-        $attr['parent_cnt'] = $entity->parentCount();
-        // Прототип и уровень наследования
-        $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
-        $attr['proto_cnt'] = $entity->protoCount();
-        // Автор
-        $attr['author'] = isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
-        // Числовое значение
-        $attr['valuef'] = floatval($attr['value']);
-        // Переопределено ли значение и кем
-        $attr['is_default_value'] = (!is_null($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_value']) : $attr['is_default_value'];
-        // Чей класс
-        $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
-        // Ссылка
-        $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
-        // Дата обновления
-        $attr['date_update'] = time();
-        // Тип по умолчанию
-        if ($attr['value_type'] == Entity::VALUE_AUTO) $attr['value_type'] = Entity::VALUE_SIMPLE;
-//        // URI до сохранения объекта
-//        $curr_uri = $attr['uri'];
+        try{
+            // Атрибуты отфильтрованы, так как нет ошибок
+            $attr = $entity->_attribs;
+            // Идентификатор объекта
+            // Родитель и урвень вложенности
+            $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
+            //$attr['parent_cnt'] = $entity->parentCount();
+            // Прототип и уровень наследования
+            $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
+            //$attr['proto_cnt'] = $entity->protoCount();
+            // Автор
+            //$attr['author'] = isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
+            // Числовое значение
+            $attr['valuef'] = floatval($attr['value']);
+            // Переопределено ли значение и кем
+            $attr['is_default_value'] = (!is_null($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_value']) : $attr['is_default_value'];
+            // Чей класс
+            $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
+            // Ссылка
+            $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
+            // Дата обновления
+            $attr['date_update'] = time();
+            // Тип по умолчанию
+            if ($attr['value_type'] == Entity::VALUE_AUTO) $attr['value_type'] = Entity::VALUE_SIMPLE;
+    //        // URI до сохранения объекта
+    //        $curr_uri = $attr['uri'];
 
-        $attr['sec'] = $this->getSection($entity->uri2());
+            $attr['sec'] = $this->getSection($entity->uri2());
 
-        $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
+            $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
 
-        if (!$is_new){
-            $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
-            $q->execute(array($attr['id']));
-            $current = $q->fetch(DB::FETCH_ASSOC);
-        }
-
-        // Порядковый номер
-        if ($is_new){
-            if ($attr['order'] != Entity::MAX_ORDER){
-                $do = 1;
-                $between = array($attr['order'], Entity::MAX_ORDER);
+            // Если больше 255, то тип текстовый
+            $value_src = $attr['value'];// для сохранения в текстовой таблице
+            if (mb_strlen($attr['value']) > 255){
+                $attr['value'] = mb_substr($attr['value'],0,255);
+                $attr['value_type'] = Entity::VALUE_TEXT;
             }
-        }else
-        if ($attr['parent'] != $current['parent']){
-            // -1 в старом родителе
-            // +1 в новом родителе (как будто новый объект)
-        }else
-        if ($attr['order'] != $current['order']){
-            if ($attr['order'] < $current['order']){
-                $do = 1;
-                $between = array($attr['order'], $current['order']);
+
+            // Если значение файл, то подготовливаем для него имя
+            if (isset($attr['file'])){
+                $attr['value_type'] = Entity::VALUE_FILE;
+                // Если нет временного имени, значит создаётся из значения
+                if (empty($attr['file']['tmp_name'])){
+                    if (!isset($attr['file']['content'])) $attr['file']['content'] = '';
+                    if (!isset($attr['file']['name'])) $attr['file']['name'] = $attr['name'].'.txt';
+                    $f = File::fileInfo($attr['file']['name']);
+                }else{
+                    if (isset($attr['file']['content'])) unset($attr['file']['content']);
+                    $f = File::fileInfo($attr['file']['tmp_name']);
+                }
+                $attr['value'] = ($f['back']?'../':'').$attr['name'];
+                // расширение
+                if (empty($attr['file']['name'])){
+                    if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                }else{
+                    $f = File::fileInfo($attr['file']['name']);
+                    if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                }
+                $value_src = $attr['value'];
+            }
+
+            // Выбор текущего состояния объекта
+            if (!$is_new){
+                $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
+                $q->execute(array($attr['id']));
+                $current = $q->fetch(DB::FETCH_ASSOC);
             }else{
-                $do = -1;
-                $between = array($current['order'], $attr['order']);
+                $attr['id'] = $this->reserveId();
             }
-        }
-        if (isset($do)){
-            $q = $this->db->prepare('UPDATE {objects} SET `order`=`order`+? WHERE `sec`=? AND `parent`=? AND `order` BETWEEN ? AND ?');
-            $q->execute(array($attr['sec'], $attr['parent'], $between[0], $between[1]));
+
+            // @todo Контроль доступа
+
+            $temp_name = $attr['name'];
+            // Уникальность имени объекта
+            if ($entity->_autoname){
+
+                // Подбор уникального имени
+                $attr['name'] = $this->nameMakeUnique($attr['sec'], $attr['parent'], $entity->_autoname);
+            }else
+            if ($is_new || $attr['name']!=$current['name'] || $attr['parent'] != $current['name']){
+                // Проверка уникальности для новых объектов или при измененении имени или родителя
+                if ($this->nameIsExists($attr['sec'], $attr['parent'], $attr['name'])){
+                    $entity->errors()->_attribs->name->unique = 'Уже имеется объект с таким именем';
+                }
+            }
+            $attr['uri'] = $entity->uri2();
+
+            //@todo Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
+            if (!empty($current) && ($current['name']!==$attr['name'] || $current['parent']!=$attr['parent'])){
+                // Текущий URI
+                $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
+                $uri = (isset($names[0])?$names[0].'/':'').(empty($current)? $temp_name : $current['name']);
+                // Новый URI
+                $names = F::splitRight('/', $attr['uri'], true);
+                $uri_new = (isset($names[0])?$names[0].'/':'').$attr['name'];
+                $entity->_attribs['uri'] = $uri_new;
+                //
+                $q = $this->db->prepare('UPDATE {ids}, {parents} SET {ids}.uri = CONCAT(?, SUBSTRING(uri, ?)) WHERE {parents}.parent_id = ? AND {parents}.object_id = {ids}.id AND {parents}.is_delete=0');
+                $v = array($uri_new, mb_strlen($uri)+1, $attr['id']);
+                $q->execute($v);
+                // Обновление уровней вложенностей в objects
+                if (!empty($current) && $current['parent']!=$attr['parent']){
+                    $dl = $attr['parent_cnt'] - $current['parent_cnt'];
+                    $q = $this->db->prepare('UPDATE {objects}, {parents} SET parent_cnt = parent_cnt + ? WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0');
+                    $q->execute(array($dl, $attr['id']));
+                    // @todo Обновление отношений
+//                    $this->makeParents($attr['id'], $attr['parent'], $dl, true);
+                }
+                if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
+                    // Переименование/перемещение папки объекта
+                    $dir = DIR_SERVER.'site'.$uri_new;
+                    File::rename(DIR_SERVER.'site'.$uri, $dir);
+                    if ($current['name'] !== $attr['name']){
+                        // Переименование файла, если он есть
+                        if ($current['value_type'] == Entity::VALUE_FILE){
+                            $attr['value'] = File::changeName($current['value'], $attr['name']);
+                        }
+                        File::rename($dir.'/'.$current['value'], $dir.'/'.$attr['name']);
+                        // Переименование файла класса
+                        File::rename($dir.'/'.$current['name'].'.php', $dir.'/'.$attr['name'].'.php');
+                        // Переименование .info файла
+                        File::rename($dir.'/'.$current['name'].'.info', $dir.'/'.$attr['name'].'.info');
+                    }
+                }
+                unset($q);
+            }
+
+            //@todo Загрузка файла
+            // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
+            if (!empty($current) && isset($attr['file']) && $current['value_type'] == Entity::VALUE_FILE){
+                File::delete($entity->dir(true).$current['value']);
+            }
+            // Связывание с новым файлом
+            if (isset($attr['file'])){
+                $path = $entity->dir(true).$attr['value'];
+                if (isset($attr['file']['content'])){
+                    File::create($attr['file']['content'], $path);
+                }else{
+                    if ($attr['file']['tmp_name']!=$path){
+                        if (!File::upload($attr['file']['tmp_name'], $path)){
+                            // @todo Проверить безопасность.
+                            // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
+                            if (!File::copy($attr['file']['tmp_name'], $path)){
+                                $attr['value_type'] = Entity::VALUE_SIMPLE;
+                                $attr['value'] = '';
+                            }
+                        }
+                    }
+                }
+                unset($attr['file']);
+            }
+
+            // Порядковый номер
+            if ($is_new){
+                if ($attr['order'] == Entity::MAX_ORDER){
+                    $attr['order'] = $attr['id'];
+                }else
+                if ($this->orderIsExists($attr['sec'], $attr['parent'],$attr['order'])){
+                    $this->ordersShift($attr['sec'], $attr['parent'], Entity::MAX_ORDER, $attr['order']);
+                }
+            }else{
+                if ($attr['parent'] != $current['parent']) $attr['order'] = Entity::MAX_ORDER;
+                if ($attr['order'] != $current['order']){
+                    if ($attr['order'] == Entity::MAX_ORDER) $attr['order'] = $this->orderMax($attr['sec'], $attr['parent']);
+                    $this->ordersShift($current['sec'], $current['parent'], $current['order'], $attr['order']);
+                }
+            }
+
+            // @todo Вствка или обновление записи объекта
+
+            // @todo Вставка или обновления текста
+
+            // @todo Создание или обновление отношений в protos & parents
+
+            // @todo Обновление наследников
+
+            // @todo Запись в лог об изменениях в объекте
+
+            $this->db->commit();
+        }catch (\Exception $e){
+            $this->db->rollBack();
+            if (!$e instanceof Error) throw $e;
         }
 
 
-        // Подбор уникального имени, если указана необходимость в этом
-        if ($entity->_autoname){
-            //Выбор записи по шаблону имени с самым большим префиксом
-            $q = $this->db->prepare('
-                SELECT CAST((SUBSTRING_INDEX(`name`, "_", -1)) AS SIGNED) AS num FROM {objects}
-                WHERE sec=? AND parent=? AND `name` REGEXP ?
-                ORDER BY num DESC
-                LIMIT 0,1
-            ');
-            $q->execute(array($attr['sec'], $attr['parent'], '^'.$entity->_autoname.'(_[0-9]+)?$'));
-            if ($row = $q->fetch(DB::FETCH_ASSOC)){
-                $entity->_autoname.= '_'.($row['num']+1);
-            }
-//            $temp_name = $attr['name'];
-            $attr['name'] = $entity->_attribs['name'] = $entity->_autoname;
-            $attr['uri'] = $entity->uri2();
-        }else{
-            $attr['uri'] = $entity->uri2();
-        }
+
+        trace($attr);
+        return;
 
         // Локальный идентификатор объекта
         if (empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID){
@@ -234,10 +341,10 @@ class MySQLStore2 extends Entity
                 $parant = isset($names[0])? $this->getId($names[0], true) : 0;
                 $parant_cnt = mb_substr_count($uri, '/');
                 $q = $this->db->prepare('
-                    INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `name`, `uri`)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `order`, `name`, `uri`)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
                 ');
-                $q->execute(array($this->uri_id[$uri], $this->getSection($uri), $parant, $parant_cnt, $names[1], $uri));
+                $q->execute(array($this->uri_id[$uri], $this->getSection($uri), $parant, $parant_cnt, $this->uri_id[$uri], $names[1], $uri));
                 $is_created = true;
             }else{
                 return 0;
@@ -254,6 +361,94 @@ class MySQLStore2 extends Entity
     {
         $this->db->exec('REPLACE {auto_increment} (`key`) VALUES (0)');
         return intval($this->db->lastInsertId());
+    }
+
+    /**
+     * Проверка существования порядкового номера
+     * @param int $sec Код секции
+     * @param int $parent Идентификатор родителя, в рамках которого проверяется порядковый номер
+     * @param int $order Проверяемый номер
+     * @return bool
+     */
+    function orderIsExists($sec, $parent, $order)
+    {
+        $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE `sec`=? AND `parent`=? AND `order`=?');
+        $q->execute(array($sec, $parent, $order));
+        return $q->fetch() ? true : false;
+    }
+
+    /**
+     * Смещение порядковых значений
+     * @param int $sec Код секции
+     * @param int $parent Идентификатор родителя, в рамках которого проверяется порядковый номер
+     * @param int $curr_order С какого порядка смещать
+     * @param int $new_order До какого порядка смещать
+     */
+    function ordersShift($sec, $parent, $curr_order, $new_order)
+    {
+        if ($curr_order != $new_order){
+            if ($curr_order > $new_order){
+                F::swap($curr_order, $new_order);
+                $shift = '+1';
+            }else{
+                $shift = '-1';
+            }
+            $q = $this->db->prepare("UPDATE {objects} SET `order`=`order`$shift WHERE `sec`=? AND `parent`=? AND `order` BETWEEN ? AND ?");
+            $q->execute(array($sec, $parent, $curr_order, $new_order));
+        }
+    }
+
+    /**
+     * Максимальный порядковый номер
+     * @param int $sec Код секции
+     * @param int $parent Идентификатор родителя, в рамках которого определяется максимальный порядковый номер
+     * @return int
+     */
+    function orderMax($sec, $parent)
+    {
+        $q = $this->db->prepare('SELECT MAX(`order`) m FROM {objects} WHERE sec=? AND parent=?');
+        $q->execute(array($sec, $parent));
+        if ($row = $q->fetch(DB::FETCH_ASSOC)){
+            return $row['m'];
+        }else{
+            return 0;
+        }
+    }
+
+    /**
+     * Проверка сущестования объекта с указанным именем и родителем
+     * @param int $sec Код секции
+     * @param int $parent Идентификатор родителя, в рамках которого проверяется имя
+     * @param string $name Проверяемое на существование имя
+     * @return bool
+     */
+    function nameIsExists($sec, $parent, $name)
+    {
+        $q = $this->db->prepare('SELECT 1 FROM {objects} WHERE `sec`=? AND `parent`=? AND `name`=?');
+        $q->execute(array($sec, $parent, $name));
+        return $q->fetch() ? true : false;
+    }
+
+    /**
+     * Формирование уникального имени
+     * @param int $sec Код секции
+     * @param int $parent Идентификатор родителя, в рамках которого проверяется уникальность имени
+     * @param string $name Имя, которое нужно сделать уникальным, добавлением в конец чисел
+     * @return string
+     */
+    function nameMakeUnique($sec, $parent, $name)
+    {
+        $q = $this->db->prepare('
+            SELECT CAST((SUBSTRING_INDEX(`name`, "_", -1)) AS SIGNED) AS num FROM {objects}
+            WHERE sec=? AND parent=? AND `name` REGEXP ?
+            ORDER BY num DESC
+            LIMIT 0,1
+        ');
+        $q->execute(array($sec, $parent, '^'.$name.'(_[0-9]+)?$'));
+        if ($row = $q->fetch(DB::FETCH_ASSOC)){
+            $name.= '_'.($row['num']+1);
+        }
+        return $name;
     }
 
     /**

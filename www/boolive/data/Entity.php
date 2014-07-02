@@ -207,9 +207,9 @@ class Entity implements ITrace
         if (isset($new_name) && ($this->_attribs['name'] != $new_name || $choose_unique)){
             $new_name = preg_replace('/\s/ui','_',$new_name);
             if (!isset($this->_current_name)) $this->_current_name = $this->_attribs['name'];
-            //if ($choose_unique){
+            if ($choose_unique){
                 $this->_autoname = $new_name;
-            //}
+            }
             if ($this->_parent && !$choose_unique){
                 if (isset($this->_parent->_children[$this->_attribs['name']])){
                     unset($this->_parent->_children[$this->_attribs['name']]);
