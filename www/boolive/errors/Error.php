@@ -69,7 +69,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
                 $message = '';
             }
         }
-        parent::__construct($message, 0, $previous);
+        parent::__construct((string)$message, 0, $previous);
         $this->code = $code;
         $this->parent = null;
         $this->children = array();
@@ -112,7 +112,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
     {
         if (!isset($this->children[$code])){
             if (!$error instanceof Error){
-                $error = new Error((string)$error, $code);
+                $error = new Error($error, $code);
             }
             $this->children[$code] = $error;
             $this->children[$code]->parent = $this;
