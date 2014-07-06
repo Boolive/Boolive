@@ -50,14 +50,20 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
     function _test_write()
     {
         $obj = new Entity(array(
-            'id' => 5,
-            'uri' => '/members',
-            'parent' => 2,
-            'parent_cnt' => 1,
-            'order' => 3
+            'id' => 8,
+            'value' => 'Новое значение в текст',
+            'name' => 'library',
+            'parent' => 0,
+            'order' => 0,
+            'is_draft' => 0,
+            //'value_type'=> Entity::VALUE_TEXT
         ));
-        $obj->name('library');
         Data2::getStore()->write($obj);
+    }
+
+    function test_read()
+    {
+        trace(Data2::read('from(library)select(self)'));
     }
 }
  

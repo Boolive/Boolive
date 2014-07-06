@@ -25,7 +25,8 @@ class MySQLStore2 extends Entity
     private $config;
     private $uri_id = array();
     private $uri_sec = array();
-
+    /** @var array  */
+    private $classes;
     /**
      * Конструктор экземпляра хранилища
      * @param array $config Параметры подключения к базе данных
@@ -54,13 +55,240 @@ class MySQLStore2 extends Entity
     /**
      * Чтение объектов
      * @param string|array $cond Условие на выбираемые объекты.
-     * @param bool $index Признак, выполнять индексацию данных перед чтением или нет?
      * @return array|\boolive\data\Entity|null Массив объектов. Если глубина поиска ровна 0, то возвращается объект или null
      * @throws \Exception
      */
-    function read($cond, $index = false)
+    function read($cond)
     {
-        return 'a';
+        $sql = $this->condToSQL($cond);
+        $q = $this->db->prepare($sql['sql']);
+        foreach ($sql['binds'] as $i => $v){
+            if (is_array($v)){
+                $q->bindValue($i+1, $v[0], $v[1]);
+            }else{
+                $q->bindValue($i+1, $v);
+            }
+        }
+        try{
+            $q->execute();
+        }catch (\Exception $e){
+            trace($q);
+            throw $e;
+        }
+        $row = $q->fetch(DB::FETCH_ASSOC);
+        $result = array();
+        while ($row){
+            if ($cond['calc']){
+                $result[] = $row['calc'];
+            }else{
+                $result[] = $this->makeObject($row);
+            }
+            $row = $q->fetch(DB::FETCH_ASSOC);
+        }
+        // Выбор текстовых значений
+        // Структуирование дерева
+
+        return $result;
+    }
+
+
+
+    function condToSQL($cond, $only_where = false)
+    {
+        $result = array(
+            'sql' => '',
+            'binds' => array()
+        );
+        $select = '';
+        $from = '';
+        $joins = '';
+        $where = '';
+        $group = '';
+        $order = '';
+        $limit = '';
+        if (empty($cond['calc'])){
+            $select = 'SELECT obj.* ';
+        }else
+        if (!is_array($cond['calc'])){
+            if ($cond['calc'] == 'exists'){
+                $select = 'SELECT 1 calc ';
+            }else
+            if ($cond['calc'] == 'count'){
+                $select = 'SELECT COUNT(*) calc ';
+            }else
+            if (in_array($cond['calc'], array('max', 'min', 'avg', 'sum'))){
+                $select = "SELECT {$cond['calc']}(obj.value) calc ";
+            }
+        }else
+        if (in_array($cond['calc'][0], array('max', 'min', 'avg', 'sum')) && isset($this->_attribs[$cond['calc'][1]])){
+            $select = "SELECT {$cond['calc'][0]}(obj.{$cond['calc'][1]}) calc ";
+        }else{
+            throw new \Exception('Incorrect calc parameter in the reading condition');
+        }
+
+        $sec = null;
+
+        if ($cond['select'] == 'self'){
+            $from .= 'FROM {objects} obj';
+            if (is_array($cond['from'])){
+                $secs = array();
+                $ids = array();
+                $uris = array();
+                foreach ($cond['from'] as $f){
+                    if (is_int($f)){
+                        $ids[] = $f;
+                    }else{
+                        $secs[$this->getSection($f)] = true;
+                        $uris[] = $f;
+                    }
+                }
+                $w = '';
+                if (count($ids)) $w.= 'obj.id IN ('.rtrim(str_repeat('?,',count($ids)),',').')';
+                if (count($uris)){
+                    $secs = array_keys($secs);
+                    if (!empty($w)) $w = '('.$w.' OR ';
+                    $w .= '(obj.sec IN ('.rtrim(str_repeat('?,',count($secs)),',').') AND obj.uri IN ('.rtrim(str_repeat('?,',count($uris)),',').'))';
+                }
+                $where.=$w;
+                $result['binds'] = array_merge($result['binds'], $ids, $secs, $uris);
+            }else{
+                if (is_int($cond['from'])){
+                    $where .= 'obj.id = ?';
+                    $result['binds'][] = array($cond['from'], DB::PARAM_INT);
+                }else{
+                    $where = 'obj.sec=? AND obj.uri=? ';
+                    $sec = $this->getSection($cond['from']);
+                    $result['binds'][] = array($sec, DB::PARAM_INT);
+                    $result['binds'][] = array($cond['from'], DB::PARAM_STR);
+                }
+            }
+        }else
+        if ($cond['select'] == 'child'){
+            $from = 'FROM {objects} obj';
+            $where = 'obj.sec = ? AND obj.parent=? AND obj.name = ?';
+            $where = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';// multy
+        }else{
+
+            if ($cond['select'] == 'children'){
+                $from = 'FROM {objects} obj';
+            }else
+            if ($cond['select'] == 'heirs'){
+                $from = 'FROM {objects} obj';
+            }else
+            if ($cond['select'] == 'parents'){
+                $from = 'FROM {objects} obj';
+            }else
+            if ($cond['select'] == 'protos'){
+                $from = 'FROM {objects} obj';
+            }
+        }
+        // условие where
+
+        // сортировка
+
+        // limit
+        if (!empty($cond['limit'])){
+            $limit = "\n  LIMIT ?,?";
+            $result['binds'][] = array((int)$cond['limit'][0], DB::PARAM_INT);
+            $result['binds'][] = array((int)$cond['limit'][1], DB::PARAM_INT);
+        }
+
+        $result['sql'] = $select.$from.$joins."\n  WHERE ".$where.$group.$order.$limit;
+
+
+        return $result;
+    }
+
+    /**
+     * Создание объекта из атрибутов
+     * @param array $attribs Атриубты объекта, выбранные из базы данных
+     * @throws \Exception
+     * @return Entity
+     */
+    private function makeObject($attribs)
+    {
+//        $attribs['id'] = intval($attribs['id']);
+        if ($attribs['parent'] == 0) $attribs['parent'] = null;
+//        $attribs['parent'] = $attribs['parent'] == 0 ? null : $attribs['parent'];
+//        $attribs['proto'] = $attribs['proto'] == 0 ? null : $attribs['proto'];
+        if ($attribs['proto'] == 0) $attribs['proto'] = null;
+//        $attribs['author'] = $attribs['author'] == 0 ? null : $attribs['author'];
+        if ($attribs['author'] == 0) $attribs['author'] = null;
+//        $attribs['is_default_value'] = $attribs['is_default_value'] == Entity::ENTITY_ID ? Entity::ENTITY_ID : $attribs['is_default_value'];
+//        $attribs['is_default_class'] = $attribs['is_default_class'] == Entity::ENTITY_ID ? Entity::ENTITY_ID : $attribs['is_default_class'];
+//        $attribs['is_link'] = $attribs['is_link'] == Entity::ENTITY_ID ? Entity::ENTITY_ID : $attribs['is_link'];
+//        $attribs['order'] = intval($attribs['order']);
+//        $attribs['date_update'] = intval($attribs['date_update']);
+//        $attribs['date_create'] = intval($attribs['date_create']);
+//        $attribs['parent_cnt'] = intval($attribs['parent_cnt']);
+//        $attribs['proto_cnt'] = intval($attribs['proto_cnt']);
+//        $attribs['value_type'] = intval($attribs['value_type']);
+//        if (empty($attribs['is_draft'])) unset($attribs['is_draft']); else $attribs['is_draft'] = true;
+//        if (empty($attribs['is_hidden'])) unset($attribs['is_hidden']); else $attribs['is_hidden'] = true;
+//        if (empty($attribs['is_mandatory'])) unset($attribs['is_mandatory']); else $attribs['is_mandatory'] = true;
+//        if (empty($attribs['is_completed'])) unset($attribs['is_completed']); else $attribs['is_completed'] = true;
+//        if (empty($attribs['is_property'])) unset($attribs['is_property']); else $attribs['is_property'] = true;
+//        if (empty($attribs['is_relative'])) unset($attribs['is_relative']); else $attribs['is_relative'] = true;
+        if (isset($attribs['is_accessible'])){
+            if (!empty($attribs['is_accessible'])) unset($attribs['is_accessible']); else $attribs['is_accessible'] = false;
+        }
+        $attribs['is_exist'] = true;
+        unset($attribs['valuef'], $attribs['sec']);
+        // Свой класс
+        $attribs['class_name'] = '\\boolive\\data\\Entity';
+        if (empty($attribs['is_default_class'])){
+            $attribs['class_name'] = $this->getClassById($attribs['id']);
+        }else
+        if ($attribs['is_default_class'] != Entity::ENTITY_ID){
+            $attribs['class_name'] = $this->getClassById($attribs['is_default_class']);
+        }
+        return $attribs;
+    }
+
+    /**
+     * Название класса по идентификатору объекта для которого он определен
+     * @param string $id Идентификатор объекта со своим классом
+     * @return string Название класса с пространством имен
+     */
+    private function getClassById($id)
+    {
+        if (!isset($this->classes)){
+            if ($classes = Cache::get('mysqlstore2/classes')){
+                // Из кэша
+                $this->classes = json_decode($classes, true);
+            }else{
+                // Из бд и создаём кэш
+                $q = $this->db->query('SELECT id, uri FROM {objects} WHERE is_default_class = id');
+                $this->classes = array();
+                while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                    if ($row['uri'] !== ''){
+                        $names = F::splitRight('/', $row['uri'], true);
+                        $this->classes[$row['id']] = '\\site\\'.str_replace('/', '\\', trim($row['uri'],'/')).'\\'.$names[1];
+                    }else{
+                        $this->classes[$row['id']] = '\\site\\site';
+                    }
+                }
+                Cache::set('mysqlstore2/classes', F::toJSON($this->classes, false));
+            }
+        }
+        if ($id != Entity::ENTITY_ID){
+            if (isset($this->classes[$id])){
+                return $this->classes[$id];
+            }else{
+                // По id выбираем запись из таблицы ids. Скорее всего объект внешний, поэтому его нет в таблице objects
+                $q = $this->db->prepare('SELECT id, uri FROM {objects} WHERE id = ?');
+                $q->execute(array($id));
+                if ($row = $q->fetch(DB::FETCH_ASSOC)){
+                    $names = F::splitRight('/', $row['uri'], true);
+                    $this->classes[$id] = '\\site\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
+                }else{
+                    $this->classes[$id] = '\\boolive\\data\\Entity';
+                }
+                //Cache::set('mysqlstore2/classes', F::toJSON($this->classes, false));
+                return $this->classes[$id];
+            }
+        }
+        return '\\boolive\\data\\Entity';
     }
 
     /**
@@ -75,12 +303,12 @@ class MySQLStore2 extends Entity
             // Идентификатор объекта
             // Родитель и урвень вложенности
             $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
-            //$attr['parent_cnt'] = $entity->parentCount();
+            $attr['parent_cnt'] = $entity->parentCount();
             // Прототип и уровень наследования
             $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
-            //$attr['proto_cnt'] = $entity->protoCount();
+            $attr['proto_cnt'] = $entity->protoCount();
             // Автор
-            //$attr['author'] = isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
+            $attr['author'] = 0;//isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
             // Числовое значение
             $attr['valuef'] = floatval($attr['value']);
             // Переопределено ли значение и кем
@@ -91,20 +319,42 @@ class MySQLStore2 extends Entity
             $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
             // Дата обновления
             $attr['date_update'] = time();
-            // Тип по умолчанию
-            if ($attr['value_type'] == Entity::VALUE_AUTO) $attr['value_type'] = Entity::VALUE_SIMPLE;
-    //        // URI до сохранения объекта
-    //        $curr_uri = $attr['uri'];
+
+            // URI до сохранения объекта
+            $curr_uri = $attr['uri'];
 
             $attr['sec'] = $this->getSection($entity->uri2());
-
+            unset($attr['date'], $attr['is_exist'], $attr['is_accessible']);
             $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
+
+            // Выбор текущего состояния объекта
+            if (!$is_new){
+                $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
+                $q->execute(array($attr['id']));
+                $current = $q->fetch(DB::FETCH_ASSOC);
+                if (empty($attr['date_create'])) $attr['date_create'] = time();
+            }
+            if (empty($current)){
+                $is_new = true;
+                $attr['id'] = $this->reserveId();
+            }
+            // Тип по умолчанию
+            if ($attr['value_type'] == Entity::VALUE_AUTO){
+                $attr['value_type'] = ($is_new ? Entity::VALUE_SIMPLE : $current['value_type']);
+            }
 
             // Если больше 255, то тип текстовый
             $value_src = $attr['value'];// для сохранения в текстовой таблице
             if (mb_strlen($attr['value']) > 255){
                 $attr['value'] = mb_substr($attr['value'],0,255);
                 $attr['value_type'] = Entity::VALUE_TEXT;
+            }
+            // Своё значение
+            if (is_null($attr['is_default_value'])){
+                $attr['is_default_value'] = $attr['id'];
+            }
+            if (is_null($attr['is_default_class'])){
+                $attr['is_default_class'] = $attr['id'];
             }
 
             // Если значение файл, то подготовливаем для него имя
@@ -130,28 +380,18 @@ class MySQLStore2 extends Entity
                 $value_src = $attr['value'];
             }
 
-            // Выбор текущего состояния объекта
-            if (!$is_new){
-                $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
-                $q->execute(array($attr['id']));
-                $current = $q->fetch(DB::FETCH_ASSOC);
-            }else{
-                $attr['id'] = $this->reserveId();
-            }
-
             // @todo Контроль доступа
 
             $temp_name = $attr['name'];
             // Уникальность имени объекта
             if ($entity->_autoname){
-
                 // Подбор уникального имени
-                $attr['name'] = $this->nameMakeUnique($attr['sec'], $attr['parent'], $entity->_autoname);
+                $attr['name'] = $entity->_attribs['name'] = $this->nameMakeUnique($attr['sec'], $attr['parent'], $entity->_autoname);
             }else
             if ($is_new || $attr['name']!=$current['name'] || $attr['parent'] != $current['name']){
                 // Проверка уникальности для новых объектов или при измененении имени или родителя
                 if ($this->nameIsExists($attr['sec'], $attr['parent'], $attr['name'])){
-                    $entity->errors()->_attribs->name->unique = 'Уже имеется объект с таким именем';
+                    $entity->errors()->_attribs->name->unique = array('Уже имеется объект с именем %s', $attr['name']);
                 }
             }
             $attr['uri'] = $entity->uri2();
@@ -165,16 +405,20 @@ class MySQLStore2 extends Entity
                 $names = F::splitRight('/', $attr['uri'], true);
                 $uri_new = (isset($names[0])?$names[0].'/':'').$attr['name'];
                 $entity->_attribs['uri'] = $uri_new;
-                //
-                $q = $this->db->prepare('UPDATE {ids}, {parents} SET {ids}.uri = CONCAT(?, SUBSTRING(uri, ?)) WHERE {parents}.parent_id = ? AND {parents}.object_id = {ids}.id AND {parents}.is_delete=0');
-                $v = array($uri_new, mb_strlen($uri)+1, $attr['id']);
+                // Новые уровни вложенности
+                $dl = $attr['parent_cnt'] - $current['parent_cnt'];
+                // @todo Устновка sec через условия, чтобы с учётом конфига обновлился код секции подчиеннных, а он может отличаться от родительского
+                $q = $this->db->prepare('
+                    UPDATE {objects}, {parents}
+                    SET {objects}.uri = CONCAT(?, SUBSTRING({objects}.uri, ?)),
+                        {objects}.parent_cnt = {objects}.parent_cnt + ?,
+                        {objects}.sec = ?
+                    WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0
+                ');
+                $v = array($uri_new, mb_strlen($uri)+1, $dl, $attr['sec'], $attr['id']);
                 $q->execute($v);
-                // Обновление уровней вложенностей в objects
-                if (!empty($current) && $current['parent']!=$attr['parent']){
-                    $dl = $attr['parent_cnt'] - $current['parent_cnt'];
-                    $q = $this->db->prepare('UPDATE {objects}, {parents} SET parent_cnt = parent_cnt + ? WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0');
-                    $q->execute(array($dl, $attr['id']));
-                    // @todo Обновление отношений
+                // Обновление отношений с родителем
+                if ($current['parent']!=$attr['parent']){
 //                    $this->makeParents($attr['id'], $attr['parent'], $dl, true);
                 }
                 if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
@@ -186,6 +430,7 @@ class MySQLStore2 extends Entity
                         if ($current['value_type'] == Entity::VALUE_FILE){
                             $attr['value'] = File::changeName($current['value'], $attr['name']);
                         }
+                        // Ассоциированный с объектом файл. Имя файла определено в value
                         File::rename($dir.'/'.$current['value'], $dir.'/'.$attr['name']);
                         // Переименование файла класса
                         File::rename($dir.'/'.$current['name'].'.php', $dir.'/'.$attr['name'].'.php');
@@ -237,9 +482,34 @@ class MySQLStore2 extends Entity
                 }
             }
 
-            // @todo Вствка или обновление записи объекта
+            // Вставка или обновление записи объекта
+            if ($is_new){
+                $names = array_keys($attr);
+                $sql = 'INSERT INTO {objects} (`'.implode('`, `',$names).'`) VALUES (:'.implode(', :',$names).')';
+                $q = $this->db->prepare($sql);
+                $q->execute($attr);
 
-            // @todo Вставка или обновления текста
+            }else{
+                $sets = '';
+                $binds = array();
+                foreach ($attr as $n => $v){
+                    if ($v != $current[$n]){
+                        $sets .= $n.' = :'.$n.', ';
+                        $binds[$n] = $v;
+                    }
+                }
+                $binds['id'] = $attr['id'];
+                $binds['cursec'] = $current['sec'];
+                $sql = 'UPDATE {objects} SET '.rtrim($sets,', ').' WHERE id = :id AND sec = :cursec';
+                $q = $this->db->prepare($sql);
+                $q->execute($binds);
+            }
+
+            // Вставка или обновления текста
+            if ($attr['value_type'] == Entity::VALUE_TEXT && $attr['is_default_value'] == $attr['id']){
+                $q = $this->db->prepare('REPLACE {text} (`id`, `value`) VALUES (?, ?)');
+                $q->execute(array($attr['id'], $value_src));
+            }
 
             // @todo Создание или обновление отношений в protos & parents
 
@@ -247,49 +517,24 @@ class MySQLStore2 extends Entity
 
             // @todo Запись в лог об изменениях в объекте
 
+            foreach ($attr as $n => $v){
+                $entity->_attribs[$n] = $v;
+            }
+            $entity->_attribs['is_exist'] = true;
+            $entity->_changed = false;
+            $entity->_autoname = false;
+            if ($entity->_attribs['uri'] !== $curr_uri){
+                $entity->updateURI();
+            }
+
             $this->db->commit();
+            return true;
         }catch (\Exception $e){
             $this->db->rollBack();
+            // @todo Учитывать исклюечения уникального ключа (именования объекта)
             if (!$e instanceof Error) throw $e;
         }
-
-
-
-        trace($attr);
-        return;
-
-        // Локальный идентификатор объекта
-        if (empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID){
-
-            $attr['id'] = $this->reserveId();
-            if ($attr['order'] == Entity::MAX_ORDER){
-                $attr['order'] = $attr['id'];
-            }
-
-            $attr_names = array(
-                'sec', 'is_draft', 'is_hidden', 'is_mandatory', 'is_property', 'is_relative', 'is_completed',
-                'date_create', 'date_update', 'order', 'name', 'parent', 'parent_cnt', 'proto', 'proto_cnt', 'author',
-                'value', 'value_type', 'uri', 'is_link', 'is_default_value', 'is_default_class'
-            );
-            $q = $this->db->prepare('
-                INSERT INTO {objects} ('.implode(',',$attr_names).')
-                VALUES ('.rtrim(str_repeat('?, ', count($attr_names)),', ').')
-            ');
-            $binds = array();
-            foreach ($attr_names as $attr_name){
-                $binds[] = $attr[$attr_name];
-            }
-            $q->execute($binds);
-            $attr['id'] = $this->db->lastInsertId();
-        }else{
-            //$attr['id'] = $this->getId($attr['id'], true, $new_id);
-            $q = $this->db->prepare('
-                UPDATE {objects} SET sec=?, is_draft=?, is_hidden=?, is_mandatory=?, is_property=?, is_relative=?, is_completed=?,
-                date_create=?, date_update=?, order=?, name=?, parent=?, parent_cnt=?, proto=?, proto_cnt=?, author=?,
-                value=?, value_type=?, uri=?, is_link=?, is_default_value=?, is_default_class=?
-                WHERE id = ?
-            ');
-        }
+        return false;
     }
 
     /**

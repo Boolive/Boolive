@@ -84,9 +84,9 @@ class Events
         if (isset(self::$handlers[$event_name])){
             $cnt = sizeof(self::$handlers[$event_name]);
             for ($i = 0; $i < $cnt; $i++){
-                if (!is_array($params)){
-                    $params = array($params);
-                }
+//                if (!is_array($params)){
+//                    $params = array($params);
+//                }
                 if (is_string(self::$handlers[$event_name][$i][0]) && !Boolive::isIncluded(self::$handlers[$event_name][$i][0])){
                     Boolive::activate(self::$handlers[$event_name][$i][0]);
                 }

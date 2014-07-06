@@ -61,18 +61,30 @@ class Data2
 
     static function read($cond = '', $access = true)
     {
-        $cond = self::normalizeCond($cond);
-
-        if ($store = self::getStore()){
-            return $store->read($cond);
-        }
-        //
         //1. Нормализация условия
+        $cond = self::normalizeCond($cond);
         //2. Если выбор одного объекта - поиск в буфере. Если найден, то возврат результата
         //3. Поиск в кэше
         //4. Если нет в кэше, то запрос к хранилищу.
+        if ($store = self::getStore()){
+            $result = $store->read($cond);
+        }else{
+            return null;
+        }
         //5. Если не из кэша, то запись результата в кэш
         //6. Создание экземпляров
+        if (!empty($result) && !$cond['calc']){
+            foreach ($result as $rkey => $ritem){
+                if (isset($ritem['class_name'])){
+                    try{
+                        $result[$rkey] = new $ritem['class_name']($ritem);
+                    }catch (\Exception $e){
+                        $result[$rkey] = new Entity($ritem);
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -94,15 +106,187 @@ class Data2
         return false;
     }
 
-    static function normalizeCond($cond)
+    /**
+     * Нормализация услвоия выборки
+     * @param string|array $cond
+     * @param bool $full_normalize Признак, выполнять полную нормализацию или только конвертирование в массив?
+     *                             Полная нормализация используется, если в условии указаны не все параметры
+     * @param array $default Условие по умолчанию
+     * @return array
+     */
+    static function normalizeCond($cond, $full_normalize = true, $default = array())
     {
         if (!empty($cond['correct'])) return $cond;
+        $result = array();
+        // Определение формата условия - массив, url, строка, массив из объекта и url
+        if (is_array($cond)){
+            if (sizeof($cond) == 2 && isset($cond[0]) && $cond[0] instanceof Entity && isset($cond[1])){
+                // Пара из объекта и uri на подчиенного. uri может быть строковым условием
+                $entity = $cond[0];
+                $str_cond = $cond[1];
+            }else{
+                // обычный массив условия
+                $result = $cond;
+            }
+        }else{
+            $str_cond = $cond;
+        }
+        // Декодирование строкового услвоия в массив
+        if (isset($str_cond)){
+            if (!preg_match('/^[^=]+\(/ui', $str_cond)){
+                $result = self::condStringToArray(self::condUrlToStrnig($str_cond), true);
+            }else{
+                $result = self::condStringToArray($str_cond, true);
+            }
+            if (isset($entity)) $result['from'] = array($entity, $result['from']);
+        }
+        if (!empty($default)) $result = array_replace_recursive($default, $result);
 
-        return $cond;
+        if ($full_normalize){
+            // select - что выбирать. объект, подчиненных, наследников, родителей, прототипы
+            if (empty($result['select'])){
+                // по умолчанию self (выбирается from)
+                $result['select'] = 'self';
+            }
+            // calc - вычислять количество выбранных объектов или максимальные, минимальные, средние значения, или проверять существование.
+            if (empty($result['calc'])){
+                $result['calc'] = false;
+            }
+
+            // struct - структура результата. Экземпляр объекта, массив объектов, вычисляемое значение или дерево объектов
+            if (empty($result['struct'])){
+                if ($result['calc']){
+                    $result['struct'] = 'value';
+                }else
+                if ($result['select'] == 'self' || $result['select'] == 'child'){
+                    $result['struct'] = 'object';
+                }else
+                if (empty($result['struct'])){
+                    $result['struct'] = 'array';
+                }else{
+                    $result['calc'] = false;
+                }
+            }
+
+            // from - от куда или какой объект выбирать. Строка, число, массив
+            if (empty($result['from'])){
+                $result['from'] = '';
+            }else
+            if (is_array($result['from'])){
+                if (count($result['from'])==2 && $result['from'][0] instanceof Entity && is_scalar($result['from'][1])){
+                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
+                }else{
+                    foreach ($result['from'] as $fkey => $fval){
+                        if (!is_int($fval) && preg_match('/^[0-9 ]+$/', $fval)){
+                            $result['from'][$fkey] = intval($fval);
+                        }
+                    }
+                    $result['limit'] = array(0,count($result['from']));
+                }
+            }else
+            if (preg_match('/^[0-9 ]+$/', $result['from'])){
+                $result['from'] = intval($result['from']);
+            }
+
+            // depth - глубина выборки. Два значения - начальная и конечная глубина относительно from.
+            if (!isset($result['depth'])){
+                // По умолчанию в зависимости от select
+                if ($result['select'] == 'self' || $result['select'] == 'link'){
+                    $result['depth'] = array(0,0);
+                }else
+                if ($result['select'] == 'parents' || $result['select'] == 'protos' || $result['struct'] == 'tree'){
+                    // выбор всех родителей или прототипов
+                    $result['depth'] = array(1, Entity::MAX_DEPTH);
+                }else{
+                    // выбор непосредственных подчиненных или наследников
+                    $result['depth'] = array(1,1);
+                }
+            }else{
+                if (!is_array($result['depth'])){
+                    $result['depth'] = array($result['depth']?1:0, $result['depth']);
+                }
+                $result['depth'][0] = intval($result['depth'][0]);
+                $result['depth'][1] = ($result['depth'][1] === 'max')? Entity::MAX_DEPTH : intval($result['depth'][1]);
+            }
+
+            // where - условие выборки
+            if (empty($result['where'])) $result['where'] = false;
+
+            // order - сортировка. Можно указывать атрибуты и названия подчиненных объектов (свойств)
+            if (isset($result['order'])){
+                if (!empty($result['order']) && !is_array(reset($result['order']))){
+                    $result['order'] = array($result['order']);
+                }
+            }
+            if (empty($result['order'])){
+                if ($result['select'] == 'children' || $result['struct'] == 'tree'){
+                    $result['order'] = array(array('order', 'asc'));
+                }else{
+                    $result['order'] = false;
+                }
+            }
+            if ($result['calc'] == 'exists'){
+                $result['limit'] = false;
+                $result['order'] = false;
+            }
+
+            // limit - ограничения выборки, начальный объект и количество
+            if ($result['calc'] == 'exists'){
+                $result['limit'] = array(0,1);
+            }else
+            if (empty($result['limit'])){
+                $result['limit'] = false;
+            }
+
+            // key - если результат список, то определяет какой атрибут использовать в качестве ключа
+            if (!isset($result['key'])){
+                $result['key'] = false;
+            }
+
+            // cache - код режима кэширования
+            if (empty($result['cache'])){
+                $result['cache'] = false;
+            }
+
+            // access - проверять или нет доступ. Если проверять, то к условию добавятся условия доступа на чтение
+            if (isset($result['access'])){
+                $result['access'] = (bool)$result['access'];
+            }else{
+                $result['access'] = false;
+            }
+
+            // group - признак, группировать ли последующие запросы. Работает только для select = child
+            if (empty($result['group'])){
+                $result['group'] = false;
+            }
+
+            // Ограничение на возвращаемый результат (когда нет необходимости создавать экземпляры выбранных объектов, когда объекты в виде массива помещаются в кэш на будущие выборки)
+            if (!isset($result['return'])) $result['return'] = true;
+
+            // Упорядочивание параметров (для создания корректных хэш-ключей для кэша)
+            $r = array(
+                'select' => $result['select'],
+                'calc' => $result['calc'],
+                'from' => $result['from'],
+                'depth' => $result['depth'],
+                'struct' => $result['struct'],
+                'where' => $result['where'],
+                'order' => $result['order'],
+                'limit' => $result['limit'],
+                'key' => $result['key'],
+                'access' => $result['access'],
+                'correct' => true,
+                'cache' => $result['cache'],
+                'comment' => empty($result['comment'])? false : $result['comment'],
+                'group' => $result['group']
+            );
+            return $r;
+        }
+        return $result;
     }
 
     /**
-     * Преобразование условия из URL формата в массив
+     * Преобразование условия из URL формата в обычный сроковый
      * Пример:
      *  Условие: from=/main/&where=is(/library/Comment)&limit=0,10
      *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /library/Comment (можно не писать "from=")
@@ -192,9 +376,12 @@ class Data2
      *  Условие: select(children)from(/main)where(is(/library/Comment))limit(0,10)
      *  Означает: выбрать 10 подчиненных у объекта /main, которые прототипированы от /library/Comment (можно не писать "from=")
      * @param $cond
+     * @param bool $accos Признак, конвертировать ли первый уровень массива в ассоциативный?
+     *                    Используется для общего условия, когда задаются from, where и другие параметры.
+     *                    Не используется для отдельной конвертации условий в where
      * @return array
      */
-    static function condStringToArray($cond)
+    static function condStringToArray($cond, $accos = false)
     {
         // Добавление запятой после закрывающей скобки, если следом нет закрывающих скобок
         $cond = preg_replace('/(\)(\s*[^\s\),$]))/ui','),$2', $cond);
@@ -219,6 +406,19 @@ class Data2
                 ));
         $cond = '['.$cond.']';
         $cond = json_decode($cond);
+        if ($accos && $cond){
+            foreach ($cond as $key => $item){
+                if (is_array($item)){
+                    $k = array_shift($item);
+                    unset($cond[$key]);
+                    if (sizeof($item)==1) $item = $item[0];
+                    if ($item === 'false' || $item === '0') $item = false;
+                    $cond[$k] = $item;
+                }else{
+                    unset($cond[$key]);
+                }
+            }
+        }
         return $cond;
     }
 

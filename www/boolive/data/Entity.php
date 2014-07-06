@@ -128,7 +128,6 @@ class Entity implements ITrace
             }
             unset($attribs['children']);
         }
-
         $this->_attribs = array_replace($this->_attribs, $attribs);
     }
 
@@ -921,7 +920,7 @@ class Entity implements ITrace
         }
         // Возврат объекта-родителя
         if ($this->_parent === false && $load){
-            if (isset($this->_attribs['parent'])){
+            if (isset($this->_attribs['parent']) && $this->_attribs['parent']!==0){
                 $this->_parent = Data::read(array(
                     'from' => $this->_attribs['parent'],
                     'select' => 'self',
