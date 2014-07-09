@@ -153,7 +153,7 @@ class MySQLStore2 extends Entity
                 $result['binds'] = array_merge($result['binds'], $ids, $secs, $uris);
             }else{
                 if (is_int($cond['from'])){
-                    $where .= 'obj.id = ?';
+                    $where .= 'obj.id=?';
                     $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                 }else{
                     $where = 'obj.sec=? AND obj.uri=? ';
@@ -165,8 +165,22 @@ class MySQLStore2 extends Entity
         }else
         if ($cond['select'] == 'child'){
             $from = 'FROM {objects} obj';
-            $where = 'obj.sec = ? AND obj.parent=? AND obj.name = ?';
-            $where = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';// multy
+//            if (is_array($cond['from'])){
+//                $where = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';
+//
+//            }else{
+            if (is_int($cond['from'][0])){
+                $where = 'obj.parent=? AND obj.name=?';
+                $result['binds'][] = array($cond['from'][0], DB::PARAM_INT);
+                $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+            }else{
+                $id = $this->getId($cond['from'][0], false);
+                $sec = $this->getSection($cond['from'][0]);
+                $where = 'obj.sec=? AND obj.parent=? AND obj.name=?';
+                $result['binds'][] = array($sec, DB::PARAM_INT);
+                $result['binds'][] = array($id, DB::PARAM_INT);
+                $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+            }
         }else{
 
             if ($cond['select'] == 'children'){
@@ -198,6 +212,29 @@ class MySQLStore2 extends Entity
 
         return $result;
     }
+
+    function parseFrom($from, $uri_to_id = false)
+    {
+        $result = array(
+            'secs' => array(),
+            'ids' => array(),
+            'uris' => array()
+        );
+        foreach ($from as $f){
+            if (is_int($f)){
+                $result['ids'][] = $f;
+            }else
+            if ($uri_to_id){
+                $result['ids'][] =$this->getId($f,false);
+            }else{
+                $secs[$this->getSection($f)] = true;
+                $result['uris'][] = $f;
+            }
+        }
+        if ($result['secs']) $result['secs'] = array_keys($result['secs']);
+        return $result;
+    }
+
 
     /**
      * Создание объекта из атрибутов
