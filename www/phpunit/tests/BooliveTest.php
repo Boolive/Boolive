@@ -47,23 +47,52 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         //echo Data2::getStore()->ordersShift(0,2, 5, 4);
     }
 
-    function _test_write()
+    function _test_move()
+    {
+        $obj = Data2::read('/library/basic/some_package');
+        $obj->parent('/test');
+//        $obj = new Entity(array(
+//            'value' => '1',
+//            'name' => 'Object',
+//            'parent' => '/library/basic/some_package',
+//            'proto' => 0,
+//            'order' => 0,
+//            'is_draft' => 0,
+//            //'value_type'=> Entity::VALUE_TEXT
+//        ));
+        //$obj->parent($p);
+        Data2::getStore()->write($obj);
+        trace($obj);
+    }
+
+    function _test_add()
     {
         $obj = new Entity(array(
-            'id' => 8,
-            'value' => 'Новое значение в текст',
-            'name' => 'library',
-            'parent' => 0,
+            'value' => '1',
+            'name' => 'Object',
+            'parent' => '/library/basic/some_package',
+            'proto' => 0,
             'order' => 0,
-            'is_draft' => 0,
-            //'value_type'=> Entity::VALUE_TEXT
+            'is_draft' => 0
         ));
         Data2::getStore()->write($obj);
     }
 
-    function test_read()
+    function test_proto()
     {
-        trace(Data2::read('from(library)select(self)'));
+        $obj = Data2::read('/test/some_package/Object');
+        $obj = $obj->birth('/test');
+        Data2::write($obj);
+        trace($obj);
     }
+
+
+    function _test_read()
+    {
+        $obj = Data2::read('library');
+        trace($obj->parent());
+    }
+
+
 }
  

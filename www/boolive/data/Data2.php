@@ -84,6 +84,9 @@ class Data2
                 }
             }
         }
+        if ($cond['struct'] == 'object' || $cond['struct'] == 'value'){
+            $result = reset($result);
+        }
         return $result;
     }
 
@@ -101,6 +104,45 @@ class Data2
                 return $store->write($entity, $access);
             }else{
                 $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище';
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Уничтожение объекта и его подчиенных
+     * @param Entity $entity Уничтожаемый объект
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
+     * @throws \boolive\errors\Error
+     * @return bool Признак, был уничтожен объект или нет?
+     */
+    static function delete($entity, $access = true, $integrity = true)
+    {
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore()){
+                return $store->delete($entity, $access, $integrity);
+            }else{
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище объекта';
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Дополнение объекта обязательными свойствами от прототипов
+     * @param Entity $entity Дополняемый объект
+     * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
+     * @return bool
+     * @throws \boolive\errors\Error
+     */
+    static function complete($entity, $access = true)
+    {
+        if ($entity->id() != Entity::ENTITY_ID){
+            if ($store = self::getStore()){
+                return $store->complete($entity, $access);
+            }else{
+                $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище для объекта';
             }
         }
         return false;
@@ -432,6 +474,16 @@ class Data2
             self::$store = new self::$config['class'](self::$config['connect']);
         }
         return self::$store;
+    }
+
+    /**
+     * Проверка, является ли значение URI объекта
+     * @param $uri
+     * @return bool
+     */
+    static function isUri($uri)
+    {
+        return !(is_int($uri) || preg_match('/^[0-9]+$/', $uri));
     }
 
     /**

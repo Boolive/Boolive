@@ -85,6 +85,16 @@ class MySQLStore2 extends Entity
             }
             $row = $q->fetch(DB::FETCH_ASSOC);
         }
+        // Создание экземпляров не найденных объектов
+        if ($cond['struct'] == 'object' && empty($result)){
+            $attr = array('class_name' => '\\boolive\\data\\Entity');
+            if (Data2::isUri($cond['from'])){
+                $attr['uri'] = $cond['from'];
+            }else{
+                $attr['id'] = $cond['from'];
+            }
+            $result[] = $attr;
+        }
         // Выбор текстовых значений
         // Структуирование дерева
 
@@ -191,7 +201,7 @@ class MySQLStore2 extends Entity
         }else{
             // Подчиенные до указанной глубины. По умолчанию глубина 1
             if ($cond['select'] == 'children'){
-                // @todo Учитывать секции b uri||id
+                // @todo Учитывать секции и uri||id
                 // Выбор всех подчиенных
                 if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                     $from = 'FROM {objects} obj';
@@ -391,11 +401,11 @@ class MySQLStore2 extends Entity
             // Числовое значение
             $attr['valuef'] = floatval($attr['value']);
             // Переопределено ли значение и кем
-            $attr['is_default_value'] = (!is_null($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_value']) : $attr['is_default_value'];
+            $attr['is_default_value'] = (!is_null($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->getId($attr['is_default_value']) : $attr['is_default_value'];
             // Чей класс
-            $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->localId($attr['is_default_class']) : $attr['is_default_class'];
+            $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->getId($attr['is_default_class']) : $attr['is_default_class'];
             // Ссылка
-            $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->localId($attr['is_link']) : $attr['is_link'];
+            $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->getId($attr['is_link']) : $attr['is_link'];
             // Дата обновления
             $attr['date_update'] = time();
 
@@ -428,11 +438,11 @@ class MySQLStore2 extends Entity
                 $attr['value'] = mb_substr($attr['value'],0,255);
                 $attr['value_type'] = Entity::VALUE_TEXT;
             }
-            // Своё значение
-            if (is_null($attr['is_default_value'])){
+            // Своё значение. Вместо 0 используется свой идентификатор - так проще обновлять наследников
+            if (empty($attr['is_default_value'])){
                 $attr['is_default_value'] = $attr['id'];
             }
-            if (is_null($attr['is_default_class'])){
+            if (empty($attr['is_default_class'])){
                 $attr['is_default_class'] = $attr['id'];
             }
 
@@ -473,9 +483,9 @@ class MySQLStore2 extends Entity
                     $entity->errors()->_attribs->name->unique = array('Уже имеется объект с именем %s', $attr['name']);
                 }
             }
-            $attr['uri'] = $entity->uri2();
+            $attr['uri'] = $entity->uri2(true);
 
-            //@todo Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
+            // Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
             if (!empty($current) && ($current['name']!==$attr['name'] || $current['parent']!=$attr['parent'])){
                 // Текущий URI
                 $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
@@ -486,7 +496,7 @@ class MySQLStore2 extends Entity
                 $entity->_attribs['uri'] = $uri_new;
                 // Новые уровни вложенности
                 $dl = $attr['parent_cnt'] - $current['parent_cnt'];
-                // @todo Устновка sec через условия, чтобы с учётом конфига обновлился код секции подчиеннных, а он может отличаться от родительского
+                // @todo Устновка sec через условия, чтобы с учётом конфига обновлился код секции подчиеннных, а он может отличаться от родительского. Sec нужно обновить и в parents
                 $q = $this->db->prepare('
                     UPDATE {objects}, {parents}
                     SET {objects}.uri = CONCAT(?, SUBSTRING({objects}.uri, ?)),
@@ -496,10 +506,7 @@ class MySQLStore2 extends Entity
                 ');
                 $v = array($uri_new, mb_strlen($uri)+1, $dl, $attr['sec'], $attr['id']);
                 $q->execute($v);
-                // Обновление отношений с родителем
-                if ($current['parent']!=$attr['parent']){
-//                    $this->makeParents($attr['id'], $attr['parent'], $dl, true);
-                }
+
                 if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
                     // Переименование/перемещение папки объекта
                     $dir = DIR_SERVER.'site'.$uri_new;
@@ -520,7 +527,7 @@ class MySQLStore2 extends Entity
                 unset($q);
             }
 
-            //@todo Загрузка файла
+            // Загрузка файла
             // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
             if (!empty($current) && isset($attr['file']) && $current['value_type'] == Entity::VALUE_FILE){
                 File::delete($entity->dir(true).$current['value']);
@@ -533,7 +540,7 @@ class MySQLStore2 extends Entity
                 }else{
                     if ($attr['file']['tmp_name']!=$path){
                         if (!File::upload($attr['file']['tmp_name'], $path)){
-                            // @todo Проверить безопасность.
+                            // @todo Проверить безопасность?
                             // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
                             if (!File::copy($attr['file']['tmp_name'], $path)){
                                 $attr['value_type'] = Entity::VALUE_SIMPLE;
@@ -543,6 +550,22 @@ class MySQLStore2 extends Entity
                     }
                 }
                 unset($attr['file']);
+            }
+            // Загрузка/обновление класса
+            if (isset($attr['class'])){
+                $path = $entity->dir(true).($attr['name']===''?'site':$attr['name']).'.php';
+                if (isset($attr['class']['content'])){
+                    File::create($attr['class']['content'], $path);
+                }else{
+                    if ($attr['class']['tmp_name']!=$path){
+                        if (!File::upload($attr['class']['tmp_name'], $path)){
+                            // @todo Проверить безопасность?
+                            // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
+                            File::copy($attr['class']['tmp_name'], $path);
+                        }
+                    }
+                }
+                unset($attr['class']);
             }
 
             // Порядковый номер
@@ -573,7 +596,7 @@ class MySQLStore2 extends Entity
                 $binds = array();
                 foreach ($attr as $n => $v){
                     if ($v != $current[$n]){
-                        $sets .= $n.' = :'.$n.', ';
+                        $sets .= '`'.$n.'` = :'.$n.', ';
                         $binds[$n] = $v;
                     }
                 }
@@ -590,9 +613,72 @@ class MySQLStore2 extends Entity
                 $q->execute(array($attr['id'], $value_src));
             }
 
-            // @todo Создание или обновление отношений в protos & parents
-
-            // @todo Обновление наследников
+            // Создание или обновление отношений в protos & parents
+            if ($is_new || $attr['parent']!=$current['parent']){
+                $this->makeParents($attr['sec'], $attr['id'], $attr['parent'], $is_new);
+            }
+            if ($is_new || $attr['proto']!=$current['proto']){
+                $this->makeProtos($attr['sec'], $attr['id'], $attr['proto'], $is_new);
+            }
+            // Обновление наследников
+            if (!$is_new){
+                $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
+                // Обновление значения, типа значения, признака наследования значения, класса и кол-во прототипов у наследников
+                // если что-то из этого изменилось у объекта
+                if ($current['value']!=$attr['value'] || $current['value_type']!=$attr['value_type'] ||
+                    $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto']) || $dp!=0)
+                {
+                    $u = $this->db->prepare('
+                        UPDATE {objects}, {protos} SET
+                            value = IF(is_default_value=:val_proto, :value, value),
+                            valuef = IF(is_default_value=:val_proto, :valuef, valuef),
+                            value_type = IF(is_default_value=:val_proto, :value_type, value_type),
+                            is_default_value = IF((is_default_value=:val_proto || is_default_value=:max_id), :new_val_proto, is_default_value),
+                            is_default_class = IF((is_default_class=:class_proto AND ((is_link>0)=:is_link)), :new_class_proto, is_default_class),
+                            proto_cnt = proto_cnt+:dp
+                        WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
+                          AND {protos}.proto_id != {protos}.object_id
+                    ');
+                    $u->execute(array(
+                        ':value' => $attr['value'],
+                        ':valuef' => $attr['valuef'],
+                        ':value_type' => $attr['value_type'],
+                        ':val_proto' => $current['is_default_value'],
+                        ':class_proto' => $current['is_default_class'],
+                        ':new_class_proto' => $attr['is_default_class'],
+                        ':new_val_proto' => $attr['is_default_value'],
+                        ':is_link' => $attr['is_link'] > 0 ? 1: 0,
+                        ':dp' => $dp,
+                        ':obj' => $attr['id'],
+                        ':max_id' => Entity::ENTITY_ID
+                    ));
+                }
+                // Изменился признак ссылки
+                if ($current['is_link'] != $attr['is_link']){
+                    // Смена класса по-умолчанию у всех наследников
+                    // Если у наследников признак is_link такой же как у изменённого объекта и класс был Entity, то они получают класс изменного объекта
+                    // Если у наследников признак is_link не такой же и класс был как у изменноо объекта, то они получают класс Entity
+                    $u = $this->db->prepare('
+                        UPDATE {objects}, {protos} SET
+                            is_default_class = IF((is_link > 0) = :is_link,
+                                IF(is_default_class=:max_id, :class_proto, is_default_class),
+                                IF(is_default_class=:class_proto, :max_id, is_default_class)
+                            ),
+                            is_link = IF((is_link=:cur_link || is_link=:max_id), :new_link, is_link)
+                        WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
+                          AND {protos}.proto_id != {protos}.object_id
+                    ');
+                    $params = array(
+                        ':is_link' => $attr['is_link'] > 0 ? 1: 0,
+                        ':class_proto' => $attr['is_default_class'],
+                        ':max_id' => Entity::ENTITY_ID,
+                        ':cur_link' => $current['is_link'] ? $current['is_link'] : $current['id'],
+                        ':new_link' => $attr['is_link'] ? $attr['is_link'] : $attr['id'],
+                        ':obj' => $attr['id']
+                    );
+                    $u->execute($params);
+                }
+            }
 
             // @todo Запись в лог об изменениях в объекте
 
@@ -617,6 +703,32 @@ class MySQLStore2 extends Entity
     }
 
     /**
+     * Удаление объекта и его подчиненных, если они никем не используются
+     * @param Entity $entity Уничтожаемый объект
+     * @param bool $access Признак, проверять или нет наличие доступа на уничтожение объекта?
+     * @param bool $integrity Признак, проверять целостность данных?
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
+     * @return bool
+     */
+    function delete($entity, $access, $integrity)
+    {
+
+    }
+
+    /**
+     * Дополнение объекта обязательными свойствами
+     * @param \boolive\data\Entity $entity Сохраняемый объект
+     * @param bool $access Признак, проверять доступ или нет?
+     * @return bool
+     * @throws \boolive\errors\Error Ошибки в сохраняемом объекте
+     * @throws \Exception Системные ошибки
+     */
+    function complete($entity, $access)
+    {
+
+    }
+
+    /**
      * Возвращает код секции по uri. По умолчанию 0
      * Секция определяется по настройкам подключения
      * @param string $uri URI, для которого определяется секция
@@ -636,6 +748,84 @@ class MySQLStore2 extends Entity
             return 0;
         }
         return $this->uri_sec[$uri];
+    }
+
+    /**
+     * Создание или обновление отношений с родителями
+     * "Материализованный путь", когда для каждого объекта имеются отношения со всеми его родителями
+     * @param int $sec Код секции объекта
+     * @param int $entity_id Идентификатор объекта для которого создать или обновить отношения. Отношения обновляются и у его подчиненных
+     * @param int $parent_id Идентифкатор нового родителя
+     * @param bool $is_new Признак, объект новый или нет. Если нет, то отношения обновляются
+     */
+    function makeParents($sec, $entity_id, $parent_id, $is_new = true)
+    {
+        // Запрос на добавление отношений копированием их у родительского объекта
+        $add = $q = $this->db->prepare('
+            INSERT INTO {parents} (object_id, parent_id, `level`, `sec`)
+            SELECT :obj, parent_id, `level`+:l, :sec FROM {parents}
+            WHERE object_id = :parent
+            UNION SELECT :obj,:obj,0,:sec
+            ON DUPLICATE KEY UPDATE `level` = VALUES(level), `sec` = VALUES(sec)
+        ');
+        if ($is_new){
+            $add->execute(array('obj' => $entity_id, 'parent'=>$parent_id, 'l'=>1, 'sec'=>$sec));
+        }else{
+            // Родители, от которых перемещается объект
+            $q = $this->db->prepare('SELECT parent_id FROM parents WHERE object_id = ? AND object_id != parent_id');
+            $q->execute(array($entity_id));
+            $parents = $q->fetchAll(DB::FETCH_COLUMN);
+            // Удаление ненужных родителей у объекта и всех его подчиненных
+            if ($parents){
+                $q = $this->db->prepare('
+                    DELETE b FROM parents b, parents c
+                    WHERE b.object_id = c.object_id AND b.object_id != b.parent_id AND
+                          b.parent_id IN ('.implode(',',$parents).') AND c.parent_id = ?
+                ');
+                $q->execute(array($entity_id));
+            }
+            // Для каждого подчиненного добавить отношения от нового родителя
+            $q = $this->db->prepare('SELECT object_id, level, sec FROM {parents} WHERE parent_id = :obj ORDER BY level');
+            $q->execute(array(':obj'=>$entity_id));
+            while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                $add->execute(array('obj'=>$row['object_id'], 'parent'=>$parent_id, 'l'=>1+$row['level'], 'sec'=>$row['sec']));
+            }
+        }
+    }
+
+    function makeProtos($sec, $entity_id, $proto_id, $is_new = true)
+    {
+        // Запрос на добавление отношений копированием их у родительского объекта
+        $add = $q = $this->db->prepare('
+            INSERT INTO {protos} (object_id, proto_id, `level`, `sec`)
+            SELECT :obj, proto_id, `level`+:l, :sec FROM {protos}
+            WHERE object_id = :proto
+            UNION SELECT :obj,:obj,0,:sec
+            ON DUPLICATE KEY UPDATE `level` = VALUES(level), `sec` = VALUES(sec)
+        ');
+        if ($is_new){
+            $add->execute(array('obj' => $entity_id, 'proto'=>$proto_id, 'l'=>1, 'sec'=>$sec));
+        }else{
+            // Родители, от которых перемещается объект
+            $q = $this->db->prepare('SELECT proto_id FROM protos WHERE object_id = ? AND object_id!=proto_id');
+            $q->execute(array($entity_id));
+            $protos = $q->fetchAll(DB::FETCH_COLUMN);
+            // Удаление ненужных родителей у объекта и всех его подчиненных
+            if ($protos){
+                $q = $this->db->prepare('
+                    DELETE b FROM protos b, protos c
+                    WHERE b.object_id = c.object_id AND b.object_id != b.proto_id AND
+                          b.proto_id IN ('.implode(',',$protos).') AND c.proto_id = ?
+                ');
+                $q->execute(array($entity_id));
+            }
+            // Для каждого подчиненного добавить отношения от нового родителя
+            $q = $this->db->prepare('SELECT object_id, level, sec FROM {protos} WHERE proto_id = :obj ORDER BY level');
+            $q->execute(array(':obj'=>$entity_id));
+            while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                $add->execute(array('obj'=>$row['object_id'], 'proto'=>$proto_id, 'l'=>1+$row['level'], 'sec'=>$row['sec']));
+            }
+        }
     }
 
     /**
@@ -664,11 +854,15 @@ class MySQLStore2 extends Entity
                 $names = F::splitRight('/', $uri);
                 $parant = isset($names[0])? $this->getId($names[0], true) : 0;
                 $parant_cnt = mb_substr_count($uri, '/');
+                $sec = $this->getSection($uri);
                 $q = $this->db->prepare('
                     INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `order`, `name`, `uri`)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 ');
-                $q->execute(array($this->uri_id[$uri], $this->getSection($uri), $parant, $parant_cnt, $this->uri_id[$uri], $names[1], $uri));
+                $q->execute(array($this->uri_id[$uri], $sec, $parant, $parant_cnt, $this->uri_id[$uri], $names[1], $uri));
+                // Иерархические отношения, чтобы не нарушать целостность
+                $this->makeParents($sec, $this->uri_id[$uri], $parant, true);
+                $this->makeProtos($sec, $this->uri_id[$uri], 0, true);
                 $is_created = true;
             }else{
                 return 0;
@@ -732,11 +926,8 @@ class MySQLStore2 extends Entity
     {
         $q = $this->db->prepare('SELECT MAX(`order`) m FROM {objects} WHERE sec=? AND parent=?');
         $q->execute(array($sec, $parent));
-        if ($row = $q->fetch(DB::FETCH_ASSOC)){
-            return $row['m'];
-        }else{
-            return 0;
-        }
+        $row = $q->fetch(DB::FETCH_ASSOC);
+        return isset($row['m'])? $row['m'] : 0;
     }
 
     /**

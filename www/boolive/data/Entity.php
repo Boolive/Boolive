@@ -40,13 +40,14 @@ class Entity implements ITrace
     public $_attribs = array(
         'uri'          => null,
         'id'           => null,
-        'name'         => 'entity',
+        'name'         => null,
         'order'		   => 0,
-        'date'		   => 0,
+        'date_create'  => 0,
+        'date_update'  => 0,
         'parent'       => null,
-        'parent_cnt'   => 0,
+        'parent_cnt'   => null,
         'proto'        => null,
-        'proto_cnt'    => 0,
+        'proto_cnt'    => null,
         'value'	 	   => '',
         'value_type'   => Entity::VALUE_AUTO,
         'author'	   => null,
@@ -56,8 +57,8 @@ class Entity implements ITrace
         'is_property'  => false,
         'is_relative'  => false,
         'is_link'      => 0,
-        'is_default_value' => null, // по умолчанию равен id
-        'is_default_class' => 0,
+        'is_default_value' => Entity::ENTITY_ID,
+        'is_default_class' => Entity::ENTITY_ID,
         'is_completed' => false,
         'is_accessible'=> true,
         'is_exist'     => false,
@@ -83,7 +84,7 @@ class Entity implements ITrace
     /** @var bool Признак, проверен ли объект или нет */
     protected $_checked = false;
     /** @var array Условие, которым был выбран объект */
-    protected $_cond;
+//    protected $_cond;
     /** @var null|Error Ошибки после проверки объекта или выполнения каких-либо его функций */
     protected $_errors = null;
     /**
@@ -114,7 +115,7 @@ class Entity implements ITrace
         }
         if (isset($attribs['class_name'])) unset($attribs['class_name']);
         if (isset($attribs['cond'])){
-            $this->_cond = $attribs['cond'];
+//            $this->_cond = $attribs['cond'];
             unset($attribs['cond']);
         }
         if (isset($attribs['children'])){
@@ -122,7 +123,7 @@ class Entity implements ITrace
                 if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
                 foreach ($attribs['children'] as $name => $child){
                     $class = isset($child['class_name'])? $child['class_name'] : '\boolive\data\Entity';
-                    $child['cond'] = $this->_cond;
+//                    $child['cond'] = $this->_cond;
                     $this->_children[$name] = new $class($child, $children_depth);
                 }
             }
@@ -143,12 +144,13 @@ class Entity implements ITrace
             'id'           => Rule::uri(), // Сокращенный или полный URI
             'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(100)->required(), // Имя объекта без символов /@:#\
             'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
-            'date'		   => Rule::int(), // Дата создания в секундах
+            'date_create'  => Rule::int(), // Дата создания в секундах
+            'date_update'  => Rule::int(), // Дата обновления в секундах
             'parent'       => Rule::uri(), // URI родителя
             'proto'        => Rule::uri(), // URI прототипа
             'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
             'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения. Определяет способ хранения (0=авто, 1=простое, 2=текст, 3=файл)
-            'author'	   => Rule::uri(), // @todo Автор (идентификатор объекта-пользователя)
+            'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
             'is_draft'	   => Rule::bool(), // Признак, в черновике или нет?
             'is_hidden'	   => Rule::bool(), // Признак, скрытый или нет?
             'is_mandatory' => Rule::bool(), // Признак, обязательный или дополненый?
@@ -253,17 +255,22 @@ class Entity implements ITrace
         if ($encode){
             $uri = urlencode($this->_attribs['uri']);
             $uri = strtr($uri, array(
-                         '%3A' => ':',
-                         '%2F' => '/'
+                '%3A' => ':',
+                '%2F' => '/'
             ));
             return $uri;
         }
         return $this->_attribs['uri'];
     }
 
-    function uri2()
+    /**
+     * URI объекта
+     * @param bool $fresh Признак, возвращать uri с учётом нового рожителя, при этом объект с новым родителем может быть ещё не сохранен.
+     * @return string
+     */
+    function uri2($fresh = false)
     {
-        if (!isset($this->_attribs['uri'])){
+        if (!isset($this->_attribs['uri']) || $fresh){
             if ($parent = $this->parent()){
                 return $parent->uri().'/'.$this->_attribs['name'];
             }else{
@@ -298,19 +305,27 @@ class Entity implements ITrace
     }
 
     /**
-     * Дата изменения
-     * @return mixed
+     * Дата создания
+     * @return int
      */
-    function date($of_default = false)
+    function date_create()
     {
-        if (!isset($this->_attribs['date'])){
-            $this->_attribs['date'] = time();
+        if (!isset($this->_attribs['date_create'])){
+            $this->_attribs['date_create'] = time();
         }
-        if ($of_default && ($p = $this->isDefaultValue(null, true))){
-            return (int)$p->_attribs['date'];
-        }else{
-            return (int)$this->_attribs['date'];
+        return (int)$this->_attribs['date_create'];
+    }
+
+    /**
+     * Дата обновления
+     * @return int
+     */
+    function date_update()
+    {
+        if (!isset($this->_attribs['date_update'])){
+            $this->_attribs['date_update'] = time();
         }
+        return (int)$this->_attribs['date_update'];
     }
 
     /**
@@ -400,23 +415,6 @@ class Entity implements ITrace
         if ($this->_attribs['value_type'] == Entity::VALUE_FILE){
             if (($proto = $this->isDefaultValue(null, true)) && $proto->isExist()){
                 $file = $proto->file(null, $root);
-                if ($cache_remote && Data::isAbsoluteUri($file)){
-                    $file_path = Data::convertAbsoluteToLocal($file, false);
-                    if (!is_file($f = DIR_SERVER.'remote/'.$file_path)){
-                        // Загрзка файла с сервера
-                        $uri = F::splitRight('/', $file);
-                        $file_content = Data::read($uri[0].'&file_content=1')->fileContent(false, true);
-                        if (isset($file_content['content'])){
-                            $content = base64_decode($file_content['content']);
-                            \boolive\file\File::create($content, $f);
-                        }
-                    }
-                    if ($root){
-                        $file = $f;
-                    }else{
-                        $file = DIR_WEB.'remote/'.$file_path;
-                    }
-                }
                 return $file;
             }else{
                 $file = $this->dir($root);
@@ -466,7 +464,6 @@ class Entity implements ITrace
     function dir($root = false)
     {
         $dir = $this->uri();
-        if (Data::isAbsoluteUri($dir)) return $dir.'/';
         if ($root){
             return DIR_SERVER.'site'.$dir.'/';
         }else{
@@ -485,7 +482,7 @@ class Entity implements ITrace
     {
         if (!isset($this->_attribs['file_content'])){
             // Для внешних объектов отдельные запросы на получение файлов не делаются.
-            if ($this->isFile() && !$this->isRemote()){
+            if ($this->isFile()){
                 $f = $this->file(null, true);
                 $c = file_get_contents($f);
                 $this->_attribs['file_content'] = array(
@@ -510,22 +507,18 @@ class Entity implements ITrace
     function classContent($only_hash = false, $base64 = true)
     {
         if (!isset($this->_attribs['class_content'])){
-            if ($this->isRemote()){
-                $this->_attribs['class_content'] = false;
+            $class = get_class($this);
+            if ($class != 'boolive\data\Entity'){
+                $f = Boolive::getClassFile($class);
+                $c = file_get_contents($f);
+                $this->_attribs['class_content'] = array(
+                    'name' => $class,
+                    'hash' => md5($c),
+                    'base64' => $base64,
+                    'content' => $only_hash? null : ($base64 ? base64_encode($c) : $c)
+                );
             }else{
-                $class = get_class($this);
-                if ($class != 'boolive\data\Entity'){
-                    $f = Boolive::getClassFile($class);
-                    $c = file_get_contents($f);
-                    $this->_attribs['class_content'] = array(
-                        'name' => $class,
-                        'hash' => md5($c),
-                        'base64' => $base64,
-                        'content' => $only_hash? null : ($base64 ? base64_encode($c) : $c)
-                    );
-                }else{
-                    $this->_attribs['class_content'] = false;
-                }
+                $this->_attribs['class_content'] = false;
             }
         }
         return $this->_attribs['class_content'];
@@ -593,11 +586,7 @@ class Entity implements ITrace
                     if ($p = $proto->isLink(null, true)) $proto = $p;
                 }
                 if (isset($proto) && $proto->isExist()){
-//                    if ($proto->store() != $this->store()){
-//                        $this->_attribs['is_link'] = $proto->uri();
-//                    }else{
-                       $this->_attribs['is_link'] = $proto->key();
-//                    }
+                    $this->_attribs['is_link'] = $proto->key();
                 }else{
                     $this->_attribs['is_link'] = self::ENTITY_ID;
                 }
@@ -623,7 +612,7 @@ class Entity implements ITrace
                 }
             }else
             if ($this->_link === false){
-                $this->_link = Data::read(array(
+                $this->_link = Data2::read(array(
                     'from' => $this,
                     'select' => 'link',
                     'depth' => array(0,0),
@@ -740,11 +729,7 @@ class Entity implements ITrace
                     if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
                 }
                 if ($proto instanceof Entity && $proto->isExist()){
-//                    if ($proto->store() != $this->store()){
-//                        $this->_attribs['is_default_value'] = $proto->uri();
-//                    }else{
-                        $this->_attribs['is_default_value'] = $proto->key();
-//                    }
+                    $this->_attribs['is_default_value'] = $proto->key();
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['value_type'] = $proto->valueType();
                 }else{
@@ -776,10 +761,8 @@ class Entity implements ITrace
         if ($this->_attribs['is_default_value'] != $this->_attribs['id'] && $return_proto){
             if ($this->_default_value_proto === false){
                 // Поиск прототипа, от которого наследуется значение, чтобы возратить его
-                $this->_default_value_proto = Data::read(array(
-                    'from' => $this,
-                    'select' => 'default_value_proto',
-                    'depth' => array(0,0),
+                $this->_default_value_proto = Data2::read(array(
+                    'from' => $this->_attribs['is_default_value'],
                     'comment' => 'read default value',
                     'cache' => 2
 //                    'from'=>$this->_attribs['is_default_value'],
@@ -811,11 +794,7 @@ class Entity implements ITrace
                     $proto = null;
                 }
                 if ($proto instanceof Entity && $proto->isExist()){
-//                    if ($proto->store() != $this->store()){
-//                        $this->_attribs['is_default_class'] = $proto->uri();
-//                    }else{
-                       $this->_attribs['is_default_class'] = $proto->key();
-//                    }
+                    $this->_attribs['is_default_class'] = $proto->key();
                 }else{
                     $this->_attribs['is_default_class'] = self::ENTITY_ID;
                 }
@@ -835,7 +814,7 @@ class Entity implements ITrace
         }
         if (!empty($this->_attribs['is_default_class']) && $return_proto){
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
-            return Data::read(array(
+            return Data2::read(array(
                 'from' => $this->_attribs['is_default_class'],
                 'comment' => 'read default class',
                 'cache' => 2
@@ -881,7 +860,7 @@ class Entity implements ITrace
     function parent($new_parent = null, $load = true)
     {
         if (isset($new_parent)){
-            if (is_string($new_parent)) $new_parent = Data::read($new_parent);
+            if (is_string($new_parent)) $new_parent = Data2::read($new_parent);
             // Смена родителя
             if (empty($new_parent) && !empty($this->_attribs['parent']) || !$new_parent->eq($this->parent()) || $this->_attribs['parent_cnt']!=$new_parent->parentCount()+1){
                 if (empty($new_parent)){
@@ -921,7 +900,7 @@ class Entity implements ITrace
         // Возврат объекта-родителя
         if ($this->_parent === false && $load){
             if (isset($this->_attribs['parent']) && $this->_attribs['parent']!==0){
-                $this->_parent = Data::read(array(
+                $this->_parent = Data2::read(array(
                     'from' => $this->_attribs['parent'],
                     'select' => 'self',
                     'comment' => 'read parent',
@@ -997,7 +976,7 @@ class Entity implements ITrace
     function proto($new_proto = null, $load = true, $reload = false)
     {
         if (isset($new_proto)){
-            if (is_string($new_proto)) $new_proto = Data::read($new_proto);
+            if (is_string($new_proto)) $new_proto = Data2::read($new_proto);
             // Смена прототипа
             if (empty($new_proto) && !empty($this->_attribs['proto']) || !$new_proto->eq($this->proto())){
                 if (empty($new_proto)){
@@ -1034,12 +1013,7 @@ class Entity implements ITrace
                         }
                     }
                     // Смена прототипа
-
-//                    if ($new_proto->store() != $this->store()){
-//                        $this->_attribs['proto'] = $new_proto->uri();
-//                    }else{
-                       $this->_attribs['proto'] = $new_proto->key();
-//                    }
+                    $this->_attribs['proto'] = $new_proto->key();
                     $this->_attribs['proto_cnt'] = $new_proto->protoCount() + 1;
                     $this->_proto = $new_proto;
 
@@ -1063,7 +1037,7 @@ class Entity implements ITrace
         //
         if ((($this->_proto === false && $load) || $reload)){
             if (isset($this->_attribs['proto'])){ // can be null
-                $this->_proto = Data::read(array(
+                $this->_proto = Data2::read(array(
                     'from' => $this->_attribs['proto'],
                     'comment' => 'read proto',
                     'cache' => $reload ? 0 : 2
@@ -1106,7 +1080,7 @@ class Entity implements ITrace
      */
     function author($new_author = null, $load = true)
     {
-        if (is_string($new_author)) $new_author = Data::read($new_author);
+        if (is_string($new_author)) $new_author = Data2::read($new_author);
         // Смена автора
         if (isset($new_author) && (empty($new_author)&&!empty($this->_attribs['author']) || !$new_author->eq($this->author()))){
             if (empty($new_author)){
@@ -1114,11 +1088,7 @@ class Entity implements ITrace
                 $this->_attribs['author'] = null;
                 $this->_author = null;
             }else{
-//                if ($new_author->store() != $this->store()){
-//                    $this->_attribs['author'] = $new_author->uri();
-//                }else{
-                   $this->_attribs['author'] = $new_author->key();
-//                }
+                $this->_attribs['author'] = $new_author->key();
                 $this->_author = $new_author;
             }
             $this->_changed = true;
@@ -1127,9 +1097,8 @@ class Entity implements ITrace
         // Возврат объекта-автора
         if ($this->_author === false && $load){
             if (isset($this->_attribs['author'])){
-                $this->_author = Data::read(array(
+                $this->_author = Data2::read(array(
                     'from' => $this->_attribs['author'],
-                    'author' => $this->_attribs['author'],
                     'comment' => 'read author',
                     'cache' => 2
                 ));
@@ -1248,7 +1217,7 @@ class Entity implements ITrace
             return $this->_children[$name];
         }else{
             if ($this->isExist()){
-                $obj = Data::read(array(
+                $obj = Data2::read(array(
                     'from' => array($this, $name),
                     'comment' => 'read property by name',
                     ///'group' => true
@@ -1379,39 +1348,37 @@ class Entity implements ITrace
      * </code>
      * @param array $cond Условие поиска
      * @param bool $load Признак, загрузить найденные объекты в список подчиненных. Чтобы обращаться к ним как к свойствам объекта
-     * @param bool $index Признак, индексировать или нет данные?
      * @param bool $access
      * @see https://github.com/Boolive/Boolive/issues/7
      * @return array
      */
-    function find($cond = array(), $load = false, $index = true, $access = true)
+    function find($cond = array(), $load = false, $access = true)
     {
-        $cond = Data::normalizeCond($cond, array('select' => array('children'), 'depth' => array(1,1)));
+        $cond = Data2::normalizeCond($cond, true, array('select' => array('children'), 'depth' => array(1,1)));
         if (isset($cond['from'])){
-            $result = Data::read($cond, $access, $index);
+            $result = Data2::read($cond, $access);
         }else
         if ($this->isExist()){
             $cond['from'] = $this;//->id();
-            $result = Data::read($cond, $access, $index);
+            $result = Data2::read($cond, $access);
         }else
 //        if (isset($this->_attribs['uri'])){
 //            $cond['from'] = $this->_attribs['uri'];
-//            $result = Data::read($cond, $access, $index);
+//            $result = Data2::read($cond, $access, $index);
 //        }else
         if ($p = $this->proto()){
             $cond['from'] = $p;//->id();
-            $result = Data::read($cond, $access, $index);
+            $result = Data2::read($cond, $access);
             foreach ($result as $key => $obj){
                 /** @var $obj Entity */
                 $result[$key] = $obj->birth($this);
             }
         }else{
-            return in_array($cond['select'], array('self', 'children', 'parents', 'tree', 'protos', 'heirs'))? array() : 0;
+            return empty($cond['calc'])? array() : 0;
         }
 
         // Установка выбранных подчиенных в свойства объекта
-        if ($load && (($cond['select'][0] == 'children' && $cond['depth'][1] == 1) || $cond['select'][0] == 'tree')
-            && empty($cond['select'][1]) && $cond['depth'][0] == 1)
+        if ($load && $cond['select'] == 'children' && $cond['depth'][1] == 1)
         {
 //            if (isset($cond['key']) && $cond['key'] == 'name'){
 //                $this->_children = $result;
@@ -1508,7 +1475,7 @@ class Entity implements ITrace
                     }
 
                     // Сохранение себя
-                    if (Data::write($this, $access)){
+                    if (Data2::write($this, $access)){
                         $this->_changed = false;
                     }
                     $this->_current_name = null;
@@ -1543,7 +1510,7 @@ class Entity implements ITrace
     function destroy($access = true, $integrity = true)
     {
         if ($this->isExist()){
-            return Data::delete($this, $access, $integrity);
+            return Data2::delete($this, $access, $integrity);
         }else{
             return false;
         }
@@ -1586,21 +1553,10 @@ class Entity implements ITrace
     function complete($access = true)
     {
         if ($this->isExist()){
-            return Data::complete($this, $access);
+            return Data2::complete($this, $access);
         }else{
             return false;
         }
-    }
-
-    /**
-     * Хранилище объекта
-     * Где объект сохранен или будет сохранен?
-     * @return stores\MySQLStore|null
-     */
-    function store()
-    {
-        $key = isset($this->_attribs['id']) ? $this->_attribs['id'] : $this->uri();
-        return Data::getStore($key);
     }
 
     /**
@@ -1690,7 +1646,7 @@ class Entity implements ITrace
     function verify($cond)
     {
         if (empty($cond)) return true;
-        if (is_string($cond)) $cond = Data::parseCond($cond);
+        if (is_string($cond)) $cond = Data2::condStringToArray($cond);
         if (count($cond)==1 && is_array($cond[0])){
             $cond = $cond[0];
         }
@@ -1888,8 +1844,8 @@ class Entity implements ITrace
         if ($object instanceof Entity){
             $object = $object->uri();
         }else
-        if (Data::isShortUri($object)){
-            $object = Data::read($object.'&cache=2')->uri();
+        if (!Data2::isUri($object)){
+            $object = Data2::read($object.'&cache=2')->uri();
         }
         return $object.'/' == mb_substr($this->uri(),0,mb_strlen($object)+1);
     }
@@ -1951,7 +1907,8 @@ class Entity implements ITrace
             $export['id'] = $this->id();
             $export['uri'] = $this->uri();
             $export['name'] = $this->name();
-            $export['date'] = $this->date();
+            $export['date_create'] = $this->date_create();
+            $export['date_update'] = $this->date_update();
             $export['proto_cnt'] = $this->protoCount();
             if ($this->isFile()) $export['file'] = $this->file();
             if ($this->parent()) $export['parent'] = $this->parent()->uri();
@@ -2102,15 +2059,6 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, является ли объект внешним?
-     * @return bool
-     */
-    function isRemote()
-    {
-        return Data::isAbsoluteUri($this->uri());
-    }
-
-    /**
      * Шаблон своего класса
      * Для автоматического создания php файла с класом данного объекта.
      * @param array $methods Код предопределяемых методов
@@ -2185,13 +2133,13 @@ $methods
      * @param mixed $cond
      * @return mixed
      */
-    function cond($cond = null)
-    {
-        if (isset($cond)){
-            $this->_cond = $cond;
-        }
-        return $this->_cond;
-    }
+//    function cond($cond = null)
+//    {
+//        if (isset($cond)){
+//            $this->_cond = $cond;
+//        }
+//        return $this->_cond;
+//    }
 
     /**
      * Объект ошибок
@@ -2253,7 +2201,7 @@ $methods
     static function fromArray($array)
     {
         if (isset($array['_attribs']['id'])){
-            $obj = Data::read($array['_attribs']['id']);
+            $obj = Data2::read($array['_attribs']['id']);
         }else{
             if (!isset($array['class'])) $array['class'] = '\boolive\data\Entity';
             $obj = new $array['class']();
