@@ -112,7 +112,7 @@ class HTTPStore extends Entity
      */
     function write($entity, $access)
     {
-        if ($entity->check(/*$error*/)){
+        if ($entity->check()){
             try{
                 $attr = $entity->export(false, true, false);
                 // Файл

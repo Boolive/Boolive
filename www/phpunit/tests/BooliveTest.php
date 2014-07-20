@@ -65,27 +65,52 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         trace($obj);
     }
 
-    function _test_add()
+    function test_add()
     {
         $obj = new Entity(array(
-            'value' => '1',
-            'name' => 'Object',
+            'value' => 'Is real my value??',
+            'name' => 'Object-II',
             'parent' => '/library/basic/some_package',
             'proto' => 0,
             'order' => 0,
             'is_draft' => 0
         ));
+        $obj->name(null, true);
+        $obj->isDefaultValue(true);
         Data2::getStore()->write($obj);
     }
 
-    function test_proto()
+    function _test_proto2()
     {
-        $obj = Data2::read('/test/some_package/Object');
+        $obj = new Entity(array(
+            'value' => '100',
+            'name' => 'NewObject',
+            'parent' => '/test',
+            'is_default_value' => false,
+            'proto' => '/library/basic/some_package/Object/9',
+        ));
+        $obj->name(null, true);//уникальность имени
+        //$obj->isDefaultValue(true);
+        Data2::getStore()->write($obj);
+        trace($obj);
+    }
+
+    function _test_proto()
+    {
+        $obj = Data2::read('/library/basic/some_package/Object');
         $obj = $obj->birth('/test');
+        $obj->isDefaultValue(true);
         Data2::write($obj);
         trace($obj);
     }
 
+    function _test_edit_proto()
+    {
+        $obj = Data2::read('/library/basic/some_package/Object');
+        $obj->value('Новое значение2499');
+        Data2::write($obj);
+        trace($obj);
+    }
 
     function _test_read()
     {

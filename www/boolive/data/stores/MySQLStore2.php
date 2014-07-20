@@ -382,322 +382,338 @@ class MySQLStore2 extends Entity
 
     /**
      * @param Entity $entity
-     * @param $access
+     * @param bool $access
+     * @throws \Exception
+     * @return bool
      */
     function write($entity, $access = true)
     {
-        try{
-            // Атрибуты отфильтрованы, так как нет ошибок
-            $attr = $entity->_attribs;
-            // Идентификатор объекта
-            // Родитель и урвень вложенности
-            $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
-            $attr['parent_cnt'] = $entity->parentCount();
-            // Прототип и уровень наследования
-            $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
-            $attr['proto_cnt'] = $entity->protoCount();
-            // Автор
-            $attr['author'] = 0;//isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
-            // Числовое значение
-            $attr['valuef'] = floatval($attr['value']);
-            // Переопределено ли значение и кем
-            $attr['is_default_value'] = (!is_null($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->getId($attr['is_default_value']) : $attr['is_default_value'];
-            // Чей класс
-            $attr['is_default_class'] = (strval($attr['is_default_class']) !== '0' && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->getId($attr['is_default_class']) : $attr['is_default_class'];
-            // Ссылка
-            $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->getId($attr['is_link']) : $attr['is_link'];
-            // Дата обновления
-            $attr['date_update'] = time();
+        if ($entity->check(false)){
+            try{
+                // Атрибуты отфильтрованы, так как нет ошибок
+                $attr = $entity->_attribs;
+                // Идентификатор объекта
+                // Родитель и урвень вложенности
+                $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
+                $attr['parent_cnt'] = $entity->parentCount();
+                // Прототип и уровень наследования
+                $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto']) : 0;
+                $attr['proto_cnt'] = $entity->protoCount();
+                // Автор
+                $attr['author'] = 0;//isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
+                // Числовое значение
+                $attr['valuef'] = floatval($attr['value']);
+                // Переопределено ли значение и кем
+                $attr['is_default_value'] = (!isset($attr['is_default_value']) && $attr['is_default_value'] != Entity::ENTITY_ID)? $this->getId($attr['is_default_value']) : $attr['is_default_value'];
+                // Чей класс
+                $attr['is_default_class'] = (!isset($attr['is_default_class']) && $attr['is_default_class'] != Entity::ENTITY_ID)? $this->getId($attr['is_default_class']) : $attr['is_default_class'];
+                // Ссылка
+                $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->getId($attr['is_link']) : $attr['is_link'];
 
-            // URI до сохранения объекта
-            $curr_uri = $attr['uri'];
+                // URI до сохранения объекта
+                $curr_uri = $attr['uri'];
 
-            $attr['sec'] = $this->getSection($entity->uri2());
-            unset($attr['date'], $attr['is_exist'], $attr['is_accessible']);
-            $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
+                $attr['sec'] = $this->getSection($entity->uri2());
+                unset($attr['date'], $attr['is_exist'], $attr['is_accessible']);
+                $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
 
-            // Выбор текущего состояния объекта
-            if (!$is_new){
-                $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
-                $q->execute(array($attr['id']));
-                $current = $q->fetch(DB::FETCH_ASSOC);
-                if (empty($attr['date_create'])) $attr['date_create'] = time();
-            }
-            if (empty($current)){
-                $is_new = true;
-                $attr['id'] = $this->reserveId();
-            }
-            // Тип по умолчанию
-            if ($attr['value_type'] == Entity::VALUE_AUTO){
-                $attr['value_type'] = ($is_new ? Entity::VALUE_SIMPLE : $current['value_type']);
-            }
-
-            // Если больше 255, то тип текстовый
-            $value_src = $attr['value'];// для сохранения в текстовой таблице
-            if (mb_strlen($attr['value']) > 255){
-                $attr['value'] = mb_substr($attr['value'],0,255);
-                $attr['value_type'] = Entity::VALUE_TEXT;
-            }
-            // Своё значение. Вместо 0 используется свой идентификатор - так проще обновлять наследников
-            if (empty($attr['is_default_value'])){
-                $attr['is_default_value'] = $attr['id'];
-            }
-            if (empty($attr['is_default_class'])){
-                $attr['is_default_class'] = $attr['id'];
-            }
-
-            // Если значение файл, то подготовливаем для него имя
-            if (isset($attr['file'])){
-                $attr['value_type'] = Entity::VALUE_FILE;
-                // Если нет временного имени, значит создаётся из значения
-                if (empty($attr['file']['tmp_name'])){
-                    if (!isset($attr['file']['content'])) $attr['file']['content'] = '';
-                    if (!isset($attr['file']['name'])) $attr['file']['name'] = $attr['name'].'.txt';
-                    $f = File::fileInfo($attr['file']['name']);
+                // Выбор текущего состояния объекта
+                if (!$is_new){
+                    $q = $this->db->prepare('SELECT * FROM {objects} WHERE id=? LIMIT 0,1');
+                    $q->execute(array($attr['id']));
+                    $current = $q->fetch(DB::FETCH_ASSOC);
+                    // Дата обновления
+                    $attr['date_update'] = time();
                 }else{
-                    if (isset($attr['file']['content'])) unset($attr['file']['content']);
-                    $f = File::fileInfo($attr['file']['tmp_name']);
+                    if (empty($attr['date_create'])) $attr['date_create'] = time();
                 }
-                $attr['value'] = ($f['back']?'../':'').$attr['name'];
-                // расширение
-                if (empty($attr['file']['name'])){
-                    if ($f['ext']) $attr['value'].='.'.$f['ext'];
-                }else{
-                    $f = File::fileInfo($attr['file']['name']);
-                    if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                if (empty($current)){
+                    $is_new = true;
+                    $attr['id'] = $this->reserveId();
                 }
-                $value_src = $attr['value'];
-            }
-
-            // @todo Контроль доступа
-
-            $temp_name = $attr['name'];
-            // Уникальность имени объекта
-            if ($entity->_autoname){
-                // Подбор уникального имени
-                $attr['name'] = $entity->_attribs['name'] = $this->nameMakeUnique($attr['sec'], $attr['parent'], $entity->_autoname);
-            }else
-            if ($is_new || $attr['name']!=$current['name'] || $attr['parent'] != $current['name']){
-                // Проверка уникальности для новых объектов или при измененении имени или родителя
-                if ($this->nameIsExists($attr['sec'], $attr['parent'], $attr['name'])){
-                    $entity->errors()->_attribs->name->unique = array('Уже имеется объект с именем %s', $attr['name']);
+                // Тип по умолчанию
+                if ($attr['value_type'] == Entity::VALUE_AUTO){
+                    $attr['value_type'] = ($is_new ? Entity::VALUE_SIMPLE : $current['value_type']);
                 }
-            }
-            $attr['uri'] = $entity->uri2(true);
 
-            // Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
-            if (!empty($current) && ($current['name']!==$attr['name'] || $current['parent']!=$attr['parent'])){
-                // Текущий URI
-                $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
-                $uri = (isset($names[0])?$names[0].'/':'').(empty($current)? $temp_name : $current['name']);
-                // Новый URI
-                $names = F::splitRight('/', $attr['uri'], true);
-                $uri_new = (isset($names[0])?$names[0].'/':'').$attr['name'];
-                $entity->_attribs['uri'] = $uri_new;
-                // Новые уровни вложенности
-                $dl = $attr['parent_cnt'] - $current['parent_cnt'];
-                // @todo Устновка sec через условия, чтобы с учётом конфига обновлился код секции подчиеннных, а он может отличаться от родительского. Sec нужно обновить и в parents
-                $q = $this->db->prepare('
-                    UPDATE {objects}, {parents}
-                    SET {objects}.uri = CONCAT(?, SUBSTRING({objects}.uri, ?)),
-                        {objects}.parent_cnt = {objects}.parent_cnt + ?,
-                        {objects}.sec = ?
-                    WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0
-                ');
-                $v = array($uri_new, mb_strlen($uri)+1, $dl, $attr['sec'], $attr['id']);
-                $q->execute($v);
+                // Если больше 255, то тип текстовый
+                $value_src = $attr['value'];// для сохранения в текстовой таблице
+                if (mb_strlen($attr['value']) > 255){
+                    $attr['value'] = mb_substr($attr['value'],0,255);
+                    $attr['value_type'] = Entity::VALUE_TEXT;
+                }
+                // Своё значение. Вместо 0 используется свой идентификатор - так проще обновлять наследников
+                if (empty($attr['is_default_value']) || $attr['is_default_value'] == Entity::ENTITY_ID){
+                    $attr['is_default_value'] = $attr['id'];
+                }
+                if (empty($attr['is_default_class'])){
+                    $attr['is_default_class'] = $attr['id'];
+                }
+                if  ($attr['is_link'] == Entity::ENTITY_ID){
+                    $attr['is_link'] = 0;
+                }
 
-                if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
-                    // Переименование/перемещение папки объекта
-                    $dir = DIR_SERVER.'site'.$uri_new;
-                    File::rename(DIR_SERVER.'site'.$uri, $dir);
-                    if ($current['name'] !== $attr['name']){
-                        // Переименование файла, если он есть
-                        if ($current['value_type'] == Entity::VALUE_FILE){
-                            $attr['value'] = File::changeName($current['value'], $attr['name']);
-                        }
-                        // Ассоциированный с объектом файл. Имя файла определено в value
-                        File::rename($dir.'/'.$current['value'], $dir.'/'.$attr['name']);
-                        // Переименование файла класса
-                        File::rename($dir.'/'.$current['name'].'.php', $dir.'/'.$attr['name'].'.php');
-                        // Переименование .info файла
-                        File::rename($dir.'/'.$current['name'].'.info', $dir.'/'.$attr['name'].'.info');
+                // Если значение файл, то подготовливаем для него имя
+                if (isset($attr['file'])){
+                    $attr['value_type'] = Entity::VALUE_FILE;
+                    // Если нет временного имени, значит создаётся из значения
+                    if (empty($attr['file']['tmp_name'])){
+                        if (!isset($attr['file']['content'])) $attr['file']['content'] = '';
+                        if (!isset($attr['file']['name'])) $attr['file']['name'] = $attr['name'].'.txt';
+                        $f = File::fileInfo($attr['file']['name']);
+                    }else{
+                        if (isset($attr['file']['content'])) unset($attr['file']['content']);
+                        $f = File::fileInfo($attr['file']['tmp_name']);
+                    }
+                    $attr['value'] = ($f['back']?'../':'').$attr['name'];
+                    // расширение
+                    if (empty($attr['file']['name'])){
+                        if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                    }else{
+                        $f = File::fileInfo($attr['file']['name']);
+                        if ($f['ext']) $attr['value'].='.'.$f['ext'];
+                    }
+                    $value_src = $attr['value'];
+                }
+
+                // @todo Контроль доступа
+
+                $temp_name = $attr['name'];
+                // Уникальность имени объекта
+                if ($entity->_autoname){
+                    // Подбор уникального имени
+                    $attr['name'] = $entity->_attribs['name'] = $this->nameMakeUnique($attr['sec'], $attr['parent'], $entity->_autoname);
+                }else
+                if ($is_new || $attr['name']!=$current['name'] || $attr['parent'] != $current['name']){
+                    // Проверка уникальности для новых объектов или при измененении имени или родителя
+                    if ($this->nameIsExists($attr['sec'], $attr['parent'], $attr['name'])){
+                        $entity->errors()->_attribs->name->unique = array('Уже имеется объект с именем %s', $attr['name']);
                     }
                 }
-                unset($q);
-            }
+                $attr['uri'] = $entity->uri2(true);
 
-            // Загрузка файла
-            // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
-            if (!empty($current) && isset($attr['file']) && $current['value_type'] == Entity::VALUE_FILE){
-                File::delete($entity->dir(true).$current['value']);
-            }
-            // Связывание с новым файлом
-            if (isset($attr['file'])){
-                $path = $entity->dir(true).$attr['value'];
-                if (isset($attr['file']['content'])){
-                    File::create($attr['file']['content'], $path);
-                }else{
-                    if ($attr['file']['tmp_name']!=$path){
-                        if (!File::upload($attr['file']['tmp_name'], $path)){
-                            // @todo Проверить безопасность?
-                            // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
-                            if (!File::copy($attr['file']['tmp_name'], $path)){
-                                $attr['value_type'] = Entity::VALUE_SIMPLE;
-                                $attr['value'] = '';
+                // Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
+                if (!empty($current) && ($current['name']!==$attr['name'] || $current['parent']!=$attr['parent'])){
+                    // Текущий URI
+                    $names = F::splitRight('/', empty($current)? $attr['uri'] : $current['uri'], true);
+                    $uri = (isset($names[0])?$names[0].'/':'').(empty($current)? $temp_name : $current['name']);
+                    // Новый URI
+                    $names = F::splitRight('/', $attr['uri'], true);
+                    $uri_new = (isset($names[0])?$names[0].'/':'').$attr['name'];
+                    $entity->_attribs['uri'] = $uri_new;
+                    // Новые уровни вложенности
+                    $dl = $attr['parent_cnt'] - $current['parent_cnt'];
+                    // @todo Устновка sec через условия, чтобы с учётом конфига обновлился код секции подчиеннных, а он может отличаться от родительского. Sec нужно обновить и в parents
+                    $q = $this->db->prepare('
+                        UPDATE {objects}, {parents}
+                        SET {objects}.uri = CONCAT(?, SUBSTRING({objects}.uri, ?)),
+                            {objects}.parent_cnt = {objects}.parent_cnt + ?,
+                            {objects}.sec = ?
+                        WHERE {parents}.parent_id = ? AND {parents}.object_id = {objects}.id AND {parents}.is_delete=0
+                    ');
+                    $v = array($uri_new, mb_strlen($uri)+1, $dl, $attr['sec'], $attr['id']);
+                    $q->execute($v);
+
+                    if (!empty($uri) && is_dir(DIR_SERVER.'site'.$uri)){
+                        // Переименование/перемещение папки объекта
+                        $dir = DIR_SERVER.'site'.$uri_new;
+                        File::rename(DIR_SERVER.'site'.$uri, $dir);
+                        if ($current['name'] !== $attr['name']){
+                            // Переименование файла, если он есть
+                            if ($current['value_type'] == Entity::VALUE_FILE){
+                                $attr['value'] = File::changeName($current['value'], $attr['name']);
+                            }
+                            // Ассоциированный с объектом файл. Имя файла определено в value
+                            File::rename($dir.'/'.$current['value'], $dir.'/'.$attr['name']);
+                            // Переименование файла класса
+                            File::rename($dir.'/'.$current['name'].'.php', $dir.'/'.$attr['name'].'.php');
+                            // Переименование .info файла
+                            File::rename($dir.'/'.$current['name'].'.info', $dir.'/'.$attr['name'].'.info');
+                        }
+                    }
+                    unset($q);
+                }
+
+                // Загрузка файла
+                // Если редактирование записи с загрузкой нового файла, при этом старая запись имеет файл, то удаляем старый файл
+                if (!empty($current) && isset($attr['file']) && $current['value_type'] == Entity::VALUE_FILE){
+                    File::delete($entity->dir(true).$current['value']);
+                }
+                // Связывание с новым файлом
+                if (isset($attr['file'])){
+                    $path = $entity->dir(true).$attr['value'];
+                    if (isset($attr['file']['content'])){
+                        File::create($attr['file']['content'], $path);
+                    }else{
+                        if ($attr['file']['tmp_name']!=$path){
+                            if (!File::upload($attr['file']['tmp_name'], $path)){
+                                // @todo Проверить безопасность?
+                                // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
+                                if (!File::copy($attr['file']['tmp_name'], $path)){
+                                    $attr['value_type'] = Entity::VALUE_SIMPLE;
+                                    $attr['value'] = '';
+                                }
                             }
                         }
                     }
+                    unset($attr['file']);
                 }
-                unset($attr['file']);
-            }
-            // Загрузка/обновление класса
-            if (isset($attr['class'])){
-                $path = $entity->dir(true).($attr['name']===''?'site':$attr['name']).'.php';
-                if (isset($attr['class']['content'])){
-                    File::create($attr['class']['content'], $path);
-                }else{
-                    if ($attr['class']['tmp_name']!=$path){
-                        if (!File::upload($attr['class']['tmp_name'], $path)){
-                            // @todo Проверить безопасность?
-                            // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
-                            File::copy($attr['class']['tmp_name'], $path);
+                // Загрузка/обновление класса
+                if (isset($attr['class'])){
+                    $path = $entity->dir(true).($attr['name']===''?'site':$attr['name']).'.php';
+                    if (isset($attr['class']['content'])){
+                        File::create($attr['class']['content'], $path);
+                    }else{
+                        if ($attr['class']['tmp_name']!=$path){
+                            if (!File::upload($attr['class']['tmp_name'], $path)){
+                                // @todo Проверить безопасность?
+                                // Копирование, если объект-файл создаётся из уже имеющихся на сервере файлов, например при импорте каталога
+                                File::copy($attr['class']['tmp_name'], $path);
+                            }
                         }
                     }
+                    unset($attr['class']);
                 }
-                unset($attr['class']);
-            }
 
-            // Порядковый номер
-            if ($is_new){
-                if ($attr['order'] == Entity::MAX_ORDER){
-                    $attr['order'] = $attr['id'];
-                }else
-                if ($this->orderIsExists($attr['sec'], $attr['parent'],$attr['order'])){
-                    $this->ordersShift($attr['sec'], $attr['parent'], Entity::MAX_ORDER, $attr['order']);
-                }
-            }else{
-                if ($attr['parent'] != $current['parent']) $attr['order'] = Entity::MAX_ORDER;
-                if ($attr['order'] != $current['order']){
-                    if ($attr['order'] == Entity::MAX_ORDER) $attr['order'] = $this->orderMax($attr['sec'], $attr['parent']);
-                    $this->ordersShift($current['sec'], $current['parent'], $current['order'], $attr['order']);
-                }
-            }
-
-            // Вставка или обновление записи объекта
-            if ($is_new){
-                $names = array_keys($attr);
-                $sql = 'INSERT INTO {objects} (`'.implode('`, `',$names).'`) VALUES (:'.implode(', :',$names).')';
-                $q = $this->db->prepare($sql);
-                $q->execute($attr);
-
-            }else{
-                $sets = '';
-                $binds = array();
-                foreach ($attr as $n => $v){
-                    if ($v != $current[$n]){
-                        $sets .= '`'.$n.'` = :'.$n.', ';
-                        $binds[$n] = $v;
+                // Порядковый номер
+                if ($is_new){
+                    if ($attr['order'] == Entity::MAX_ORDER){
+                        $attr['order'] = $attr['id'];
+                    }else
+                    if ($this->orderIsExists($attr['sec'], $attr['parent'],$attr['order'])){
+                        $this->ordersShift($attr['sec'], $attr['parent'], Entity::MAX_ORDER, $attr['order']);
+                    }
+                }else{
+                    if ($attr['parent'] != $current['parent']) $attr['order'] = Entity::MAX_ORDER;
+                    if ($attr['order'] != $current['order']){
+                        if ($attr['order'] == Entity::MAX_ORDER) $attr['order'] = $this->orderMax($attr['sec'], $attr['parent']);
+                        $this->ordersShift($current['sec'], $current['parent'], $current['order'], $attr['order']);
                     }
                 }
-                $binds['id'] = $attr['id'];
-                $binds['cursec'] = $current['sec'];
-                $sql = 'UPDATE {objects} SET '.rtrim($sets,', ').' WHERE id = :id AND sec = :cursec';
-                $q = $this->db->prepare($sql);
-                $q->execute($binds);
-            }
 
-            // Вставка или обновления текста
-            if ($attr['value_type'] == Entity::VALUE_TEXT && $attr['is_default_value'] == $attr['id']){
-                $q = $this->db->prepare('REPLACE {text} (`id`, `value`) VALUES (?, ?)');
-                $q->execute(array($attr['id'], $value_src));
-            }
+                // Вставка или обновление записи объекта
+                if ($is_new){
+                    $names = array_keys($attr);
+                    $sql = 'INSERT INTO {objects} (`'.implode('`, `',$names).'`) VALUES (:'.implode(', :',$names).')';
+                    $q = $this->db->prepare($sql);
+                    $q->execute($attr);
 
-            // Создание или обновление отношений в protos & parents
-            if ($is_new || $attr['parent']!=$current['parent']){
-                $this->makeParents($attr['sec'], $attr['id'], $attr['parent'], $is_new);
-            }
-            if ($is_new || $attr['proto']!=$current['proto']){
-                $this->makeProtos($attr['sec'], $attr['id'], $attr['proto'], $is_new);
-            }
-            // Обновление наследников
-            if (!$is_new){
-                $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
-                // Обновление значения, типа значения, признака наследования значения, класса и кол-во прототипов у наследников
-                // если что-то из этого изменилось у объекта
-                if ($current['value']!=$attr['value'] || $current['value_type']!=$attr['value_type'] ||
-                    $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto']) || $dp!=0)
-                {
-                    $u = $this->db->prepare('
-                        UPDATE {objects}, {protos} SET
-                            value = IF(is_default_value=:val_proto, :value, value),
-                            valuef = IF(is_default_value=:val_proto, :valuef, valuef),
-                            value_type = IF(is_default_value=:val_proto, :value_type, value_type),
-                            is_default_value = IF((is_default_value=:val_proto || is_default_value=:max_id), :new_val_proto, is_default_value),
-                            is_default_class = IF((is_default_class=:class_proto AND ((is_link>0)=:is_link)), :new_class_proto, is_default_class),
-                            proto_cnt = proto_cnt+:dp
-                        WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
-                          AND {protos}.proto_id != {protos}.object_id
-                    ');
-                    $u->execute(array(
-                        ':value' => $attr['value'],
-                        ':valuef' => $attr['valuef'],
-                        ':value_type' => $attr['value_type'],
-                        ':val_proto' => $current['is_default_value'],
-                        ':class_proto' => $current['is_default_class'],
-                        ':new_class_proto' => $attr['is_default_class'],
-                        ':new_val_proto' => $attr['is_default_value'],
-                        ':is_link' => $attr['is_link'] > 0 ? 1: 0,
-                        ':dp' => $dp,
-                        ':obj' => $attr['id'],
-                        ':max_id' => Entity::ENTITY_ID
-                    ));
+                }else{
+                    $sets = '';
+                    $changes = array();
+                    foreach ($attr as $n => $v){
+                        if ($v != $current[$n]){
+                            $sets .= '`'.$n.'` = :'.$n.', ';
+                            $changes[$n] = $v;
+                        }
+                    }
+                    $changes['id'] = $attr['id'];
+                    $changes['cursec'] = $current['sec'];
+                    $sql = 'UPDATE {objects} SET '.rtrim($sets,', ').' WHERE id = :id AND sec = :cursec';
+                    $q = $this->db->prepare($sql);
+                    $q->execute($changes);
                 }
-                // Изменился признак ссылки
-                if ($current['is_link'] != $attr['is_link']){
-                    // Смена класса по-умолчанию у всех наследников
-                    // Если у наследников признак is_link такой же как у изменённого объекта и класс был Entity, то они получают класс изменного объекта
-                    // Если у наследников признак is_link не такой же и класс был как у изменноо объекта, то они получают класс Entity
-                    $u = $this->db->prepare('
-                        UPDATE {objects}, {protos} SET
-                            is_default_class = IF((is_link > 0) = :is_link,
-                                IF(is_default_class=:max_id, :class_proto, is_default_class),
-                                IF(is_default_class=:class_proto, :max_id, is_default_class)
-                            ),
-                            is_link = IF((is_link=:cur_link || is_link=:max_id), :new_link, is_link)
-                        WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
-                          AND {protos}.proto_id != {protos}.object_id
-                    ');
-                    $params = array(
-                        ':is_link' => $attr['is_link'] > 0 ? 1: 0,
-                        ':class_proto' => $attr['is_default_class'],
-                        ':max_id' => Entity::ENTITY_ID,
-                        ':cur_link' => $current['is_link'] ? $current['is_link'] : $current['id'],
-                        ':new_link' => $attr['is_link'] ? $attr['is_link'] : $attr['id'],
-                        ':obj' => $attr['id']
-                    );
-                    $u->execute($params);
+
+                // Вставка или обновления текста
+                if ($attr['value_type'] == Entity::VALUE_TEXT && $attr['is_default_value'] == $attr['id']){
+                    $q = $this->db->prepare('REPLACE {text} (`id`, `value`) VALUES (?, ?)');
+                    $q->execute(array($attr['id'], $value_src));
                 }
-            }
 
-            // @todo Запись в лог об изменениях в объекте
+                // Создание или обновление отношений в protos & parents
+                if ($is_new || $attr['parent']!=$current['parent']){
+                    $this->makeParents($attr['sec'], $attr['id'], $attr['parent'], $is_new);
+                }
+                if ($is_new || $attr['proto']!=$current['proto']){
+                    $this->makeProtos($attr['sec'], $attr['id'], $attr['proto'], $is_new);
+                }
+                // Обновление наследников
+                if (!$is_new){
+                    $dp = ($attr['proto_cnt'] - $current['proto_cnt']);
+                    // Обновление значения, типа значения, признака наследования значения, класса и кол-во прототипов у наследников
+                    // если что-то из этого изменилось у объекта
+                    if ($current['value']!=$attr['value'] || $current['value_type']!=$attr['value_type'] ||
+                        $current['is_default_class']!=$attr['is_default_class'] || ($current['proto']!=$attr['proto']) || $dp!=0)
+                    {
+                        $u = $this->db->prepare('
+                            UPDATE {objects}, {protos} SET
+                                value = IF(is_default_value=:val_proto, :value, value),
+                                valuef = IF(is_default_value=:val_proto, :valuef, valuef),
+                                value_type = IF(is_default_value=:val_proto, :value_type, value_type),
+                                date_update = IF(is_default_value=:val_proto, :date_update, date_update),
+                                is_default_value = IF((is_default_value=:val_proto), :new_val_proto, is_default_value),
+                                is_default_class = IF((is_default_class=:class_proto AND ((is_link>0)=:is_link)), :new_class_proto, is_default_class),
+                                proto_cnt = proto_cnt+:dp
+                            WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
+                              AND {protos}.proto_id != {protos}.object_id
+                        ');
+                        $u->execute(array(
+                            ':value' => $attr['value'],
+                            ':valuef' => $attr['valuef'],
+                            ':value_type' => $attr['value_type'],
+                            ':date_update' => $attr['date_update'],
+                            ':val_proto' => $current['is_default_value'],
+                            ':class_proto' => $current['is_default_class'],
+                            ':new_class_proto' => $attr['is_default_class'],
+                            ':new_val_proto' => $attr['is_default_value'],
+                            ':is_link' => $attr['is_link'] > 0 ? 1: 0,
+                            ':dp' => $dp,
+                            ':obj' => $attr['id'],
+                            //':max_id' => Entity::ENTITY_ID
+                        ));
+                    }
+                    // Изменился признак ссылки
+                    if ($current['is_link'] != $attr['is_link']){
+                        // Смена класса по-умолчанию у всех наследников
+                        // Если у наследников признак is_link такой же как у изменённого объекта и класс был Entity, то они получают класс изменного объекта
+                        // Если у наследников признак is_link не такой же и класс был как у изменноо объекта, то они получают класс Entity
+                        $u = $this->db->prepare('
+                            UPDATE {objects}, {protos} SET
+                                is_default_class = IF((is_link > 0) = :is_link,
+                                    IF(is_default_class=:max_id, :class_proto, is_default_class),
+                                    IF(is_default_class=:class_proto, :max_id, is_default_class)
+                                ),
+                                is_link = IF((is_link=:cur_link || is_link=:max_id), :new_link, is_link)
+                            WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
+                              AND {protos}.proto_id != {protos}.object_id
+                        ');
+                        $params = array(
+                            ':is_link' => $attr['is_link'] > 0 ? 1: 0,
+                            ':class_proto' => $attr['is_default_class'],
+                            ':max_id' => Entity::ENTITY_ID,
+                            ':cur_link' => $current['is_link'] ? $current['is_link'] : $current['id'],
+                            ':new_link' => $attr['is_link'] ? $attr['is_link'] : $attr['id'],
+                            ':obj' => $attr['id']
+                        );
+                        $u->execute($params);
+                    }
+                }
 
-            foreach ($attr as $n => $v){
-                $entity->_attribs[$n] = $v;
-            }
-            $entity->_attribs['is_exist'] = true;
-            $entity->_changed = false;
-            $entity->_autoname = false;
-            if ($entity->_attribs['uri'] !== $curr_uri){
-                $entity->updateURI();
-            }
+                if ($is_new){
+                    $this->log('create', $attr);
+                }else{
+                    $this->log('edit', $changes);
+                }
 
-            $this->db->commit();
-            return true;
-        }catch (\Exception $e){
-            $this->db->rollBack();
-            // @todo Учитывать исклюечения уникального ключа (именования объекта)
-            if (!$e instanceof Error) throw $e;
+                // @todo Запись в лог об изменениях в объекте
+
+                foreach ($attr as $n => $v){
+                    $entity->_attribs[$n] = $v;
+                }
+                $entity->_attribs['is_exist'] = true;
+                $entity->_changed = false;
+                $entity->_autoname = false;
+                if ($entity->_attribs['uri'] !== $curr_uri){
+                    $entity->updateURI();
+                }
+
+                $this->db->commit();
+                return true;
+            }catch (\Exception $e){
+                $this->db->rollBack();
+                // @todo Учитывать исклюечения уникального ключа (именования объекта)
+                if (!$e instanceof Error) throw $e;
+            }
         }
         return false;
     }
@@ -712,7 +728,7 @@ class MySQLStore2 extends Entity
      */
     function delete($entity, $access, $integrity)
     {
-
+        $this->log('delete', array('id'=>$entity->id()));
     }
 
     /**
@@ -725,7 +741,7 @@ class MySQLStore2 extends Entity
      */
     function complete($entity, $access)
     {
-
+        $this->log('complete', array('id'=>$entity->id()));
     }
 
     /**
@@ -838,7 +854,8 @@ class MySQLStore2 extends Entity
      */
     function getId($uri, $create = false, &$is_created = false)
     {
-        if (is_null($uri) || is_int($uri)) return $uri;
+        if (is_int($uri)) return $uri;
+        if (is_null($uri)) return 0;
         if (preg_match('/^[0-9]+$/', $uri)) return intval($uri);
         if (!isset($this->uri_id[$uri])){
             // Поиск идентифкатора URI
@@ -967,6 +984,20 @@ class MySQLStore2 extends Entity
     }
 
     /**
+     * Логирование действия
+     * @param string $action Название действия
+     * @param array $params Параметры действия
+     * @return bool
+     */
+    function log($action, $params)
+    {
+        $params = F::toJSON($params, false);
+        $q = $this->db->prepare('INSERT INTO {logs} (time,action,params) VALUES (?,?,?)');
+        $q->execute(array(time(),$action,$params));
+        return $q->rowCount()>0;
+    }
+
+    /**
      * Создание хранилища
      * @param $connect
      * @param null $errors
@@ -1051,7 +1082,7 @@ class MySQLStore2 extends Entity
                   `is_relative` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Относительный (1) или нет (0) прототип?',
                   `is_completed` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Дополнен свйствами прототипа или нет (0 - нет, 1 - да)?',
                   `is_link` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Используетя как ссылка или нет? Для оптимизации указывается идентификатор объекта, на которого ссылается ',
-                  `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Идентификатор прототипа, чьё значение наследуется (если не наследуется, то свой id)',
+                  `is_default_value` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Идентификатор прототипа, чьё значение наследуется (если не наследуется, то свой id)',
                   `is_default_class` INT(10) UNSIGNED NOT NULL DEFAULT '4294967295' COMMENT 'Используется класс прототипа или свой?',
                   `date_create` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Дата создания',
                   `date_update` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Дата обновления',
@@ -1080,7 +1111,6 @@ class MySQLStore2 extends Entity
                   `object_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор объекта',
                   `parent_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор родителя',
                   `level` INT(10) UNSIGNED NOT NULL COMMENT 'Уровень родителя от корня',
-                  `is_delete` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Удалено отношение или нет',
                   `sec` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Код секции',
                   PRIMARY KEY (`object_id`,`parent_id`, `sec`),
                   UNIQUE KEY `children` (`parent_id`,`object_id`, `sec`)
@@ -1093,7 +1123,6 @@ class MySQLStore2 extends Entity
                   `object_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор объекта',
                   `proto_id` INT(10) UNSIGNED NOT NULL COMMENT 'Идентификатор прототипа',
                   `level` INT(10) UNSIGNED NOT NULL COMMENT 'Уровень прототипа от базового',
-                  `is_delete` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Признак, удалено отношение или нет',
                   `sec` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Код секции',
                   PRIMARY KEY (`object_id`,`proto_id`, `sec`),
                   UNIQUE KEY `heirs` (`proto_id`,`object_id`, `sec`)
@@ -1116,6 +1145,16 @@ class MySQLStore2 extends Entity
                   `value` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                   PRIMARY KEY (`key`),
                   UNIQUE KEY `value` (`value`)
+                ) ENGINE=INNODB DEFAULT CHARSET=utf8
+            ");
+            $db->exec("
+                CREATE TABLE `logs` (
+                  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор события',
+                  `time` INT(11) NOT NULL COMMENT 'Время записи',
+                  `action` VARCHAR(30) NOT NULL COMMENT 'Совершенное действие',
+                  `params` VARCHAR(1000) NOT NULL DEFAULT '{}' COMMENT 'Параметры действия в JSON',
+                  PRIMARY KEY (`id`),
+                  KEY `time` (`time`)
                 ) ENGINE=INNODB DEFAULT CHARSET=utf8
             ");
         }catch (\PDOException $e){

@@ -81,6 +81,7 @@ class Data2
                     }catch (\Exception $e){
                         $result[$rkey] = new Entity($ritem);
                     }
+                    $result[$rkey]->isChanged(false);
                 }
             }
         }
@@ -99,7 +100,7 @@ class Data2
      */
     static function write($entity, $access = true)
     {
-        if ($entity->id() != Entity::ENTITY_ID){
+        if ($entity->id() != Entity::ENTITY_ID && $entity->check()){
             if ($store = self::getStore()){
                 return $store->write($entity, $access);
             }else{
@@ -226,7 +227,7 @@ class Data2
                     $result['limit'] = array(0,count($result['from']));
                 }
             }else
-            if (preg_match('/^[0-9 ]+$/', $result['from'])){
+            if ($result['from']!=Entity::ENTITY_ID && preg_match('/^[0-9 ]+$/', $result['from'])){
                 $result['from'] = intval($result['from']);
             }
 

@@ -316,9 +316,10 @@ class F
      * @param $a
      * @param $b
      */
-    static function swap(&$a, &$b) {
-        $a = $a ^ $b;
-        $b = $a ^ $b;
-        $a = $a ^ $b;
+    static function swap(&$a, &$b)
+    {
+        $s = $a;
+        $a = $b;
+        $b = $s;
     }
 }
