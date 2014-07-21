@@ -905,11 +905,9 @@ class Entity implements ITrace
                     'comment' => 'read parent',
                     'cache' => 2
                 ), false);
-                if (!$this->_parent->isExist()){
-                    $this->_parent = null;
-                }
             }else{
                 $this->_parent = null;
+                $this->_attribs['parent_cnt'] = 0;
             }
         }
         return $this->_parent;
@@ -1047,6 +1045,7 @@ class Entity implements ITrace
                 $this->_attribs['proto_cnt'] = null;
             }else{
                 $this->_proto = null;
+                $this->_attribs['proto_cnt'] = 0;
             }
         }
         return $this->_proto;
@@ -1610,17 +1609,6 @@ class Entity implements ITrace
             $this->isLink(true);
         }
 
-        if ($this->_proto instanceof Entity && !$this->_proto->isExist()){
-                        if ($this->_attribs['is_default_class'] == Entity::ENTITY_ID){
-                            $this->isDefaultClass(true);
-                        }
-                        if ($this->isDefaultValue()){
-                            $this->isDefaultValue(true);
-                        }
-                        if ($this->isLink()){
-                            $this->isLink(true);
-                        }
-                    }
         // Проверка и фильтр атрибутов
         $attribs = new Values($this->_attribs);
         $filtered = array_replace($this->_attribs, $attribs->get($this->rule(), $error));
