@@ -82,6 +82,7 @@ class MySQLStore2 extends Entity
                 $result[] = $row['calc'];
             }else{
                 $result[] = $this->makeObject($row);
+                $this->uri_id[$row['uri']] = $row['id'];
             }
             $row = $q->fetch(DB::FETCH_ASSOC);
         }
@@ -397,7 +398,7 @@ class MySQLStore2 extends Entity
                 $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
                 $attr['parent_cnt'] = $entity->parentCount();
                 // Прототип и уровень наследования
-                $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto']) : 0;
+                $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
                 $attr['proto_cnt'] = $entity->protoCount();
                 // Автор
                 $attr['author'] = 0;//isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
@@ -689,10 +690,12 @@ class MySQLStore2 extends Entity
                     }
                 }
 
-                if ($is_new){
-                    $this->log('create', $attr);
-                }else{
-                    $this->log('edit', $changes);
+                if (IS_INSTALL){
+                    if ($is_new){
+                        $this->log('create', $attr);
+                    }else{
+                        $this->log('edit', $changes);
+                    }
                 }
 
                 // @todo Запись в лог об изменениях в объекте

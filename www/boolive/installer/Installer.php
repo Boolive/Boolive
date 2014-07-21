@@ -431,8 +431,8 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
-                    $entity = new Entity();
-                    $entity->import($m);
+                    $entity = new Entity($m);
+                    //$entity->import($m);
                     $entity->save(true, false);
                     $install['step']++;
                 }else{

@@ -114,10 +114,10 @@ class Entity implements ITrace
             }
         }
         if (isset($attribs['class_name'])) unset($attribs['class_name']);
-        if (isset($attribs['cond'])){
-//            $this->_cond = $attribs['cond'];
-            unset($attribs['cond']);
-        }
+//        if (isset($attribs['cond'])){
+////            $this->_cond = $attribs['cond'];
+//            unset($attribs['cond']);
+//        }
         if (isset($attribs['children'])){
             if ($children_depth > 0){
                 if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
@@ -1567,7 +1567,7 @@ class Entity implements ITrace
         if ($this->_checked) return true;
         // Проверка существования прототипа
         if ($proto = $this->proto()){
-            if (!$this->proto()->isExist()){
+            if (!$this->proto()->isExist() && (!isset($proto->_attribs['uri']) || $proto->_autoname)){
                 $this->errors()->_attribs->proto->not_exists = "Прототип не существует";
             }else{
                 $this->_attribs['proto'] = $this->proto()->key();

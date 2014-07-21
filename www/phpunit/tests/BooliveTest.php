@@ -69,9 +69,9 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
     {
         $obj = new Entity(array(
             'value' => 'Is real my value??',
-            'name' => 'Object-II',
-            'parent' => '/library/basic/some_package',
-            'proto' => 0,
+            'name' => 'Object-proto',
+            'parent' => '/library/basic2/some_package2',
+            'proto' => '/content/X',
             'order' => 0,
             'is_draft' => 0
         ));
