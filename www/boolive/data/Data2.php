@@ -77,6 +77,9 @@ class Data2
             foreach ($result as $rkey => $ritem){
                 if (isset($ritem['class_name'])){
                     try{
+                        if ($ritem['class_name'] == '\site\library\javascripts\patterns\Boolive.Widget\Boolive.Widget'){
+                            $a = 10;
+                        }
                         $result[$rkey] = new $ritem['class_name']($ritem);
                     }catch (\Exception $e){
                         $result[$rkey] = new Entity($ritem);
@@ -227,7 +230,10 @@ class Data2
                     $result['limit'] = array(0,count($result['from']));
                 }
             }else
-            if ($result['from']!=Entity::ENTITY_ID && preg_match('/^[0-9 ]+$/', $result['from'])){
+            if ($result['from'] instanceof Entity){
+                throw new \Exception(Trace::format($result['from']));
+            }else
+            if ($result['from']!= Entity::ENTITY_ID && preg_match('/^[0-9 ]+$/', $result['from'])){
                 $result['from'] = intval($result['from']);
             }
 

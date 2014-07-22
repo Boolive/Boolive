@@ -58,7 +58,7 @@ class Entity implements ITrace
         'is_relative'  => false,
         'is_link'      => 0,
         'is_default_value' => 0,//Entity::ENTITY_ID,
-        'is_default_class' => 0,
+        'is_default_class' => Entity::ENTITY_ID,
         'is_completed' => false,
         'is_accessible'=> true,
         'is_exist'     => false,

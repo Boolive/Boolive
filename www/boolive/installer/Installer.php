@@ -13,6 +13,7 @@ use boolive\Boolive,
     boolive\errors\Error,
     boolive\session\Session,
     boolive\file\File;
+use boolive\functions\F;
 
 class Installer
 {
@@ -54,7 +55,7 @@ class Installer
             if ($result['complete']){
                 self::installComplete();
             }
-            echo json_encode($result);
+            echo F::toJSON($result);
         }
     }
 
@@ -434,6 +435,9 @@ class Installer
                     $entity = new Entity($m);
                     //$entity->import($m);
                     $entity->save(true, false);
+                    if ($entity->errors()->isExist()){
+                        $result['error'] = $entity->errors()->toArrayCompact();
+                    }
                     $install['step']++;
                 }else{
                     $install['step']++;

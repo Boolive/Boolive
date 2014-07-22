@@ -30,6 +30,11 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         Boolive::activate();
     }
 
+    function _test()
+    {
+        echo PHP_MAXPATHLEN;
+    }
+
     function _test_getId()
     {
         trace(Data2::getStore()->getId('/library/test2', true));
@@ -65,7 +70,7 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         trace($obj);
     }
 
-    function test_add()
+    function _test_add()
     {
         $obj = new Entity(array(
             'value' => 'Is real my value??',
@@ -84,10 +89,9 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
     {
         $obj = new Entity(array(
             'value' => '100',
-            'name' => 'NewObject',
-            'parent' => '/test',
-            'is_default_value' => false,
-            'proto' => '/library/basic/some_package/Object/9',
+            'name' => 'object',
+            'parent' => '/parent/not-exists',
+            'proto' => '/proto/not-exists',
         ));
         $obj->name(null, true);//уникальность имени
         //$obj->isDefaultValue(true);
@@ -118,6 +122,10 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         trace($obj->parent());
     }
 
-
+    function test_error()
+    {
+        $obj = Data2::read('/library/javascripts/patterns/Boolive.Widget');
+        trace($obj);
+    }
 }
  
