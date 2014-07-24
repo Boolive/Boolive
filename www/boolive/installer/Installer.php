@@ -13,6 +13,7 @@ use boolive\Boolive,
     boolive\errors\Error,
     boolive\session\Session,
     boolive\file\File;
+use boolive\develop\Trace;
 use boolive\functions\F;
 
 class Installer
@@ -432,11 +433,14 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
-                    $entity = new Entity($m);
+                    $entity = new Entity($m, 100);
                     //$entity->import($m);
-                    $entity->save(true, false);
+                    try{$entity->save(true, false);
                     if ($entity->errors()->isExist()){
                         $result['error'] = $entity->errors()->toArrayCompact();
+                    }
+                    }catch (\Exception $e){
+                        $result['error'] = Trace::format($e);
                     }
                     $install['step']++;
                 }else{

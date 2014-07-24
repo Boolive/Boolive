@@ -125,6 +125,7 @@ class Entity implements ITrace
                     $class = isset($child['class_name'])? $child['class_name'] : '\boolive\data\Entity';
 //                    $child['cond'] = $this->_cond;
                     $this->_children[$name] = new $class($child, $children_depth);
+                    $this->_children[$name]->_parent = $this;
                 }
             }
             unset($attribs['children']);
@@ -613,9 +614,7 @@ class Entity implements ITrace
             }else
             if ($this->_link === false){
                 $this->_link = Data2::read(array(
-                    'from' => $this,
-                    'select' => 'link',
-                    'depth' => array(0,0),
+                    'from' => $this->_attribs['is_link'],
                     'comment' => 'read link',
                     'cache' => 2
                 ));
@@ -1354,7 +1353,7 @@ class Entity implements ITrace
             $result = Data2::read($cond, $access);
         }else
         if ($this->isExist()){
-            $cond['from'] = $this;//->id();
+            $cond['from'] = $this->id();
             $result = Data2::read($cond, $access);
         }else
 //        if (isset($this->_attribs['uri'])){
@@ -1362,7 +1361,7 @@ class Entity implements ITrace
 //            $result = Data2::read($cond, $access, $index);
 //        }else
         if ($p = $this->proto()){
-            $cond['from'] = $p;//->id();
+            $cond['from'] = $p->id();
             $result = Data2::read($cond, $access);
             foreach ($result as $key => $obj){
                 /** @var $obj Entity */
