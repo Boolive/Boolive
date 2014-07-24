@@ -124,6 +124,8 @@ class Entity implements ITrace
                 foreach ($attribs['children'] as $name => $child){
                     $class = isset($child['class_name'])? $child['class_name'] : '\boolive\data\Entity';
 //                    $child['cond'] = $this->_cond;
+                    $child['name'] = $name;
+                    if (isset($attribs['uri'])) $child['uri'] = $attribs['uri'].'/'.$name;
                     $this->_children[$name] = new $class($child, $children_depth);
                     $this->_children[$name]->_parent = $this;
                 }
