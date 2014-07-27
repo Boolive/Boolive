@@ -7,7 +7,7 @@ $store = array(
     'class' => '\boolive\data\stores\MySQLStore2',
     'connect' => array(
         // Имя базы данных
-        'dbname' => 'blv-data28',
+        'dbname' => 'boolive-data2-20',
         // Адрес сервера
         'host' => '127.0.0.1',
         // Порт
@@ -29,7 +29,13 @@ $store = array(
         // Настройка секционирования базы данных
         'sections' => array(
             array('code' => 0, 'uri' => ''),
-            array('code' => 1, 'uri' => '/library')
+            array('code' => 1, 'uri' => '/library'),
+
+            array('code' => 2, 'uri' => '/library/sub'),
+            array('code' => 3, 'uri' => '/library/sub/hub'),
+            array('code' => 4, 'uri' => '/library/nesub'),
+            array('code' => 5, 'uri' => '/foo/xxx'),
+            array('code' => 6, 'uri' => '/library/sub/xxxxxxx/yyyyy/zzzzz')
         )
     )
 );

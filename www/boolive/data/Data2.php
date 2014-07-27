@@ -211,29 +211,6 @@ class Data2
                 }
             }
 
-            // from - от куда или какой объект выбирать. Строка, число, массив
-            if (empty($result['from'])){
-                $result['from'] = '';
-            }else
-            if (is_array($result['from'])){
-                if (count($result['from'])==2 && $result['from'][0] instanceof Entity && is_scalar($result['from'][1])){
-                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
-                }else{
-                    foreach ($result['from'] as $fkey => $fval){
-                        if (!is_int($fval) && preg_match('/^[0-9 ]+$/', $fval)){
-                            $result['from'][$fkey] = intval($fval);
-                        }
-                    }
-                    $result['limit'] = array(0,count($result['from']));
-                }
-            }else
-            if ($result['from'] instanceof Entity){
-                throw new \Exception(Trace::format($result['from']));
-            }else
-            if ($result['from']!= Entity::ENTITY_ID && preg_match('/^[0-9 ]+$/', $result['from'])){
-                $result['from'] = intval($result['from']);
-            }
-
             // depth - глубина выборки. Два значения - начальная и конечная глубина относительно from.
             if (!isset($result['depth'])){
                 // По умолчанию в зависимости от select
@@ -253,6 +230,39 @@ class Data2
                 }
                 $result['depth'][0] = intval($result['depth'][0]);
                 $result['depth'][1] = ($result['depth'][1] === 'max')? Entity::MAX_DEPTH : intval($result['depth'][1]);
+            }
+
+            // from - от куда или какой объект выбирать. Строка, число, массив
+            // Если URI, то дополнительно определяются секции, в которых выполнять поиск
+            $result['sections'] = array();
+            if (empty($result['from'])){
+                $result['from'] = '';
+                $result['sections'] = self::getSections($result['from'], $result['depth'][1]);
+            }else
+            if (is_array($result['from'])){
+                if (count($result['from'])==2 && $result['from'][0] instanceof Entity && is_scalar($result['from'][1])){
+                    $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
+                }else{
+                    foreach ($result['from'] as $fkey => $fval){
+                        if (self::isUri($fval)){
+                            $result['sections'] = array_merge($result['sections'], self::getSections($fval,$result['depth'][1]));
+                        }else{
+                            $result['from'][$fkey] = $fval==Entity::ENTITY_ID? Entity::ENTITY_ID : intval($fval);
+                        }
+                    }
+                    $result['limit'] = array(0,count($result['from']));
+                }
+            }else
+            if ($result['from'] instanceof Entity){
+                $result['from'] = $result['from']->key();
+                $result['sections'] = self::getSections($result['from']->uri(), $result['depth'][1]);
+                throw new \Exception(Trace::format($result['from']));
+            }else
+            if (self::isUri($result['from'])){
+                $result['sections'] = self::getSections($result['from'], $result['depth'][1]);
+            }else
+            if ($result['from']!= Entity::ENTITY_ID){
+                $result['from'] = intval($result['from']);
             }
 
             // where - условие выборки
@@ -466,6 +476,29 @@ class Data2
             }
         }
         return $cond;
+    }
+
+    /**
+     * Возвращает код секции по uri. По умолчанию 0
+     * Секция определяется по настройкам подключения
+     * @param string $uri URI, для которого определяется секция
+     * @throws \Exception
+     * @return int Код секции
+     */
+    static function getSection($uri){
+        if ($store = self::getStore()){
+            return $store->getSection($uri);
+        }else{
+            throw new \Exception('Не определено хранилище объектов');
+        }
+    }
+
+    static function getSections($uri, $depth){
+        if ($store = self::getStore()){
+            return $store->getSections($uri, $depth);
+        }else{
+            throw new \Exception('Не определено хранилище объектов');
+        }
     }
 
     /**

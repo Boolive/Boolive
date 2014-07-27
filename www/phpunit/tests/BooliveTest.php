@@ -122,10 +122,20 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
         trace($obj->parent());
     }
 
-    function test_error()
+    function _test_error()
     {
         $obj = Data2::read('/library/javascripts/patterns/Boolive.Widget');
         trace($obj);
+    }
+
+    function test_find()
+    {
+        $obj = Data2::read(array(
+            'from' => '',
+            'select' => 'children'
+        ));
+//        trace($obj);
+//        trace(Data2::getSections('',1));
     }
 }
  

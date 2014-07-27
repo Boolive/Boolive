@@ -203,7 +203,7 @@ class MySQLStore2 extends Entity
             // Подчиенные до указанной глубины. По умолчанию глубина 1
             if ($cond['select'] == 'children'){
                 // @todo Учитывать секции и uri||id
-                // Выбор всех подчиенных
+                // Выбор подчиненных на всю глубину
                 if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                     $from = 'FROM {objects} obj';
                     $from.= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
@@ -782,6 +782,35 @@ class MySQLStore2 extends Entity
             return 0;
         }
         return $this->uri_sec[$uri];
+    }
+
+    /**
+     * Возвращает коды секциий по uri сучётом глубины. По умолчанию 0
+     * @param $uri
+     * @param $depth
+     * @return array
+     */
+    function getSections($uri, $depth = Entity::MAX_DEPTH)
+    {
+        $result = array();
+        if (isset($this->config['sections'])){
+            $uri_depth = mb_substr_count($uri, '/');
+            $i = count($this->config['sections']);
+            while (--$i>=0){
+                $pos = empty($uri)? 0 : mb_strpos($this->config['sections'][$i]['uri'], $uri);
+                if ($pos === 0){
+                    if ($depth == Entity::MAX_DEPTH || mb_substr_count($this->config['sections'][$i]['uri'],'/')-$uri_depth<=$depth){
+                        $result[] =$this->config['sections'][$i]['code'];
+                    }
+                }
+
+
+//                if ($this->config['sections'][$i]['uri'] == '' || mb_strpos($uri, $this->config['sections'][$i]['uri']) === 0){
+//                    return $this->uri_sec[$uri] = $this->config['sections'][$i]['code'];
+//                }
+            }
+        }
+        return $result;
     }
 
     /**
