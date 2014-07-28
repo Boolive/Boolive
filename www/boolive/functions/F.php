@@ -322,4 +322,22 @@ class F
         $a = $b;
         $b = $s;
     }
+
+    static function array_append(&$array1, $array2, $save_keys = false)
+    {
+        //if ($save_keys){
+//            foreach ($array2 as $k => $v) $array1[$k] = $v;
+//        }else{
+            foreach ($array2 as $v) $array1[] = $v;
+//        }
+    }
+
+    static function array_unique($array)
+    {
+        $result = array();
+        foreach($array as $val) {
+            $result[$val] = true;
+        }
+        return array_keys($result);
+    }
 }

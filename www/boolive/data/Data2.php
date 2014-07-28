@@ -250,8 +250,10 @@ class Data2
                             $result['from'][$fkey] = $fval==Entity::ENTITY_ID? Entity::ENTITY_ID : intval($fval);
                         }
                     }
+                    $result['sections'] = F::array_unique($result['sections']);
                     $result['limit'] = array(0,count($result['from']));
                 }
+
             }else
             if ($result['from'] instanceof Entity){
                 $result['from'] = $result['from']->key();
@@ -324,6 +326,7 @@ class Data2
                 'select' => $result['select'],
                 'calc' => $result['calc'],
                 'from' => $result['from'],
+                'sections' => $result['sections'],
                 'depth' => $result['depth'],
                 'struct' => $result['struct'],
                 'where' => $result['where'],

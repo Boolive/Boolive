@@ -11,6 +11,7 @@ namespace phpunit\tests;
 use boolive\Boolive;
 use boolive\data\Data2;
 use boolive\data\Entity;
+use boolive\functions\F;
 
 class BooliveTest extends \PHPUnit_Framework_TestCase {
 
@@ -130,12 +131,64 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
 
     function test_find()
     {
-        $obj = Data2::read(array(
-            'from' => '',
-            'select' => 'children'
+        $result = Data2::read(array(
+            'from' => '/library',
+            'select' => 'children',
+            'depth' => array(0,1)
         ));
-//        trace($obj);
+        trace($result);
 //        trace(Data2::getSections('',1));
+    }
+
+    function _test_unique()
+    {
+        $max = 100000;
+        $arr = range(1,$max,3);
+        $arr2 = range(1,$max,2);
+        $arr = array_merge($arr,$arr2);
+
+        $time = -microtime(true);
+        $res1 = array_unique($arr);
+        $time += microtime(true);
+        trace("deduped to ".count($res1)." in ".$time);
+        // deduped to 666667 in 32.300781965256
+
+        $time = -microtime(true);
+        $res2 = F::array_unique($arr);
+//        $res2 = array();
+//        foreach($arr as $val) {
+//            $res2[$val] = true;
+//        }
+//        $res2 = array_keys($res2);
+        $time += microtime(true);
+        trace("deduped to ".count($res2)." in ".$time);
+        // deduped to 666667 in 0.84372591972351
+    }
+
+    function _test_merge()
+    {
+        $steps = 100;
+
+        $max = 100;
+        $arr1 = range(1,$max,2);
+        $arr2 = range(1,$max,2);
+        $append = range(1, 5, 2);
+        //2
+        $time = -microtime(true);
+        for ($i=0; $i<$steps; $i++){
+            //F::array_append($arr2, $append);
+            foreach ($append as $v) $arr2[] = $v;
+        }
+        $time += microtime(true);
+        trace($time);
+        // 1
+        $time = -microtime(true);
+        for ($i=0; $i<$steps; $i++){
+            $arr1 = array_merge($arr1, $append);
+        }
+
+        $time += microtime(true);
+        trace($time);
     }
 }
  

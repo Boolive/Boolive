@@ -2119,7 +2119,7 @@ class Entity implements ITrace
             $extends = 'boolive\\data\\Entity';
         }
         array_unshift($use, $extends);
-        $use = array_unique($use);
+        $use = F::array_unique($use);
         // Используемые классы
         $use_plain = '';
         $shorts = array($name);

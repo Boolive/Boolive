@@ -113,7 +113,7 @@ class MySQLStore2 extends Entity
         $select = '';
         $from = '';
         $joins = '';
-        $where = '';
+        $where = array(); //AND условия
         $group = '';
         $order = '';
         $limit = '';
@@ -147,10 +147,10 @@ class MySQLStore2 extends Entity
             if (empty($cond['multiple'])){
                 // Выбор одного объекта по id или uri
                 if (is_int($cond['from'])){
-                    $where .= 'obj.id=?';
+                    $where[] = 'obj.id=?';
                     $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                 }else{
-                    $where = 'obj.sec=? AND obj.uri=? ';
+                    $where[] = 'obj.sec=? AND obj.uri=? ';
                     $sec = $this->getSection($cond['from']);
                     $result['binds'][] = array($sec, DB::PARAM_INT);
                     $result['binds'][] = array($cond['from'], DB::PARAM_STR);
@@ -175,7 +175,7 @@ class MySQLStore2 extends Entity
                     if (!empty($w)) $w = '('.$w.' OR ';
                     $w .= '(obj.sec IN ('.rtrim(str_repeat('?,',count($secs)),',').') AND obj.uri IN ('.rtrim(str_repeat('?,',count($uris)),',').'))';
                 }
-                $where.=$w;
+                $where[] = $w;
                 $result['binds'] = array_merge($result['binds'], $ids, $secs, $uris);
             }
         }else
@@ -184,44 +184,48 @@ class MySQLStore2 extends Entity
             $from = 'FROM {objects} obj';
             if (empty($cond['multiple'])){
                 if (is_int($cond['from'][0])){
-                    $where = 'obj.parent=? AND obj.name=?';
+                    $where[] = 'obj.parent=? AND obj.name=?';
                     $result['binds'][] = array($cond['from'][0], DB::PARAM_INT);
                     $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
                 }else{
                     $id = $this->getId($cond['from'][0], false);
                     $sec = $this->getSection($cond['from'][0]);
-                    $where = 'obj.sec=? AND obj.parent=? AND obj.name=?';
+                    $where[] = 'obj.sec=? AND obj.parent=? AND obj.name=?';
                     $result['binds'][] = array($sec, DB::PARAM_INT);
                     $result['binds'][] = array($id, DB::PARAM_INT);
                     $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
                 }
             }else{
                 // @todo Выбор свойства по имени у множества объектов
-                $where = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';
+                $where[] = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';
             }
         }else{
+            $cond['from'] = $this->getId($cond['from']);
             // Подчиенные до указанной глубины. По умолчанию глубина 1
             if ($cond['select'] == 'children'){
-                // @todo Учитывать секции и uri||id
                 // Выбор подчиненных на всю глубину
                 if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                     $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').' AND t.is_delete=0)';
+                    $from.= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.sec = obj.sec AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').')';
                     $binds2[] = array($cond['from'], DB::PARAM_INT);
 
                 }else
                 // Выбор непосредственных подчиненных
                 if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
                     $from = 'FROM {objects} obj USE INDEX(child)';
-                    $where = 'obj.parent = ? ';
+                    $where[] = 'obj.parent = ?';
                     $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                 }else{
                     // Выбор с ограничением в глубину
                     $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.parent_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
+                    $from.= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.sec = obj.sec AND f.parent_id = ? AND f.level>=? AND f.level<=?)";
                     $binds2[] = array($cond['from'], DB::PARAM_INT);
                     $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                     $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                }
+                if ($cond['sections']){
+                    $where[] = 'obj.sec IN ('.str_repeat('?,', count($cond['sections'])-1).'?)';
+                    $result['binds'] = array_merge($result['binds'], $cond['sections']);
                 }
             }else
             // Наследники до указанной глубины. По умодчанию глубина 1
@@ -259,8 +263,8 @@ class MySQLStore2 extends Entity
             $result['binds'][] = array((int)$cond['limit'][0], DB::PARAM_INT);
             $result['binds'][] = array((int)$cond['limit'][1], DB::PARAM_INT);
         }
-
-        $result['sql'] = $select.$from.$joins."\n  WHERE ".$where.$group.$order.$limit;
+        if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
+        $result['sql'] = $select.$from.$joins."\n  WHERE ".implode(' AND ', $where).$group.$order.$limit;
 
 
         return $result;
@@ -803,11 +807,6 @@ class MySQLStore2 extends Entity
                         $result[] =$this->config['sections'][$i]['code'];
                     }
                 }
-
-
-//                if ($this->config['sections'][$i]['uri'] == '' || mb_strpos($uri, $this->config['sections'][$i]['uri']) === 0){
-//                    return $this->uri_sec[$uri] = $this->config['sections'][$i]['code'];
-//                }
             }
         }
         return $result;
