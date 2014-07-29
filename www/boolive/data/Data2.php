@@ -73,17 +73,22 @@ class Data2
         }
         //5. Если не из кэша, то запись результата в кэш
         //6. Создание экземпляров
+
         if (!empty($result) && !$cond['calc']){
+            $key = empty($cond['key'])? false : $cond['key'];
+            $entities = array();
             foreach ($result as $rkey => $ritem){
+                if ($key) $rkey = $ritem[$key];
                 if (isset($ritem['class_name'])){
                     try{
-                        $result[$rkey] = new $ritem['class_name']($ritem);
+                        $entities[$rkey] = new $ritem['class_name']($ritem);
                     }catch (\Exception $e){
-                        $result[$rkey] = new Entity($ritem);
+                        $entities[$rkey] = new Entity($ritem);
                     }
-                    $result[$rkey]->isChanged(false);
+                    $entities[$rkey]->isChanged(false);
                 }
             }
+            $result = $entities;
         }
         if ($cond['struct'] == 'object' || $cond['struct'] == 'value'){
             $result = reset($result);
