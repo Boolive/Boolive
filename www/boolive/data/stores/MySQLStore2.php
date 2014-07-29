@@ -112,7 +112,7 @@ class MySQLStore2 extends Entity
         );
         $select = '';
         $from = '';
-        $joins = '';
+        $joins = array();
         $where = array(); //AND условия
         $group = '';
         $order = '';
@@ -230,27 +230,62 @@ class MySQLStore2 extends Entity
             }else
             // Наследники до указанной глубины. По умодчанию глубина 1
             if ($cond['select'] == 'heirs'){
-                $from = 'FROM {objects} obj';
-            }else
-            // Родители до указанной глубины относительно объекта. По умолчанию выбор до корня
-            if ($cond['select'] == 'parents'){
-                $from = 'FROM {objects} obj';
-            }else
-            // Прототипы до указанной глубины. По умолчанию выбор до первичного прототипа
-            if ($cond['select'] == 'protos'){
-                // @todo секции и учитывать uri||id
-                // Поиск по всей ветке
+                // Выбор подчиненных на всю глубину
                 if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
                     $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').' AND t.is_delete=0)';
+                    $from.= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.sec = obj.sec AND t.proto_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').')';
                     $binds2[] = array($cond['from'], DB::PARAM_INT);
+
+                }else
+                // Выбор непосредственных подчиненных
+                if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
+                    $from = 'FROM {objects} obj USE INDEX(child)';
+                    $where[] = 'obj.proto = ?';
+                    $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                 }else{
-                    $from = ' FROM {objects} obj';
-                    $from.= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=? AND f.is_delete=0)";
+                    // Выбор с ограничением в глубину
+                    $from = 'FROM {objects} obj';
+                    $from.= "\n  JOIN {protos} f ON (f.object_id = obj.id AND f.sec = obj.sec AND f.proto_id = ? AND f.level>=? AND f.level<=?)";
                     $binds2[] = array($cond['from'], DB::PARAM_INT);
                     $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
                     $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                 }
+            }else
+            // Родители до указанной глубины относительно объекта. По умолчанию выбор до корня
+            if ($cond['select'] == 'parents'){
+                // @todo секции
+                // Поиск по всей ветке
+                if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                    $from = 'FROM {objects} obj';
+                    $from.= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').')';
+                    $binds2[] = array($cond['from'], DB::PARAM_INT);
+                }else{
+                    $from = ' FROM {objects} obj';
+                    $from.= "\n  JOIN {parents} f ON (f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
+                    $binds2[] = array($cond['from'], DB::PARAM_INT);
+                    $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                    $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                }
+            }else
+            // Прототипы до указанной глубины. По умолчанию выбор до первичного прототипа
+            if ($cond['select'] == 'protos'){
+                // @todo секции
+                // Поиск по всей ветке
+                if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                    $from = 'FROM {objects} obj';
+                    $from.= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').')';
+                    $binds2[] = array($cond['from'], DB::PARAM_INT);
+                }else{
+                    $from = ' FROM {objects} obj';
+                    $from.= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
+                    $binds2[] = array($cond['from'], DB::PARAM_INT);
+                    $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                    $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                }
+//                if ($cond['sections']){
+//                    $where[] = 'obj.sec IN ('.str_repeat('?,', count($cond['sections'])-1).'?)';
+//                    $result['binds'] = array_merge($result['binds'], $cond['sections']);
+//                }
             }
         }
         // условие where
@@ -267,12 +302,27 @@ class MySQLStore2 extends Entity
                             $joins[$jtable = $jtable.'.'.$cond['order'][$i][$o]] = array($pretabel, $cond['order'][$i][$o]);
                         }
                     }
-                    if ($result['order']) $result['order'].=', ';
-                    $result['order'].= '`'.$jtable.'`.`'.$cond['order'][$i][$ocnt].'` '.$cond['order'][$i][$ocnt+1];
+                    if ($order) $order.=', ';
+                    $order.= '`'.$jtable.'`.`'.$cond['order'][$i][$ocnt].'` '.$cond['order'][$i][$ocnt+1];
                 }
             }
-            if ($result['order']) $result['order'] = "\n  ORDER BY ".$result['order'];
+            if ($order) $order = "\n  ORDER BY ".$order;
         }
+
+        // Слияния для условий по подчиненным и сортировке по ним
+        //unset($joins['obj']);
+        $join = '';
+        foreach ($joins as $alias => $info){
+            $join.= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ?)';
+            $binds2[] = $info[1];
+        }
+//        foreach ($joins_text as $alias => $info){
+//            $result['joins'].= "\n  LEFT JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
+//        }
+//        foreach ($joins_link as $alias => $info){
+//            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
+//        }
+        if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
 
         // limit
         if (!empty($cond['limit'])){
@@ -280,8 +330,10 @@ class MySQLStore2 extends Entity
             $result['binds'][] = array((int)$cond['limit'][0], DB::PARAM_INT);
             $result['binds'][] = array((int)$cond['limit'][1], DB::PARAM_INT);
         }
-        if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
-        $result['sql'] = $select.$from.$joins."\n  WHERE ".implode(' AND ', $where).$group.$order.$limit;
+
+        $where = $where? "\n  WHERE ".implode(' AND ', $where) : '';
+
+        $result['sql'] = $select.$from.$join.$where.$group.$order.$limit;
 
 
         return $result;
