@@ -256,6 +256,23 @@ class MySQLStore2 extends Entity
         // условие where
 
         // сортировка
+        if (!empty($cond['order'])){
+            $cnt = sizeof($cond['order']);
+            for ($i=0; $i<$cnt; ++$i){
+                if (($ocnt = sizeof($cond['order'][$i])-2)>=0){
+                    $jtable = $pretabel = 'obj';
+                    if ($ocnt>0){
+                        // Сортировка по подчиненным объектами. Требуется слияние таблиц
+                        for ($o = 0; $o < $ocnt; ++$o){
+                            $joins[$jtable = $jtable.'.'.$cond['order'][$i][$o]] = array($pretabel, $cond['order'][$i][$o]);
+                        }
+                    }
+                    if ($result['order']) $result['order'].=', ';
+                    $result['order'].= '`'.$jtable.'`.`'.$cond['order'][$i][$ocnt].'` '.$cond['order'][$i][$ocnt+1];
+                }
+            }
+            if ($result['order']) $result['order'] = "\n  ORDER BY ".$result['order'];
+        }
 
         // limit
         if (!empty($cond['limit'])){
