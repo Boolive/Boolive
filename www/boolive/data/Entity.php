@@ -1377,8 +1377,11 @@ class Entity implements ITrace
         }
 
         // Установка выбранных подчиенных в свойства объекта
-        //@todo struct = list(1,1) tree(1,any)
-        if ($load && $cond['depth'][1] == 1 )
+        // list(1,1) tree(1,any)
+        if ($load && (
+            ($cond['struct']=='list' && $cond['depth'][0] == 1 && $cond['depth'][1] == 1) ||
+            ($cond['struct']=='tree' && $cond['depth'][0] == 1)
+            ))
         {
             if ($cond['select'] == 'children'){
                 $this->_children = array();
