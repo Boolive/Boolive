@@ -133,8 +133,8 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
     {
         $result = Data2::read(array(
             'from' => '/library/basic/Number',
-            'select' => 'heirs',
-            'depth' => array(1,'max'),
+            'select' => 'children',
+            'depth' => array(0,Entity::MAX_DEPTH),
 //            'limit' => array(1,2),
 //            'order' => array('parent_cnt', 'asc')
         ));

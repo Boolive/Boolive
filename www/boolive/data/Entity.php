@@ -65,6 +65,9 @@ class Entity implements ITrace
     );
     /** @var array Подчиненные объекты (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_children = array();
+    /** @var array Объекты наследники (выгруженные из бд или новые, не обязательно все существующие) */
+    protected $_heirs = array();
+
     /** @var Entity Экземпляр прототипа */
     protected $_proto = false;
     /** @var Entity Экземпляр родителя */
@@ -1374,16 +1377,23 @@ class Entity implements ITrace
         }
 
         // Установка выбранных подчиенных в свойства объекта
-        if ($load && $cond['select'] == 'children' && $cond['depth'][1] == 1)
+        //@todo struct = list(1,1) tree(1,any)
+        if ($load && $cond['depth'][1] == 1 )
         {
-//            if (isset($cond['key']) && $cond['key'] == 'name'){
-//                $this->_children = $result;
-//            }else{
+            if ($cond['select'] == 'children'){
+                $this->_children = array();
                 foreach ($result as $obj){
                     $this->_children[$obj->name()] = $obj;
-                    $obj->_parent = $this;
+                    $obj->_parent = $this; // @todo Возможно сам определится??
                 }
-//            }
+            }else
+            if ($cond['select'] == 'heirs'){
+                $this->_heirs = array();
+                foreach ($result as $obj){
+                    $this->_heirs[] = $obj;
+                    $obj->_proto = $this; // @todo Возможно сам определится??
+                }
+            }
         }
         return $result;
     }
@@ -1391,32 +1401,37 @@ class Entity implements ITrace
     /**
      * Список выгруженных подчиненных (свойства объекта)
      * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
-     * @param array $depth Глубина подчиенных. По умолчанию
-     * @return array Массив подчененных
+     * @return array
      */
-    function children($key = 'name', $depth = array(1,1))
+    function children($key = 'name')
     {
         $result = array();
-        if ($depth[0] == 1){
-            if ($key === 'name'){
-                $result = $this->_children;
-            }else
-            if (empty($key)){
-                $result = array_values($this->_children);
-            }else{
-                foreach ($this->_children as $child){
-                    $result[$child->_attribs[$key]];
-                }
+        if ($key === 'name'){
+            $result = $this->_children;
+        }else
+        if (empty($key)){
+            $result = array_values($this->_children);
+        }else{
+            foreach ($this->_children as $child){
+                $result[$child->_attribs[$key]];
             }
         }
-        if ($depth[0] == 0){
-            array_unshift($result, $this);
-        }
-        if ($depth[1] > 1){
-            $depth[0]--;
-            $depth[1]--;
-            foreach ($this->_children as $child){
-                $result = array_merge($result, $child->children($key, $depth));
+        return $result;
+    }
+
+    /**
+     * Список выгруженных наследников (непосредсвтенных, а не всей ветки)
+     * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
+     * @return array
+     */
+    function heirs($key = null)
+    {
+        $result = array();
+        if (empty($key)){
+            $result = $this->_heirs;
+        }else{
+            foreach ($this->_heirs as $child){
+                $result[$child->_attribs[$key]];
             }
         }
         return $result;
