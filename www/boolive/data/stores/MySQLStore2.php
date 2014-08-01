@@ -96,6 +96,14 @@ class MySQLStore2 extends Entity
             }
             $result[] = $attr;
         }
+        if ($cond['struct'] == 'tree'){
+            $first_level = Data2::read($cond['from']->key(), false)->parentCount();
+            if ($cond['select'] == 'parents' || $cond['select'] == 'protos'){
+                $first_level-= $cond['depth'][0];
+            }else{
+                $first_level+= $cond['depth'][0];
+            }
+        }
         // Выбор текстовых значений
         // Структуирование дерева
 
