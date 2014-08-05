@@ -60,6 +60,25 @@ class MySQLStore2 extends Entity
      */
     function read($cond)
     {
+        // Для формирования дерева необходимо знать уровень вложенности from
+        if ($cond['struct'] == 'tree'){
+            $make_tree = true;
+            $tree = array();
+            $tree_type = ($cond['select'] == 'heirs' || $cond['select'] == 'protos')?1:0;
+            if ($tree_type == 1){
+                $first_level = Data2::read($cond['from'], false)->protoCount();
+            }else{
+                $first_level = Data2::read($cond['from'], false)->parentCount();
+            }
+            if ($cond['select'] == 'parents' || $cond['select'] == 'protos'){
+                $first_level-= $cond['depth'][0];
+            }else{
+                $first_level+= $cond['depth'][0];
+            }
+        }else{
+            $make_tree = false;
+        }
+        // Условие в SQL
         $sql = $this->condToSQL($cond);
         $q = $this->db->prepare($sql['sql']);
         foreach ($sql['binds'] as $i => $v){
@@ -77,12 +96,26 @@ class MySQLStore2 extends Entity
         }
         $row = $q->fetch(DB::FETCH_ASSOC);
         $result = array();
+
         while ($row){
             if ($cond['calc']){
                 $result[] = $row['calc'];
             }else{
-                $result[] = $this->makeObject($row);
-                $this->uri_id[$row['uri']] = $row['id'];
+                $obj = $this->makeObject($row);
+                $this->uri_id[$row['uri']] = $row['id'];//кэш uri
+                if ($make_tree){
+                    $tree[$obj['id']] = $obj;
+                    if (($tree_type == 0 && $row['parent_cnt'] == $first_level) ||
+                        ($tree_type == 1 && $row['proto_cnt'] == $first_level)){
+                        $result[] = &$tree[$obj['id']];
+                    }
+                }else{
+                    $result[] = $obj;
+                }
+                // Если тип текстовый, то требуется дополнительная выборка текса
+                if (isset($row['value_type']) && $row['value_type'] == Entity::VALUE_TEXT){
+                    $need_text[$row['is_default_value']][] = &end($result);
+                }
             }
             $row = $q->fetch(DB::FETCH_ASSOC);
         }
@@ -96,17 +129,39 @@ class MySQLStore2 extends Entity
             }
             $result[] = $attr;
         }
-        if ($cond['struct'] == 'tree'){
-            $first_level = Data2::read($cond['from']->key(), false)->parentCount();
-            if ($cond['select'] == 'parents' || $cond['select'] == 'protos'){
-                $first_level-= $cond['depth'][0];
-            }else{
-                $first_level+= $cond['depth'][0];
+
+        // Выбор текстовых значений
+        if (!empty($need_text)){
+            $q = $this->db->query('SELECT id, value FROM {text} WHERE id IN ('.implode(',', array_keys($need_text)).')');
+            while ($row = $q->fetch(DB::FETCH_ASSOC)){
+                $cnt = sizeof($need_text[$row['id']]);
+                for ($i=0; $i<$cnt; $i++) $need_text[$row['id']][$i]['value'] = $row['value'];
             }
         }
-        // Выбор текстовых значений
-        // Структуирование дерева
 
+        // Структуирование дерева
+        if (!empty($tree)){
+            foreach ($tree as $id => $obj){
+                switch ($cond['select']){
+                    case 'children':
+                        $p = $obj['parent'];
+                        if (isset($tree[$p])) $tree[$p]['children'][$obj['name']] = &$tree[$id];
+                        break;
+                    case 'heirs':
+                        $p = $obj['proto'];
+                        if (isset($tree[$p])) $tree[$p]['heirs'][] = &$tree[$id];
+                        break;
+                    case 'parents':
+                        $p = $obj['parent'];
+                        if (isset($tree[$p])) $tree[$id]['_parent'] = &$tree[$p];
+                        break;
+                    case 'protos':
+                        $p = $obj['proto'];
+                        if (isset($tree[$p])) $tree[$id]['_proto'] = &$tree[$p];
+                        break;
+                }
+            }
+        }
         return $result;
     }
 
@@ -121,200 +176,526 @@ class MySQLStore2 extends Entity
         $select = '';
         $from = '';
         $joins = array();
+        $joins_link = array();
+        $joins_plain = array();
+        $joins_text = array();
         $where = array(); //AND условия
         $group = '';
         $order = '';
         $limit = '';
+
         // Значения в условиях JOIN ON
         $binds2 = array();
-
-        if (empty($cond['calc'])){
-            $select = 'SELECT obj.* ';
-        }else
-        if (!is_array($cond['calc'])){
-            if ($cond['calc'] == 'exists'){
-                $select = 'SELECT 1 calc ';
+        if (!$only_where){
+            if (empty($cond['calc'])){
+                $select = 'SELECT obj.* ';
             }else
-            if ($cond['calc'] == 'count'){
-                $select = 'SELECT COUNT(*) calc ';
+            if (!is_array($cond['calc'])){
+                if ($cond['calc'] == 'exists'){
+                    $select = 'SELECT 1 calc ';
+                }else
+                if ($cond['calc'] == 'count'){
+                    $select = 'SELECT COUNT(*) calc ';
+                }else
+                if (in_array($cond['calc'], array('max', 'min', 'avg', 'sum'))){
+                    $select = "SELECT {$cond['calc']}(obj.value) calc ";
+                }
             }else
-            if (in_array($cond['calc'], array('max', 'min', 'avg', 'sum'))){
-                $select = "SELECT {$cond['calc']}(obj.value) calc ";
+            if (in_array($cond['calc'][0], array('max', 'min', 'avg', 'sum')) && isset($this->_attribs[$cond['calc'][1]])){
+                $select = "SELECT {$cond['calc'][0]}(obj.{$cond['calc'][1]}) calc ";
+            }else{
+                throw new \Exception('Incorrect calc parameter in the reading condition');
             }
-        }else
-        if (in_array($cond['calc'][0], array('max', 'min', 'avg', 'sum')) && isset($this->_attribs[$cond['calc'][1]])){
-            $select = "SELECT {$cond['calc'][0]}(obj.{$cond['calc'][1]}) calc ";
-        }else{
-            throw new \Exception('Incorrect calc parameter in the reading condition');
-        }
 
-        $sec = null;
-        // Выбор "себя"
-        if ($cond['select'] == 'self'){
-            $from .= 'FROM {objects} obj';
-            if (empty($cond['multiple'])){
-                // Выбор одного объекта по id или uri
-                if (is_int($cond['from'])){
-                    $where[] = 'obj.id=?';
-                    $result['binds'][] = array($cond['from'], DB::PARAM_INT);
+            $sec = null;
+            // Выбор "себя"
+            if ($cond['select'] == 'self'){
+                $from .= 'FROM {objects} obj';
+                if (empty($cond['multiple'])){
+                    // Выбор одного объекта по id или uri
+                    if (is_int($cond['from'])){
+                        $where[] = 'obj.id=?';
+                        $result['binds'][] = array($cond['from'], DB::PARAM_INT);
+                    }else{
+                        $where[] = 'obj.sec=? AND obj.uri=? ';
+                        $sec = $this->getSection($cond['from']);
+                        $result['binds'][] = array($sec, DB::PARAM_INT);
+                        $result['binds'][] = array($cond['from'], DB::PARAM_STR);
+                    }
                 }else{
-                    $where[] = 'obj.sec=? AND obj.uri=? ';
-                    $sec = $this->getSection($cond['from']);
-                    $result['binds'][] = array($sec, DB::PARAM_INT);
-                    $result['binds'][] = array($cond['from'], DB::PARAM_STR);
+                    // Множественный выбор объектов по id или uri
+                    $secs = array();
+                    $ids = array();
+                    $uris = array();
+                    foreach ($cond['from'] as $f){
+                        if (is_int($f)){
+                            $ids[] = $f;
+                        }else{
+                            $secs[$this->getSection($f)] = true;
+                            $uris[] = $f;
+                        }
+                    }
+                    $w = '';
+                    if (count($ids)) $w.= 'obj.id IN ('.rtrim(str_repeat('?,',count($ids)),',').')';
+                    if (count($uris)){
+                        $secs = array_keys($secs);
+                        if (!empty($w)) $w = '('.$w.' OR ';
+                        $w .= '(obj.sec IN ('.rtrim(str_repeat('?,',count($secs)),',').') AND obj.uri IN ('.rtrim(str_repeat('?,',count($uris)),',').'))';
+                    }
+                    $where[] = $w;
+                    $result['binds'] = array_merge($result['binds'], $ids, $secs, $uris);
+                }
+            }else
+            // Выбор подчиненного по имени
+            if ($cond['select'] == 'child'){
+                $from = 'FROM {objects} obj';
+                if (empty($cond['multiple'])){
+                    if (is_int($cond['from'][0])){
+                        $where[] = 'obj.parent=? AND obj.name=?';
+                        $result['binds'][] = array($cond['from'][0], DB::PARAM_INT);
+                        $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+                    }else{
+                        $id = $this->getId($cond['from'][0], false);
+                        $sec = $this->getSection($cond['from'][0]);
+                        $where[] = 'obj.sec=? AND obj.parent=? AND obj.name=?';
+                        $result['binds'][] = array($sec, DB::PARAM_INT);
+                        $result['binds'][] = array($id, DB::PARAM_INT);
+                        $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+                    }
+                }else{
+                    // @todo Выбор свойства по имени у множества объектов
+                    $where[] = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';
                 }
             }else{
-                // Множественный выбор объектов по id или uri
-                $secs = array();
-                $ids = array();
-                $uris = array();
-                foreach ($cond['from'] as $f){
-                    if (is_int($f)){
-                        $ids[] = $f;
+                $cond['from'] = $this->getId($cond['from']);
+                // Подчиенные до указанной глубины. По умолчанию глубина 1
+                if ($cond['select'] == 'children'){
+                    // Выбор подчиненных на всю глубину
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        $from = 'FROM {objects} obj';
+                        $from.= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').')';
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                    }else
+                    // Выбор непосредственных подчиненных
+                    if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
+                        $from = 'FROM {objects} obj USE INDEX(child)';
+                        $where[] = 'obj.parent = ?';
+                        $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                     }else{
-                        $secs[$this->getSection($f)] = true;
-                        $uris[] = $f;
+                        // Выбор с ограничением в глубину
+                        $from = 'FROM {objects} obj';
+                        $from.= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.sec = obj.sec AND f.parent_id = ? AND f.level>=? AND f.level<=?)";
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                    }
+                    if ($cond['sections']){
+                        $where[] = 'obj.sec IN ('.str_repeat('?,', count($cond['sections'])-1).'?)';
+                        $result['binds'] = array_merge($result['binds'], $cond['sections']);
+                    }
+                }else
+                // Наследники до указанной глубины. По умодчанию глубина 1
+                if ($cond['select'] == 'heirs'){
+                    // Выбор подчиненных на всю глубину
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        $from = 'FROM {objects} obj';
+                        $from.= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.sec = obj.sec AND t.proto_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').')';
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+
+                    }else
+                    // Выбор непосредственных подчиненных
+                    if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
+                        $from = 'FROM {objects} obj USE INDEX(child)';
+                        $where[] = 'obj.proto = ?';
+                        $result['binds'][] = array($cond['from'], DB::PARAM_INT);
+                    }else{
+                        // Выбор с ограничением в глубину
+                        $from = 'FROM {objects} obj';
+                        $from.= "\n  JOIN {protos} f ON (f.object_id = obj.id AND f.sec = obj.sec AND f.proto_id = ? AND f.level>=? AND f.level<=?)";
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                    }
+                }else
+                // Родители до указанной глубины относительно объекта. По умолчанию выбор до корня
+                if ($cond['select'] == 'parents'){
+                    // @todo секции
+                    // Поиск по всей ветке
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        $from = 'FROM {objects} obj';
+                        $from.= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').')';
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                    }else{
+                        $from = ' FROM {objects} obj';
+                        $from.= "\n  JOIN {parents} f ON (f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
+                    }
+                }else
+                // Прототипы до указанной глубины. По умолчанию выбор до первичного прототипа
+                if ($cond['select'] == 'protos'){
+                    // @todo секции
+                    // Поиск по всей ветке
+                    if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
+                        $from = 'FROM {objects} obj';
+                        $from.= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').')';
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                    }else{
+                        $from = ' FROM {objects} obj';
+                        $from.= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
+                        $binds2[] = array($cond['from'], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
+                        $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
                     }
                 }
-                $w = '';
-                if (count($ids)) $w.= 'obj.id IN ('.rtrim(str_repeat('?,',count($ids)),',').')';
-                if (count($uris)){
-                    $secs = array_keys($secs);
-                    if (!empty($w)) $w = '('.$w.' OR ';
-                    $w .= '(obj.sec IN ('.rtrim(str_repeat('?,',count($secs)),',').') AND obj.uri IN ('.rtrim(str_repeat('?,',count($uris)),',').'))';
-                }
-                $where[] = $w;
-                $result['binds'] = array_merge($result['binds'], $ids, $secs, $uris);
             }
-        }else
-        // Выбор подчиненного по имени
-        if ($cond['select'] == 'child'){
-            $from = 'FROM {objects} obj';
-            if (empty($cond['multiple'])){
-                if (is_int($cond['from'][0])){
-                    $where[] = 'obj.parent=? AND obj.name=?';
-                    $result['binds'][] = array($cond['from'][0], DB::PARAM_INT);
-                    $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
-                }else{
-                    $id = $this->getId($cond['from'][0], false);
-                    $sec = $this->getSection($cond['from'][0]);
-                    $where[] = 'obj.sec=? AND obj.parent=? AND obj.name=?';
-                    $result['binds'][] = array($sec, DB::PARAM_INT);
-                    $result['binds'][] = array($id, DB::PARAM_INT);
-                    $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+            // сортировка
+            if (!empty($cond['order'])){
+                $cnt = sizeof($cond['order']);
+                for ($i=0; $i<$cnt; ++$i){
+                    if (($ocnt = sizeof($cond['order'][$i])-2)>=0){
+                        $jtable = $pretabel = 'obj';
+                        if ($ocnt>0){
+                            // Сортировка по подчиненным объектами. Требуется слияние таблиц
+                            for ($o = 0; $o < $ocnt; ++$o){
+                                $joins[$jtable = $jtable.'.'.$cond['order'][$i][$o]] = array($pretabel, $cond['order'][$i][$o]);
+                            }
+                        }
+                        if ($order) $order.=', ';
+                        $order.= '`'.$jtable.'`.`'.$cond['order'][$i][$ocnt].'` '.$cond['order'][$i][$ocnt+1];
+                    }
                 }
-            }else{
-                // @todo Выбор свойства по имени у множества объектов
-                $where[] = 'obj.sec IN (?) AND obj.parent IN (?) AND obj.name = ?';
-            }
-        }else{
-            $cond['from'] = $this->getId($cond['from']);
-            // Подчиенные до указанной глубины. По умолчанию глубина 1
-            if ($cond['select'] == 'children'){
-                // Выбор подчиненных на всю глубину
-                if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
-                    $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {parents} t ON (t.object_id = obj.id AND t.sec = obj.sec AND t.parent_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').')';
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-
-                }else
-                // Выбор непосредственных подчиненных
-                if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
-                    $from = 'FROM {objects} obj USE INDEX(child)';
-                    $where[] = 'obj.parent = ?';
-                    $result['binds'][] = array($cond['from'], DB::PARAM_INT);
-                }else{
-                    // Выбор с ограничением в глубину
-                    $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {parents} f ON (f.object_id = obj.id AND f.sec = obj.sec AND f.parent_id = ? AND f.level>=? AND f.level<=?)";
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                }
-                if ($cond['sections']){
-                    $where[] = 'obj.sec IN ('.str_repeat('?,', count($cond['sections'])-1).'?)';
-                    $result['binds'] = array_merge($result['binds'], $cond['sections']);
-                }
-            }else
-            // Наследники до указанной глубины. По умодчанию глубина 1
-            if ($cond['select'] == 'heirs'){
-                // Выбор подчиненных на всю глубину
-                if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
-                    $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {protos} t ON (t.object_id = obj.id AND t.sec = obj.sec AND t.proto_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').')';
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-
-                }else
-                // Выбор непосредственных подчиненных
-                if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
-                    $from = 'FROM {objects} obj USE INDEX(child)';
-                    $where[] = 'obj.proto = ?';
-                    $result['binds'][] = array($cond['from'], DB::PARAM_INT);
-                }else{
-                    // Выбор с ограничением в глубину
-                    $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {protos} f ON (f.object_id = obj.id AND f.sec = obj.sec AND f.proto_id = ? AND f.level>=? AND f.level<=?)";
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                }
-            }else
-            // Родители до указанной глубины относительно объекта. По умолчанию выбор до корня
-            if ($cond['select'] == 'parents'){
-                // @todo секции
-                // Поиск по всей ветке
-                if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
-                    $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {parents} t ON (t.parent_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.parent_id':'').')';
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-                }else{
-                    $from = ' FROM {objects} obj';
-                    $from.= "\n  JOIN {parents} f ON (f.parent_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                }
-            }else
-            // Прототипы до указанной глубины. По умолчанию выбор до первичного прототипа
-            if ($cond['select'] == 'protos'){
-                // @todo секции
-                // Поиск по всей ветке
-                if ($cond['depth'][1] == Entity::MAX_DEPTH && $cond['depth'][0]<=1){
-                    $from = 'FROM {objects} obj';
-                    $from.= "\n  JOIN {protos} t ON (t.proto_id = obj.id AND t.object_id = ?".($cond['depth'][0]==1?' AND t.object_id!=t.proto_id':'').')';
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-                }else{
-                    $from = ' FROM {objects} obj';
-                    $from.= "\n  JOIN {protos} f ON (f.proto_id = obj.id AND f.object_id = ? AND f.level>=? AND f.level<=?)";
-                    $binds2[] = array($cond['from'], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][0], DB::PARAM_INT);
-                    $binds2[] = array($cond['depth'][1], DB::PARAM_INT);
-                }
-//                if ($cond['sections']){
-//                    $where[] = 'obj.sec IN ('.str_repeat('?,', count($cond['sections'])-1).'?)';
-//                    $result['binds'] = array_merge($result['binds'], $cond['sections']);
-//                }
+                if ($order) $order = "\n  ORDER BY ".$order;
             }
         }
         // условие where
-
-        // сортировка
-        if (!empty($cond['order'])){
-            $cnt = sizeof($cond['order']);
-            for ($i=0; $i<$cnt; ++$i){
-                if (($ocnt = sizeof($cond['order'][$i])-2)>=0){
-                    $jtable = $pretabel = 'obj';
-                    if ($ocnt>0){
-                        // Сортировка по подчиненным объектами. Требуется слияние таблиц
-                        for ($o = 0; $o < $ocnt; ++$o){
-                            $joins[$jtable = $jtable.'.'.$cond['order'][$i][$o]] = array($pretabel, $cond['order'][$i][$o]);
-                        }
-                    }
-                    if ($order) $order.=', ';
-                    $order.= '`'.$jtable.'`.`'.$cond['order'][$i][$ocnt].'` '.$cond['order'][$i][$ocnt+1];
+        if (!empty($cond['where'])){
+            $store = $this;
+            /**
+             * Рекурсивная функция форматирования условия в SQL
+             * @param array $cond Условие
+             * @param string $glue Логическая оперция объединения условий
+             * @param string $table Алиас таблицы. Изменяется в соответсвии с вложенностью условий на подчиенных
+             * @param int $level Уровень вложености вызова функции
+             * @param array $attr_exists Есть ли условия на указанные атрибуты? Если нет, то добавляется услвоие по умолчанию
+             * @return string SQL условия в WHERE
+             */
+            $convert = function($cond, $glue = ' AND ', $table = 'obj', $level = 0, &$attr_exists = array()) use (&$store, &$convert, &$result, &$joins, &$joins_link, &$joins_plain, &$joins_text){
+                $level++;
+                // Нормализация групп условий
+                if ($cond[0] == 'any' || $cond[0] == 'all'){
+                    $glue = $cond[0] == 'any'?' OR ':' AND ';
+                    $cond = $cond[1];
+                }else
+                if (sizeof($cond)>0 && !is_array($cond[0])){
+                    $cond = array($cond);
+                    $glue = ' AND ';
                 }
+                foreach ($cond as $i => $c){
+                    if (!is_array($c)) $c = array($c);
+                    if (!empty($c)){
+                        $c[0] = strtolower($c[0]);
+                        // AND
+                        if ($c[0]=='all'){
+                            $cond[$i] = '('.$convert($c[1], ' AND ', $table, $level, $attr_exists).')';
+                        }else
+                        // OR
+                        if ($c[0]=='any'){
+                            $cond[$i] = '('.$convert($c[1], ' OR ', $table, $level, $attr_exists).')';
+                        }else
+                        // NOT - отрицание условий
+                        if ($c[0]=='not'){
+                            $cond[$i] = 'NOT('.$convert($c[1], ' AND ', $table, $level, $attr_exists).')';
+                        }else
+                        if ($c[0]=='match'){
+                            $alias = uniqid('text');
+                            $joins_text[$alias] = array($table);
+                            $mode = empty($c[2])?'': ' IN BOOLEAN MODE';
+                            if (empty($c[2])){
+                                $cond[$i] = '(`'.$alias.'`.id IS NOT NULL)';
+                            }else{
+                                $cond[$i] = 'MATCH('.$alias.'.value) AGAINST (? '.$mode.')';
+                                $result['binds'][] = empty($c[1])?'':strval($c[1]);
+                            }
+                        }else
+                        // Условие на наличие родителя или эквивалентности.
+                        if ($c[0]=='in'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('in');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие прототипа или эквивалентности.
+                        if ($c[0]=='is'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('is');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Проверка подчиненного
+                        if ($c[0]=='child'){
+                            $joins[$table.'.'.$c[1]] = array($table, $c[1]);
+                            // Если условий на подчиненного нет, то проверяется его наличие
+                            if (empty($c[2])){
+                                $cond[$i] = '(`'.$table.'.'.$c[1].'`.id IS NOT NULL)';
+                            }else{
+                                // Условия на подчиненного
+                                $cond[$i] = '('.$convert($c[2], ' AND ', $table.'.'.$c[1], $level).')';
+                            }
+                        }else
+                        // Условие на наличие наследника.
+                        if ($c[0]=='heir'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('heirs');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие наследника.
+                        if ($c[0]=='parent'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('parent');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие наследника.
+                        if ($c[0]=='proto'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('proto');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие родителя
+                        if ($c[0]=='childof'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('in');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level>0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие прототипа.
+                        if ($c[0]=='heirof'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('is');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level > 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие родителя
+                        if ($c[0]=='parentof'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('in');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level>0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Условие на наличие прототипа.
+                        if ($c[0]=='protoof'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $alias = uniqid('is');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level > 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Проверка ссылки
+                        if ($c[0]=='link'){
+                            $alias = uniqid('link');
+                            $joins_link[$alias] = array($table);
+                            // Если условий на ссылки нет, то проверяется его наличие
+                            if (empty($c[1])){
+                                $cond[$i] = '(`'.$alias.'`.id IS NOT NULL)';
+                            }else{
+                                // Условия на ссылку
+                                $cond[$i] = '('.$convert($c[1], ' AND ', $alias, $level).')';
+                            }
+                        }else
+                        // Сверка объекта по URI
+                        if ($c[0]=='eq'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $cond[$i] = '`'.$table.'`.`id` IN ('.str_repeat('?,', sizeof($c)-1).'?)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c);
+                            }else{
+                                $cond[$i] = '0';
+                            }
+                        }else
+                        // Является частью чего-то с учётом наследования
+                        // Например заголовок статьи story1 является его частью и частью эталона статьи
+                        // Пример, утверждение "Ветка является частью дерева" верно и для любого конкретного дерева
+                        if ($c[0]=='of'){
+                            if (is_array($c[1])){
+                                $c = $c[1];
+                            }else{
+                                unset($c[0]);
+                            }
+                            if (sizeof($c)>0){
+                                $of = rtrim(str_repeat('?,', sizeof($c)), ',');
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $result['binds'] = array_merge($result['binds'], $c, $c);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        if ($c[0] == 'access'){
+                            if (IS_INSTALL && ($acond = \boolive\auth\Auth::getUser()->getAccessCond($c[1]))){
+                                $acond = $store->getCondSQL(array('where'=>$acond), true);
+
+                                $cond[$i] = $acond['where'];
+                                $result['joins'].= $acond['joins'];
+                                $result['binds'] = array_merge($result['binds'], $acond['binds']);
+                            }else{
+                                $cond[$i] = '1';
+                            }
+                        }else
+                        // Атрибут
+                        /*if ($c[0]=='attr')*/{
+                            if ($c[0]=='attr') array_shift($c);
+                            if (sizeof($c) < 2){
+                                $c[1] = '!=';
+                                $c[2] = 0;
+                            }
+                            // Если атрибут value, то в зависимости от типа значения используется соответсвующая колонка
+                            if ($c[0] == 'value'){
+                                $c[0] = is_numeric($c[2]) ? 'valuef': 'value';
+                            }
+                            // sql услвоие
+                            if ($c[1]=='eq'){
+                                $c[1] = '=';
+                            }
+                            $cond[$i] = '`'.$table.'`.`'.$c[0].'` '.$c[1];
+                            // Учитываем особенность синтаксиса условия IN
+                            if (mb_strtolower($c[1]) == 'in'){
+                                if (!is_array($c[2])) $c[2] = array($c[2]);
+                                if (empty($c[2])){
+                                    $cond[$i].='(NULL)';
+                                }else{
+                                    $cond[$i].='('.str_repeat('?,', sizeof($c[2])-1).'?)';
+                                    $result['binds'] = array_merge($result['binds'], $c[2]);
+                                }
+                            }else{
+                                $cond[$i].= '?';
+                                $result['binds'][] = $c[2];
+                            }
+                            if ($c[0] == 'is_draft' || $c[0] == 'is_hidden'){
+                                $attr_exists[$c[0]] = true;
+                            }
+                        //}
+                        // Не поддерживаемые условия игнорируем
+//                        else{
+//                            $cond[$i] = '0';
+                        }
+                    }else{
+                        unset($cond[$i]);
+                    }
+                }
+                // Дополнительные услвоия по умолчанию
+                if ($level == 1){
+                    $more_cond = array();
+                    if (empty($attr_exists['is_draft'])) $more_cond[]  = '`'.$table.'`.is_draft = 0';
+                    if (empty($attr_exists['is_hidden'])) $more_cond[]  = '`'.$table.'`.is_hidden = 0';
+                    $attr_exists = array('is_hidden' => true, 'is_draft' => true);
+                    if ($glue == ' AND '){
+                        $cond = array_merge($cond, $more_cond);
+                    }else
+                    if (!empty($more_cond)){
+                        array_unshift($more_cond, '('.implode($glue, $cond).')');
+                        return implode(' AND ', $more_cond);
+                    }
+                }
+                return implode($glue, $cond);
+            };
+            $attr_exists = $only_where ? array('is_hidden' => true, 'is_draft' => true) : array();
+            // Если услвоия есть, то добавляем их в SQL
+            if ($w = $convert($cond['where'], ' AND ', 'obj', 0, $attr_exists)){
+                $where[] = $w;
             }
-            if ($order) $order = "\n  ORDER BY ".$order;
+        }else{
+            if ($cond['select'][0] != 'self'){
+                $where[] = 'obj.is_draft = 0 AND obj.is_hidden = 0';
+            }
         }
 
         // Слияния для условий по подчиненным и сортировке по ним
@@ -324,16 +705,16 @@ class MySQLStore2 extends Entity
             $join.= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ?)';
             $binds2[] = $info[1];
         }
-//        foreach ($joins_text as $alias => $info){
-//            $result['joins'].= "\n  LEFT JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
-//        }
-//        foreach ($joins_link as $alias => $info){
-//            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
-//        }
+        foreach ($joins_text as $alias => $info){
+            $result['joins'].= "\n  LEFT JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
+        }
+        foreach ($joins_link as $alias => $info){
+            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
+        }
         if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
 
         // limit
-        if (!empty($cond['limit'])){
+        if (!$only_where && !empty($cond['limit'])){
             $limit = "\n  LIMIT ?,?";
             $result['binds'][] = array((int)$cond['limit'][0], DB::PARAM_INT);
             $result['binds'][] = array((int)$cond['limit'][1], DB::PARAM_INT);

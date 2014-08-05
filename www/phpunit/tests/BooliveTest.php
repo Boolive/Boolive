@@ -132,11 +132,14 @@ class BooliveTest extends \PHPUnit_Framework_TestCase {
     function test_find()
     {
         $result = Data2::read(array(
-            'from' => '/library/basic/Number',
+            'from' => '/library',
             'select' => 'children',
-            'depth' => array(0,Entity::MAX_DEPTH),
-//            'limit' => array(1,2),
-//            'order' => array('parent_cnt', 'asc')
+            'depth' => array(0,\boolive\data\Entity::MAX_DEPTH),
+            'struct' => 'list',
+            'limit' =>array(0,4),
+            'where'=> array(
+                array('is','/library/basic/Number')
+            )
         ));
         trace($result);
 //        trace(Data2::getSections('',1));

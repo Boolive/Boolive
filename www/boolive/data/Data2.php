@@ -77,20 +77,24 @@ class Data2
         if (!empty($result) && !$cond['calc']){
             $key = empty($cond['key'])? false : $cond['key'];
             $entities = array();
+            $tree_depth = $cond['struct'] == 'tree' ? $cond['depth'][1] : 0;
             foreach ($result as $rkey => $ritem){
                 if ($key) $rkey = $ritem[$key];
                 if (isset($ritem['class_name'])){
                     try{
-                        $entities[$rkey] = new $ritem['class_name']($ritem);
+                        $entities[$rkey] = new $ritem['class_name']($ritem, $tree_depth);
                     }catch (\Exception $e){
-                        $entities[$rkey] = new Entity($ritem);
+                        $entities[$rkey] = new Entity($ritem, $tree_depth);
                     }
                     $entities[$rkey]->isChanged(false);
                 }
             }
             $result = $entities;
         }
-        if ($cond['struct'] == 'object' || $cond['struct'] == 'value'){
+        if ($cond['struct'] == 'object' ||
+            $cond['struct'] == 'value' ||
+           ($cond['struct'] == 'tree' && ($cond['depth'][0] == 0 || $cond['select'] == 'parents' || $cond['select'] == 'protos')))
+        {
             $result = reset($result);
         }
         return $result;
@@ -233,8 +237,8 @@ class Data2
                 if (!is_array($result['depth'])){
                     $result['depth'] = array($result['depth']?1:0, $result['depth']);
                 }
-                $result['depth'][0] = intval($result['depth'][0]);
-                $result['depth'][1] = ($result['depth'][1] === 'max')? Entity::MAX_DEPTH : intval($result['depth'][1]);
+                $result['depth'][0] = $result['depth'][0];
+                $result['depth'][1] = ($result['depth'][1] === 'max')? Entity::MAX_DEPTH : $result['depth'][1];
             }
 
             // from - от куда или какой объект выбирать. Строка, число, массив
@@ -328,20 +332,20 @@ class Data2
 
             // Упорядочивание параметров (для создания корректных хэш-ключей для кэша)
             $r = array(
-                'select' => $result['select'],
-                'calc' => $result['calc'],
-                'from' => $result['from'],
-                'sections' => $result['sections'],
-                'depth' => $result['depth'],
-                'struct' => $result['struct'],
+                'select' => $result['select'],//check
+                'calc' => $result['calc'],//check
+                'from' => $result['from'],//check
+                'sections' => $result['sections'],//check
+                'depth' => $result['depth'],//check
+                'struct' => $result['struct'],//check
                 'where' => $result['where'],
-                'order' => $result['order'],
-                'limit' => $result['limit'],
-                'key' => $result['key'],
+                'order' => $result['order'],//check
+                'limit' => $result['limit'],//check
+                'key' => $result['key'],//check
                 'access' => $result['access'],
-                'correct' => true,
+                'correct' => true,//check
                 'cache' => $result['cache'],
-                'comment' => empty($result['comment'])? false : $result['comment'],
+                'comment' => empty($result['comment'])? false : $result['comment'],//check
                 'group' => $result['group']
             );
             return $r;

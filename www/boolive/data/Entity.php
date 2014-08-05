@@ -102,9 +102,9 @@ class Entity implements ITrace
     /**
      * Конструктор
      * @param array $attribs Атрибуты объекта, а также атрибуты подчиенных объектов
-     * @param int $children_depth До какой глубины (вложенности) создавать экземпляры подчиненных объектов
+     * @param int $tree_depth До какой глубины (вложенности) создавать экземпляры подчиненных объектов
      */
-    function __construct($attribs = array(), $children_depth = 0)
+    function __construct($attribs = array(), $tree_depth = 0)
     {
         if (!empty($attribs['id'])){
             $attribs['is_exist'] = true;
@@ -122,18 +122,44 @@ class Entity implements ITrace
 //            unset($attribs['cond']);
 //        }
         if (isset($attribs['children'])){
-            if ($children_depth > 0){
-                if ($children_depth != Entity::MAX_DEPTH) $children_depth--;
+            if ($tree_depth > 0){
+                $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
                 foreach ($attribs['children'] as $name => $child){
                     $class = isset($child['class_name'])? $child['class_name'] : '\boolive\data\Entity';
-//                    $child['cond'] = $this->_cond;
                     $child['name'] = $name;
                     if (isset($attribs['uri'])) $child['uri'] = $attribs['uri'].'/'.$name;
-                    $this->_children[$name] = new $class($child, $children_depth);
+                    $this->_children[$name] = new $class($child, $d);
                     $this->_children[$name]->_parent = $this;
                 }
             }
             unset($attribs['children']);
+        }
+        if (isset($attribs['heirs'])){
+            if ($tree_depth > 0){
+                $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
+                foreach ($attribs['heirs'] as $key => $heir){
+                    $class = isset($heir['class_name'])? $heir['class_name'] : '\boolive\data\Entity';
+                    $this->_heirs[$key] = new $class($heir, $d);
+                    $this->_heirs[$key]->_proto = $this;
+                }
+            }
+            unset($attribs['heirs']);
+        }
+        if (isset($attribs['_parent'])){
+            if ($tree_depth > 0){
+                $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
+                $class = isset($attribs['_parent']['class_name'])? $attribs['_parent']['class_name'] : '\boolive\data\Entity';
+                $this->_parent = new $class($attribs['_parent'], $d);
+            }
+            unset($attribs['_parent']);
+        }
+        if (isset($attribs['_proto'])){
+            if ($tree_depth > 0){
+                $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
+                $class = isset($attribs['_proto']['class_name'])? $attribs['_proto']['class_name'] : '\boolive\data\Entity';
+                $this->_proto = new $class($attribs['_proto'], $d);
+            }
+            unset($attribs['_proto']);
         }
         $this->_attribs = array_replace($this->_attribs, $attribs);
     }
@@ -2321,6 +2347,7 @@ $methods
         $trace['_parent'] = $this->_parent;
 //        $trace['_cond'] = $this->_cond;
         $trace['_children'] = $this->_children;
+        $trace['_heirs'] = $this->_heirs;
         if ($this->_errors) $trace['_errors'] = $this->_errors->toArrayCompact(false);
         return $trace;
     }
