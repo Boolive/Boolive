@@ -428,8 +428,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('in');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -445,7 +445,7 @@ class MySQLStore2 extends Entity
                             if (sizeof($c)>0){
                                 $alias = uniqid('is');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -471,8 +471,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('heirs');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -487,8 +487,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('parent');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -503,8 +503,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('proto');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -519,8 +519,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('in');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level>0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level>0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -535,8 +535,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('is');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level > 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level > 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -551,8 +551,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('in');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level>0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level>0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -567,8 +567,8 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $alias = uniqid('is');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND is_delete = 0 AND level > 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level > 0)';
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '1';
@@ -595,7 +595,7 @@ class MySQLStore2 extends Entity
                             }
                             if (sizeof($c)>0){
                                 $cond[$i] = '`'.$table.'`.`id` IN ('.str_repeat('?,', sizeof($c)-1).'?)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
                             }else{
                                 $cond[$i] = '0';
@@ -613,7 +613,7 @@ class MySQLStore2 extends Entity
                             if (sizeof($c)>0){
                                 $of = rtrim(str_repeat('?,', sizeof($c)), ',');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents}, {protos} WHERE {parents}.object_id = {protos}.object_id AND {parents}.object_id=`'.$table.'`.id AND ({parents}.parent_id IN ('.$of.') OR {protos}.proto_id IN ('.$of.')) AND {parents}.is_delete = 0 AND {protos}.is_delete = 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->localId($key, false);
+                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c, $c);
                             }else{
                                 $cond[$i] = '1';
