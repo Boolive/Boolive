@@ -463,53 +463,53 @@ class MySQLStore2 extends Entity
                             }
                         }else
                         // Условие на наличие наследника.
-                        if ($c[0]=='heir'){
-                            if (is_array($c[1])){
-                                $c = $c[1];
-                            }else{
-                                unset($c[0]);
-                            }
-                            if (sizeof($c)>0){
-                                $alias = uniqid('heirs');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
-                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
-                                $result['binds'] = array_merge($result['binds'], $c);
-                            }else{
-                                $cond[$i] = '1';
-                            }
-                        }else
-                        // Условие на наличие наследника.
-                        if ($c[0]=='parent'){
-                            if (is_array($c[1])){
-                                $c = $c[1];
-                            }else{
-                                unset($c[0]);
-                            }
-                            if (sizeof($c)>0){
-                                $alias = uniqid('parent');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
-                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
-                                $result['binds'] = array_merge($result['binds'], $c);
-                            }else{
-                                $cond[$i] = '1';
-                            }
-                        }else
-                        // Условие на наличие наследника.
-                        if ($c[0]=='proto'){
-                            if (is_array($c[1])){
-                                $c = $c[1];
-                            }else{
-                                unset($c[0]);
-                            }
-                            if (sizeof($c)>0){
-                                $alias = uniqid('proto');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
-                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
-                                $result['binds'] = array_merge($result['binds'], $c);
-                            }else{
-                                $cond[$i] = '1';
-                            }
-                        }else
+//                        if ($c[0]=='heir'){
+//                            if (is_array($c[1])){
+//                                $c = $c[1];
+//                            }else{
+//                                unset($c[0]);
+//                            }
+//                            if (sizeof($c)>0){
+//                                $alias = uniqid('heirs');
+//                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+//                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
+//                                $result['binds'] = array_merge($result['binds'], $c);
+//                            }else{
+//                                $cond[$i] = '1';
+//                            }
+//                        }else
+//                        // Условие на наличие наследника.
+//                        if ($c[0]=='parent'){
+//                            if (is_array($c[1])){
+//                                $c = $c[1];
+//                            }else{
+//                                unset($c[0]);
+//                            }
+//                            if (sizeof($c)>0){
+//                                $alias = uniqid('parent');
+//                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+//                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
+//                                $result['binds'] = array_merge($result['binds'], $c);
+//                            }else{
+//                                $cond[$i] = '1';
+//                            }
+//                        }else
+//                        // Условие на наличие наследника.
+//                        if ($c[0]=='proto'){
+//                            if (is_array($c[1])){
+//                                $c = $c[1];
+//                            }else{
+//                                unset($c[0]);
+//                            }
+//                            if (sizeof($c)>0){
+//                                $alias = uniqid('proto');
+//                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`proto_id`=`'.$table.'`.id AND `'.$alias.'`.object_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').'))';
+//                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
+//                                $result['binds'] = array_merge($result['binds'], $c);
+//                            }else{
+//                                $cond[$i] = '1';
+//                            }
+//                        }else
                         // Условие на наличие родителя
                         if ($c[0]=='childof'){
                             if (is_array($c[1])){
@@ -518,7 +518,7 @@ class MySQLStore2 extends Entity
                                 unset($c[0]);
                             }
                             if (sizeof($c)>0){
-                                $alias = uniqid('in');
+                                $alias = uniqid('childof');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level>0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
@@ -534,7 +534,7 @@ class MySQLStore2 extends Entity
                                 unset($c[0]);
                             }
                             if (sizeof($c)>0){
-                                $alias = uniqid('is');
+                                $alias = uniqid('heirof');
                                 $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level > 0)';
                                 foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
                                 $result['binds'] = array_merge($result['binds'], $c);
@@ -542,38 +542,38 @@ class MySQLStore2 extends Entity
                                 $cond[$i] = '1';
                             }
                         }else
-                        // Условие на наличие родителя
-                        if ($c[0]=='parentof'){
-                            if (is_array($c[1])){
-                                $c = $c[1];
-                            }else{
-                                unset($c[0]);
-                            }
-                            if (sizeof($c)>0){
-                                $alias = uniqid('in');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level>0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
-                                $result['binds'] = array_merge($result['binds'], $c);
-                            }else{
-                                $cond[$i] = '1';
-                            }
-                        }else
-                        // Условие на наличие прототипа.
-                        if ($c[0]=='protoof'){
-                            if (is_array($c[1])){
-                                $c = $c[1];
-                            }else{
-                                unset($c[0]);
-                            }
-                            if (sizeof($c)>0){
-                                $alias = uniqid('is');
-                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level > 0)';
-                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
-                                $result['binds'] = array_merge($result['binds'], $c);
-                            }else{
-                                $cond[$i] = '1';
-                            }
-                        }else
+//                        // Условие на наличие родителя
+//                        if ($c[0]=='parentof'){
+//                            if (is_array($c[1])){
+//                                $c = $c[1];
+//                            }else{
+//                                unset($c[0]);
+//                            }
+//                            if (sizeof($c)>0){
+//                                $alias = uniqid('parentof');
+//                                $cond[$i] = 'EXISTS (SELECT 1 FROM {parents} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.parent_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level>0)';
+//                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
+//                                $result['binds'] = array_merge($result['binds'], $c);
+//                            }else{
+//                                $cond[$i] = '1';
+//                            }
+//                        }else
+//                        // Условие на наличие прототипа.
+//                        if ($c[0]=='protoof'){
+//                            if (is_array($c[1])){
+//                                $c = $c[1];
+//                            }else{
+//                                unset($c[0]);
+//                            }
+//                            if (sizeof($c)>0){
+//                                $alias = uniqid('protoof');
+//                                $cond[$i] = 'EXISTS (SELECT 1 FROM {protos} `'.$alias.'` WHERE `'.$alias.'`.`object_id`=`'.$table.'`.id AND `'.$alias.'`.proto_id IN ('.rtrim(str_repeat('?,', sizeof($c)), ',').') AND level > 0)';
+//                                foreach ($c as $j => $key) $c[$j] = $store->getId($key, false);
+//                                $result['binds'] = array_merge($result['binds'], $c);
+//                            }else{
+//                                $cond[$i] = '1';
+//                            }
+//                        }else
                         // Проверка ссылки
                         if ($c[0]=='link'){
                             $alias = uniqid('link');
@@ -621,8 +621,7 @@ class MySQLStore2 extends Entity
                         }else
                         if ($c[0] == 'access'){
                             if (IS_INSTALL && ($acond = \boolive\auth\Auth::getUser()->getAccessCond($c[1]))){
-                                $acond = $store->getCondSQL(array('where'=>$acond), true);
-
+                                $acond = $store->condToSQL(array('where'=>$acond), true);
                                 $cond[$i] = $acond['where'];
                                 $result['joins'].= $acond['joins'];
                                 $result['binds'] = array_merge($result['binds'], $acond['binds']);
