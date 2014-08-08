@@ -31,7 +31,7 @@ namespace boolive\values;
 
 use boolive\events\Events,
     boolive\data\Entity,
-    boolive\data\Data,
+    boolive\data\Data2,
     boolive\errors\Error;
 
 class Check
@@ -343,18 +343,18 @@ class Check
             }
             if (is_string($value)){
                 // Пробуем получить объект по uri
-                $value = Data::read($value.'&cache=2');
+                $value = Data2::read($value.'&cache=2');
             }else
             if (is_array($value)){
                 if (isset($value['id'])){
-                    $value = Data::read($value['id'].'&cache=2');
+                    $value = Data2::read($value['id'].'&cache=2');
                 }else
                 if (isset($value['uri'])){
-                    $value = Data::read($value['uri'].'&cache=2');
+                    $value = Data2::read($value['uri'].'&cache=2');
                 }else
                 if (isset($value['proto'])){
-                    $value = Data::read($value['proto'])->birth();
-                    if (isset($value['parent']) && $parent = Data::read($value['parent'])){
+                    $value = Data2::read($value['proto'])->birth();
+                    if (isset($value['parent']) && $parent = Data2::read($value['parent'])){
                         $parent->__set(null, $value);
                     }
                 }
@@ -799,7 +799,7 @@ class Check
      */
     static function condition($value, &$error, Rule $rule)
     {
-        $result = \boolive\data\Data::normalizeCond($value, array(), true);
+        $result = \boolive\data\Data2::normalizeCond($value);
         if ($result === null){
             $error = new Error('Не является условием поиска', 'condition');
         }

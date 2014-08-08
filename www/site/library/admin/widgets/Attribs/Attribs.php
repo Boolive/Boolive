@@ -11,7 +11,7 @@ namespace site\library\admin\widgets\Attribs;
 use boolive\errors\Error,
     site\library\views\Widget\Widget,
     boolive\values\Rule,
-    boolive\data\Data;
+    boolive\data\Data2;
 
 class Attribs extends Widget
 {
@@ -88,10 +88,10 @@ class Attribs extends Widget
             }
 
             // Прототип
-            if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
+            if (isset($attribs['proto'])) $obj->proto(Data2::read($attribs['proto']));
 
             // Родитель
-            if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
+            if (isset($attribs['parent'])) $obj->parent(Data2::read($attribs['parent']));
 
             // Порядковый номер
             if (isset($attribs['order'])) $obj->order($attribs['order']);
@@ -111,7 +111,7 @@ class Attribs extends Widget
             // Сохранение
             if ($obj->save(false)){
                 if ($class_changed){
-                    $this->_input['REQUEST']['object'] = Data::read(array(
+                    $this->_input['REQUEST']['object'] = Data2::read(array(
                         'from' => $obj->id(),
                         'cache' => 0
                     ), true);

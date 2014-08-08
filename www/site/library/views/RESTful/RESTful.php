@@ -8,7 +8,7 @@
  */
 namespace site\library\views\RESTful;
 
-use boolive\data\Data,
+use boolive\data\Data2,
     boolive\data\Entity,
     boolive\errors\Error,
     boolive\functions\F,
@@ -62,14 +62,14 @@ class RESTful extends View
                     if (isset($attribs['file']['tmp_name'])) unset($attribs['file']['tmp_name']);
                 }
                 if ($this->_input['REQUEST']['method'] == 'PUT'){
-                    $this->put(Data::read($this->_input['REQUEST']['path']), $attribs);
+                    $this->put(Data2::read($this->_input['REQUEST']['path']), $attribs);
                 }else{
-                    $this->post(Data::read($this->_input['REQUEST']['path']), $attribs);
+                    $this->post(Data2::read($this->_input['REQUEST']['path']), $attribs);
                 }
                 break;
             // Удаление объекта
             case 'DELETE':
-                $obj = Data::read($this->_input['REQUEST']['path']);
+                $obj = Data2::read($this->_input['REQUEST']['path']);
                 if ($obj->isExist()){
                     if ($obj->destroy()!==false){
                         header("HTTP/1.1 204 No Content");
@@ -82,7 +82,7 @@ class RESTful extends View
                 }
                 break;
             case 'CALL':
-                $this->call(Data::read($this->_input['REQUEST']['path']), $this->_input['REQUEST']['call'], $this->_input_child);
+                $this->call(Data2::read($this->_input['REQUEST']['path']), $this->_input['REQUEST']['call'], $this->_input_child);
                 break;
             default:
                 header("HTTP/1.1 501 Not Implemented");
@@ -99,7 +99,7 @@ class RESTful extends View
     private function get($uri, $export_file, $export_class)
     {
         // Если есть условие, то выполняется поиск подчиненных объекта
-        $result = Data::read($uri);
+        $result = Data2::read($uri);
         if ($result instanceof Entity){
             $result = $result->export(false, true, false, $export_file, $export_class);
         }else
@@ -149,8 +149,8 @@ class RESTful extends View
             // Значения по умолчанию от прототипа
             $obj->isDefaultValue(true);
         }
-        if (isset($attribs['proto'])) $obj->proto(Data::read($attribs['proto']));
-        if (isset($attribs['parent'])) $obj->parent(Data::read($attribs['parent']));
+        if (isset($attribs['proto'])) $obj->proto(Data2::read($attribs['proto']));
+        if (isset($attribs['parent'])) $obj->parent(Data2::read($attribs['parent']));
         if (isset($attribs['order'])) $obj->order($attribs['order']);
         if (isset($attribs['is_hidden'])) $obj->isHidden(!empty($attribs['is_hidden']));
         if (isset($attribs['is_draft'])) $obj->isDraft(!empty($attribs['is_draft']));
@@ -171,7 +171,7 @@ class RESTful extends View
         if ($obj->save(false)){
             // Если изменился класс, то повторно выбрать объект из хранилища, чтобы обновилась его логика
             if ($class_changed){
-                $this->_input['REQUEST']['object'] = Data::read(array(
+                $this->_input['REQUEST']['object'] = Data2::read(array(
                     'from' => $obj->id(),
                     'cache' => 0
                 ), true);
@@ -193,7 +193,7 @@ class RESTful extends View
      */
     private function post($parent, $attribs)
     {
-        if (isset($attribs['proto']) && ($proto = Data::read($attribs['proto'])) && $proto->isExist()){
+        if (isset($attribs['proto']) && ($proto = Data2::read($attribs['proto'])) && $proto->isExist()){
             $obj = $proto->birth($parent, false);
         }else{
             $obj = new Entity();

@@ -162,6 +162,13 @@ class Entity implements ITrace
             unset($attribs['_proto']);
         }
         $this->_attribs = array_replace($this->_attribs, $attribs);
+
+        if ($this->_attribs['uri'] == '/library/basic/Image/extentions/title'){
+            $a = 10;
+        }
+        if (isset($attribs['is_default_value']) && is_bool($attribs['is_default_value'])) $this->isDefaultValue($attribs['is_default_value']);
+        if (isset($attribs['is_default_class']) && is_bool($attribs['is_default_class'])) $this->isDefaultClass($attribs['is_default_class']);
+        if (isset($attribs['is_link']) && is_bool($attribs['is_link'])) $this->isLink($attribs['is_link']);
     }
 
     function __destruct(){}
@@ -763,11 +770,11 @@ class Entity implements ITrace
                     $this->_attribs['value'] = $proto->value();
                     $this->_attribs['value_type'] = $proto->valueType();
                 }else{
-                    if (!isset($this->_attribs['is_default_value'])){
+                    //if (!isset($this->_attribs['is_default_value'])){
                         $this->_attribs['is_default_value'] = Entity::ENTITY_ID;
                         $this->_attribs['value'] = '';
                         $this->_attribs['value_type'] = Entity::VALUE_AUTO;
-                    }
+                    //}
                 }
             }else{
                 if (IS_INSTALL && $this->_attribs['is_default_value']!=$this->_attribs['id'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
@@ -788,7 +795,10 @@ class Entity implements ITrace
                 $this->_checked = false;
             }
         }
-        if ($this->_attribs['is_default_value'] != $this->_attribs['id'] && $return_proto){
+        if ($return_proto && $this->_attribs['is_default_value'] != $this->_attribs['id']){
+//            if ($this->_attribs['is_default_value'] == $this->_attribs['id']){
+//                return $this;
+//            }
             if ($this->_default_value_proto === false){
                 // Поиск прототипа, от которого наследуется значение, чтобы возратить его
                 $this->_default_value_proto = Data2::read(array(
@@ -842,7 +852,7 @@ class Entity implements ITrace
                 $this->_checked = false;
             }
         }
-        if (!empty($this->_attribs['is_default_class']) && $return_proto){
+        if ($return_proto && !empty($this->_attribs['is_default_class']) && $this->_attribs['is_default_class'] == $this->_attribs['id']){
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
             return Data2::read(array(
                 'from' => $this->_attribs['is_default_class'],
@@ -1379,7 +1389,10 @@ class Entity implements ITrace
      */
     function find($cond = array(), $load = false, $access = true)
     {
-        $cond = Data2::normalizeCond($cond, true, array('select' => array('children'), 'depth' => array(1,1)));
+        if (!isset($cond['from'])){
+            $cond['from'] = $this;
+        }
+        $cond = Data2::normalizeCond($cond, true, array('select' => 'children', 'depth' => array(1,1)));
         if (isset($cond['from'])){
             $result = Data2::read($cond, $access);
         }else
@@ -1481,6 +1494,9 @@ class Entity implements ITrace
      */
     function save($children = true, $access = true)
     {
+        if ($this->_attribs['is_default_value'] == 1){
+            $a = 10;
+        }
         if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;

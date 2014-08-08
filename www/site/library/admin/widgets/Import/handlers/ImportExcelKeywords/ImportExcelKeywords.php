@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\Import\handlers\ImportExcelKeywords;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\errors\Error;
 use boolive\file\File;
 use boolive\functions\F;
@@ -37,7 +37,7 @@ class ImportExcelKeywords extends ImportFile
             $excel_sheet = $excel->getActiveSheet();
             $row_cnt = min(500, $excel_sheet->getHighestRow());
             $parent = $this->where->linked();
-            $proto = Data::read('/library/content_samples/Keyword');
+            $proto = Data2::read('/library/content_samples/Keyword');
             if ($excel_sheet->getCell('A1')->getValue() != 'Фраза' || $excel_sheet->getCell('B1')->getValue() != 'Частотность'){
                 throw new Error('Неверная струткра файла','structure');
             }

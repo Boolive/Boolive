@@ -210,7 +210,7 @@ class MySQLStore2 extends Entity
             $sec = null;
             // Выбор "себя"
             if ($cond['select'] == 'self'){
-                $from .= 'FROM {objects} obj';
+                $from = 'FROM {objects} obj';
                 if (empty($cond['multiple'])){
                     // Выбор одного объекта по id или uri
                     if (is_int($cond['from'])){
@@ -692,7 +692,7 @@ class MySQLStore2 extends Entity
                 $where[] = $w;
             }
         }else{
-            if ($cond['select'][0] != 'self'){
+            if ($cond['select'] != 'self'){
                 $where[] = 'obj.is_draft = 0 AND obj.is_hidden = 0';
             }
         }
@@ -872,6 +872,9 @@ class MySQLStore2 extends Entity
                 // Ссылка
                 $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->getId($attr['is_link']) : $attr['is_link'];
 
+                if ($attr['is_default_value']===1 || $attr['is_default_value']==='1'){
+                    $a = 10;
+                }
                 // URI до сохранения объекта
                 $curr_uri = $attr['uri'];
 

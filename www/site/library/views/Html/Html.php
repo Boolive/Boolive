@@ -7,7 +7,7 @@
  */
 namespace site\library\views\Html;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\values\Rule,
     boolive\input\Input,
     site\library\views\Widget\Widget;
@@ -33,7 +33,7 @@ class Html extends Widget
         $js = '';
         $this->_commands->htmlHead('base', array('href'=>'http://'.Input::SERVER()->HTTP_HOST->string().DIR_WEB), true);
         // Meta
-        $site = Data::read();
+        $site = Data2::read();
         if ($site->favicon->isExist()){
             $this->_commands->htmlHead('link', array('rel'=>'shortcut icon', 'type'=>$site->favicon->mime(), 'href'=>$site->favicon->file().'?'.$site->favicon->date(true)));
         }

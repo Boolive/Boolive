@@ -31,7 +31,7 @@ class Part extends Page
             array('attr', 'is_draft', '=', 0),
             array('attr', 'is_property', '=', 0)
         ));
-        $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'count', 'where'=>$where))/$count_per_page);
+        $this->_input_child['REQUEST']['page_count'] = ceil($obj->find(array('select'=>'children', 'calc'=>'count', 'where'=>$where))/$count_per_page);
         $cond = array(
             'where' => $where,
             'order' => array(array('order', 'ASC')),

@@ -7,7 +7,7 @@
 namespace site\library\forms\FormAuth2;
 
 use boolive\auth\Auth;
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\errors\Error;
 use boolive\input\Input;
 use site\library\forms\SimpleForm\SimpleForm,
@@ -38,10 +38,10 @@ class FormAuth2 extends SimpleForm
      */
     function process($commands, $input)
     {
-        $user = Data::read(array(
+        $user = Data2::read(array(
             'select' => 'children',
             'from' => '/members',
-            'depth' => 'max',
+            'depth' => array(1,'max'),
             'where' => array(
                 array('is_link', '=', '0'),
                 array('name', '=', $input['REQUEST']['login']),

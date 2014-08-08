@@ -8,7 +8,7 @@ namespace site\library\admin\Admin;
 
 use site\library\layouts\Layout\Layout,
     boolive\values\Rule,
-    boolive\data\Data,
+    boolive\data\Data2,
     boolive\input\Input;
 
 class Admin extends Layout
@@ -36,7 +36,7 @@ function startRule()
             $uri = ltrim($uri, '/');
         }
         // Установка во входящие данные
-        $this->_input_child['REQUEST']['object'] = Data::read($uri);
+        $this->_input_child['REQUEST']['object'] = Data2::read($uri);
     }
 
     function show($v = array(), $commands, $input)

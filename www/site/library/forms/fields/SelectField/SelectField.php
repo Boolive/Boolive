@@ -6,7 +6,7 @@
  */
 namespace site\library\forms\fields\SelectField;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use site\library\forms\fields\Field\Field;
 
 class SelectField extends Field
@@ -32,7 +32,7 @@ class SelectField extends Field
     {
         if (isset($this->_input['REQUEST']['value'])){
             $obj = $this->_input['REQUEST']['object'];
-            $proto = Data::read($this->_input['REQUEST']['value']);
+            $proto = Data2::read($this->_input['REQUEST']['value']);
             if ($proto->isExist()){
                 $obj->proto($proto);
             }else{

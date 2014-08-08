@@ -6,7 +6,7 @@
  */
 namespace site\library\views\CKEditorUploader;
 
-use boolive\data\Data,
+use boolive\data\Data2,
     boolive\errors\Error,
     site\library\views\View\View,
     boolive\values\Rule;
@@ -36,7 +36,7 @@ class CKEditorUploader extends View
         $callback = $this->_input['REQUEST']['CKEditorFuncNum'];
         $file_url = '';
         $error = '';
-        $text = Data::read($this->_input['REQUEST']['CKEditor']);
+        $text = Data2::read($this->_input['REQUEST']['CKEditor']);
         $proto = $this->{$this->_input['REQUEST']['proto']}->linked();
         try{
             if ($text->isExist() && $proto->isExist()){

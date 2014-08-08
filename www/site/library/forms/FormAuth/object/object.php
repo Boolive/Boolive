@@ -9,7 +9,7 @@ namespace site\library\forms\FormAuth\object;
 
 use boolive\data\Entity,
     boolive\auth\Auth,
-    boolive\data\Data;
+    boolive\data\Data2;
 
 class object extends Entity
 {
@@ -17,10 +17,10 @@ class object extends Entity
     {
         if ($this->check()){
 
-            $user = Data::read(array(
+            $user = Data2::read(array(
                 'select' => 'children',
                 'from' => '/members',
-                'depth' => 'max',
+                'depth' => array(1,'max'),
                 'where' => array(
                     array('is_link', '=', '0'),
                     array('name', '=', $this->name->value()),

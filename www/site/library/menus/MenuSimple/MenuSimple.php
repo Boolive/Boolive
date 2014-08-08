@@ -6,7 +6,7 @@
  */
 namespace site\library\menus\MenuSimple;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity;
 use boolive\input\Input;
 use boolive\values\Rule;
@@ -92,7 +92,8 @@ class MenuSimple extends Widget
         foreach ($is_list as $key => $is){
             $is_list[$key] = $is->linked()->id();
         }
-        $cond['select'] = 'tree';
+        $cond['select'] = 'children';
+        $cond['struct'] = 'tree';
         $cond['from'] = $this->object;
         $cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
         $cond['where'] = array('all', array(
@@ -103,6 +104,6 @@ class MenuSimple extends Widget
         ));
         $cond['group'] = true; // Для выбранных объектов выполнять подвыборки
         $cond['cache'] = 2; // Кэшировать сущности
-        return Data::read($cond);
+        return Data2::read($cond);
     }
 }

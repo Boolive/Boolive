@@ -7,7 +7,7 @@
 namespace site\library\content_widgets\CommentsTree;
 
 use boolive\auth\Auth;
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\values\Rule;
 use site\library\views\AutoWidgetList2\AutoWidgetList2;
 
@@ -30,7 +30,7 @@ class CommentsTree extends AutoWidgetList2
     function show($v = array(), $commands, $input)
     {
         if ($this->_input['REQUEST']['call'] == 'add'){
-            $comment = Data::read('/library/content_samples/Comment')->birth($this->_input['REQUEST']['add']['parent']);
+            $comment = Data2::read('/library/content_samples/Comment')->birth($this->_input['REQUEST']['add']['parent']);
             $comment->isDraft(false);
             $comment->message->value($this->_input['REQUEST']['add']['message']);
             $comment->author->proto(Auth::getUser());

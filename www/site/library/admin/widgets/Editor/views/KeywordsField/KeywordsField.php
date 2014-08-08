@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\Editor\views\KeywordsField;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity;
 use boolive\functions\F;
 use site\library\views\AutoWidgetList2\AutoWidgetList2,
@@ -85,11 +85,11 @@ class KeywordsField extends AutoWidgetList2
         $obj = $this->_input['REQUEST']['object'];
         $key_title = $this->_input['REQUEST']['Keyword']['value'];
         $key_name = mb_strtolower(F::translit($key_title));
-        $keywords = Data::read('/contents/keywords');
+        $keywords = Data2::read('/contents/keywords');
         $key = $keywords->{$key_name};
         // Создание слова в общей коллекции ключевых слов
         if (!$key->isExist()){
-            $proto = Data::read('/library/content_samples/Keyword');
+            $proto = Data2::read('/library/content_samples/Keyword');
             $key = $proto->birth($keywords, false);
             $key->name($key_name);
             $key->value(0);
@@ -125,9 +125,9 @@ class KeywordsField extends AutoWidgetList2
      */
     protected function callSaveOrder($object, $next)
     {
-        $obj = Data::read($object['uri']);
+        $obj = Data2::read($object['uri']);
         if (!empty($next)){
-            $next_object = Data::read($next['uri']);
+            $next_object = Data2::read($next['uri']);
             if ($next_object->isExist()){
                 if ($next['next'] > 0){
                     $obj->order($next_object->order());
@@ -145,7 +145,7 @@ class KeywordsField extends AutoWidgetList2
      */
     protected function callFind()
     {
-        $keywords = Data::read('/contents/keywords');
+        $keywords = Data2::read('/contents/keywords');
         $result = $keywords->find(array(
             'where' => array(
                 array('is_property', '=', 0),

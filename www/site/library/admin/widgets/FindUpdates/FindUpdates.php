@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\FindUpdates;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use site\library\admin\widgets\ProgressAction\ProgressAction,
     boolive\session\Session;
 
@@ -40,8 +40,8 @@ class FindUpdates extends ProgressAction
     {
         // Если есть сессия, задачи и текущая
         if (($info = Session::get($id)) && !empty($info['jobs']) && $info['jobs_step'] < $info['jobs_count']){
-            $obj = Data::read($info['jobs'][$info['jobs_step']]);
-            Data::findUpdates($obj, 50, 1, true);
+            $obj = Data2::read($info['jobs'][$info['jobs_step']]);
+            Data2::findUpdates($obj, 50, 1, true);
             $info['jobs_step']++;
             $info['progress'] = $info['jobs_step'] / $info['jobs_count'] * 100;
             Session::set($info['id'], $info);

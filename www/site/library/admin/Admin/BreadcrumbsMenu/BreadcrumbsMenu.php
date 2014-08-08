@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\Admin\BreadcrumbsMenu;
 
-use boolive\data\Data,
+use boolive\data\Data2,
     boolive\data\Entity,
     boolive\values\Check,
     boolive\values\Rule,
@@ -41,7 +41,7 @@ class BreadcrumbsMenu extends Widget{
             )
         ));
         if ($object->isRemote()){
-            $parents[] = Data::read();
+            $parents[] = Data2::read();
         }
         $items = array();
         foreach ($parents as $p){

@@ -6,7 +6,7 @@
  */
 namespace site\library\content_widgets\SearchResult;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity;
 use site\library\content_widgets\Part\Part,
     boolive\values\Rule;
@@ -43,7 +43,7 @@ class SearchResult extends Part
             $cond = array(
                 'from' => '/contents',
                 'select' => 'children',
-                'depth' => 'max',
+                'depth' => array(1,'max'),
                 'where' => array('all', array(
                     array('attr', 'is_hidden', '=', 0),
                     array('attr', 'is_draft', '=', 0),
@@ -60,7 +60,7 @@ class SearchResult extends Part
                 ),
                 'group' => true
             );
-            $list = Data::read($cond);
+            $list = Data2::read($cond);
         }else{
             $list = array();
         }

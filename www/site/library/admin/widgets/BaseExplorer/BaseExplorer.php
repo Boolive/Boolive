@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\BaseExplorer;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity;
 use boolive\values\Rule;
 use site\library\views\AutoWidgetList2\AutoWidgetList2;
@@ -190,7 +190,7 @@ class BaseExplorer extends AutoWidgetList2
         $cond['key'] = false;
         $list =  parent::getList($cond);
         if (count($list)==$count_per_page){
-            $cnt = $obj->find(array('select'=>array('count', $cond['select']), 'where'=>$cond['where']));
+            $cnt = $obj->find(array('select'=> $cond['select'], 'calc'=>'count', 'where'=>$cond['where']));
             $this->_input_child['REQUEST']['page_count'] = ceil($cnt/$count_per_page);
         }else{
             $this->_input_child['REQUEST']['page_count'] = 1;
@@ -203,9 +203,9 @@ class BaseExplorer extends AutoWidgetList2
      */
     protected function callSaveOrder($object, $next)
     {
-        $obj = Data::read($object['uri']);
+        $obj = Data2::read($object['uri']);
         if (!empty($next)) {
-            $next_object = Data::read($next['uri']);
+            $next_object = Data2::read($next['uri']);
             if ($next_object->isExist()) {
                 if ($next['next'] > 0) {
                     $obj->order($next_object->order());

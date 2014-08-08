@@ -8,7 +8,7 @@
  */
 namespace boolive\auth;
 
-use boolive\data\Data,
+use boolive\data\Data2,
     boolive\input\Input;
 use boolive\functions\F;
 
@@ -80,7 +80,7 @@ class Auth
         $hash = empty($ID[1]) ? '' : $ID[1];
         // Если есть кука, то ищем пользователя в БД
         if ($hash){
-            $result = Data::read(array(
+            $result = Data2::read(array(
                 'from' => '/members',
                 'select' => 'children',
                 'depth' => 'max',
@@ -101,7 +101,7 @@ class Auth
         }
         // Новый гость
         if (!self::$user){
-            self::$user = Data::read(self::USER, false)->birth(Data::read(self::GROUP_GUEST, false), false);
+            self::$user = Data2::read(self::USER, false)->birth(Data2::read(self::GROUP_GUEST, false), false);
             self::$user->value($hash);
             $duration = 0;
         }
@@ -122,7 +122,7 @@ class Auth
             self::$user->save(false, false);
         }
         // Запомнить время визита (не чаще раза за 5 минут)
-//        if (self::$user->isExist() && (Data::read(array(self::$user, 'visit_time'), false)->value() < (time()-300))){
+//        if (self::$user->isExist() && (Data2::read(array(self::$user, 'visit_time'), false)->value() < (time()-300))){
 //            // Обновление времени визита
 //            self::$user->visit_time = time();
 //            //self::$user->visit_time->save(true, false);

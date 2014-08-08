@@ -194,7 +194,7 @@ namespace boolive
                 $match[1] = str_replace('_','.',$match[1]);
                 $match[2] = str_replace('\\','/',$match[2]);
                 $uri = 'http://'.$match[1].$match[2].'&class_content=1';
-                $remote = \boolive\data\Data::read($uri);
+                $remote = \boolive\data\Data2::read($uri);
                 $class = $remote->classContent();
                 if (isset($class['content'])){
                     $content = base64_decode($class['content']);

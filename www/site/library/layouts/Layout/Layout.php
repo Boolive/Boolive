@@ -9,8 +9,8 @@
  */
 namespace site\library\layouts\Layout;
 
+use boolive\data\Data2;
 use site\library\views\Widget\Widget,
-    boolive\data\Data,
     boolive\values\Rule;
 
 class Layout extends Widget
@@ -38,7 +38,7 @@ class Layout extends Widget
         $object = null;
         // объект по умолчанию - первый в /contents не являющейся свойством
         if (empty($uri)){
-            if ($object = Data::read(array(
+            if ($object = Data2::read(array(
                 'select' => 'children',
                 'from' => '/contents',
                 'where' => array(
@@ -55,13 +55,13 @@ class Layout extends Widget
                 $object = reset($object);
             }
         }else{
-            if ($uri === '/site/') $object = Data::read('');
+            if ($uri === '/site/') $object = Data2::read('');
             // Ищем в /contents
-            if (!$object) $object = Data::read('/contents'.$uri.'&comment=read default page');
+            if (!$object) $object = Data2::read('/contents'.$uri.'&comment=read default page');
             // Точное соответствие uri
-            if ((!$object || !$object->isExist())) $object = Data::read($uri);
+            if ((!$object || !$object->isExist())) $object = Data2::read($uri);
         }
-        if ((!$object || !$object->isExist())) $object = Data::read('/contents');
+        if ((!$object || !$object->isExist())) $object = Data2::read('/contents');
         // Установка во входящие данные
         $this->_input_child['REQUEST']['object'] = $object;
     }

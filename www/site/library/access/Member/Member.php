@@ -10,7 +10,7 @@
 namespace site\library\access\Member;
 
 use boolive\auth\Auth;
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity,
     boolive\functions\F;
 use boolive\develop\Trace;
@@ -59,12 +59,13 @@ class Member extends Entity
                 if ($obj && $obj->isExist()){
                     // Выбор ролей со всей информацией в них
                     $roles = $obj->rights->find(array(
-                        'select' => 'tree',
+                        'select' => 'children',
+                        'struct' => 'tree',
                         'depth' => array(1, 'max'),
                         'comment' => 'read rights of Member',
                         'return'=>array('depth'=>1)
                     ), false);
-//                    $rights = Data::read(array($obj, 'rights'), false);
+//                    $rights = Data2::read(array($obj, 'rights'), false);
                     //$roles = $rights->find(array('comment'=>'read all roles of Member'));
                     // Объединяем права в общий список
                     foreach ($roles as $r){

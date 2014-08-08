@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\Admin\ProgramsMenu\item_view\views\view_select_object;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use site\library\views\Widget\Widget,
     boolive\values\Rule;
 
@@ -63,7 +63,7 @@ class view_select_object extends Widget
             $v['open_all'] = '/library';
             $v['open_link'] = '/library';
 
-//             $entity = Data::read('/library/basic/Object');
+//             $entity = Data2::read('/library/basic/Object');
 //            $v['shorts'][] = array(
 //                'uri' => $entity->uri(),
 //                'title' => $entity->title->value()

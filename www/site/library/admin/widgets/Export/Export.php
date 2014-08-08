@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\Export;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity;
 use boolive\develop\Trace;
 use boolive\file\File;
@@ -84,10 +84,11 @@ class Export extends Widget
         /** @var \boolive\data\Entity $obj  */
         foreach ($objects as $obj){
             $info['jobs'][] = array(
-                'count' => Data::read(array(
-                    'select' => array('count', 'children'),
+                'count' => Data2::read(array(
+                    'select' => 'children',
+                    'calc' => 'count',
                     'from' => $obj,
-                    'depth' => 'max',
+                    'depth' => array(1,'max'),
                     'where'=> array(
                         array('is_draft', '>=', 0),
                         array('is_hidden', '>=', 0),
@@ -119,10 +120,10 @@ class Export extends Widget
             if ($info['jobs'][$j]['step'] <= $info['jobs'][$j]['count']){
                 $cnt = 20;
                 // Выбор объектов начиная со step
-                $list = Data::read(array(
-                    'select' => array('children'),
+                $list = Data2::read(array(
+                    'select' => 'children',
                     'from' => $info['jobs'][$j]['obj'],
-                    'depth' => 'max',
+                    'depth' => array(1,'max'),
                     'where'=> array(
                         array('is_draft', '>=', 0),
                         array('is_hidden', '>=', 0),
@@ -132,7 +133,7 @@ class Export extends Widget
                     'limit' => array($info['jobs'][$j]['step'], $cnt)
                 ));
                 if ($info['jobs'][$j]['step'] == 0){
-                    $root =  Data::read($info['jobs'][$j]['obj']);
+                    $root =  Data2::read($info['jobs'][$j]['obj']);
                     if (!$root->isProperty()){
                         $list[] = $root;
                     }

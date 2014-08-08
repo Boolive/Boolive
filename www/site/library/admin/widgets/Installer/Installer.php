@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\Installer;
 
-use boolive\data\Data,
+use boolive\data\Data2,
     boolive\data\Entity,
     site\library\views\Widget\Widget,
     boolive\values\Rule;
@@ -28,7 +28,7 @@ class Installer extends Widget
     {
         // Установка объекта
         if ($this->_input['REQUEST']['call'] == 'install'){
-            Data::applyUpdates($this->_input['REQUEST']['object']);
+            Data2::applyUpdates($this->_input['REQUEST']['object']);
             return true;
         }
         // Отображение

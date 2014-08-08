@@ -37,7 +37,7 @@ class Data2
     static function create($proto, $parent, $name = null)
     {
 
-        if (!$proto instanceof Entity) $proto = Data::read($proto);
+        if (!$proto instanceof Entity) $proto = Data2::read($proto);
         $class = get_class($proto);
         $attr = array(
             'name' => $name ? $name : $proto->name(),
@@ -50,7 +50,7 @@ class Data2
         $obj = new $class($attr);
         $obj->name(null, true); // Уникальность имени
         if (isset($proto)){
-            if (!$parent instanceof Entity) $parent = Data::read($parent);
+            if (!$parent instanceof Entity) $parent = Data2::read($parent);
             $obj->parent($parent);
         }
         $obj->proto($proto);
@@ -235,9 +235,8 @@ class Data2
                 }
             }else{
                 if (!is_array($result['depth'])){
-                    $result['depth'] = array($result['depth']?1:0, $result['depth']);
+                    $result['depth'] = array(1, $result['depth']);
                 }
-                $result['depth'][0] = $result['depth'][0];
                 $result['depth'][1] = ($result['depth'][1] === 'max')? Entity::MAX_DEPTH : $result['depth'][1];
             }
 
@@ -265,9 +264,8 @@ class Data2
 
             }else
             if ($result['from'] instanceof Entity){
-                $result['from'] = $result['from']->key();
                 $result['sections'] = self::getSections($result['from']->uri(), $result['depth'][1]);
-                throw new \Exception(Trace::format($result['from']));
+                $result['from'] = $result['from']->key();
             }else
             if (self::isUri($result['from'])){
                 $result['sections'] = self::getSections($result['from'], $result['depth'][1]);
@@ -397,7 +395,7 @@ class Data2
                 }
             }
         }
-        if (sizeof($cond['select']) == 1) $cond['select'] = $cond['select'][0];
+        //if (sizeof($cond['select']) == 1) $cond['select'] = $cond['select'][0];
         if ($cond['select'] == 'self'){
             unset($cond['select'], $cond['depth']);
         }

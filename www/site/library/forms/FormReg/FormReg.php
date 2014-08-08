@@ -8,7 +8,7 @@ namespace site\library\forms\FormReg;
 
 use boolive\auth\Auth;
 use boolive\commands\Commands;
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\errors\Error;
 use boolive\values\Rule,
     site\library\forms\SimpleForm\SimpleForm;
@@ -58,9 +58,10 @@ class FormReg extends SimpleForm
         }
         if (!$error){
             // Проверка уникальности логина
-            $result = Data::read(array(
+            $result = Data2::read(array(
                 'from' =>  '/members',
-                'select' => array('exists','children'),
+                'select' => 'children',
+                'calc' => 'exists',
                 'depth' => 'max',
                 'where' => array(
                     array('is', '/library/access/User'),
@@ -72,9 +73,10 @@ class FormReg extends SimpleForm
                 $error->REQUEST->arrays->login->exists = "Логин занят";
             }
             // Проверка уникальности мыла
-            $result = Data::read(array(
+            $result = Data2::read(array(
                 'from' =>  '/members',
-                'select' => array('exists','children'),
+                'select' => 'children',
+                'calc' => 'exists',
                 'depth' => 'max',
                 'where' => array(
                     array('is', '/library/access/User'),

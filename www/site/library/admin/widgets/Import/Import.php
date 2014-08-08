@@ -6,7 +6,7 @@
  */
 namespace site\library\admin\widgets\Import;
 
-use boolive\data\Data;
+use boolive\data\Data2;
 use boolive\data\Entity;
 use boolive\values\Rule;
 use site\library\views\Widget\Widget;
@@ -58,7 +58,7 @@ class Import extends Widget
         if ($find){
             /** @var Entity $proto */
             $proto = $handlers[$i]->linked();
-            $tasks = Data::read('/system/tasks');
+            $tasks = Data2::read('/system/tasks');
             $task = $proto->birth($tasks, true);
             $task->where->proto($object);
             $task->file->file($file);
@@ -75,7 +75,7 @@ class Import extends Widget
     function getTasks($object)
     {
         // Поиск задач прототипированных от InfoImport и со свойством where равным $object->key()
-        $tasks = Data::read(array(
+        $tasks = Data2::read(array(
             'from' => '/system/tasks',
             'select' => 'children',
             'depth' => array(1,1),
@@ -113,7 +113,7 @@ class Import extends Widget
 
     function clearTasks($object)
     {
-        $tasks = Data::read(array(
+        $tasks = Data2::read(array(
             'from' => '/system/tasks',
             'select' => 'children',
             'depth' => array(1,1),

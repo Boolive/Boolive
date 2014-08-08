@@ -391,7 +391,7 @@ class Installer
             'percent' => 0,
             'step_cnt' => sizeof($install['modules'])
         );
-        $steps_at_a_time = 3;
+        $steps_at_a_time = 1;
         while (0 < $steps_at_a_time-- && $install['step'] < $result['step_cnt']){
             // Устанока класса/объекта
             if (!empty($install['modules'][$install['step']])){
@@ -433,8 +433,12 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
+                    if ($m['uri'] == '/library/admin/widgets/Editor'){
+                        $a = 10;
+                    }
                     $entity = new Entity($m, 100);
                     //$entity->import($m);
+
                     try{$entity->save(true, false);
                     if ($entity->errors()->isExist()){
                         $result['error'] = $entity->errors()->toArrayCompact();

@@ -67,7 +67,7 @@ class Destroy extends Widget
                 $item['uri'] = $o->uri();
                 $v['objects'][] = $item;
                 $v['data-o'][]=$o->uri();
-//                $conflits = Data::deleteConflicts($o, true, true);
+//                $conflits = Data2::deleteConflicts($o, true, true);
 //                $v['conflicts'] = array_merge_recursive($v['conflicts'], $conflits);
             }
             $v['data-o'] = json_encode($v['data-o']);
