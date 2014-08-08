@@ -872,7 +872,7 @@ class MySQLStore2 extends Entity
                 // Ссылка
                 $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->getId($attr['is_link']) : $attr['is_link'];
 
-                if ($attr['is_default_value']===1 || $attr['is_default_value']==='1'){
+                if ($attr['name']== 'Html'){
                     $a = 10;
                 }
                 // URI до сохранения объекта
@@ -915,7 +915,12 @@ class MySQLStore2 extends Entity
                 // Своё значение. Вместо 0 используется свой идентификатор - так проще обновлять наследников
                 if (empty($attr['is_default_value'])){
                     $attr['is_default_value'] = $attr['id'];
+                }else
+                if ($attr['is_default_value'] == Entity::ENTITY_ID){
+                    $attr['is_default_value']
                 }
+
+
 //                else
 //                if ($attr['is_default_value'] == Entity::ENTITY_ID && $attr['proto']){
 //                    $attr['is_default_value'] = $attr['proto'];
