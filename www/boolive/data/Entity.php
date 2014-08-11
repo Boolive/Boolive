@@ -116,6 +116,9 @@ class Entity implements ITrace
                 $attribs['parent'] = $names[0];
             }
         }
+//        if ($attribs['name'] == 'TopMenu'){
+//            $a = 10;
+//        }
         if (isset($attribs['class_name'])) unset($attribs['class_name']);
 //        if (isset($attribs['cond'])){
 ////            $this->_cond = $attribs['cond'];
@@ -167,7 +170,13 @@ class Entity implements ITrace
             $a = 10;
         }
         if (isset($attribs['is_default_value']) && is_bool($attribs['is_default_value'])) $this->isDefaultValue($attribs['is_default_value']);
-        if (isset($attribs['is_default_class']) && is_bool($attribs['is_default_class'])) $this->isDefaultClass($attribs['is_default_class']);
+        if (isset($attribs['is_default_class'])){
+            if (is_bool($attribs['is_default_class'])){
+                $this->isDefaultClass($attribs['is_default_class']);
+            }
+        }else{
+            $this->isDefaultClass(true);
+        }
         if (isset($attribs['is_link']) && is_bool($attribs['is_link'])) $this->isLink($attribs['is_link']);
     }
 
@@ -824,6 +833,10 @@ class Entity implements ITrace
      */
     function isDefaultClass($is_default = null, $return_proto = false)
     {
+        if ($this->_attribs['uri'] == '/library/menus/TopMenu/item_view/views'){
+            $a = 10;
+        }
+
         if (isset($is_default)){
             $curr = $this->_attribs['is_default_class'];
             if ($is_default){
@@ -852,7 +865,7 @@ class Entity implements ITrace
                 $this->_checked = false;
             }
         }
-        if ($return_proto && !empty($this->_attribs['is_default_class']) && $this->_attribs['is_default_class'] == $this->_attribs['id']){
+        if ($return_proto && !empty($this->_attribs['is_default_class']) && $this->_attribs['is_default_class'] != $this->_attribs['id']){
             // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
             return Data2::read(array(
                 'from' => $this->_attribs['is_default_class'],

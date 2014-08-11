@@ -391,8 +391,10 @@ class Values implements IteratorAggregate, ArrayAccess, Countable, ITrace
     {
         $v = $this->getValue();
         if (is_array($v) && $this->offsetExists($name)){
-            $this->_interfaces[$name]->_maker = null;
-            unset($this->_interfaces[$name]);
+            if (isset($this->_interfaces[$name])){
+                $this->_interfaces[$name]->_maker = null;
+                unset($this->_interfaces[$name]);
+            }
             unset($v[$name]);
             $this->set($v);
         }

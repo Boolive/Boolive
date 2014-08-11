@@ -917,24 +917,17 @@ class MySQLStore2 extends Entity
                     $attr['is_default_value'] = $attr['id'];
                 }else
                 if ($attr['is_default_value'] == Entity::ENTITY_ID){
-                    $attr['is_default_value']
+                    $attr['is_default_value'] = $attr['proto'];
                 }
-
-
-//                else
-//                if ($attr['is_default_value'] == Entity::ENTITY_ID && $attr['proto']){
-//                    $attr['is_default_value'] = $attr['proto'];
-//                }
 
                 if (empty($attr['is_default_class'])){
                     $attr['is_default_class'] = $attr['id'];
+                }else
+                if ($attr['is_default_class'] == Entity::ENTITY_ID){
+                    $attr['is_default_class'] = $attr['proto'];
                 }
-//                else
-//                if ($attr['is_default_class'] == Entity::ENTITY_ID && $attr['proto']){
-//                    $attr['is_default_class'] = $attr['proto'];
-//                }
 
-//                if ($attr['is_link'] == Entity::ENTITY_ID && $attr['proto']){
+//                if ($attr['is_link'] == Entity::ENTITY_ID){
 //                    $attr['is_link'] = $attr['proto'];
 //                }
 
@@ -976,6 +969,16 @@ class MySQLStore2 extends Entity
                     }
                 }
                 $attr['uri'] = $entity->uri2(true);
+
+                if (in_array($attr['uri'], array(
+                    '/library/layouts/Boolive2/TopMenu/item_view/views',
+                    '/library/menus/TopMenu/item_view/views',
+                    '/library/menus/Menu/item_view/views',
+                    '/library/views/AutoWidgetList2/views',
+                    '/library/views/ViewSingle')
+                )){
+                    $a = $attr['uri'];
+                }
 
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
                 if (!empty($current) && ($current['name']!==$attr['name'] || $current['parent']!=$attr['parent'])){
@@ -1384,10 +1387,10 @@ class MySQLStore2 extends Entity
                 $parant_cnt = mb_substr_count($uri, '/');
                 $sec = $this->getSection($uri);
                 $q = $this->db->prepare('
-                    INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `order`, `name`, `uri`, `is_default_value`)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `order`, `name`, `uri`, `is_default_value`, `is_default_class`)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ');
-                $q->execute(array($this->uri_id[$uri], $sec, $parant, $parant_cnt, $this->uri_id[$uri], $names[1], $uri, $this->uri_id[$uri]));
+                $q->execute(array($this->uri_id[$uri], $sec, $parant, $parant_cnt, $this->uri_id[$uri], $names[1], $uri, $this->uri_id[$uri], $this->uri_id[$uri]));
                 // Иерархические отношения, чтобы не нарушать целостность
                 $this->makeParents($sec, $this->uri_id[$uri], $parant, true);
                 $this->makeProtos($sec, $this->uri_id[$uri], 0, true);
