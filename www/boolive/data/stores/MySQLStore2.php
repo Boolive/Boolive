@@ -854,12 +854,12 @@ class MySQLStore2 extends Entity
             try{
                 // Атрибуты отфильтрованы, так как нет ошибок
                 $attr = $entity->_attribs;
-                // Идентификатор объекта
                 // Родитель и урвень вложенности
                 $attr['parent'] = isset($attr['parent']) ? $this->getId($attr['parent'], true) : 0;
                 $attr['parent_cnt'] = $entity->parentCount();
                 // Прототип и уровень наследования
-                $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true) : 0;
+                $is_proto_new = true;
+                $attr['proto'] = isset($attr['proto']) ? $this->getId($attr['proto'], true, $is_proto_new) : 0;
                 $attr['proto_cnt'] = $entity->protoCount();
                 // Автор
                 $attr['author'] = 0;//isset($attr['author']) ? $this->getId($attr['author']) : (IS_INSTALL ? $this->getId(Auth::getUser()->key()): 0);
@@ -872,9 +872,6 @@ class MySQLStore2 extends Entity
                 // Ссылка
                 $attr['is_link'] = (strval($attr['is_link']) !== '0' && $attr['is_link'] != Entity::ENTITY_ID)? $this->getId($attr['is_link']) : $attr['is_link'];
 
-                if ($attr['name']== 'Html'){
-                    $a = 10;
-                }
                 // URI до сохранения объекта
                 $curr_uri = $attr['uri'];
 
@@ -901,6 +898,45 @@ class MySQLStore2 extends Entity
                     $is_new = true;
                     $attr['id'] = $this->reserveId();
                 }
+
+                if (!$is_proto_new){
+                    $q = $this->db->prepare('SELECT is_default_value,is_default_class FROM {objects} WHERE id=? LIMIT 0,1');
+                    $q->execute(array($attr['proto']));
+                    $proto = $q->fetch(DB::FETCH_ASSOC);
+                }
+                // Своё значение. Вместо 0 используется свой идентификатор - так проще обновлять наследников
+                if (empty($attr['is_default_value'])){
+                    $attr['is_default_value'] = $attr['id'];
+                }else
+                if ($attr['proto']){
+                    if (empty($proto)){
+                        $attr['is_default_value'] = $attr['proto'];
+                    }else{
+                        $attr['is_default_value'] = $proto['is_default_value'];
+                    }
+                }
+//                if ($attr['is_default_value'] == Entity::ENTITY_ID && $attr['proto']){
+//                    $attr['is_default_value'] = $attr['proto'];
+//                }
+
+                if (empty($attr['is_default_class'])){
+                    $attr['is_default_class'] = $attr['id'];
+                }else
+                if ($attr['proto']){
+                    if (empty($proto)){
+                        $attr['is_default_class'] = $attr['proto'];
+                    }else{
+                        $attr['is_default_class'] = $proto['is_default_class'];
+                    }
+                }
+//                if ($attr['is_default_class'] == Entity::ENTITY_ID && $attr['proto']){
+//                    $attr['is_default_class'] = $attr['proto'];
+//                }
+
+//                if ($attr['is_link'] == Entity::ENTITY_ID){
+//                    $attr['is_link'] = $attr['proto'];
+//                }
+
                 // Тип по умолчанию
                 if ($attr['value_type'] == Entity::VALUE_AUTO){
                     $attr['value_type'] = ($is_new ? Entity::VALUE_SIMPLE : $current['value_type']);
@@ -912,24 +948,7 @@ class MySQLStore2 extends Entity
                     $attr['value'] = mb_substr($attr['value'],0,255);
                     $attr['value_type'] = Entity::VALUE_TEXT;
                 }
-                // Своё значение. Вместо 0 используется свой идентификатор - так проще обновлять наследников
-                if (empty($attr['is_default_value'])){
-                    $attr['is_default_value'] = $attr['id'];
-                }else
-                if ($attr['is_default_value'] == Entity::ENTITY_ID){
-                    $attr['is_default_value'] = $attr['proto'];
-                }
 
-                if (empty($attr['is_default_class'])){
-                    $attr['is_default_class'] = $attr['id'];
-                }else
-                if ($attr['is_default_class'] == Entity::ENTITY_ID){
-                    $attr['is_default_class'] = $attr['proto'];
-                }
-
-//                if ($attr['is_link'] == Entity::ENTITY_ID){
-//                    $attr['is_link'] = $attr['proto'];
-//                }
 
                 // Если значение файл, то подготовливаем для него имя
                 if (isset($attr['file'])){
@@ -971,13 +990,11 @@ class MySQLStore2 extends Entity
                 $attr['uri'] = $entity->uri2(true);
 
                 if (in_array($attr['uri'], array(
-                    '/library/layouts/Boolive2/TopMenu/item_view/views',
-                    '/library/menus/TopMenu/item_view/views',
-                    '/library/menus/Menu/item_view/views',
-                    '/library/views/AutoWidgetList2/views',
-                    '/library/views/ViewSingle')
-                )){
-                    $a = $attr['uri'];
+                    '/contents',
+                    '/library/content_samples/Part',
+                    '/library/basic/Object'
+                ))){
+                    $a = 10;
                 }
 
                 // Если новое имя или родитель, то обновить свой URI и URI подчиненных, перенести папки, переименовать файлы
@@ -1129,8 +1146,8 @@ class MySQLStore2 extends Entity
                                 valuef = IF(is_default_value=:val_proto, :valuef, valuef),
                                 value_type = IF(is_default_value=:val_proto, :value_type, value_type),
                                 date_update = IF(is_default_value=:val_proto, :date_update, date_update),
-                                is_default_value = IF((is_default_value=:val_proto || is_default_value=:max_id), :new_val_proto, is_default_value),
-                                is_default_class = IF(((is_default_class=:class_proto  || is_default_value=:max_id) AND ((is_link>0)=:is_link)), :new_class_proto, is_default_class),
+                                is_default_value = IF((is_default_value=:val_proto), :new_val_proto, is_default_value),
+                                is_default_class = IF(((is_default_class=:class_proto) AND ((is_link>0)=:is_link)), :new_class_proto, is_default_class),
                                 proto_cnt = proto_cnt+:dp
                             WHERE {protos}.proto_id = :obj AND {protos}.object_id = {objects}.id
                               AND {protos}.proto_id != {protos}.object_id
@@ -1147,7 +1164,7 @@ class MySQLStore2 extends Entity
                             ':is_link' => $attr['is_link'] > 0 ? 1: 0,
                             ':dp' => $dp,
                             ':obj' => $attr['id'],
-                            ':max_id' => Entity::ENTITY_ID
+                            //':max_id' => Entity::ENTITY_ID
                         ));
                     }
                     // Изменился признак ссылки

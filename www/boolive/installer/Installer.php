@@ -433,7 +433,7 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
-                    if ($m['uri'] == '/interfaces/html'){
+                    if ($m['uri'] == '/contents'){
                         $a = 10;
                     }
                     if ($m['uri'] == '/library/views/Html'){

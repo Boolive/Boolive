@@ -833,10 +833,6 @@ class Entity implements ITrace
      */
     function isDefaultClass($is_default = null, $return_proto = false)
     {
-        if ($this->_attribs['uri'] == '/library/menus/TopMenu/item_view/views'){
-            $a = 10;
-        }
-
         if (isset($is_default)){
             $curr = $this->_attribs['is_default_class'];
             if ($is_default){
@@ -1404,9 +1400,12 @@ class Entity implements ITrace
     {
         if (!isset($cond['from'])){
             $cond['from'] = $this;
+            $from_this = true;
+        }else{
+            $from_this = false;
         }
         $cond = Data2::normalizeCond($cond, true, array('select' => 'children', 'depth' => array(1,1)));
-        if (isset($cond['from'])){
+        if (!$from_this){
             $result = Data2::read($cond, $access);
         }else
         if ($this->isExist()){
