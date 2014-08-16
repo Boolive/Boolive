@@ -56,9 +56,9 @@ class Entity implements ITrace
         'is_mandatory' => false,
         'is_property'  => false,
         'is_relative'  => false,
-        'is_link'      => 0,
-        'is_default_value' => 0,//Entity::ENTITY_ID,
-        'is_default_class' => Entity::ENTITY_ID,
+        'is_link'      => false,
+        'is_default_value' => false,
+        'is_default_class' => true,
         'is_completed' => false,
         'is_accessible'=> true,
         'is_exist'     => false,
@@ -67,7 +67,6 @@ class Entity implements ITrace
     protected $_children = array();
     /** @var array Объекты наследники (выгруженные из бд или новые, не обязательно все существующие) */
     protected $_heirs = array();
-
     /** @var Entity Экземпляр прототипа */
     protected $_proto = false;
     /** @var Entity Экземпляр родителя */
@@ -75,9 +74,11 @@ class Entity implements ITrace
     /** @var Entity Экземпляр автора */
     protected $_author = false;
     /** @var Entity Экземпляр прототипа, на которого ссылается объект */
-    protected $_link = false;
-    /** @var Entity Экземпляр прототипа, от которого берется значение по умолчанию */
-    protected $_default_value_proto = false;
+    protected $_link_entity = false;
+    /** @var Entity Экземпляр, от которого берется значение по умолчанию */
+    protected $_default_value_entity = false;
+    /** @var Entity Экземпляр, от которого берется класс по умолчанию */
+    protected $_default_class_entity = false;
     /** @var bool Признак, свойство внутренне или нет */
     protected $_is_inner = false;
     /** @var bool Принзнак, объект в процессе сохранения? */
@@ -116,14 +117,8 @@ class Entity implements ITrace
                 $attribs['parent'] = $names[0];
             }
         }
-//        if ($attribs['name'] == 'TopMenu'){
-//            $a = 10;
-//        }
         if (isset($attribs['class_name'])) unset($attribs['class_name']);
-//        if (isset($attribs['cond'])){
-////            $this->_cond = $attribs['cond'];
-//            unset($attribs['cond']);
-//        }
+
         if (isset($attribs['children'])){
             if ($tree_depth > 0){
                 $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
@@ -165,19 +160,6 @@ class Entity implements ITrace
             unset($attribs['_proto']);
         }
         $this->_attribs = array_replace($this->_attribs, $attribs);
-
-        if ($this->_attribs['uri'] == '/library/basic/Image/extentions/title'){
-            $a = 10;
-        }
-        if (isset($attribs['is_default_value']) && is_bool($attribs['is_default_value'])) $this->isDefaultValue($attribs['is_default_value']);
-        if (isset($attribs['is_default_class'])){
-            if (is_bool($attribs['is_default_class'])){
-                $this->isDefaultClass($attribs['is_default_class']);
-            }
-        }else{
-            $this->isDefaultClass(true);
-        }
-        if (isset($attribs['is_link']) && is_bool($attribs['is_link'])) $this->isLink($attribs['is_link']);
     }
 
     function __destruct(){}
@@ -189,25 +171,25 @@ class Entity implements ITrace
     protected function rule()
     {
         return Rule::arrays(array(
-            'id'           => Rule::uri(), // Сокращенный или полный URI
+            'id'           => Rule::any(Rule::int(), Rule::null()), // Сокращенный или полный URI
             'name'         => Rule::string()->regexp('|^[^/@:#\\\\]*$|')->min(IS_INSTALL?1:0)->max(100)->required(), // Имя объекта без символов /@:#\
             'order'		   => Rule::int()->max(Entity::MAX_ORDER), // Порядковый номер. Уникален в рамках родителя
             'date_create'  => Rule::int(), // Дата создания в секундах
             'date_update'  => Rule::int(), // Дата обновления в секундах
-            'parent'       => Rule::uri(), // URI родителя
-            'proto'        => Rule::uri(), // URI прототипа
+            'parent'       => Rule::any(Rule::uri(), Rule::null()), // URI родителя
+            'proto'        => Rule::any(Rule::uri(), Rule::null()), // URI прототипа
             'value'	 	   => Rule::string()->max(65535), // Значение до 65535 сиволов
             'value_type'   => Rule::int()->min(0)->max(4), // Код типа значения. Определяет способ хранения (0=авто, 1=простое, 2=текст, 3=файл)
-            'author'	   => Rule::uri(), // Автор (идентификатор объекта-пользователя)
+            'author'	   => Rule::any(Rule::uri(), Rule::null()), // Автор (идентификатор объекта-пользователя)
             'is_draft'	   => Rule::bool(), // Признак, в черновике или нет?
             'is_hidden'	   => Rule::bool(), // Признак, скрытый или нет?
             'is_mandatory' => Rule::bool(), // Признак, обязательный или дополненый?
             'is_property'  => Rule::bool(), // Признак, свойство или самостоятельный объект?
             'is_relative'  => Rule::bool(), // Прототип относительный или нет?
             'is_completed' => Rule::bool(), // Признак, дополнен объект свойствами прототипа или нет?
-            'is_link'      => Rule::uri(), // Ссылка или нет?
-            'is_default_value' => Rule::any(Rule::null(), Rule::uri()), // Используется значение прототипа или своё? Идентификатор прототипа или свой
-            'is_default_class' => Rule::uri(), // Используется класс прототипа или свой? Идентификатор прототипа или 0
+            'is_link'      => Rule::bool(), // Ссылка или нет?
+            'is_default_value' => Rule::bool(), // Используется значение прототипа или своё? Идентификатор или булево
+            'is_default_class' => Rule::bool(), // Используется класс прототипа или свой? Идентификатор прототипа или булево
             // Сведения о загружаемом файле. Не является атрибутом объекта, но используется в общей обработке
             'file'	=> Rule::arrays(array(
                 'tmp_name'	=> Rule::string(), // Путь на связываемый файл
@@ -619,60 +601,6 @@ class Entity implements ITrace
     }
 
     /**
-     * Признак, объект является ссылкой или нет?
-     * @param null|bool $is_link Новое значение, если не null
-     * @param bool $return_link Признак, возвращать или нет объект, на которого ссылается данный
-     * @return bool|Entity
-     */
-    function isLink($is_link = null, $return_link = false)
-    {
-        if (isset($is_link)){
-            $curr = $this->_attribs['is_link'];
-            if ($is_link){
-                // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
-                if (($proto = $this->proto())){
-                    if ($p = $proto->isLink(null, true)) $proto = $p;
-                }
-                if (isset($proto) && $proto->isExist()){
-                    $this->_attribs['is_link'] = $proto->key();
-                }else{
-                    $this->_attribs['is_link'] = self::ENTITY_ID;
-                }
-            }else{
-                $this->_attribs['is_link'] = 0;
-            }
-            if ($curr !== $this->_attribs['is_link']){
-                $this->_changed = true;
-                $this->_checked = false;
-            }
-            if ($this->isDefaultClass()) $this->isDefaultClass(true);
-        }
-        // Возвращение признака или объекта, на которого ссылается данный объект
-        if (!empty($this->_attribs['is_link']) && $return_link){
-            // Если прототип-ссылка ещё не сохранен
-            if ($this->_attribs['is_link'] == self::ENTITY_ID){
-                if ($proto = $this->proto()){
-                    if ($link = $proto->isLink(null, true)){
-                        $this->_link = $link;
-                    }else{
-                        $this->_link = $proto;
-                    }
-                }
-            }else
-            if ($this->_link === false){
-                $this->_link = Data2::read(array(
-                    'from' => $this->_attribs['is_link'],
-                    'comment' => 'read link',
-                    'cache' => 2
-                ));
-            }
-            return $this->_link;
-        }else{
-            return !empty($this->_attribs['is_link']);
-        }
-    }
-
-    /**
      * Признак, объект является обязательным для родителя (true) или дополненым (false)?
      * @param null|bool $is_mandatory Новое значение, если не null
      * @return bool
@@ -762,66 +690,41 @@ class Entity implements ITrace
     /**
      * Признак, наследуется ли значение от прототипа и от кого именно?
      * @param null $is_default Новое значение признака. Для отмены значения по умолчанию необходимое изменить само значение.
-     * @param $return_proto Если значение по умолчанию, то возвращать прототип, чьё значение наследуется или true?
+     * @param bool $return_proto Если $return_proto Если значение по умолчанию, то возвращать прототип, чьё значение наследуется или true?
      * @return bool|Entity
      */
     function isDefaultValue($is_default = null, $return_proto = false)
     {
         if (isset($is_default)){
-            $curr = $this->_attribs['is_default_value'];
-            if ($is_default){
-                // Поиск прототипа, от котоого наследуется значение, чтобы взять его значение
-                if (($proto = $this->proto(null, true, true))/* && $proto->isLink() == $this->isLink()*/){
-                    if ($p = $proto->isDefaultValue(null, true)) $proto = $p;
-                }
-                if ($proto instanceof Entity && $proto->isExist()){
-                    $this->_attribs['is_default_value'] = $proto->key();
-                    $this->_attribs['value'] = $proto->value();
-                    $this->_attribs['value_type'] = $proto->valueType();
-                }else{
-                    //if (!isset($this->_attribs['is_default_value'])){
-                        $this->_attribs['is_default_value'] = Entity::ENTITY_ID;
-                        $this->_attribs['value'] = '';
-                        $this->_attribs['value_type'] = Entity::VALUE_AUTO;
-                    //}
-                }
-            }else{
-                if (IS_INSTALL && $this->_attribs['is_default_value']!=$this->_attribs['id'] && ($proto = $this->isDefaultValue(null, true)) && $proto->isFile()){
-                    $content = $this->fileTemplate();
-                    if (is_null($content)){
-                        $this->file($proto->file(null, true));
-                    }else{
-                        $this->file(array(
-                            'name' => File::changeName(File::fileName($proto->file()), $this->name()),
-                            'content' => $content
-                        ));
-                    }
-                }
-                $this->_attribs['is_default_value'] = $this->_attribs['id'];
-            }
-            if ($curr !== $this->_attribs['is_default_value']){
+            if ($is_default != $this->_attribs['is_default_value']){
+                $this->_attribs['is_default_value'] = (bool)$is_default;
                 $this->_changed = true;
                 $this->_checked = false;
+                $this->_default_value_entity = false;
             }
         }
-        if ($return_proto && $this->_attribs['is_default_value'] != $this->_attribs['id']){
-//            if ($this->_attribs['is_default_value'] == $this->_attribs['id']){
-//                return $this;
-//            }
-            if ($this->_default_value_proto === false){
-                // Поиск прототипа, от которого наследуется значение, чтобы возратить его
-                $this->_default_value_proto = Data2::read(array(
+        if ($return_proto){
+            if ($this->_default_value_entity !== false) return $this->_default_value_entity;
+            // Если false или идентификатор и равен $this, то Null
+            if (empty($this->_attribs['is_default_value']) || ($this->_attribs['is_default_value']!==true && $this->_attribs['is_default_value'] == $this->_attribs['id'])){
+                $this->_default_value_entity = null;
+            }else
+            // Если true, то ручной поиск объекта
+            if ($this->_attribs['is_default_value'] === true){
+                if (($this->_default_value_entity = $this->proto(null, true, true))){
+                    if ($p = $this->_default_value_entity->isDefaultValue(null, true)) $this->_default_value_entity = $p;
+                }
+            }else{
+                // Иначе выбор по идентификатору
+                $this->_default_value_entity = Data2::read(array(
                     'from' => $this->_attribs['is_default_value'],
                     'comment' => 'read default value',
                     'cache' => 2
-//                    'from'=>$this->_attribs['is_default_value'],
-//                    'comment'=>'read default value',
-//                    'cache' => 2
-                ), false);
+                ));
             }
-            return $this->_default_value_proto;
+            return $this->_default_value_entity;
         }else{
-            return $this->_attribs['is_default_value'] != $this->_attribs['id'];
+            return !empty($this->_attribs['is_default_value']);
         }
     }
 
@@ -834,42 +737,76 @@ class Entity implements ITrace
     function isDefaultClass($is_default = null, $return_proto = false)
     {
         if (isset($is_default)){
-            $curr = $this->_attribs['is_default_class'];
-            if ($is_default){
-                // Поиск прототипа, от которого наследуется значение, чтобы взять его значение
-                if (($proto = $this->proto(null, true, true)) && $proto->isLink() == $this->isLink()){
-                    if ($p = $proto->isDefaultClass(null, true)) $proto = $p;
-                }else{
-                    $proto = null;
-                }
-                if ($proto instanceof Entity && $proto->isExist()){
-                    $this->_attribs['is_default_class'] = $proto->key();
-                }else{
-                    $this->_attribs['is_default_class'] = self::ENTITY_ID;
-                }
-            }else{
-                $this->_attribs['is_default_class'] = 0;
-                // Если файла класса нет, то создаём его программный код
-                if (IS_INSTALL && !is_file($this->dir(true).($this->currentName()===''?'site':$this->currentName()).'.php')){
-                    $this->logic(array(
-                        'content' => $this->classTemplate()
-                    ));
-                }
-            }
-            if ($curr !== $this->_attribs['is_default_class']){
+            if ($is_default != $this->_attribs['is_default_class']){
+                $this->_attribs['is_default_class'] = (bool)$is_default;
                 $this->_changed = true;
                 $this->_checked = false;
+                $this->_default_class_entity = false;
             }
         }
-        if ($return_proto && !empty($this->_attribs['is_default_class']) && $this->_attribs['is_default_class'] != $this->_attribs['id']){
-            // Поиск прототипа, от котоого наследуется значение, чтобы возратить его
-            return Data2::read(array(
-                'from' => $this->_attribs['is_default_class'],
-                'comment' => 'read default class',
-                'cache' => 2
-            ));
+        if ($return_proto){
+            if ($this->_default_class_entity !== false) return $this->_default_class_entity;
+            // Если false или идентификатор и равен $this, то Null
+            if (empty($this->_attribs['is_default_class']) || ($this->_attribs['is_default_class']!==true && $this->_attribs['is_default_class'] == $this->_attribs['id'])){
+                $this->_default_class_entity = null;
+            }else
+            // Если true, то ручной поиск объекта
+            if ($this->_attribs['is_default_class'] === true){
+                if (($this->_default_class_entity = $this->proto(null, true, true))){
+                    if ($p = $this->_default_class_entity->isDefaultClass(null, true)) $this->_default_class_entity = $p;
+                }
+            }else{
+                // Иначе выбор по идентификатору
+                $this->_default_class_entity = Data2::read(array(
+                    'from' => $this->_attribs['is_default_class'],
+                    'comment' => 'read default class',
+                    'cache' => 2
+                ));
+            }
+            return $this->_default_class_entity;
         }else{
             return !empty($this->_attribs['is_default_class']);
+        }
+    }
+
+    /**
+     * Признак, объект является ссылкой или нет?
+     * @param null|bool $is_link Новое значение, если не null
+     * @param bool $return_link Признак, возвращать или нет объект, на которого ссылается данный
+     * @return bool|Entity
+     */
+    function isLink($is_link = null, $return_link = false)
+    {
+        if (isset($is_link)){
+            if ($is_link != $this->_attribs['is_link']){
+                $this->_attribs['is_link'] = (bool)$is_link;
+                $this->_changed = true;
+                $this->_checked = false;
+                $this->_link_entity = false;
+            }
+        }
+        if ($return_link){
+            if ($this->_link_entity!==false) return $this->_link_entity;
+            // Если false или идентификатор и равен $this, то Null
+            if (empty($this->_attribs['is_link']) || ($this->_attribs['is_link']!==true && $this->_attribs['is_link'] == $this->_attribs['id'])){
+                $this->_link_entity = null;
+            }else
+            // Если true, то ручной поиск объекта
+            if ($this->_attribs['is_link'] === true){
+                if (($this->_link_entity = $this->proto(null, true, true))){
+                    if ($p = $this->_link_entity->isDefaultClass(null, true)) $this->_link_entity = $p;
+                }
+            }else{
+                // Иначе выбор по идентификатору
+                $this->_link_entity = Data2::read(array(
+                    'from' => $this->_attribs['is_link'],
+                    'comment' => 'read link',
+                    'cache' => 2
+                ));
+            }
+            return $this->_link_entity;
+        }else{
+            return !empty($this->_attribs['is_link']);
         }
     }
 
@@ -885,7 +822,7 @@ class Entity implements ITrace
     /**
      * Атрибут объекта по имени
      * Необходимо учитывать, что некоторые атрибуты могут быть ещё не инициалироваными
-     * @param $name Назавние возвращаемого атрибута
+     * @param string $name Назавние возвращаемого атрибута
      * @return mixed Значение атрибута
      */
     function attr($name)
@@ -1506,9 +1443,6 @@ class Entity implements ITrace
      */
     function save($children = true, $access = true)
     {
-        if ($this->_attribs['is_default_value'] == 1){
-            $a = 10;
-        }
         if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;
@@ -1596,20 +1530,20 @@ class Entity implements ITrace
         $attr = array(
             'name' => $this->name(),
             'order' => self::MAX_ORDER,
-            'is_default_value' => self::ENTITY_ID,
-            'is_default_class' => self::ENTITY_ID
+            'value' => $this->value(),
+            'value_type' => $this->valueType(),
+            'is_default_value' => true,
+            'is_default_class' => true,
+            'is_hidden' => $this->isHidden(),
+            'is_draft' => $draft || $this->isDraft(),
+            'is_property' => $this->isProperty(),
+            'is_link' => $this->isLink()
         );
         /** @var $obj Entity */
         $obj = new $class($attr);
-        $obj->name(null, true); // Уникальность имени
+        $obj->name(null, true);
         if (isset($for)) $obj->parent($for);
         $obj->proto($this);
-        $obj->isHidden($this->isHidden());
-        $obj->isDraft($draft || $this->isDraft());
-        $obj->isProperty($this->isProperty());
-        $obj->isDefaultValue(true);
-        $obj->isDefaultClass(true);
-        if ($this->isLink()) $this->_attribs['is_link'] = 1;
         return $obj;
     }
 
@@ -1659,27 +1593,6 @@ class Entity implements ITrace
         }else{
             $this->_attribs['parent'] = null;
             $this->_attribs['parent_cnt'] = 0;
-        }
-        // Значение по умолчанию - uri||id прототипа или false. Прототип должен существовать
-        if (empty($this->_attribs['is_default_value']) && $this->_attribs['is_default_value']!==''){
-            $this->_attribs['is_default_value'] = null;
-        }else
-        if ($this->_attribs['is_default_value'] === true){
-            $this->isDefaultValue(true);
-        }
-        // Класс по умолчанию
-        if (empty($this->_attribs['is_default_class']) && $this->_attribs['is_default_class']!==''){
-            $this->_attribs['is_default_class'] = null;
-        }else
-        if ($this->_attribs['is_default_class'] === true){
-            $this->isDefaultClass(true);
-        }
-        // Ссылка
-        if (empty($this->_attribs['is_link']) && $this->_attribs['is_link']!==''){
-            $this->_attribs['is_link'] = null;
-        }else
-        if ($this->_attribs['is_link'] === true){
-            $this->isLink(true);
         }
 
         // Проверка и фильтр атрибутов

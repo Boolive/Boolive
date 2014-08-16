@@ -433,12 +433,6 @@ class Installer
                 }else
                 if (empty($m['kind'])){
                     // Устанока объекта проекта
-                    if ($m['uri'] == '/contents'){
-                        $a = 10;
-                    }
-                    if ($m['uri'] == '/library/views/Html'){
-                        $a = 11;
-                    }
                     $entity = new Entity($m, 100);
                     //$entity->import($m);
 

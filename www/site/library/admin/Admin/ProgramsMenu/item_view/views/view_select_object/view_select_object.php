@@ -39,11 +39,11 @@ class view_select_object extends Widget
             $v['icon'] = $real->icon->inner()->file();
             $v['show-item'] = true;
 
-            $shorts = $real->short_select->find(array('where'=>
+            $shorts = array();/*$real->short_select->find(array('where'=>
                 array('link',
                     array('heirs', $this->_input['REQUEST']['object']))
                 )
-            );
+            );*/
 
             $v['shorts'] = array();
             foreach ($shorts as $short){

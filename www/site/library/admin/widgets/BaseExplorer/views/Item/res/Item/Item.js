@@ -26,7 +26,7 @@
                         type: 'GET',
                         dataType: 'json',
                         accepts: {json: 'application/json'},
-                        url: url+'&select=(exists,children)&where=(attr(is_property,eq,0))',
+                        url: url+'&select=children&calc=exists&where=(attr(is_property,eq,0))',
                         success: function(result, textStatus, jqXHR){
                             if (result.result){
                                 self.callParents('setState', [{object:  self.options.link}]);

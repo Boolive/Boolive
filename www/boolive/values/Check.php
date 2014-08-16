@@ -38,7 +38,7 @@ class Check
 {
     /**
      * Универсальный фильтр значения по правилу
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|\boolive\values\Rule $rule Объект правила
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @return mixed
@@ -80,8 +80,8 @@ class Check
 
     /**
      * Вызов внешнего фильтра
-     * @param $method Названия фильтра
-     * @param $args Аргументы для метода фильтра
+     * @param string $method Названия фильтра
+     * @param array $args Аргументы для метода фильтра
      * @return mixed
      */
     static function __callStatic($method, $args)
@@ -96,27 +96,29 @@ class Check
 
     /**
      * Проверка и фильтр логического значения
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return bool
      */
     static function bool($value, &$error, Rule $rule)
     {
+        if ($value===true || $value===false){
+            return $value;
+        }
         if (is_string($value)){
-            return !in_array(mb_strtolower($value), array('false', 'off', 'no', '', '0', 'нет'));
+            return !in_array(mb_strtolower($value), array('false', '', '0'));
         }
         if (is_scalar($value)){
             return (bool)$value;
-        }else{
-            $error = new Error('Должно быть логическим (true/false, on/off, yes/no, 1/0, да/нет )', 'bool');
-            return (bool)$value;
         }
+        $error = new Error('Должно быть логическим (true/false, 1/0)', 'bool');
+        return (bool)$value;
     }
 
     /**
      * Проверка и фильтр целого числа в диапазоне от -2147483648 до 2147483647
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return int|string
@@ -126,21 +128,20 @@ class Check
         if (is_string($value)){
             $value = str_replace(' ', '', $value);
         }
-        if (is_bool($value) || (is_scalar($value) && preg_match('/^[-\+]?[0-9]+$/', strval($value)) == 1)){
+        if (!is_bool($value) && ((is_scalar($value) && preg_match('/^[-\+]?[0-9]+$/', strval($value)) == 1))){
             $result = doubleval($value);
             if (-PHP_INT_MAX < $value && $value < PHP_INT_MAX ){
                 $result = intval($value);
             }
             return $result;
-        }else{
-            $error = new Error('Некорректное целое число', 'int');
-            return is_object($value)?1:intval($value);
         }
+        $error = new Error('Некорректное целое число', 'int');
+        return is_object($value)?1:intval($value);
     }
 
     /**
      * Проверка и фильтр действительного числа в диапазоне от -1.7976931348623157E+308 до 1.7976931348623157E+308
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return int|string
@@ -153,15 +154,14 @@ class Check
         }
         if (is_numeric($value)){
             return doubleval($value);
-        }else{
-            $error = new Error('Некорректное число', 'double');
-            return is_object($value)?1:doubleval($value);
         }
+        $error = new Error('Некорректное число', 'double');
+        return is_object($value)?1:doubleval($value);
     }
 
     /**
      * Проверка и фильтр строки
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return string
@@ -170,16 +170,15 @@ class Check
     {
         if (isset($value) && is_scalar($value)){
             return strval($value);
-        }else{
-            $error = new Error('Должно быть строкой', 'string');
-            return '';
         }
+        $error = new Error('Должно быть строкой', 'string');
+        return '';
     }
 
     /**
      * Проверка и фильтр скалярного значения
      * Нескалярные значения превращаются в 0
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return string
@@ -188,15 +187,14 @@ class Check
     {
         if (isset($value) && is_scalar($value)){
             return $value;
-        }else{
-            $error = new Error('Должно быть строкой, числом или логическим значением', 'scalar');
-            return 0;
         }
+        $error = new Error('Должно быть строкой, числом или логическим значением', 'scalar');
+        return 0;
     }
 
     /**
      * Проверка и фильтр NULL
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return null
@@ -211,7 +209,7 @@ class Check
 
     /**
      * Проверка и фильтр массива с учетом правил на его элементы
-     * @param $value Значение для проверки и фильтра
+     * @param mixed $value Значение для проверки и фильтра
      * @param null|Error &$error Возвращаемый объект исключения, если элементы не соответсвуют правилам
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return array
@@ -295,7 +293,7 @@ class Check
 
     /**
      * Проверка значения на соответствие объекту опредленного класса
-     * @param $value Значение для проверки
+     * @param mixed $value Значение для проверки
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return object|null
@@ -312,7 +310,7 @@ class Check
 
     /**
      * Проверка значения на соответствие объекту класса \boolive\values\Values
-     * @param $value Значение для проверки
+     * @param mixed $value Значение для проверки
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return \boolive\values\Values Любое значение превразается в объект \boolive\values\Values
@@ -329,7 +327,7 @@ class Check
     /**
      * Проверка значения на соответствие объекту класса \boolive\data\Entity
      * Если значение строка, то значение будет воспринято как uri объекта данных, и будет попытка выбора объекта из бд.
-     * @param $value Значение для проверки
+     * @param mixed $value Значение для проверки
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует типу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return \boolive\data\Entity|null
@@ -382,7 +380,7 @@ class Check
      * Проверка и фильтр значения правилами на выбор.
      * Если нет ни одного правила, то значение не проверяет и не фильтруется.
      * Если ниодно правило не подходит, то возвращается ошибка и значение от последнего правила.
-     * @param $value Значение для проверки
+     * @param mixed $value Значение для проверки
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed|null
@@ -403,7 +401,7 @@ class Check
 
     /**
      * Максимально допустимое значение, длина или количество элементов. Правая граница отрезка
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -430,7 +428,7 @@ class Check
 
     /**
      * Минимально допустимое значение, длина или количество элементов. Левая граница отрезка
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -454,7 +452,7 @@ class Check
 
     /**
      * Меньше указанного значения, длины или количества элементов. Правая граница интервала
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -481,7 +479,7 @@ class Check
 
     /**
      * Больше указанного значения, длины или количества элементов. Левая граница интервала
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -508,7 +506,7 @@ class Check
 
     /**
      * Проверка на равенство указанному значению
-     * @param $value Проверяемое значение
+     * @param mixed $value Проверяемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -526,7 +524,7 @@ class Check
 
     /**
      * Проверка на неравенство указанному значению
-     * @param $value Проверяемое значение
+     * @param mixed $value Проверяемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -543,7 +541,7 @@ class Check
 
     /**
      * Допустимые значения. Через запятую или массив
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -561,7 +559,7 @@ class Check
 
     /**
      * Недопустимые значения. Через запятую или массив
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -579,7 +577,7 @@ class Check
 
     /**
      * Обрезание строки
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -596,7 +594,7 @@ class Check
 
     /**
      * Экранирование html символов
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -617,7 +615,7 @@ class Check
 
     /**
      * Вырезание html тегов
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -635,7 +633,7 @@ class Check
 
     /**
      * Email адрес
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -650,7 +648,7 @@ class Check
 
     /**
      * URL
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -665,27 +663,31 @@ class Check
 
     /**
      * URI = URL + URN
-     * @param $value Фильтруемое значение
+     * Может быть целым числом
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
      */
     static function uri($value, &$error, Rule $rule)
     {
-        if (empty($value)) return $value;
-        $check = $value;
-        if (!preg_match('#^([^:/]+://).*$#iu', $check)){
-            $check = 'http://check/'.trim($check, '/');
+        if (is_string($value) || is_int($value)){
+            if (empty($value) || trim($value, '/')===''){
+                return $value;
+            }
+            $check = $value;
+            if (!preg_match('#^([^:/]+://).*$#iu', $check)) $check = 'http://check/'.trim($check, '/');
+            if (filter_var($check, FILTER_VALIDATE_URL)){
+                return $value;
+            }
         }
-        if (!is_scalar($value) || (trim($value, '/')!='' && !filter_var($check, FILTER_VALIDATE_URL))){
-            $error = new Error(array('"Некорректный URI', $value), 'uri');
-        }
+        $error = new Error(array('"Некорректный URI', $value), 'uri');
         return $value;
     }
 
     /**
      * IP
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -700,7 +702,7 @@ class Check
 
     /**
      * Проверка на совпадение одному из регулярных выражений
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -721,7 +723,7 @@ class Check
 
     /**
      * Проверка на совпадения одному из паттернов в стиле оболочки операционной системы: "*gr[ae]y"
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -741,7 +743,7 @@ class Check
 
     /**
      * HEX формат числа из 6 или 3 символов. Код цвета #FFFFFF. Возможны сокращения и опущение #
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return mixed
@@ -760,7 +762,7 @@ class Check
 
     /**
      * Строка в нижнем регистре
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return string
@@ -776,7 +778,7 @@ class Check
 
     /**
      * Строка в верхнем регистре
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return string
@@ -792,7 +794,7 @@ class Check
 
     /**
      * Условие поиска или валидации объекта
-     * @param $value Фильтруемое значение
+     * @param mixed $value Фильтруемое значение
      * @param null|Error &$error Возвращаемый объект исключения, если значение не соответсвует правилу
      * @param \boolive\values\Rule $rule Объект правила. Аргументы одноименного фильтра применяются в методе
      * @return string
