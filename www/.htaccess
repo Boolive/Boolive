@@ -2,7 +2,12 @@
 AddDefaultCharset UTF-8
 
 # Файлы, к которым запрщено обращаться напрямую
-<Files ~ "(\.(htaccess|sql|php|cache|tpl|info|md))$">
+<Files ~ "(\.(htaccess|sql|php|cache|tpl|info|md|phar|lock|gitignore))$">
+    Order deny,allow
+    Deny from all
+</Files>
+
+<Files "composer.json">
     Order deny,allow
     Deny from all
 </Files>

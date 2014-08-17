@@ -1,0 +1,17 @@
+{
+    "name": "boolive/Boolive2",
+    "description": "Super flexible CMF",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+
+    "authors": [
+        {
+            "name": "Vladimmir Shestakov",
+            "email": "boolive@yandex.ru"
+        }
+    ],
+    "require": {
+        "codeplex/phpexcel": "1.7.8",
+        "zendframework/zend-console": "*"
+    }
+}
