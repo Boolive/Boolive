@@ -18,6 +18,8 @@ define('VERSION', '2.0.beta.2014.02.10');
 define('DIR', __DIR__.'/');
 /** @const string Директория временных файлов на сервере. Слеш в конце обязателен! */
 define('DIR_TEMP', DIR.'_temp_/');
+/** @const string Директория конфигураций. Слеш в конце обязателен! */
+define('DIR_CONFIG', DIR.'config/');
 // Адрес сайта, например: boolive.ru. Значение по умолчанию для CLI режима
 define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_HOST']);
 /** @cont string Временная метка для общей идентификации кэша (изменение сбрасывает кэш) */

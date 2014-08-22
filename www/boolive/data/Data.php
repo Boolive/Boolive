@@ -8,6 +8,7 @@
  */
 namespace boolive\data;
 
+use boolive\config\Config;
 use boolive\functions\F,
     boolive\errors\Error,
     boolive\develop\Trace;
@@ -26,7 +27,7 @@ class Data
     static function activate()
     {
         // Конфиг хранилищ
-        self::$config_stores = F::loadConfig(DIR.self::CONFIG_FILE, 'stores');
+        self::$config_stores = Config::read('stores');
     }
 
     /**

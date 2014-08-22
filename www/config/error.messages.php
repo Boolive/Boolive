@@ -3,7 +3,7 @@
  * Глобальный словарь сообщений об ошибках.
  * @var array
  */
-$messages = array(
+return array(
     'boolive' => array(
         'default' => '',//Введены ошибочные данные',
 		'php' => array(

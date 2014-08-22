@@ -8,14 +8,13 @@
  */
 namespace boolive\data;
 
+use boolive\config\Config;
 use boolive\functions\F,
     boolive\errors\Error,
     boolive\develop\Trace;
 
 class Data2
 {
-    /** @const  Файл конфигурации хранилищ */
-    const CONFIG_FILE = 'config.data2.php';
     /** @var array Конфигурация хранилищ */
     public static $config;
     /** @var array Экземпляр хранилища */
@@ -24,7 +23,7 @@ class Data2
     static function activate()
     {
         // Конфиг хранилищ
-        self::$config = F::loadConfig(DIR.self::CONFIG_FILE, 'store');
+        self::$config = Config::read('data2');
     }
 
     /**
@@ -630,27 +629,26 @@ class Data2
 			//'prefix'	 => Rule::regexp('/^[0-9a-zA-Z_-]+$/u')->max(50)->default('')
 		)), $sub_errors);
 		$new_config['prefix'] = '';
+        $new_config['options'] = array(
+            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8" COLLATE "utf8_bin"'
+        );
+        $new_config['prefix'] = '';
+        $new_config['trace_sql'] = false;
+        $new_config['trace_count'] = false;
+        $new_config['sections'] = array(
+            array('code' => 0, 'uri' => '')
+        );
 		// Если ошибочные данные от юзера
 		if ($sub_errors){
             $errors->add($sub_errors->children());
             throw $errors;
         }
-        if ($cur_config = $config = F::loadConfig(DIR.self::CONFIG_FILE, 'store')){
+        if ($cur_config = $config = Config::read('data2')){
             $new_config = array_replace_recursive($cur_config['connect'], $new_config);
         }
 		// Создание MySQL хранилища
         \boolive\data\stores\MySQLStore2::createStore($new_config, $errors);
 
-        foreach ($new_config['sections'] as $i => $sec){
-            $new_config['sections'][$i] = "array('code' => {$sec['code']}, 'uri' => '{$sec['uri']}')";
-        }
-        $new_config['sections'] = implode(",\n            ", $new_config['sections']);
-
-        // Создание файла конфигурации из шаблона
-        $content = file_get_contents(DIR.'boolive/data/tpl.'.self::CONFIG_FILE);
-        $content = F::Parse($content, $new_config, '_', '_', null);
-        $fp = fopen(DIR.self::CONFIG_FILE, 'w');
-        fwrite($fp, $content);
-        fclose($fp);
+        Config::write('data2', $new_config);
 	}
 }

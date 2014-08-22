@@ -8,13 +8,12 @@
  */
 namespace boolive\template;
 
+use boolive\config\Config;
 use boolive\errors\Error,
     boolive\functions\F;
 
 class Template
 {
-    /** @const  Файл с ассоциациями расширений файлов на шаблонизаторы */
-    const CONFIG_FILE = 'config.template.php';
     /** @var array Массив названий классов шаблонизаторов */
     static private $engines;
 
@@ -22,7 +21,7 @@ class Template
      * Загрузка шаблонизаторов
      */
     static function activate(){
-        self::$engines = F::loadConfig(DIR.self::CONFIG_FILE);
+        self::$engines = Config::read('template');
     }
 
     /**

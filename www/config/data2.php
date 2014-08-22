@@ -3,7 +3,7 @@
  * Конфигурация хранилища данных
  * Указывается класс хранидища, параметры подключения и секций.
  */
-$store = array(
+return array(
     'class' => '\boolive\data\stores\MySQLStore2',
     'connect' => array(
         // Имя базы данных

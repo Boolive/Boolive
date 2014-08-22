@@ -9,11 +9,10 @@
 namespace boolive\events;
 
 use boolive\Boolive;
+use boolive\config\Config;
 
 class Events
 {
-    /** @const Названия файла со сведениями о зарегистрированных обработчиков */
-    const CONFIG_FILE = 'config.json';
     /** @var array Реестр обработчиков событий */
     private static $handlers = array();
     /** @var bool Признак, требуется ли выпонить сохранение обработчиков в файл */
@@ -108,8 +107,7 @@ class Events
      */
     private static function load()
     {
-        $content = file_get_contents(DIR.'boolive/events/'.self::CONFIG_FILE);
-        self::$handlers = json_decode($content, true);
+        self::$handlers = Config::read('events');
     }
 
     /**
@@ -130,11 +128,7 @@ class Events
             }
             if (empty($content[$event])) unset($content[$event]);
         }
-        $content = json_encode($content);
-        if ($f = fopen(DIR.'boolive/events/'.self::CONFIG_FILE, 'w')){
-            fwrite($f, $content);
-            fclose($f);
-        }
+        Config::write('events', $content, false);
         self::$need_save = false;
     }
 }

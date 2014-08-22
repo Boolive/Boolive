@@ -8,16 +8,14 @@
  */
 namespace boolive\auth;
 
+use boolive\config\Config;
 use boolive\data\Data2,
     boolive\input\Input;
-use boolive\functions\F;
 
 class Auth
 {
-    /** @const  Файл конфигурации */
-    const CONFIG_FILE = 'config.auth.php';
     /** @var array Конфигурация */
-    private static $config_auth;
+    private static $config;
     /** Эталон пользователей */
     const USER = '/library/access/User';
     /** Группа гостей */
@@ -30,7 +28,7 @@ class Auth
     static function activate()
     {
         // Конфиг хранилищ
-        self::$config_auth = F::loadConfig(DIR.self::CONFIG_FILE, 'config');
+        self::$config = Config::read('auth');
     }
 
     /**
@@ -151,6 +149,6 @@ class Auth
 
     static function isSuperAdmin()
     {
-        return in_array(self::getUser()->uri(), self::$config_auth['super-admins']);
+        return in_array(self::getUser()->uri(), self::$config['super-admins']);
     }
 }

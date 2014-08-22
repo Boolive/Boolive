@@ -16,6 +16,7 @@
 
 namespace boolive\errors;
 
+use boolive\config\Config;
 use Exception,
     boolive\develop\ITrace,
     IteratorAggregate,
@@ -23,9 +24,7 @@ use Exception,
 
 class Error extends Exception implements ITrace, IteratorAggregate
 {
-    /** @const string Файл со статическими сообщениями */
-	const FILE_GLOBAL_DICTIONARY = 'config.error.messages.php';
-	/** @var array Глобальный словарь пользовательских сообщений об ошибках*/
+    /** @var array Глобальный словарь пользовательских сообщений об ошибках*/
 	private static $global_dictionary;
 
     /** @var array Локальный словарь сообщений об ошибках. Дополняет глобальный */
@@ -219,7 +218,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
 
     /**
      * Удаление подчиенного исключения
-     * @param $name Название (ключ) исключения
+     * @param string $name Название (ключ) исключения
      */
     function delete($name)
     {
@@ -503,9 +502,7 @@ class Error extends Exception implements ITrace, IteratorAggregate
 	 */
 	private static function loadGlobalDictionary(){
 		if (!isset(self::$global_dictionary)){
-			include DIR.self::FILE_GLOBAL_DICTIONARY;
-			if (!isset($messages)) $messages = array();
-			self::$global_dictionary = $messages;
+			self::$global_dictionary = Config::read('error.messages');
 		}
 	}
 }

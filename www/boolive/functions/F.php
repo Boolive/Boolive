@@ -10,6 +10,7 @@ namespace boolive\functions;
 class F
 {
      static private $translit_table;
+
     /**
      * Парсер. Вставка в шаблон значений
      *
@@ -17,6 +18,7 @@ class F
      * @param array $vars Массив значений для вставки в шаблон
      * @param string $tpl_left
      * @param string $tpl_right
+     * @param int $filter
      * @return string Подготовленный текст
      */
     static function parse($text, $vars=array(), $tpl_left = '{', $tpl_right = '}', $filter = FILTER_SANITIZE_SPECIAL_CHARS)
@@ -299,6 +301,16 @@ class F
     }
 
     /**
+     * Фозвращает конфигурацию
+     * @param $name
+     * @return mixed
+     */
+    static function config($name)
+    {
+        return include DIR_CONFIG.$name.'.php';
+    }
+
+    /**
      * Экранирование строки для сравнения оператором LIKE
      * @param $value
      * @return string
@@ -339,5 +351,50 @@ class F
             $result[$val] = true;
         }
         return array_keys($result);
+    }
+
+    static function isAssoc($array)
+    {
+        return array_keys($array) !== range(0, count($array) - 1);
+    }
+
+    /**
+     * Рекрсивное преобразование массива в строку кода на php
+     * @param array $arrray
+     * @param array $syntax
+     * @param int $indentLevel
+     * @param string $indent
+     * @return string
+     */
+    static function arrayToCode(array $arrray, array $syntax, $indent = '    ', &$indentLevel = 1)
+    {
+        $result = "";
+        $ia_accos = F::isAssoc($arrray);
+        foreach ($arrray as $key => $value){
+            $result .= str_repeat($indent, $indentLevel);
+            $result .= $ia_accos ? ((is_int($key) ? $key : "'" . addslashes($key) . "'") . ' => ') : '';
+            if (is_array($value)){
+                if ($value === array()) {
+                    $result .= $syntax['open'] . $syntax['close'] . ",\n";
+                }else{
+                    $indentLevel++;
+                    $result .= $syntax['open'] . "\n"
+                        . self::arrayToCode($value, $syntax, $indent, $indentLevel)
+                        . str_repeat($indent, --$indentLevel) . $syntax['close'] . ",\n";
+                }
+            }else
+            if (is_object($value) || is_string($value)){
+                $result .= var_export($value, true) . ",\n";
+            }else
+            if (is_bool($value)){
+                $result .= ($value ? 'true' : 'false') . ",\n";
+            }else
+            if ($value === null){
+                $result .= "null,\n";
+            }else{
+                $result .= $value . ",\n";
+            }
+        }
+        return $result;
     }
 }
