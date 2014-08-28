@@ -1,7 +1,6 @@
 <?php
 /**
  * Глобальный словарь сообщений об ошибках.
- * @var array
  */
 return array(
     'boolive' => array(

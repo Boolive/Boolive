@@ -93,9 +93,9 @@ class MenuSimple extends Widget
             $is_list[$key] = $is->linked()->id();
         }
         $cond['select'] = 'children';
-        $cond['struct'] = 'tree';
+        //$cond['struct'] = 'tree';
         $cond['from'] = $this->object;
-        $cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
+        //$cond['depth'] = array(1, 'max'); // выбрать из хранилища всё дерево меню
         $cond['where'] = array('all', array(
             array('attr', 'is_hidden', '=', 0),
             array('attr', 'is_draft', '=', 0),

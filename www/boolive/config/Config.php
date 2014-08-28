@@ -59,6 +59,11 @@ class Config
         return is_writable(DIR_CONFIG);
     }
 
+    static function file_name($name)
+    {
+        return DIR_CONFIG.$name.'.php';
+    }
+
     /**
      * Генератор содержимого файла конфигурации
      * @param array $config

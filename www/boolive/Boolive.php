@@ -317,7 +317,7 @@ namespace boolive
                 $requirements[] = 'Требуется модуль <code>mod_rewrite</code> для сервера Apache. Обратитесь в тех. поддержку или настройте сервер самостоятельно.
                 Включение выполняется в файле конфигурации <code>.../Apache/conf/httpd.conf</code> опцией <code>LoadModule rewrite_module modules/mod_rewrite.so</code>';
             }
-            $file = DIR.'config.php';
+            $file = DIR.'index.php';
             if (!is_writable($file)){
                 $requirements[] = 'Установите права на запись для файла <code>'.$file.'</code>. Необходимо для автоматической записи настроек системы';
             }
@@ -338,63 +338,63 @@ namespace boolive
          * Запрашиваемые данные для установки модуля
          * @return array
          */
-        static function installPrepare()
-        {
-            return array(
-                'title' => 'Настройка фоновых задач',
-                'descript' => 'Для выполнения фоновых задач необходим прямой доступ к интерпретатору PHP',
-                'fields' => array(
-                    'php' => array(
-                        'label' => 'Путь к PHP CLI',
-                        'descript' => 'Укажите полный путь до php.exe (php на *nix)',
-                        'value' => PHP,
-                        'input' => 'text',
-                        'style' => 'big',
-                        'required' => true,
-                    )
-                )
-            );
-        }
-
-        /**
-         * Установка ядра
-         */
-        static function install($input)
-        {
-            // Параметры доступа к БД
-            $errors = new Error('Некоректные параметры', 'boolive');
-            $new_config = $input->REQUEST->get(\boolive\values\Rule::arrays(array(
-                'php'	 => \boolive\values\Rule::string()->more(0)->max(255)->required()
-            )), $sub_errors);
-            // Если ошибочные данные от юзера
-            if ($sub_errors){
-                $errors->add($sub_errors->children());
-                throw $errors;
-            }
-            if (!is_executable($new_config['php'])){
-                $errors->php->not_exec = "Not executable";
-                throw $errors;
-            }
-            $file = DIR.'config.php';
-            if (is_writable($file)){
-                $content = file_get_contents($file);
-                $content = preg_replace('/["\']PHP[\'"],[^)]+/u', "'PHP', '".$new_config['php']."'", $content);
-                $fp = fopen($file, 'w');
-                fwrite($fp, $content);
-                fclose($fp);
-            }
-
-//            $file = DIR.'.htaccess';
+//        static function installPrepare()
+//        {
+//            return array(
+//                'title' => 'Настройка фоновых задач',
+//                'descript' => 'Для выполнения фоновых задач необходим прямой доступ к интерпретатору PHP',
+//                'fields' => array(
+//                    'php' => array(
+//                        'label' => 'Путь к PHP CLI',
+//                        'descript' => 'Укажите полный путь до php.exe (php на *nix)',
+//                        'value' => PHP,
+//                        'input' => 'text',
+//                        'style' => 'big',
+//                        'required' => true,
+//                    )
+//                )
+//            );
+//        }
+//
+//        /**
+//         * Установка ядра
+//         */
+//        static function install($input)
+//        {
+//            // Параметры доступа к БД
+//            $errors = new Error('Некоректные параметры', 'boolive');
+//            $new_config = $input->REQUEST->get(\boolive\values\Rule::arrays(array(
+//                'php'	 => \boolive\values\Rule::string()->more(0)->max(255)->required()
+//            )), $sub_errors);
+//            // Если ошибочные данные от юзера
+//            if ($sub_errors){
+//                $errors->add($sub_errors->children());
+//                throw $errors;
+//            }
+//            if (!is_executable($new_config['php'])){
+//                $errors->php->not_exec = "Not executable";
+//                throw $errors;
+//            }
+//            $file = DIR.'config.php';
 //            if (is_writable($file)){
 //                $content = file_get_contents($file);
-//                // Прописывание базовой директории для mod_rewrite
-//                $content = preg_replace('/\n[ \t]*RewriteEngine[ \t\S]*/u', "\n    RewriteEngine On", $content);
-//                $content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n    RewriteBase ".DIR_WEB, $content);
+//                $content = preg_replace('/["\']PHP[\'"],[^)]+/u', "'PHP', '".$new_config['php']."'", $content);
 //                $fp = fopen($file, 'w');
 //                fwrite($fp, $content);
 //                fclose($fp);
 //            }
-        }
+//
+////            $file = DIR.'.htaccess';
+////            if (is_writable($file)){
+////                $content = file_get_contents($file);
+////                // Прописывание базовой директории для mod_rewrite
+////                $content = preg_replace('/\n[ \t]*RewriteEngine[ \t\S]*/u', "\n    RewriteEngine On", $content);
+////                $content = preg_replace('/\n[ \t]*RewriteBase[ \t\S]*/u', "\n    RewriteBase ".DIR_WEB, $content);
+////                $fp = fopen($file, 'w');
+////                fwrite($fp, $content);
+////                fclose($fp);
+////            }
+//        }
     }
 }
 

@@ -26,7 +26,7 @@ class history extends JavaScript
             if ($basepath = $this->basepath->value()){
                 $config[] = 'basepath=/'.trim($basepath,'/').'/';
             }
-            $config[] = TIMESTAMP;
+            //$config[] = TIMESTAMP;
             $file.='?'.implode('&',$config);
 
             $this->_commands->htmlHead('script', array('type'=>'text/javascript', 'src'=>$file, 'text'=>''));

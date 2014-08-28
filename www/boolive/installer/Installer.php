@@ -516,7 +516,7 @@ class Installer
 	 * Завершение установки
 	 */
 	private static function installComplete(){
-		$file = DIR.'config.php';
+		$file = DIR.'index.php';
 		if (is_writable($file)){
 			$content = file_get_contents($file);
 			$content = preg_replace('/["\']IS_INSTALL[\'"],[^)]+/u', "'IS_INSTALL', true", $content);

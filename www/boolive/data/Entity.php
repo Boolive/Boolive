@@ -295,7 +295,7 @@ class Entity implements ITrace
 
     /**
      * URI объекта
-     * @param bool $fresh Признак, возвращать uri с учётом нового рожителя, при этом объект с новым родителем может быть ещё не сохранен.
+     * @param bool $fresh Признак, возвращать uri с учётом нового родителя, при этом объект с новым родителем может быть ещё не сохранен.
      * @return string
      */
     function uri2($fresh = false)
@@ -1200,6 +1200,7 @@ class Entity implements ITrace
             if ($this->isExist()){
                 $obj = Data2::read(array(
                     'from' => array($this, $name),
+                    'select' => 'child',
                     'comment' => 'read property by name',
                     ///'group' => true
                 ));

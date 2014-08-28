@@ -94,7 +94,7 @@ class View extends Entity
                     $result = ob_get_contents().$result;
                 }
             ob_end_clean();
-            $this->_input_child = null;
+            //$this->_input_child = null;
             if (isset($key)){
                 Cache::set($key, json_encode(array($result, $commands->getGroup($key))));
                 $commands->ungroup($key);

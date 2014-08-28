@@ -28,7 +28,7 @@ class JavaScript extends View
 //        }
         // Подключение javascript файла
         if ($file = $this->file()){
-            $this->_commands->htmlHead('script', array('type'=>'text/javascript', 'src'=>$file.'?'.TIMESTAMP, 'text'=>''));
+            $this->_commands->htmlHead('script', array('type'=>'text/javascript', 'src'=>$file, 'text'=>''));
         }
     }
 }

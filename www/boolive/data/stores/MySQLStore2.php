@@ -250,17 +250,17 @@ class MySQLStore2 extends Entity
             if ($cond['select'] == 'child'){
                 $from = 'FROM {objects} obj';
                 if (empty($cond['multiple'])){
-                    if (is_int($cond['from'][0])){
+                    if (is_int($cond['parent'])){
                         $where[] = 'obj.parent=? AND obj.name=?';
-                        $result['binds'][] = array($cond['from'][0], DB::PARAM_INT);
-                        $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+                        $result['binds'][] = array($cond['parent'], DB::PARAM_INT);
+                        $result['binds'][] = array($cond['name'], DB::PARAM_STR);
                     }else{
-                        $id = $this->getId($cond['from'][0], false);
+                        $id = $this->getId($cond['parent'], false);
                         $sec = $this->getSection($cond['from'][0]);
                         $where[] = 'obj.sec=? AND obj.parent=? AND obj.name=?';
                         $result['binds'][] = array($sec, DB::PARAM_INT);
                         $result['binds'][] = array($id, DB::PARAM_INT);
-                        $result['binds'][] = array($cond['from'][1], DB::PARAM_STR);
+                        $result['binds'][] = array($cond['name'], DB::PARAM_STR);
                     }
                 }else{
                     // @todo Выбор свойства по имени у множества объектов

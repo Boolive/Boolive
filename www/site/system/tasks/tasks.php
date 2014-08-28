@@ -98,13 +98,13 @@ class tasks extends View
      */
     private function executeBackground()
     {
-        if (AUTOSTART_TASKS && !$this->is_lock()){
-            if (substr(php_uname(), 0, 7) == "Windows"){
-                pclose(popen("start /B ".PHP.' '.DIR.'index.php tasks', "r"));
-            }else{
-                exec(PHP.' '.DIR."index.php tasks > /dev/null &");
-            }
-        }
+//        if (AUTOSTART_TASKS && !$this->is_lock()){
+//            if (substr(php_uname(), 0, 7) == "Windows"){
+//                pclose(popen("start /B ".PHP.' '.DIR.'index.php tasks', "r"));
+//            }else{
+//                exec(PHP.' '.DIR."index.php tasks > /dev/null &");
+//            }
+//        }
     }
 
     /**

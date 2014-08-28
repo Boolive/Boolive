@@ -35,7 +35,6 @@ class Data2
      */
     static function create($proto, $parent, $name = null)
     {
-
         if (!$proto instanceof Entity) $proto = Data2::read($proto);
         $class = get_class($proto);
         $attr = array(
@@ -63,6 +62,11 @@ class Data2
         //1. Нормализация условия
         $cond = self::normalizeCond($cond);
         //2. Если выбор одного объекта - поиск в буфере. Если найден, то возврат результата
+        if ($cond['struct'] == 'object' && empty($cond['multiple']) && (
+                $cond['select'] == 'self' || $cond['select'] == 'child'
+            )){
+            if ($result = Buffer2::get($cond['from'])) return $result;
+        }
         //3. Поиск в кэше
         //4. Если нет в кэше, то запрос к хранилищу.
         if ($store = self::getStore()){
@@ -80,12 +84,17 @@ class Data2
             foreach ($result as $rkey => $ritem){
                 if ($key) $rkey = $ritem[$key];
                 if (isset($ritem['class_name'])){
-                    try{
-                        $entities[$rkey] = new $ritem['class_name']($ritem, $tree_depth);
-                    }catch (\ErrorException $e){
-                        $entities[$rkey] = new Entity($ritem, $tree_depth);
+                    if ($tree_depth || !($entities[$rkey] = Buffer2::get($ritem['uri']))){
+                        try{
+                            $entities[$rkey] = new $ritem['class_name']($ritem, $tree_depth);
+                        }catch (\ErrorException $e){
+                            $entities[$rkey] = new Entity($ritem, $tree_depth);
+                        }
+                        $entities[$rkey]->isChanged(false);
+                        if (!$tree_depth){
+                            Buffer2::set($entities[$rkey]);
+                        }
                     }
-                    $entities[$rkey]->isChanged(false);
                 }
             }
             $result = $entities;
@@ -110,7 +119,12 @@ class Data2
     {
         if ($entity->id() != Entity::ENTITY_ID && $entity->check()){
             if ($store = self::getStore()){
-                return $store->write($entity, $access);
+                if ($result = $store->write($entity, $access)){
+                    if (!Buffer2::isExists($entity)){
+                        Buffer2::set($entity);
+                    }
+                }
+                return $result;
             }else{
                 $entity->errors()->store->{'not-exist'} = 'Неопределено хранилище';
             }
@@ -248,6 +262,8 @@ class Data2
             }else
             if (is_array($result['from'])){
                 if (count($result['from'])==2 && $result['from'][0] instanceof Entity && is_scalar($result['from'][1])){
+                    $result['parent'] = (int)$result['from'][0]->id();
+                    $result['name'] = $result['from'][1];
                     $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
                 }else{
                     foreach ($result['from'] as $fkey => $fval){
@@ -259,8 +275,8 @@ class Data2
                     }
                     $result['sections'] = F::array_unique($result['sections']);
                     $result['limit'] = array(0,count($result['from']));
+                    $result['multiple'] = true;
                 }
-
             }else
             if ($result['from'] instanceof Entity){
                 $result['sections'] = self::getSections($result['from']->uri(), $result['depth'][1]);
@@ -333,6 +349,7 @@ class Data2
                 'calc' => $result['calc'],//check
                 'from' => $result['from'],//check
                 'sections' => $result['sections'],//check
+                'multiple' => !empty($result['multiple']),
                 'depth' => $result['depth'],//check
                 'struct' => $result['struct'],//check
                 'where' => $result['where'],
@@ -345,6 +362,10 @@ class Data2
                 'comment' => empty($result['comment'])? false : $result['comment'],//check
                 'group' => $result['group']
             );
+            if (isset($result['parent']) && isset($result['name'])){
+                $r['parent'] = $result['parent'];
+                $r['name'] = $result['name'];
+            }
             return $r;
         }
         return $result;
@@ -539,12 +560,12 @@ class Data2
 	static function systemRequirements()
     {
 		$requirements = array();
-		if (file_exists(DIR.self::CONFIG_FILE) && !is_writable(DIR.self::CONFIG_FILE)){
-			$requirements[] = 'Установите права на запись для файла: <code>'.DIR.self::CONFIG_FILE.'</code>';
+		if (!Config::is_writable('data2')){
+			$requirements[] = 'Установите права на запись файла: <code>'.Config::file_name('data2').'</code>';
 		}
-		if (!file_exists(DIR.'boolive/data/tpl.'.self::CONFIG_FILE)){
-			$requirements[] = 'Отсутствует установочный файл <code>'.DIR.'boolive/data/tpl.'.self::CONFIG_FILE.'</code>';
-		}
+//		if (!file_exists(DIR.'boolive/data/tpl.'.self::CONFIG_FILE)){
+//			$requirements[] = 'Отсутствует установочный файл <code>'.DIR.'boolive/data/tpl.'.self::CONFIG_FILE.'</code>';
+//		}
 		return $requirements;
 	}
 
@@ -554,7 +575,7 @@ class Data2
 	 */
 	static function installPrepare()
     {
-		$config = F::loadConfig(DIR.self::CONFIG_FILE, 'store');
+		$config = Config::read('data2');
         if (empty($config)){
             $config = array(
                 'connect' => array(
@@ -638,6 +659,10 @@ class Data2
         $new_config['sections'] = array(
             array('code' => 0, 'uri' => '')
         );
+        $new_config = array(
+            'class' => '\boolive\data\stores\MySQLStore2',
+            'connect' => $new_config
+        );
 		// Если ошибочные данные от юзера
 		if ($sub_errors){
             $errors->add($sub_errors->children());
@@ -647,7 +672,7 @@ class Data2
             $new_config = array_replace_recursive($cur_config['connect'], $new_config);
         }
 		// Создание MySQL хранилища
-        \boolive\data\stores\MySQLStore2::createStore($new_config, $errors);
+        \boolive\data\stores\MySQLStore2::createStore($new_config['connect'], $errors);
 
         Config::write('data2', $new_config);
 	}
