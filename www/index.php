@@ -11,7 +11,7 @@
 /** @const Времея начала работы системы */
 define('START_TIME', microtime(true));
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', false);
+define('IS_INSTALL', true);
 /** @const Версия системы Boolive */
 define('VERSION', '2.0.beta.2014.02.10');
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */
@@ -25,7 +25,7 @@ define('HTTP_HOST', empty($_SERVER['HTTP_HOST'])?'boolive.ru' : $_SERVER['HTTP_H
 /* Признак, выводить всю трассировку?*/
 define('GLOBAL_TRACE', true);
 /* Признак, профилировать запросы к модулю даных?*/
-define('PROFILE_DATA', true);
+define('PROFILE_DATA', false);
 
 // Подключение конфигурации путей
 //include 'config.php';

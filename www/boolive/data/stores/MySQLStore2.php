@@ -278,7 +278,7 @@ class MySQLStore2 extends Entity
                     }else
                     // Выбор непосредственных подчиненных
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
-                        $from = 'FROM {objects} obj USE INDEX(child)';
+                        $from = 'FROM {objects} obj';
                         $where[] = 'obj.parent = ?';
                         $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                     }else{
@@ -305,7 +305,7 @@ class MySQLStore2 extends Entity
                     }else
                     // Выбор непосредственных подчиненных
                     if ($cond['depth'][0] == 1 && $cond['depth'][1] == 1){
-                        $from = 'FROM {objects} obj USE INDEX(child)';
+                        $from = 'FROM {objects} obj';
                         $where[] = 'obj.proto = ?';
                         $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                     }else{
@@ -705,10 +705,10 @@ class MySQLStore2 extends Entity
             $binds2[] = $info[1];
         }
         foreach ($joins_text as $alias => $info){
-            $result['joins'].= "\n  LEFT JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
+            $join.= "\n  LEFT JOIN {text} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_default_value AND `'.$info[0].'`.value_type=2)';
         }
         foreach ($joins_link as $alias => $info){
-            $result['joins'].= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
+            $join.= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.id = `'.$info[0].'`.is_link)';
         }
         if ($binds2)  $result['binds'] = array_merge($binds2, $result['binds']);
 
@@ -722,7 +722,6 @@ class MySQLStore2 extends Entity
         $where = $where? "\n  WHERE ".implode(' AND ', $where) : '';
 
         $result['sql'] = $select.$from.$join.$where.$group.$order.$limit;
-
 
         return $result;
     }
@@ -1562,17 +1561,6 @@ class MySQLStore2 extends Entity
             }
             $sects = implode(',', $sects);
             // Создание таблиц
-//            $db->exec("
-//                CREATE TABLE {ids} (
-//                  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-//                  `sec` TINYINT(1) NOT NULL DEFAULT '0' COMMENT 'Код секции',
-//                  `uri` VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-//                  PRIMARY KEY (`id`, `sec`),
-//                  KEY `uri` (`uri`(255))
-//                )
-//                ENGINE=INNODB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='Идентификация путей (URI)'
-//                PARTITION BY LIST(sec) ($sects)
-//            ");
             $db->exec("
                 CREATE TABLE {objects} (
                   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор по таблице ids',
@@ -1601,12 +1589,11 @@ class MySQLStore2 extends Entity
                   `uri` VARCHAR(1024) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
                     PRIMARY KEY (`id`,`sec`),
                     UNIQUE KEY `name` (`sec`,`parent`,`name`),
-                    KEY `uri` (`uri`(255)),
                     KEY `order` (`sec`,`parent`,`order`),
-                    KEY `child` (`sec`,`parent`,`name`,`value`(255),`valuef`)
+                    KEY `uri` (`uri`(255))
                 )
                 ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'
-                PARTITION BY LIST(sec) ($sects)
+                #PARTITION BY LIST(sec) ($sects)
             ");
             $db->exec("
                 CREATE TABLE {parents} (
@@ -1618,7 +1605,7 @@ class MySQLStore2 extends Entity
                   UNIQUE KEY `children` (`parent_id`,`object_id`, `sec`)
                 )
                 ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Отношения объектов с родителями'
-                PARTITION BY LIST(sec) ($sects)
+                #PARTITION BY LIST(sec) ($sects)
             ");
             $db->exec("
                 CREATE TABLE {protos} (
@@ -1630,7 +1617,7 @@ class MySQLStore2 extends Entity
                   UNIQUE KEY `heirs` (`proto_id`,`object_id`, `sec`)
                 )
                 ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Отношения объектов с прототипами'
-                PARTITION BY LIST(sec) ($sects)
+                #PARTITION BY LIST(sec) ($sects)
             ");
             $db->exec("
                 CREATE TABLE `text` (

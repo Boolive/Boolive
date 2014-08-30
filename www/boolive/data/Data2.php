@@ -84,16 +84,19 @@ class Data2
             foreach ($result as $rkey => $ritem){
                 if ($key) $rkey = $ritem[$key];
                 if (isset($ritem['class_name'])){
-                    if ($tree_depth || !($entities[$rkey] = Buffer2::get($ritem['uri']))){
+                    if (!($entities[$rkey] = Buffer2::get($ritem['uri']))){
                         try{
+                            if ($ritem['class_name'] == '\site\library\content_samples\Part\Part'){
+                                $a = 10;
+                            }
                             $entities[$rkey] = new $ritem['class_name']($ritem, $tree_depth);
                         }catch (\ErrorException $e){
                             $entities[$rkey] = new Entity($ritem, $tree_depth);
                         }
                         $entities[$rkey]->isChanged(false);
-                        if (!$tree_depth){
+                        //if (!$tree_depth){
                             Buffer2::set($entities[$rkey]);
-                        }
+                        //}
                     }
                 }
             }
@@ -120,9 +123,7 @@ class Data2
         if ($entity->id() != Entity::ENTITY_ID && $entity->check()){
             if ($store = self::getStore()){
                 if ($result = $store->write($entity, $access)){
-                    if (!Buffer2::isExists($entity)){
-                        Buffer2::set($entity);
-                    }
+                    Buffer2::set($entity);
                 }
                 return $result;
             }else{
@@ -668,12 +669,12 @@ class Data2
             $errors->add($sub_errors->children());
             throw $errors;
         }
-        if ($cur_config = $config = Config::read('data2')){
-            $new_config = array_replace_recursive($cur_config['connect'], $new_config);
+        if ($config = Config::read('data2')){
+            $config = array_replace_recursive($config, $new_config);
         }
 		// Создание MySQL хранилища
-        \boolive\data\stores\MySQLStore2::createStore($new_config['connect'], $errors);
+        \boolive\data\stores\MySQLStore2::createStore($config['connect'], $errors);
 
-        Config::write('data2', $new_config);
+        Config::write('data2', $config);
 	}
 }

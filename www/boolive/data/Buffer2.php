@@ -35,7 +35,9 @@ class Buffer2
     static function set($entity)
     {
         self::$list_id[$entity->uri()] = $entity;
-        if ($id = $entity->id()) self::$list_id[$id] = &self::$list_id[$entity->uri()];
+        if ($id = $entity->id()){
+            self::$list_id[$id] = &self::$list_id[$entity->uri()];
+        }
     }
 
     static function remove($key)
@@ -48,7 +50,7 @@ class Buffer2
 
     static function isExists($key)
     {
-        return isset(self::$list_id[$key]) || isset(self::$list_uri[$key]);
+        return isset($key) && (isset(self::$list_id[$key]) || isset(self::$list_uri[$key]));
     }
 }
  

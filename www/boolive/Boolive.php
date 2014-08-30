@@ -48,10 +48,10 @@ namespace boolive
                 $class_name = ltrim($class_name, '\\');
                 // Если ещё не подключен
                 if (!self::isIncluded($class_name)){
-                    self::$included[$class_name] = $class_name;
                     // Подключение и активация запрашиваемого модуля
                     $class_path = self::getClassFile($class_name);
                     if (is_file($class_path)){
+                        self::$included[$class_name] = $class_name;
                         include_once($class_path);
                         if (method_exists($class_name, 'activate')) {
                             self::$activated[$class_name] = $class_name;
