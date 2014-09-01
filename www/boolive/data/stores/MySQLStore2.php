@@ -256,11 +256,13 @@ class MySQLStore2 extends Entity
                         $result['binds'][] = array($cond['name'], DB::PARAM_STR);
                     }else{
                         $id = $this->getId($cond['parent'], false);
-                        $sec = $this->getSection($cond['from'][0]);
-                        $where[] = 'obj.sec=? AND obj.parent=? AND obj.name=?';
-                        $result['binds'][] = array($sec, DB::PARAM_INT);
+                        $where[] = 'obj.parent=? AND obj.name=?';
                         $result['binds'][] = array($id, DB::PARAM_INT);
                         $result['binds'][] = array($cond['name'], DB::PARAM_STR);
+                    }
+                    if ($cond['sections']){
+                        $where[] = 'obj.sec IN ('.str_repeat('?,', count($cond['sections'])-1).'?)';
+                        $result['binds'] = array_merge($result['binds'], $cond['sections']);
                     }
                 }else{
                     // @todo Выбор свойства по имени у множества объектов
@@ -1255,8 +1257,8 @@ class MySQLStore2 extends Entity
             $uri_depth = mb_substr_count($uri, '/');
             $i = count($this->config['sections']);
             while (--$i>=0){
-                $pos = empty($uri)? 0 : mb_strpos($this->config['sections'][$i]['uri'], $uri);
-                if ($pos === 0){
+                //$pos = empty($uri)? 0 : mb_strpos($uri, $this->config['sections'][$i]['uri']);
+                if ($this->config['sections'][$i]['uri'] == '' || mb_strpos($uri, $this->config['sections'][$i]['uri']) === 0){
                     if ($depth == Entity::MAX_DEPTH || mb_substr_count($this->config['sections'][$i]['uri'],'/')-$uri_depth<=$depth){
                         $result[] =$this->config['sections'][$i]['code'];
                     }
@@ -1593,7 +1595,7 @@ class MySQLStore2 extends Entity
                     KEY `uri` (`uri`(255))
                 )
                 ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'
-                #PARTITION BY LIST(sec) ($sects)
+                PARTITION BY LIST(sec) ($sects)
             ");
             $db->exec("
                 CREATE TABLE {parents} (

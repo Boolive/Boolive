@@ -456,7 +456,7 @@ class Installer
             $result['percent'] = 100;
             $result['complete'] = true;
         }else{
-            $result['percent'] = round($install['step'] / $result['step_cnt'] * 100);
+            $result['percent'] = $install['step'] / $result['step_cnt'] * 100;
         }
         Session::set('install', $install);
         return $result;

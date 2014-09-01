@@ -266,6 +266,7 @@ class Data2
                     $result['parent'] = (int)$result['from'][0]->id();
                     $result['name'] = $result['from'][1];
                     $result['from'] = $result['from'][0]->uri().'/'.$result['from'][1];
+                    $result['sections'] = self::getSections($result['from'], 0);
                 }else{
                     foreach ($result['from'] as $fkey => $fval){
                         if (self::isUri($fval)){
