@@ -23,13 +23,15 @@ class DBStatementDebug
     private $info;
     private $debug = true;
     private $count = true;
+    private $slow = 0;
 
-    function __construct($stmt, $debug = true, $count = true)
+    function __construct($stmt, $debug = true, $count = true, $slow = 0)
     {
         $this->stmt = $stmt;
         $this->info['sql'] = $stmt->queryString;
         $this->debug = $debug;
         $this->count = $count;
+        $this->slow = $slow;
     }
 
     function __destruct()
@@ -48,13 +50,15 @@ class DBStatementDebug
             $result = $this->stmt->execute($params);
             //Trace::groups('Data')->group('')->set($this->stmt->queryString);
             $bm = Benchmark::stop('sql', true);
-            if ($bm['time']>0.1){
-            Trace::groups('DB')->group('query')->group($this->stmt->queryString)->group()->set(array(
-                'sql' => $this->stmt->queryString,
-                'values' => $params?$params:$this->values,
-                'benchmark' => $bm
-                )
-            );
+            if ($bm['time'] >= $this->slow){
+                Trace::groups('DB')->group('query')->group($this->stmt->queryString)->group()->set(array(
+                    'sql' => $this->stmt->queryString,
+                    'values' => $params?$params:$this->values,
+                    'benchmark' => $bm
+                    )
+                );
+                Trace::groups('DB')->group('sql_time')->set(Trace::groups('DB')->group('sql_time')->get()+$bm['time']);
+                Trace::groups('DB')->group('slow_count')->set(Trace::groups('DB')->group('slow_count')->get()+1);
             }
         }else{
             $result = $this->stmt->execute($params);

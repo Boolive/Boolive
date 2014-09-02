@@ -13,6 +13,7 @@ return [
         ],
         'trace_sql' => false,
         'trace_count' => false,
+        'slow_query' => 0.000,
         'sections' => [
             [
                 'code' => 0,

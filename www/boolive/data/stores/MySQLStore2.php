@@ -40,6 +40,9 @@ class MySQLStore2 extends Entity
             'host' => $config['host'],
             'port' => $config['port']
         );
+        foreach ($config['sections'] as $i => $s){
+            $this->config['sections'][$i]['depth'] = mb_substr_count($s['uri'], '/');
+        }
         $this->db = DB::connect($config);
         Events::on('Boolive::deactivate', $this, 'deactivate');
     }
@@ -218,7 +221,7 @@ class MySQLStore2 extends Entity
                         $result['binds'][] = array($cond['from'], DB::PARAM_INT);
                     }else{
                         $where[] = 'obj.sec=? AND obj.uri=? ';
-                        $sec = $this->getSection($cond['from']);
+                        $sec = $this->getSection($cond['from'])['code'];
                         $result['binds'][] = array($sec, DB::PARAM_INT);
                         $result['binds'][] = array($cond['from'], DB::PARAM_STR);
                     }
@@ -231,7 +234,7 @@ class MySQLStore2 extends Entity
                         if (is_int($f)){
                             $ids[] = $f;
                         }else{
-                            $secs[$this->getSection($f)] = true;
+                            $secs[$this->getSection($f)['code']] = true;
                             $uris[] = $f;
                         }
                     }
@@ -703,7 +706,7 @@ class MySQLStore2 extends Entity
         //unset($joins['obj']);
         $join = '';
         foreach ($joins as $alias => $info){
-            $join.= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ?)';
+            $join.= "\n  LEFT JOIN {objects} `".$alias.'` ON (`'.$alias.'`.sec = `'.$info[0].'`.sec AND `'.$alias.'`.parent = `'.$info[0].'`.id AND `'.$alias.'`.name = ?)';
             $binds2[] = $info[1];
         }
         foreach ($joins_text as $alias => $info){
@@ -742,7 +745,7 @@ class MySQLStore2 extends Entity
             if ($uri_to_id){
                 $result['ids'][] =$this->getId($f,false);
             }else{
-                $secs[$this->getSection($f)] = true;
+                $secs[$this->getSection($f)['code']] = true;
                 $result['uris'][] = $f;
             }
         }
@@ -870,7 +873,7 @@ class MySQLStore2 extends Entity
                 // URI до сохранения объекта
                 $curr_uri = $attr['uri'];
 
-                $attr['sec'] = $this->getSection($entity->uri2());
+                $attr['sec'] = $this->getSection($entity->uri2())['code'];
                 unset($attr['date'], $attr['is_exist'], $attr['is_accessible']);
                 $is_new = empty($attr['id']) || $attr['id'] == Entity::ENTITY_ID;
 
@@ -1231,17 +1234,17 @@ class MySQLStore2 extends Entity
     function getSection($uri)
     {
         if (!isset($this->uri_sec[$uri])){
-            if (isset($this->config['sections'])){
+            //if (isset($this->config['sections'])){
                 $i = count($this->config['sections']);
                 while (--$i>=0){
                     if ($this->config['sections'][$i]['uri'] == '' || mb_strpos($uri, $this->config['sections'][$i]['uri']) === 0){
-                        return $this->uri_sec[$uri] = $this->config['sections'][$i]['code'];
+                        return $this->config['sections'][$this->uri_sec[$uri] = $i];
                     }
                 }
-            }
-            return 0;
+            //}
+            return array('code'=>0, 'uri'=>'');
         }
-        return $this->uri_sec[$uri];
+        return $this->config['sections'][$this->uri_sec[$uri]];
     }
 
     /**
@@ -1252,20 +1255,22 @@ class MySQLStore2 extends Entity
      */
     function getSections($uri, $depth = Entity::MAX_DEPTH)
     {
-        $result = array();
-        if (isset($this->config['sections'])){
-            $uri_depth = mb_substr_count($uri, '/');
-            $i = count($this->config['sections']);
-            while (--$i>=0){
-                //$pos = empty($uri)? 0 : mb_strpos($uri, $this->config['sections'][$i]['uri']);
-                if ($this->config['sections'][$i]['uri'] == '' || mb_strpos($uri, $this->config['sections'][$i]['uri']) === 0){
-                    if ($depth == Entity::MAX_DEPTH || mb_substr_count($this->config['sections'][$i]['uri'],'/')-$uri_depth<=$depth){
-                        $result[] =$this->config['sections'][$i]['code'];
-                    }
+        $root_section = $this->getSection($uri);
+        $result[$root_section['code']] = true;
+        $uri_depth = mb_substr_count($uri, '/');
+        $depth += $uri_depth - $root_section['depth'];
+        $i = count($this->config['sections']);
+        while (--$i>=0){
+            $pos = empty($root_section['uri'])? 0 : mb_strpos($this->config['sections'][$i]['uri'], $root_section['uri']);
+            if ($pos === 0 && ($uri == '' || mb_strpos($this->config['sections'][$i]['uri'], $uri) === 0)){
+                if ($depth == Entity::MAX_DEPTH ||
+                    $this->config['sections'][$i]['depth']-$root_section['depth'] <= $depth)
+                {
+                    $result[$this->config['sections'][$i]['code']] = true;
                 }
             }
         }
-        return $result;
+        return array_keys($result);
     }
 
     /**
@@ -1374,7 +1379,7 @@ class MySQLStore2 extends Entity
                 $names = F::splitRight('/', $uri);
                 $parant = isset($names[0])? $this->getId($names[0], true) : 0;
                 $parant_cnt = mb_substr_count($uri, '/');
-                $sec = $this->getSection($uri);
+                $sec = $this->getSection($uri)['code'];
                 $q = $this->db->prepare('
                     INSERT INTO {objects} (`id`, `sec`, `parent`, `parent_cnt`, `order`, `name`, `uri`, `is_default_value`, `is_default_class`)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)

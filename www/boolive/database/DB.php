@@ -35,6 +35,7 @@ class DB extends PDO
     /** @var bool Признак, включен или нет режим отладки */
     private $trace_sql = false;
     private $trace_count = false;
+    private $slow_query = 0;
 
     private $statements = array();
     /**
@@ -68,8 +69,9 @@ class DB extends PDO
             if (empty($config['password'])) $config['password'] = null;
             if (empty($config['options'])) $config['options'] = null;
             if (empty($config['prefix'])) $config['prefix'] = '';
-            if (empty($config['trace_sql'])) $config['trace_sql'] = false;
-            if (empty($config['trace_count'])) $config['trace_count'] = false;
+            $config['trace_sql'] = !empty($config['trace_sql']);
+            $config['trace_count'] = !empty($config['trace_count']);
+            if (empty($config['slow_query'])) $config['slow_query'] = 0;
             // Ключ подключения
             $key = $dsn.'-'.$config['user'].'-'.$config['password'].'-'.$config['prefix'];
             if (!empty($config['options'])){
@@ -77,20 +79,21 @@ class DB extends PDO
             }
             // Если подключения нет, то создаём
             if (!isset(self::$connection[$key])){
-                self::$connection[$key] = new self($dsn, $config['user'], $config['password'], $config['options'], $config['prefix'], $config['trace_sql'], $config['trace_count']);
+                self::$connection[$key] = new self($dsn, $config['user'], $config['password'], $config['options'], $config['prefix'], $config['trace_sql'], $config['trace_count'], $config['slow_query']);
             }
             return self::$connection[$key];
         }
         return null;
     }
 
-    function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false, $count = false)
+    function __construct($dsn, $username = null, $passwd = null, $options = array(), $prefix = '', $debug = false, $count = false, $slow = 0)
     {
         parent::__construct($dsn, $username, $passwd, $options);
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->prefix = $prefix;
         $this->trace_sql = $debug;
         $this->trace_count = $count;
+        $this->slow_query = $slow;
     }
 
     /**
@@ -165,11 +168,16 @@ class DB extends PDO
             Benchmark::start('sql');
             $sql = $this->addPrefixes($sql);
             $result = parent::exec($sql);
-            Trace::groups('DB')->group('query')->group()->set(array(
-                'sql' => $sql,
-                'benchmark' => Benchmark::stop('sql', true)
-                )
-            );
+            $bm = Benchmark::stop('sql', true);
+            if ($bm['time'] >= $this->slow_query){
+                Trace::groups('DB')->group('query')->group()->set(array(
+                    'sql' => $sql,
+                    'benchmark' => $bm
+                    )
+                );
+                Trace::groups('DB')->group('sql_time')->set(Trace::groups('DB')->group('sql_time')->get()+$bm['time']);
+                Trace::groups('DB')->group('slow_count')->set(Trace::groups('DB')->group('slow_count')->get()+1);
+            }
             return $result;
         }
         return parent::exec($this->addPrefixes($sql));
@@ -191,7 +199,7 @@ class DB extends PDO
         if ($this->trace_sql || $this->trace_count){
             $stmt = parent::prepare($this->addPrefixes($sql), $driver_options);
             if ($stmt instanceof PDOStatement){
-                return /*$this->statements[$sql] = */new DBStatementDebug($stmt, $this->trace_sql, $this->trace_count);
+                return /*$this->statements[$sql] = */new DBStatementDebug($stmt, $this->trace_sql, $this->trace_count, $this->slow_query);
             }else{
                 throw new Error('PDO does not return PDOStatement');
             }
@@ -214,11 +222,16 @@ class DB extends PDO
             Benchmark::start('sql');
             $sql = $this->AddPrefixes($sql);
             $result = parent::query($sql);
-            Trace::groups('DB')->group('query')->group()->set(array(
-                'sql' => $sql,
-                'benchmark' => Benchmark::stop('sql', true)
-                )
-            );
+            $bm = Benchmark::stop('sql', true);
+            if ($bm['time'] >= $this->slow_query){
+                Trace::groups('DB')->group('query')->group()->set(array(
+                        'sql' => $sql,
+                        'benchmark' => $bm
+                    )
+                );
+                Trace::groups('DB')->group('sql_time')->set(Trace::groups('DB')->group('sql_time')->get()+$bm['time']);
+                Trace::groups('DB')->group('slow_count')->set(Trace::groups('DB')->group('slow_count')->get()+1);
+            }
             return $result;
         }
         return parent::query($this->addPrefixes($sql));
