@@ -105,15 +105,24 @@ class MySQLStore2 extends Entity
                 $result[] = $row['calc'];
             }else{
                 $obj = $this->makeObject($row);
+                $key = $cond['key']? $obj[$cond['key']] : null;
                 $this->uri_id[$row['uri']] = $row['id'];//кэш uri
                 if ($make_tree){
-                    $tree[$obj['id']] = $obj;
+                    $tree[$obj['id']] = array('object'=>$obj);
                     if (($tree_type == 0 && $row['parent_cnt'] == $first_level) ||
                         ($tree_type == 1 && $row['proto_cnt'] == $first_level)){
-                        $result[] = &$tree[$obj['id']];
+                        if ($key){
+                            $result[$key] = &$tree[$obj['id']];
+                        }else{
+                            $result[] = &$tree[$obj['id']];
+                        }
                     }
                 }else{
-                    $result[] = $obj;
+                    if ($key){
+                        $result[$key] = $obj;
+                    }else{
+                        $result[] = $obj;
+                    }
                 }
                 // Если тип текстовый, то требуется дополнительная выборка текса
                 if (isset($row['value_type']) && $row['value_type'] == Entity::VALUE_TEXT){
@@ -145,22 +154,35 @@ class MySQLStore2 extends Entity
         // Структуирование дерева
         if (!empty($tree)){
             foreach ($tree as $id => $obj){
+                $key = $cond['key']? $obj['object'][$cond['key']] : null;
                 switch ($cond['select']){
                     case 'children':
-                        $p = $obj['parent'];
-                        if (isset($tree[$p])) $tree[$p]['children'][$obj['name']] = &$tree[$id];
+                        $p = $obj['object']['parent'];
+                        if (isset($tree[$p])){
+                            if ($key){
+                                $tree[$p]['sub'][$key] = &$tree[$id];
+                            }else{
+                                $tree[$p]['sub'][] = &$tree[$id];
+                            }
+                        }
                         break;
                     case 'heirs':
-                        $p = $obj['proto'];
-                        if (isset($tree[$p])) $tree[$p]['heirs'][] = &$tree[$id];
+                        $p = $obj['object']['proto'];
+                        if (isset($tree[$p])){
+                            if ($key){
+                                $tree[$p]['sub'][$key] = &$tree[$id];
+                            }else{
+                                $tree[$p]['sub'][] = &$tree[$id];
+                            }
+                        }
                         break;
                     case 'parents':
-                        $p = $obj['parent'];
-                        if (isset($tree[$p])) $tree[$id]['_parent'] = &$tree[$p];
+                        $p = $obj['object']['parent'];
+                        if (isset($tree[$p])) $tree[$id]['sup'] = &$tree[$p];
                         break;
                     case 'protos':
-                        $p = $obj['proto'];
-                        if (isset($tree[$p])) $tree[$id]['_proto'] = &$tree[$p];
+                        $p = $obj['object']['proto'];
+                        if (isset($tree[$p])) $tree[$id]['sup'] = &$tree[$p];
                         break;
                 }
             }
@@ -762,16 +784,14 @@ class MySQLStore2 extends Entity
      */
     private function makeObject($attribs)
     {
-//        $attribs['id'] = intval($attribs['id']);
+        $attribs['id'] = intval($attribs['id']);
         if ($attribs['parent'] == 0) $attribs['parent'] = null;
 //        $attribs['parent'] = $attribs['parent'] == 0 ? null : $attribs['parent'];
 //        $attribs['proto'] = $attribs['proto'] == 0 ? null : $attribs['proto'];
         if ($attribs['proto'] == 0) $attribs['proto'] = null;
 //        $attribs['author'] = $attribs['author'] == 0 ? null : $attribs['author'];
         if ($attribs['author'] == 0) $attribs['author'] = null;
-//        $attribs['is_default_value'] = $attribs['is_default_value'] == Entity::ENTITY_ID ? Entity::ENTITY_ID : $attribs['is_default_value'];
-//        $attribs['is_default_class'] = $attribs['is_default_class'] == Entity::ENTITY_ID ? Entity::ENTITY_ID : $attribs['is_default_class'];
-//        $attribs['is_link'] = $attribs['is_link'] == Entity::ENTITY_ID ? Entity::ENTITY_ID : $attribs['is_link'];
+
 //        $attribs['order'] = intval($attribs['order']);
 //        $attribs['date_update'] = intval($attribs['date_update']);
 //        $attribs['date_create'] = intval($attribs['date_create']);
@@ -784,6 +804,14 @@ class MySQLStore2 extends Entity
 //        if (empty($attribs['is_completed'])) unset($attribs['is_completed']); else $attribs['is_completed'] = true;
 //        if (empty($attribs['is_property'])) unset($attribs['is_property']); else $attribs['is_property'] = true;
 //        if (empty($attribs['is_relative'])) unset($attribs['is_relative']); else $attribs['is_relative'] = true;
+
+//        $attribs['is_draft'] = !empty($attribs['is_draft']);
+//        $attribs['is_hidden'] = !empty($attribs['is_hidden']);
+//        $attribs['is_mandatory'] = !empty($attribs['is_mandatory']);
+//        $attribs['is_completed'] = !empty($attribs['is_completed']);
+//        $attribs['is_property'] = !empty($attribs['is_property']);
+//        $attribs['is_relative'] = !empty($attribs['is_relative']);
+
         if (isset($attribs['is_accessible'])){
             if (!empty($attribs['is_accessible'])) unset($attribs['is_accessible']); else $attribs['is_accessible'] = false;
         }
@@ -797,6 +825,9 @@ class MySQLStore2 extends Entity
         if ($attribs['is_default_class'] != Entity::ENTITY_ID){
             $attribs['class_name'] = $this->getClassById($attribs['is_default_class']);
         }
+        $attribs['is_default_value'] = $attribs['is_default_value'] != $attribs['id'];
+        $attribs['is_default_class'] = $attribs['is_default_class'] != $attribs['id'];
+        $attribs['is_link'] = $attribs['is_link'] != 0;
         return $attribs;
     }
 
@@ -839,7 +870,7 @@ class MySQLStore2 extends Entity
                 }else{
                     $this->classes[$id] = '\\boolive\\data\\Entity';
                 }
-                //Cache::set('mysqlstore2/classes', F::toJSON($this->classes, false));
+                Cache::set('mysqlstore2/classes', F::toJSON($this->classes, false));
                 return $this->classes[$id];
             }
         }
@@ -897,7 +928,7 @@ class MySQLStore2 extends Entity
                     $attr['id'] = $this->reserveId();
                 }
 
-                if (!$is_proto_new){
+                if (!$is_proto_new || !$is_new){
                     $q = $this->db->prepare('SELECT is_default_value,is_default_class,is_link FROM {objects} WHERE id=? LIMIT 0,1');
                     $q->execute(array($attr['proto']));
                     $proto = $q->fetch(DB::FETCH_ASSOC);
@@ -1597,7 +1628,7 @@ class MySQLStore2 extends Entity
                     PRIMARY KEY (`id`,`sec`),
                     UNIQUE KEY `name` (`sec`,`parent`,`name`),
                     KEY `order` (`sec`,`parent`,`order`),
-                    KEY `uri` (`uri`(255))
+                    KEY `uri` (`uri`(255),`sec`)
                 )
                 ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='Объекты'
                 PARTITION BY LIST(sec) ($sects)

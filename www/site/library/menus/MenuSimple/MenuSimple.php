@@ -50,7 +50,8 @@ class MenuSimple extends Widget
         $list = array();
         $have_active = false;
         foreach ($items as $item){
-            $children = $item->children();
+            $children = $item['sub'];
+            $item = $item['object'];
             $real = $item->linked();
             $info = array(
                 'title' => $item->title->value(),

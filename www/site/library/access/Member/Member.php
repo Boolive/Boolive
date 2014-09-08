@@ -60,15 +60,16 @@ class Member extends Entity
                     // Выбор ролей со всей информацией в них
                     $roles = $obj->rights->find(array(
                         'select' => 'children',
-                        'struct' => 'tree',
-                        'depth' => array(1, 'max'),
+                        //'struct' => 'tree',
+                        //'depth' => array(1, 'max'),
                         'comment' => 'read rights of Member',
-                        'return'=>array('depth'=>1)
+                        //'return'=>array('depth'=>1)
                     ), false);
 //                    $rights = Data2::read(array($obj, 'rights'), false);
                     //$roles = $rights->find(array('comment'=>'read all roles of Member'));
                     // Объединяем права в общий список
                     foreach ($roles as $r){
+                        //$r = $r['object'];
                         if ($r instanceof Role && ($c = $r->linked()->getAccessCond($action_kind, $object)) && is_array($c)){
                             $need = ($c[0] == 'not')?'all':'any';
                             if (is_null($cond)){

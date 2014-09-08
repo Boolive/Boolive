@@ -36,7 +36,7 @@ class ViewSingle extends View
         if ($result = parent::startCheck($commands, $input)){
             if (!empty($this->_input['REQUEST']['view_name'])){
                 // Если указано, каким отображать, то только его пробуем запустить
-                $result = $this->{$this->_input['REQUEST']['view_name']}->isExist();
+                $result = $this->childByPath($this->_input['REQUEST']['view_name'])->isExist();
             }
         }
         return $result;
@@ -49,7 +49,7 @@ class ViewSingle extends View
         // Запускаем по очереди подчиненных, пока один из них не сработает
         if ($this->_input['REQUEST']['view_name']){
             // Если указано, каким отображать, то только его пробуем запустить
-            $views = array($this->{$this->_input['REQUEST']['view_name']}->linked());
+            $views = array($this->childByPath($this->_input['REQUEST']['view_name'])->linked());
             unset($this->_input_child['REQUEST']['view_name']);
 //        }else
 //        if ($view_name = Cache::get($key)){

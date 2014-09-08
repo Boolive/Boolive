@@ -15,7 +15,7 @@ class Image extends Widget
         /** @var \site\library\basic\Image\Image $obj */
         $obj = $this->_input['REQUEST']['object'];
         $v['file'] = $obj->file();
-        $v['style'] = $obj->find(array('select'=>'children','struct'=>'tree', 'depth'=>array(1, 'max'), 'return'=>false, 'comment' => 'read tree of text element'));
+//        $v['style'] = $obj->find(array('select'=>'children','struct'=>'tree', 'depth'=>array(1, 'max'), 'return'=>false, 'comment' => 'read tree of text element'));
         if ($obj->style->isExist()){
             $v['style'] = $obj->style->getStyle();
         }

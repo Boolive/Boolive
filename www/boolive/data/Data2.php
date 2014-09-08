@@ -78,29 +78,18 @@ class Data2
         //6. Создание экземпляров
 
         if (!empty($result) && !$cond['calc']){
-            $key = empty($cond['key'])? false : $cond['key'];
-            $entities = array();
-            $tree_depth = $cond['struct'] == 'tree' ? $cond['depth'][1] : 0;
-            foreach ($result as $rkey => $ritem){
-                if ($key) $rkey = $ritem[$key];
-                if (isset($ritem['class_name'])){
-                    if (!($entities[$rkey] = Buffer2::get($ritem['uri']))){
-                        try{
-                            if ($ritem['class_name'] == '\site\library\content_samples\Part\Part'){
-                                $a = 10;
-                            }
-                            $entities[$rkey] = new $ritem['class_name']($ritem, $tree_depth);
-                        }catch (\ErrorException $e){
-                            $entities[$rkey] = new Entity($ritem, $tree_depth);
-                        }
-                        $entities[$rkey]->isChanged(false);
-                        //if (!$tree_depth){
-                            Buffer2::set($entities[$rkey]);
-                        //}
-                    }
+            //$key = empty($cond['key'])? false : $cond['key'];
+            //$entities = array();
+            //$tree_depth = $cond['struct'] == 'tree' ? $cond['depth'][1] : 0;
+            $tree = $cond['struct'] == 'tree';
+            foreach ($result as $key => $item){
+                //if ($key) $rkey = $ritem[$key];
+                if ($tree){
+                    $result[$key] = self::entityTree($item);
+                }else{
+                    $result[$key] = self::entity($item);
                 }
             }
-            $result = $entities;
         }
         if ($cond['struct'] == 'object' ||
             $cond['struct'] == 'value' ||
@@ -110,6 +99,21 @@ class Data2
         }
         return $result;
     }
+
+    static function entityTree($array)
+    {
+        $array['object'] = self::entity($array['object']);
+        if (!empty($array['sub'])){
+            foreach ($array['sub'] as $key => $item){
+                $array['sub'][$key] = self::entityTree($item);
+            }
+        }
+        if (!empty($array['sup'])){
+            $array['sup'] = self::entityTree($array['sup']);
+        }
+        return $array;
+    }
+
 
     /**
      * Сохранение объекта
@@ -170,6 +174,26 @@ class Data2
             }
         }
         return false;
+    }
+
+    static function entity($attribs, $tree_depth = Entity::MAX_DEPTH)
+    {
+        $key = isset($attribs['uri'])? $attribs['uri'] : (isset($attribs['id'])? $attribs['id'] : null);
+        if (!isset($key) || !($entity = Buffer2::get($key))){
+            try{
+                if (isset($attribs['class_name'])){
+                    $class = $attribs['class_name'];
+                    unset($attribs['class_name']);
+                }else{
+                    $class = '\boolive\data\Entity';
+                }
+                $entity = new $class($attribs, $tree_depth);
+            }catch (\ErrorException $e){
+                $entity = new Entity($attribs, $tree_depth);
+            }
+            if (isset($key)) Buffer2::set($entity);
+        }
+        return $entity;
     }
 
     /**

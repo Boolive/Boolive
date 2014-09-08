@@ -2,7 +2,7 @@
 return [
     'class' => '\\boolive\\data\\stores\\MySQLStore2',
     'connect' => [
-        'dbname' => 'boolive-data2-36',
+        'dbname' => 'boolive-data2-44',
         'user' => 'root',
         'password' => '',
         'host' => '127.0.0.1',
@@ -13,7 +13,7 @@ return [
         ],
         'trace_sql' => false,
         'trace_count' => false,
-        'slow_query' => 0.000,
+        'slow_query' => 0,
         'sections' => [
             [
                 'code' => 0,

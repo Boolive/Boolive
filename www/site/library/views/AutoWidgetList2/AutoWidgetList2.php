@@ -20,6 +20,7 @@ class AutoWidgetList2 extends Widget
         $v['children'] = array();
         if (is_array($list)){
             foreach ($list as $key => $object){
+                //$object = $object['object'];
                 $result = $this->showObject($object, $i);
                 if ($result !== false){
                     $v['views'][$key] = $result;

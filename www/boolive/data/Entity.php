@@ -110,23 +110,21 @@ class Entity implements ITrace
         if (!empty($attribs['id'])){
             $attribs['is_exist'] = true;
         }
-        if (!isset($attribs['name']) && isset($attribs['uri'])){
+        if (!isset($attribs['parent']) && !isset($attribs['name']) && isset($attribs['uri'])){
             $names = F::splitRight('/', $attribs['uri'], true);
             $attribs['name'] = $names[1];
             if (!isset($attribs['parent'])){
                 $attribs['parent'] = $names[0];
             }
         }
-        if (isset($attribs['class_name'])) unset($attribs['class_name']);
 
         if (isset($attribs['children'])){
             if ($tree_depth > 0){
                 $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
                 foreach ($attribs['children'] as $name => $child){
-                    $class = isset($child['class_name'])? $child['class_name'] : '\boolive\data\Entity';
                     $child['name'] = $name;
                     if (isset($attribs['uri'])) $child['uri'] = $attribs['uri'].'/'.$name;
-                    $this->_children[$name] = new $class($child, $d);
+                    $this->_children[$name] = Data2::entity($child, $d);
                     $this->_children[$name]->_parent = $this;
                 }
             }
@@ -136,8 +134,7 @@ class Entity implements ITrace
             if ($tree_depth > 0){
                 $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
                 foreach ($attribs['heirs'] as $key => $heir){
-                    $class = isset($heir['class_name'])? $heir['class_name'] : '\boolive\data\Entity';
-                    $this->_heirs[$key] = new $class($heir, $d);
+                    $this->_heirs[$key] = Data2::entity($heir, $d);
                     $this->_heirs[$key]->_proto = $this;
                 }
             }
@@ -146,16 +143,14 @@ class Entity implements ITrace
         if (isset($attribs['_parent'])){
             if ($tree_depth > 0){
                 $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
-                $class = isset($attribs['_parent']['class_name'])? $attribs['_parent']['class_name'] : '\boolive\data\Entity';
-                $this->_parent = new $class($attribs['_parent'], $d);
+                $this->_parent = Data2::entity($attribs['_parent'], $d);
             }
             unset($attribs['_parent']);
         }
         if (isset($attribs['_proto'])){
             if ($tree_depth > 0){
                 $d = ($tree_depth != Entity::MAX_DEPTH)? $tree_depth-1 : $tree_depth;
-                $class = isset($attribs['_proto']['class_name'])? $attribs['_proto']['class_name'] : '\boolive\data\Entity';
-                $this->_proto = new $class($attribs['_proto'], $d);
+                $this->_proto = Data2::entity($attribs['_proto'], $d);
             }
             unset($attribs['_proto']);
         }
@@ -384,7 +379,7 @@ class Entity implements ITrace
         if (isset($new_value) && (!isset($this->_attribs['value']) || $this->_attribs['value']!==$new_value)){
             $this->_attribs['value'] = $new_value;
             $this->_attribs['value_type'] = Entity::VALUE_AUTO;
-            $this->_attribs['is_default_value'] = $this->_attribs['id'];
+            $this->_attribs['is_default_value'] = false;
             $this->_changed = true;
             $this->_checked = false;
         }
@@ -437,7 +432,7 @@ class Entity implements ITrace
                 $this->_attribs['file'] = $new_file;
                 $this->_attribs['value_type'] = Entity::VALUE_FILE;
             }
-            $this->_attribs['is_default_value'] = $this->_attribs['id'];
+            $this->_attribs['is_default_value'] = false;//$this->_attribs['id'];
             $this->_changed = true;
             $this->_checked = false;
         }
@@ -706,25 +701,25 @@ class Entity implements ITrace
         if ($return_proto){
             if ($this->_default_value_entity !== false) return $this->_default_value_entity;
             // Если false или идентификатор и равен $this, то Null
-            if (empty($this->_attribs['is_default_value']) || ($this->_attribs['is_default_value']!==true && $this->_attribs['is_default_value'] == $this->_attribs['id'])){
+            if (empty($this->_attribs['is_default_value']) /*|| ($this->_attribs['is_default_value']!==true && $this->_attribs['is_default_value'] == $this->_attribs['id'])*/){
                 $this->_default_value_entity = null;
             }else
             // Если true, то ручной поиск объекта
-            if ($this->_attribs['is_default_value'] === true){
+            //if ($this->_attribs['is_default_value'] === true){
                 if (($this->_default_value_entity = $this->proto(null, true, true))){
                     if ($p = $this->_default_value_entity->isDefaultValue(null, true)) $this->_default_value_entity = $p;
                 }
-            }else{
-                // Иначе выбор по идентификатору
-                $this->_default_value_entity = Data2::read(array(
-                    'from' => $this->_attribs['is_default_value'],
-                    'comment' => 'read default value',
-                    'cache' => 2
-                ));
-            }
+//            }else{
+//                // Иначе выбор по идентификатору
+//                $this->_default_value_entity = Data2::read(array(
+//                    'from' => $this->_attribs['is_default_value'],
+//                    'comment' => 'read default value',
+//                    'cache' => 2
+//                ));
+//            }
             return $this->_default_value_entity;
         }else{
-            return !empty($this->_attribs['is_default_value']) && $this->_attribs['is_default_value']!=$this->_attribs['id'];
+            return !empty($this->_attribs['is_default_value']) /*&& $this->_attribs['is_default_value']!=$this->_attribs['id']*/;
         }
     }
 
@@ -747,25 +742,25 @@ class Entity implements ITrace
         if ($return_proto){
             if ($this->_default_class_entity !== false) return $this->_default_class_entity;
             // Если false или идентификатор и равен $this, то Null
-            if (empty($this->_attribs['is_default_class']) || ($this->_attribs['is_default_class']!==true && $this->_attribs['is_default_class'] == $this->_attribs['id'])){
+            if (empty($this->_attribs['is_default_class']) /*|| ($this->_attribs['is_default_class']!==true && $this->_attribs['is_default_class'] == $this->_attribs['id'])*/){
                 $this->_default_class_entity = null;
             }else
             // Если true, то ручной поиск объекта
-            if ($this->_attribs['is_default_class'] === true){
+//            if ($this->_attribs['is_default_class'] === true){
                 if (($this->_default_class_entity = $this->proto(null, true, true))){
                     if ($p = $this->_default_class_entity->isDefaultClass(null, true)) $this->_default_class_entity = $p;
                 }
-            }else{
-                // Иначе выбор по идентификатору
-                $this->_default_class_entity = Data2::read(array(
-                    'from' => $this->_attribs['is_default_class'],
-                    'comment' => 'read default class',
-                    'cache' => 2
-                ));
-            }
+//            }else{
+//                // Иначе выбор по идентификатору
+//                $this->_default_class_entity = Data2::read(array(
+//                    'from' => $this->_attribs['is_default_class'],
+//                    'comment' => 'read default class',
+//                    'cache' => 2
+//                ));
+//            }
             return $this->_default_class_entity;
         }else{
-            return !empty($this->_attribs['is_default_class']) && $this->_attribs['is_default_class']!=$this->_attribs['id'];
+            return !empty($this->_attribs['is_default_class']) /*&& $this->_attribs['is_default_class']!=$this->_attribs['id']*/;
         }
     }
 
@@ -788,22 +783,22 @@ class Entity implements ITrace
         if ($return_link){
             if ($this->_link_entity!==false) return $this->_link_entity;
             // Если false или идентификатор и равен $this, то Null
-            if (empty($this->_attribs['is_link']) || ($this->_attribs['is_link']!==true && $this->_attribs['is_link'] == $this->_attribs['id'])){
+            if (empty($this->_attribs['is_link'])/* || ($this->_attribs['is_link']!==true && $this->_attribs['is_link'] == $this->_attribs['id'])*/){
                 $this->_link_entity = null;
             }else
             // Если true, то ручной поиск объекта
-            if ($this->_attribs['is_link'] === true){
+//            if ($this->_attribs['is_link'] === true){
                 if (($this->_link_entity = $this->proto(null, true, true))){
-                    if ($p = $this->_link_entity->isDefaultClass(null, true)) $this->_link_entity = $p;
+                    if ($p = $this->_link_entity->isLink(null, true)) $this->_link_entity = $p;
                 }
-            }else{
-                // Иначе выбор по идентификатору
-                $this->_link_entity = Data2::read(array(
-                    'from' => $this->_attribs['is_link'],
-                    'comment' => 'read link',
-                    'cache' => 2
-                ));
-            }
+//            }else{
+//                // Иначе выбор по идентификатору
+//                $this->_link_entity = Data2::read(array(
+//                    'from' => $this->_attribs['is_link'],
+//                    'comment' => 'read link',
+//                    'cache' => 2
+//                ));
+//            }
             return $this->_link_entity;
         }else{
             return !empty($this->_attribs['is_link']);
@@ -966,13 +961,13 @@ class Entity implements ITrace
                     // Удаление прототипа
                     $this->_attribs['proto'] = null;
                     $this->_attribs['proto_cnt'] = 0;
-                    $this->_attribs['is_default_value'] = $this->_attribs['id'];
-                    if ($this->_attribs['is_default_class'] != 0){
-                        $this->_attribs['is_default_class'] = self::ENTITY_ID;
-                    }
-                    if ($this->_attribs['is_link'] != 0){
-                        $this->_attribs['is_link'] = self::ENTITY_ID;
-                    }
+                    //$this->_attribs['is_default_value'] = $this->_attribs['id'];
+//                    if ($this->_attribs['is_default_class'] != 0){
+//                        $this->_attribs['is_default_class'] = self::ENTITY_ID;
+//                    }
+//                    if ($this->_attribs['is_link'] != 0){
+//                        $this->_attribs['is_link'] = self::ENTITY_ID;
+//                    }
                     $this->_proto = null;
                 }else{
                     // Новый родитель не должен быть свойстовм объекта
@@ -989,11 +984,11 @@ class Entity implements ITrace
                     if ($this->isDefaultValue()){
                         $this->_attribs['value'] = $new_proto->value();
                         $this->_attribs['value_type'] = $new_proto->valueType();
-                        if ($vp = $new_proto->isDefaultValue(null, true)){
-                            $this->_attribs['is_default_value'] = $vp->key();
-                        }else{
-                            $this->_attribs['is_default_value'] = $new_proto->key();
-                        }
+//                        if ($vp = $new_proto->isDefaultValue(null, true)){
+//                            $this->_attribs['is_default_value'] = $vp->key();
+//                        }else{
+//                            $this->_attribs['is_default_value'] = $new_proto->key();
+//                        }
                     }
                     // Смена прототипа
                     $this->_attribs['proto'] = $new_proto->key();
@@ -1001,13 +996,13 @@ class Entity implements ITrace
                     $this->_proto = $new_proto;
 
                     // Если объект ссылка или новый прототип ссылка, то обновление ссылки
-                    if ($this->isLink() || $new_proto->isLink()){
-                        $this->isLink(true); //также обновляется класс
-                    }else
-                    // Обновление наследуемого класса
-                    if ($this->isDefaultClass()){
-                        $this->isDefaultClass(true);
-                    }
+//                    if ($this->isLink() || $new_proto->isLink()){
+//                        $this->isLink(true); //также обновляется класс
+//                    }else
+//                    // Обновление наследуемого класса
+//                    if ($this->isDefaultClass()){
+//                        $this->isDefaultClass(true);
+//                    }
                     // Обновление доступа
                     if (!$new_proto->isAccessible() || !isset($this->_attribs['is_accessible'])) $this->_attribs['is_accessible'] = $new_proto->isAccessible();
                 }
@@ -1390,6 +1385,21 @@ class Entity implements ITrace
         return $result;
     }
 
+    function childByPath($path)
+    {
+        $obj = Data2::read(array(
+            'from' => $this->uri().'/'.trim($path,'/'),
+            'select' => 'self',
+            'comment' => 'read child by path',
+            ///'group' => true
+        ));
+        if (!$obj->isExist()){
+            $obj->_changed = false;
+        }
+        return $obj;
+    }
+
+
     /**
      * Список выгруженных подчиненных (свойства объекта)
      * @param string $key Название атрибута, который использовать в качестве ключей элементов массива
@@ -1447,7 +1457,7 @@ class Entity implements ITrace
         if (!$this->_is_saved){
             try{
                 $this->_is_saved = true;
-                if ($this->_changed){
+                if ($this->_changed || !$this->isExist()){
                     // Сохранение родителя, если не сохранен или требует переименования
 //                    if ($this->_parent){
 //                        if (!$this->_parent->isExist() || $this->_parent->_autoname){
@@ -1477,6 +1487,28 @@ class Entity implements ITrace
 //                        }
 //                    }
 
+                    // Проверка существования прототипа
+                    if ($proto = $this->proto()){
+                        if (!$this->proto()->isExist() && (!isset($proto->_attribs['uri']) || $proto->_autoname)){
+                            $this->errors()->_attribs->proto->not_exists = "Прототип не существует";
+                        }else{
+                            $this->_attribs['proto'] = $this->proto()->key();
+                        }
+                    }else{
+                        $this->_attribs['proto'] = null;
+                        $this->_attribs['proto_cnt'] = 0;
+                    }
+                    // Проверка родителя - должен существовать или должен быть опредлен его uri
+                    if ($parent = $this->parent()){
+                        if (!$parent->isExist() && (!isset($parent->_attribs['uri']) || $parent->_autoname)){
+                            $this->errors()->_attribs->parent->not_exists = "Родительский объект не имеет URI";
+                        }else{
+                            $this->_attribs['parent'] = $this->parent()->key();
+                        }
+                    }else{
+                        $this->_attribs['parent'] = null;
+                        $this->_attribs['parent_cnt'] = 0;
+                    }
                     // Сохранение себя
                     if (Data2::write($this, $access)){
                         $this->_changed = false;
@@ -1573,28 +1605,6 @@ class Entity implements ITrace
         // "Контейнер" для ошибок по атрибутам и подчиненным объектам
         //$errors = new Error('Неверный объект', $this->uri());
         if ($this->_checked) return true;
-        // Проверка существования прототипа
-        if ($proto = $this->proto()){
-            if (!$this->proto()->isExist() && (!isset($proto->_attribs['uri']) || $proto->_autoname)){
-                $this->errors()->_attribs->proto->not_exists = "Прототип не существует";
-            }else{
-                $this->_attribs['proto'] = $this->proto()->key();
-            }
-        }else{
-            $this->_attribs['proto'] = null;
-            $this->_attribs['proto_cnt'] = 0;
-        }
-        // Проверка родителя - должен существовать или должен быть опредлен его uri
-        if ($parent = $this->parent()){
-            if (!$parent->isExist() && (!isset($parent->_attribs['uri']) || $parent->_autoname)){
-                $this->errors()->_attribs->parent->not_exists = "Родительский объект не имеет URI";
-            }else{
-                $this->_attribs['parent'] = $this->parent()->key();
-            }
-        }else{
-            $this->_attribs['parent'] = null;
-            $this->_attribs['parent_cnt'] = 0;
-        }
 
         // Проверка и фильтр атрибутов
         $attribs = new Values($this->_attribs);
@@ -1943,8 +1953,8 @@ class Entity implements ITrace
             if (!$this->isProperty()) $export['is_property'] = false;
             if ($this->isCompleted()) $export['is_completed'] = true;
             if ($p = $this->isLink(null, true)) $export['is_link'] = $p->uri();
-            if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
-            if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
+//            if ($p = $this->isDefaultValue(null, true)) $export['is_default_value'] = $p->uri();
+//            if ($p = $this->isDefaultClass(null, true)) $export['is_default_class'] = $p->uri();
             if (!$this->isAccessible()) $export['is_accessible'] = false;
             if (!$this->isExist()) $export['is_exist'] = false;
         }

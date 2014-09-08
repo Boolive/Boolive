@@ -391,7 +391,7 @@ class Installer
             'percent' => 0,
             'step_cnt' => sizeof($install['modules'])
         );
-        $steps_at_a_time = 4;
+        $steps_at_a_time = 6;
         while (0 < $steps_at_a_time-- && $install['step'] < $result['step_cnt']){
             // Устанока класса/объекта
             if (!empty($install['modules'][$install['step']])){
