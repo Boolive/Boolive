@@ -838,6 +838,7 @@ class MySQLStore2 extends Entity
      */
     private function getClassById($id)
     {
+        if (!IS_INSTALL) return '\\boolive\\data\\Entity';
         if (!isset($this->classes)){
             if ($classes = Cache::get('mysqlstore2/classes')){
                 // Из кэша
@@ -864,7 +865,7 @@ class MySQLStore2 extends Entity
                 // По id выбираем запись из таблицы ids. Скорее всего объект внешний, поэтому его нет в таблице objects
                 $q = $this->db->prepare('SELECT id, uri FROM {objects} WHERE id = ?');
                 $q->execute(array($id));
-                if ($row = $q->fetch(DB::FETCH_ASSOC)){
+                if (($row = $q->fetch(DB::FETCH_ASSOC)) && preg_match('#^[a-zA-Z_0-9\/]?$#ui', $row['uri'])){
                     $names = F::splitRight('/', $row['uri'], true);
                     $this->classes[$id] = '\\site\\'.str_replace('/', '\\', trim($row['uri'],'/')) . '\\' . $names[1];
                 }else{
@@ -1314,7 +1315,7 @@ class MySQLStore2 extends Entity
      */
     function makeParents($sec, $entity_id, $parent_id, $is_new = true)
     {
-        // Запрос на добавление отношений копированием их у родительского объекта
+        // Запрос на добавление отношений копированием их у рFодительского объекта
         $add = $q = $this->db->prepare('
             INSERT INTO {parents} (object_id, parent_id, `level`, `sec`)
             SELECT :obj, parent_id, `level`+:l, :sec FROM {parents}
@@ -1397,9 +1398,10 @@ class MySQLStore2 extends Entity
         if (is_null($uri)) return 0;
         if (preg_match('/^[0-9]+$/', $uri)) return intval($uri);
         if (!isset($this->uri_id[$uri])){
+            $sec = $this->getSection($uri);
             // Поиск идентифкатора URI
-            $q = $this->db->prepare('SELECT id FROM {objects} WHERE `uri`=? LIMIT 0,1 FOR UPDATE');
-            $q->execute(array($uri));
+            $q = $this->db->prepare('SELECT id FROM {objects} WHERE `sec`=? AND `uri`=? LIMIT 0,1 FOR UPDATE');
+            $q->execute(array($sec['code'], $uri));
             if ($row = $q->fetch(DB::FETCH_ASSOC)){
                 $this->uri_id[$uri] = intval($row['id']);
                 $is_created = false;

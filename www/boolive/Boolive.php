@@ -33,8 +33,8 @@ namespace boolive
         static function activate($class_name = ''){
             if (empty($class_name)){
                 // Актвация самого себя
-                self::$activated = array($class_name=>$class_name);
-                self::$included = array($class_name=>$class_name);
+                self::$activated = array($class_name => $class_name);
+                self::$included = array($class_name => $class_name);
                 self::$error_reporting = error_reporting();
                 if (IS_INSTALL){
                     self::init();

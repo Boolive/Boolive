@@ -37,12 +37,3 @@ include DIR.'boolive/Boolive.php';
 boolive\Boolive::start();
 
 //boolive\Boolive::activate();
-//
-//echo $uri = '/library/views/View';
-//trace(\boolive\data\Data2::getSections($uri,1));
-//
-//echo $uri = '/library';
-//trace(\boolive\data\Data2::getSections($uri,3));
-//
-//echo $uri = '';
-//trace(\boolive\data\Data2::getSections($uri,2));
