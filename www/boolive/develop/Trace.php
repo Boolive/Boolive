@@ -31,7 +31,7 @@ class Trace
     /**
      * Конструктор объекта трассировки
      * @param string $key Ключ новой трассировки
-     * @param $value Значения для трассировки
+     * @param mixed $value Значения для трассировки
      * @param bool $clone Признак, клонировать значение, если является объектом?
      */
     function __construct($key = null, $value = null, $clone = true)
@@ -82,6 +82,7 @@ class Trace
     function log()
     {
         //error_log(self::Format($this, $trace_buf = array(), '  ', false));
+        $trace_buf = array();
         File::create(date('Y.m.d G:i.s').' '.self::Format($this, $trace_buf, '  ', false)."\r\n", DIR_TEMP.'trace.log', true);
         return $this;
     }
@@ -93,6 +94,7 @@ class Trace
     function out()
     {
         if (php_sapi_name() == 'cli'){
+            $trace_buf = array();
             echo self::Format($this, $trace_buf, '  ', false)."\n";
         }else{
             echo '<pre>'.self::Format($this).'</pre>';
@@ -126,7 +128,7 @@ class Trace
 
     /**
      * Удаление вложенного объекта трассировки
-     * @param $key Ключ трассировки
+     * @param string $key Ключ трассировки
      */
     function __unset($key)
     {
@@ -152,7 +154,8 @@ class Trace
 
     /**
      * Оформление значения
-     * @param $var
+     * @param mixed $var
+     * @param bool $html
      * @return string
      */
     static private function style($var, $html = true)

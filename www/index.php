@@ -11,7 +11,7 @@
 /** @const Времея начала работы системы */
 define('START_TIME', microtime(true));
 /** @cont bool Установлена ли система Boolive? */
-define('IS_INSTALL', true);
+define('IS_INSTALL', false);
 /** @const Версия системы Boolive */
 define('VERSION', '2.0.beta.2014.02.10');
 /** @cont string Директория сайта на сервере. Слеш в конце обязателен! */

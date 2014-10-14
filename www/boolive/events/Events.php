@@ -64,7 +64,7 @@ class Events
             foreach ($list as $key => $handler){
                 if (($handler[0] == $handler_module) && ($handler[1] == $handler_method)){
                     unset(self::$handlers[$event_name][$key]);
-                    if (!empty($handler['svae'])) self::$need_save = true;
+                    if (!empty($handler['save'])) self::$need_save = true;
                 }
             }
         }
