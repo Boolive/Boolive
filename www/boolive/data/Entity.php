@@ -1585,7 +1585,7 @@ class Entity implements ITrace
      * @param bool $access Признак, проверять или нет наличие доступа на запись объекта?
      * @return bool
      */
-    function complete($access = true)
+    function completeChildren($access = true)
     {
         if ($this->isExist()){
             return Data2::complete($this, $access);

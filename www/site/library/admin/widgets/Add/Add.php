@@ -41,7 +41,7 @@ class Add extends SelectObject
                 }
                 // @todo Обрабатывать ошибки
                 $obj->save(false);
-                $obj->complete();
+                $obj->completeChildren();
                 $result['changes'][$obj->uri()] = array(
                     'uri' => $obj->uri()
                 );
