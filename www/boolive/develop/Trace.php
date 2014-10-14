@@ -82,7 +82,7 @@ class Trace
     function log()
     {
         //error_log(self::Format($this, $trace_buf = array(), '  ', false));
-        File::create(date('Y.m.d G:i.s').' '.self::Format($this, $trace_buf = array(), '  ', false)."\r\n", DIR_TEMP.'trace.log', true);
+        File::create(date('Y.m.d G:i.s').' '.self::Format($this, $trace_buf, '  ', false)."\r\n", DIR_TEMP.'trace.log', true);
         return $this;
     }
 
@@ -93,7 +93,7 @@ class Trace
     function out()
     {
         if (php_sapi_name() == 'cli'){
-            echo self::Format($this, $trace_buf = array(), '  ', false)."\n";
+            echo self::Format($this, $trace_buf, '  ', false)."\n";
         }else{
             echo '<pre>'.self::Format($this).'</pre>';
         }
