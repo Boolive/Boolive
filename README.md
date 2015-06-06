@@ -1,5 +1,7 @@
 # Boolive CMS 2
 
+[![Join the chat at https://gitter.im/Boolive/Boolive](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Boolive/Boolive?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Super flexible content management system by using prototype data model and strong detailing.
 See more: http://boolive.ru (russian)
 
